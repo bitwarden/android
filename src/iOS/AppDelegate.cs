@@ -10,6 +10,7 @@ using Bit.App.Abstractions;
 using Bit.App.Services;
 using Microsoft.Practices.Unity;
 using Bit.iOS.Services;
+using Plugin.Settings;
 
 namespace Bit.iOS
 {
@@ -48,6 +49,7 @@ namespace Bit.iOS
                 .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterType<IApiService, ApiService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())

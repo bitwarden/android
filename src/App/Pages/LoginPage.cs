@@ -9,7 +9,7 @@ using Bit.App.Models.Api;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
-namespace Bit.App.Views
+namespace Bit.App.Pages
 {
     public class LoginPage : ContentPage
     {
@@ -63,12 +63,15 @@ namespace Bit.App.Views
                     var response = await authService.TokenPostAsync(request);
                     if(!response.Succeeded)
                     {
-                        throw new Exception();
+                        await DisplayAlert("An error occurred", response.Errors.First().Message, "Ok");
+                        return;
                     }
 
                     cryptoService.Key = key;
                     authService.Token = response.Result.Token;
-                    await Navigation.PushAsync(new VaultListPage());
+                    authService.UserId = response.Result.Profile.Id;
+
+                    Application.Current.MainPage = new MainPage();
                 })
             };
 

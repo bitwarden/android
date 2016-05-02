@@ -12,6 +12,7 @@ using Bit.App.Services;
 using XLabs.Ioc.Unity;
 using XLabs.Ioc;
 using Bit.Android.Services;
+using Plugin.Settings;
 
 namespace Bit.Android
 {
@@ -40,6 +41,7 @@ namespace Bit.Android
                 .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISecureStorageService, KeyStoreStorageService>(new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterType<IApiService, ApiService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())

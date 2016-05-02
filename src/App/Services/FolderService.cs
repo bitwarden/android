@@ -10,18 +10,25 @@ namespace Bit.App.Services
 {
     public class FolderService : Repository<FolderData, int>, IFolderService
     {
-        public FolderService(ISqlService sqlite)
-            : base(sqlite) { }
+        private readonly IAuthService _authService;
 
-        public new async Task<IEnumerable<Folder>> GetAllAsync()
+        public FolderService(
+            ISqlService sqlService,
+            IAuthService authService)
+            : base(sqlService)
         {
-            var data = await base.GetAllAsync();
-            return data.Select(f => new Folder(f));
+            _authService = authService;
+        }
+
+        public new Task<IEnumerable<Folder>> GetAllAsync()
+        {
+            var data = Connection.Table<FolderData>().Where(f => f.UserId == _authService.UserId).Cast<FolderData>();
+            return Task.FromResult(data.Select(f => new Folder(f)));
         }
 
         public async Task SaveAsync(Folder folder)
         {
-            var data = new FolderData(folder);
+            var data = new FolderData(folder, _authService.UserId);
             data.RevisionDateTime = DateTime.UtcNow;
 
             if(folder.Id == 0)

@@ -10,12 +10,13 @@ namespace Bit.App.Models.Data
         public SiteData()
         { }
 
-        public SiteData(Site site)
+        public SiteData(Site site, string userId)
         {
             Id = site.Id;
             ServerId = site.ServerId;
             FolderId = site.FolderId;
             ServerFolderId = site.ServerFolderId;
+            UserId = userId;
             Name = site.Name?.EncryptedString;
             Uri = site.Uri?.EncryptedString;
             Username = site.Username?.EncryptedString;
@@ -29,6 +30,7 @@ namespace Bit.App.Models.Data
         public string ServerId { get; set; }
         public int? FolderId { get; set; }
         public string ServerFolderId { get; set; }
+        public string UserId { get; set; }
         public string Name { get; set; }
         public string Uri { get; set; }
         public string Username { get; set; }

@@ -10,10 +10,11 @@ namespace Bit.App.Models.Data
         public FolderData()
         { }
 
-        public FolderData(Folder folder)
+        public FolderData(Folder folder, string userId)
         {
             Id = folder.Id;
             ServerId = folder.ServerId;
+            UserId = userId;
             Name = folder.Name?.EncryptedString;
         }
 
@@ -21,6 +22,7 @@ namespace Bit.App.Models.Data
         [AutoIncrement]
         public int Id { get; set; }
         public string ServerId { get; set; }
+        public string UserId { get; set; }
         public string Name { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;
 

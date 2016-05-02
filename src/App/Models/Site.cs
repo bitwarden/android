@@ -39,9 +39,9 @@ namespace Bit.App.Models
         public CipherString Password { get; set; }
         public CipherString Notes { get; set; }
 
-        public SiteData ToSiteData()
+        public SiteData ToSiteData(string userId)
         {
-            return new SiteData(this);
+            return new SiteData(this, userId);
         }
     }
 }

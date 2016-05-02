@@ -21,9 +21,9 @@ namespace Bit.App.Models
             Name = response.Name != null ? new CipherString(response.Name) : null;
         }
 
-        public FolderData ToFolderData()
+        public FolderData ToFolderData(string userId)
         {
-            return new FolderData(this);
+            return new FolderData(this, userId);
         }
     }
 }

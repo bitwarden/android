@@ -10,18 +10,25 @@ namespace Bit.App.Services
 {
     public class SiteService : Repository<SiteData, int>, ISiteService
     {
-        public SiteService(ISqlService sqlite)
-            : base(sqlite) { }
+        private readonly IAuthService _authService;
 
-        public new async Task<IEnumerable<Site>> GetAllAsync()
+        public SiteService(
+            ISqlService sqlService,
+            IAuthService authService)
+            : base(sqlService)
         {
-            var data = await base.GetAllAsync();
-            return data.Select(s => new Site(s));
+            _authService = authService;
+        }
+
+        public new Task<IEnumerable<Site>> GetAllAsync()
+        {
+            var data = Connection.Table<SiteData>().Where(f => f.UserId == _authService.UserId).Cast<SiteData>();
+            return Task.FromResult(data.Select(s => new Site(s)));
         }
 
         public async Task SaveAsync(Site site)
         {
-            var data = new SiteData(site);
+            var data = new SiteData(site, _authService.UserId);
             data.RevisionDateTime = DateTime.UtcNow;
 
             if(site.Id == 0)

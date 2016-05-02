@@ -5,23 +5,31 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Services
 {
     public class AuthService : IAuthService
     {
         private const string TokenKey = "token";
+        private const string UserIdKey = "userId";
 
         private readonly ISecureStorageService _secureStorage;
+        private readonly ISettings _settings;
         private readonly ICryptoService _cryptoService;
         private readonly IApiService _apiService;
 
+        private string _token;
+        private string _userId;
+
         public AuthService(
-            ISecureStorageService secureStorage, 
+            ISecureStorageService secureStorage,
+            ISettings settings,
             ICryptoService cryptoService,
             IApiService apiService)
         {
             _secureStorage = secureStorage;
+            _settings = settings;
             _cryptoService = cryptoService;
             _apiService = apiService;
         }
@@ -30,8 +38,19 @@ namespace Bit.App.Services
         {
             get
             {
+                if(_token != null)
+                {
+                    return _token;
+                }
+
                 var tokenBytes = _secureStorage.Retrieve(TokenKey);
-                return Encoding.UTF8.GetString(tokenBytes, 0, tokenBytes.Length);
+                if(tokenBytes == null)
+                {
+                    return null;
+                }
+
+                _token = Encoding.UTF8.GetString(tokenBytes, 0, tokenBytes.Length);
+                return _token;
             }
             set
             {
@@ -43,6 +62,33 @@ namespace Bit.App.Services
                 else
                 {
                     _secureStorage.Delete(TokenKey);
+                    _token = null;
+                }
+            }
+        }
+
+        public string UserId
+        {
+            get
+            {
+                if(_userId != null)
+                {
+                    return _userId;
+                }
+
+                _userId = _settings.GetValueOrDefault<string>(UserIdKey);
+                return _userId;
+            }
+            set
+            {
+                if(value != null)
+                {
+                    _settings.AddOrUpdateValue(UserIdKey, value);
+                }
+                else
+                {
+                    _settings.Remove(UserIdKey);
+                    _userId = null;
                 }
             }
         }
@@ -51,8 +97,15 @@ namespace Bit.App.Services
         {
             get
             {
-                return _cryptoService.Key != null && Token != null;
+                return _cryptoService.Key != null && Token != null && UserId != null;
             }
+        }
+
+        public void LogOut()
+        {
+            Token = null;
+            UserId = null;
+            _cryptoService.Key = null;
         }
 
         public async Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request)
@@ -66,7 +119,7 @@ namespace Bit.App.Services
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
-            return ApiResult<TokenResponse>.Success(responseObj);
+            return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
         }
     }
 }

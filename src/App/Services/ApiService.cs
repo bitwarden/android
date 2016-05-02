@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
@@ -20,21 +21,26 @@ namespace Bit.App.Services
 
         public async Task<ApiResult<T>> HandleErrorAsync<T>(HttpResponseMessage response)
         {
-            var error = new ApiError
-            {
-                Message = "An unknown error has occured.",
-                StatusCode = response.StatusCode
-            };
-
             try
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var errorResponseModel = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
-                error.Message = errorResponseModel.Message;
-            }
-            catch(JsonReaderException) { }
 
-            return ApiResult<T>.Failed(error);
+                var errors = new List<ApiError>();
+                foreach(var valError in errorResponseModel.ValidationErrors)
+                {
+                    foreach(var errorMessage in valError.Value)
+                    {
+                        errors.Add(new ApiError { Message = errorMessage });
+                    }
+                }
+
+                return ApiResult<T>.Failed(response.StatusCode, errors.ToArray());
+            }
+            catch(JsonReaderException)
+            { }
+
+            return ApiResult<T>.Failed(response.StatusCode, new ApiError { Message = "An unknown error has occured." });
         }
     }
 }

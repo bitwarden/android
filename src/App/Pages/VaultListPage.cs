@@ -7,13 +7,13 @@ using Bit.App.Models.View;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
-namespace Bit.App.Views
+namespace Bit.App.Pages
 {
     public class VaultListPage : ContentPage
     {
         private readonly IFolderService _folderService;
         private readonly ISiteService _siteService;
-        private ListView _listView;
+        private ListView _listView = new ListView();
 
         public VaultListPage()
         {
@@ -28,12 +28,8 @@ namespace Bit.App.Views
 
             ToolbarItems.Add(addSiteToolBarItem);
 
-            _listView = new ListView
-            {
-                IsGroupingEnabled = true,
-                GroupDisplayBinding = new Binding("Name")
-            };
-
+            _listView.IsGroupingEnabled = true;
+            _listView.GroupDisplayBinding = new Binding("Name");
             _listView.ItemSelected += FolderSelected;
             _listView.ItemTemplate = new DataTemplate(() =>
             {
@@ -45,7 +41,6 @@ namespace Bit.App.Views
 
             Title = "My Vault";
             Content = _listView;
-            NavigationPage.SetHasBackButton(this, false);
         }
 
         protected override void OnAppearing()

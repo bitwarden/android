@@ -6,7 +6,7 @@ using System.Text;
 
 using Xamarin.Forms;
 
-namespace Bit.App.Views
+namespace Bit.App.Pages
 {
     public class VaultEditSitePage : ContentPage
     {

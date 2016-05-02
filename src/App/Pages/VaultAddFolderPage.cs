@@ -8,7 +8,7 @@ using Bit.App.Models;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
-namespace Bit.App.Views
+namespace Bit.App.Pages
 {
     public class VaultAddFolderPage : ContentPage
     {

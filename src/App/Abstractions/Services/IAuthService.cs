@@ -7,7 +7,9 @@ namespace Bit.App.Abstractions
     {
         bool IsAuthenticated { get; }
         string Token { get; set; }
+        string UserId { get; set; }
 
+        void LogOut();
         Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request);
     }
 }

@@ -51,11 +51,30 @@ namespace Bit.App.Services
             }
             set
             {
-                _secureStorage.Store(KeyKey, value);
-                _keyParameter = new KeyParameter(value);
+                if(value != null)
+                {
+                    _secureStorage.Store(KeyKey, value);
+                }
+                else
+                {
+                    _secureStorage.Delete(KeyKey);
+                    _keyParameter = null;
+                }
             }
         }
-        public string Base64Key { get { return Convert.ToBase64String(Key); } }
+
+        public string Base64Key
+        {
+            get
+            {
+                if(Key == null)
+                {
+                    return null;
+                }
+
+                return Convert.ToBase64String(Key);
+            }
+        }
 
         public CipherString Encrypt(string plaintextValue)
         {

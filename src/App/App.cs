@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Bit.App.Abstractions;
-using Bit.App.Views;
+using Bit.App.Pages;
 using Xamarin.Forms;
 
 namespace Bit.App
@@ -11,26 +11,20 @@ namespace Bit.App
     public class App : Application
     {
         private readonly IDatabaseService _databaseService;
+        private readonly IAuthService _authService;
 
         public App(IAuthService authService, IDatabaseService databaseService)
         {
             _databaseService = databaseService;
+            _authService = authService;
 
             if(authService.IsAuthenticated)
             {
-                var nav = new NavigationPage(new VaultListPage());
-                nav.BarBackgroundColor = Color.FromHex("3c8dbc");
-                nav.BarTextColor = Color.FromHex("ffffff");
-
-                MainPage = nav;
+                MainPage = new MainPage();
             }
             else
             {
-                var nav = new NavigationPage(new LoginPage());
-                nav.BarBackgroundColor = Color.FromHex("3c8dbc");
-                nav.BarTextColor = Color.FromHex("ffffff");
-
-                MainPage = nav;
+                MainPage = new LoginNavigationPage();
             }
 
             MainPage.BackgroundColor = Color.FromHex("ecf0f5");

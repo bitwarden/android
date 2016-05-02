@@ -11,38 +11,38 @@ namespace Bit.App.Services
         where TId : IEquatable<TId> 
         where T : class, IDataObject<TId>, new()
     {
-        protected readonly SQLiteConnection _connection;
-
-        public Repository(ISqlService sqlite)
+        public Repository(ISqlService sqlService)
         {
-            _connection = sqlite.GetConnection();
+            Connection = sqlService.GetConnection();
         }
+
+        protected SQLiteConnection Connection { get; private set; }
 
         protected virtual Task<T> GetByIdAsync(TId id)
         {
-            return Task.FromResult(_connection.Get<T>(id));
+            return Task.FromResult(Connection.Get<T>(id));
         }
 
         protected virtual Task<IEnumerable<T>> GetAllAsync()
         {
-            return Task.FromResult(_connection.Table<T>().Cast<T>());
+            return Task.FromResult(Connection.Table<T>().Cast<T>());
         }
 
         protected virtual Task CreateAsync(T obj)
         {
-            _connection.Insert(obj);
+            Connection.Insert(obj);
             return Task.FromResult(0);
         }
 
         protected virtual Task ReplaceAsync(T obj)
         {
-            _connection.Update(obj);
+            Connection.Update(obj);
             return Task.FromResult(0);
         }
 
         protected virtual Task DeleteAsync(T obj)
         {
-            _connection.Delete<T>(obj.Id);
+            Connection.Delete<T>(obj.Id);
             return Task.FromResult(0);
         }
     }
