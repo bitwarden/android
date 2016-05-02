@@ -16,10 +16,19 @@ namespace Bit.App.Pages
         {
             var cryptoService = Resolver.Resolve<ICryptoService>();
             var siteService = Resolver.Resolve<ISiteService>();
+            var folderService = Resolver.Resolve<IFolderService>();
+
+            var folders = folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name);
 
             var uriEntry = new Entry { Keyboard = Keyboard.Url };
             var nameEntry = new Entry();
-            var folderEntry = new Entry { };
+            var folderPicker = new Picker { Title = "Folder" };
+            folderPicker.Items.Add("(none)");
+            folderPicker.SelectedIndex = 0;
+            foreach(var folder in folders)
+            {
+                folderPicker.Items.Add(folder.Name.Decrypt());
+            }
             var usernameEntry = new Entry();
             var passwordEntry = new Entry { IsPassword = true };
             var notesEditor = new Editor();
@@ -30,7 +39,7 @@ namespace Bit.App.Pages
             stackLayout.Children.Add(new Label { Text = "Name" });
             stackLayout.Children.Add(nameEntry);
             stackLayout.Children.Add(new Label { Text = "Folder" });
-            stackLayout.Children.Add(folderEntry);
+            stackLayout.Children.Add(folderPicker);
             stackLayout.Children.Add(new Label { Text = "Username" });
             stackLayout.Children.Add(usernameEntry);
             stackLayout.Children.Add(new Label { Text = "Password" });
@@ -64,8 +73,13 @@ namespace Bit.App.Pages
                     Name = nameEntry.Text.Encrypt(),
                     Username = usernameEntry.Text?.Encrypt(),
                     Password = passwordEntry.Text?.Encrypt(),
-                    Notes = notesEditor.Text?.Encrypt()
+                    Notes = notesEditor.Text?.Encrypt(),
                 };
+
+                if(folderPicker.SelectedIndex > 0)
+                {
+                    site.FolderId = folders.ElementAt(folderPicker.SelectedIndex - 1).Id;
+                }
 
                 await siteService.SaveAsync(site);
                 await Navigation.PopAsync();

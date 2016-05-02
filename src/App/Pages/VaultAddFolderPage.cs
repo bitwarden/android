@@ -39,8 +39,9 @@ namespace Bit.App.Pages
 
                 var folder = new Folder
                 {
-                    Name = new CipherString(nameEntry.Text)
+                    Name = nameEntry.Text.Encrypt()
                 };
+
                 await folderService.SaveAsync(folder);
                 await Navigation.PopAsync();
             }, ToolbarItemOrder.Default, 0);

@@ -22,8 +22,18 @@ namespace Bit.App.Pages
 
             var addSiteToolBarItem = new ToolbarItem("+", null, async () =>
             {
-                var addSitePage = new VaultAddSitePage();
-                await Navigation.PushAsync(addSitePage);
+                var selection = await DisplayActionSheet("Add", "Cancel", null, "Add New Folder", "Add New Site");
+                if(selection == "Add New Folder")
+                {
+                    var addFolderPage = new VaultAddFolderPage();
+                    await Navigation.PushAsync(addFolderPage);
+                }
+                else
+                {
+                    var addSitePage = new VaultAddSitePage();
+                    await Navigation.PushAsync(addSitePage);
+
+                }
             }, ToolbarItemOrder.Default, 0);
 
             ToolbarItems.Add(addSiteToolBarItem);

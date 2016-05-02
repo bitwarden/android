@@ -20,6 +20,12 @@ namespace Bit.App.Services
             _authService = authService;
         }
 
+        public new Task<Folder> GetByIdAsync(int id)
+        {
+            var data = Connection.Table<FolderData>().Where(f => f.UserId == _authService.UserId && f.Id == id).FirstOrDefault();
+            return Task.FromResult(new Folder(data));
+        }
+
         public new Task<IEnumerable<Folder>> GetAllAsync()
         {
             var data = Connection.Table<FolderData>().Where(f => f.UserId == _authService.UserId).Cast<FolderData>();

@@ -11,13 +11,16 @@ namespace Bit.App.Services
     public class SiteService : Repository<SiteData, int>, ISiteService
     {
         private readonly IAuthService _authService;
+        private readonly IFolderService _folderService;
 
         public SiteService(
             ISqlService sqlService,
-            IAuthService authService)
+            IAuthService authService,
+            IFolderService folderService)
             : base(sqlService)
         {
             _authService = authService;
+            _folderService = folderService;
         }
 
         public new Task<IEnumerable<Site>> GetAllAsync()
@@ -30,6 +33,15 @@ namespace Bit.App.Services
         {
             var data = new SiteData(site, _authService.UserId);
             data.RevisionDateTime = DateTime.UtcNow;
+
+            if(site.FolderId.HasValue && site.ServerFolderId == null)
+            {
+                var folder = await _folderService.GetByIdAsync(site.FolderId.Value);
+                if(folder != null)
+                {
+                    site.ServerFolderId = folder.ServerId;
+                }
+            }
 
             if(site.Id == 0)
             {
