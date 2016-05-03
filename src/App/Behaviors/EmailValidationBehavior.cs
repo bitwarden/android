@@ -18,9 +18,10 @@ namespace Bit.App.Behaviors
             private set { SetValue(IsValidPropertyKey, value); }
         }
 
-        protected override void OnAttachedTo(Entry bindable)
+        protected override void OnAttachedTo(Entry entry)
         {
-            bindable.TextChanged += HandleTextChanged;
+            entry.TextChanged += HandleTextChanged;
+            base.OnAttachedTo(entry);
         }
 
         void HandleTextChanged(object sender, TextChangedEventArgs e)
@@ -29,9 +30,10 @@ namespace Bit.App.Behaviors
             ((Entry)sender).BackgroundColor = IsValid ? Color.Default : Color.Red;
         }
 
-        protected override void OnDetachingFrom(Entry bindable)
+        protected override void OnDetachingFrom(Entry entry)
         {
-            bindable.TextChanged -= HandleTextChanged;
+            entry.TextChanged -= HandleTextChanged;
+            base.OnDetachingFrom(entry);
         }
     }
 }

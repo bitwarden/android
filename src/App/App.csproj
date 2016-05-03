@@ -41,6 +41,7 @@
     <Compile Include="Abstractions\Services\ISecureStorageService.cs" />
     <Compile Include="Abstractions\Services\ISqlService.cs" />
     <Compile Include="Behaviors\EmailValidationBehavior.cs" />
+    <Compile Include="Behaviors\ConnectivityBehavior.cs" />
     <Compile Include="Behaviors\RequiredValidationBehavior.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
@@ -84,6 +85,7 @@
     <Compile Include="Pages\VaultListPage.cs" />
     <Compile Include="Services\ApiService.cs" />
     <Compile Include="Utilities\Extentions.cs" />
+    <Compile Include="Utilities\TokenHttpRequestMessage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

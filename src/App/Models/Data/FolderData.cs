@@ -27,6 +27,7 @@ namespace Bit.App.Models.Data
 
         [PrimaryKey]
         public string Id { get; set; }
+        [Indexed]
         public string UserId { get; set; }
         public string Name { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;

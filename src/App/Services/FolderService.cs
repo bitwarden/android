@@ -8,7 +8,6 @@ using Bit.App.Models.Data;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using System.Net.Http;
-using System.Text;
 
 namespace Bit.App.Services
 {
@@ -30,26 +29,25 @@ namespace Bit.App.Services
         public new Task<Folder> GetByIdAsync(string id)
         {
             var data = Connection.Table<FolderData>().Where(f => f.UserId == _authService.UserId && f.Id == id).FirstOrDefault();
-            return Task.FromResult(new Folder(data));
+            var folder = new Folder(data);
+            return Task.FromResult(folder);
         }
 
         public new Task<IEnumerable<Folder>> GetAllAsync()
         {
             var data = Connection.Table<FolderData>().Where(f => f.UserId == _authService.UserId).Cast<FolderData>();
-            return Task.FromResult(data.Select(f => new Folder(f)));
+            var folders = data.Select(f => new Folder(f));
+            return Task.FromResult(folders);
         }
 
         public async Task<ApiResult<FolderResponse>> SaveAsync(Folder folder)
         {
             var request = new FolderRequest(folder);
-            var requestContent = JsonConvert.SerializeObject(request);
-            var requestMessage = new HttpRequestMessage
+            var requestMessage = new TokenHttpRequestMessage(request)
             {
                 Method = folder.Id == null ? HttpMethod.Post : HttpMethod.Put,
-                RequestUri = new Uri(_apiService.Client.BaseAddress, folder.Id == null ? "/folders" : string.Concat("/folders/", folder.Id)),
-                Content = new StringContent(requestContent, Encoding.UTF8, "application/json")
+                RequestUri = new Uri(_apiService.Client.BaseAddress, folder.Id == null ? "/folders" : $"/folders/{folder.Id}"),
             };
-            requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", _authService.Token));
 
             var response = await _apiService.Client.SendAsync(requestMessage);
             if(!response.IsSuccessStatusCode)

@@ -20,7 +20,7 @@ namespace Bit.App.Pages
             var folderService = Resolver.Resolve<IFolderService>();
             var userDialogs = Resolver.Resolve<IUserDialogs>();
 
-            var folders = folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name);
+            var folders = folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
 
             var uriEntry = new Entry { Keyboard = Keyboard.Url };
             var nameEntry = new Entry();

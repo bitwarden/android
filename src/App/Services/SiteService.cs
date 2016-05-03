@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -30,20 +29,18 @@ namespace Bit.App.Services
         public new Task<IEnumerable<Site>> GetAllAsync()
         {
             var data = Connection.Table<SiteData>().Where(f => f.UserId == _authService.UserId).Cast<SiteData>();
-            return Task.FromResult(data.Select(s => new Site(s)));
+            var sites = data.Select(s => new Site(s));
+            return Task.FromResult(sites);
         }
 
         public async Task<ApiResult<SiteResponse>> SaveAsync(Site site)
         {
             var request = new SiteRequest(site);
-            var requestContent = JsonConvert.SerializeObject(request);
-            var requestMessage = new HttpRequestMessage
+            var requestMessage = new TokenHttpRequestMessage(request)
             {
                 Method = site.Id == null ? HttpMethod.Post : HttpMethod.Put,
-                RequestUri = new Uri(_apiService.Client.BaseAddress, site.Id == null ? "/sites" : string.Concat("/folders/", site.Id)),
-                Content = new StringContent(requestContent, Encoding.UTF8, "application/json")
+                RequestUri = new Uri(_apiService.Client.BaseAddress, site.Id == null ? "/sites" : $"/folders/{site.Id}")
             };
-            requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", _authService.Token));
 
             var response = await _apiService.Client.SendAsync(requestMessage);
             if(!response.IsSuccessStatusCode)
@@ -57,15 +54,33 @@ namespace Bit.App.Services
 
             if(site.Id == null)
             {
-                await CreateAsync(data);
+                await base.CreateAsync(data);
                 site.Id = responseObj.Id;
             }
             else
             {
-                await ReplaceAsync(data);
+                await base.ReplaceAsync(data);
             }
 
             return ApiResult<SiteResponse>.Success(responseObj, response.StatusCode);
+        }
+
+        public new async Task<ApiResult<object>> DeleteAsync(string id)
+        {
+            var requestMessage = new TokenHttpRequestMessage
+            {
+                Method = HttpMethod.Delete,
+                RequestUri = new Uri(_apiService.Client.BaseAddress, $"/sites/{id}")
+            };
+
+            var response = await _apiService.Client.SendAsync(requestMessage);
+            if(!response.IsSuccessStatusCode)
+            {
+                return await _apiService.HandleErrorAsync<object>(response);
+            }
+
+            await base.DeleteAsync(id);
+            return ApiResult<object>.Success(null, response.StatusCode);
         }
     }
 }

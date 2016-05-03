@@ -38,6 +38,7 @@ namespace Bit.App.Models.Data
         [PrimaryKey]
         public string Id { get; set; }
         public string FolderId { get; set; }
+        [Indexed]
         public string UserId { get; set; }
         public string Name { get; set; }
         public string Uri { get; set; }

@@ -40,9 +40,14 @@ namespace Bit.App.Services
             return Task.FromResult(0);
         }
 
-        protected virtual Task DeleteAsync(T obj)
+        protected virtual async Task DeleteAsync(T obj)
         {
-            Connection.Delete<T>(obj.Id);
+            await DeleteAsync(obj.Id);
+        }
+
+        protected virtual Task DeleteAsync(TId id)
+        {
+            Connection.Delete<T>(id);
             return Task.FromResult(0);
         }
     }

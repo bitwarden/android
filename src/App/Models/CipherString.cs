@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using XLabs.Ioc;
 
@@ -10,6 +6,8 @@ namespace Bit.App.Models
 {
     public class CipherString
     {
+        private string _decryptedValue;
+
         public CipherString(string encryptedString)
         {
             if(string.IsNullOrWhiteSpace(encryptedString) || !encryptedString.Contains("|"))
@@ -43,8 +41,13 @@ namespace Bit.App.Models
 
         public string Decrypt()
         {
-            var cryptoService = Resolver.Resolve<ICryptoService>();
-            return cryptoService.Decrypt(this);
+            if(_decryptedValue == null)
+            {
+                var cryptoService = Resolver.Resolve<ICryptoService>();
+                _decryptedValue = cryptoService.Decrypt(this);
+            }
+
+            return _decryptedValue;
         }
     }
 }
