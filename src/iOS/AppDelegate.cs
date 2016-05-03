@@ -11,6 +11,8 @@ using Bit.App.Services;
 using Microsoft.Practices.Unity;
 using Bit.iOS.Services;
 using Plugin.Settings;
+using Plugin.Connectivity;
+using Acr.UserDialogs;
 
 namespace Bit.iOS
 {
@@ -54,7 +56,9 @@ namespace Bit.iOS
                 .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager());
+                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
+                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
         }

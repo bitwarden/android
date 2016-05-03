@@ -11,14 +11,18 @@ namespace Bit.App.Models
         public Folder(FolderData data)
         {
             Id = data.Id;
-            ServerId = data.ServerId;
             Name = data.Name != null ? new CipherString(data.Name) : null;
         }
 
         public Folder(FolderResponse response)
         {
-            ServerId = response.Id;
+            Id = response.Id;
             Name = response.Name != null ? new CipherString(response.Name) : null;
+        }
+
+        public FolderRequest ToFolderRequest()
+        {
+            return new FolderRequest(this);
         }
 
         public FolderData ToFolderData(string userId)

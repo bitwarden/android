@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Models.Api;
 using Bit.App.Models.Data;
+using Newtonsoft.Json;
 
 namespace Bit.App.Services
 {
-    public class SiteService : Repository<SiteData, int>, ISiteService
+    public class SiteService : Repository<SiteData, string>, ISiteService
     {
         private readonly IAuthService _authService;
-        private readonly IFolderService _folderService;
+        private readonly IApiService _apiService;
 
         public SiteService(
             ISqlService sqlService,
             IAuthService authService,
-            IFolderService folderService)
+            IApiService apiService)
             : base(sqlService)
         {
             _authService = authService;
-            _folderService = folderService;
+            _apiService = apiService;
         }
 
         public new Task<IEnumerable<Site>> GetAllAsync()
@@ -29,30 +33,39 @@ namespace Bit.App.Services
             return Task.FromResult(data.Select(s => new Site(s)));
         }
 
-        public async Task SaveAsync(Site site)
+        public async Task<ApiResult<SiteResponse>> SaveAsync(Site site)
         {
-            var data = new SiteData(site, _authService.UserId);
-            data.RevisionDateTime = DateTime.UtcNow;
-
-            if(site.FolderId.HasValue && site.ServerFolderId == null)
+            var request = new SiteRequest(site);
+            var requestContent = JsonConvert.SerializeObject(request);
+            var requestMessage = new HttpRequestMessage
             {
-                var folder = await _folderService.GetByIdAsync(site.FolderId.Value);
-                if(folder != null)
-                {
-                    site.ServerFolderId = folder.ServerId;
-                }
+                Method = site.Id == null ? HttpMethod.Post : HttpMethod.Put,
+                RequestUri = new Uri(_apiService.Client.BaseAddress, site.Id == null ? "/sites" : string.Concat("/folders/", site.Id)),
+                Content = new StringContent(requestContent, Encoding.UTF8, "application/json")
+            };
+            requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", _authService.Token));
+
+            var response = await _apiService.Client.SendAsync(requestMessage);
+            if(!response.IsSuccessStatusCode)
+            {
+                return await _apiService.HandleErrorAsync<SiteResponse>(response);
             }
 
-            if(site.Id == 0)
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var responseObj = JsonConvert.DeserializeObject<SiteResponse>(responseContent);
+            var data = new SiteData(responseObj, _authService.UserId);
+
+            if(site.Id == null)
             {
                 await CreateAsync(data);
+                site.Id = responseObj.Id;
             }
             else
             {
                 await ReplaceAsync(data);
             }
 
-            site.Id = data.Id;
+            return ApiResult<SiteResponse>.Success(responseObj, response.StatusCode);
         }
     }
 }

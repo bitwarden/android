@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Emit;
 using System.Text;
+using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Xamarin.Forms;
@@ -17,6 +18,7 @@ namespace Bit.App.Pages
             var cryptoService = Resolver.Resolve<ICryptoService>();
             var siteService = Resolver.Resolve<ISiteService>();
             var folderService = Resolver.Resolve<IFolderService>();
+            var userDialogs = Resolver.Resolve<IUserDialogs>();
 
             var folders = folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name);
 
@@ -81,8 +83,13 @@ namespace Bit.App.Pages
                     site.FolderId = folders.ElementAt(folderPicker.SelectedIndex - 1).Id;
                 }
 
-                await siteService.SaveAsync(site);
+                var saveTask = siteService.SaveAsync(site);
+                userDialogs.ShowLoading("Saving...", MaskType.Black);
+                await saveTask;
+
+                userDialogs.HideLoading();
                 await Navigation.PopAsync();
+                userDialogs.SuccessToast(nameEntry.Text, "New site created.");
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Add Site";

@@ -62,7 +62,7 @@ namespace Bit.App.Pages
 
             var folderItems = folders.Select(f => new VaultView.Folder(f, sites.Where(s => s.FolderId == f.Id))).ToList();
             // add the sites with no folder
-            folderItems.Add(new VaultView.Folder(sites.Where(s => !s.FolderId.HasValue)));
+            folderItems.Add(new VaultView.Folder(sites.Where(s => s.FolderId != null)));
             _listView.ItemsSource = folderItems;
         }
 

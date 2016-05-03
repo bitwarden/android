@@ -15,7 +15,7 @@ namespace Bit.App.Models.View
                 Username = site.Username?.Decrypt();
             }
 
-            public int Id { get; set; }
+            public string Id { get; set; }
             public string Name { get; set; }
             public string Username { get; set; }
         }
@@ -40,7 +40,7 @@ namespace Bit.App.Models.View
                 Name = folder.Name?.Decrypt();
             }
 
-            public int? Id { get; set; }
+            public string Id { get; set; }
             public string Name { get; set; }
             public string FirstLetter { get { return Name.Substring(0, 1); } }
         }

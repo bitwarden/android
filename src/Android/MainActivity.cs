@@ -13,6 +13,8 @@ using XLabs.Ioc.Unity;
 using XLabs.Ioc;
 using Bit.Android.Services;
 using Plugin.Settings;
+using Plugin.Connectivity;
+using Acr.UserDialogs;
 
 namespace Bit.Android
 {
@@ -46,9 +48,13 @@ namespace Bit.Android
                 .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager());
+                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
+                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
+
+            UserDialogs.Init(this);
         }
     }
 }

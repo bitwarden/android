@@ -1,13 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.App.Models;
+using Bit.App.Models.Api;
 
 namespace Bit.App.Abstractions
 {
     public interface IFolderService
     {
-        Task<Folder> GetByIdAsync(int id);
+        Task<Folder> GetByIdAsync(string id);
         Task<IEnumerable<Folder>> GetAllAsync();
-        Task SaveAsync(Folder folder);
+        Task<ApiResult<FolderResponse>> SaveAsync(Folder folder);
     }
 }

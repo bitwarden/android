@@ -1,11 +1,12 @@
 ﻿using System;
 using SQLite;
 using Bit.App.Abstractions;
+using Bit.App.Models.Api;
 
 namespace Bit.App.Models.Data
 {
     [Table("Site")]
-    public class SiteData : IDataObject<int>
+    public class SiteData : IDataObject<string>
     {
         public SiteData()
         { }
@@ -13,9 +14,7 @@ namespace Bit.App.Models.Data
         public SiteData(Site site, string userId)
         {
             Id = site.Id;
-            ServerId = site.ServerId;
             FolderId = site.FolderId;
-            ServerFolderId = site.ServerFolderId;
             UserId = userId;
             Name = site.Name?.EncryptedString;
             Uri = site.Uri?.EncryptedString;
@@ -24,12 +23,21 @@ namespace Bit.App.Models.Data
             Notes = site.Notes?.EncryptedString;
         }
 
+        public SiteData(SiteResponse site, string userId)
+        {
+            Id = site.Id;
+            FolderId = site.FolderId;
+            UserId = userId;
+            Name = site.Name;
+            Uri = site.Uri;
+            Username = site.Username;
+            Password = site.Password;
+            Notes = site.Notes;
+        }
+
         [PrimaryKey]
-        [AutoIncrement]
-        public int Id { get; set; }
-        public string ServerId { get; set; }
-        public int? FolderId { get; set; }
-        public string ServerFolderId { get; set; }
+        public string Id { get; set; }
+        public string FolderId { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
         public string Uri { get; set; }

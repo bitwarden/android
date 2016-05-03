@@ -1,11 +1,12 @@
 ﻿using System;
 using SQLite;
 using Bit.App.Abstractions;
+using Bit.App.Models.Api;
 
 namespace Bit.App.Models.Data
 {
     [Table("Folder")]
-    public class FolderData : IDataObject<int>
+    public class FolderData : IDataObject<string>
     {
         public FolderData()
         { }
@@ -13,15 +14,19 @@ namespace Bit.App.Models.Data
         public FolderData(Folder folder, string userId)
         {
             Id = folder.Id;
-            ServerId = folder.ServerId;
             UserId = userId;
             Name = folder.Name?.EncryptedString;
         }
 
+        public FolderData(FolderResponse folder, string userId)
+        {
+            Id = folder.Id;
+            UserId = userId;
+            Name = folder.Name;
+        }
+
         [PrimaryKey]
-        [AutoIncrement]
-        public int Id { get; set; }
-        public string ServerId { get; set; }
+        public string Id { get; set; }
         public string UserId { get; set; }
         public string Name { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;
