@@ -26,7 +26,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>bitwarden</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.bitwarden.bitwarden</string>
+	<string>com.bitwarden.vault</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>

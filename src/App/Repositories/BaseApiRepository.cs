@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
-using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using ModernHttpClient;
 using Newtonsoft.Json;
 
-namespace Bit.App.Services
+namespace Bit.App.Repositories
 {
-    public class ApiService : IApiService
+    public abstract class BaseApiRepository
     {
-        public ApiService()
+        public BaseApiRepository()
         {
             Client = new HttpClient(new NativeMessageHandler());
             Client.BaseAddress = new Uri("https://api.bitwarden.com");
+            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        public HttpClient Client { get; set; }
+        protected virtual HttpClient Client { get; private set; }
+        protected abstract string ApiRoute { get; }
 
         public async Task<ApiResult<T>> HandleErrorAsync<T>(HttpResponseMessage response)
         {

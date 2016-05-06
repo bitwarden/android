@@ -1,4 +1,6 @@
-﻿namespace Bit.App.Models.Api
+﻿using System;
+
+namespace Bit.App.Models.Api
 {
     public class SiteResponse
     {
@@ -9,6 +11,7 @@
         public string Username { get; set; }
         public string Password { get; set; }
         public string Notes { get; set; }
+        public DateTime RevisionDate { get; set; }
 
         // Expandables
         public FolderResponse Folder { get; set; }

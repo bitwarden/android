@@ -17,7 +17,7 @@ namespace Bit.App.Services
         private readonly ISecureStorageService _secureStorage;
         private readonly ISettings _settings;
         private readonly ICryptoService _cryptoService;
-        private readonly IApiService _apiService;
+        private readonly IAuthApiRepository _authApiRepository;
 
         private string _token;
         private string _userId;
@@ -26,12 +26,12 @@ namespace Bit.App.Services
             ISecureStorageService secureStorage,
             ISettings settings,
             ICryptoService cryptoService,
-            IApiService apiService)
+            IAuthApiRepository authApiRepository)
         {
             _secureStorage = secureStorage;
             _settings = settings;
             _cryptoService = cryptoService;
-            _apiService = apiService;
+            _authApiRepository = authApiRepository;
         }
 
         public string Token
@@ -110,16 +110,8 @@ namespace Bit.App.Services
 
         public async Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request)
         {
-            var requestContent = JsonConvert.SerializeObject(request);
-            var response = await _apiService.Client.PostAsync("/auth/token", new StringContent(requestContent, Encoding.UTF8, "application/json"));
-            if(!response.IsSuccessStatusCode)
-            {
-                return await _apiService.HandleErrorAsync<TokenResponse>(response);
-            }
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
-            return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
+            // TODO: move more logic in here
+            return await _authApiRepository.PostTokenAsync(request);
         }
     }
 }

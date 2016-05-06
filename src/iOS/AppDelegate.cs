@@ -13,6 +13,7 @@ using Bit.iOS.Services;
 using Plugin.Settings;
 using Plugin.Connectivity;
 using Acr.UserDialogs;
+using Bit.App.Repositories;
 
 namespace Bit.iOS
 {
@@ -48,15 +49,23 @@ namespace Bit.iOS
             var container = new UnityContainer();
 
             container
-                .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
+                // Services
                 .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
-                .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
-                .RegisterType<IApiService, ApiService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
+                // Repositories
+                .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
+                // Other
+                .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager());
 

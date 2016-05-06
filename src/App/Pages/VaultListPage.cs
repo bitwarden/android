@@ -31,21 +31,14 @@ namespace Bit.App.Pages
         {
             ToolbarItems.Add(new AddSiteToolBarItem(this));
 
-            var moreAction = new MenuItem { Text = "More" };
-            moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
-            moreAction.Clicked += MoreClickedAsync;
-
-            var deleteAction = new MenuItem { Text = "Delete", IsDestructive = true };
-            deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
-            deleteAction.Clicked += DeleteClickedAsync;
-
             var listView = new ListView { IsGroupingEnabled = true, ItemsSource = Folders };
             listView.GroupDisplayBinding = new Binding("Name");
             listView.ItemSelected += SiteSelected;
-            listView.ItemTemplate = new DataTemplate(() => new VaultListViewCell(moreAction, deleteAction));
+            listView.ItemTemplate = new DataTemplate(() => new VaultListViewCell(this));
 
             Title = "My Vault";
             Content = listView;
+            NavigationPage.SetBackButtonTitle(this, string.Empty);
         }
 
         protected override void OnAppearing()
@@ -122,7 +115,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = "Add";
-                Icon = "";
+                Icon = "fa-plus";
                 Clicked += ClickedItem;
             }
 
@@ -144,12 +137,20 @@ namespace Bit.App.Pages
 
         private class VaultListViewCell : TextCell
         {
-            public VaultListViewCell(MenuItem moreMenuItem, MenuItem deleteMenuItem)
+            public VaultListViewCell(VaultListPage page)
             {
+                var moreAction = new MenuItem { Text = "More" };
+                moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
+                moreAction.Clicked += page.MoreClickedAsync;
+
+                var deleteAction = new MenuItem { Text = "Delete", IsDestructive = true };
+                deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
+                deleteAction.Clicked += page.DeleteClickedAsync;
+
                 this.SetBinding<VaultView.Site>(TextProperty, s => s.Name);
                 this.SetBinding<VaultView.Site>(DetailProperty, s => s.Username);
-                ContextActions.Add(moreMenuItem);
-                ContextActions.Add(deleteMenuItem);
+                ContextActions.Add(moreAction);
+                ContextActions.Add(deleteAction);
             }
         }
     }

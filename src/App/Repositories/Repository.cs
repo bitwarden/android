@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using SQLite;
 
-namespace Bit.App.Services
+namespace Bit.App.Repositories
 {
-    public abstract class Repository<T, TId>
+    public abstract class Repository<T, TId> : IRepository<T, TId>
         where TId : IEquatable<TId> 
         where T : class, IDataObject<TId>, new()
     {
@@ -18,34 +18,34 @@ namespace Bit.App.Services
 
         protected SQLiteConnection Connection { get; private set; }
 
-        protected virtual Task<T> GetByIdAsync(TId id)
+        public virtual Task<T> GetByIdAsync(TId id)
         {
             return Task.FromResult(Connection.Get<T>(id));
         }
 
-        protected virtual Task<IEnumerable<T>> GetAllAsync()
+        public virtual Task<IEnumerable<T>> GetAllAsync()
         {
             return Task.FromResult(Connection.Table<T>().Cast<T>());
         }
 
-        protected virtual Task CreateAsync(T obj)
+        public virtual Task InsertAsync(T obj)
         {
             Connection.Insert(obj);
             return Task.FromResult(0);
         }
 
-        protected virtual Task ReplaceAsync(T obj)
+        public virtual Task UpdateAsync(T obj)
         {
             Connection.Update(obj);
             return Task.FromResult(0);
         }
 
-        protected virtual async Task DeleteAsync(T obj)
+        public virtual async Task DeleteAsync(T obj)
         {
             await DeleteAsync(obj.Id);
         }
 
-        protected virtual Task DeleteAsync(TId id)
+        public virtual Task DeleteAsync(TId id)
         {
             Connection.Delete<T>(id);
             return Task.FromResult(0);

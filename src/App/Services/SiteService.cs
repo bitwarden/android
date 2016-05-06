@@ -1,86 +1,89 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Models.Api;
 using Bit.App.Models.Data;
-using Newtonsoft.Json;
 
 namespace Bit.App.Services
 {
-    public class SiteService : Repository<SiteData, string>, ISiteService
+    public class SiteService : ISiteService
     {
+        private readonly ISiteRepository _siteRepository;
         private readonly IAuthService _authService;
-        private readonly IApiService _apiService;
+        private readonly ISiteApiRepository _siteApiRepository;
 
         public SiteService(
-            ISqlService sqlService,
+            ISiteRepository siteRepository,
             IAuthService authService,
-            IApiService apiService)
-            : base(sqlService)
+            ISiteApiRepository siteApiRepository)
         {
+            _siteRepository = siteRepository;
             _authService = authService;
-            _apiService = apiService;
+            _siteApiRepository = siteApiRepository;
         }
 
-        public new Task<IEnumerable<Site>> GetAllAsync()
+        public async Task<Site> GetByIdAsync(string id)
         {
-            var data = Connection.Table<SiteData>().Where(f => f.UserId == _authService.UserId).Cast<SiteData>();
-            var sites = data.Select(s => new Site(s));
-            return Task.FromResult(sites);
+            var data = await _siteRepository.GetByIdAsync(id);
+            if(data == null || data.UserId != _authService.UserId)
+            {
+                return null;
+            }
+
+            var site = new Site(data);
+            return site;
+        }
+
+        public async Task<IEnumerable<Site>> GetAllAsync()
+        {
+            var data = await _siteRepository.GetAllByUserIdAsync(_authService.UserId);
+            var sites = data.Select(f => new Site(f));
+            return sites;
         }
 
         public async Task<ApiResult<SiteResponse>> SaveAsync(Site site)
         {
+            ApiResult<SiteResponse> response = null;
             var request = new SiteRequest(site);
-            var requestMessage = new TokenHttpRequestMessage(request)
-            {
-                Method = site.Id == null ? HttpMethod.Post : HttpMethod.Put,
-                RequestUri = new Uri(_apiService.Client.BaseAddress, site.Id == null ? "/sites" : $"/folders/{site.Id}")
-            };
-
-            var response = await _apiService.Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await _apiService.HandleErrorAsync<SiteResponse>(response);
-            }
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<SiteResponse>(responseContent);
-            var data = new SiteData(responseObj, _authService.UserId);
 
             if(site.Id == null)
             {
-                await base.CreateAsync(data);
-                site.Id = responseObj.Id;
+                response = await _siteApiRepository.PostAsync(request);
             }
             else
             {
-                await base.ReplaceAsync(data);
+                response = await _siteApiRepository.PutAsync(site.Id, request);
             }
 
-            return ApiResult<SiteResponse>.Success(responseObj, response.StatusCode);
+            if(response.Succeeded)
+            {
+                var data = new SiteData(response.Result, _authService.UserId);
+                if(site.Id == null)
+                {
+                    await _siteRepository.InsertAsync(data);
+                    site.Id = data.Id;
+                }
+                else
+                {
+                    await _siteRepository.UpdateAsync(data);
+                }
+            }
+
+            return response;
         }
 
-        public new async Task<ApiResult<object>> DeleteAsync(string id)
+        public async Task<ApiResult<object>> DeleteAsync(string id)
         {
-            var requestMessage = new TokenHttpRequestMessage
+            ApiResult<object> response = await _siteApiRepository.DeleteAsync(id);
+            if(response.Succeeded)
             {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(_apiService.Client.BaseAddress, $"/sites/{id}")
-            };
-
-            var response = await _apiService.Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await _apiService.HandleErrorAsync<object>(response);
+                await _siteRepository.DeleteAsync(id);
             }
 
-            await base.DeleteAsync(id);
-            return ApiResult<object>.Success(null, response.StatusCode);
+            return response;
         }
     }
 }

@@ -6,70 +6,73 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Models.Data;
 using Bit.App.Models.Api;
-using Newtonsoft.Json;
-using System.Net.Http;
 
 namespace Bit.App.Services
 {
-    public class FolderService : Repository<FolderData, string>, IFolderService
+    public class FolderService : IFolderService
     {
+        private readonly IFolderRepository _folderRepository;
         private readonly IAuthService _authService;
-        private readonly IApiService _apiService;
+        private readonly IFolderApiRepository _folderApiRepository;
 
         public FolderService(
-            ISqlService sqlService,
+            IFolderRepository folderRepository,
             IAuthService authService,
-            IApiService apiService)
-            : base(sqlService)
+            IFolderApiRepository folderApiRepository)
         {
+            _folderRepository = folderRepository;
             _authService = authService;
-            _apiService = apiService;
+            _folderApiRepository = folderApiRepository;
         }
 
-        public new Task<Folder> GetByIdAsync(string id)
+        public async Task<Folder> GetByIdAsync(string id)
         {
-            var data = Connection.Table<FolderData>().Where(f => f.UserId == _authService.UserId && f.Id == id).FirstOrDefault();
+            var data = await _folderRepository.GetByIdAsync(id);
+            if(data == null || data.UserId != _authService.UserId)
+            {
+                return null;
+            }
+
             var folder = new Folder(data);
-            return Task.FromResult(folder);
+            return folder;
         }
 
-        public new Task<IEnumerable<Folder>> GetAllAsync()
+        public async Task<IEnumerable<Folder>> GetAllAsync()
         {
-            var data = Connection.Table<FolderData>().Where(f => f.UserId == _authService.UserId).Cast<FolderData>();
+            var data = await _folderRepository.GetAllByUserIdAsync(_authService.UserId);
             var folders = data.Select(f => new Folder(f));
-            return Task.FromResult(folders);
+            return folders;
         }
 
         public async Task<ApiResult<FolderResponse>> SaveAsync(Folder folder)
         {
+            ApiResult<FolderResponse> response = null;
             var request = new FolderRequest(folder);
-            var requestMessage = new TokenHttpRequestMessage(request)
-            {
-                Method = folder.Id == null ? HttpMethod.Post : HttpMethod.Put,
-                RequestUri = new Uri(_apiService.Client.BaseAddress, folder.Id == null ? "/folders" : $"/folders/{folder.Id}"),
-            };
-
-            var response = await _apiService.Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await _apiService.HandleErrorAsync<FolderResponse>(response);
-            }
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<FolderResponse>(responseContent);
-            var data = new FolderData(responseObj, _authService.UserId);
 
             if(folder.Id == null)
             {
-                await CreateAsync(data);
-                folder.Id = responseObj.Id;
+                response = await _folderApiRepository.PostAsync(request);
             }
             else
             {
-                await ReplaceAsync(data);
+                response = await _folderApiRepository.PutAsync(folder.Id, request);
             }
 
-            return ApiResult<FolderResponse>.Success(responseObj, response.StatusCode);
+            if(response.Succeeded)
+            {
+                var data = new FolderData(response.Result, _authService.UserId);
+                if(folder.Id == null)
+                {
+                    await _folderRepository.InsertAsync(data);
+                    folder.Id = data.Id;
+                }
+                else
+                {
+                    await _folderRepository.UpdateAsync(data);
+                }
+            }
+
+            return response;
         }
     }
 }
