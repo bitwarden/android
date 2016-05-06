@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
-using Newtonsoft.Json;
 using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Services

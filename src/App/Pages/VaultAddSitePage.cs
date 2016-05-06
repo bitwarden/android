@@ -6,6 +6,7 @@ using System.Text;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -19,6 +20,7 @@ namespace Bit.App.Pages
             var siteService = Resolver.Resolve<ISiteService>();
             var folderService = Resolver.Resolve<IFolderService>();
             var userDialogs = Resolver.Resolve<IUserDialogs>();
+            var connectivity = Resolver.Resolve<IConnectivity>();
 
             var folders = folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
 
@@ -57,6 +59,12 @@ namespace Bit.App.Pages
 
             var saveToolBarItem = new ToolbarItem("Save", null, async () =>
             {
+                if(!connectivity.IsConnected)
+                {
+                    AlertNoConnection();
+                    return;
+                }
+
                 if(string.IsNullOrWhiteSpace(uriEntry.Text))
                 {
                     await DisplayAlert("An error has occurred", "The Uri field is required.", "Ok");
@@ -95,6 +103,17 @@ namespace Bit.App.Pages
             Title = "Add Site";
             Content = scrollView;
             ToolbarItems.Add(saveToolBarItem);
+
+            if(!connectivity.IsConnected)
+            {
+                AlertNoConnection();
+            }
+        }
+
+        public void AlertNoConnection()
+        {
+            DisplayAlert("No internet connection", "Adding a new folder required an internet connection. Please connect to the internet before continuing.", "Ok");
         }
     }
 }
+
