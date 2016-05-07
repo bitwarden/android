@@ -208,6 +208,12 @@
       <Project>{b490c5da-639e-4994-abd2-54222b8a348e}</Project>
       <Name>App</Name>
     </ProjectReference>
+    <ProjectReference Include="..\iOS.Extension\iOS.Extension.csproj">
+      <Project>{32f5a2d6-f54d-4da1-ae26-0a980d48f422}</Project>
+      <Name>iOS.Extension</Name>
+      <IsAppExtension>true</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\fa-refresh.png" />
