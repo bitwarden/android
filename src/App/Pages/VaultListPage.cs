@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Models.View;
+using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -36,7 +37,7 @@ namespace Bit.App.Pages
             listView.ItemSelected += SiteSelected;
             listView.ItemTemplate = new DataTemplate(() => new VaultListViewCell(this));
 
-            Title = "My Vault";
+            Title = AppResources.MyVault;
             Content = listView;
             NavigationPage.SetBackButtonTitle(this, string.Empty);
         }
