@@ -67,7 +67,8 @@ namespace Bit.App.Pages
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
         {
-
+            var site = e.SelectedItem as VaultView.Site;
+            Navigation.PushAsync(new VaultViewSitePage(site.Id));
         }
 
         private async void MoreClickedAsync(object sender, EventArgs e)
@@ -121,17 +122,7 @@ namespace Bit.App.Pages
 
             private async void ClickedItem(object sender, EventArgs e)
             {
-                var selection = await _page.DisplayActionSheet("Add", "Cancel", null, "Add New Folder", "Add New Site");
-                if(selection == "Add New Folder")
-                {
-                    var addFolderPage = new VaultAddFolderPage();
-                    await _page.Navigation.PushAsync(addFolderPage);
-                }
-                else if(selection == "Add New Site")
-                {
-                    var addSitePage = new VaultAddSitePage();
-                    await _page.Navigation.PushAsync(addSitePage);
-                }
+                await _page.Navigation.PushAsync(new VaultAddSitePage());
             }
         }
 

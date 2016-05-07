@@ -50,6 +50,7 @@ namespace Bit.Android
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

@@ -91,6 +91,7 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Services\ClipboardService.cs" />
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />

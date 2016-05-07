@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Abstractions\Services\IClipboardService.cs" />
     <Compile Include="Abstractions\Services\ISiteService.cs" />
     <Compile Include="Abstractions\Services\IFolderService.cs" />
     <Compile Include="App.cs" />
@@ -94,7 +95,6 @@
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Models\View\VaultView.cs" />
     <Compile Include="Pages\LoginPage.cs" />
-    <Compile Include="Pages\VaultEditFolderPage.cs" />
     <Compile Include="Pages\VaultAddFolderPage.cs" />
     <Compile Include="Pages\VaultAddSitePage.cs" />
     <Compile Include="Pages\VaultViewSitePage.cs" />

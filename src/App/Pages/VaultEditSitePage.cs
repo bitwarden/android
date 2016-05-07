@@ -10,9 +10,9 @@ namespace Bit.App.Pages
 {
     public class VaultEditSitePage : ContentPage
     {
-        public VaultEditSitePage()
+        public VaultEditSitePage(string siteId)
         {
-            Title = "Edit Site";
+            Title = "Edit Site " + siteId;
             Content = null;
         }
     }
