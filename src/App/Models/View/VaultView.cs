@@ -14,12 +14,16 @@ namespace Bit.App.Models.View
                 FolderId = folderId;
                 Name = site.Name?.Decrypt();
                 Username = site.Username?.Decrypt();
+                Password = site.Password?.Decrypt();
+                Uri = site.Uri?.Decrypt();
             }
 
             public string Id { get; set; }
             public string FolderId { get; set; }
             public string Name { get; set; }
             public string Username { get; set; }
+            public string Password { get; set; }
+            public string Uri { get; set; }
         }
 
         public class Folder : ObservableCollection<Site>

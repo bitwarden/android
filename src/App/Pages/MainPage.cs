@@ -1,4 +1,5 @@
 ﻿using System;
+using Bit.App.Resources;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -14,10 +15,10 @@ namespace Bit.App.Pages
             vaultNavigation.BarBackgroundColor = settingsNavigation.BarBackgroundColor = Color.FromHex("3c8dbc");
             vaultNavigation.BarTextColor = settingsNavigation.BarTextColor = Color.FromHex("ffffff");
 
-            vaultNavigation.Title = "My Vault";
+            vaultNavigation.Title = AppResources.MyVault;
             vaultNavigation.Icon = "fa-lock";
 
-            settingsNavigation.Title = "Settings";
+            settingsNavigation.Title = AppResources.Settings;
             settingsNavigation.Icon = "fa-cogs";
 
             Children.Add(vaultNavigation);

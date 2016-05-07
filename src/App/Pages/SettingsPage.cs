@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -16,7 +17,7 @@ namespace Bit.App.Pages
 
             var logoutButton = new Button
             {
-                Text = "Log Out",
+                Text = AppResources.LogOut,
                 Command = new Command(() =>
                 {
                     authService.LogOut();
@@ -27,7 +28,7 @@ namespace Bit.App.Pages
             var stackLayout = new StackLayout { };
             stackLayout.Children.Add(logoutButton);
 
-            Title = "Settings";
+            Title = AppResources.Settings;
             Content = stackLayout;
         }
     }

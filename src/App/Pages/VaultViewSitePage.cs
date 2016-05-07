@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Text;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -49,10 +50,10 @@ namespace Bit.App.Pages
             usernameRow.Children.Add(usernameLabel);
             usernameRow.Children.Add(new Button
             {
-                Text = "Copy",
+                Text = AppResources.Copy,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
-                Command = new Command(() => Copy(usernameLabel.Text, "Username"))
+                Command = new Command(() => Copy(usernameLabel.Text, AppResources.Username))
             });
 
             var passwordRow = new StackLayout { Orientation = StackOrientation.Horizontal };
@@ -67,7 +68,7 @@ namespace Bit.App.Pages
             passwordRow.Children.Add(passwordLabel);
             var togglePasswordButton = new Button
             {
-                Text = "Show",
+                Text = AppResources.Show,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
                 Command = new Command((self) => TogglePassword(self as Button, passwordLabel, password))
@@ -76,10 +77,10 @@ namespace Bit.App.Pages
             passwordRow.Children.Add(togglePasswordButton);
             passwordRow.Children.Add(new Button
             {
-                Text = "Copy",
+                Text = AppResources.Copy,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
-                Command = new Command(() => Copy(password, "Password"))
+                Command = new Command(() => Copy(password, AppResources.Password))
             });
 
             var uriRow = new StackLayout { Orientation = StackOrientation.Horizontal };
@@ -93,22 +94,22 @@ namespace Bit.App.Pages
             });
             uriRow.Children.Add(new Button
             {
-                Text = "Launch",
+                Text = AppResources.Launch,
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center,
                 Command = new Command(() => Device.OpenUri(new Uri(uri)))
             });
 
             var stackLayout = new StackLayout();
-            stackLayout.Children.Add(new Label { Text = "Username" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Username });
             stackLayout.Children.Add(usernameRow);
-            stackLayout.Children.Add(new Label { Text = "Password" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Password });
             stackLayout.Children.Add(passwordRow);
-            stackLayout.Children.Add(new Label { Text = "Website" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Website });
             stackLayout.Children.Add(uriRow);
             if(site.Notes != null)
             {
-                stackLayout.Children.Add(new Label { Text = "Notes" });
+                stackLayout.Children.Add(new Label { Text = AppResources.Notes });
                 stackLayout.Children.Add(new Label { Text = site.Notes.Decrypt() });
             }
 
@@ -118,28 +119,28 @@ namespace Bit.App.Pages
                 Orientation = ScrollOrientation.Vertical
             };
 
-            Title = site.Name?.Decrypt() ?? "No Name";
+            Title = site.Name?.Decrypt() ?? AppResources.SiteNoName;
             Content = scrollView;
         }
 
-        public void TogglePassword(Button toggleButton, Label passwordLabel, string password)
+        private void TogglePassword(Button toggleButton, Label passwordLabel, string password)
         {
-            if(toggleButton.Text == "Show")
+            if(toggleButton.Text == AppResources.Show)
             {
-                toggleButton.Text = "Hide";
+                toggleButton.Text = AppResources.Hide;
                 passwordLabel.Text = password;
             }
             else
             {
-                toggleButton.Text = "Show";
+                toggleButton.Text = AppResources.Show;
                 passwordLabel.Text = new string('●', password.Length);
             }
         }
 
-        public void Copy(string copyText, string alertLabel)
+        private void Copy(string copyText, string alertLabel)
         {
             _clipboardService.CopyToClipboard(copyText);
-            _userDialogs.SuccessToast($"{alertLabel} has been copied.");
+            _userDialogs.SuccessToast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private class EditSiteToolBarItem : ToolbarItem
@@ -151,7 +152,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 _siteId = siteId;
-                Text = "Edit";
+                Text = AppResources.Edit;
                 Clicked += ClickedItem;
             }
 

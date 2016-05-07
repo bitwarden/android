@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -25,7 +26,7 @@ namespace Bit.App.Pages
             var nameEntry = new Entry();
 
             var stackLayout = new StackLayout();
-            stackLayout.Children.Add(new Label { Text = "Name" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Name });
             stackLayout.Children.Add(nameEntry);
 
             var scrollView = new ScrollView
@@ -34,7 +35,7 @@ namespace Bit.App.Pages
                 Orientation = ScrollOrientation.Vertical
             };
 
-            var saveToolBarItem = new ToolbarItem("Save", null, async () =>
+            var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
                 if(!connectivity.IsConnected)
                 {
@@ -44,7 +45,7 @@ namespace Bit.App.Pages
 
                 if(string.IsNullOrWhiteSpace(nameEntry.Text))
                 {
-                    await DisplayAlert("An error has occurred", "The Name field is required.", "Ok");
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
                     return;
                 }
 
@@ -74,7 +75,7 @@ namespace Bit.App.Pages
 
         public void AlertNoConnection()
         {
-            DisplayAlert("No internet connection", "Adding a new folder required an internet connection. Please connect to the internet before continuing.", "Ok");
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
         }
     }
 }

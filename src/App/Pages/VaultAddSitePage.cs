@@ -6,6 +6,7 @@ using System.Text;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -27,7 +28,7 @@ namespace Bit.App.Pages
             var uriEntry = new Entry { Keyboard = Keyboard.Url };
             var nameEntry = new Entry();
             var folderPicker = new Picker { Title = "Folder" };
-            folderPicker.Items.Add("(none)");
+            folderPicker.Items.Add(AppResources.FolderNone);
             folderPicker.SelectedIndex = 0;
             foreach(var folder in folders)
             {
@@ -38,17 +39,17 @@ namespace Bit.App.Pages
             var notesEditor = new Editor();
 
             var stackLayout = new StackLayout();
-            stackLayout.Children.Add(new Label { Text = "URI" });
+            stackLayout.Children.Add(new Label { Text = AppResources.URI });
             stackLayout.Children.Add(uriEntry);
-            stackLayout.Children.Add(new Label { Text = "Name" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Name });
             stackLayout.Children.Add(nameEntry);
-            stackLayout.Children.Add(new Label { Text = "Folder" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Folder });
             stackLayout.Children.Add(folderPicker);
-            stackLayout.Children.Add(new Label { Text = "Username" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Username });
             stackLayout.Children.Add(usernameEntry);
-            stackLayout.Children.Add(new Label { Text = "Password" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Password });
             stackLayout.Children.Add(passwordEntry);
-            stackLayout.Children.Add(new Label { Text = "Notes" });
+            stackLayout.Children.Add(new Label { Text = AppResources.Notes });
             stackLayout.Children.Add(notesEditor);
 
             var scrollView = new ScrollView
@@ -57,7 +58,7 @@ namespace Bit.App.Pages
                 Orientation = ScrollOrientation.Vertical
             };
 
-            var saveToolBarItem = new ToolbarItem("Save", null, async () =>
+            var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
                 if(!connectivity.IsConnected)
                 {
@@ -67,13 +68,13 @@ namespace Bit.App.Pages
 
                 if(string.IsNullOrWhiteSpace(uriEntry.Text))
                 {
-                    await DisplayAlert("An error has occurred", "The Uri field is required.", "Ok");
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.URI), AppResources.Ok);
                     return;
                 }
 
                 if(string.IsNullOrWhiteSpace(nameEntry.Text))
                 {
-                    await DisplayAlert("An error has occurred", "The Name field is required.", "Ok");
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
                     return;
                 }
 
@@ -100,7 +101,7 @@ namespace Bit.App.Pages
                 userDialogs.SuccessToast(nameEntry.Text, "New site created.");
             }, ToolbarItemOrder.Default, 0);
 
-            Title = "Add Site";
+            Title = AppResources.AddSite;
             Content = scrollView;
             ToolbarItems.Add(saveToolBarItem);
 
@@ -112,7 +113,7 @@ namespace Bit.App.Pages
 
         public void AlertNoConnection()
         {
-            DisplayAlert("No internet connection", "Adding a new folder required an internet connection. Please connect to the internet before continuing.", "Ok");
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
         }
     }
 }

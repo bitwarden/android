@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Bit.App.Resources;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -9,7 +10,7 @@ namespace Bit.App.Pages
         {
             BarBackgroundColor = Color.FromHex("3c8dbc");
             BarTextColor = Color.FromHex("ffffff");
-            Title = "Login";
+            Title = AppResources.LogInNoun;
         }
     }
 }

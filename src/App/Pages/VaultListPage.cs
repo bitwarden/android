@@ -16,12 +16,14 @@ namespace Bit.App.Pages
         private readonly IFolderService _folderService;
         private readonly ISiteService _siteService;
         private readonly IUserDialogs _userDialogs;
+        private readonly IClipboardService _clipboardService;
 
         public VaultListPage()
         {
             _folderService = Resolver.Resolve<IFolderService>();
             _siteService = Resolver.Resolve<ISiteService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _clipboardService = Resolver.Resolve<IClipboardService>();
 
             Init();
         }
@@ -76,22 +78,44 @@ namespace Bit.App.Pages
         {
             var mi = sender as MenuItem;
             var site = mi.CommandParameter as VaultView.Site;
-            var selection = await DisplayActionSheet("More Options", "Cancel", null, "View", "Edit", "Copy Password", "Copy Username", "Go To Website");
+            var selection = await DisplayActionSheet(AppResources.MoreOptions, AppResources.Cancel, null,
+                AppResources.View, AppResources.Edit, AppResources.CopyPassword, AppResources.CopyUsername, AppResources.GoToWebsite);
 
-            switch(selection)
+            if(selection == AppResources.View)
             {
-                case "View":
-                case "Edit":
-                case "Copy Password":
-                case "Copy Username":
-                case "Go To Website":
-                default:
-                    break;
+                await Navigation.PushAsync(new VaultViewSitePage(site.Id));
             }
+            else if(selection == AppResources.Edit)
+            {
+                // TODO: navigate to edit page
+            }
+            else if(selection == AppResources.CopyPassword)
+            {
+                Copy(site.Password, AppResources.Password);
+            }
+            else if(selection == AppResources.CopyUsername)
+            {
+                Copy(site.Username, AppResources.Username);
+            }
+            else if(selection == AppResources.GoToWebsite)
+            {
+                Device.OpenUri(new Uri(site.Uri));
+            }
+        }
+
+        private void Copy(string copyText, string alertLabel)
+        {
+            _clipboardService.CopyToClipboard(copyText);
+            _userDialogs.SuccessToast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private async void DeleteClickedAsync(object sender, EventArgs e)
         {
+            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
+            {
+                return;
+            }
+
             var mi = sender as MenuItem;
             var site = mi.CommandParameter as VaultView.Site;
             var deleteCall = await _siteService.DeleteAsync(site.Id);
@@ -101,11 +125,11 @@ namespace Bit.App.Pages
                 var folder = Folders.Single(f => f.Id == site.FolderId);
                 var siteIndex = folder.Select((s, i) => new { s, i }).First(s => s.s.Id == site.Id).i;
                 folder.RemoveAt(siteIndex);
-                _userDialogs.SuccessToast("Site deleted.");
+                _userDialogs.SuccessToast(AppResources.SiteDeleted);
             }
             else if(deleteCall.Errors.Count() > 0)
             {
-                await DisplayAlert("An error has occurred", deleteCall.Errors.First().Message, "Ok");
+                await DisplayAlert(AppResources.AnErrorHasOccurred, deleteCall.Errors.First().Message, AppResources.Ok);
             }
         }
 
@@ -116,7 +140,7 @@ namespace Bit.App.Pages
             public AddSiteToolBarItem(VaultListPage page)
             {
                 _page = page;
-                Text = "Add";
+                Text = AppResources.Add;
                 Icon = "fa-plus";
                 Clicked += ClickedItem;
             }
@@ -131,11 +155,11 @@ namespace Bit.App.Pages
         {
             public VaultListViewCell(VaultListPage page)
             {
-                var moreAction = new MenuItem { Text = "More" };
+                var moreAction = new MenuItem { Text = AppResources.More };
                 moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 moreAction.Clicked += page.MoreClickedAsync;
 
-                var deleteAction = new MenuItem { Text = "Delete", IsDestructive = true };
+                var deleteAction = new MenuItem { Text = AppResources.Delete, IsDestructive = true };
                 deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 deleteAction.Clicked += page.DeleteClickedAsync;
 

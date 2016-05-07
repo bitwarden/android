@@ -6,6 +6,7 @@ using System.Text;
 using Bit.App.Abstractions;
 using Bit.App.Behaviors;
 using Bit.App.Models.Api;
+using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -21,7 +22,7 @@ namespace Bit.App.Pages
             var emailEntry = new Entry
             {
                 Keyboard = Keyboard.Email,
-                Placeholder = "Email Address"
+                Placeholder = AppResources.EmailAddress
             };
 
             emailEntry.Behaviors.Add(new RequiredValidationBehavior());
@@ -30,25 +31,25 @@ namespace Bit.App.Pages
             var masterPasswordEntry = new Entry
             {
                 IsPassword = true,
-                Placeholder = "Master Password"
+                Placeholder = AppResources.MasterPassword
             };
 
             masterPasswordEntry.Behaviors.Add(new RequiredValidationBehavior());
 
             var loginButton = new Button
             {
-                Text = "Log In",
+                Text = AppResources.LogIn,
                 Command = new Command(async () =>
                 {
                     if(string.IsNullOrWhiteSpace(emailEntry.Text))
                     {
-                        await DisplayAlert("An error has occurred", "The Email Address field is required.", "Ok");
+                        await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress), AppResources.Ok);
                         return;
                     }
 
                     if(string.IsNullOrWhiteSpace(masterPasswordEntry.Text))
                     {
-                        await DisplayAlert("An error has occurred", "The Master Password field is required.", "Ok");
+                        await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword), AppResources.Ok);
                         return;
                     }
 
@@ -63,7 +64,7 @@ namespace Bit.App.Pages
                     var response = await authService.TokenPostAsync(request);
                     if(!response.Succeeded)
                     {
-                        await DisplayAlert("An error occurred", response.Errors.First().Message, "Ok");
+                        await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.First().Message, AppResources.Ok);
                         return;
                     }
 
@@ -83,7 +84,7 @@ namespace Bit.App.Pages
             stackLayout.Children.Add(masterPasswordEntry);
             stackLayout.Children.Add(loginButton);
 
-            Title = "Log In";
+            Title = AppResources.LogIn;
             Content = stackLayout;
             NavigationPage.SetHasNavigationBar(this, false);
         }

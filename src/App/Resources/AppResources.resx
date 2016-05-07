@@ -117,13 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
   <data name="AddSite" xml:space="preserve">
     <value>Add Site</value>
     <comment>The title for the add site page.</comment>
   </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>An error has occurred.</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>Copy</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>Copy Password</value>
+    <comment>The button text that allows a user to copy the site's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Copy Username</value>
+    <comment>The button text that allows a user to copy the site's username to their clipboard.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>Do you really want to delete? This cannot be undone.</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
-    <comment>Label for an email address.</comment>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Email Address</value>
+    <comment>Full label for a email address.</comment>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Folder</value>
@@ -133,33 +172,92 @@
     <value>(none)</value>
     <comment>Sites that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>Go To Website</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Hide</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>Please connect to the internet before continuing.</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>Internet Connection Required</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Launch</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
   <data name="LogIn" xml:space="preserve">
     <value>Log In</value>
-    <comment>The login button text.</comment>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>Login</value>
+    <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
     <value>Log Out</value>
-    <comment>The log out button text.</comment>
+    <comment>The log out button text (verb).</comment>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Master Password</value>
     <comment>Label for a master password.</comment>
   </data>
+  <data name="More" xml:space="preserve">
+    <value>More</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MoreOptions" xml:space="preserve">
+    <value>More Options</value>
+    <comment>The text title that defines more options for a site.</comment>
+  </data>
   <data name="MyVault" xml:space="preserve">
     <value>My Vault</value>
     <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Name</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
   </data>
   <data name="Notes" xml:space="preserve">
     <value>Notes</value>
     <comment>Label for notes.</comment>
   </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+    <comment>Acknowledgement.</comment>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
     <comment>Label for a password.</comment>
   </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
     <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="SiteDeleted" xml:space="preserve">
+    <value>Site has been deleted.</value>
+    <comment>Confirmation message after successfully deleting a site.</comment>
+  </data>
+  <data name="SiteNoName" xml:space="preserve">
+    <value>No Name</value>
+    <comment>Title text to display when there is no name given for a site.</comment>
   </data>
   <data name="Sync" xml:space="preserve">
     <value>Sync</value>
@@ -172,5 +270,23 @@
   <data name="Username" xml:space="preserve">
     <value>Username</value>
     <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>The {0} field is required.</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>{0} has been copied.</value>
+    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Website</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
   </data>
 </root>
