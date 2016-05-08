@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Bit.App.Resources;
 
-namespace Bit.App.Models.View
+namespace Bit.App.Models.Page
 {
-    public class VaultView
+    public class VaultListPageModel
     {
         public class Site
         {
@@ -44,7 +45,7 @@ namespace Bit.App.Models.View
             }
 
             public string Id { get; set; }
-            public string Name { get; set; } = "(none)";
+            public string Name { get; set; } = AppResources.FolderNone;
             public string FirstLetter { get { return Name.Substring(0, 1); } }
         }
     }

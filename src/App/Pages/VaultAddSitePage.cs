@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -15,19 +12,26 @@ namespace Bit.App.Pages
 {
     public class VaultAddSitePage : ContentPage
     {
+        private readonly ISiteService _siteService;
+        private readonly IFolderService _folderService;
+        private readonly IUserDialogs _userDialogs;
+        private readonly IConnectivity _connectivity;
+
         public VaultAddSitePage()
         {
-            var cryptoService = Resolver.Resolve<ICryptoService>();
-            var siteService = Resolver.Resolve<ISiteService>();
-            var folderService = Resolver.Resolve<IFolderService>();
-            var userDialogs = Resolver.Resolve<IUserDialogs>();
-            var connectivity = Resolver.Resolve<IConnectivity>();
+            _siteService = Resolver.Resolve<ISiteService>();
+            _folderService = Resolver.Resolve<IFolderService>();
+            _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _connectivity = Resolver.Resolve<IConnectivity>();
+        }
 
-            var folders = folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
+        private void Init()
+        {
+            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
 
             var uriEntry = new Entry { Keyboard = Keyboard.Url };
             var nameEntry = new Entry();
-            var folderPicker = new Picker { Title = "Folder" };
+            var folderPicker = new Picker { Title = AppResources.Folder };
             folderPicker.Items.Add(AppResources.FolderNone);
             folderPicker.SelectedIndex = 0;
             foreach(var folder in folders)
@@ -60,7 +64,7 @@ namespace Bit.App.Pages
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
-                if(!connectivity.IsConnected)
+                if(!_connectivity.IsConnected)
                 {
                     AlertNoConnection();
                     return;
@@ -92,26 +96,26 @@ namespace Bit.App.Pages
                     site.FolderId = folders.ElementAt(folderPicker.SelectedIndex - 1).Id;
                 }
 
-                var saveTask = siteService.SaveAsync(site);
-                userDialogs.ShowLoading("Saving...", MaskType.Black);
+                var saveTask = _siteService.SaveAsync(site);
+                _userDialogs.ShowLoading("Saving...", MaskType.Black);
                 await saveTask;
 
-                userDialogs.HideLoading();
+                _userDialogs.HideLoading();
                 await Navigation.PopAsync();
-                userDialogs.SuccessToast(nameEntry.Text, "New site created.");
+                _userDialogs.SuccessToast(nameEntry.Text, "New site created.");
             }, ToolbarItemOrder.Default, 0);
 
             Title = AppResources.AddSite;
             Content = scrollView;
             ToolbarItems.Add(saveToolBarItem);
 
-            if(!connectivity.IsConnected)
+            if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
             }
         }
 
-        public void AlertNoConnection()
+        private void AlertNoConnection()
         {
             DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
         }

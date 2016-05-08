@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
-using Bit.App.Models.View;
+using Bit.App.Models.Page;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -28,7 +28,7 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ObservableCollection<VaultView.Folder> Folders { get; private set; } = new ObservableCollection<VaultView.Folder>();
+        public ObservableCollection<VaultListPageModel.Folder> Folders { get; private set; } = new ObservableCollection<VaultListPageModel.Folder>();
 
         private void Init()
         {
@@ -41,7 +41,7 @@ namespace Bit.App.Pages
 
             Title = AppResources.MyVault;
             Content = listView;
-            NavigationPage.SetBackButtonTitle(this, string.Empty);
+            NavigationPage.SetBackButtonTitle(this, "Back");
         }
 
         protected override void OnAppearing()
@@ -59,25 +59,25 @@ namespace Bit.App.Pages
 
             foreach(var folder in folders)
             {
-                var f = new VaultView.Folder(folder, sites.Where(s => s.FolderId == folder.Id));
+                var f = new VaultListPageModel.Folder(folder, sites.Where(s => s.FolderId == folder.Id));
                 Folders.Add(f);
             }
 
             // add the sites with no folder
-            var noneFolder = new VaultView.Folder(sites.Where(s => s.FolderId == null));
+            var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));
             Folders.Add(noneFolder);
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var site = e.SelectedItem as VaultView.Site;
+            var site = e.SelectedItem as VaultListPageModel.Site;
             Navigation.PushAsync(new VaultViewSitePage(site.Id));
         }
 
         private async void MoreClickedAsync(object sender, EventArgs e)
         {
             var mi = sender as MenuItem;
-            var site = mi.CommandParameter as VaultView.Site;
+            var site = mi.CommandParameter as VaultListPageModel.Site;
             var selection = await DisplayActionSheet(AppResources.MoreOptions, AppResources.Cancel, null,
                 AppResources.View, AppResources.Edit, AppResources.CopyPassword, AppResources.CopyUsername, AppResources.GoToWebsite);
 
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
             }
 
             var mi = sender as MenuItem;
-            var site = mi.CommandParameter as VaultView.Site;
+            var site = mi.CommandParameter as VaultListPageModel.Site;
             var deleteCall = await _siteService.DeleteAsync(site.Id);
 
             if(deleteCall.Succeeded)
@@ -163,8 +163,8 @@ namespace Bit.App.Pages
                 deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 deleteAction.Clicked += page.DeleteClickedAsync;
 
-                this.SetBinding<VaultView.Site>(TextProperty, s => s.Name);
-                this.SetBinding<VaultView.Site>(DetailProperty, s => s.Username);
+                this.SetBinding<VaultListPageModel.Site>(TextProperty, s => s.Name);
+                this.SetBinding<VaultListPageModel.Site>(DetailProperty, s => s.Username);
                 ContextActions.Add(moreAction);
                 ContextActions.Add(deleteAction);
             }
