@@ -243,13 +243,22 @@
     <BundleResource Include="Resources\fa-lock%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\fa-plus.png" />
+    <BundleResource Include="Resources\ion-chevron-right.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\fa-plus%402x.png" />
+    <BundleResource Include="Resources\ion-chevron-right%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\fa-plus%403x.png" />
+    <BundleResource Include="Resources\ion-chevron-right%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ion-plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ion-plus%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ion-plus%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -119,6 +119,7 @@ namespace Bit.App.Pages
             SetBinding(Page.TitleProperty, new Binding("PageTitle"));
             Content = scrollView;
             BindingContext = Model;
+            NavigationPage.SetBackButtonTitle(this, AppResources.Back);
         }
 
         protected override void OnAppearing()

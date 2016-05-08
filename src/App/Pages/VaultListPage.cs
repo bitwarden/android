@@ -41,7 +41,7 @@ namespace Bit.App.Pages
 
             Title = AppResources.MyVault;
             Content = listView;
-            NavigationPage.SetBackButtonTitle(this, "Back");
+            NavigationPage.SetBackButtonTitle(this, AppResources.Back);
         }
 
         protected override void OnAppearing()
@@ -141,7 +141,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = AppResources.Add;
-                Icon = "fa-plus";
+                Icon = "ion-plus";
                 Clicked += ClickedItem;
             }
 
