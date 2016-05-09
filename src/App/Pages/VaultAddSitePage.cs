@@ -23,6 +23,8 @@ namespace Bit.App.Pages
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
+
+            Init();
         }
 
         private void Init()
