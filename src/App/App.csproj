@@ -44,6 +44,10 @@
     <Compile Include="Behaviors\EmailValidationBehavior.cs" />
     <Compile Include="Behaviors\ConnectivityBehavior.cs" />
     <Compile Include="Behaviors\RequiredValidationBehavior.cs" />
+    <Compile Include="Controls\EntryLabel.cs" />
+    <Compile Include="Controls\BottomBorderEntry.cs" />
+    <Compile Include="Controls\ExtendedEntry.cs" />
+    <Compile Include="Controls\ExtendedTabbedPage.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />

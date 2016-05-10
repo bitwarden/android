@@ -2,5 +2,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="Bit.Android" android:versionCode="1" android:versionName="0.0.1" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="23" />
 	<uses-permission android:name="android.permission.INTERNET" />
-	<application android:label="bitwarden"></application>
+	<application android:label="bitwarden" android:theme="@android:style/Theme.Material.Light.DarkActionBar"></application>
 </manifest>

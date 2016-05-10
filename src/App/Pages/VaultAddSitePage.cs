@@ -2,6 +2,7 @@
 using System.Linq;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Models;
 using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
@@ -31,8 +32,8 @@ namespace Bit.App.Pages
         {
             var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
 
-            var uriEntry = new Entry { Keyboard = Keyboard.Url };
-            var nameEntry = new Entry();
+            var uriEntry = new BottomBorderEntry { Keyboard = Keyboard.Url };
+            var nameEntry = new BottomBorderEntry();
             var folderPicker = new Picker { Title = AppResources.Folder };
             folderPicker.Items.Add(AppResources.FolderNone);
             folderPicker.SelectedIndex = 0;
@@ -40,22 +41,22 @@ namespace Bit.App.Pages
             {
                 folderPicker.Items.Add(folder.Name.Decrypt());
             }
-            var usernameEntry = new Entry();
-            var passwordEntry = new Entry { IsPassword = true };
+            var usernameEntry = new BottomBorderEntry();
+            var passwordEntry = new BottomBorderEntry { IsPassword = true };
             var notesEditor = new Editor();
 
-            var stackLayout = new StackLayout();
-            stackLayout.Children.Add(new Label { Text = AppResources.URI });
+            var stackLayout = new StackLayout { Padding = new Thickness(15) };
+            stackLayout.Children.Add(new EntryLabel { Text = AppResources.URI });
             stackLayout.Children.Add(uriEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Name });
+            stackLayout.Children.Add(new EntryLabel { Text = AppResources.Name });
             stackLayout.Children.Add(nameEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Folder });
+            stackLayout.Children.Add(new EntryLabel { Text = AppResources.Folder });
             stackLayout.Children.Add(folderPicker);
-            stackLayout.Children.Add(new Label { Text = AppResources.Username });
+            stackLayout.Children.Add(new EntryLabel { Text = AppResources.Username });
             stackLayout.Children.Add(usernameEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Password });
+            stackLayout.Children.Add(new EntryLabel { Text = AppResources.Password });
             stackLayout.Children.Add(passwordEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Notes });
+            stackLayout.Children.Add(new EntryLabel { Text = AppResources.Notes });
             stackLayout.Children.Add(notesEditor);
 
             var scrollView = new ScrollView

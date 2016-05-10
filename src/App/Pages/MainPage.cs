@@ -1,13 +1,17 @@
 ﻿using System;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class MainPage : TabbedPage
+    public class MainPage : ExtendedTabbedPage
     {
         public MainPage()
         {
+            BarTintColor = Color.FromHex("222d32");
+            TintColor = Color.FromHex("ffffff");
+
             var settingsNavigation = new NavigationPage(new SettingsPage());
             var vaultNavigation = new NavigationPage(new VaultListPage());
             var syncNavigation = new NavigationPage(new SyncPage());
