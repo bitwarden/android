@@ -19,27 +19,12 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var foldersLayout = new StackLayout { Orientation = StackOrientation.Horizontal };
-            foldersLayout.Children.Add(new Label
-            {
-                Text = "Folders",
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center,
-                Margin = new Thickness(10, 0, 0, 0)
-            });
-            foldersLayout.Children.Add(new Image
-            {
-                Source = ImageSource.FromFile("ion-chevron-right.png"),
-                Opacity = 0.3,
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, 0, 10, 0)
-            });
-            var foldersCell = new ViewCell { View = foldersLayout };
+            var foldersCell = new TextCell { Text = "Folders" };
             foldersCell.Tapped += FoldersCell_Tapped;
 
             var table = new TableView
             {
+                Intent = TableIntent.Menu,
                 Root = new TableRoot
                 {
                     new TableSection("Manage Folders")

@@ -7,7 +7,7 @@ using Xamarin.Forms.Platform.iOS;
 [assembly: ExportRenderer(typeof(ExtendedTabbedPage), typeof(ExtendedTabbedPageRenderer))]
 namespace Bit.iOS.Controls
 {
-    public class ExtendedTabbedPageRenderer: TabbedRenderer
+    public class ExtendedTabbedPageRenderer : TabbedRenderer
     {
         protected override void OnElementChanged(VisualElementChangedEventArgs e)
         {

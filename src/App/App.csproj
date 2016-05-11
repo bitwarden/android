@@ -45,7 +45,6 @@
     <Compile Include="Behaviors\ConnectivityBehavior.cs" />
     <Compile Include="Behaviors\RequiredValidationBehavior.cs" />
     <Compile Include="Controls\EntryLabel.cs" />
-    <Compile Include="Controls\BottomBorderEntry.cs" />
     <Compile Include="Controls\ExtendedPicker.cs" />
     <Compile Include="Controls\ExtendedEntry.cs" />
     <Compile Include="Controls\ExtendedTabbedPage.cs" />

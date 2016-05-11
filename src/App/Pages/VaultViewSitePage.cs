@@ -132,6 +132,8 @@ namespace Bit.App.Pages
             }
 
             Model.Update(site);
+
+            base.OnAppearing();
         }
 
         private void Copy(string copyText, string alertLabel)

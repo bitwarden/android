@@ -30,94 +30,130 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy( f => f.Name?.Decrypt() );
+            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
 
-            var uriEntry = new BottomBorderEntry { Keyboard = Keyboard.Url };
-            var nameEntry = new BottomBorderEntry();
-            var folderPicker = new ExtendedPicker
-            {
-                Title = AppResources.Folder,
-                BottomBorderColor = Color.FromHex( "d2d6de" ),
-                HasOnlyBottomBorder = true
-            };
-            folderPicker.Items.Add( AppResources.FolderNone );
+            var uriEntry = new ExtendedEntry { Keyboard = Keyboard.Url, HasBorder = false };
+            var nameEntry = new ExtendedEntry { HasBorder = false };
+            var folderPicker = new ExtendedPicker { Title = AppResources.Folder, HasBorder = false };
+            folderPicker.Items.Add(AppResources.FolderNone);
             folderPicker.SelectedIndex = 0;
-            foreach( var folder in folders )
+            foreach(var folder in folders)
             {
-                folderPicker.Items.Add( folder.Name.Decrypt() );
+                folderPicker.Items.Add(folder.Name.Decrypt());
             }
-            var usernameEntry = new BottomBorderEntry();
-            var passwordEntry = new BottomBorderEntry { IsPassword = true };
+            var usernameEntry = new ExtendedEntry { HasBorder = false };
+            var passwordEntry = new ExtendedEntry { IsPassword = true, HasBorder = false };
             var notesEditor = new Editor { HeightRequest = 75 };
 
-            var stackLayout = new StackLayout { Padding = new Thickness( 15 ) };
-            stackLayout.Children.Add( new EntryLabel { Text = AppResources.URI } );
-            stackLayout.Children.Add( uriEntry );
-            stackLayout.Children.Add( new EntryLabel { Text = AppResources.Name, Margin = new Thickness( 0, 15, 0, 0 ) } );
-            stackLayout.Children.Add( nameEntry );
-            stackLayout.Children.Add( new EntryLabel { Text = AppResources.Folder, Margin = new Thickness( 0, 15, 0, 0 ) } );
-            stackLayout.Children.Add( folderPicker );
-            stackLayout.Children.Add( new EntryLabel { Text = AppResources.Username, Margin = new Thickness( 0, 15, 0, 0 ) } );
-            stackLayout.Children.Add( usernameEntry );
-            stackLayout.Children.Add( new EntryLabel { Text = AppResources.Password, Margin = new Thickness( 0, 15, 0, 0 ) } );
-            stackLayout.Children.Add( passwordEntry );
-            stackLayout.Children.Add( new EntryLabel { Text = AppResources.Notes, Margin = new Thickness( 0, 15, 0, 0 ) } );
-            stackLayout.Children.Add( notesEditor );
+            var uriStackLayout = new FormEntryStackLayout();
+            uriStackLayout.Children.Add(new EntryLabel { Text = AppResources.URI });
+            uriStackLayout.Children.Add(uriEntry);
+            var uriCell = new ViewCell();
+            uriCell.View = uriStackLayout;
+
+            var nameStackLayout = new FormEntryStackLayout();
+            nameStackLayout.Children.Add(new EntryLabel { Text = AppResources.Name });
+            nameStackLayout.Children.Add(nameEntry);
+            var nameCell = new ViewCell();
+            nameCell.View = nameStackLayout;
+
+            var folderStackLayout = new FormEntryStackLayout();
+            folderStackLayout.Children.Add(new EntryLabel { Text = AppResources.Folder });
+            folderStackLayout.Children.Add(folderPicker);
+            var folderCell = new ViewCell();
+            folderCell.View = folderStackLayout;
+
+            var usernameStackLayout = new FormEntryStackLayout();
+            usernameStackLayout.Children.Add(new EntryLabel { Text = AppResources.Username });
+            usernameStackLayout.Children.Add(usernameEntry);
+            var usernameCell = new ViewCell();
+            usernameCell.View = usernameStackLayout;
+
+            var passwordStackLayout = new FormEntryStackLayout();
+            passwordStackLayout.Children.Add(new EntryLabel { Text = AppResources.Password });
+            passwordStackLayout.Children.Add(passwordEntry);
+            var passwordCell = new ViewCell();
+            passwordCell.View = passwordStackLayout;
+
+            var notesStackLayout = new FormEntryStackLayout();
+            notesStackLayout.Children.Add(new EntryLabel { Text = AppResources.Notes });
+            notesStackLayout.Children.Add(notesEditor);
+            var notesCell = new ViewCell();
+            notesCell.View = notesStackLayout;
+
+            var table = new TableView
+            {
+                Intent = TableIntent.Form,
+                RowHeight = 65,
+                HasUnevenRows = true,
+                Root = new TableRoot
+                {
+                    new TableSection
+                    {
+                        uriCell,
+                        nameCell,
+                        folderCell,
+                        usernameCell,
+                        passwordCell,
+                        notesCell
+                    }
+                }
+            };
 
             var scrollView = new ScrollView
             {
-                Content = stackLayout,
+                Content = table,
                 Orientation = ScrollOrientation.Vertical
             };
 
-            var saveToolBarItem = new ToolbarItem( AppResources.Save, null, async () =>
-             {
-                 if( !_connectivity.IsConnected )
-                 {
-                     AlertNoConnection();
-                     return;
-                 }
+            var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
+            {
+                if(!_connectivity.IsConnected)
+                {
+                    AlertNoConnection();
+                    return;
+                }
 
-                 if( string.IsNullOrWhiteSpace( uriEntry.Text ) )
-                 {
-                     await DisplayAlert( AppResources.AnErrorHasOccurred, string.Format( AppResources.ValidationFieldRequired, AppResources.URI ), AppResources.Ok );
-                     return;
-                 }
+                if(string.IsNullOrWhiteSpace(uriEntry.Text))
+                {
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.URI), AppResources.Ok);
+                    return;
+                }
 
-                 if( string.IsNullOrWhiteSpace( nameEntry.Text ) )
-                 {
-                     await DisplayAlert( AppResources.AnErrorHasOccurred, string.Format( AppResources.ValidationFieldRequired, AppResources.Name ), AppResources.Ok );
-                     return;
-                 }
+                if(string.IsNullOrWhiteSpace(nameEntry.Text))
+                {
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
+                    return;
+                }
 
-                 var site = new Site
-                 {
-                     Uri = uriEntry.Text.Encrypt(),
-                     Name = nameEntry.Text.Encrypt(),
-                     Username = usernameEntry.Text?.Encrypt(),
-                     Password = passwordEntry.Text?.Encrypt(),
-                     Notes = notesEditor.Text?.Encrypt(),
-                 };
+                var site = new Site
+                {
+                    Uri = uriEntry.Text.Encrypt(),
+                    Name = nameEntry.Text.Encrypt(),
+                    Username = usernameEntry.Text?.Encrypt(),
+                    Password = passwordEntry.Text?.Encrypt(),
+                    Notes = notesEditor.Text?.Encrypt(),
+                };
 
-                 if( folderPicker.SelectedIndex > 0 )
-                 {
-                     site.FolderId = folders.ElementAt( folderPicker.SelectedIndex - 1 ).Id;
-                 }
+                if(folderPicker.SelectedIndex > 0)
+                {
+                    site.FolderId = folders.ElementAt(folderPicker.SelectedIndex - 1).Id;
+                }
 
-                 var saveTask = _siteService.SaveAsync( site );
-                 _userDialogs.ShowLoading( "Saving...", MaskType.Black );
-                 await saveTask;
+                var saveTask = _siteService.SaveAsync(site);
+                _userDialogs.ShowLoading("Saving...", MaskType.Black);
+                await saveTask;
 
-                 _userDialogs.HideLoading();
-                 await Navigation.PopAsync();
-                 _userDialogs.SuccessToast( nameEntry.Text, "New site created." );
-             }, ToolbarItemOrder.Default, 0 );
+                _userDialogs.HideLoading();
+                await Navigation.PopAsync();
+                _userDialogs.SuccessToast(nameEntry.Text, "New site created.");
+            }, ToolbarItemOrder.Default, 0);
 
             Title = AppResources.AddSite;
             Content = scrollView;
-            ToolbarItems.Add( saveToolBarItem );
+            ToolbarItems.Add(saveToolBarItem);
 
-            if( !_connectivity.IsConnected )
+            if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
             }
@@ -125,7 +161,15 @@ namespace Bit.App.Pages
 
         private void AlertNoConnection()
         {
-            DisplayAlert( AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok );
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
+        }
+
+        private class FormEntryStackLayout : StackLayout
+        {
+            public FormEntryStackLayout()
+            {
+                Padding = new Thickness(15, 15, 15, 0);
+            }
         }
     }
 }

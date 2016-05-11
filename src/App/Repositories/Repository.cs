@@ -8,7 +8,7 @@ using SQLite;
 namespace Bit.App.Repositories
 {
     public abstract class Repository<T, TId> : IRepository<T, TId>
-        where TId : IEquatable<TId> 
+        where TId : IEquatable<TId>
         where T : class, IDataObject<TId>, new()
     {
         public Repository(ISqlService sqlService)

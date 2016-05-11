@@ -8,7 +8,7 @@ using Foundation;
 
 namespace Bit.iOS.Extension
 {
-	[Register("ActionViewController")]
+    [Register("ActionViewController")]
     partial class ActionViewController
     {
         [Outlet]
