@@ -26,7 +26,6 @@ namespace Bit.Android.Controls
             }
 
             SetBorder(view);
-            SetPlaceholderTextColor(view);
             SetMaxLength(view);
         }
 
@@ -36,13 +35,9 @@ namespace Bit.Android.Controls
 
             if(e.PropertyName == ExtendedEntry.HasBorderProperty.PropertyName
                 || e.PropertyName == ExtendedEntry.HasOnlyBottomBorderProperty.PropertyName
-                || e.PropertyName == ExtendedEntry.BorderColorProperty.PropertyName)
+                || e.PropertyName == ExtendedEntry.BottomBorderColorProperty.PropertyName)
             {
                 SetBorder(view);
-            }
-            if(e.PropertyName == ExtendedEntry.PlaceholderTextColorProperty.PropertyName)
-            {
-                SetPlaceholderTextColor(view);
             }
             else
             {
@@ -62,14 +57,6 @@ namespace Bit.Android.Controls
         private void SetMaxLength(ExtendedEntry view)
         {
             Control.SetFilters(new IInputFilter[] { new InputFilterLengthFilter(view.MaxLength) });
-        }
-
-        private void SetPlaceholderTextColor(ExtendedEntry view)
-        {
-            if(view.PlaceholderTextColor != Xamarin.Forms.Color.Default)
-            {
-                Control.SetHintTextColor(view.PlaceholderTextColor.ToAndroid());
-            }
         }
     }
 }

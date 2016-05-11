@@ -7,7 +7,7 @@ namespace Bit.App.Controls
         public BottomBorderEntry()
         {
             HasBorder = HasOnlyBottomBorder = true;
-            BorderColor = Color.FromHex("d2d6de");
+            BottomBorderColor = Color.FromHex("d2d6de");
         }
     }
 }

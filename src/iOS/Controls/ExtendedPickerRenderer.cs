@@ -4,25 +4,23 @@ using Bit.App.Controls;
 using Bit.iOS.Controls;
 using CoreAnimation;
 using CoreGraphics;
-using Foundation;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(ExtendedEntry), typeof(ExtendedEntryRenderer))]
+[assembly: ExportRenderer(typeof(ExtendedPicker), typeof( ExtendedPickerRenderer ) )]
 namespace Bit.iOS.Controls
 {
-    public class ExtendedEntryRenderer : EntryRenderer
+    public class ExtendedPickerRenderer : PickerRenderer
     {
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Picker> e)
         {
             base.OnElementChanged(e);
 
-            var view = e.NewElement as ExtendedEntry;
+            var view = e.NewElement as ExtendedPicker;
             if(view != null)
             {
                 SetBorder(view);
-                SetMaxLength(view);
             }
         }
 
@@ -30,27 +28,27 @@ namespace Bit.iOS.Controls
         {
             base.OnElementPropertyChanged(sender, e);
 
-            var view = (ExtendedEntry)Element;
+            var view = (ExtendedPicker)Element;
 
-            if(e.PropertyName == ExtendedEntry.HasBorderProperty.PropertyName
-                || e.PropertyName == ExtendedEntry.HasOnlyBottomBorderProperty.PropertyName
-                || e.PropertyName == ExtendedEntry.BottomBorderColorProperty.PropertyName)
+            if(e.PropertyName == ExtendedPicker.HasBorderProperty.PropertyName
+                || e.PropertyName == ExtendedPicker.HasOnlyBottomBorderProperty.PropertyName
+                || e.PropertyName == ExtendedPicker.BottomBorderColorProperty.PropertyName)
             {
                 SetBorder(view);
             }
         }
 
-        private void SetBorder(ExtendedEntry view)
+        private void SetBorder( ExtendedPicker view )
         {
             if(view.HasOnlyBottomBorder)
             {
                 var borderLayer = new CALayer();
                 borderLayer.MasksToBounds = true;
-                borderLayer.Frame = new CGRect(0f, Frame.Height / 2, Frame.Width * 2, 1f);
+                borderLayer.Frame = new CGRect( 0f, Frame.Height / 2, Frame.Width * 2, 1f );
                 borderLayer.BorderColor = view.BottomBorderColor.ToCGColor();
                 borderLayer.BorderWidth = 1f;
 
-                Control.Layer.AddSublayer(borderLayer);
+                Control.Layer.AddSublayer( borderLayer );
                 Control.BorderStyle = UITextBorderStyle.None;
             }
             else if(view.HasBorder)
@@ -61,15 +59,6 @@ namespace Bit.iOS.Controls
             {
                 Control.BorderStyle = UITextBorderStyle.None;
             }
-        }
-
-        private void SetMaxLength(ExtendedEntry view)
-        {
-            Control.ShouldChangeCharacters = (textField, range, replacementString) =>
-            {
-                var newLength = textField.Text.Length + replacementString.Length - range.Length;
-                return newLength <= view.MaxLength;
-            };
         }
     }
 }

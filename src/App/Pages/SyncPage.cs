@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
@@ -29,17 +30,25 @@ namespace Bit.App.Pages
             var syncButton = new Button
             {
                 Text = "Sync Vault",
-                Command = new Command(async () => await SyncAsync())
+                Command = new Command( async () => await SyncAsync() )
             };
 
             var stackLayout = new StackLayout { };
-            stackLayout.Children.Add(syncButton);
+            stackLayout.Children.Add( syncButton );
+            stackLayout.Children.Add( new ExtendedEntry
+            {
+                BottomBorderColor = Color.Black,
+                HasBorder = true,
+                HasOnlyBottomBorder = true,
+                Placeholder = "Some placeholder",
+                PlaceholderColor = Color.Red
+            } );
 
             Title = "Sync";
             Content = stackLayout;
             Icon = "fa-refresh";
 
-            if(!_connectivity.IsConnected)
+            if( !_connectivity.IsConnected )
             {
                 AlertNoConnection();
             }
@@ -47,28 +56,28 @@ namespace Bit.App.Pages
 
         public async Task SyncAsync()
         {
-            if(!_connectivity.IsConnected)
+            if( !_connectivity.IsConnected )
             {
                 AlertNoConnection();
                 return;
             }
 
-            _userDialogs.ShowLoading("Syncing...", MaskType.Black);
+            _userDialogs.ShowLoading( "Syncing...", MaskType.Black );
             var succeeded = await _syncService.SyncAsync();
             _userDialogs.HideLoading();
-            if(succeeded)
+            if( succeeded )
             {
-                _userDialogs.SuccessToast("Syncing complete.");
+                _userDialogs.SuccessToast( "Syncing complete." );
             }
             else
             {
-                _userDialogs.ErrorToast("Syncing failed.");
+                _userDialogs.ErrorToast( "Syncing failed." );
             }
         }
 
         public void AlertNoConnection()
         {
-            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
+            DisplayAlert( AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok );
         }
     }
 }

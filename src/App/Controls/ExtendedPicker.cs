@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class ExtendedEntry : Entry
+    public class ExtendedPicker : Picker
     {
         public static readonly BindableProperty HasBorderProperty =
             BindableProperty.Create(nameof(HasBorder), typeof(bool), typeof(ExtendedEntry), true);
@@ -13,9 +13,6 @@ namespace Bit.App.Controls
 
         public static readonly BindableProperty BottomBorderColorProperty =
             BindableProperty.Create(nameof(BottomBorderColor), typeof(Color), typeof(ExtendedEntry), Color.Default);
-
-        public static readonly BindableProperty MaxLengthProperty =
-            BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(ExtendedEntry), int.MaxValue);
 
         public bool HasBorder
         {
@@ -33,12 +30,6 @@ namespace Bit.App.Controls
         {
             get { return (Color)GetValue(BottomBorderColorProperty); }
             set { SetValue(BottomBorderColorProperty, value); }
-        }
-
-        public int MaxLength
-        {
-            get { return (int)GetValue(MaxLengthProperty); }
-            set { SetValue(MaxLengthProperty, value); }
         }
     }
 }
