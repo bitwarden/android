@@ -43,7 +43,7 @@ namespace Bit.App.Pages
             }
             var usernameEntry = new ExtendedEntry { HasBorder = false };
             var passwordEntry = new ExtendedEntry { IsPassword = true, HasBorder = false };
-            var notesEditor = new Editor { HeightRequest = 75 };
+            var notesEditor = new ExtendedEditor { HeightRequest = Device.OS == TargetPlatform.iOS ? 70 : 90, HasBorder = false };
 
             var uriStackLayout = new FormEntryStackLayout();
             uriStackLayout.Children.Add(new EntryLabel { Text = AppResources.URI });
@@ -76,15 +76,13 @@ namespace Bit.App.Pages
             passwordCell.View = passwordStackLayout;
 
             var notesStackLayout = new FormEntryStackLayout();
-            notesStackLayout.Children.Add(new EntryLabel { Text = AppResources.Notes });
             notesStackLayout.Children.Add(notesEditor);
             var notesCell = new ViewCell();
             notesCell.View = notesStackLayout;
 
-            var table = new TableView
+            var mainTable = new ExtendedTableView
             {
-                Intent = TableIntent.Form,
-                RowHeight = 65,
+                Intent = TableIntent.Settings,
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
@@ -94,15 +92,37 @@ namespace Bit.App.Pages
                         nameCell,
                         folderCell,
                         usernameCell,
-                        passwordCell,
+                        passwordCell
+                    }
+                }
+            };
+
+            var notesTable = new ExtendedTableView
+            {
+                Intent = TableIntent.Settings,
+                HasUnevenRows = true,
+                Root = new TableRoot
+                {
+                    new TableSection(AppResources.Notes)
+                    {
                         notesCell
                     }
                 }
             };
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                mainTable.RowHeight = 70;
+                notesTable.RowHeight = 90;
+            }
+
+            var tablesStackLayout = new StackLayout();
+            tablesStackLayout.Children.Add(mainTable);
+            tablesStackLayout.Children.Add(notesTable);
+
             var scrollView = new ScrollView
             {
-                Content = table,
+                Content = tablesStackLayout,
                 Orientation = ScrollOrientation.Vertical
             };
 
@@ -169,6 +189,7 @@ namespace Bit.App.Pages
             public FormEntryStackLayout()
             {
                 Padding = new Thickness(15, 15, 15, 0);
+                BackgroundColor = Color.White;
             }
         }
     }

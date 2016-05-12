@@ -51,7 +51,14 @@ namespace Bit.Android.Controls
 
         private void SetBorder(ExtendedEntry view)
         {
-            //Not suported on Android
+            if(!view.HasBorder)
+            {
+                Control.SetBackgroundColor(global::Android.Graphics.Color.Transparent);
+            }
+            else
+            {
+                Control.SetBackgroundColor(view.BottomBorderColor.ToAndroid());
+            }
         }
 
         private void SetMaxLength(ExtendedEntry view)

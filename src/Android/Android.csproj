@@ -196,6 +196,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ExtendedEditorRenderer.cs" />
+    <Compile Include="Controls\ExtendedPickerRenderer.cs" />
     <Compile Include="Controls\ExtendedEntryRenderer.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Services\ClipboardService.cs" />
