@@ -53,6 +53,7 @@
     <Compile Include="Controls\ExtendedEntry.cs" />
     <Compile Include="Controls\ExtendedTabbedPage.cs" />
     <Compile Include="Controls\FormEditorCell.cs" />
+    <Compile Include="Controls\LabeledValueCell.cs" />
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Models\Api\ApiError.cs" />

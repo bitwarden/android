@@ -27,101 +27,70 @@ namespace Bit.App.Pages
         }
 
         private VaultViewSitePageModel Model { get; set; } = new VaultViewSitePageModel();
+        private ExtendedTableView Table { get; set; }
 
         private void Init()
         {
             ToolbarItems.Add(new EditSiteToolBarItem(this, _siteId));
             ToolbarItems.Add(new DismissModalToolBarItem(this));
-            var stackLayout = new StackLayout();
 
             // Username
-            var usernameRow = new StackLayout { Orientation = StackOrientation.Horizontal };
-            var usernameLabel = new Label
-            {
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center,
-                LineBreakMode = LineBreakMode.TailTruncation
-            };
-            usernameLabel.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
-            usernameRow.Children.Add(usernameLabel);
-            usernameRow.Children.Add(new Button
-            {
-                Text = AppResources.Copy,
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Command = new Command(() => Copy(usernameLabel.Text, AppResources.Username))
-            });
-            stackLayout.Children.Add(new Label { Text = AppResources.Username });
-            stackLayout.Children.Add(usernameRow);
+            var nameCell = new LabeledValueCell(AppResources.Name);
+            nameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Name);
+
+            // Username
+            var usernameCell = new LabeledValueCell(AppResources.Username, copyValue: true);
+            usernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
 
             // Password
-            var passwordRow = new StackLayout { Orientation = StackOrientation.Horizontal };
-            var passwordLabel = new Label
-            {
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center,
-                LineBreakMode = LineBreakMode.TailTruncation
-            };
-            passwordLabel.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
-            passwordRow.Children.Add(passwordLabel);
-            var togglePasswordButton = new Button
-            {
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Command = new Command(() => Model.ShowPassword = !Model.ShowPassword)
-            };
-            togglePasswordButton.CommandParameter = togglePasswordButton;
-            togglePasswordButton.SetBinding<VaultViewSitePageModel>(Button.TextProperty, s => s.ShowHideText);
-            passwordRow.Children.Add(togglePasswordButton);
-            passwordRow.Children.Add(new Button
-            {
-                Text = AppResources.Copy,
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Command = new Command(() => Copy(Model.Password, AppResources.Password))
-            });
-            stackLayout.Children.Add(new Label { Text = AppResources.Password });
-            stackLayout.Children.Add(passwordRow);
+            var passwordCell = new LabeledValueCell(AppResources.Password, copyValue: true);
+            passwordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Password);
 
             // URI
-            var uriRow = new StackLayout { Orientation = StackOrientation.Horizontal };
-            var uriLabel = new Label
-            {
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center,
-                LineBreakMode = LineBreakMode.TailTruncation
-            };
-            uriLabel.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Uri);
-            uriRow.Children.Add(uriLabel);
-            uriRow.Children.Add(new Button
-            {
-                Text = AppResources.Launch,
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Command = new Command(() => Device.OpenUri(new Uri(uriLabel.Text)))
-            });
-            stackLayout.Children.Add(new Label { Text = AppResources.Website });
-            stackLayout.Children.Add(uriRow);
+            var uriCell = new LabeledValueCell(AppResources.URI, launch: true);
+            uriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Uri);
 
             // Notes
-            var notes = new Label { Text = AppResources.Notes };
-            notes.SetBinding<VaultViewSitePageModel>(Label.IsVisibleProperty, s => s.ShowNotes);
-            stackLayout.Children.Add(notes);
-            var notesLabel = new Label();
-            notesLabel.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
-            notesLabel.SetBinding<VaultViewSitePageModel>(Label.IsVisibleProperty, s => s.ShowNotes);
-            stackLayout.Children.Add(notesLabel);
+            var notesCell = new LabeledValueCell(AppResources.Notes);
+            notesCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
+
+            Table = new ExtendedTableView
+            {
+                Intent = TableIntent.Settings,
+                EnableScrolling = false,
+                HasUnevenRows = true,
+                EnableSelection = true,
+                Root = new TableRoot
+                {
+                    new TableSection("Site Information")
+                    {
+                        uriCell,
+                        nameCell,
+                        usernameCell,
+                        passwordCell
+                    },
+                    new TableSection(AppResources.Notes)
+                    {
+                        notesCell
+                    }
+                }
+            };
+
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                Table.RowHeight = -1;
+                Table.EstimatedRowHeight = 70;
+            }
 
             var scrollView = new ScrollView
             {
-                Content = stackLayout,
+                Content = Table,
                 Orientation = ScrollOrientation.Vertical
             };
 
             SetBinding(Page.TitleProperty, new Binding("PageTitle"));
             Content = scrollView;
             BindingContext = Model;
-            NavigationPage.SetBackButtonTitle(this, AppResources.Back);
         }
 
         protected override void OnAppearing()
@@ -136,6 +105,10 @@ namespace Bit.App.Pages
             Model.Update(site);
 
             base.OnAppearing();
+
+            // Hack to get table row height binding to update. Better way to do this probably?
+            Table.Root.Add(new TableSection { new TextCell() });
+            Table.Root.RemoveAt(Table.Root.Count - 1);
         }
 
         private void Copy(string copyText, string alertLabel)

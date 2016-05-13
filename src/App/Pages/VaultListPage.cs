@@ -42,7 +42,6 @@ namespace Bit.App.Pages
 
             Title = AppResources.MyVault;
             Content = listView;
-            NavigationPage.SetBackButtonTitle(this, AppResources.Back);
         }
 
         protected override void OnAppearing()
