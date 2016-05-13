@@ -44,12 +44,17 @@
     <Compile Include="Behaviors\EmailValidationBehavior.cs" />
     <Compile Include="Behaviors\ConnectivityBehavior.cs" />
     <Compile Include="Behaviors\RequiredValidationBehavior.cs" />
+    <Compile Include="Controls\DismissModalToolBarItem.cs" />
     <Compile Include="Controls\EntryLabel.cs" />
     <Compile Include="Controls\ExtendedEditor.cs" />
+    <Compile Include="Controls\ExtendedNavigationPage.cs" />
     <Compile Include="Controls\ExtendedTableView.cs" />
     <Compile Include="Controls\ExtendedPicker.cs" />
     <Compile Include="Controls\ExtendedEntry.cs" />
     <Compile Include="Controls\ExtendedTabbedPage.cs" />
+    <Compile Include="Controls\FormEditorCell.cs" />
+    <Compile Include="Controls\FormPickerCell.cs" />
+    <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />

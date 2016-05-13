@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
@@ -30,55 +31,20 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
+            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url);
+            var nameCell = new FormEntryCell(AppResources.Name);
+            var usernameCell = new FormEntryCell(AppResources.Username);
+            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true);
 
-            var uriEntry = new ExtendedEntry { Keyboard = Keyboard.Url, HasBorder = false };
-            var nameEntry = new ExtendedEntry { HasBorder = false };
-            var folderPicker = new ExtendedPicker { Title = AppResources.Folder, HasBorder = false };
-            folderPicker.Items.Add(AppResources.FolderNone);
-            folderPicker.SelectedIndex = 0;
+            var folderOptions = new List<string> { AppResources.FolderNone };
+            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
             foreach(var folder in folders)
             {
-                folderPicker.Items.Add(folder.Name.Decrypt());
+                folderOptions.Add(folder.Name.Decrypt());
             }
-            var usernameEntry = new ExtendedEntry { HasBorder = false };
-            var passwordEntry = new ExtendedEntry { IsPassword = true, HasBorder = false };
-            var notesEditor = new ExtendedEditor { HeightRequest = 90, HasBorder = false };
+            var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
 
-            var uriStackLayout = new FormEntryStackLayout();
-            uriStackLayout.Children.Add(new EntryLabel { Text = AppResources.URI });
-            uriStackLayout.Children.Add(uriEntry);
-            var uriCell = new ViewCell();
-            uriCell.View = uriStackLayout;
-
-            var nameStackLayout = new FormEntryStackLayout();
-            nameStackLayout.Children.Add(new EntryLabel { Text = AppResources.Name });
-            nameStackLayout.Children.Add(nameEntry);
-            var nameCell = new ViewCell();
-            nameCell.View = nameStackLayout;
-
-            var folderStackLayout = new FormEntryStackLayout();
-            folderStackLayout.Children.Add(new EntryLabel { Text = AppResources.Folder });
-            folderStackLayout.Children.Add(folderPicker);
-            var folderCell = new ViewCell();
-            folderCell.View = folderStackLayout;
-
-            var usernameStackLayout = new FormEntryStackLayout();
-            usernameStackLayout.Children.Add(new EntryLabel { Text = AppResources.Username });
-            usernameStackLayout.Children.Add(usernameEntry);
-            var usernameCell = new ViewCell();
-            usernameCell.View = usernameStackLayout;
-
-            var passwordStackLayout = new FormEntryStackLayout();
-            passwordStackLayout.Children.Add(new EntryLabel { Text = AppResources.Password });
-            passwordStackLayout.Children.Add(passwordEntry);
-            var passwordCell = new ViewCell();
-            passwordCell.View = passwordStackLayout;
-
-            var notesStackLayout = new FormEntryStackLayout();
-            notesStackLayout.Children.Add(notesEditor);
-            var notesCell = new ViewCell();
-            notesCell.View = notesStackLayout;
+            var notesCell = new FormEditorCell(height:90);
 
             var mainTable = new ExtendedTableView
             {
@@ -88,7 +54,7 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection("Site Information")
                     {
                         uriCell,
                         nameCell,
@@ -123,13 +89,13 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(uriEntry.Text))
+                if(string.IsNullOrWhiteSpace(uriCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.URI), AppResources.Ok);
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(nameEntry.Text))
+                if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
                     return;
@@ -137,16 +103,16 @@ namespace Bit.App.Pages
 
                 var site = new Site
                 {
-                    Uri = uriEntry.Text.Encrypt(),
-                    Name = nameEntry.Text.Encrypt(),
-                    Username = usernameEntry.Text?.Encrypt(),
-                    Password = passwordEntry.Text?.Encrypt(),
-                    Notes = notesEditor.Text?.Encrypt(),
+                    Uri = uriCell.Entry.Text.Encrypt(),
+                    Name = nameCell.Entry.Text.Encrypt(),
+                    Username = usernameCell.Entry.Text?.Encrypt(),
+                    Password = passwordCell.Entry.Text?.Encrypt(),
+                    Notes = notesCell.Editor.Text?.Encrypt(),
                 };
 
-                if(folderPicker.SelectedIndex > 0)
+                if(folderCell.Picker.SelectedIndex > 0)
                 {
-                    site.FolderId = folders.ElementAt(folderPicker.SelectedIndex - 1).Id;
+                    site.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
                 }
 
                 var saveTask = _siteService.SaveAsync(site);
@@ -155,12 +121,13 @@ namespace Bit.App.Pages
 
                 _userDialogs.HideLoading();
                 await Navigation.PopAsync();
-                _userDialogs.SuccessToast(nameEntry.Text, "New site created.");
+                _userDialogs.SuccessToast(nameCell.Entry.Text, "New site created.");
             }, ToolbarItemOrder.Default, 0);
 
             Title = AppResources.AddSite;
             Content = scrollView;
             ToolbarItems.Add(saveToolBarItem);
+            ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
 
             if(!_connectivity.IsConnected)
             {

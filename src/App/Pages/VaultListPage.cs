@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Models.Page;
 using Bit.App.Resources;
 using Xamarin.Forms;
@@ -71,7 +72,8 @@ namespace Bit.App.Pages
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var site = e.SelectedItem as VaultListPageModel.Site;
-            Navigation.PushAsync(new VaultViewSitePage(site.Id));
+            var page = new ExtendedNavigationPage(new VaultViewSitePage(site.Id));
+            Navigation.PushModalAsync(page);
         }
 
         private async void MoreClickedAsync(object sender, EventArgs e)
@@ -83,11 +85,13 @@ namespace Bit.App.Pages
 
             if(selection == AppResources.View)
             {
-                await Navigation.PushAsync(new VaultViewSitePage(site.Id));
+                var page = new ExtendedNavigationPage(new VaultViewSitePage(site.Id));
+                await Navigation.PushModalAsync(page);
             }
             else if(selection == AppResources.Edit)
             {
-                // TODO: navigate to edit page
+                var page = new ExtendedNavigationPage(new VaultEditSitePage(site.Id));
+                await Navigation.PushModalAsync(page);
             }
             else if(selection == AppResources.CopyPassword)
             {
@@ -147,7 +151,8 @@ namespace Bit.App.Pages
 
             private async void ClickedItem(object sender, EventArgs e)
             {
-                await _page.Navigation.PushAsync(new VaultAddSitePage());
+                var page = new ExtendedNavigationPage(new VaultAddSitePage());
+                await _page.Navigation.PushModalAsync(page);
             }
         }
 

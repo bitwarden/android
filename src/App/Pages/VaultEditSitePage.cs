@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection.Emit;
-using System.Text;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
@@ -40,12 +39,17 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
+            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url);
+            uriCell.Entry.Text = site.Uri?.Decrypt();
+            var nameCell = new FormEntryCell(AppResources.Name);
+            nameCell.Entry.Text = site.Name?.Decrypt();
+            var usernameCell = new FormEntryCell(AppResources.Username);
+            usernameCell.Entry.Text = site.Username?.Decrypt();
+            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true);
+            passwordCell.Entry.Text = site.Password?.Decrypt();
 
-            var uriEntry = new Entry { Keyboard = Keyboard.Url, Text = site.Uri?.Decrypt() };
-            var nameEntry = new Entry { Text = site.Name?.Decrypt() };
-            var folderPicker = new Picker { Title = AppResources.Folder };
-            folderPicker.Items.Add(AppResources.FolderNone);
+            var folderOptions = new List<string> { AppResources.FolderNone };
+            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
             int selectedIndex = 0;
             int i = 0;
             foreach(var folder in folders)
@@ -56,30 +60,46 @@ namespace Bit.App.Pages
                     selectedIndex = i;
                 }
 
-                folderPicker.Items.Add(folder.Name.Decrypt());
+                folderOptions.Add(folder.Name.Decrypt());
             }
-            folderPicker.SelectedIndex = selectedIndex;
-            var usernameEntry = new Entry { Text = site.Username?.Decrypt() };
-            var passwordEntry = new Entry { IsPassword = true, Text = site.Password?.Decrypt() };
-            var notesEditor = new Editor { Text = site.Notes?.Decrypt() };
+            var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
+            folderCell.Picker.SelectedIndex = selectedIndex;
 
-            var stackLayout = new StackLayout();
-            stackLayout.Children.Add(new Label { Text = AppResources.URI });
-            stackLayout.Children.Add(uriEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Name });
-            stackLayout.Children.Add(nameEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Folder });
-            stackLayout.Children.Add(folderPicker);
-            stackLayout.Children.Add(new Label { Text = AppResources.Username });
-            stackLayout.Children.Add(usernameEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Password });
-            stackLayout.Children.Add(passwordEntry);
-            stackLayout.Children.Add(new Label { Text = AppResources.Notes });
-            stackLayout.Children.Add(notesEditor);
+            var notesCell = new FormEditorCell(height: 90);
+            notesCell.Editor.Text = site.Notes?.Decrypt();
+
+            var table = new ExtendedTableView
+            {
+                Intent = TableIntent.Settings,
+                EnableScrolling = false,
+                HasUnevenRows = true,
+                EnableSelection = false,
+                Root = new TableRoot
+                {
+                    new TableSection("Site Information")
+                    {
+                        uriCell,
+                        nameCell,
+                        folderCell,
+                        usernameCell,
+                        passwordCell
+                    },
+                    new TableSection(AppResources.Notes)
+                    {
+                        notesCell
+                    }
+                }
+            };
+
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                table.RowHeight = -1;
+                table.EstimatedRowHeight = 70;
+            }
 
             var scrollView = new ScrollView
             {
-                Content = stackLayout,
+                Content = table,
                 Orientation = ScrollOrientation.Vertical
             };
 
@@ -91,27 +111,31 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(uriEntry.Text))
+                if(string.IsNullOrWhiteSpace(uriCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.URI), AppResources.Ok);
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(nameEntry.Text))
+                if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
                     return;
                 }
 
-                site.Uri = uriEntry.Text.Encrypt();
-                site.Name = nameEntry.Text.Encrypt();
-                site.Username = usernameEntry.Text?.Encrypt();
-                site.Password = passwordEntry.Text?.Encrypt();
-                site.Notes = notesEditor.Text?.Encrypt();
+                site.Uri = uriCell.Entry.Text.Encrypt();
+                site.Name = nameCell.Entry.Text.Encrypt();
+                site.Username = usernameCell.Entry.Text?.Encrypt();
+                site.Password = passwordCell.Entry.Text?.Encrypt();
+                site.Notes = notesCell.Editor.Text?.Encrypt();
 
-                if(folderPicker.SelectedIndex > 0)
+                if(folderCell.Picker.SelectedIndex > 0)
                 {
-                    site.FolderId = folders.ElementAt(folderPicker.SelectedIndex - 1).Id;
+                    site.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
+                }
+                else
+                {
+                    site.FolderId = null;
                 }
 
                 var saveTask = _siteService.SaveAsync(site);
@@ -119,13 +143,14 @@ namespace Bit.App.Pages
                 await saveTask;
 
                 _userDialogs.HideLoading();
-                await Navigation.PopAsync();
-                _userDialogs.SuccessToast(nameEntry.Text, "Site updated.");
+                await Navigation.PopModalAsync();
+                _userDialogs.SuccessToast(nameCell.Entry.Text, "Site updated.");
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Edit Site";
             Content = scrollView;
             ToolbarItems.Add(saveToolBarItem);
+            ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
 
             if(!_connectivity.IsConnected)
             {

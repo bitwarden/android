@@ -1,6 +1,7 @@
 ﻿using System;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Models.Page;
 using Bit.App.Resources;
 using Xamarin.Forms;
@@ -30,6 +31,7 @@ namespace Bit.App.Pages
         private void Init()
         {
             ToolbarItems.Add(new EditSiteToolBarItem(this, _siteId));
+            ToolbarItems.Add(new DismissModalToolBarItem(this));
             var stackLayout = new StackLayout();
 
             // Username
@@ -157,7 +159,8 @@ namespace Bit.App.Pages
 
             private async void ClickedItem(object sender, EventArgs e)
             {
-                await _page.Navigation.PushAsync(new VaultEditSitePage(_siteId));
+                var page = new ExtendedNavigationPage(new VaultEditSitePage(_siteId));
+                await _page.Navigation.PushModalAsync(page);
             }
         }
     }
