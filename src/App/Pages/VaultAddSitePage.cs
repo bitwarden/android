@@ -43,7 +43,7 @@ namespace Bit.App.Pages
             }
             var usernameEntry = new ExtendedEntry { HasBorder = false };
             var passwordEntry = new ExtendedEntry { IsPassword = true, HasBorder = false };
-            var notesEditor = new ExtendedEditor { HeightRequest = Device.OS == TargetPlatform.iOS ? 70 : 90, HasBorder = false };
+            var notesEditor = new ExtendedEditor { HeightRequest = 90, HasBorder = false };
 
             var uriStackLayout = new FormEntryStackLayout();
             uriStackLayout.Children.Add(new EntryLabel { Text = AppResources.URI });
@@ -83,7 +83,9 @@ namespace Bit.App.Pages
             var mainTable = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
+                EnableScrolling = false,
                 HasUnevenRows = true,
+                EnableSelection = false,
                 Root = new TableRoot
                 {
                     new TableSection
@@ -93,16 +95,7 @@ namespace Bit.App.Pages
                         folderCell,
                         usernameCell,
                         passwordCell
-                    }
-                }
-            };
-
-            var notesTable = new ExtendedTableView
-            {
-                Intent = TableIntent.Settings,
-                HasUnevenRows = true,
-                Root = new TableRoot
-                {
+                    },
                     new TableSection(AppResources.Notes)
                     {
                         notesCell
@@ -112,17 +105,13 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                mainTable.RowHeight = 70;
-                notesTable.RowHeight = 90;
+                mainTable.RowHeight = -1;
+                mainTable.EstimatedRowHeight = 70;
             }
-
-            var tablesStackLayout = new StackLayout();
-            tablesStackLayout.Children.Add(mainTable);
-            tablesStackLayout.Children.Add(notesTable);
 
             var scrollView = new ScrollView
             {
-                Content = tablesStackLayout,
+                Content = mainTable,
                 Orientation = ScrollOrientation.Vertical
             };
 

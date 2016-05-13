@@ -3,6 +3,7 @@ using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Bit.App.Controls;
 
 namespace Bit.App.Pages
 {
@@ -22,8 +23,9 @@ namespace Bit.App.Pages
             var foldersCell = new TextCell { Text = "Folders" };
             foldersCell.Tapped += FoldersCell_Tapped;
 
-            var table = new TableView
+            var table = new ExtendedTableView
             {
+                EnableScrolling = false,
                 Intent = TableIntent.Menu,
                 Root = new TableRoot
                 {
