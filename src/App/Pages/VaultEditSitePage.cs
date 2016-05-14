@@ -111,9 +111,9 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(uriCell.Entry.Text))
+                if(string.IsNullOrWhiteSpace(passwordCell.Entry.Text))
                 {
-                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.URI), AppResources.Ok);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Password), AppResources.Ok);
                     return;
                 }
 
@@ -150,7 +150,10 @@ namespace Bit.App.Pages
             Title = "Edit Site";
             Content = scrollView;
             ToolbarItems.Add(saveToolBarItem);
-            ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+            }
 
             if(!_connectivity.IsConnected)
             {

@@ -23,6 +23,7 @@ namespace Bit.iOS.Controls
                 SetSelection(view);
                 UpdateRowHeight(view);
                 UpdateEstimatedRowHeight(view);
+                UpdateSeparatorColor(view);
             }
         }
 
@@ -86,6 +87,11 @@ namespace Bit.iOS.Controls
             {
                 Control.EstimatedRowHeight = 0;
             }
+        }
+
+        private void UpdateSeparatorColor(ExtendedTableView view)
+        {
+            Control.SeparatorColor = view.SeparatorColor.ToUIColor(UIColor.Gray);
         }
     }
 }

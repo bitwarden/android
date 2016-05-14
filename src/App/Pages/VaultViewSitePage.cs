@@ -32,26 +32,34 @@ namespace Bit.App.Pages
         private void Init()
         {
             ToolbarItems.Add(new EditSiteToolBarItem(this, _siteId));
-            ToolbarItems.Add(new DismissModalToolBarItem(this));
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this));
+            }
 
             // Username
             var nameCell = new LabeledValueCell(AppResources.Name);
             nameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Name);
 
             // Username
-            var usernameCell = new LabeledValueCell(AppResources.Username, copyValue: true);
+            var usernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
             usernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
+            usernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
 
             // Password
-            var passwordCell = new LabeledValueCell(AppResources.Password, copyValue: true);
-            passwordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Password);
+            var passwordCell = new LabeledValueCell(AppResources.Password, button1Text: AppResources.Show, button2Text: AppResources.Copy);
+            passwordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
+            passwordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.TextProperty, s => s.ShowHideText);
+            passwordCell.Button1.Command = new Command(() => Model.ShowPassword = !Model.ShowPassword);
+            passwordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
 
             // URI
-            var uriCell = new LabeledValueCell(AppResources.URI, launch: true);
-            uriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Uri);
+            var uriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
+            uriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.UriHost);
+            uriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(uriCell.Value.Text)));
 
             // Notes
-            var notesCell = new LabeledValueCell(AppResources.Notes);
+            var notesCell = new LabeledValueCell();
             notesCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
 
             Table = new ExtendedTableView

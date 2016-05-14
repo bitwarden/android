@@ -44,7 +44,7 @@ namespace Bit.App.Pages
             }
             var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
 
-            var notesCell = new FormEditorCell(height:90);
+            var notesCell = new FormEditorCell(height: 90);
 
             var mainTable = new ExtendedTableView
             {
@@ -89,9 +89,9 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(uriCell.Entry.Text))
+                if(string.IsNullOrWhiteSpace(passwordCell.Entry.Text))
                 {
-                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.URI), AppResources.Ok);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Password), AppResources.Ok);
                     return;
                 }
 
@@ -127,7 +127,10 @@ namespace Bit.App.Pages
             Title = AppResources.AddSite;
             Content = scrollView;
             ToolbarItems.Add(saveToolBarItem);
-            ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+            }
 
             if(!_connectivity.IsConnected)
             {

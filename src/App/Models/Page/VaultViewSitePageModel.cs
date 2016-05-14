@@ -27,6 +27,7 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(PageTitle)));
             }
         }
+        public string PageTitle => Name ?? AppResources.SiteNoName;
         public string Username
         {
             get { return _username; }
@@ -34,8 +35,10 @@ namespace Bit.App.Models.Page
             {
                 _username = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Username)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowUsername)));
             }
         }
+        public bool ShowUsername => !string.IsNullOrWhiteSpace(Username);
         public string Password
         {
             get { return _password; }
@@ -53,8 +56,31 @@ namespace Bit.App.Models.Page
             {
                 _uri = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Uri)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(UriHost)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowUri)));
             }
         }
+        public string UriHost
+        {
+            get
+            {
+                if(ShowUri)
+                {
+                    try
+                    {
+                        return new Uri(Uri).Host;
+                    }
+                    catch
+                    {
+                        return Uri;
+                    }
+                }
+
+                return null;
+            }
+        }
+
+        public bool ShowUri => !string.IsNullOrWhiteSpace(Uri);
         public string Notes
         {
             get { return _notes; }
@@ -65,7 +91,7 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowNotes)));
             }
         }
-        public string PageTitle => Name ?? AppResources.SiteNoName;
+        public bool ShowNotes => !string.IsNullOrWhiteSpace(Notes);
         public bool ShowPassword
         {
             get { return _showPassword; }
@@ -79,7 +105,6 @@ namespace Bit.App.Models.Page
         }
         public string MaskedPassword => ShowPassword ? Password : Password == null ? null : new string('●', Password.Length);
         public string ShowHideText => ShowPassword ? AppResources.Hide : AppResources.Show;
-        public bool ShowNotes => !string.IsNullOrWhiteSpace(Notes);
 
         public void Update(Site site)
         {

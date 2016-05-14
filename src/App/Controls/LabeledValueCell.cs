@@ -9,20 +9,13 @@ namespace Bit.App.Controls
 {
     public class LabeledValueCell : ViewCell
     {
-        private readonly IUserDialogs _userDialogs;
-        private readonly IClipboardService _clipboardService;
-
         public LabeledValueCell(
-            string labelText,
+            string labelText = null,
             string valueText = null,
-            bool copyValue = false,
-            bool password = false,
-            bool launch = false)
+            string button1Text = null,
+            string button2Text = null)
         {
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _clipboardService = Resolver.Resolve<IClipboardService>();
-
-            var stackLayout = new StackLayout
+            StackLayout = new StackLayout
             {
                 Padding = new Thickness(15, 15, 15, 0),
                 BackgroundColor = Color.White
@@ -37,7 +30,7 @@ namespace Bit.App.Controls
                     TextColor = Color.FromHex("777777")
                 };
 
-                stackLayout.Children.Add(Label);
+                StackLayout.Children.Add(Label);
             }
 
             Value = new Label
@@ -52,46 +45,42 @@ namespace Bit.App.Controls
             {
                 Orientation = StackOrientation.Horizontal
             };
+
             valueStackLayout.Children.Add(Value);
 
-            if(copyValue)
+            if(button1Text != null)
             {
-                var copyButton = new Button
+                Button1 = new Button
                 {
-                    Text = AppResources.Copy,
+                    Text = button1Text,
                     HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.Center,
-                    Command = new Command(() => Copy())
+                    VerticalOptions = LayoutOptions.Center
                 };
 
-                valueStackLayout.Children.Add(copyButton);
+                valueStackLayout.Children.Add(Button1);
             }
 
-            if(launch)
+            if(button2Text != null)
             {
-                var launchButton = new Button
+                Button2 = new Button
                 {
-                    Text = AppResources.Launch,
+                    Text = button2Text,
                     HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.Center,
-                    Command = new Command(() => Device.OpenUri(new Uri(Value.Text)))
+                    VerticalOptions = LayoutOptions.Center
                 };
 
-                valueStackLayout.Children.Add(launchButton);
+                valueStackLayout.Children.Add(Button2);
             }
 
-            stackLayout.Children.Add(valueStackLayout);
+            StackLayout.Children.Add(valueStackLayout);
 
-            View = stackLayout;
+            View = StackLayout;
         }
 
+        public StackLayout StackLayout { get; private set; }
         public Label Label { get; private set; }
         public Label Value { get; private set; }
-
-        private void Copy()
-        {
-            _clipboardService.CopyToClipboard(Value.Text);
-            _userDialogs.SuccessToast(string.Format(AppResources.ValueHasBeenCopied, Label.Text));
-        }
+        public Button Button1 { get; private set; }
+        public Button Button2 { get; private set; }
     }
 }

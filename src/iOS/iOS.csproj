@@ -330,6 +330,15 @@
   <ItemGroup>
     <ITunesArtwork Include="Resources\iTunesArtwork%402x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\fa-folder-open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\fa-folder-open%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\fa-folder-open%403x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

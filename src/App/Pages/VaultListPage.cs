@@ -35,8 +35,15 @@ namespace Bit.App.Pages
         {
             ToolbarItems.Add(new AddSiteToolBarItem(this));
 
-            var listView = new ListView { IsGroupingEnabled = true, ItemsSource = Folders };
+            var listView = new ListView
+            {
+                IsGroupingEnabled = true,
+                ItemsSource = Folders,
+                HasUnevenRows = true,
+                SeparatorColor = Color.FromHex("E0E0E0")
+            };
             listView.GroupDisplayBinding = new Binding("Name");
+            listView.GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this));
             listView.ItemSelected += SiteSelected;
             listView.ItemTemplate = new DataTemplate(() => new VaultListViewCell(this));
 
@@ -171,6 +178,53 @@ namespace Bit.App.Pages
                 this.SetBinding<VaultListPageModel.Site>(DetailProperty, s => s.Username);
                 ContextActions.Add(moreAction);
                 ContextActions.Add(deleteAction);
+
+                TextColor = Color.FromHex("333333");
+                DetailColor = Color.FromHex("777777");
+            }
+        }
+
+        private class VaultListHeaderViewCell : ViewCell
+        {
+            public VaultListHeaderViewCell(VaultListPage page)
+            {
+                var image = new Image
+                {
+                    Source = ImageSource.FromFile("fa-folder-open.png"),
+                    Margin = new Thickness(16, 8, 0, 8)
+                };
+
+                var label = new Label
+                {
+                    FontSize = 14,
+                    TextColor = Color.FromHex("777777"),
+                    VerticalTextAlignment = TextAlignment.Center
+                };
+
+                label.SetBinding<VaultListPageModel.Folder>(Label.TextProperty, s => s.Name);
+
+                var stackLayout = new StackLayout
+                {
+                    Orientation = StackOrientation.Horizontal,
+                    BackgroundColor = Color.FromHex("ecf0f5")
+                };
+
+                stackLayout.Children.Add(image);
+                stackLayout.Children.Add(label);
+
+                var borderStackLayout = new StackLayout
+                {
+                    Spacing = 0
+                };
+
+                var borderBoxTop = new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5 };
+                var borderBoxBottom = new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5 };
+                borderStackLayout.Children.Add(borderBoxTop);
+                borderStackLayout.Children.Add(stackLayout);
+                borderStackLayout.Children.Add(borderBoxBottom);
+
+                View = borderStackLayout;
+                Height = 30;
             }
         }
     }
