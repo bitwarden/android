@@ -229,7 +229,7 @@ namespace Bit.App.Pages
                 }
 
                 View = borderedStackLayout;
-                Height = 40;
+                Height = 35;
             }
         }
     }

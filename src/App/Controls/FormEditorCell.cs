@@ -20,7 +20,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15, 15, 15, 0),
+                Padding = new Thickness(15),
                 BackgroundColor = Color.White
             };
 

@@ -56,11 +56,11 @@ namespace Bit.App.Pages
                 {
                     new TableSection("Site Information")
                     {
-                        uriCell,
                         nameCell,
-                        folderCell,
+                        uriCell,
                         usernameCell,
-                        passwordCell
+                        passwordCell,
+                        folderCell
                     },
                     new TableSection(AppResources.Notes)
                     {

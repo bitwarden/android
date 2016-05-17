@@ -35,14 +35,6 @@ namespace Bit.App.Pages
 
             var stackLayout = new StackLayout { };
             stackLayout.Children.Add(syncButton);
-            stackLayout.Children.Add(new ExtendedEntry
-            {
-                BottomBorderColor = Color.Black,
-                HasBorder = true,
-                HasOnlyBottomBorder = true,
-                Placeholder = "Some placeholder",
-                PlaceholderColor = Color.Red
-            });
 
             Title = "Sync";
             Content = stackLayout;

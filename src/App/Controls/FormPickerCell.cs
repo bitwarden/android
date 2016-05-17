@@ -12,12 +12,15 @@ namespace Bit.App.Controls
             {
                 Text = labelText,
                 FontSize = 14,
-                TextColor = Color.FromHex("777777")
+                TextColor = Color.FromHex("777777"),
+                VerticalOptions = LayoutOptions.Start
             };
 
             Picker = new ExtendedPicker
             {
-                HasBorder = false
+                HasBorder = false,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(0, 5, 0, 0)
             };
 
             foreach(var item in pickerItems)
@@ -28,7 +31,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15, 15, 15, 0),
+                Padding = new Thickness(15),
                 BackgroundColor = Color.White
             };
 

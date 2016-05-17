@@ -11,18 +11,21 @@ namespace Bit.App.Controls
             {
                 Text = labelText,
                 FontSize = 14,
-                TextColor = Color.FromHex("777777")
+                TextColor = Color.FromHex("777777"),
+                VerticalOptions = LayoutOptions.Start
             };
 
             Entry = new ExtendedEntry
             {
                 Keyboard = entryKeyboard,
-                HasBorder = false
+                HasBorder = false,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(0, 5, 0, 0)
             };
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15, 15, 15, 0),
+                Padding = new Thickness(15),
                 BackgroundColor = Color.White
             };
 

@@ -24,10 +24,8 @@ namespace Bit.App.Models.Page
             {
                 _name = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Name)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(PageTitle)));
             }
         }
-        public string PageTitle => Name ?? AppResources.SiteNoName;
         public string Username
         {
             get { return _username; }

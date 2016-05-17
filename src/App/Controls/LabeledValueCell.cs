@@ -15,10 +15,17 @@ namespace Bit.App.Controls
             string button1Text = null,
             string button2Text = null)
         {
-            StackLayout = new StackLayout
+            var containerStackLayout = new StackLayout
             {
-                Padding = new Thickness(15, 15, 15, 0),
-                BackgroundColor = Color.White
+                Padding = new Thickness(15),
+                BackgroundColor = Color.White,
+                Orientation = StackOrientation.Horizontal
+            };
+
+            var labelValueStackLayout = new StackLayout
+            {
+                HorizontalOptions = LayoutOptions.StartAndExpand,
+                VerticalOptions = LayoutOptions.Center
             };
 
             if(labelText != null)
@@ -27,26 +34,29 @@ namespace Bit.App.Controls
                 {
                     Text = labelText,
                     FontSize = 14,
-                    TextColor = Color.FromHex("777777")
+                    TextColor = Color.FromHex("777777"),
+                    VerticalOptions = LayoutOptions.Start
                 };
 
-                StackLayout.Children.Add(Label);
+                labelValueStackLayout.Children.Add(Label);
             }
 
             Value = new Label
             {
                 Text = valueText,
                 LineBreakMode = LineBreakMode.TailTruncation,
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(0, 5, 0, 0)
             };
 
-            var valueStackLayout = new StackLayout
+            labelValueStackLayout.Children.Add(Value);
+
+            containerStackLayout.Children.Add(labelValueStackLayout);
+
+            var buttonStackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal
             };
-
-            valueStackLayout.Children.Add(Value);
 
             if(button1Text != null)
             {
@@ -57,7 +67,7 @@ namespace Bit.App.Controls
                     VerticalOptions = LayoutOptions.Center
                 };
 
-                valueStackLayout.Children.Add(Button1);
+                buttonStackLayout.Children.Add(Button1);
             }
 
             if(button2Text != null)
@@ -69,15 +79,14 @@ namespace Bit.App.Controls
                     VerticalOptions = LayoutOptions.Center
                 };
 
-                valueStackLayout.Children.Add(Button2);
+                buttonStackLayout.Children.Add(Button2);
             }
 
-            StackLayout.Children.Add(valueStackLayout);
+            containerStackLayout.Children.Add(buttonStackLayout);
 
-            View = StackLayout;
+            View = containerStackLayout;
         }
 
-        public StackLayout StackLayout { get; private set; }
         public Label Label { get; private set; }
         public Label Value { get; private set; }
         public Button Button1 { get; private set; }

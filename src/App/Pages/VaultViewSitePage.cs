@@ -45,6 +45,7 @@ namespace Bit.App.Pages
             var usernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
             usernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
             usernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
+            usernameCell.View.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowUsername);
 
             // Password
             var passwordCell = new LabeledValueCell(AppResources.Password, button1Text: AppResources.Show, button2Text: AppResources.Copy);
@@ -56,24 +57,26 @@ namespace Bit.App.Pages
             // URI
             var uriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
             uriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.UriHost);
-            uriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(uriCell.Value.Text)));
+            uriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(Model.Uri)));
+            uriCell.View.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowUri);
 
             // Notes
             var notesCell = new LabeledValueCell();
             notesCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
+            notesCell.View.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowNotes);
 
             Table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
                 EnableScrolling = false,
                 HasUnevenRows = true,
-                EnableSelection = true,
+                EnableSelection = false,
                 Root = new TableRoot
                 {
                     new TableSection("Site Information")
                     {
-                        uriCell,
                         nameCell,
+                        uriCell,
                         usernameCell,
                         passwordCell
                     },
@@ -96,7 +99,7 @@ namespace Bit.App.Pages
                 Orientation = ScrollOrientation.Vertical
             };
 
-            SetBinding(Page.TitleProperty, new Binding("PageTitle"));
+            Title = "View Site";
             Content = scrollView;
             BindingContext = Model;
         }
