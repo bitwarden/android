@@ -40,7 +40,7 @@ namespace Bit.App.Pages
                 IsGroupingEnabled = true,
                 ItemsSource = Folders,
                 HasUnevenRows = true,
-                SeparatorColor = Color.FromHex("E0E0E0")
+                SeparatorColor = Color.FromHex("d2d6de")
             };
             listView.GroupDisplayBinding = new Binding("Name");
             listView.GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this));
@@ -162,7 +162,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private class VaultListViewCell : TextCell
+        private class VaultListViewCell : ExtendedTextCell
         {
             public VaultListViewCell(VaultListPage page)
             {
@@ -181,6 +181,7 @@ namespace Bit.App.Pages
 
                 TextColor = Color.FromHex("333333");
                 DetailColor = Color.FromHex("777777");
+                BackgroundColor = Color.White;
             }
         }
 
@@ -190,15 +191,16 @@ namespace Bit.App.Pages
             {
                 var image = new Image
                 {
-                    Source = ImageSource.FromFile("fa-folder-open.png"),
-                    Margin = new Thickness(16, 8, 0, 8)
+                    Source = "fa_folder_open.png",
+                    Margin = new Thickness(16, 0, 0, 0),
+                    VerticalOptions = LayoutOptions.CenterAndExpand
                 };
 
                 var label = new Label
                 {
-                    FontSize = 14,
                     TextColor = Color.FromHex("777777"),
-                    VerticalTextAlignment = TextAlignment.Center
+                    VerticalTextAlignment = TextAlignment.Center,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
                 };
 
                 label.SetBinding<VaultListPageModel.Folder>(Label.TextProperty, s => s.Name);
@@ -206,25 +208,28 @@ namespace Bit.App.Pages
                 var stackLayout = new StackLayout
                 {
                     Orientation = StackOrientation.Horizontal,
-                    BackgroundColor = Color.FromHex("ecf0f5")
+                    VerticalOptions = LayoutOptions.CenterAndExpand
                 };
 
                 stackLayout.Children.Add(image);
                 stackLayout.Children.Add(label);
 
-                var borderStackLayout = new StackLayout
+                var borderedStackLayout = new StackLayout
                 {
-                    Spacing = 0
+                    Spacing = 0,
+                    BackgroundColor = Color.FromHex("ecf0f5"),
+                    HorizontalOptions = LayoutOptions.FillAndExpand
                 };
 
-                var borderBoxTop = new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5 };
-                var borderBoxBottom = new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5 };
-                borderStackLayout.Children.Add(borderBoxTop);
-                borderStackLayout.Children.Add(stackLayout);
-                borderStackLayout.Children.Add(borderBoxBottom);
+                borderedStackLayout.Children.Add(new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5, VerticalOptions = LayoutOptions.Start });
+                borderedStackLayout.Children.Add(stackLayout);
+                if(Device.OS == TargetPlatform.iOS)
+                {
+                    borderedStackLayout.Children.Add(new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5, VerticalOptions = LayoutOptions.End });
+                }
 
-                View = borderStackLayout;
-                Height = 30;
+                View = borderedStackLayout;
+                Height = 40;
             }
         }
     }
