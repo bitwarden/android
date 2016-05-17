@@ -21,7 +21,7 @@ namespace Bit.App.Controls
         {
             // default colors for our app
             BarBackgroundColor = Color.FromHex("3c8dbc");
-            BarTextColor = Color.FromHex("ffffff");
+            BarTextColor = Color.White;
         }
     }
 }

@@ -56,17 +56,9 @@
 	<string>0.0.1</string>
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>LaunchScreen</string>
-	<key>UIStatusBarTintParameters</key>
-	<dict>
-		<key>UINavigationBar</key>
-		<dict>
-			<key>Style</key>
-			<string>UIBarStyleDefault</string>
-			<key>Translucent</key>
-			<false/>
-			<key>BackgroundImage</key>
-			<string></string>
-		</dict>
-	</dict>
+	<key>UIStatusBarStyle</key>
++	<string>UIStatusBarStyleLightContent</string>
++	<key>UIViewControllerBasedStatusBarAppearance</key>
++	<false/>
 </dict>
 </plist>
