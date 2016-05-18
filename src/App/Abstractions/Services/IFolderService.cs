@@ -10,5 +10,6 @@ namespace Bit.App.Abstractions
         Task<Folder> GetByIdAsync(string id);
         Task<IEnumerable<Folder>> GetAllAsync();
         Task<ApiResult<FolderResponse>> SaveAsync(Folder folder);
+        Task<ApiResult<object>> DeleteAsync(string folderId);
     }
 }

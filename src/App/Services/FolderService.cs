@@ -74,5 +74,16 @@ namespace Bit.App.Services
 
             return response;
         }
+
+        public async Task<ApiResult<object>> DeleteAsync(string folderId)
+        {
+            ApiResult<object> response = await _folderApiRepository.DeleteAsync(folderId);
+            if(response.Succeeded)
+            {
+                await _folderRepository.DeleteAsync(folderId);
+            }
+
+            return response;
+        }
     }
 }

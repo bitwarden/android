@@ -38,12 +38,15 @@ namespace Bit.App.Pages
             var nameCell = new FormEntryCell(AppResources.Name);
             nameCell.Entry.Text = folder.Name.Decrypt();
 
+            var deleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
+            deleteCell.Tapped += DeleteCell_Tapped;
+
             var mainTable = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
                 EnableScrolling = false,
-                HasUnevenRows = true,
                 EnableSelection = false,
+                HasUnevenRows = true,
                 Root = new TableRoot
                 {
                     new TableSection()
@@ -58,6 +61,20 @@ namespace Bit.App.Pages
                 mainTable.RowHeight = -1;
                 mainTable.EstimatedRowHeight = 70;
             }
+
+            var deleteTable = new ExtendedTableView
+            {
+                Intent = TableIntent.Settings,
+                EnableScrolling = false,
+                EnableSelection = true,
+                Root = new TableRoot
+                {
+                    new TableSection()
+                    {
+                        deleteCell
+                    }
+                }
+            };
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
@@ -85,7 +102,7 @@ namespace Bit.App.Pages
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Edit Folder";
-            Content = mainTable;
+            Content = new StackLayout { Children = { mainTable, deleteTable } };
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
@@ -95,6 +112,27 @@ namespace Bit.App.Pages
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
+            }
+        }
+
+        private async void DeleteCell_Tapped(object sender, EventArgs e)
+        {
+            // TODO: Validate the delete operation. ex. Cannot delete a folder that has sites in it?
+
+            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
+            {
+                return;
+            }
+
+            var deleteTask = _folderService.DeleteAsync(_folderId);
+            _userDialogs.ShowLoading("Deleting...", MaskType.Black);
+            await deleteTask;
+            _userDialogs.HideLoading();
+
+            if((await deleteTask).Succeeded)
+            {
+                await Navigation.PopModalAsync();
+                _userDialogs.SuccessToast("Folder deleted.");
             }
         }
 
