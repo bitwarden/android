@@ -197,6 +197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />
+    <Compile Include="Controls\ExtendedViewCellRenderer.cs" />
     <Compile Include="Controls\ExtendedTextCellRenderer.cs" />
     <Compile Include="Controls\ExtendedPickerRenderer.cs" />
     <Compile Include="Controls\ExtendedEntryRenderer.cs" />

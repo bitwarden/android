@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class FormEditorCell : ViewCell
+    public class FormEditorCell : ExtendedViewCell
     {
         public FormEditorCell(Keyboard entryKeyboard = null, double? height = null)
         {
@@ -20,8 +20,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15),
-                BackgroundColor = Color.White
+                Padding = new Thickness(15)
             };
 
             stackLayout.Children.Add(Editor);

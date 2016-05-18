@@ -1,13 +1,8 @@
-﻿using Acr.UserDialogs;
-using Bit.App.Abstractions;
-using Bit.App.Resources;
-using System;
-using Xamarin.Forms;
-using XLabs.Ioc;
+﻿using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class LabeledValueCell : ViewCell
+    public class LabeledValueCell : ExtendedViewCell
     {
         public LabeledValueCell(
             string labelText = null,
@@ -18,7 +13,6 @@ namespace Bit.App.Controls
             var containerStackLayout = new StackLayout
             {
                 Padding = new Thickness(15),
-                BackgroundColor = Color.White,
                 Orientation = StackOrientation.Horizontal
             };
 

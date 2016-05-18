@@ -1,9 +1,8 @@
-﻿using System;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class FormEntryCell : ViewCell
+    public class FormEntryCell : ExtendedViewCell
     {
         public FormEntryCell(string labelText, Keyboard entryKeyboard = null, bool IsPassword = false)
         {
@@ -25,8 +24,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15),
-                BackgroundColor = Color.White
+                Padding = new Thickness(15)
             };
 
             stackLayout.Children.Add(Label);

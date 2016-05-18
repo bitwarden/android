@@ -20,7 +20,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var foldersCell = new TextCell { Text = "Folders" };
+            var foldersCell = new ExtendedTextCell { Text = "Folders", ShowDisclousure = true };
             foldersCell.Tapped += FoldersCell_Tapped;
 
             var table = new ExtendedTableView

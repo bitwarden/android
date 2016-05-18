@@ -4,7 +4,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class FormPickerCell : ViewCell
+    public class FormPickerCell : ExtendedViewCell
     {
         public FormPickerCell(string labelText, string[] pickerItems)
         {
@@ -31,8 +31,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15),
-                BackgroundColor = Color.White
+                Padding = new Thickness(15)
             };
 
             stackLayout.Children.Add(Label);
