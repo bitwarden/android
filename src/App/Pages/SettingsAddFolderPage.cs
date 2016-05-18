@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
@@ -12,16 +10,14 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class VaultAddSitePage : ContentPage
+    public class SettingsAddFolderPage : ContentPage
     {
-        private readonly ISiteService _siteService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
 
-        public VaultAddSitePage()
+        public SettingsAddFolderPage()
         {
-            _siteService = Resolver.Resolve<ISiteService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
@@ -31,20 +27,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url);
             var nameCell = new FormEntryCell(AppResources.Name);
-            var usernameCell = new FormEntryCell(AppResources.Username);
-            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true);
-
-            var folderOptions = new List<string> { AppResources.FolderNone };
-            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
-            foreach(var folder in folders)
-            {
-                folderOptions.Add(folder.Name.Decrypt());
-            }
-            var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
-
-            var notesCell = new FormEditorCell(height: 90);
 
             var mainTable = new ExtendedTableView
             {
@@ -54,17 +37,9 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 Root = new TableRoot
                 {
-                    new TableSection("Site Information")
+                    new TableSection()
                     {
-                        nameCell,
-                        uriCell,
-                        usernameCell,
-                        passwordCell,
-                        folderCell
-                    },
-                    new TableSection(AppResources.Notes)
-                    {
-                        notesCell
+                        nameCell
                     }
                 }
             };
@@ -75,23 +50,11 @@ namespace Bit.App.Pages
                 mainTable.EstimatedRowHeight = 70;
             }
 
-            var scrollView = new ScrollView
-            {
-                Content = mainTable,
-                Orientation = ScrollOrientation.Vertical
-            };
-
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
                 if(!_connectivity.IsConnected)
                 {
                     AlertNoConnection();
-                    return;
-                }
-
-                if(string.IsNullOrWhiteSpace(passwordCell.Entry.Text))
-                {
-                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Password), AppResources.Ok);
                     return;
                 }
 
@@ -101,31 +64,22 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                var site = new Site
+                var folder = new Folder
                 {
-                    Uri = uriCell.Entry.Text.Encrypt(),
-                    Name = nameCell.Entry.Text.Encrypt(),
-                    Username = usernameCell.Entry.Text?.Encrypt(),
-                    Password = passwordCell.Entry.Text?.Encrypt(),
-                    Notes = notesCell.Editor.Text?.Encrypt(),
+                    Name = nameCell.Entry.Text.Encrypt()
                 };
 
-                if(folderCell.Picker.SelectedIndex > 0)
-                {
-                    site.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
-                }
-
-                var saveTask = _siteService.SaveAsync(site);
+                var saveTask = _folderService.SaveAsync(folder);
                 _userDialogs.ShowLoading("Saving...", MaskType.Black);
                 await saveTask;
 
                 _userDialogs.HideLoading();
                 await Navigation.PopModalAsync();
-                _userDialogs.SuccessToast(nameCell.Entry.Text, "New site created.");
+                _userDialogs.SuccessToast(nameCell.Entry.Text, "New folder created.");
             }, ToolbarItemOrder.Default, 0);
 
-            Title = AppResources.AddSite;
-            Content = scrollView;
+            Title = "Add Folder";
+            Content = mainTable;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
@@ -144,4 +98,3 @@ namespace Bit.App.Pages
         }
     }
 }
-

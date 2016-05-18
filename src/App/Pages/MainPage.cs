@@ -13,7 +13,7 @@ namespace Bit.App.Pages
             TintColor = Color.FromHex("ffffff");
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
-            var vaultNavigation = new ExtendedNavigationPage(new VaultListPage());
+            var vaultNavigation = new ExtendedNavigationPage(new VaultListSitesPage());
             var syncNavigation = new ExtendedNavigationPage(new SyncPage());
 
             vaultNavigation.Title = AppResources.MyVault;

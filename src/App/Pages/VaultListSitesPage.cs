@@ -12,14 +12,14 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class VaultListPage : ContentPage
+    public class VaultListSitesPage : ContentPage
     {
         private readonly IFolderService _folderService;
         private readonly ISiteService _siteService;
         private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
 
-        public VaultListPage()
+        public VaultListSitesPage()
         {
             _folderService = Resolver.Resolve<IFolderService>();
             _siteService = Resolver.Resolve<ISiteService>();
@@ -145,9 +145,9 @@ namespace Bit.App.Pages
 
         private class AddSiteToolBarItem : ToolbarItem
         {
-            private readonly VaultListPage _page;
+            private readonly VaultListSitesPage _page;
 
-            public AddSiteToolBarItem(VaultListPage page)
+            public AddSiteToolBarItem(VaultListSitesPage page)
             {
                 _page = page;
                 Text = AppResources.Add;
@@ -164,7 +164,7 @@ namespace Bit.App.Pages
 
         private class VaultListViewCell : ExtendedTextCell
         {
-            public VaultListViewCell(VaultListPage page)
+            public VaultListViewCell(VaultListSitesPage page)
             {
                 var moreAction = new MenuItem { Text = AppResources.More };
                 moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
@@ -181,13 +181,12 @@ namespace Bit.App.Pages
 
                 TextColor = Color.FromHex("333333");
                 DetailColor = Color.FromHex("777777");
-                BackgroundColor = Color.White;
             }
         }
 
         private class VaultListHeaderViewCell : ViewCell
         {
-            public VaultListHeaderViewCell(VaultListPage page)
+            public VaultListHeaderViewCell(VaultListSitesPage page)
             {
                 var image = new Image
                 {

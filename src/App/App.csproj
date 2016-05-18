@@ -76,12 +76,15 @@
     <Compile Include="Abstractions\IDataObject.cs" />
     <Compile Include="Models\Data\SiteData.cs" />
     <Compile Include="Models\Folder.cs" />
+    <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
     <Compile Include="Pages\LoginNavigationPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
+    <Compile Include="Pages\SettingsEditFolderPage.cs" />
     <Compile Include="Pages\SyncPage.cs" />
     <Compile Include="Pages\SettingsPage.cs" />
+    <Compile Include="Pages\SettingsListFoldersPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Abstractions\Repositories\ISiteRepository.cs" />
     <Compile Include="Repositories\ApiRepository.cs" />
@@ -115,11 +118,11 @@
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Models\Page\VaultListPageModel.cs" />
     <Compile Include="Pages\LoginPage.cs" />
-    <Compile Include="Pages\VaultAddFolderPage.cs" />
+    <Compile Include="Pages\SettingsAddFolderPage.cs" />
     <Compile Include="Pages\VaultAddSitePage.cs" />
     <Compile Include="Pages\VaultViewSitePage.cs" />
     <Compile Include="Pages\VaultEditSitePage.cs" />
-    <Compile Include="Pages\VaultListPage.cs" />
+    <Compile Include="Pages\VaultListSitesPage.cs" />
     <Compile Include="Utilities\Extentions.cs" />
     <Compile Include="Utilities\TokenHttpRequestMessage.cs" />
   </ItemGroup>
