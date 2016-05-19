@@ -82,7 +82,6 @@
     <Compile Include="Pages\LoginNavigationPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\SettingsEditFolderPage.cs" />
-    <Compile Include="Pages\TestListPage.cs" />
     <Compile Include="Pages\SyncPage.cs" />
     <Compile Include="Pages\SettingsPage.cs" />
     <Compile Include="Pages\SettingsListFoldersPage.cs" />
