@@ -258,22 +258,22 @@
     <BundleResource Include="Resources\fa-lock%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion-chevron-right.png" />
+    <BundleResource Include="Resources\ion_chevron_right.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion-chevron-right%402x.png" />
+    <BundleResource Include="Resources\ion_chevron_right%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion-chevron-right%403x.png" />
+    <BundleResource Include="Resources\ion_chevron_right%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion-plus.png" />
+    <BundleResource Include="Resources\ion_plus.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion-plus%402x.png" />
+    <BundleResource Include="Resources\ion_plus%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion-plus%403x.png" />
+    <BundleResource Include="Resources\ion_plus%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\Icon-120.png" />

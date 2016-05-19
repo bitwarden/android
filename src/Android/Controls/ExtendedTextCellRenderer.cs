@@ -26,8 +26,7 @@ namespace Bit.Android.Controls
 
                 if(extendedCell.ShowDisclousure)
                 {
-                    // TODO: different image
-                    var resourceId = Resource.Drawable.fa_folder_open;
+                    var resourceId = Resource.Drawable.ion_chevron_right;
                     if(!string.IsNullOrWhiteSpace(extendedCell.DisclousureImage))
                     {
                         var fileName = System.IO.Path.GetFileNameWithoutExtension(extendedCell.DisclousureImage);

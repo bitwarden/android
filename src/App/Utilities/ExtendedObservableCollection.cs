@@ -24,7 +24,7 @@ namespace Bit.App.Utilities
             OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
         }
 
-        public void Reset(IEnumerable<T> range)
+        public void ResetWithRange(IEnumerable<T> range)
         {
             Items.Clear();
             AddRange(range);

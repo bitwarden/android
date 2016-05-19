@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Page;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -23,7 +25,7 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ObservableCollection<SettingsFolderPageModel> Folders { get; private set; } = new ObservableCollection<SettingsFolderPageModel>();
+        public ExtendedObservableCollection<SettingsFolderPageModel> Folders { get; private set; } = new ExtendedObservableCollection<SettingsFolderPageModel>();
 
         private void Init()
         {
@@ -49,14 +51,9 @@ namespace Bit.App.Pages
 
         private async Task LoadFoldersAsync()
         {
-            Folders.Clear();
-
             var folders = await _folderService.GetAllAsync();
-            foreach(var folder in folders)
-            {
-                var f = new SettingsFolderPageModel(folder);
-                Folders.Add(f);
-            }
+            var pageFolders = folders.Select(f => new SettingsFolderPageModel(f));
+            Folders.ResetWithRange(pageFolders);
         }
 
         private void FolderSelected(object sender, SelectedItemChangedEventArgs e)
@@ -74,7 +71,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = AppResources.Add;
-                Icon = "ion-plus";
+                Icon = "ion_plus";
                 Clicked += ClickedItem;
             }
 

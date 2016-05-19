@@ -41,12 +41,11 @@ namespace Bit.App.Pages
                 IsGroupingEnabled = true,
                 ItemsSource = Folders,
                 HasUnevenRows = true,
-                SeparatorColor = Color.FromHex("d2d6de")
+                SeparatorColor = Color.FromHex("d2d6de"),
+                GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this)),
+                ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
             };
-            listView.GroupDisplayBinding = new Binding("Name");
-            listView.GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this));
             listView.ItemSelected += SiteSelected;
-            listView.ItemTemplate = new DataTemplate(() => new VaultListViewCell(this));
 
             Title = AppResources.MyVault;
             Content = listView;
@@ -67,7 +66,7 @@ namespace Bit.App.Pages
             var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));
             pageFolders.Add(noneFolder);
 
-            Folders.Reset(pageFolders);
+            Folders.ResetWithRange(pageFolders);
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
@@ -146,7 +145,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = AppResources.Add;
-                Icon = "ion-plus";
+                Icon = "ion_plus";
                 Clicked += ClickedItem;
             }
 
