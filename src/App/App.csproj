@@ -52,6 +52,7 @@
     <Compile Include="Controls\ExtendedPicker.cs" />
     <Compile Include="Controls\ExtendedEntry.cs" />
     <Compile Include="Controls\ExtendedTabbedPage.cs" />
+    <Compile Include="Controls\ExtendedSwitchCell.cs" />
     <Compile Include="Controls\ExtendedViewCell.cs" />
     <Compile Include="Controls\FormEditorCell.cs" />
     <Compile Include="Controls\ExtendedTextCell.cs" />

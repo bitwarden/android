@@ -102,6 +102,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controls\ContentPageRenderer.cs" />
+    <Compile Include="Controls\ExtendedSwitchCellRenderer.cs" />
     <Compile Include="Controls\ExtendedViewCellRenderer.cs" />
     <Compile Include="Controls\ExtendedTextCellRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />

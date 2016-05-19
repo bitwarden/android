@@ -40,7 +40,7 @@ namespace Bit.App.Controls
                 Text = valueText,
                 LineBreakMode = LineBreakMode.TailTruncation,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(0, 5, 0, 0)
+                TextColor = Color.FromHex("333333")
             };
 
             labelValueStackLayout.Children.Add(Value);

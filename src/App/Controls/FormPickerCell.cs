@@ -19,8 +19,7 @@ namespace Bit.App.Controls
             Picker = new ExtendedPicker
             {
                 HasBorder = false,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Margin = new Thickness(0, 5, 0, 0)
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             foreach(var item in pickerItems)

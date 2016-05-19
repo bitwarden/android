@@ -23,40 +23,44 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var touchIdCell = new SwitchCell
+            var touchIdCell = new ExtendedSwitchCell
             {
                 Text = "Use Touch ID"
             };
-            touchIdCell.Tapped += TouchIdCell_Tapped;
+            touchIdCell.OnChanged += TouchIdCell_Changed;
 
-            var lockOnExitCell = new SwitchCell
+            var lockOnExitCell = new ExtendedSwitchCell
             {
                 Text = "Lock Immediately On Exit"
             };
-            lockOnExitCell.Tapped += LockOnExitCell_Tapped;
+            lockOnExitCell.OnChanged += LockOnExitCell_Changed;
 
             var changeMasterPasswordCell = new ExtendedTextCell
             {
-                Text = "Change Master Password"
+                Text = "Change Master Password",
+                TextColor = Color.FromHex("333333")
             };
             changeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
 
             var foldersCell = new ExtendedTextCell
             {
                 Text = "Folders",
-                ShowDisclousure = true
+                ShowDisclousure = true,
+                TextColor = Color.FromHex("333333")
             };
             foldersCell.Tapped += FoldersCell_Tapped;
 
             var lockCell = new ExtendedTextCell
             {
-                Text = "Lock"
+                Text = "Lock",
+                TextColor = Color.FromHex("333333")
             };
             lockCell.Tapped += LockCell_Tapped;
 
             var logOutCell = new ExtendedTextCell
             {
-                Text = "Log Out"
+                Text = "Log Out",
+                TextColor = Color.FromHex("333333")
             };
             logOutCell.Tapped += LogOutCell_Tapped;
 
@@ -109,7 +113,7 @@ namespace Bit.App.Pages
             Application.Current.MainPage = new LoginNavigationPage();
         }
 
-        private void LockOnExitCell_Tapped(object sender, EventArgs e)
+        private void LockOnExitCell_Changed(object sender, EventArgs e)
         {
 
         }
@@ -124,7 +128,7 @@ namespace Bit.App.Pages
             Device.OpenUri(new Uri("https://vault.bitwarden.com"));
         }
 
-        private void TouchIdCell_Tapped(object sender, EventArgs e)
+        private void TouchIdCell_Changed(object sender, EventArgs e)
         {
             
         }
