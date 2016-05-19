@@ -37,7 +37,7 @@ namespace Bit.App.Services
             {
                 if(_keyParameter != null)
                 {
-                    _keyParameter.GetKey();
+                    return _keyParameter.GetKey();
                 }
 
                 var storedKey = _secureStorage.Retrieve(KeyKey);
