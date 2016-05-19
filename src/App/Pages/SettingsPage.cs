@@ -126,7 +126,7 @@ namespace Bit.App.Pages
 
         private void TouchIdCell_Tapped(object sender, EventArgs e)
         {
-
+            Navigation.PushAsync(new TestListPage());
         }
 
         private void FoldersCell_Tapped(object sender, EventArgs e)
