@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using Bit.App.Resources;
+using Bit.App.Utilities;
+using System.Linq;
 
 namespace Bit.App.Models.Page
 {
@@ -27,14 +28,12 @@ namespace Bit.App.Models.Page
             public string Uri { get; set; }
         }
 
-        public class Folder : ObservableCollection<Site>
+        public class Folder : List<Site>
         {
             public Folder(IEnumerable<Models.Site> sites, string folderId = null)
             {
-                foreach(var site in sites)
-                {
-                    Items.Add(new Site(site, folderId));
-                }
+                var pageSites = sites.Select(s => new Site(s, folderId));
+                AddRange(pageSites);
             }
 
             public Folder(Models.Folder folder, IEnumerable<Models.Site> sites)
@@ -46,7 +45,6 @@ namespace Bit.App.Models.Page
 
             public string Id { get; set; }
             public string Name { get; set; } = AppResources.FolderNone;
-            public string FirstLetter { get { return Name.Substring(0, 1); } }
         }
     }
 }

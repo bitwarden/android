@@ -9,6 +9,7 @@ using Bit.App.Models.Page;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -29,7 +30,7 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ObservableCollection<VaultListPageModel.Folder> Folders { get; private set; } = new ObservableCollection<VaultListPageModel.Folder>();
+        public ExtendedObservableCollection<VaultListPageModel.Folder> Folders { get; private set; } = new ExtendedObservableCollection<VaultListPageModel.Folder>();
 
         private void Init()
         {
@@ -59,20 +60,14 @@ namespace Bit.App.Pages
 
         private async Task LoadFoldersAsync()
         {
-            Folders.Clear();
-
             var folders = await _folderService.GetAllAsync();
             var sites = await _siteService.GetAllAsync();
 
-            foreach(var folder in folders)
-            {
-                var f = new VaultListPageModel.Folder(folder, sites.Where(s => s.FolderId == folder.Id));
-                Folders.Add(f);
-            }
-
-            // add the sites with no folder
+            var pageFolders = folders.Select(f => new VaultListPageModel.Folder(f, sites.Where(s => s.FolderId == f.Id))).ToList();
             var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));
-            Folders.Add(noneFolder);
+            pageFolders.Add(noneFolder);
+
+            Folders.Reset(pageFolders);
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)

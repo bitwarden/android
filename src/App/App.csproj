@@ -124,6 +124,7 @@
     <Compile Include="Pages\VaultEditSitePage.cs" />
     <Compile Include="Pages\VaultListSitesPage.cs" />
     <Compile Include="Utilities\Extentions.cs" />
+    <Compile Include="Utilities\ExtendedObservableCollection.cs" />
     <Compile Include="Utilities\TokenHttpRequestMessage.cs" />
   </ItemGroup>
   <ItemGroup>
