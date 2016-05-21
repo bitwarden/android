@@ -14,6 +14,11 @@ using Plugin.Settings;
 using Plugin.Connectivity;
 using Acr.UserDialogs;
 using Bit.App.Repositories;
+using Plugin.Fingerprint;
+using Plugin.Fingerprint.Abstractions;
+using Plugin.Settings.Abstractions;
+using System.Diagnostics;
+using Xamarin.Forms;
 
 namespace Bit.iOS
 {
@@ -23,6 +28,8 @@ namespace Bit.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        private App.App _app;
+
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -32,6 +39,8 @@ namespace Bit.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            CrossFingerprint.AllowReuse = false;
+
             global::Xamarin.Forms.Forms.Init();
 
             if(!Resolver.IsSet)
@@ -39,9 +48,67 @@ namespace Bit.iOS
                 SetIoc();
             }
 
-            LoadApplication(new App.App(Resolver.Resolve<IAuthService>(), Resolver.Resolve<IDatabaseService>()));
+            _app = new App.App(
+                Resolver.Resolve<IAuthService>(),
+                Resolver.Resolve<IDatabaseService>(),
+                Resolver.Resolve<IFingerprint>(),
+                Resolver.Resolve<ISettings>());
+
+            LoadApplication(_app);
 
             return base.FinishedLaunching(app, options);
+        }
+
+        public override void DidEnterBackground(UIApplication uiApplication)
+        {
+            var colourView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            {
+                BackgroundColor = UIColor.Black,
+                Tag = 4321
+            };
+            UIApplication.SharedApplication.KeyWindow.AddSubview(colourView);
+            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(colourView);
+
+            base.DidEnterBackground(uiApplication);
+            Debug.WriteLine("DidEnterBackground");
+        }
+
+
+        public override void OnResignActivation(UIApplication uiApplication)
+        {
+            base.OnResignActivation(uiApplication);
+            Debug.WriteLine("OnResignActivation");
+        }
+
+        public override void WillTerminate(UIApplication uiApplication)
+        {
+            base.WillTerminate(uiApplication);
+            Debug.WriteLine("WillTerminate");
+        }
+
+        public override void OnActivated(UIApplication uiApplication)
+        {
+            base.OnActivated(uiApplication);
+            Debug.WriteLine("OnActivated");
+
+            var view = UIApplication.SharedApplication.KeyWindow.ViewWithTag(4321);
+            if(view != null)
+            {
+                view.RemoveFromSuperview();
+            }
+        }
+
+        public override void WillEnterForeground(UIApplication uiApplication)
+        {
+            SendLockMessage();
+            base.WillEnterForeground(uiApplication);
+            Debug.WriteLine("WillEnterForeground");
+        }
+
+        private void SendLockMessage()
+        {
+            MessagingCenter.Send<App.App>(_app, "Lock");
+
         }
 
         private void SetIoc()
@@ -68,7 +135,8 @@ namespace Bit.iOS
                 // Other
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager());
+                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
         }

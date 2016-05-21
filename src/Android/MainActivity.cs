@@ -16,6 +16,9 @@ using Plugin.Settings;
 using Plugin.Connectivity;
 using Acr.UserDialogs;
 using Bit.App.Repositories;
+using Plugin.Fingerprint;
+using Plugin.Fingerprint.Abstractions;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.Android
 {
@@ -33,7 +36,11 @@ namespace Bit.Android
                 SetIoc();
             }
 
-            LoadApplication(new App.App(Resolver.Resolve<IAuthService>(), Resolver.Resolve<IDatabaseService>()));
+            LoadApplication(new App.App(
+                Resolver.Resolve<IAuthService>(),
+                Resolver.Resolve<IDatabaseService>(),
+                Resolver.Resolve<IFingerprint>(),
+                Resolver.Resolve<ISettings>()));
         }
 
         private void SetIoc()
@@ -60,7 +67,8 @@ namespace Bit.Android
                 // Other
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager());
+                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
 
