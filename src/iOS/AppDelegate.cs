@@ -19,6 +19,7 @@ using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
 using System.Diagnostics;
 using Xamarin.Forms;
+using Bit.App;
 
 namespace Bit.iOS
 {
@@ -61,13 +62,17 @@ namespace Bit.iOS
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            var colourView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            // TODO: Make this an image view
+            var colorView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
                 BackgroundColor = UIColor.Black,
                 Tag = 4321
             };
-            UIApplication.SharedApplication.KeyWindow.AddSubview(colourView);
-            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(colourView);
+            UIApplication.SharedApplication.KeyWindow.AddSubview(colorView);
+            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(colorView);
+
+            // Log the date/time we last backgrounded
+            CrossSettings.Current.AddOrUpdateValue(Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
 
             base.DidEnterBackground(uiApplication);
             Debug.WriteLine("DidEnterBackground");
@@ -107,7 +112,7 @@ namespace Bit.iOS
 
         private void SendLockMessage()
         {
-            MessagingCenter.Send<App.App>(_app, "Lock");
+            MessagingCenter.Send(_app, "Lock");
 
         }
 

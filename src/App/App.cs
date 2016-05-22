@@ -70,9 +70,47 @@ namespace Bit.App
 
         private async Task CheckLockAsync()
         {
-            if(_authService.IsAuthenticated && Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockFingerprintPage == null)
+            // Only lock if they are logged in
+            if(!_authService.IsAuthenticated)
             {
-                await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(), false);
+                return;
+            }
+
+            // Lock seconds tells if if they want to lock the app or not
+            var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
+            if(!lockSeconds.HasValue)
+            {
+                return;
+            }
+
+            // Has it been longer than lockSeconds since the last time the app was backgrounded?
+            var now = DateTime.UtcNow;
+            var lastBackground = _settings.GetValueOrDefault(Constants.SettingLastBackgroundedDate, now.AddYears(-1));
+            if((now - lastBackground).TotalSeconds < lockSeconds.Value)
+            {
+                return;
+            }
+
+            // What method are we using to unlock?
+            var fingerprintUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn);
+            var pinUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingPinUnlockOn);
+            if(fingerprintUnlock && _fingerprint.IsAvailable)
+            {
+                if(Device.OS == TargetPlatform.iOS)
+                {
+                    if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockFingerprintPage == null)
+                    {
+                        await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(), false);
+                    }
+                }
+            }
+            else if(pinUnlock)
+            {
+
+            }
+            else
+            {
+                // Use master password to unlock if no other methods are set
             }
         }
     }
