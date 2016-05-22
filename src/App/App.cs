@@ -41,16 +41,16 @@ namespace Bit.App
 
             MainPage.BackgroundColor = Color.FromHex("ecf0f5");
 
-            MessagingCenter.Subscribe<App>(this, "Lock", async (sender) =>
+            MessagingCenter.Subscribe<Application, bool>(Current, "Lock", async (sender, args) =>
             {
-                await CheckLockAsync();
+                await CheckLockAsync(args);
             });
         }
 
         protected override void OnStart()
         {
             // Handle when your app starts
-            CheckLockAsync();
+            CheckLockAsync(false);
             _databaseService.CreateTables();
 
             Debug.WriteLine("OnStart");
@@ -68,7 +68,7 @@ namespace Bit.App
             Debug.WriteLine("OnResume");
         }
 
-        private async Task CheckLockAsync()
+        private async Task CheckLockAsync(bool forceLock)
         {
             // Only lock if they are logged in
             if(!_authService.IsAuthenticated)
@@ -76,19 +76,23 @@ namespace Bit.App
                 return;
             }
 
-            // Lock seconds tells if if they want to lock the app or not
-            var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
-            if(!lockSeconds.HasValue)
+            // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
+            if(!forceLock)
             {
-                return;
-            }
+                // Lock seconds tells if if they want to lock the app or not
+                var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
+                if(!lockSeconds.HasValue)
+                {
+                    return;
+                }
 
-            // Has it been longer than lockSeconds since the last time the app was backgrounded?
-            var now = DateTime.UtcNow;
-            var lastBackground = _settings.GetValueOrDefault(Constants.SettingLastBackgroundedDate, now.AddYears(-1));
-            if((now - lastBackground).TotalSeconds < lockSeconds.Value)
-            {
-                return;
+                // Has it been longer than lockSeconds since the last time the app was backgrounded?
+                var now = DateTime.UtcNow;
+                var lastBackground = _settings.GetValueOrDefault(Constants.SettingLastBackgroundedDate, now.AddYears(-1));
+                if((now - lastBackground).TotalSeconds < lockSeconds.Value)
+                {
+                    return;
+                }
             }
 
             // What method are we using to unlock?
@@ -100,7 +104,7 @@ namespace Bit.App
                 {
                     if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockFingerprintPage == null)
                     {
-                        await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(), false);
+                        await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(!forceLock), false);
                     }
                 }
             }

@@ -18,9 +18,11 @@ namespace Bit.App.Pages
         private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
+        private readonly bool _checkFingerprintImmediately;
 
-        public LockFingerprintPage()
+        public LockFingerprintPage(bool checkFingerprintImmediately)
         {
+            _checkFingerprintImmediately = checkFingerprintImmediately;
             _fingerprint = Resolver.Resolve<IFingerprint>();
             _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -31,8 +33,6 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            CheckFingerprintAsync();
-
             var fingerprintButton = new Button
             {
                 Text = "Use Fingerprint to Unlock",
@@ -53,6 +53,16 @@ namespace Bit.App.Pages
 
             Title = "Verify Fingerprint";
             Content = stackLayout;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            if(_checkFingerprintImmediately)
+            {
+                CheckFingerprintAsync();
+            }
         }
 
         public async Task LogoutAsync()

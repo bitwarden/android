@@ -147,7 +147,7 @@ namespace Bit.App.Pages
 
         private void LockCell_Tapped(object sender, EventArgs e)
         {
-
+            MessagingCenter.Send(Application.Current, "Lock", true);
         }
 
         private async void LogOutCell_Tapped(object sender, EventArgs e)

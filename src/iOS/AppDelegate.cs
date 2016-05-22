@@ -29,8 +29,6 @@ namespace Bit.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        private App.App _app;
-
         //
         // This method is invoked when the application has loaded and is ready to run. In this 
         // method you should instantiate the window, load the UI into it and then make the window
@@ -49,13 +47,11 @@ namespace Bit.iOS
                 SetIoc();
             }
 
-            _app = new App.App(
+            LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<IFingerprint>(),
-                Resolver.Resolve<ISettings>());
-
-            LoadApplication(_app);
+                Resolver.Resolve<ISettings>()));
 
             return base.FinishedLaunching(app, options);
         }
@@ -112,8 +108,7 @@ namespace Bit.iOS
 
         private void SendLockMessage()
         {
-            MessagingCenter.Send(_app, "Lock");
-
+            MessagingCenter.Send(Xamarin.Forms.Application.Current, "Lock", false);
         }
 
         private void SetIoc()
