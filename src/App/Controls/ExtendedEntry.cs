@@ -42,8 +42,17 @@ namespace Bit.App.Controls
             set { SetValue(MaxLengthProperty, value); }
         }
 
+
         public ReturnType? ReturnType { get; set; }
         public bool? Autocorrect { get; set; }
         public bool DisableAutocapitalize { get; set; }
+
+        // Need to overwrite default handler because we cant Invoke otherwise
+        public new event EventHandler Completed;
+
+        public void InvokeCompleted()
+        {
+            Completed.Invoke(this, null);
+        }
     }
 }

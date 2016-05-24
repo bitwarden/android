@@ -2,10 +2,10 @@
 {
     public enum ReturnType
     {
-        Return,
         Done,
         Go,
         Next,
-        Search
+        Search,
+        Send
     }
 }

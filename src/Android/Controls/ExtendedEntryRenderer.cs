@@ -3,8 +3,11 @@ using System.ComponentModel;
 using Android.Graphics;
 using Android.Text;
 using Android.Text.Method;
+using Android.Views.InputMethods;
+using Android.Widget;
 using Bit.Android.Controls;
 using Bit.App.Controls;
+using Bit.App.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -27,6 +30,29 @@ namespace Bit.Android.Controls
 
             SetBorder(view);
             SetMaxLength(view);
+            SetReturnType(view);
+
+            // Editor Action is called when the return button is pressed
+            Control.EditorAction += (object sender, TextView.EditorActionEventArgs args) =>
+            {
+                if(view.ReturnType != ReturnType.Next)
+                {
+                    view.Unfocus();
+                }
+
+                // Call all the methods attached to base_entry event handler Completed
+                view.InvokeCompleted();
+            };
+
+            if(view.DisableAutocapitalize)
+            {
+                Control.SetRawInputType(Control.InputType |= InputTypes.TextVariationEmailAddress);
+            }
+
+            if(view.Autocorrect.HasValue)
+            {
+                Control.SetRawInputType(Control.InputType |= InputTypes.TextFlagNoSuggestions);
+            }
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -45,6 +71,35 @@ namespace Bit.Android.Controls
                 if(e.PropertyName == VisualElement.BackgroundColorProperty.PropertyName)
                 {
                     Control.SetBackgroundColor(view.BackgroundColor.ToAndroid());
+                }
+            }
+        }
+
+        private void SetReturnType(ExtendedEntry view)
+        {
+            if(view.ReturnType.HasValue)
+            {
+                switch(view.ReturnType.Value)
+                {
+                    case ReturnType.Go:
+                        Control.ImeOptions = ImeAction.Go;
+                        Control.SetImeActionLabel("Go", ImeAction.Go);
+                        break;
+                    case ReturnType.Next:
+                        Control.ImeOptions = ImeAction.Next;
+                        Control.SetImeActionLabel("Next", ImeAction.Next);
+                        break;
+                    case ReturnType.Search:
+                        Control.ImeOptions = ImeAction.Search;
+                        Control.SetImeActionLabel("Search", ImeAction.Search);
+                        break;
+                    case ReturnType.Send:
+                        Control.ImeOptions = ImeAction.Send;
+                        Control.SetImeActionLabel("Send", ImeAction.Send);
+                        break;
+                    default:
+                        Control.SetImeActionLabel("Done", ImeAction.Done);
+                        break;
                 }
             }
         }

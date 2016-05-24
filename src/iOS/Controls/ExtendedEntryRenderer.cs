@@ -38,9 +38,6 @@ namespace Bit.iOS.Controls
                 {
                     switch(view.ReturnType.Value)
                     {
-                        case App.Enums.ReturnType.Return:
-                            Control.ReturnKeyType = UIReturnKeyType.Default;
-                            break;
                         case App.Enums.ReturnType.Done:
                             Control.ReturnKeyType = UIReturnKeyType.Done;
                             break;
@@ -53,10 +50,20 @@ namespace Bit.iOS.Controls
                         case App.Enums.ReturnType.Search:
                             Control.ReturnKeyType = UIReturnKeyType.Search;
                             break;
+                        case App.Enums.ReturnType.Send:
+                            Control.ReturnKeyType = UIReturnKeyType.Send;
+                            break;
                         default:
+                            Control.ReturnKeyType = UIReturnKeyType.Default;
                             break;
                     }
                 }
+
+                Control.ShouldReturn += (UITextField tf) =>
+                {
+                    view.InvokeCompleted();
+                    return true;
+                };
             }
         }
 
