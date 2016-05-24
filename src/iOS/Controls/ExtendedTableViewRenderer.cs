@@ -18,7 +18,6 @@ namespace Bit.iOS.Controls
             var view = e.NewElement as ExtendedTableView;
             if(view != null)
             {
-                CorrectMargins(view);
                 SetScrolling(view);
                 SetSelection(view);
                 UpdateRowHeight(view);
@@ -33,8 +32,6 @@ namespace Bit.iOS.Controls
 
             var view = (ExtendedTableView)Element;
 
-            CorrectMargins(view);
-
             if(e.PropertyName == ExtendedTableView.EnableScrollingProperty.PropertyName)
             {
                 SetScrolling(view);
@@ -47,11 +44,6 @@ namespace Bit.iOS.Controls
             {
                 SetSelection(view);
             }
-        }
-
-        private void CorrectMargins(ExtendedTableView view)
-        {
-            Control.ContentInset = new UIEdgeInsets(-10, 0, -100, 0);
         }
 
         private void SetScrolling(ExtendedTableView view)
