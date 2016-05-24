@@ -47,10 +47,10 @@ namespace Bit.App.Pages
             }
             var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
 
-            var mainTable = new ExtendedTableView
+            var table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
-                EnableScrolling = false,
+                EnableScrolling = true,
                 HasUnevenRows = true,
                 EnableSelection = false,
                 Root = new TableRoot
@@ -72,15 +72,9 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                mainTable.RowHeight = -1;
-                mainTable.EstimatedRowHeight = 70;
+                table.RowHeight = -1;
+                table.EstimatedRowHeight = 70;
             }
-
-            var scrollView = new ScrollView
-            {
-                Content = mainTable,
-                Orientation = ScrollOrientation.Vertical
-            };
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
@@ -126,7 +120,7 @@ namespace Bit.App.Pages
             }, ToolbarItemOrder.Default, 0);
 
             Title = AppResources.AddSite;
-            Content = scrollView;
+            Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {

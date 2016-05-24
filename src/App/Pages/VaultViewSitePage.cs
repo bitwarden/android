@@ -64,11 +64,12 @@ namespace Bit.App.Pages
             var notesCell = new LabeledValueCell();
             notesCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
             notesCell.View.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowNotes);
+            notesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             Table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
-                EnableScrolling = false,
+                EnableScrolling = true,
                 HasUnevenRows = true,
                 EnableSelection = false,
                 Root = new TableRoot
@@ -93,14 +94,8 @@ namespace Bit.App.Pages
                 Table.EstimatedRowHeight = 70;
             }
 
-            var scrollView = new ScrollView
-            {
-                Content = Table,
-                Orientation = ScrollOrientation.Vertical
-            };
-
             Title = "View Site";
-            Content = scrollView;
+            Content = Table;
             BindingContext = Model;
         }
 

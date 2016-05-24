@@ -29,7 +29,7 @@ namespace Bit.App.Pages
         {
             var nameCell = new FormEntryCell(AppResources.Name);
 
-            var mainTable = new ExtendedTableView
+            var table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
                 EnableScrolling = false,
@@ -46,8 +46,8 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                mainTable.RowHeight = -1;
-                mainTable.EstimatedRowHeight = 70;
+                table.RowHeight = -1;
+                table.EstimatedRowHeight = 70;
             }
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
@@ -79,7 +79,7 @@ namespace Bit.App.Pages
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Add Folder";
-            Content = mainTable;
+            Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {

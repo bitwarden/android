@@ -39,14 +39,18 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url);
-            uriCell.Entry.Text = site.Uri?.Decrypt();
-            var nameCell = new FormEntryCell(AppResources.Name);
-            nameCell.Entry.Text = site.Name?.Decrypt();
-            var usernameCell = new FormEntryCell(AppResources.Username);
-            usernameCell.Entry.Text = site.Username?.Decrypt();
-            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true);
+            var notesCell = new FormEditorCell(height: 90);
+            notesCell.Editor.Text = site.Notes?.Decrypt();
+            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
             passwordCell.Entry.Text = site.Password?.Decrypt();
+            var usernameCell = new FormEntryCell(AppResources.Username, nextElement: passwordCell.Entry);
+            usernameCell.Entry.Text = site.Username?.Decrypt();
+            usernameCell.Entry.DisableAutocapitalize = true;
+            usernameCell.Entry.Autocorrect = false;
+            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
+            uriCell.Entry.Text = site.Uri?.Decrypt();
+            var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
+            nameCell.Entry.Text = site.Name?.Decrypt();
 
             var folderOptions = new List<string> { AppResources.FolderNone };
             var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
@@ -65,13 +69,10 @@ namespace Bit.App.Pages
             var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
             folderCell.Picker.SelectedIndex = selectedIndex;
 
-            var notesCell = new FormEditorCell(height: 90);
-            notesCell.Editor.Text = site.Notes?.Decrypt();
-
             var table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
-                EnableScrolling = false,
+                EnableScrolling = true,
                 HasUnevenRows = true,
                 EnableSelection = false,
                 Root = new TableRoot
@@ -96,12 +97,6 @@ namespace Bit.App.Pages
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
             }
-
-            var scrollView = new ScrollView
-            {
-                Content = table,
-                Orientation = ScrollOrientation.Vertical
-            };
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
@@ -148,7 +143,7 @@ namespace Bit.App.Pages
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Edit Site";
-            Content = scrollView;
+            Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
