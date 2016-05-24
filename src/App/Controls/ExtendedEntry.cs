@@ -57,7 +57,7 @@ namespace Bit.App.Controls
 
         public void InvokeCompleted()
         {
-            Completed.Invoke(this, null);
+            Completed?.Invoke(this, null);
         }
     }
 }
