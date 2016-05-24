@@ -23,6 +23,40 @@ namespace Bit.iOS.Controls
             {
                 SetBorder(view);
                 SetMaxLength(view);
+
+                if(view.DisableAutocapitalize)
+                {
+                    Control.AutocapitalizationType = UITextAutocapitalizationType.None;
+                }
+
+                if(view.Autocorrect.HasValue)
+                {
+                    Control.AutocorrectionType = view.Autocorrect.Value ? UITextAutocorrectionType.Yes : UITextAutocorrectionType.No;
+                }
+
+                if(view.ReturnType.HasValue)
+                {
+                    switch(view.ReturnType.Value)
+                    {
+                        case App.Enums.ReturnType.Return:
+                            Control.ReturnKeyType = UIReturnKeyType.Default;
+                            break;
+                        case App.Enums.ReturnType.Done:
+                            Control.ReturnKeyType = UIReturnKeyType.Done;
+                            break;
+                        case App.Enums.ReturnType.Go:
+                            Control.ReturnKeyType = UIReturnKeyType.Go;
+                            break;
+                        case App.Enums.ReturnType.Next:
+                            Control.ReturnKeyType = UIReturnKeyType.Next;
+                            break;
+                        case App.Enums.ReturnType.Search:
+                            Control.ReturnKeyType = UIReturnKeyType.Search;
+                            break;
+                        default:
+                            break;
+                    }
+                }
             }
         }
 

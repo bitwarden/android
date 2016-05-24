@@ -31,10 +31,13 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url);
-            var nameCell = new FormEntryCell(AppResources.Name);
-            var usernameCell = new FormEntryCell(AppResources.Username);
-            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true);
+            var notesCell = new FormEditorCell(height: 90);
+            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
+            var usernameCell = new FormEntryCell(AppResources.Username, nextElement: passwordCell.Entry);
+            usernameCell.Entry.DisableAutocapitalize = true;
+            usernameCell.Entry.Autocorrect = false;
+            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
+            var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
 
             var folderOptions = new List<string> { AppResources.FolderNone };
             var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
@@ -43,8 +46,6 @@ namespace Bit.App.Pages
                 folderOptions.Add(folder.Name.Decrypt());
             }
             var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
-
-            var notesCell = new FormEditorCell(height: 90);
 
             var mainTable = new ExtendedTableView
             {

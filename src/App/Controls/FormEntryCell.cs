@@ -1,10 +1,11 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
     public class FormEntryCell : ExtendedViewCell
     {
-        public FormEntryCell(string labelText, Keyboard entryKeyboard = null, bool IsPassword = false)
+        public FormEntryCell(string labelText, Keyboard entryKeyboard = null, bool IsPassword = false, VisualElement nextElement = null)
         {
             Label = new Label
             {
@@ -18,8 +19,16 @@ namespace Bit.App.Controls
             {
                 Keyboard = entryKeyboard,
                 HasBorder = false,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                IsPassword = IsPassword,
+                TextColor = Color.FromHex("333333")
             };
+
+            if(nextElement != null)
+            {
+                Entry.ReturnType = Enums.ReturnType.Next;
+                Entry.Completed += (object sender, EventArgs e) => { nextElement.Focus(); };
+            }
 
             var stackLayout = new StackLayout
             {

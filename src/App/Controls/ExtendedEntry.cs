@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Enums;
+using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -40,5 +41,9 @@ namespace Bit.App.Controls
             get { return (int)GetValue(MaxLengthProperty); }
             set { SetValue(MaxLengthProperty, value); }
         }
+
+        public ReturnType? ReturnType { get; set; }
+        public bool? Autocorrect { get; set; }
+        public bool DisableAutocapitalize { get; set; }
     }
 }
