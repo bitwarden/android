@@ -193,7 +193,8 @@ namespace Bit.App.Pages
                 {
                     TextColor = Color.FromHex("777777"),
                     VerticalTextAlignment = TextAlignment.Center,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    FontSize = 14
                 };
 
                 label.SetBinding<VaultListPageModel.Folder>(Label.TextProperty, s => s.Name);
@@ -201,28 +202,13 @@ namespace Bit.App.Pages
                 var stackLayout = new StackLayout
                 {
                     Orientation = StackOrientation.Horizontal,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    Children = { image, label },
+                    BackgroundColor = Color.FromHex("ecf0f5")
                 };
-
-                stackLayout.Children.Add(image);
-                stackLayout.Children.Add(label);
-
-                var borderedStackLayout = new StackLayout
-                {
-                    Spacing = 0,
-                    BackgroundColor = Color.FromHex("ecf0f5"),
-                    HorizontalOptions = LayoutOptions.FillAndExpand
-                };
-
-                borderedStackLayout.Children.Add(new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5, VerticalOptions = LayoutOptions.Start });
-                borderedStackLayout.Children.Add(stackLayout);
-                if(Device.OS == TargetPlatform.iOS)
-                {
-                    borderedStackLayout.Children.Add(new BoxView { BackgroundColor = Color.FromHex("d2d6de"), HeightRequest = 0.5, VerticalOptions = LayoutOptions.End });
-                }
-
-                View = borderedStackLayout;
-                Height = 35;
+                
+                View = stackLayout;
+                Height = 30;
             }
         }
     }
