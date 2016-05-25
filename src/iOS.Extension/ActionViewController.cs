@@ -28,25 +28,33 @@ namespace Bit.iOS.Extension
             {
                 foreach(var itemProvider in item.Attachments)
                 {
-                    if(itemProvider.HasItemConformingTo(UTType.PropertyList))
+                    if(!itemProvider.HasItemConformingTo(UTType.PropertyList))
                     {
-                        itemProvider.LoadItem(UTType.PropertyList, null, delegate (NSObject list, NSError error)
-                        {
-                            if(list != null)
-                            {
-                                var dict = list as NSDictionary;
-                                var result = dict[NSJavaScriptExtension.PreprocessingResultsKey];
-                                if(result != null)
-                                {
-                                    Content = result.ValueForKey(new NSString("content")) as NSString;
-                                    Uri = new Uri(result.ValueForKey(new NSString("uri")) as NSString);
-                                    Console.WriteLine("BITWARDEN LOG, Content: {0}", Content);
-                                    Console.WriteLine("BITWARDEN LOG, Uri: {0}", Uri);
-                                }
-                            }
-                        });
-                        break;
+                        continue;
                     }
+
+                    itemProvider.LoadItem(UTType.PropertyList, null, (NSObject list, NSError error) =>
+                    {
+                        if(list == null)
+                        {
+                            return;
+                        }
+
+                        var dict = list as NSDictionary;
+                        var result = dict[NSJavaScriptExtension.PreprocessingResultsKey];
+                        if(result == null)
+                        {
+                            return;
+                        }
+
+                        Content = result.ValueForKey(new NSString("content")) as NSString;
+                        Uri = new Uri(result.ValueForKey(new NSString("uri")) as NSString);
+
+                        Console.WriteLine("BITWARDEN LOG, Content: {0}", Content);
+                        Console.WriteLine("BITWARDEN LOG, Uri: {0}", Uri);
+                    });
+
+                    break;
                 }
             }
         }

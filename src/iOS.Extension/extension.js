@@ -2,6 +2,9 @@
 
 BitwardenExtension.prototype = {
     run: function (arguments) {
+        console.log("Run");
+        console.log(arguments);
+
         var args = {
             content: document.body.innerHTML,
             uri: document.baseURI
@@ -9,7 +12,8 @@ BitwardenExtension.prototype = {
         arguments.completionFunction(args);
     },
     finalize: function (arguments) {
-        alert('finalize');
+        console.log("Finalize");
+        console.log(arguments);
     }
 };
 
