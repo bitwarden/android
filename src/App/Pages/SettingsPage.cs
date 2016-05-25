@@ -53,9 +53,9 @@ namespace Bit.App.Pages
             LockOptionsCell = new ExtendedTextCell
             {
                 Text = "Lock Options",
-                // TODO: Set detail based on setting
-                Detail = "Immediately",
-                ShowDisclousure = true
+                Detail = GetLockOptionsDetailsText(),
+                ShowDisclousure = true,
+                TextColor = Color.FromHex("333333")
             };
             LockOptionsCell.Tapped += LockOptionsCell_Tapped;
 
@@ -125,7 +125,12 @@ namespace Bit.App.Pages
         private async void LockOptionsCell_Tapped(object sender, EventArgs e)
         {
             var selection = await DisplayActionSheet("Lock Options", AppResources.Cancel, null,
-                "Immediately", "1 minute", "3 minutes", "15 minutes", "1 hour", "8 hours", "24 hours", "Never");
+                "Immediately", "1 minute", "15 minutes", "1 hour", "4 hours", "Never");
+
+            if(selection == AppResources.Cancel)
+            {
+                return;
+            }
 
             if(selection == "Immediately")
             {
@@ -135,10 +140,24 @@ namespace Bit.App.Pages
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60);
             }
-            // TODO: others
-            else
+            else if(selection == "5 minutes")
             {
-                // Never lock
+                _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 5);
+            }
+            else if(selection == "15 minutes")
+            {
+                _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 15);
+            }
+            else if(selection == "1 hour")
+            {
+                _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 60);
+            }
+            else if(selection == "4 hours")
+            {
+                _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 60 * 4);
+            }
+            else if(selection == "Never")
+            {
                 _settings.Remove(Constants.SettingLockSeconds);
             }
 
@@ -207,6 +226,40 @@ namespace Bit.App.Pages
         private void FoldersCell_Tapped(object sender, EventArgs e)
         {
             Navigation.PushAsync(new SettingsListFoldersPage());
+        }
+
+        private string GetLockOptionsDetailsText()
+        {
+            var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
+            if(!lockSeconds.HasValue)
+            {
+                return "Never";
+            }
+
+            if(lockSeconds.Value == 60)
+            {
+                return "1 minute";
+            }
+            else if(lockSeconds.Value == 60 * 5)
+            {
+                return "5 minutes";
+            }
+            else if(lockSeconds.Value == 60 * 15)
+            {
+                return "15 minutes";
+            }
+            else if(lockSeconds.Value == 60 * 60)
+            {
+                return "1 hour";
+            }
+            else if(lockSeconds.Value == 60 * 60 * 4)
+            {
+                return "4 hours";
+            }
+            else
+            {
+                return "Immediately";
+            }
         }
     }
 }
