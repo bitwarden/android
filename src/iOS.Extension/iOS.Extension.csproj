@@ -87,16 +87,16 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ActionViewController.cs" />
     <Compile Include="ActionViewController.designer.cs">
       <DependentUpon>ActionViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <InterfaceDefinition Include="ActionViewController.xib" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ActionViewController.cs" />
-    <InterfaceDefinition Include="MainInterface.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

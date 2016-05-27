@@ -6,8 +6,9 @@ BitwardenExtension.prototype = {
         console.log(arguments);
 
         var args = {
-            content: document.body.innerHTML,
-            uri: document.baseURI
+            baseUri: document.baseURI,
+            url: document.URL,
+            htmlContent: document.body.innerHTML
         };
         arguments.completionFunction(args);
     },
