@@ -33,21 +33,16 @@ namespace Bit.iOS.Extension
         private void Button_TouchUpInside(object sender, EventArgs e)
         {
             var itemData = new NSDictionary(
-                new NSString("username"),
-                new NSString("myusername"),
-                new NSString("password"),
-                new NSString("mypassword"));
+                "username", "me@example.com",
+                "password", "mypassword",
+                "autoSubmit", true);
 
             var resultsProvider = new NSItemProvider(
-                new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, itemData),
-                UTType.PropertyList);
+                new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, itemData), UTType.PropertyList);
 
-            var resultsItem = new NSExtensionItem
-            {
-                Attachments = new NSItemProvider[] { resultsProvider }
-            };
-
+            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
             var returningItems = new NSExtensionItem[] { resultsItem };
+
             ExtensionContext.CompleteRequest(returningItems, null);
         }
 
