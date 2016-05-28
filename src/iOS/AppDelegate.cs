@@ -20,6 +20,7 @@ using Plugin.Settings.Abstractions;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Bit.App;
+using Bit.iOS.Core.Services;
 
 namespace Bit.iOS
 {

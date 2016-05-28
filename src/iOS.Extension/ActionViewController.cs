@@ -1,8 +1,17 @@
 using System;
+using System.Diagnostics;
+using System.Linq;
+using Bit.App.Abstractions;
+using Bit.App.Repositories;
+using Bit.App.Services;
+using Bit.iOS.Core.Services;
 using CoreGraphics;
 using Foundation;
+using Microsoft.Practices.Unity;
 using MobileCoreServices;
 using UIKit;
+using XLabs.Ioc;
+using XLabs.Ioc.Unity;
 
 namespace Bit.iOS.Extension
 {
@@ -10,18 +19,52 @@ namespace Bit.iOS.Extension
     {
         public ActionViewController() : base("ActionViewController", null)
         {
+            if(!Resolver.IsSet)
+            {
+                SetIoc();
+            }
         }
 
         public string HtmlContent { get; set; }
         public Uri BaseUri { get; set; }
         public Uri Url { get; set; }
 
+        private void SetIoc()
+        {
+            var container = new UnityContainer();
+
+            container
+                // Services
+                .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
+                //.RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
+                //.RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
+                // Repositories
+                .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager());
+                // Other
+                //.RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
+                //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
+                //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
+                //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+
+            Resolver.SetResolver(new UnityResolver(container));
+        }
+
         public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
         }
 
-        public override void LoadView()
+        public async override void LoadView()
         {
             View = new UIView(new CGRect(x: 0.0, y: 0, width: 320.0, height: 200.0));
             var button = new UIButton(new CGRect(x: 10.0, y: 50.0, width: 200.0, height: 30.0));

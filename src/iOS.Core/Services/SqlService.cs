@@ -2,7 +2,7 @@
 using System.IO;
 using Bit.App.Abstractions;
 
-namespace Bit.iOS.Services
+namespace Bit.iOS.Core.Services
 {
     public class SqlService : ISqlService
     {
