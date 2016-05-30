@@ -29,18 +29,20 @@
 			<key>NSExtensionJavaScriptPreprocessingFile</key>
 			<string>extension</string>
 			<key>NSExtensionActivationRule</key>
-			<dict>
-				<key>NSExtensionActivationSupportsFileWithMaxCount</key>
-				<integer>0</integer>
-				<key>NSExtensionActivationSupportsImageWithMaxCount</key>
-				<integer>0</integer>
-				<key>NSExtensionActivationSupportsMovieWithMaxCount</key>
-				<integer>0</integer>
-				<key>NSExtensionActivationSupportsText</key>
-				<false/>
-				<key>NSExtensionActivationSupportsWebURLWithMaxCount</key>
-				<integer>1</integer>
-			</dict>
+            <string>SUBQUERY (
+        extensionItems,
+        $extensionItem,
+        SUBQUERY (
+            $extensionItem.attachments,
+            $attachment,
+                ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url"
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.find-login-action"
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.save-login-action"
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.change-password-action"
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.fill-webview-action"
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.fill-browser-action"
+        ).@count == $extensionItem.attachments.@count
+    ).@count == 1</string>
 			<key>NSExtensionPointName</key>
 			<string>com.apple.ui-services</string>
 			<key>NSExtensionPointVersion</key>

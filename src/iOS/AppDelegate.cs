@@ -107,6 +107,11 @@ namespace Bit.iOS
             Debug.WriteLine("WillEnterForeground");
         }
 
+        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+        {
+            return true;
+        }
+
         private void SendLockMessage()
         {
             MessagingCenter.Send(Xamarin.Forms.Application.Current, "Lock", false);

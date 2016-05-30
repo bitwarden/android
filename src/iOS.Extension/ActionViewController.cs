@@ -17,6 +17,14 @@ namespace Bit.iOS.Extension
 {
     public partial class ActionViewController : UIViewController
     {
+        private const string AppExtensionVersionNumberKey = "version_number";
+        private const string AppExtensionUrlStringKey = "url_string";
+        private const string UTTypeAppExtensionFindLoginAction = "org.appextension.find-login-action";
+        private const string UTTypeAppExtensionSaveLoginAction = "org.appextension.save-login-action";
+        private const string UTTypeAppExtensionChangePasswordAction = "org.appextension.change-password-action";
+        private const string UTTypeAppExtensionFillWebViewAction = "org.appextension.fill-webview-action";
+        private const string UTTypeAppExtensionFillBrowserAction = "org.appextension.fill-browser-action";
+
         public ActionViewController() : base("ActionViewController", null)
         {
             if(!Resolver.IsSet)
@@ -50,11 +58,11 @@ namespace Bit.iOS.Extension
                 .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager());
-                // Other
-                //.RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
-                //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-                //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
-                //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+            // Other
+            //.RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
+            //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
+            //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
+            //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
         }
@@ -97,34 +105,73 @@ namespace Bit.iOS.Extension
             {
                 foreach(var itemProvider in item.Attachments)
                 {
-                    if(!itemProvider.HasItemConformingTo(UTType.PropertyList))
+                    if(ProcessWebUrlProvider(itemProvider))
                     {
-                        continue;
+                        break;
                     }
-
-                    itemProvider.LoadItem(UTType.PropertyList, null, (NSObject list, NSError error) =>
+                    else if(ProcessFindLoginProvider(itemProvider))
                     {
-                        if(list == null)
-                        {
-                            return;
-                        }
-
-                        var dict = list as NSDictionary;
-                        var result = dict[NSJavaScriptExtension.PreprocessingResultsKey];
-                        if(result == null)
-                        {
-                            return;
-                        }
-
-                        HtmlContent = result.ValueForKey(new NSString("htmlContent")) as NSString;
-                        BaseUri = new Uri(result.ValueForKey(new NSString("baseUri")) as NSString);
-                        Url = new Uri(result.ValueForKey(new NSString("url")) as NSString);
-                    });
-
-                    break;
+                        break;
+                    }
                 }
             }
         }
 
+        private bool ProcessWebUrlProvider(NSItemProvider itemProvider)
+        {
+            if(!itemProvider.HasItemConformingTo(UTType.PropertyList))
+            {
+                return false;
+            }
+
+            itemProvider.LoadItem(UTType.PropertyList, null, (NSObject list, NSError error) =>
+            {
+                if(list == null)
+                {
+                    return;
+                }
+
+                var dict = list as NSDictionary;
+                var result = dict[NSJavaScriptExtension.PreprocessingResultsKey];
+                if(result == null)
+                {
+                    return;
+                }
+
+                HtmlContent = result.ValueForKey(new NSString("htmlContent")) as NSString;
+                BaseUri = new Uri(result.ValueForKey(new NSString("baseUri")) as NSString);
+                Url = new Uri(result.ValueForKey(new NSString("url")) as NSString);
+            });
+
+            return true;
+        }
+
+        private bool ProcessFindLoginProvider(NSItemProvider itemProvider)
+        {
+            if(!itemProvider.HasItemConformingTo(UTTypeAppExtensionFindLoginAction))
+            {
+                return false;
+            }
+
+            itemProvider.LoadItem(UTTypeAppExtensionFindLoginAction, null, (NSObject list, NSError error) =>
+            {
+                if(list == null)
+                {
+                    return;
+                }
+
+                var dict = list as NSDictionary;
+                var version = dict[AppExtensionVersionNumberKey] as NSNumber;
+                var url = dict[AppExtensionUrlStringKey] as NSString;
+                if(url == null)
+                {
+                    return;
+                }
+
+                Url = new Uri(url);
+            });
+
+            return true;
+        }
     }
 }

@@ -22,7 +22,7 @@
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>MinimumOSVersion</key>
-	<string>9.3</string>
+	<string>9.0</string>
 	<key>CFBundleDisplayName</key>
 	<string>bitwarden</string>
 	<key>CFBundleIdentifier</key>
@@ -57,8 +57,20 @@
 	<key>UIMainStoryboardFile~ipad</key>
 	<string>LaunchScreen</string>
 	<key>UIStatusBarStyle</key>
-+	<string>UIStatusBarStyleLightContent</string>
-+	<key>UIViewControllerBasedStatusBarAppearance</key>
-+	<false/>
+	<string>UIStatusBarStyleLightContent</string>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bitwarden</string>
+                <string>org-appextension-feature-password-management</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>com.bitwarden.vault.url</string>
+		</dict>
+	</array>
 </dict>
 </plist>
