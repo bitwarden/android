@@ -131,14 +131,20 @@ namespace Bit.iOS.Extension
         private void Button_TouchUpInside(object sender, EventArgs e)
         {
             NSDictionary itemData = null;
+            if(ProviderType == UTType.PropertyList)
+            {
+                var fillScript = new FillScript(Details);
+                var scriptJson = JsonConvert.SerializeObject(fillScript, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                var scriptDict = new NSDictionary(AppExtensionWebViewPageFillScript, scriptJson);
+                itemData = new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, scriptDict);
+            }
             if(ProviderType == UTTypeAppExtensionFindLoginAction)
             {
                 itemData = new NSDictionary(
                     AppExtensionUsernameKey, "me@example.com",
                     AppExtensionPasswordKey, "mypassword");
             }
-            else if(ProviderType == UTType.PropertyList
-                || ProviderType == UTTypeAppExtensionFillBrowserAction 
+            else if(ProviderType == UTTypeAppExtensionFillBrowserAction
                 || ProviderType == UTTypeAppExtensionFillWebViewAction)
             {
                 var fillScript = new FillScript(Details);
