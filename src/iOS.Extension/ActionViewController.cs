@@ -142,7 +142,7 @@ namespace Bit.iOS.Extension
                 || ProviderType == UTTypeAppExtensionFillWebViewAction)
             {
                 var fillScript = new FillScript(Details);
-                var scriptJson = JsonConvert.SerializeObject(fillScript);
+                var scriptJson = JsonConvert.SerializeObject(fillScript, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                 itemData = new NSDictionary(AppExtensionWebViewPageFillScript, scriptJson);
             }
             else if(ProviderType == UTTypeAppExtensionSaveLoginAction)
