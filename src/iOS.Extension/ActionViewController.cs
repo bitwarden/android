@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bit.App.Abstractions;
@@ -9,6 +10,7 @@ using CoreGraphics;
 using Foundation;
 using Microsoft.Practices.Unity;
 using MobileCoreServices;
+using Newtonsoft.Json;
 using UIKit;
 using XLabs.Ioc;
 using XLabs.Ioc.Unity;
@@ -37,6 +39,9 @@ namespace Bit.iOS.Extension
         private const string AppExtensionGeneratedPasswordRequireSymbolsKey = "password_require_symbols";
         private const string AppExtensionGeneratedPasswordForbiddenCharactersKey = "password_forbidden_characters";
 
+        private const string AppExtensionWebViewPageFillScript = "fillScript";
+        private const string AppExtensionWebViewPageDetails = "pageDetails";
+
         private const string UTTypeAppExtensionFindLoginAction = "org.appextension.find-login-action";
         private const string UTTypeAppExtensionSaveLoginAction = "org.appextension.save-login-action";
         private const string UTTypeAppExtensionChangePasswordAction = "org.appextension.change-password-action";
@@ -59,6 +64,7 @@ namespace Bit.iOS.Extension
         public string OldPassword { get; set; }
         public string Notes { get; set; }
         public PasswordGenerationOptions PasswordOptions { get; set; }
+        public PageDetails Details { get; set; }
 
         private void SetIoc()
         {
@@ -90,33 +96,28 @@ namespace Bit.iOS.Extension
             Resolver.SetResolver(new UnityResolver(container));
         }
 
-        public override void DidReceiveMemoryWarning()
-        {
-            base.DidReceiveMemoryWarning();
-        }
-
         public override void LoadView()
         {
             foreach(var item in ExtensionContext.InputItems)
             {
+                var processed = false;
                 foreach(var itemProvider in item.Attachments)
                 {
-                    if(ProcessWebUrlProvider(itemProvider))
+                    if(ProcessWebUrlProvider(itemProvider)
+                        || ProcessFindLoginProvider(itemProvider)
+                        || ProcessFindLoginBrowserProvider(itemProvider, UTTypeAppExtensionFillBrowserAction)
+                        || ProcessFindLoginBrowserProvider(itemProvider, UTTypeAppExtensionFillWebViewAction)
+                        || ProcessSaveLoginProvider(itemProvider)
+                        || ProcessChangePasswordProvider(itemProvider))
                     {
+                        processed = true;
                         break;
                     }
-                    else if(ProcessFindLoginProvider(itemProvider))
-                    {
-                        break;
-                    }
-                    else if(ProcessSaveLoginProvider(itemProvider))
-                    {
-                        break;
-                    }
-                    else if(ProcessChangePasswordProvider(itemProvider))
-                    {
-                        break;
-                    }
+                }
+
+                if(processed)
+                {
+                    break;
                 }
             }
 
@@ -130,18 +131,19 @@ namespace Bit.iOS.Extension
         private void Button_TouchUpInside(object sender, EventArgs e)
         {
             NSDictionary itemData = null;
-            if(ProviderType == UTType.PropertyList)
-            {
-                itemData = new NSDictionary(
-                    "username", "me@example.com",
-                    "password", "mypassword",
-                    "autoSubmit", true);
-            }
-            else if(ProviderType == UTTypeAppExtensionFindLoginAction)
+            if(ProviderType == UTTypeAppExtensionFindLoginAction)
             {
                 itemData = new NSDictionary(
                     AppExtensionUsernameKey, "me@example.com",
                     AppExtensionPasswordKey, "mypassword");
+            }
+            else if(ProviderType == UTType.PropertyList
+                || ProviderType == UTTypeAppExtensionFillBrowserAction 
+                || ProviderType == UTTypeAppExtensionFillWebViewAction)
+            {
+                var fillScript = new FillScript(Details);
+                var scriptJson = JsonConvert.SerializeObject(fillScript);
+                itemData = new NSDictionary(AppExtensionWebViewPageFillScript, scriptJson);
             }
             else if(ProviderType == UTTypeAppExtensionSaveLoginAction)
             {
@@ -154,10 +156,6 @@ namespace Bit.iOS.Extension
                 itemData = new NSDictionary(
                     AppExtensionPasswordKey, "mynewpassword",
                     AppExtensionOldPasswordKey, "myoldpassword");
-            }
-            else
-            {
-                return;
             }
 
             var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
@@ -197,6 +195,7 @@ namespace Bit.iOS.Extension
                 Debug.WriteLine("BW LOG, Password: " + Password);
                 Debug.WriteLine("BW LOG, Old Password: " + OldPassword);
                 Debug.WriteLine("BW LOG, Notes: " + Notes);
+                Debug.WriteLine("BW LOG, Details: " + Details);
 
                 if(PasswordOptions != null)
                 {
@@ -221,7 +220,9 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                Url = new Uri(result.ValueForKey(new NSString("url")) as NSString);
+                Url = new Uri(result.ValueForKey(new NSString(AppExtensionUrlStringKey)) as NSString);
+                var jsonStr = result.ValueForKey(new NSString(AppExtensionWebViewPageDetails)) as NSString;
+                Details = DeserializeString<PageDetails>(jsonStr);
             });
         }
 
@@ -239,6 +240,21 @@ namespace Bit.iOS.Extension
             });
         }
 
+        private bool ProcessFindLoginBrowserProvider(NSItemProvider itemProvider, string action)
+        {
+            return ProcessItemProvider(itemProvider, action, (dict) =>
+            {
+                var version = dict[AppExtensionVersionNumberKey] as NSNumber;
+                var url = dict[AppExtensionUrlStringKey] as NSString;
+                if(url != null)
+                {
+                    Url = new Uri(url);
+                }
+
+                Details = DeserializeDictionary<PageDetails>(dict[AppExtensionWebViewPageDetails] as NSDictionary);
+            });
+        }
+
         private bool ProcessSaveLoginProvider(NSItemProvider itemProvider)
         {
             return ProcessItemProvider(itemProvider, UTTypeAppExtensionSaveLoginAction, (dict) =>
@@ -251,7 +267,6 @@ namespace Bit.iOS.Extension
                 var password = dict[AppExtensionPasswordKey] as NSString;
                 var notes = dict[AppExtensionNotesKey] as NSString;
                 var fields = dict[AppExtensionFieldsKey] as NSDictionary;
-                var passwordGenerationOptions = dict[AppExtensionPasswordGeneratorOptionsKey] as NSDictionary;
 
                 if(url != null)
                 {
@@ -263,7 +278,7 @@ namespace Bit.iOS.Extension
                 Username = username;
                 Password = password;
                 Notes = notes;
-                PasswordOptions = new PasswordGenerationOptions(passwordGenerationOptions);
+                PasswordOptions = DeserializeDictionary<PasswordGenerationOptions>(dict[AppExtensionPasswordGeneratorOptionsKey] as NSDictionary);
             });
         }
 
@@ -280,7 +295,6 @@ namespace Bit.iOS.Extension
                 var oldPassword = dict[AppExtensionOldPasswordKey] as NSString;
                 var notes = dict[AppExtensionNotesKey] as NSString;
                 var fields = dict[AppExtensionFieldsKey] as NSDictionary;
-                var passwordGenerationOptions = dict[AppExtensionPasswordGeneratorOptionsKey] as NSDictionary;
 
                 if(url != null)
                 {
@@ -292,31 +306,147 @@ namespace Bit.iOS.Extension
                 Password = password;
                 OldPassword = oldPassword;
                 Notes = notes;
-                PasswordOptions = new PasswordGenerationOptions(passwordGenerationOptions);
+                PasswordOptions = DeserializeDictionary<PasswordGenerationOptions>(dict[AppExtensionPasswordGeneratorOptionsKey] as NSDictionary);
             });
+        }
+
+        private T DeserializeDictionary<T>(NSDictionary dict)
+        {
+            if(dict != null)
+            {
+                NSError jsonError;
+                var jsonData = NSJsonSerialization.Serialize(dict, NSJsonWritingOptions.PrettyPrinted, out jsonError);
+                if(jsonData != null)
+                {
+                    var jsonString = new NSString(jsonData, NSStringEncoding.UTF8);
+                    return DeserializeString<T>(jsonString);
+                }
+            }
+
+            return default(T);
+        }
+
+        private T DeserializeString<T>(NSString jsonString)
+        {
+            if(jsonString != null)
+            {
+                var convertedObject = JsonConvert.DeserializeObject<T>(jsonString.ToString());
+                return convertedObject;
+            }
+
+            return default(T);
         }
 
         public class PasswordGenerationOptions
         {
-            public PasswordGenerationOptions(NSDictionary dict)
-            {
-                if(dict == null)
-                {
-                    throw new ArgumentNullException(nameof(dict));
-                }
-
-                MinLength = (dict[AppExtensionGeneratedPasswordMinLengthKey] as NSNumber)?.Int32Value ?? 0;
-                MaxLength = (dict[AppExtensionGeneratedPasswordMaxLengthKey] as NSNumber)?.Int32Value ?? 0;
-                RequireDigits = (dict[AppExtensionGeneratedPasswordRequireDigitsKey] as NSNumber)?.BoolValue ?? false;
-                RequireSymbols = (dict[AppExtensionGeneratedPasswordRequireSymbolsKey] as NSNumber)?.BoolValue ?? false;
-                ForbiddenCharacters = (dict[AppExtensionGeneratedPasswordForbiddenCharactersKey] as NSString)?.ToString();
-            }
-
             public int MinLength { get; set; }
             public int MaxLength { get; set; }
             public bool RequireDigits { get; set; }
             public bool RequireSymbols { get; set; }
             public string ForbiddenCharacters { get; set; }
+        }
+
+        public class PageDetails
+        {
+            public string DocumentUUID { get; set; }
+            public string Title { get; set; }
+            public string Url { get; set; }
+            public string DocumentUrl { get; set; }
+            public string TabUrl { get; set; }
+            public Dictionary<string, Form> Forms { get; set; }
+            public List<Field> Fields { get; set; }
+            public long CollectedTimestamp { get; set; }
+
+            public class Form
+            {
+                public string OpId { get; set; }
+                public string HtmlName { get; set; }
+                public string HtmlId { get; set; }
+                public string HtmlAction { get; set; }
+                public string HtmlMethod { get; set; }
+            }
+
+            public class Field
+            {
+                public string OpId { get; set; }
+                public int ElementNumber { get; set; }
+                public bool Visible { get; set; }
+                public bool Viewable { get; set; }
+                public string HtmlId { get; set; }
+                public string HtmlName { get; set; }
+                public string HtmlClass { get; set; }
+                public string LabelRight { get; set; }
+                public string LabelLeft { get; set; }
+                public string Type { get; set; }
+                public string Value { get; set; }
+                public bool Disabled { get; set; }
+                public bool Readonly { get; set; }
+                public string OnePasswordFieldType { get; set; }
+                public string Form { get; set; }
+            }
+        }
+
+        public class FillScript
+        {
+            public FillScript(PageDetails pageDetails)
+            {
+                if(pageDetails == null)
+                {
+                    return;
+                }
+
+                DocumentUUID = pageDetails.DocumentUUID;
+
+                var loginForm = pageDetails.Forms.FirstOrDefault(form => pageDetails.Fields.Any(f => f.Form == form.Key && f.Type == "password")).Value;
+                if(loginForm == null)
+                {
+                    return;
+                }
+
+                Script = new List<List<string>>();
+
+                var password = pageDetails.Fields.FirstOrDefault(f =>
+                    f.Form == loginForm.OpId
+                    && f.Type == "password");
+
+                var username = pageDetails.Fields.LastOrDefault(f =>
+                    f.Form == loginForm.OpId
+                    && (f.Type == "text" || f.Type == "email")
+                    && f.ElementNumber < password.ElementNumber);
+
+                if(username != null)
+                {
+                    Script.Add(new List<string> { "click_on_opid", username.OpId });
+                    Script.Add(new List<string> { "fill_by_opid", username.OpId, "me@example.com" });
+                }
+
+                Script.Add(new List<string> { "click_on_opid", password.OpId });
+                Script.Add(new List<string> { "fill_by_opid", password.OpId, "mypassword" });
+
+                if(loginForm.HtmlAction != null)
+                {
+                    AutoSubmit = new Submit { FocusOpId = password.OpId };
+                }
+            }
+
+            [JsonProperty(PropertyName = "script")]
+            public List<List<string>> Script { get; set; }
+            [JsonProperty(PropertyName = "autosubmit")]
+            public Submit AutoSubmit { get; set; }
+            [JsonProperty(PropertyName = "documentUUID")]
+            public object DocumentUUID { get; set; }
+            [JsonProperty(PropertyName = "properties")]
+            public object Properties { get; set; } = new object();
+            [JsonProperty(PropertyName = "options")]
+            public object Options { get; set; } = new object();
+            [JsonProperty(PropertyName = "metadata")]
+            public object MetaData { get; set; } = new object();
+
+            public class Submit
+            {
+                [JsonProperty(PropertyName = "focusOpid")]
+                public string FocusOpId { get; set; }
+            }
         }
     }
 }
