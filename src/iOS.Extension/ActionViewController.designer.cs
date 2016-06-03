@@ -11,17 +11,22 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-    [Register("ActionViewController")]
-    partial class ActionViewController
-    {
-        [Outlet]
-        UIImageView imageView { get; set; }
+	[Register ("ActionViewController")]
+	partial class ActionViewController
+	{
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIImageView logo { get; set; }
 
-        [Action("DoneClicked:")]
-        partial void DoneClicked(NSObject sender);
+		[Action ("DoneClicked:")]
+		partial void DoneClicked (Foundation.NSObject sender);
 
-        void ReleaseDesignerOutlets()
-        {
-        }
-    }
+		void ReleaseDesignerOutlets ()
+		{
+			if (logo != null) {
+				logo.Dispose ();
+				logo = null;
+			}
+		}
+	}
 }

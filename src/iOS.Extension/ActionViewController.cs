@@ -125,8 +125,8 @@ namespace Bit.iOS.Extension
             }
         }
 
-        partial void DoneClicked(NSObject sender)
-        {
+		partial void DoneClicked(Foundation.NSObject sender)
+		{
             NSDictionary itemData = null;
             if(ProviderType == UTType.PropertyList)
             {
@@ -324,7 +324,7 @@ namespace Bit.iOS.Extension
             return default(T);
         }
 
-        private T DeserializeString<T>(NSString jsonString)
+		private T DeserializeString<T>(NSString jsonString)
         {
             if(jsonString != null)
             {
