@@ -48,9 +48,7 @@ namespace Bit.iOS.Extension
         private const string UTTypeAppExtensionFillWebViewAction = "org.appextension.fill-webview-action";
         private const string UTTypeAppExtensionFillBrowserAction = "org.appextension.fill-browser-action";
 
-        private UIImageView _splashImageView;
-
-        public ActionViewController() : base("ActionViewController", null)
+        public ActionViewController(IntPtr handle) : base(handle)
         {
         }
 
@@ -94,21 +92,9 @@ namespace Bit.iOS.Extension
             Resolver.SetResolver(new UnityResolver(container));
         }
 
-        public override void LoadView()
+        public override void ViewDidLoad()
         {
-            View = new UIView(UIScreen.MainScreen.Bounds)
-            {
-                BackgroundColor = new UIColor(0.93f, 0.94f, 0.96f, 1.0f),
-            };
-
-            _splashImageView = new UIImageView(new UIImage("Icon.png"));
-
-            View.AddSubview(_splashImageView);
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
+            base.ViewDidLoad();
 
             if(!Resolver.IsSet)
             {
@@ -137,26 +123,9 @@ namespace Bit.iOS.Extension
                     break;
                 }
             }
-
-            var navBar = new UINavigationBar(new CGRect(0, 0, View.Frame.Size.Width, 44))
-            {
-                BackgroundColor = new UIColor(0.24f, 0.55f, 0.74f, 1.0f),
-                TintColor = UIColor.White
-            };
-
-            var button = new UIButton(new CGRect(x: 10.0, y: 50.0, width: View.Frame.Size.Width - 100, height: 30.0))
-            {
-                BackgroundColor = UIColor.Black,
-                TintColor = UIColor.White
-            };
-            button.SetTitle("Done", UIControlState.Normal);
-            button.TouchUpInside += Button_TouchUpInside;
-
-            _splashImageView.RemoveFromSuperview();
-            View.AddSubviews(navBar, button);
         }
 
-        private void Button_TouchUpInside(object sender, EventArgs e)
+        partial void DoneClicked(NSObject sender)
         {
             NSDictionary itemData = null;
             if(ProviderType == UTType.PropertyList)

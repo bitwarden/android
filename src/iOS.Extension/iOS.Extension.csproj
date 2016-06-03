@@ -95,10 +95,10 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <InterfaceDefinition Include="ActionViewController.xib" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <InterfaceDefinition Include="MainInterface.storyboard" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
