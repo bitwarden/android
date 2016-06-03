@@ -48,12 +48,10 @@ namespace Bit.iOS.Extension
         private const string UTTypeAppExtensionFillWebViewAction = "org.appextension.fill-webview-action";
         private const string UTTypeAppExtensionFillBrowserAction = "org.appextension.fill-browser-action";
 
+        private UIImageView _splashImageView;
+
         public ActionViewController() : base("ActionViewController", null)
         {
-            if(!Resolver.IsSet)
-            {
-                SetIoc();
-            }
         }
 
         public string ProviderType { get; set; }
@@ -98,6 +96,25 @@ namespace Bit.iOS.Extension
 
         public override void LoadView()
         {
+            View = new UIView(UIScreen.MainScreen.Bounds)
+            {
+                BackgroundColor = new UIColor(0.93f, 0.94f, 0.96f, 1.0f),
+            };
+
+            _splashImageView = new UIImageView(new UIImage("Icon.png"));
+
+            View.AddSubview(_splashImageView);
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+
+            if(!Resolver.IsSet)
+            {
+                SetIoc();
+            }
+
             foreach(var item in ExtensionContext.InputItems)
             {
                 var processed = false;
@@ -121,11 +138,22 @@ namespace Bit.iOS.Extension
                 }
             }
 
-            View = new UIView(new CGRect(x: 0.0, y: 0, width: 320.0, height: 200.0));
-            var button = new UIButton(new CGRect(x: 10.0, y: 50.0, width: 200.0, height: 30.0));
+            var navBar = new UINavigationBar(new CGRect(0, 0, View.Frame.Size.Width, 44))
+            {
+                BackgroundColor = new UIColor(0.24f, 0.55f, 0.74f, 1.0f),
+                TintColor = UIColor.White
+            };
+
+            var button = new UIButton(new CGRect(x: 10.0, y: 50.0, width: View.Frame.Size.Width - 100, height: 30.0))
+            {
+                BackgroundColor = UIColor.Black,
+                TintColor = UIColor.White
+            };
             button.SetTitle("Done", UIControlState.Normal);
             button.TouchUpInside += Button_TouchUpInside;
-            View.AddSubview(button);
+
+            _splashImageView.RemoveFromSuperview();
+            View.AddSubviews(navBar, button);
         }
 
         private void Button_TouchUpInside(object sender, EventArgs e)
@@ -169,11 +197,6 @@ namespace Bit.iOS.Extension
             var returningItems = new NSExtensionItem[] { resultsItem };
 
             ExtensionContext.CompleteRequest(returningItems, null);
-        }
-
-        public override void ViewDidLoad()
-        {
-            base.ViewDidLoad();
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> action)

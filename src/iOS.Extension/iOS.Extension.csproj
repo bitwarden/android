@@ -137,6 +137,9 @@
     <Content Include="extension.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <BundleResource Include="Resources\Icon.png" />
+    <BundleResource Include="Resources\Icon%402x.png" />
+    <BundleResource Include="Resources\Icon%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
