@@ -95,9 +95,13 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="SplashViewController.cs" />
-    <Compile Include="SplashViewController.designer.cs">
-      <DependentUpon>SplashViewController.cs</DependentUpon>
+    <Compile Include="Models\Context.cs" />
+    <Compile Include="Models\FillScript.cs" />
+    <Compile Include="Models\PageDetails.cs" />
+    <Compile Include="Models\PasswordGenerationOptions.cs" />
+    <Compile Include="LoadingViewController.cs" />
+    <Compile Include="LoadingViewController.designer.cs">
+      <DependentUpon>LoadingViewController.cs</DependentUpon>
     </Compile>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />

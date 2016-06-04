@@ -11,8 +11,8 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-	[Register ("SplashViewController")]
-	partial class SplashViewController
+	[Register ("LoadingViewController")]
+	partial class LoadingViewController
 	{
 		void ReleaseDesignerOutlets ()
 		{

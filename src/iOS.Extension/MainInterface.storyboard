@@ -18,26 +18,28 @@
                         <color key="backgroundColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1717" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="20" y="72" width="560" height="483"/>
+                                <rect key="frame" x="0.0" y="72" width="600" height="506"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1722" rowHeight="44">
-                                        <rect key="frame" x="0.0" y="22" width="560" height="44"/>
+                                        <rect key="frame" x="0.0" y="22" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="1723" tableViewCell="1722">
-                                            <rect key="frame" x="0.0" y="0.0" width="560" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                     </tableViewCell>
                                 </prototypes>
+                                <constraints>
+                                    <constraint id="1745" firstAttribute="width" constant="600"/>
+                                    <constraint id="1746" firstAttribute="height" constant="506"/>
+                                </constraints>
                             </tableView>
                         </subviews>
                         <constraints>
-                            <constraint id="1724" firstItem="1717" firstAttribute="top" secondItem="qkL-Od-lgU" secondAttribute="bottom" constant="8" symbolic="YES"/>
-                            <constraint id="1725" firstItem="n38-gi-rB5" firstAttribute="top" secondItem="1717" secondAttribute="bottom" constant="8" symbolic="YES"/>
-                            <constraint id="1726" firstItem="1717" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leading" constant="20" symbolic="YES"/>
-                            <constraint id="1727" firstItem="zMn-AG-sqS" firstAttribute="trailing" secondItem="1717" secondAttribute="trailing" constant="20" symbolic="YES"/>
+                            <constraint id="1743" firstItem="zMn-AG-sqS" firstAttribute="trailing" secondItem="1717" secondAttribute="trailing"/>
+                            <constraint id="1744" firstItem="zMn-AG-sqS" firstAttribute="bottom" secondItem="1717" secondAttribute="bottom" constant="22"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="yHH-Ee-etX" title="Sites">
@@ -60,7 +62,7 @@
         <!--Splash View Controller-->
         <scene sceneID="42">
             <objects>
-                <viewController id="43" customClass="SplashViewController" sceneMemberID="viewController">
+                <viewController id="43" customClass="LoadingViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="40"/>
                         <viewControllerLayoutGuide type="bottom" id="41"/>
