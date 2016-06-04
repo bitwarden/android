@@ -44,6 +44,7 @@ namespace Bit.iOS.Extension
         {
         }
 
+		public NSExtensionContext Context { get; set; }
         public string ProviderType { get; set; }
         public Uri Url { get; set; }
         public string SiteTitle { get; set; }
@@ -59,7 +60,7 @@ namespace Bit.iOS.Extension
             base.ViewDidLoad();
             View.BackgroundColor = UIColor.FromPatternImage(new UIImage("boxed-bg.png"));
 
-            foreach(var item in ExtensionContext.InputItems)
+            foreach(var item in Context.InputItems)
             {
                 var processed = false;
                 foreach(var itemProvider in item.Attachments)
@@ -82,6 +83,11 @@ namespace Bit.iOS.Extension
                 }
             }
         }
+
+		partial void CancelClicked (UIBarButtonItem sender)
+		{
+			Context.CompleteRequest(null, null);
+		}
 
         partial void DoneClicked(NSObject sender)
         {
@@ -123,7 +129,7 @@ namespace Bit.iOS.Extension
             var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
             var returningItems = new NSExtensionItem[] { resultsItem };
 
-            ExtensionContext.CompleteRequest(returningItems, null);
+            Context.CompleteRequest(returningItems, null);
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> action)

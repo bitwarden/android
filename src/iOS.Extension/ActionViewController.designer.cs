@@ -17,6 +17,10 @@ namespace Bit.iOS.Extension
 		[Action ("DoneClicked:")]
 		partial void DoneClicked (Foundation.NSObject sender);
 
+		[Action ("CancelClicked:")]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		partial void CancelClicked (UIBarButtonItem sender);
+
 		void ReleaseDesignerOutlets ()
 		{
 		}

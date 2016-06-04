@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Diagnostics;
 using Bit.App.Abstractions;
 using Bit.App.Repositories;
 using Bit.App.Services;
@@ -51,6 +52,19 @@ namespace Bit.iOS.Extension
 
             PerformSegue("seque", this);
         }
+
+		public override void PrepareForSegue (UIStoryboardSegue segue, NSObject sender)
+		{
+			var navController = segue.DestinationViewController as UINavigationController;
+			if(navController != null)
+			{
+				var actionController = navController.TopViewController as ActionViewController;
+				if(actionController != null)
+				{
+					actionController.Context = ExtensionContext;
+				}
+			}
+		}
 
         private void SetIoc()
         {
