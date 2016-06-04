@@ -14,6 +14,14 @@ namespace Bit.iOS.Extension
 	[Register ("ActionViewController")]
 	partial class ActionViewController
 	{
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UINavigationItem NavItem { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UITableView tableView { get; set; }
+
 		[Action ("DoneClicked:")]
 		partial void DoneClicked (Foundation.NSObject sender);
 
@@ -23,6 +31,14 @@ namespace Bit.iOS.Extension
 
 		void ReleaseDesignerOutlets ()
 		{
+			if (NavItem != null) {
+				NavItem.Dispose ();
+				NavItem = null;
+			}
+			if (tableView != null) {
+				tableView.Dispose ();
+				tableView = null;
+			}
 		}
 	}
 }

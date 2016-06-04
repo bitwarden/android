@@ -18,7 +18,7 @@
                         <color key="backgroundColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1717" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="0.0" y="72" width="600" height="506"/>
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1722" rowHeight="44">
@@ -31,29 +31,25 @@
                                         </view>
                                     </tableViewCell>
                                 </prototypes>
-                                <constraints>
-                                    <constraint id="1745" firstAttribute="width" constant="600"/>
-                                    <constraint id="1746" firstAttribute="height" constant="506"/>
-                                </constraints>
                             </tableView>
                         </subviews>
                         <constraints>
-                            <constraint id="1743" firstItem="zMn-AG-sqS" firstAttribute="trailing" secondItem="1717" secondAttribute="trailing"/>
-                            <constraint id="1744" firstItem="zMn-AG-sqS" firstAttribute="bottom" secondItem="1717" secondAttribute="bottom" constant="22"/>
+                            <constraint id="1753" firstItem="1717" firstAttribute="top" secondItem="qkL-Od-lgU" secondAttribute="bottom"/>
+                            <constraint id="1754" firstItem="1717" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leading"/>
+                            <constraint id="1755" firstItem="1717" firstAttribute="trailing" secondItem="zMn-AG-sqS" secondAttribute="trailing"/>
+                            <constraint id="1756" firstItem="1717" firstAttribute="bottom" secondItem="n38-gi-rB5" secondAttribute="top"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="yHH-Ee-etX" title="Sites">
-                        <barButtonItem key="leftBarButtonItem" title="Done" style="done" id="WYi-yp-eM6">
-                            <connections>
-                                <action selector="DoneClicked:" destination="ObA-dk-sSI" id="eDL-XE-zg5"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem title="Cancel" id="1714" translatesAutoresizingMaskIntoConstraints="NO" key="rightBarButtonItem">
+                        <barButtonItem title="Cancel" id="1714" translatesAutoresizingMaskIntoConstraints="NO" key="leftBarButtonItem">
                             <connections>
                                 <action selector="CancelClicked:" destination="ObA-dk-sSI" id="1729"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="1717" id="name-outlet-1717"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
