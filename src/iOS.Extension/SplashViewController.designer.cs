@@ -11,12 +11,9 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-	[Register ("ActionViewController")]
-	partial class ActionViewController
+	[Register ("SplashViewController")]
+	partial class SplashViewController
 	{
-		[Action ("DoneClicked:")]
-		partial void DoneClicked (Foundation.NSObject sender);
-
 		void ReleaseDesignerOutlets ()
 		{
 		}

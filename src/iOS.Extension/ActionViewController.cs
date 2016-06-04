@@ -2,18 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Bit.App.Abstractions;
-using Bit.App.Repositories;
-using Bit.App.Services;
-using Bit.iOS.Core.Services;
-using CoreGraphics;
 using Foundation;
-using Microsoft.Practices.Unity;
 using MobileCoreServices;
 using Newtonsoft.Json;
 using UIKit;
-using XLabs.Ioc;
-using XLabs.Ioc.Unity;
 
 namespace Bit.iOS.Extension
 {
@@ -62,44 +54,10 @@ namespace Bit.iOS.Extension
         public PasswordGenerationOptions PasswordOptions { get; set; }
         public PageDetails Details { get; set; }
 
-        private void SetIoc()
-        {
-            var container = new UnityContainer();
-
-            container
-                // Services
-                .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
-                //.RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
-                //.RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
-                // Repositories
-                .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager());
-            // Other
-            //.RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
-            //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-            //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
-            //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
-
-            Resolver.SetResolver(new UnityResolver(container));
-        }
-
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            if(!Resolver.IsSet)
-            {
-                SetIoc();
-            }
+            View.BackgroundColor = UIColor.FromPatternImage(new UIImage("boxed-bg.png"));
 
             foreach(var item in ExtensionContext.InputItems)
             {
@@ -125,8 +83,8 @@ namespace Bit.iOS.Extension
             }
         }
 
-		partial void DoneClicked(Foundation.NSObject sender)
-		{
+        partial void DoneClicked(NSObject sender)
+        {
             NSDictionary itemData = null;
             if(ProviderType == UTType.PropertyList)
             {
@@ -324,7 +282,7 @@ namespace Bit.iOS.Extension
             return default(T);
         }
 
-		private T DeserializeString<T>(NSString jsonString)
+        private T DeserializeString<T>(NSString jsonString)
         {
             if(jsonString != null)
             {

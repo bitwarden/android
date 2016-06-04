@@ -95,6 +95,10 @@
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="SplashViewController.cs" />
+    <Compile Include="SplashViewController.designer.cs">
+      <DependentUpon>SplashViewController.cs</DependentUpon>
+    </Compile>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,6 +144,10 @@
     <BundleResource Include="Resources\Icon.png" />
     <BundleResource Include="Resources\Icon%402x.png" />
     <BundleResource Include="Resources\Icon%403x.png" />
+    <BundleResource Include="Resources\boxed-bg.png" />
+    <BundleResource Include="Resources\logo.png" />
+    <BundleResource Include="Resources\logo%402x.png" />
+    <BundleResource Include="Resources\logo%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
