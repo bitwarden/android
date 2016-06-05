@@ -117,7 +117,10 @@ namespace Bit.App
             }
             else if(pinUnlock)
             {
-
+                if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage == null)
+                {
+                    await Current.MainPage.Navigation.PushModalAsync(new LockPinPage(), false);
+                }
             }
             else
             {

@@ -80,8 +80,10 @@
     <Compile Include="Models\Data\SiteData.cs" />
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
+    <Compile Include="Models\Page\PinPageModel.cs" />
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
+    <Compile Include="Pages\LockPinPage.cs" />
     <Compile Include="Pages\LoginNavigationPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\SettingsEditFolderPage.cs" />
