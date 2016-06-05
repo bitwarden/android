@@ -24,6 +24,7 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = UIColor.FromPatternImage(new UIImage("boxed-bg.png"));
             NavigationController.NavigationBar.TintColor = UIColor.White;
             NavigationController.NavigationBar.BarTintColor = new UIColor(0.24f, 0.55f, 0.74f, 1.0f);
+            NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = UIColor.White };
 
             List<string> sites = new List<string>();
             for(int i = 1; i <= 100; i++)
