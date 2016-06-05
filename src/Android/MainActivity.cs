@@ -28,6 +28,7 @@ namespace Bit.Android
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
+            Console.WriteLine("A OnCreate");
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
@@ -41,6 +42,42 @@ namespace Bit.Android
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>()));
+        }
+
+        protected override void OnPause()
+        {
+            Console.WriteLine("A OnPause");
+            base.OnPause();
+        }
+
+        protected override void OnDestroy()
+        {
+            Console.WriteLine("A OnDestroy");
+            base.OnDestroy();
+        }
+
+        protected override void OnRestart()
+        {
+            Console.WriteLine("A OnRestart");
+            base.OnRestart();
+        }
+
+        protected override void OnStart()
+        {
+            Console.WriteLine("A OnStart");
+            base.OnStart();
+        }
+
+        protected override void OnStop()
+        {
+            Console.WriteLine("A OnStop");
+            base.OnStop();
+        }
+
+        protected override void OnResume()
+        {
+            Console.WriteLine("A OnResume");
+            base.OnResume();
         }
 
         private void SetIoc()

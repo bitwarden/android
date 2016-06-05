@@ -60,12 +60,22 @@ namespace Bit.App
         {
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                _settings.AddOrUpdateValue(Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
+            }
         }
 
         protected override void OnResume()
         {
             // Handle when your app resumes
             Debug.WriteLine("OnResume");
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                CheckLockAsync(false);
+            }
         }
 
         private async Task CheckLockAsync(bool forceLock)
@@ -100,12 +110,9 @@ namespace Bit.App
             var pinUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingPinUnlockOn);
             if(fingerprintUnlock && _fingerprint.IsAvailable)
             {
-                if(Device.OS == TargetPlatform.iOS)
+                if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockFingerprintPage == null)
                 {
-                    if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockFingerprintPage == null)
-                    {
-                        await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(!forceLock), false);
-                    }
+                    await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(!forceLock), false);
                 }
             }
             else if(pinUnlock)
