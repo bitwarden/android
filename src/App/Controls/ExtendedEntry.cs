@@ -47,7 +47,6 @@ namespace Bit.App.Controls
             set { SetValue(MaxLengthProperty, value); }
         }
 
-
         public ReturnType? ReturnType { get; set; }
         public bool? Autocorrect { get; set; }
         public bool DisableAutocapitalize { get; set; }

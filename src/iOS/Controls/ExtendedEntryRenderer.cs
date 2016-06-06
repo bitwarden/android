@@ -23,6 +23,7 @@ namespace Bit.iOS.Controls
             {
                 SetBorder(view);
                 SetMaxLength(view);
+                UpdateKeyboard();
 
                 if(view.DisableAutocapitalize)
                 {
@@ -79,6 +80,10 @@ namespace Bit.iOS.Controls
             {
                 SetBorder(view);
             }
+            else if(e.PropertyName == Xamarin.Forms.InputView.KeyboardProperty.PropertyName)
+            {
+                UpdateKeyboard();
+            }
         }
 
         private void SetBorder(ExtendedEntry view)
@@ -111,6 +116,18 @@ namespace Bit.iOS.Controls
                 var newLength = textField.Text.Length + replacementString.Length - range.Length;
                 return newLength <= view.MaxLength;
             };
+        }
+
+        private void UpdateKeyboard()
+        {
+            if(Element.Keyboard == Keyboard.Numeric)
+            {
+                Control.KeyboardType = UIKeyboardType.NumberPad;
+            }
+            else
+            {
+                Control.ApplyKeyboard(Element.Keyboard);
+            }
         }
     }
 }

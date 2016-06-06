@@ -60,6 +60,7 @@
     <Compile Include="Controls\LabeledValueCell.cs" />
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
+    <Compile Include="Controls\PinControl.cs" />
     <Compile Include="Enums\ReturnType.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />

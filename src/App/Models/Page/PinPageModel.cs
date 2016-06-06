@@ -6,33 +6,32 @@ namespace Bit.App.Models.Page
 {
     public class PinPageModel : INotifyPropertyChanged
     {
-        private string _labelText;
-        private List<string> _pin;
-
-        public PinPageModel()
-        {
-            LabelText = "_  _  _  _";
-            PIN = new List<string>();
-        }
+        private string _pin = string.Empty;
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         public string LabelText
         {
-            get { return _labelText; }
-            set
+            get
             {
-                _labelText = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(LabelText)));
+                var newText = string.Empty;
+                for(int i = 0; i < 4; i++)
+                {
+                    newText += _pin.Length <= i ? "- " : "● ";
+                }
+
+                return newText.TrimEnd();
             }
         }
-        public List<string> PIN
+
+        public string PIN
         {
             get { return _pin; }
             set
             {
                 _pin = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(PIN)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(LabelText)));
             }
         }
     }
