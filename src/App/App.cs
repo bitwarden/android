@@ -77,10 +77,10 @@ namespace Bit.App
                 CheckLockAsync(false);
             }
 
-            var lockPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage;
-            if(lockPage != null)
+            var lockPinPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage;
+            if(lockPinPage != null)
             {
-                lockPage.PinControl.Entry.Focus();
+                lockPinPage.PinControl.Entry.Focus();
             }
         }
 

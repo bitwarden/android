@@ -6,10 +6,8 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
-using System.Collections.Generic;
 using Bit.App.Models.Page;
 using Bit.App.Controls;
-using System.Diagnostics;
 
 namespace Bit.App.Pages
 {
@@ -34,6 +32,8 @@ namespace Bit.App.Pages
         public void Init()
         {
             PinControl = new PinControl(PinEntered);
+            PinControl.Label.SetBinding<PinPageModel>(Label.TextProperty, s => s.LabelText);
+            PinControl.Entry.SetBinding<PinPageModel>(Entry.TextProperty, s => s.PIN);
 
             var logoutButton = new Button
             {
@@ -49,11 +49,19 @@ namespace Bit.App.Pages
                 Children = { PinControl.Label, logoutButton, PinControl.Entry }
             };
 
+            var tgr = new TapGestureRecognizer();
+            tgr.Tapped += Tgr_Tapped;
+
             Title = "Verify PIN";
             Content = stackLayout;
+            Content.GestureRecognizers.Add(tgr);
             BindingContext = Model;
         }
 
+        private void Tgr_Tapped(object sender, EventArgs e)
+        {
+            PinControl.Entry.Focus();
+        }
 
         protected override bool OnBackButtonPressed()
         {
@@ -75,6 +83,8 @@ namespace Bit.App.Pages
             }
             else
             {
+                // TODO: keep track of invalid attempts and logout?
+
                 _userDialogs.Alert("Invalid PIN. Try again.");
                 Model.PIN = string.Empty;
                 PinControl.Entry.Focus();
