@@ -76,6 +76,12 @@ namespace Bit.App
             {
                 CheckLockAsync(false);
             }
+
+            var lockPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage;
+            if(lockPage != null)
+            {
+                lockPage.PinControl.Entry.Focus();
+            }
         }
 
         private async Task CheckLockAsync(bool forceLock)

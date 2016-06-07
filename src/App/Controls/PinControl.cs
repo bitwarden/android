@@ -24,8 +24,8 @@ namespace Bit.App.Controls
             Entry = new ExtendedEntry
             {
                 Keyboard = Keyboard.Numeric,
-                IsVisible = false,
-                MaxLength = 4
+                MaxLength = 4,
+                Margin = new Thickness(0, int.MaxValue, 0, 0)
             };
             Entry.SetBinding<PinPageModel>(Xamarin.Forms.Entry.TextProperty, s => s.PIN);
             Entry.TextChanged += PinEntry_TextChanged;

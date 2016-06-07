@@ -46,12 +46,18 @@ namespace Bit.App.Pages
             {
                 Padding = new Thickness(30, 40),
                 Spacing = 10,
-                Children = { PinControl.Label, PinControl.Entry, logoutButton }
+                Children = { PinControl.Label, logoutButton, PinControl.Entry }
             };
 
             Title = "Verify PIN";
             Content = stackLayout;
             BindingContext = Model;
+        }
+
+
+        protected override bool OnBackButtonPressed()
+        {
+            return false;
         }
 
         protected override void OnAppearing()

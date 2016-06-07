@@ -55,6 +55,11 @@ namespace Bit.App.Pages
             Content = stackLayout;
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            return false;
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
