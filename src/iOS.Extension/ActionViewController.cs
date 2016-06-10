@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Bit.iOS.Core;
 using Bit.iOS.Extension.Models;
@@ -119,6 +120,8 @@ namespace Bit.iOS.Extension
                         Constants.AppExtensionPasswordKey, "mynewpassword",
                         Constants.AppExtensionOldPasswordKey, "myoldpassword");
                 }
+
+                Debug.WriteLine("BW LOG, itemData: " + itemData);
 
                 _controller.CompleteRequest(itemData);
             }
