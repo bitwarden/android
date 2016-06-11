@@ -28,8 +28,7 @@ namespace Bit.iOS.Extension
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            View.BackgroundColor = UIColor.FromPatternImage(new UIImage("boxed-bg.png"));
-            NavigationController.SetNavigationBarHidden(true, false);
+            View.BackgroundColor = UIColor.FromPatternImage(new UIImage("bg.png"));
             _context.ExtContext = ExtensionContext;
         }
 

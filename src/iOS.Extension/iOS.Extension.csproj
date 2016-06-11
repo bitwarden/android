@@ -148,7 +148,7 @@
     <BundleResource Include="Resources\Icon.png" />
     <BundleResource Include="Resources\Icon%402x.png" />
     <BundleResource Include="Resources\Icon%403x.png" />
-    <BundleResource Include="Resources\boxed-bg.png" />
+    <BundleResource Include="Resources\bg.png" />
     <BundleResource Include="Resources\logo.png" />
     <BundleResource Include="Resources\logo%402x.png" />
     <BundleResource Include="Resources\logo%403x.png" />

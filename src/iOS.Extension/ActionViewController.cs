@@ -22,18 +22,15 @@ namespace Bit.iOS.Extension
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            View.BackgroundColor = UIColor.FromPatternImage(new UIImage("boxed-bg.png"));
-            NavigationController.NavigationBar.TintColor = UIColor.White;
-            NavigationController.NavigationBar.BarTintColor = new UIColor(0.24f, 0.55f, 0.74f, 1.0f);
-            NavigationController.NavigationBar.TitleTextAttributes = new UIStringAttributes() { ForegroundColor = UIColor.White };
 
-            List<string> sites = new List<string>();
+            List<Tuple<string, string>> sites = new List<Tuple<string, string>>();
             for(int i = 1; i <= 100; i++)
             {
-                sites.Add("Site " + i);
+                sites.Add(new Tuple<string, string>("Site " + i, "Username " + i));
             }
 
             tableView.Source = new TableSource(sites, this);
+            AutomaticallyAdjustsScrollViewInsets = false;
         }
 
         partial void CancelClicked(UIBarButtonItem sender)
@@ -54,11 +51,11 @@ namespace Bit.iOS.Extension
         {
             private const string CellIdentifier = "TableCell";
 
-            private IEnumerable<string> _tableItems;
+            private IEnumerable<Tuple<string, string>> _tableItems;
             private Context _context;
             private ActionViewController _controller;
 
-            public TableSource(IEnumerable<string> items, ActionViewController controller)
+            public TableSource(IEnumerable<Tuple<string, string>> items, ActionViewController controller)
             {
                 _tableItems = items;
                 _context = controller.Context;
@@ -78,10 +75,11 @@ namespace Bit.iOS.Extension
                 // if there are no cells to reuse, create a new one
                 if(cell == null)
                 {
-                    cell = new UITableViewCell(UITableViewCellStyle.Default, CellIdentifier);
+                    cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
                 }
 
-                cell.TextLabel.Text = item;
+                cell.TextLabel.Text = item.Item1;
+                cell.DetailTextLabel.Text = item.Item2;
                 return cell;
             }
 
