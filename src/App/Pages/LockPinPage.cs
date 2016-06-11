@@ -39,7 +39,8 @@ namespace Bit.App.Pages
             {
                 Text = AppResources.LogOut,
                 Command = new Command(async () => await LogoutAsync()),
-                VerticalOptions = LayoutOptions.End
+                VerticalOptions = LayoutOptions.End,
+                TextColor = Color.FromHex("333333")
             };
 
             var stackLayout = new StackLayout
@@ -55,6 +56,7 @@ namespace Bit.App.Pages
             Title = "Verify PIN";
             Content = stackLayout;
             Content.GestureRecognizers.Add(tgr);
+            BackgroundImage = "bg.png";
             BindingContext = Model;
         }
 

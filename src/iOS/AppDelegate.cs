@@ -59,14 +59,27 @@ namespace Bit.iOS
 
         public override void DidEnterBackground(UIApplication uiApplication)
         {
-            // TODO: Make this an image view
-            var colorView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            var view = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                BackgroundColor = UIColor.Black,
                 Tag = 4321
             };
-            UIApplication.SharedApplication.KeyWindow.AddSubview(colorView);
-            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(colorView);
+
+            var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
+            {
+                BackgroundColor = UIColor.FromPatternImage(new UIImage("bg.png"))
+            };
+
+            var imageView = new UIImageView(new UIImage("logo.png"))
+            {
+                Center = view.Center
+            };
+
+            view.AddSubview(backgroundView);
+            view.AddSubview(imageView);
+
+            UIApplication.SharedApplication.KeyWindow.AddSubview(view);
+            UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
+            UIApplication.SharedApplication.KeyWindow.EndEditing(true);
 
             // Log the date/time we last backgrounded
             CrossSettings.Current.AddOrUpdateValue(Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
