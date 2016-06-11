@@ -15,6 +15,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" id="11" translatesAutoresizingMaskIntoConstraints="NO" image="bg.png">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="16" translatesAutoresizingMaskIntoConstraints="NO" image="logo.png">
+                                <rect key="frame" x="159" y="278" width="282" height="44"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint id="12" firstItem="11" firstAttribute="top" secondItem="6" secondAttribute="top"/>
+                            <constraint id="13" firstItem="6" firstAttribute="bottom" secondItem="11" secondAttribute="bottom"/>
+                            <constraint id="14" firstItem="11" firstAttribute="leading" secondItem="6" secondAttribute="leading"/>
+                            <constraint id="15" firstItem="6" firstAttribute="trailing" secondItem="11" secondAttribute="trailing"/>
+                            <constraint id="19" firstItem="16" firstAttribute="centerY" secondItem="6" secondAttribute="centerY"/>
+                            <constraint id="20" firstItem="6" firstAttribute="centerX" secondItem="16" secondAttribute="centerX"/>
+                        </constraints>
                     </view>
                     <connections/>
                 </viewController>
@@ -48,5 +64,9 @@
         <image name="Icon.png" width="57" height="57"/>
         <image name="ion_chevron_right.png" width="14" height="14"/>
         <image name="ion_plus.png" width="22" height="22"/>
+        <image name="logo.png" width="282" height="44"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedScreenMetrics key="destination" type="retina47"/>
+    </simulatedMetricsContainer>
 </document>
