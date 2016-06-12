@@ -11,15 +11,13 @@ using Bit.App.Controls;
 
 namespace Bit.App.Pages
 {
-    public class LockPinPage : ContentPage
+    public class SettingsPinPage : ContentPage
     {
-        private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
 
-        public LockPinPage()
+        public SettingsPinPage()
         {
-            _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
 
@@ -28,6 +26,7 @@ namespace Bit.App.Pages
 
         public PinPageModel Model { get; set; } = new PinPageModel();
         public PinControl PinControl { get; set; }
+        public EventHandler OnPinEntered;
 
         public void Init()
         {
@@ -36,25 +35,17 @@ namespace Bit.App.Pages
             PinControl.Label.SetBinding<PinPageModel>(Label.TextProperty, s => s.LabelText);
             PinControl.Entry.SetBinding<PinPageModel>(Entry.TextProperty, s => s.PIN);
 
-            var logoutButton = new Button
-            {
-                Text = AppResources.LogOut,
-                Command = new Command(async () => await LogoutAsync()),
-                VerticalOptions = LayoutOptions.End,
-                TextColor = Color.FromHex("333333")
-            };
-
             var stackLayout = new StackLayout
             {
                 Padding = new Thickness(30, 40),
                 Spacing = 10,
-                Children = { PinControl.Label, logoutButton, PinControl.Entry }
+                Children = { PinControl.Label, PinControl.Entry }
             };
 
             var tgr = new TapGestureRecognizer();
             tgr.Tapped += Tgr_Tapped;
 
-            Title = "Verify PIN";
+            Title = "Set PIN";
             Content = stackLayout;
             Content.GestureRecognizers.Add(tgr);
             BackgroundImage = "bg.png";
@@ -66,11 +57,6 @@ namespace Bit.App.Pages
             PinControl.Entry.Focus();
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return false;
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -79,31 +65,7 @@ namespace Bit.App.Pages
 
         protected void PinEntered(object sender, EventArgs args)
         {
-            if(Model.PIN == _authService.PIN)
-            {
-                PinControl.Entry.Unfocus();
-                Navigation.PopModalAsync();
-            }
-            else
-            {
-                // TODO: keep track of invalid attempts and logout?
-
-                _userDialogs.Alert("Invalid PIN. Try again.");
-                Model.PIN = string.Empty;
-                PinControl.Entry.Focus();
-            }
-        }
-
-        private async Task LogoutAsync()
-        {
-            if(!await _userDialogs.ConfirmAsync("Are you sure you want to log out?", null, AppResources.Yes, AppResources.Cancel))
-            {
-                return;
-            }
-
-            _authService.LogOut();
-            await Navigation.PopModalAsync();
-            Application.Current.MainPage = new LoginNavigationPage();
+            OnPinEntered.Invoke(this, null);
         }
     }
 }

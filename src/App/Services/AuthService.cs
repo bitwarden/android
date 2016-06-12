@@ -11,6 +11,7 @@ namespace Bit.App.Services
     {
         private const string TokenKey = "token";
         private const string UserIdKey = "userId";
+        private const string PinKey = "pin";
 
         private readonly ISecureStorageService _secureStorage;
         private readonly ISettings _settings;
@@ -19,6 +20,7 @@ namespace Bit.App.Services
 
         private string _token;
         private string _userId;
+        private string _pin;
 
         public AuthService(
             ISecureStorageService secureStorage,
@@ -60,8 +62,9 @@ namespace Bit.App.Services
                 else
                 {
                     _secureStorage.Delete(TokenKey);
-                    _token = null;
                 }
+
+                _token = value;
             }
         }
 
@@ -86,8 +89,9 @@ namespace Bit.App.Services
                 else
                 {
                     _settings.Remove(UserIdKey);
-                    _userId = null;
                 }
+
+                _userId = value;
             }
         }
 
@@ -96,6 +100,40 @@ namespace Bit.App.Services
             get
             {
                 return _cryptoService.Key != null && Token != null && UserId != null;
+            }
+        }
+
+        public string PIN
+        {
+            get
+            {
+                if(_pin != null)
+                {
+                    return _pin;
+                }
+
+                var pinBytes = _secureStorage.Retrieve(PinKey);
+                if(pinBytes == null)
+                {
+                    return null;
+                }
+
+                _pin = Encoding.UTF8.GetString(pinBytes, 0, pinBytes.Length);
+                return _pin;
+            }
+            set
+            {
+                if(value != null)
+                {
+                    var pinBytes = Encoding.UTF8.GetBytes(value);
+                    _secureStorage.Store(PinKey, pinBytes);
+                }
+                else
+                {
+                    _secureStorage.Delete(PinKey);
+                }
+
+                _pin = value;
             }
         }
 

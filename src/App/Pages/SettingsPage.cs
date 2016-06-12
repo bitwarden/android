@@ -215,12 +215,28 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _settings.AddOrUpdateValue(Constants.SettingPinUnlockOn, cell.On);
             if(cell.On)
             {
-                _settings.AddOrUpdateValue(Constants.SettingFingerprintUnlockOn, false);
-                FingerprintCell.On = false;
+                var pinPage = new SettingsPinPage();
+                pinPage.OnPinEntered += PinEntered;
+                Navigation.PushAsync(pinPage);
             }
+            else
+            {
+                _settings.AddOrUpdateValue(Constants.SettingPinUnlockOn, false);
+            }
+        }
+
+        private void PinEntered(object sender, EventArgs args)
+        {
+            var page = sender as SettingsPinPage;
+            page.Navigation.PopAsync();
+
+            _authService.PIN = page.Model.PIN;
+
+            _settings.AddOrUpdateValue(Constants.SettingPinUnlockOn, true);
+            _settings.AddOrUpdateValue(Constants.SettingFingerprintUnlockOn, false);
+            FingerprintCell.On = false;
         }
 
         private void FoldersCell_Tapped(object sender, EventArgs e)

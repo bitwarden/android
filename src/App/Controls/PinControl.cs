@@ -5,14 +5,10 @@ namespace Bit.App.Controls
 {
     public class PinControl
     {
-        private Action _pinEnteredAction;
-        private Action _confirmPinEnteredAction;
+        public EventHandler OnPinEntered;
 
-        public PinControl(Action pinEnteredAction, Action confirmPinEnteredAction = null)
+        public PinControl()
         {
-            _pinEnteredAction = pinEnteredAction;
-            _confirmPinEnteredAction = confirmPinEnteredAction;
-
             Label = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -28,34 +24,17 @@ namespace Bit.App.Controls
                 Margin = new Thickness(0, int.MaxValue, 0, 0)
             };
             Entry.TextChanged += Entry_TextChanged;
-
-            ConfirmEntry = new ExtendedEntry
-            {
-                Keyboard = Keyboard.Numeric,
-                MaxLength = 4,
-                Margin = new Thickness(0, int.MaxValue, 0, 0)
-            };
-            Entry.TextChanged += ConfirmEntry_TextChanged;
         }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if(e.NewTextValue.Length >= 4 && _pinEnteredAction != null)
+            if(e.NewTextValue.Length >= 4)
             {
-                _pinEnteredAction();
-            }
-        }
-
-        private void ConfirmEntry_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if(e.NewTextValue.Length >= 4 && _confirmPinEnteredAction != null)
-            {
-                _confirmPinEnteredAction();
+                OnPinEntered.Invoke(this, null);
             }
         }
 
         public Label Label { get; set; }
         public ExtendedEntry Entry { get; set; }
-        public ExtendedEntry ConfirmEntry { get; set; }
     }
 }
