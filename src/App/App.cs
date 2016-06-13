@@ -121,7 +121,7 @@ namespace Bit.App
                     await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(!forceLock), false);
                 }
             }
-            else if(pinUnlock)
+            else if(pinUnlock && !string.IsNullOrWhiteSpace(_authService.PIN))
             {
                 if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage == null)
                 {
