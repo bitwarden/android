@@ -283,15 +283,6 @@
     <BundleResource Include="Resources\ion_chevron_right%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion_plus.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\ion_plus%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\ion_plus%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\Icon-120.png" />
   </ItemGroup>
   <ItemGroup>
@@ -392,6 +383,15 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\star_selected%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\plus%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\plus%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
