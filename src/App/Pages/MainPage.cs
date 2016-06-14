@@ -27,7 +27,7 @@ namespace Bit.App.Pages
             syncNavigation.Icon = "fa-refresh";
 
             settingsNavigation.Title = AppResources.Settings;
-            settingsNavigation.Icon = "fa-cogs";
+            settingsNavigation.Icon = "cogs";
 
             Children.Add(favoritesNavigation);
             Children.Add(vaultNavigation);

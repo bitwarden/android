@@ -256,15 +256,6 @@
     <BundleResource Include="Resources\fa-refresh%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\fa-cogs.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\fa-cogs%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\fa-cogs%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\fa-lock.png" />
   </ItemGroup>
   <ItemGroup>
@@ -376,15 +367,6 @@
     <BundleResource Include="Resources\star%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\star_selected.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\star_selected%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\star_selected%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\plus.png" />
   </ItemGroup>
   <ItemGroup>
@@ -392,6 +374,15 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\plus%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cogs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cogs%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cogs%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
