@@ -19,6 +19,14 @@ namespace Bit.iOS.Extension
 
         public Context Context { get; set; }
 
+        public override void ViewWillAppear(bool animated)
+        {
+            UINavigationBar.Appearance.ShadowImage = new UIImage();
+            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
+
+            base.ViewWillAppear(animated);
+        }
+
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();

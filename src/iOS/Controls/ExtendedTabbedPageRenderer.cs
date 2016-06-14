@@ -1,6 +1,7 @@
 ﻿using System;
 using Bit.App.Controls;
 using Bit.iOS.Controls;
+using Foundation;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -19,6 +20,10 @@ namespace Bit.iOS.Controls
             TabBar.TintColor = page.TintColor.ToUIColor();
             TabBar.BarTintColor = page.BarTintColor.ToUIColor();
             TabBar.BackgroundColor = page.BackgroundColor.ToUIColor();
+
+            // remove top border
+            // ref: http://stackoverflow.com/questions/14371343/ios-uitabbar-remove-top-shadow-gradient-line
+            TabBar.SetValueForKeyPath(FromObject(true), new NSString("_hidesShadow"));
         }
 
         public override void ViewWillAppear(bool animated)

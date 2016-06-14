@@ -54,6 +54,9 @@ namespace Bit.iOS
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>()));
 
+            UINavigationBar.Appearance.ShadowImage = new UIImage();
+            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
+
             return base.FinishedLaunching(app, options);
         }
 

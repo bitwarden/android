@@ -265,15 +265,6 @@
     <BundleResource Include="Resources\fa-lock%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ion_chevron_right.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\ion_chevron_right%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\ion_chevron_right%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\Icon-120.png" />
   </ItemGroup>
   <ItemGroup>

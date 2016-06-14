@@ -59,7 +59,8 @@ namespace Bit.App.Controls
                     Text = button1Text,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0)
+                    Margin = new Thickness(0),
+                    TextColor = Color.FromHex("3c8dbc")
                 };
 
                 buttonStackLayout.Children.Add(Button1);
@@ -72,7 +73,8 @@ namespace Bit.App.Controls
                     Text = button2Text,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0)
+                    Margin = new Thickness(0),
+                    TextColor = Color.FromHex("3c8dbc")
                 };
 
                 buttonStackLayout.Children.Add(Button2);
