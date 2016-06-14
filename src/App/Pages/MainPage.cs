@@ -13,8 +13,12 @@ namespace Bit.App.Pages
             TintColor = Color.FromHex("ffffff");
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
+            var favoritesNavigation = new ExtendedNavigationPage(new VaultListSitesPage());
             var vaultNavigation = new ExtendedNavigationPage(new VaultListSitesPage());
             var syncNavigation = new ExtendedNavigationPage(new SyncPage());
+
+            favoritesNavigation.Title = AppResources.Favorites;
+            favoritesNavigation.Icon = "star";
 
             vaultNavigation.Title = AppResources.MyVault;
             vaultNavigation.Icon = "fa-lock";
@@ -25,6 +29,7 @@ namespace Bit.App.Pages
             settingsNavigation.Title = AppResources.Settings;
             settingsNavigation.Icon = "fa-cogs";
 
+            Children.Add(favoritesNavigation);
             Children.Add(vaultNavigation);
             Children.Add(syncNavigation);
             Children.Add(settingsNavigation);

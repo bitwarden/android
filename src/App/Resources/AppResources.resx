@@ -168,6 +168,10 @@
     <value>Email Address</value>
     <comment>Full label for a email address.</comment>
   </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>Favorites</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
   <data name="Folder" xml:space="preserve">
     <value>Folder</value>
     <comment>Label for a folder.</comment>
