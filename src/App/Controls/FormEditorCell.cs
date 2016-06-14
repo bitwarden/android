@@ -20,7 +20,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15)
+                Padding = new Thickness(15, 10)
             };
 
             stackLayout.Children.Add(Editor);

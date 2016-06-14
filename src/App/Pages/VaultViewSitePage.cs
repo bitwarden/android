@@ -28,6 +28,11 @@ namespace Bit.App.Pages
 
         private VaultViewSitePageModel Model { get; set; } = new VaultViewSitePageModel();
         private ExtendedTableView Table { get; set; }
+        private TableSection SiteInformationSection { get; set; }
+        private TableSection NotesSection { get; set; }
+        public LabeledValueCell UsernameCell { get; set; }
+        public LabeledValueCell PasswordCell { get; set; }
+        public LabeledValueCell UriCell { get; set; }
 
         private void Init()
         {
@@ -42,29 +47,38 @@ namespace Bit.App.Pages
             nameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Name);
 
             // Username
-            var usernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
-            usernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
-            usernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
-            usernameCell.View.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowUsername);
+            UsernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
+            UsernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
+            UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
 
             // Password
-            var passwordCell = new LabeledValueCell(AppResources.Password, button1Text: AppResources.Show, button2Text: AppResources.Copy);
-            passwordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
-            passwordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.TextProperty, s => s.ShowHideText);
-            passwordCell.Button1.Command = new Command(() => Model.ShowPassword = !Model.ShowPassword);
-            passwordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
+            PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: AppResources.Show, button2Text: AppResources.Copy);
+            PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
+            PasswordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.TextProperty, s => s.ShowHideText);
+            PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
+            PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
+
+            UsernameCell.Value.FontFamily = PasswordCell.Value.FontFamily = "Courier";
 
             // URI
-            var uriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
-            uriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.UriHost);
-            uriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(Model.Uri)));
-            uriCell.View.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowUri);
+            UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
+            UriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.UriHost);
+            UriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(Model.Uri)));
 
             // Notes
             var notesCell = new LabeledValueCell();
             notesCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
-            notesCell.View.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowNotes);
             notesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
+
+            SiteInformationSection = new TableSection("Site Information")
+            {
+                nameCell
+            };
+
+            NotesSection = new TableSection(AppResources.Notes)
+            {
+                notesCell
+            };
 
             Table = new ExtendedTableView
             {
@@ -74,17 +88,8 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 Root = new TableRoot
                 {
-                    new TableSection("Site Information")
-                    {
-                        nameCell,
-                        uriCell,
-                        usernameCell,
-                        passwordCell
-                    },
-                    new TableSection(AppResources.Notes)
-                    {
-                        notesCell
-                    }
+                    SiteInformationSection,
+                    NotesSection
                 }
             };
 
@@ -110,11 +115,43 @@ namespace Bit.App.Pages
 
             Model.Update(site);
 
-            base.OnAppearing();
+            if(!Model.ShowUri)
+            {
+                SiteInformationSection.Remove(UriCell);
+            }
+            else if(!SiteInformationSection.Contains(UriCell))
+            {
+                SiteInformationSection.Add(UriCell);
+            }
 
-            // Hack to get table row height binding to update. Better way to do this probably?
-            Table.Root.Add(new TableSection { new TextCell() });
-            Table.Root.RemoveAt(Table.Root.Count - 1);
+            if(!Model.ShowUsername)
+            {
+                SiteInformationSection.Remove(UsernameCell);
+            }
+            else if(!SiteInformationSection.Contains(UsernameCell))
+            {
+                SiteInformationSection.Add(UsernameCell);
+            }
+
+            if(!Model.ShowPassword)
+            {
+                SiteInformationSection.Remove(PasswordCell);
+            }
+            else if(!SiteInformationSection.Contains(PasswordCell))
+            {
+                SiteInformationSection.Add(PasswordCell);
+            }
+
+            if(!Model.ShowNotes)
+            {
+                Table.Root.Remove(NotesSection);
+            }
+            else if(!Table.Root.Contains(NotesSection))
+            {
+                Table.Root.Add(NotesSection);
+            }
+
+            base.OnAppearing();
         }
 
         private void Copy(string copyText, string alertLabel)

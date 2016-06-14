@@ -27,15 +27,18 @@ namespace Bit.App.Repositories
         {
             try
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var errorResponseModel = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
-
                 var errors = new List<ApiError>();
-                foreach(var valError in errorResponseModel.ValidationErrors)
+                if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
                 {
-                    foreach(var errorMessage in valError.Value)
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var errorResponseModel = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+
+                    foreach(var valError in errorResponseModel.ValidationErrors)
                     {
-                        errors.Add(new ApiError { Message = errorMessage });
+                        foreach(var errorMessage in valError.Value)
+                        {
+                            errors.Add(new ApiError { Message = errorMessage });
+                        }
                     }
                 }
 

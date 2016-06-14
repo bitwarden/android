@@ -12,7 +12,7 @@ namespace Bit.App.Controls
         {
             var containerStackLayout = new StackLayout
             {
-                Padding = new Thickness(15),
+                Padding = new Thickness(15, 10),
                 Orientation = StackOrientation.Horizontal
             };
 
@@ -58,7 +58,8 @@ namespace Bit.App.Controls
                 {
                     Text = button1Text,
                     HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.Center
+                    VerticalOptions = LayoutOptions.Center,
+                    Margin = new Thickness(0)
                 };
 
                 buttonStackLayout.Children.Add(Button1);
@@ -70,7 +71,8 @@ namespace Bit.App.Controls
                 {
                     Text = button2Text,
                     HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.Center
+                    VerticalOptions = LayoutOptions.Center,
+                    Margin = new Thickness(0)
                 };
 
                 buttonStackLayout.Children.Add(Button2);

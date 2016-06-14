@@ -36,6 +36,9 @@ namespace Bit.App.Pages
             var usernameCell = new FormEntryCell(AppResources.Username, nextElement: passwordCell.Entry);
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
+
+            usernameCell.Entry.FontFamily = passwordCell.Entry.FontFamily = "Courier";
+
             var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
             var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
 

@@ -11,7 +11,7 @@ namespace Bit.App.Models.Page
         private string _password;
         private string _uri;
         private string _notes;
-        private bool _showPassword;
+        private bool _revealPassword;
 
         public VaultViewSitePageModel() { }
 
@@ -37,6 +37,7 @@ namespace Bit.App.Models.Page
             }
         }
         public bool ShowUsername => !string.IsNullOrWhiteSpace(Username);
+
         public string Password
         {
             get { return _password; }
@@ -47,6 +48,8 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedPassword)));
             }
         }
+        public bool ShowPassword => !string.IsNullOrWhiteSpace(Password);
+
         public string Uri
         {
             get { return _uri; }
@@ -58,6 +61,8 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowUri)));
             }
         }
+        public bool ShowUri => !string.IsNullOrWhiteSpace(Uri);
+
         public string UriHost
         {
             get
@@ -78,7 +83,6 @@ namespace Bit.App.Models.Page
             }
         }
 
-        public bool ShowUri => !string.IsNullOrWhiteSpace(Uri);
         public string Notes
         {
             get { return _notes; }
@@ -90,19 +94,19 @@ namespace Bit.App.Models.Page
             }
         }
         public bool ShowNotes => !string.IsNullOrWhiteSpace(Notes);
-        public bool ShowPassword
+        public bool RevealPassword
         {
-            get { return _showPassword; }
+            get { return _revealPassword; }
             set
             {
-                _showPassword = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowPassword)));
+                _revealPassword = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(RevealPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowHideText)));
             }
         }
-        public string MaskedPassword => ShowPassword ? Password : Password == null ? null : new string('●', Password.Length);
-        public string ShowHideText => ShowPassword ? AppResources.Hide : AppResources.Show;
+        public string MaskedPassword => RevealPassword ? Password : Password == null ? null : new string('●', Password.Length);
+        public string ShowHideText => RevealPassword ? AppResources.Hide : AppResources.Show;
 
         public void Update(Site site)
         {
