@@ -17,6 +17,7 @@ namespace Bit.App.Models
             Username = data.Username != null ? new CipherString(data.Username) : null;
             Password = data.Password != null ? new CipherString(data.Password) : null;
             Notes = data.Notes != null ? new CipherString(data.Notes) : null;
+            Favorite = data.Favorite;
         }
 
         public Site(SiteResponse response)
@@ -28,6 +29,7 @@ namespace Bit.App.Models
             Username = response.Username != null ? new CipherString(response.Username) : null;
             Password = response.Password != null ? new CipherString(response.Password) : null;
             Notes = response.Notes != null ? new CipherString(response.Notes) : null;
+            Favorite = response.Favorite;
         }
 
         public string FolderId { get; set; }
@@ -35,6 +37,7 @@ namespace Bit.App.Models
         public CipherString Username { get; set; }
         public CipherString Password { get; set; }
         public CipherString Notes { get; set; }
+        public bool Favorite { get; set; }
 
         public SiteRequest ToSiteRequest()
         {

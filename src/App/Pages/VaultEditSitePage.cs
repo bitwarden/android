@@ -72,6 +72,12 @@ namespace Bit.App.Pages
             var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
             folderCell.Picker.SelectedIndex = selectedIndex;
 
+            var favoriteCell = new ExtendedSwitchCell
+            {
+                Text = "Favorite",
+                On = site.Favorite
+            };
+
             var table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
@@ -87,6 +93,10 @@ namespace Bit.App.Pages
                         usernameCell,
                         passwordCell,
                         folderCell
+                    },
+                    new TableSection
+                    {
+                        favoriteCell
                     },
                     new TableSection(AppResources.Notes)
                     {
@@ -126,6 +136,7 @@ namespace Bit.App.Pages
                 site.Username = usernameCell.Entry.Text?.Encrypt();
                 site.Password = passwordCell.Entry.Text?.Encrypt();
                 site.Notes = notesCell.Editor.Text?.Encrypt();
+                site.Favorite = favoriteCell.On;
 
                 if(folderCell.Picker.SelectedIndex > 0)
                 {

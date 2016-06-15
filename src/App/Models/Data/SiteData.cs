@@ -21,6 +21,7 @@ namespace Bit.App.Models.Data
             Username = site.Username?.EncryptedString;
             Password = site.Password?.EncryptedString;
             Notes = site.Notes?.EncryptedString;
+            Favorite = site.Favorite;
         }
 
         public SiteData(SiteResponse site, string userId)
@@ -33,6 +34,7 @@ namespace Bit.App.Models.Data
             Username = site.Username;
             Password = site.Password;
             Notes = site.Notes;
+            Favorite = site.Favorite;
         }
 
         [PrimaryKey]
@@ -45,6 +47,7 @@ namespace Bit.App.Models.Data
         public string Username { get; set; }
         public string Password { get; set; }
         public string Notes { get; set; }
+        public bool Favorite { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;
 
         public Site ToSite()
