@@ -44,6 +44,13 @@ namespace Bit.App.Services
             return sites;
         }
 
+        public async Task<IEnumerable<Site>> GetAllAsync(bool favorites)
+        {
+            var data = await _siteRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
+            var sites = data.Select(f => new Site(f));
+            return sites;
+        }
+
         public async Task<ApiResult<SiteResponse>> SaveAsync(Site site)
         {
             ApiResult<SiteResponse> response = null;

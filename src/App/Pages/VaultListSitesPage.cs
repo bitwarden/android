@@ -19,9 +19,11 @@ namespace Bit.App.Pages
         private readonly ISiteService _siteService;
         private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
+        private readonly bool _favorites;
 
-        public VaultListSitesPage()
+        public VaultListSitesPage(bool favorites)
         {
+            _favorites = favorites;
             _folderService = Resolver.Resolve<IFolderService>();
             _siteService = Resolver.Resolve<ISiteService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -34,7 +36,10 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            ToolbarItems.Add(new AddSiteToolBarItem(this));
+            if(!_favorites)
+            {
+                ToolbarItems.Add(new AddSiteToolBarItem(this));
+            }
 
             var listView = new ListView
             {
@@ -47,7 +52,7 @@ namespace Bit.App.Pages
             };
             listView.ItemSelected += SiteSelected;
 
-            Title = AppResources.MyVault;
+            Title = _favorites ? AppResources.Favorites : AppResources.MyVault;
             Content = listView;
         }
 
@@ -60,7 +65,7 @@ namespace Bit.App.Pages
         private async Task LoadFoldersAsync()
         {
             var folders = await _folderService.GetAllAsync();
-            var sites = await _siteService.GetAllAsync();
+            var sites = _favorites ? await _siteService.GetAllAsync(true) : await _siteService.GetAllAsync();
 
             var pageFolders = folders.Select(f => new VaultListPageModel.Folder(f, sites.Where(s => s.FolderId == f.Id))).ToList();
             var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));

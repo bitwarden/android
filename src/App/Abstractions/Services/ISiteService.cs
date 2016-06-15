@@ -9,6 +9,7 @@ namespace Bit.App.Abstractions
     {
         Task<Site> GetByIdAsync(string id);
         Task<IEnumerable<Site>> GetAllAsync();
+        Task<IEnumerable<Site>> GetAllAsync(bool favorites);
         Task<ApiResult<SiteResponse>> SaveAsync(Site site);
         Task<ApiResult<object>> DeleteAsync(string id);
     }
