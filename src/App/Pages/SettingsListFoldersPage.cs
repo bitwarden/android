@@ -71,7 +71,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = AppResources.Add;
-                Icon = "ion_plus";
+                Icon = "plus";
                 Clicked += ClickedItem;
             }
 

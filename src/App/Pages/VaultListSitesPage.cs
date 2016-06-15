@@ -66,7 +66,7 @@ namespace Bit.App.Pages
             var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));
             pageFolders.Add(noneFolder);
 
-            Folders.ResetWithRange(pageFolders);
+            Folders.ResetWithRange(pageFolders.Where(f => f.Any()));
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
@@ -206,7 +206,7 @@ namespace Bit.App.Pages
                     Children = { image, label },
                     BackgroundColor = Color.FromHex("ecf0f5")
                 };
-                
+
                 View = stackLayout;
                 Height = 30;
             }
