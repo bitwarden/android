@@ -25,14 +25,20 @@ namespace Bit.iOS.Controls
                     {
                         var detailDisclosureButton = UIButton.FromType(UIButtonType.Custom);
                         detailDisclosureButton.SetImage(UIImage.FromBundle(extendedCell.DisclousureImage), UIControlState.Normal);
-                        detailDisclosureButton.SetImage(UIImage.FromBundle(extendedCell.DisclousureImage), UIControlState.Selected);
 
-                        detailDisclosureButton.Frame = new CGRect(0f, 0f, 30f, 30f);
+                        try
+                        {
+                            detailDisclosureButton.SetImage(UIImage.FromBundle(extendedCell.DisclousureImage + "_selected"), UIControlState.Selected);
+                        }
+                        catch
+                        {
+                            detailDisclosureButton.SetImage(UIImage.FromBundle(extendedCell.DisclousureImage), UIControlState.Selected);
+                        }
+
+                        detailDisclosureButton.Frame = new CGRect(0f, 0f, 30f, 40f);
                         detailDisclosureButton.TouchUpInside += (sender, e) =>
                         {
-                            var index = tv.IndexPathForCell(cell);
-                            tv.SelectRow(index, true, UITableViewScrollPosition.None);
-                            tv.Source.AccessoryButtonTapped(tv, index);
+                            extendedCell.OnDisclousureTapped();
                         };
                         cell.AccessoryView = detailDisclosureButton;
                     }

@@ -33,14 +33,38 @@ namespace Bit.Android.Controls
                         resourceId = context.Resources.GetIdentifier(fileName, "drawable", context.PackageName);
                     }
 
-                    var image = new ImageView(context);
+                    var image = new DisclosureImage(context, extendedCell);
                     image.SetImageResource(resourceId);
-                    image.SetPadding(0, 0, 30, 0);
+                    image.SetPadding(10, 10, 30, 10);
                     View.SetAccessoryView(image);
                 }
             }
 
             return View;
+        }
+
+        private class DisclosureImage : ImageView
+        {
+            private ExtendedTextCell _cell;
+
+            public DisclosureImage(Context context, ExtendedTextCell cell) : base(context)
+            {
+                _cell = cell;
+            }
+
+            public override bool OnTouchEvent(MotionEvent e)
+            {
+                switch(e.Action)
+                {
+                    case MotionEventActions.Up:
+                        _cell.OnDisclousureTapped();
+                        break;
+                    default:
+                        break;
+                }
+
+                return true;
+            }
         }
 
         protected override void OnCellPropertyChanged(object sender, PropertyChangedEventArgs args)

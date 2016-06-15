@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
@@ -29,6 +30,13 @@ namespace Bit.App.Controls
         {
             get { return (string)GetValue(DisclousureImageProperty); }
             set { SetValue(DisclousureImageProperty, value); }
+        }
+
+        public event EventHandler DisclousureTapped;
+
+        public void OnDisclousureTapped()
+        {
+            DisclousureTapped?.Invoke(this, EventArgs.Empty);
         }
     }
 }

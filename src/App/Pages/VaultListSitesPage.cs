@@ -10,6 +10,7 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Utilities;
+using System.Diagnostics;
 
 namespace Bit.App.Pages
 {
@@ -83,8 +84,8 @@ namespace Bit.App.Pages
 
         private async void MoreClickedAsync(object sender, EventArgs e)
         {
-            var mi = sender as MenuItem;
-            var site = mi.CommandParameter as VaultListPageModel.Site;
+            var cell = sender as VaultListViewCell;
+            var site = cell.CommandParameter as VaultListPageModel.Site;
             var selection = await DisplayActionSheet(AppResources.MoreOptions, AppResources.Cancel, null,
                 AppResources.View, AppResources.Edit, AppResources.CopyPassword, AppResources.CopyUsername, AppResources.GoToWebsite);
 
@@ -163,23 +164,32 @@ namespace Bit.App.Pages
 
         private class VaultListViewCell : ExtendedTextCell
         {
+            private VaultListSitesPage _page;
+
             public VaultListViewCell(VaultListSitesPage page)
             {
-                var moreAction = new MenuItem { Text = AppResources.More };
-                moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
-                moreAction.Clicked += page.MoreClickedAsync;
+                _page = page;
 
                 var deleteAction = new MenuItem { Text = AppResources.Delete, IsDestructive = true };
                 deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 deleteAction.Clicked += page.DeleteClickedAsync;
 
+                SetBinding(CommandParameterProperty, new Binding("."));
                 this.SetBinding<VaultListPageModel.Site>(TextProperty, s => s.Name);
                 this.SetBinding<VaultListPageModel.Site>(DetailProperty, s => s.Username);
-                ContextActions.Add(moreAction);
                 ContextActions.Add(deleteAction);
 
                 TextColor = Color.FromHex("333333");
                 DetailColor = Color.FromHex("777777");
+
+                DisclousureTapped += VaultListViewCell_DisclousureTapped;
+                ShowDisclousure = true;
+                DisclousureImage = "more";
+            }
+
+            private void VaultListViewCell_DisclousureTapped(object sender, EventArgs e)
+            {
+                _page.MoreClickedAsync(sender, e);
             }
         }
 

@@ -375,6 +375,24 @@
   <ItemGroup>
     <BundleResource Include="Resources\cogs%403x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\more.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\more%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\more%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\more_selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\more_selected%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\more_selected%402x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
