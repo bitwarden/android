@@ -220,10 +220,6 @@
     <value>More</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
-  <data name="MoreOptions" xml:space="preserve">
-    <value>More Options</value>
-    <comment>The text title that defines more options for a site.</comment>
-  </data>
   <data name="MyVault" xml:space="preserve">
     <value>My Vault</value>
     <comment>The title for the vault page.</comment>

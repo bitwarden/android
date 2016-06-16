@@ -83,11 +83,9 @@ namespace Bit.App.Pages
             Navigation.PushModalAsync(page);
         }
 
-        private async void MoreClickedAsync(object sender, EventArgs e)
+        private async void MoreClickedAsync(VaultListPageModel.Site site)
         {
-            var cell = sender as VaultListViewCell;
-            var site = cell.CommandParameter as VaultListPageModel.Site;
-            var selection = await DisplayActionSheet(AppResources.MoreOptions, AppResources.Cancel, null,
+            var selection = await DisplayActionSheet(site.Name, AppResources.Cancel, null,
                 AppResources.View, AppResources.Edit, AppResources.CopyPassword, AppResources.CopyUsername, AppResources.GoToWebsite);
 
             if(selection == AppResources.View)
@@ -171,14 +169,21 @@ namespace Bit.App.Pages
             {
                 _page = page;
 
-                var deleteAction = new MenuItem { Text = AppResources.Delete, IsDestructive = true };
+                // Adding whitespace to Delete action to account for the negative margin offset on the listview
+                var deleteAction = new MenuItem { Text = AppResources.Delete + "   ", IsDestructive = true };
                 deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 deleteAction.Clicked += page.DeleteClickedAsync;
+
+                var moreAction = new MenuItem { Text = AppResources.More };
+                moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
+                moreAction.Clicked += MoreAction_Clicked;
 
                 SetBinding(CommandParameterProperty, new Binding("."));
                 this.SetBinding<VaultListPageModel.Site>(TextProperty, s => s.Name);
                 this.SetBinding<VaultListPageModel.Site>(DetailProperty, s => s.Username);
+
                 ContextActions.Add(deleteAction);
+                ContextActions.Add(moreAction);
 
                 TextColor = Color.FromHex("333333");
                 DetailColor = Color.FromHex("777777");
@@ -188,9 +193,18 @@ namespace Bit.App.Pages
                 DisclousureImage = "more";
             }
 
+            private void MoreAction_Clicked(object sender, EventArgs e)
+            {
+                var menuItem = sender as MenuItem;
+                var site = menuItem.CommandParameter as VaultListPageModel.Site;
+                _page.MoreClickedAsync(site);
+            }
+
             private void VaultListViewCell_DisclousureTapped(object sender, EventArgs e)
             {
-                _page.MoreClickedAsync(sender, e);
+                var cell = sender as VaultListViewCell;
+                var site = cell.CommandParameter as VaultListPageModel.Site;
+                _page.MoreClickedAsync(site);
             }
         }
 

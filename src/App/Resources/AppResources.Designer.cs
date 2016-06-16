@@ -296,15 +296,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to More Options.
-        /// </summary>
-        internal static string MoreOptions {
-            get {
-                return ResourceManager.GetString("MoreOptions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to My Vault.
         /// </summary>
         internal static string MyVault {
