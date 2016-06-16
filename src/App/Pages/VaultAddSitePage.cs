@@ -107,8 +107,8 @@ namespace Bit.App.Pages
 
                 var site = new Site
                 {
-                    Uri = uriCell.Entry.Text.Encrypt(),
-                    Name = nameCell.Entry.Text.Encrypt(),
+                    Uri = uriCell.Entry.Text?.Encrypt(),
+                    Name = nameCell.Entry.Text?.Encrypt(),
                     Username = usernameCell.Entry.Text?.Encrypt(),
                     Password = passwordCell.Entry.Text?.Encrypt(),
                     Notes = notesCell.Editor.Text?.Encrypt(),

@@ -131,8 +131,8 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                site.Uri = uriCell.Entry.Text.Encrypt();
-                site.Name = nameCell.Entry.Text.Encrypt();
+                site.Uri = uriCell.Entry.Text?.Encrypt();
+                site.Name = nameCell.Entry.Text?.Encrypt();
                 site.Username = usernameCell.Entry.Text?.Encrypt();
                 site.Password = passwordCell.Entry.Text?.Encrypt();
                 site.Notes = notesCell.Editor.Text?.Encrypt();
