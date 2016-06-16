@@ -44,6 +44,7 @@ namespace Bit.App.Pages
 
             var listView = new ListView
             {
+                Margin = new Thickness(0, 0, -15, 0),
                 IsGroupingEnabled = true,
                 ItemsSource = Folders,
                 HasUnevenRows = true,
