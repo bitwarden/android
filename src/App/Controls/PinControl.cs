@@ -13,7 +13,6 @@ namespace Bit.App.Controls
             {
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 30,
-                TextColor = Color.FromHex("333333"),
                 FontFamily = "Courier"
             };
 

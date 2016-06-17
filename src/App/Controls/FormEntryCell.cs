@@ -11,8 +11,8 @@ namespace Bit.App.Controls
             {
                 Text = labelText,
                 FontSize = 14,
-                TextColor = Color.FromHex("777777"),
-                VerticalOptions = LayoutOptions.Start
+                VerticalOptions = LayoutOptions.Start,
+                Style = (Style)Application.Current.Resources["text-muted"]
             };
 
             Entry = new ExtendedEntry
@@ -20,8 +20,7 @@ namespace Bit.App.Controls
                 Keyboard = entryKeyboard,
                 HasBorder = false,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                IsPassword = IsPassword,
-                TextColor = Color.FromHex("333333")
+                IsPassword = IsPassword
             };
 
             if(nextElement != null)

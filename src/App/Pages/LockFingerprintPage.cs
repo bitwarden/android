@@ -38,7 +38,7 @@ namespace Bit.App.Pages
                 Text = "Use Fingerprint to Unlock",
                 Command = new Command(async () => await CheckFingerprintAsync()),
                 VerticalOptions = LayoutOptions.EndAndExpand,
-                TextColor = Color.FromHex("333333")
+                Style = (Style)Application.Current.Resources["btn-default"]
             };
 
             var logoutButton = new Button
@@ -46,7 +46,7 @@ namespace Bit.App.Pages
                 Text = AppResources.LogOut,
                 Command = new Command(async () => await LogoutAsync()),
                 VerticalOptions = LayoutOptions.End,
-                TextColor = Color.FromHex("333333")
+                Style = (Style)Application.Current.Resources["btn-default"]
             };
 
             var stackLayout = new StackLayout { Padding = new Thickness(30, 40), Spacing = 10 };

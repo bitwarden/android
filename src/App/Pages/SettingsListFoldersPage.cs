@@ -33,8 +33,7 @@ namespace Bit.App.Pages
 
             var listView = new ListView
             {
-                ItemsSource = Folders,
-                SeparatorColor = Color.FromHex("d2d6de")
+                ItemsSource = Folders
             };
             listView.ItemSelected += FolderSelected;
             listView.ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this));

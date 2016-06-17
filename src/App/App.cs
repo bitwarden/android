@@ -9,6 +9,7 @@ using System.Diagnostics;
 using Plugin.Fingerprint.Abstractions;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
+using Bit.App.Controls;
 
 namespace Bit.App
 {
@@ -29,6 +30,8 @@ namespace Bit.App
             _authService = authService;
             _fingerprint = fingerprint;
             _settings = settings;
+
+            SetStyles();
 
             if(authService.IsAuthenticated)
             {
@@ -132,6 +135,75 @@ namespace Bit.App
             {
                 // Use master password to unlock if no other methods are set
             }
+        }
+
+        private void SetStyles()
+        {
+            var gray = Color.FromHex("333333");
+            var grayLight = Color.FromHex("777777");
+            var grayLighter = Color.FromHex("d2d6de");
+            var primaryColor = Color.FromHex("3c8dbc");
+
+            Resources = new ResourceDictionary();
+
+            // Labels
+
+            Resources.Add(new Style(typeof(Label))
+            {
+                Setters = {
+                    new Setter { Property = Label.TextColorProperty, Value = gray }
+                }
+            });
+
+            Resources.Add("text-muted", new Style(typeof(Label))
+            {
+                Setters = {
+                    new Setter { Property = Label.TextColorProperty, Value = grayLight }
+                }
+            });
+
+            // Buttons
+
+            Resources.Add("btn-default", new Style(typeof(Button))
+            {
+                Setters = {
+                    new Setter { Property = Button.TextColorProperty, Value = gray }
+                }
+            });
+
+            Resources.Add(new Style(typeof(Button))
+            {
+                Setters = {
+                    new Setter { Property = Button.TextColorProperty, Value = primaryColor }
+                }
+            });
+
+            // Editors
+
+            Resources.Add(new Style(typeof(Editor))
+            {
+                Setters = {
+                    new Setter { Property = Editor.TextColorProperty, Value = gray }
+                }
+            });
+
+            // Entries
+
+            Resources.Add(new Style(typeof(Entry))
+            {
+                Setters = {
+                    new Setter { Property = Entry.TextColorProperty, Value = gray }
+                }
+            });
+
+            // List View
+
+            Resources.Add(new Style(typeof(ListView))
+            {
+                Setters = {
+                    new Setter { Property = ListView.SeparatorColorProperty, Value = grayLighter }
+                }
+            });
         }
     }
 }

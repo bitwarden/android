@@ -28,7 +28,7 @@ namespace Bit.App.Controls
                 {
                     Text = labelText,
                     FontSize = 14,
-                    TextColor = Color.FromHex("777777"),
+                    Style = (Style)Application.Current.Resources["text-muted"],
                     VerticalOptions = LayoutOptions.Start
                 };
 
@@ -39,8 +39,7 @@ namespace Bit.App.Controls
             {
                 Text = valueText,
                 LineBreakMode = LineBreakMode.TailTruncation,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                TextColor = Color.FromHex("333333")
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             labelValueStackLayout.Children.Add(Value);
@@ -59,8 +58,7 @@ namespace Bit.App.Controls
                     Text = button1Text,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0),
-                    TextColor = Color.FromHex("3c8dbc")
+                    Margin = new Thickness(0)
                 };
 
                 buttonStackLayout.Children.Add(Button1);
@@ -73,8 +71,7 @@ namespace Bit.App.Controls
                     Text = button2Text,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0),
-                    TextColor = Color.FromHex("3c8dbc")
+                    Margin = new Thickness(0)
                 };
 
                 buttonStackLayout.Children.Add(Button2);

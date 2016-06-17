@@ -48,7 +48,6 @@ namespace Bit.App.Pages
                 IsGroupingEnabled = true,
                 ItemsSource = Folders,
                 HasUnevenRows = true,
-                SeparatorColor = Color.FromHex("d2d6de"),
                 GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this)),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
             };
@@ -185,9 +184,6 @@ namespace Bit.App.Pages
                 ContextActions.Add(deleteAction);
                 ContextActions.Add(moreAction);
 
-                TextColor = Color.FromHex("333333");
-                DetailColor = Color.FromHex("777777");
-
                 DisclousureTapped += VaultListViewCell_DisclousureTapped;
                 ShowDisclousure = true;
                 DisclousureImage = "more";
@@ -221,10 +217,10 @@ namespace Bit.App.Pages
 
                 var label = new Label
                 {
-                    TextColor = Color.FromHex("777777"),
                     VerticalTextAlignment = TextAlignment.Center,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
-                    FontSize = 14
+                    FontSize = 14,
+                    Style = (Style)Application.Current.Resources["text-muted"]
                 };
 
                 label.SetBinding<VaultListPageModel.Folder>(Label.TextProperty, s => s.Name);

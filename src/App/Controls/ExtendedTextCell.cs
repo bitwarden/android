@@ -5,6 +5,12 @@ namespace Bit.App.Controls
 {
     public class ExtendedTextCell : TextCell
     {
+        public ExtendedTextCell()
+        {
+            TextColor = Color.FromHex("333333");
+            DetailColor = Color.FromHex("777777");
+        }
+
         public static readonly BindableProperty BackgroundColorProperty =
             BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ExtendedTextCell), Color.White);
 
