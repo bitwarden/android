@@ -10,7 +10,6 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Utilities;
-using System.Diagnostics;
 
 namespace Bit.App.Pages
 {
@@ -44,13 +43,16 @@ namespace Bit.App.Pages
 
             var listView = new ListView
             {
-                Margin = new Thickness(0, 0, -15, 0),
                 IsGroupingEnabled = true,
                 ItemsSource = Folders,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this)),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
             };
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                listView.Margin = new Thickness(0, 0, -15, 0);
+            }
             listView.ItemSelected += SiteSelected;
 
             Title = _favorites ? AppResources.Favorites : AppResources.MyVault;

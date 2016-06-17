@@ -42,7 +42,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(new DismissModalToolBarItem(this));
             }
 
-            // Username
+            // Name
             var nameCell = new LabeledValueCell(AppResources.Name);
             nameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Name);
 
@@ -55,7 +55,10 @@ namespace Bit.App.Pages
             PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty, button2Text: AppResources.Copy);
             PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
             PasswordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.ImageProperty, s => s.ShowHideImage);
-            PasswordCell.Button1.Margin = new Thickness(10, 0);
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                PasswordCell.Button1.Margin = new Thickness(10, 0);
+            }
             PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
             PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
 
