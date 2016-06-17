@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using Bit.App.Resources;
+using Xamarin.Forms;
 
 namespace Bit.App.Models.Page
 {
@@ -103,10 +104,12 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(RevealPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowHideText)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowHideImage)));
             }
         }
         public string MaskedPassword => RevealPassword ? Password : Password == null ? null : new string('●', Password.Length);
         public string ShowHideText => RevealPassword ? AppResources.Hide : AppResources.Show;
+        public ImageSource ShowHideImage => RevealPassword ? ImageSource.FromFile("eye_slash") : ImageSource.FromFile("eye");
 
         public void Update(Site site)
         {

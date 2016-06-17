@@ -52,9 +52,10 @@ namespace Bit.App.Pages
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
 
             // Password
-            PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: AppResources.Show, button2Text: AppResources.Copy);
+            PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty, button2Text: AppResources.Copy);
             PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
-            PasswordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.TextProperty, s => s.ShowHideText);
+            PasswordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.ImageProperty, s => s.ShowHideImage);
+            PasswordCell.Button1.Margin = new Thickness(10, 0);
             PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
             PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
 
