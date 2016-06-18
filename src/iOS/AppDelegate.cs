@@ -193,6 +193,7 @@ namespace Bit.iOS
                 .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())

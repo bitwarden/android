@@ -84,7 +84,6 @@ namespace Bit.Android
         public static void StartPushService()
         {
             AppContext.StartService(new Intent(AppContext, typeof(PushNotificationService)));
-
             if(global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.Kitkat)
             {
                 PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext, typeof(PushNotificationService)), 0);
@@ -126,6 +125,7 @@ namespace Bit.Android
                 .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
