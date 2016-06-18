@@ -16,10 +16,17 @@ namespace Bit.App.Services
     {
         private bool _showNotification;
         private readonly ISyncService _syncService;
+        private readonly IDeviceApiRepository _deviceApiRepository;
+        private readonly IAuthService _authService;
 
-        public PushNotificationListener(ISyncService syncService)
+        public PushNotificationListener(
+            ISyncService syncService,
+            IDeviceApiRepository deviceApiRepository,
+            IAuthService authService)
         {
             _syncService = syncService;
+            _deviceApiRepository = deviceApiRepository;
+            _authService = authService;
         }
 
         public void OnMessage(JObject values, DeviceType deviceType)
@@ -31,6 +38,27 @@ namespace Bit.App.Services
         public void OnRegistered(string token, DeviceType deviceType)
         {
             Debug.WriteLine(string.Format("Push Notification - Device Registered - Token : {0}", token));
+
+            if(!_authService.IsAuthenticated)
+            {
+                return;
+            }
+
+            var response = _deviceApiRepository.PostAsync(new Models.Api.DeviceRequest
+            {
+                Name = deviceType.ToString(),
+                Type = deviceType,
+                PushToken = token
+            }).GetAwaiter().GetResult();
+
+            if(response.Succeeded)
+            {
+                Debug.WriteLine("Registered device with server.");
+            }
+            else
+            {
+                Debug.WriteLine("Failed to register device.");
+            }
         }
 
         public void OnUnregistered(DeviceType deviceType)
