@@ -21,6 +21,7 @@ using System.Diagnostics;
 using Xamarin.Forms;
 using Bit.App;
 using Bit.iOS.Core.Services;
+using PushNotification.Plugin;
 
 namespace Bit.iOS
 {
@@ -128,6 +129,43 @@ namespace Bit.iOS
             return true;
         }
 
+        public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
+        {
+            if(CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnErrorReceived(error);
+            }
+        }
+
+        public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
+        {
+            if(CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnRegisteredSuccess(deviceToken);
+            }
+        }
+
+        public override void DidRegisterUserNotificationSettings(UIApplication application, UIUserNotificationSettings notificationSettings)
+        {
+            application.RegisterForRemoteNotifications();
+        }
+
+        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        {
+            if(CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived(userInfo);
+            }
+        }
+
+        public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
+        {
+            if(CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                ((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived(userInfo);
+            }
+        }
+
         private void SendLockMessage()
         {
             MessagingCenter.Send(Xamarin.Forms.Application.Current, "Lock", false);
@@ -148,6 +186,7 @@ namespace Bit.iOS
                 .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IPushNotificationListener, PushNotificationListener>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
@@ -159,6 +198,9 @@ namespace Bit.iOS
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+
+            CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>());
+            container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
         }
