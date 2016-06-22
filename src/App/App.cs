@@ -39,7 +39,7 @@ namespace Bit.App
             }
             else
             {
-                MainPage = new LoginNavigationPage();
+                MainPage = new HomePage();
             }
 
             MainPage.BackgroundColor = Color.FromHex("ecf0f5");

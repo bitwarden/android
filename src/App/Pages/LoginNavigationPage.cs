@@ -8,8 +8,8 @@ namespace Bit.App.Pages
         public LoginNavigationPage()
             : base(new LoginPage())
         {
-            BarBackgroundColor = Color.FromHex("3c8dbc");
-            BarTextColor = Color.FromHex("ffffff");
+            BarBackgroundColor = Color.Transparent;
+            BarTextColor = Color.FromHex("333333");
             Title = AppResources.LogInNoun;
         }
     }

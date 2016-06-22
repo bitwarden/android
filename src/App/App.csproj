@@ -90,6 +90,7 @@
     <Compile Include="Models\Page\PinPageModel.cs" />
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
+    <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\SettingsPinPage.cs" />
     <Compile Include="Pages\LockPinPage.cs" />
     <Compile Include="Pages\LoginNavigationPage.cs" />

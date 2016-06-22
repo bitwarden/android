@@ -177,7 +177,7 @@ namespace Bit.App.Pages
             }
 
             _authService.LogOut();
-            Application.Current.MainPage = new LoginNavigationPage();
+            Application.Current.MainPage = new HomePage();
         }
 
         private async void ChangeMasterPasswordCell_Tapped(object sender, EventArgs e)

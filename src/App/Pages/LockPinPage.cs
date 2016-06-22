@@ -103,7 +103,7 @@ namespace Bit.App.Pages
 
             _authService.LogOut();
             await Navigation.PopModalAsync();
-            Application.Current.MainPage = new LoginNavigationPage();
+            Application.Current.MainPage = new HomePage();
         }
     }
 }

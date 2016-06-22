@@ -5,6 +5,7 @@ using System.Reflection.Emit;
 using System.Text;
 using Bit.App.Abstractions;
 using Bit.App.Behaviors;
+using Bit.App.Controls;
 using Bit.App.Models.Api;
 using Bit.App.Resources;
 using Plugin.DeviceInfo.Abstractions;
@@ -88,9 +89,14 @@ namespace Bit.App.Pages
             stackLayout.Children.Add(masterPasswordEntry);
             stackLayout.Children.Add(loginButton);
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+            }
+
             Title = AppResources.LogIn;
             Content = stackLayout;
-            NavigationPage.SetHasNavigationBar(this, false);
+            BackgroundImage = "bg.png";
         }
     }
 }
