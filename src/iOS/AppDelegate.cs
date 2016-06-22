@@ -22,6 +22,7 @@ using Xamarin.Forms;
 using Bit.App;
 using Bit.iOS.Core.Services;
 using PushNotification.Plugin;
+using Plugin.DeviceInfo;
 
 namespace Bit.iOS
 {
@@ -187,6 +188,7 @@ namespace Bit.iOS
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPushNotificationListener, PushNotificationListener>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
@@ -195,6 +197,7 @@ namespace Bit.iOS
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
+                .RegisterInstance(CrossDeviceInfo.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())

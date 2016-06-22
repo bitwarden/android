@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
+    <Compile Include="Abstractions\Services\IAppIdService.cs" />
+    <Compile Include="Abstractions\Services\IAuthService.cs" />
     <Compile Include="Abstractions\Services\IClipboardService.cs" />
     <Compile Include="Abstractions\Services\ISiteService.cs" />
     <Compile Include="Abstractions\Services\IFolderService.cs" />
@@ -65,6 +67,7 @@
     <Compile Include="Enums\ReturnType.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
+    <Compile Include="Models\Api\Request\DeviceTokenRequest.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
     <Compile Include="Models\Api\Request\SiteRequest.cs" />
@@ -117,10 +120,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\AppIdService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\FolderService.cs" />
     <Compile Include="Repositories\Repository.cs" />
-    <Compile Include="Abstractions\Services\IAuthService.cs" />
     <Compile Include="Abstractions\Services\ICryptoService.cs" />
     <Compile Include="Abstractions\Services\IDatabaseService.cs" />
     <Compile Include="Abstractions\Services\ISyncService.cs" />
@@ -140,7 +143,9 @@
     <Compile Include="Utilities\TokenHttpRequestMessage.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Acr.UserDialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -177,6 +182,14 @@
     </Reference>
     <Reference Include="Plugin.Connectivity.Abstractions, Version=2.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.1.2\lib\portable-net45+wp80+wp81+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+Xamarin.Mac20+UAP10\Plugin.Connectivity.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.DeviceInfo, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.DeviceInfo.2.0.2\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.DeviceInfo.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.DeviceInfo.Abstractions, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.DeviceInfo.2.0.2\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.DeviceInfo.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Plugin.Fingerprint, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">

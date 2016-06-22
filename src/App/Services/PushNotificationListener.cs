@@ -9,6 +9,8 @@ using PushNotification.Plugin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Bit.App.Abstractions;
+using Xamarin.Forms;
+using Plugin.DeviceInfo.Abstractions;
 
 namespace Bit.App.Services
 {
@@ -18,15 +20,18 @@ namespace Bit.App.Services
         private readonly ISyncService _syncService;
         private readonly IDeviceApiRepository _deviceApiRepository;
         private readonly IAuthService _authService;
+        private readonly IAppIdService _appIdService;
 
         public PushNotificationListener(
             ISyncService syncService,
             IDeviceApiRepository deviceApiRepository,
-            IAuthService authService)
+            IAuthService authService,
+            IAppIdService appIdService)
         {
             _syncService = syncService;
             _deviceApiRepository = deviceApiRepository;
             _authService = authService;
+            _appIdService = appIdService;
         }
 
         public void OnMessage(JObject values, DeviceType deviceType)
@@ -44,13 +49,8 @@ namespace Bit.App.Services
                 return;
             }
 
-            var response = _deviceApiRepository.PostAsync(new Models.Api.DeviceRequest
-            {
-                Name = deviceType.ToString(),
-                Type = deviceType,
-                PushToken = token
-            }).GetAwaiter().GetResult();
-
+            var response = _deviceApiRepository.PutTokenAsync(_appIdService.AppId, new Models.Api.DeviceTokenRequest(token))
+                .GetAwaiter().GetResult();
             if(response.Succeeded)
             {
                 Debug.WriteLine("Registered device with server.");

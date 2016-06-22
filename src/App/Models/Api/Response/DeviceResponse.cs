@@ -7,6 +7,7 @@ namespace Bit.App.Models.Api
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public string Identifier { get; set; }
         public DeviceType Type { get; set; }
         public DateTime CreationDate { get; set; }
     }

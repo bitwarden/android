@@ -7,6 +7,7 @@ using Bit.App.Abstractions;
 using Bit.App.Behaviors;
 using Bit.App.Models.Api;
 using Bit.App.Resources;
+using Plugin.DeviceInfo.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -18,6 +19,8 @@ namespace Bit.App.Pages
         {
             var cryptoService = Resolver.Resolve<ICryptoService>();
             var authService = Resolver.Resolve<IAuthService>();
+            var deviceInfo = Resolver.Resolve<IDeviceInfo>();
+            var appIdService = Resolver.Resolve<IAppIdService>();
 
             var emailEntry = new Entry
             {
@@ -58,13 +61,14 @@ namespace Bit.App.Pages
                     var request = new TokenRequest
                     {
                         Email = emailEntry.Text,
-                        MasterPasswordHash = cryptoService.HashPasswordBase64(key, masterPasswordEntry.Text)
+                        MasterPasswordHash = cryptoService.HashPasswordBase64(key, masterPasswordEntry.Text),
+                        Device = new DeviceRequest(appIdService, deviceInfo)
                     };
 
                     var response = await authService.TokenPostAsync(request);
                     if(!response.Succeeded)
                     {
-                        await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.First().Message, AppResources.Ok);
+                        await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.FirstOrDefault()?.Message, AppResources.Ok);
                         return;
                     }
 

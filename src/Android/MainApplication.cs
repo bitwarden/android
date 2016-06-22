@@ -11,6 +11,7 @@ using Bit.App.Services;
 using Microsoft.Practices.Unity;
 using Plugin.Connectivity;
 using Plugin.CurrentActivity;
+using Plugin.DeviceInfo;
 using Plugin.Fingerprint;
 using Plugin.Settings;
 using PushNotification.Plugin;
@@ -119,6 +120,7 @@ namespace Bit.Android
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPushNotificationListener, PushNotificationListener>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
@@ -127,12 +129,13 @@ namespace Bit.Android
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
+                .RegisterInstance(CrossDeviceInfo.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
-            CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>(), "SENDERID");
+            CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>(), "SECRET_SENDER_ID");
             container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
