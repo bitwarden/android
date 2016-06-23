@@ -37,7 +37,7 @@ namespace Bit.App.Pages
             var message = new Label
             {
                 Text = "Welcome!",
-                VerticalOptions = LayoutOptions.CenterAndExpand,
+                VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
 
@@ -46,8 +46,9 @@ namespace Bit.App.Pages
                 Text = "Create Account",
                 //Command = new Command(async () => await LogoutAsync()),
                 VerticalOptions = LayoutOptions.End,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Style = (Style)Application.Current.Resources["btn-default"]
+                HorizontalOptions = LayoutOptions.Fill,
+                Style = (Style)Application.Current.Resources["btn-primary"],
+                FontSize = 17
             };
 
             var loginButton = new Button
@@ -55,8 +56,9 @@ namespace Bit.App.Pages
                 Text = AppResources.LogIn,
                 Command = new Command(async () => await LoginAsync()),
                 VerticalOptions = LayoutOptions.End,
-                HorizontalOptions = LayoutOptions.CenterAndExpand,
-                Style = (Style)Application.Current.Resources["btn-default"]
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                HorizontalOptions = LayoutOptions.Fill,
+                FontSize = 17
             };
 
             var buttonStackLayout = new StackLayout

@@ -143,6 +143,7 @@ namespace Bit.App
             var grayLight = Color.FromHex("777777");
             var grayLighter = Color.FromHex("d2d6de");
             var primaryColor = Color.FromHex("3c8dbc");
+            var primaryColorAccent = Color.FromHex("286090");
 
             Resources = new ResourceDictionary();
 
@@ -168,6 +169,23 @@ namespace Bit.App
             {
                 Setters = {
                     new Setter { Property = Button.TextColorProperty, Value = gray }
+                }
+            });
+
+            Resources.Add("btn-primary", new Style(typeof(Button))
+            {
+                Setters = {
+                    new Setter { Property = Button.TextColorProperty, Value = Color.White },
+                    new Setter { Property = Button.BackgroundColorProperty, Value = primaryColor },
+                    new Setter { Property = Button.FontAttributesProperty, Value = FontAttributes.Bold },
+                    new Setter { Property = Button.BorderRadiusProperty, Value = 0 }
+                }
+            });
+
+            Resources.Add("btn-primaryAccent", new Style(typeof(Button))
+            {
+                Setters = {
+                    new Setter { Property = Button.TextColorProperty, Value = primaryColorAccent }
                 }
             });
 
