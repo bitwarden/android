@@ -9,7 +9,7 @@
 	<key>CFBundleExecutable</key>
 	<string>iOS.Extension</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.bitwarden.vault.extension</string>
+	<string>com.8bit.bitwarden.extension</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -29,18 +29,18 @@
 			<key>NSExtensionJavaScriptPreprocessingFile</key>
 			<string>extension</string>
 			<key>NSExtensionActivationRule</key>
-            <string>SUBQUERY (
+			<string>SUBQUERY (
         extensionItems,
         $extensionItem,
         SUBQUERY (
             $extensionItem.attachments,
             $attachment,
-                ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "public.url"
-            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.find-login-action"
-            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.save-login-action"
-            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.change-password-action"
-            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.fill-webview-action"
-            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO "org.appextension.fill-browser-action"
+                ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.url&quot;
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.find-login-action&quot;
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.save-login-action&quot;
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.change-password-action&quot;
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.fill-webview-action&quot;
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.fill-browser-action&quot;
         ).@count == $extensionItem.attachments.@count
     ).@count == 1</string>
 			<key>NSExtensionPointName</key>

@@ -26,7 +26,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>bitwarden</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.bitwarden.vault</string>
+	<string>com.8bit.bitwarden</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
@@ -62,7 +62,7 @@
 				<string>org-appextension-feature-password-management</string>
 			</array>
 			<key>CFBundleURLName</key>
-			<string>com.bitwarden.vault.url</string>
+			<string>com.8bit.bitwarden.url</string>
 		</dict>
 	</array>
 	<key>UIStatusBarTintParameters</key>

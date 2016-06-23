@@ -38,9 +38,9 @@
     <MtouchI18n />
     <CodesignKey>iPhone Developer</CodesignKey>
     <CodesignProvision />
-    <CodesignEntitlements />
     <CodesignResourceRules />
     <CodesignExtraArgs />
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -51,6 +51,7 @@
     <MtouchLink>None</MtouchLink>
     <MtouchArch>i386, x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -258,12 +259,6 @@
       <Project>{b2538ada-b605-4d6f-acd2-62a409680f84}</Project>
       <Name>iOS.Core</Name>
       <IsAppExtension>false</IsAppExtension>
-      <IsWatchApp>false</IsWatchApp>
-    </ProjectReference>
-    <ProjectReference Include="..\iOS.Extension\iOS.Extension.csproj">
-      <Project>{32f5a2d6-f54d-4da1-ae26-0a980d48f422}</Project>
-      <Name>iOS.Extension</Name>
-      <IsAppExtension>true</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>
