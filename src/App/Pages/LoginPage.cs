@@ -81,9 +81,9 @@ namespace Bit.App.Pages
             EmailCell.Entry.Focus();
         }
 
-        private void Entry_Completed(object sender, EventArgs e)
+        private async void Entry_Completed(object sender, EventArgs e)
         {
-            LogIn().Wait();
+            await LogIn();
         }
 
         private async Task LogIn()
