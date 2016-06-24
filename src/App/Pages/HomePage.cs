@@ -6,6 +6,7 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
+using Bit.App.Controls;
 
 namespace Bit.App.Pages
 {
@@ -36,15 +37,18 @@ namespace Bit.App.Pages
 
             var message = new Label
             {
-                Text = "Welcome!",
+                Text = "Log in or create a new account to access your secure vault.",
                 VerticalOptions = LayoutOptions.StartAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = 20
             };
 
             var createAccountButton = new Button
             {
                 Text = "Create Account",
-                //Command = new Command(async () => await LogoutAsync()),
+                //Command = new Command(async () => await RegisterAsync()),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"],
@@ -75,7 +79,7 @@ namespace Bit.App.Pages
 
         public async Task LoginAsync()
         {
-            await Navigation.PushModalAsync(new LoginNavigationPage());
+            await Navigation.PushModalAsync(new ExtendedNavigationPage(new LoginPage()));
         }
     }
 }

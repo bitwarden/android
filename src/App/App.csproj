@@ -93,7 +93,6 @@
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\SettingsPinPage.cs" />
     <Compile Include="Pages\LockPinPage.cs" />
-    <Compile Include="Pages\LoginNavigationPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\SettingsEditFolderPage.cs" />
     <Compile Include="Pages\LockFingerprintPage.cs" />

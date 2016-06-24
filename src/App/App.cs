@@ -189,6 +189,16 @@ namespace Bit.App
                 }
             });
 
+            Resources.Add("btn-white", new Style(typeof(Button))
+            {
+                Setters = {
+                    new Setter { Property = Button.BackgroundColorProperty, Value = Color.White },
+                    new Setter { Property = Button.TextColorProperty, Value = primaryColor },
+                    new Setter { Property = Button.FontAttributesProperty, Value = FontAttributes.Bold },
+                    new Setter { Property = Button.BorderRadiusProperty, Value = 0 }
+                }
+            });
+
             Resources.Add(new Style(typeof(Button))
             {
                 Setters = {

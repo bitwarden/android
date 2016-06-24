@@ -98,6 +98,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to bitwarden.
+        /// </summary>
+        internal static string Bitwarden {
+            get {
+                return ResourceManager.GetString("Bitwarden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         internal static string Cancel {
