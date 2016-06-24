@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Bit.App.Abstractions;
+using Foundation;
 
 namespace Bit.iOS.Core.Services
 {
@@ -9,8 +10,9 @@ namespace Bit.iOS.Core.Services
         public SQLite.SQLiteConnection GetConnection()
         {
             var sqliteFilename = "bitwarden.db3";
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal); // Documents folder
-            var libraryPath = Path.Combine(documentsPath, "..", "Library"); // Library folder
+            var fileManager = new NSFileManager();
+            var appGroupContainer = fileManager.GetContainerUrl("group.com.8bit.bitwarden");
+            var libraryPath = Path.Combine(appGroupContainer.Path, "Library"); // Library folder
             var path = Path.Combine(libraryPath, sqliteFilename);
 
             Console.WriteLine(path);
