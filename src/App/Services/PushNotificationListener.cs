@@ -1,16 +1,9 @@
 using PushNotification.Plugin.Abstractions;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using PushNotification.Plugin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Bit.App.Abstractions;
-using Xamarin.Forms;
-using Plugin.DeviceInfo.Abstractions;
 
 namespace Bit.App.Services
 {
