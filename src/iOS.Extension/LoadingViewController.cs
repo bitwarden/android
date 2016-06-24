@@ -30,11 +30,6 @@ namespace Bit.iOS.Extension
             base.ViewDidLoad();
             View.BackgroundColor = UIColor.FromPatternImage(new UIImage("bg.png"));
             _context.ExtContext = ExtensionContext;
-        }
-
-        public override void ViewDidAppear(bool animated)
-        {
-            base.ViewDidAppear(animated);
 
             if(!Resolver.IsSet)
             {
@@ -63,7 +58,11 @@ namespace Bit.iOS.Extension
                     break;
                 }
             }
+        }
 
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
             PerformSegue("seque", this);
         }
 
