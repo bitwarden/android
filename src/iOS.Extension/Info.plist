@@ -36,6 +36,7 @@
             $extensionItem.attachments,
             $attachment,
                 ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.url&quot;
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;public.plan-text&quot;
             ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.find-login-action&quot;
             ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.save-login-action&quot;
             ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.change-password-action&quot;
