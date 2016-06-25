@@ -6,5 +6,9 @@
 	<array>
 		<string>group.com.8bit.bitwarden</string>
 	</array>
+	<key>keychain-access-groups</key>
+	<array>
+		<string>TEAMID.bitwarden</string>
+	</array>
 </dict>
 </plist>

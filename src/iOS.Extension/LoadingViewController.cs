@@ -14,6 +14,7 @@ using Bit.iOS.Core;
 using Newtonsoft.Json;
 using Bit.iOS.Extension.Models;
 using MobileCoreServices;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.iOS.Extension
 {
@@ -87,7 +88,7 @@ namespace Bit.iOS.Extension
                 // Services
                 .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
-                //.RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
@@ -101,10 +102,12 @@ namespace Bit.iOS.Extension
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager());
             // Other
-            //.RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
             //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
             //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
             //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+
+            ISettings settings = new Settings("group.com.8bit.bitwarden");
+            container.RegisterInstance(settings, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
         }

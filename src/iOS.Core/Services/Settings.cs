@@ -7,7 +7,7 @@ using MonoTouch.Foundation;
 #endif
 using Plugin.Settings.Abstractions;
 
-namespace Bit.iOS.Services
+namespace Bit.iOS.Core.Services
 {
     /// <summary>
     /// Main implementation for ISettings

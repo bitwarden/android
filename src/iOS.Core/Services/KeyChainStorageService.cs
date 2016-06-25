@@ -4,7 +4,7 @@ using Bit.App.Abstractions;
 using Foundation;
 using Security;
 
-namespace Bit.iOS.Services
+namespace Bit.iOS.Core.Services
 {
     public class KeyChainStorageService : ISecureStorageService
     {
@@ -67,7 +67,8 @@ namespace Bit.iOS.Services
             var record = new SecRecord(SecKind.GenericPassword)
             {
                 Service = NSBundle.MainBundle.BundleIdentifier,
-                Account = key
+                Account = key,
+                AccessGroup = "TEAMID.bitwarden"
             };
 
             if(data != null)

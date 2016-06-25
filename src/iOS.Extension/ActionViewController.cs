@@ -2,20 +2,22 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Bit.App.Abstractions;
 using Bit.iOS.Core;
 using Bit.iOS.Extension.Models;
 using Foundation;
 using MobileCoreServices;
 using Newtonsoft.Json;
 using UIKit;
+using Microsoft.Practices.Unity;
+using XLabs.Ioc;
 
 namespace Bit.iOS.Extension
 {
     public partial class ActionViewController : UIViewController
     {
         public ActionViewController(IntPtr handle) : base(handle)
-        {
-        }
+        { }
 
         public Context Context { get; set; }
 
@@ -27,17 +29,20 @@ namespace Bit.iOS.Extension
             base.ViewWillAppear(animated);
         }
 
-        public override void ViewDidLoad()
+        public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
 
-            List<Tuple<string, string>> sites = new List<Tuple<string, string>>();
-            for(int i = 1; i <= 100; i++)
-            {
-                sites.Add(new Tuple<string, string>("Site " + i, "Username " + i));
-            }
-
-            tableView.Source = new TableSource(sites, this);
+            Debug.WriteLine("BW LOG, Container");
+            var siteService = Resolver.Resolve<ISiteService>();
+            Debug.WriteLine("BW LOG, siteService: " + siteService);
+            var sites = await siteService.GetAllAsync();
+            Debug.WriteLine("BW LOG, sites: " + sites.Count());
+            var siteModels = sites.Select(s => new SiteViewModel(s));
+            Debug.WriteLine("BW LOG, siteModels: " + siteModels.Count());
+            var filteredSiteModels = siteModels.Where(s => s.HostName == Context.Url?.Host);
+            Debug.WriteLine("BW LOG, filteredSiteModels: " + filteredSiteModels.Count());
+            tableView.Source = new TableSource(filteredSiteModels, this);
             AutomaticallyAdjustsScrollViewInsets = false;
         }
 
@@ -59,11 +64,11 @@ namespace Bit.iOS.Extension
         {
             private const string CellIdentifier = "TableCell";
 
-            private IEnumerable<Tuple<string, string>> _tableItems;
+            private IEnumerable<SiteViewModel> _tableItems;
             private Context _context;
             private ActionViewController _controller;
 
-            public TableSource(IEnumerable<Tuple<string, string>> items, ActionViewController controller)
+            public TableSource(IEnumerable<SiteViewModel> items, ActionViewController controller)
             {
                 _tableItems = items;
                 _context = controller.Context;
@@ -86,8 +91,8 @@ namespace Bit.iOS.Extension
                     cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
                 }
 
-                cell.TextLabel.Text = item.Item1;
-                cell.DetailTextLabel.Text = item.Item2;
+                cell.TextLabel.Text = item.Name;
+                cell.DetailTextLabel.Text = item.Username;
                 return cell;
             }
 
