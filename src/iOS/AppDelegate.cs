@@ -10,7 +10,6 @@ using Bit.App.Abstractions;
 using Bit.App.Services;
 using Microsoft.Practices.Unity;
 using Bit.iOS.Services;
-using Plugin.Settings;
 using Plugin.Connectivity;
 using Acr.UserDialogs;
 using Bit.App.Repositories;
@@ -26,19 +25,11 @@ using Plugin.DeviceInfo;
 
 namespace Bit.iOS
 {
-    // The UIApplicationDelegate for the application. This class is responsible for launching the 
-    // User Interface of the application, as well as listening (and optionally responding) to 
-    // application events from iOS.
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        //
-        // This method is invoked when the application has loaded and is ready to run. In this 
-        // method you should instantiate the window, load the UI into it and then make the window
-        // visible.
-        //
-        // You have 17 seconds to return from this method, or iOS will terminate your application.
-        //
+        public ISettings Settings { get; set; }
+
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             CrossFingerprint.AllowReuse = false;
@@ -87,7 +78,8 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
 
             // Log the date/time we last backgrounded
-            CrossSettings.Current.AddOrUpdateValue(Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
+
+            Settings.AddOrUpdateValue(Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
 
             base.DidEnterBackground(uiApplication);
             Debug.WriteLine("DidEnterBackground");
@@ -198,10 +190,12 @@ namespace Bit.iOS
                 .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossDeviceInfo.Current, new ContainerControlledLifetimeManager())
-                .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+
+            Settings = new Settings("group.com.8bit.bitwarden");
+            container.RegisterInstance(Settings, new ContainerControlledLifetimeManager());
 
             CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>());
             container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());

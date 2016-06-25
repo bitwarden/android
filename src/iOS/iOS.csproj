@@ -113,6 +113,7 @@
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\Settings.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -133,6 +134,14 @@
     <InterfaceDefinition Include="Resources\LaunchScreen.storyboard" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Plugin.Settings, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugins.Settings.2.1.0\lib\Xamarin.iOS10\Plugin.Settings.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Settings.Abstractions, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugins.Settings.2.1.0\lib\Xamarin.iOS10\Plugin.Settings.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -172,12 +181,6 @@
     </Reference>
     <Reference Include="Plugin.Fingerprint.Abstractions, Version=1.1.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\Plugin.Fingerprint.1.1.1-beta\lib\Xamarin.iOS10\Plugin.Fingerprint.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.Settings, Version=2.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Xam.Plugins.Settings.2.1.0\lib\Xamarin.iOS10\Plugin.Settings.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.Settings.Abstractions, Version=2.1.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Xam.Plugins.Settings.2.1.0\lib\Xamarin.iOS10\Plugin.Settings.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\Splat.1.6.2\lib\Xamarin.iOS10\Splat.dll</HintPath>
