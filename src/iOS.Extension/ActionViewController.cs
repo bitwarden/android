@@ -9,7 +9,6 @@ using Foundation;
 using MobileCoreServices;
 using Newtonsoft.Json;
 using UIKit;
-using Microsoft.Practices.Unity;
 using XLabs.Ioc;
 
 namespace Bit.iOS.Extension
@@ -33,15 +32,10 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
-            Debug.WriteLine("BW LOG, Container");
             var siteService = Resolver.Resolve<ISiteService>();
-            Debug.WriteLine("BW LOG, siteService: " + siteService);
             var sites = await siteService.GetAllAsync();
-            Debug.WriteLine("BW LOG, sites: " + sites.Count());
             var siteModels = sites.Select(s => new SiteViewModel(s));
-            Debug.WriteLine("BW LOG, siteModels: " + siteModels.Count());
             var filteredSiteModels = siteModels.Where(s => s.HostName == Context.Url?.Host);
-            Debug.WriteLine("BW LOG, filteredSiteModels: " + filteredSiteModels.Count());
             tableView.Source = new TableSource(filteredSiteModels, this);
             AutomaticallyAdjustsScrollViewInsets = false;
         }
@@ -98,10 +92,16 @@ namespace Bit.iOS.Extension
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
+                var item = _tableItems.ElementAt(indexPath.Row);
+                if(item == null)
+                {
+                    _controller.CompleteRequest(null);
+                }
+
                 NSDictionary itemData = null;
                 if(_context.ProviderType == UTType.PropertyList)
                 {
-                    var fillScript = new FillScript(_context.Details);
+                    var fillScript = new FillScript(_context.Details, item.Username, item.Password);
                     var scriptJson = JsonConvert.SerializeObject(fillScript, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                     var scriptDict = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
                     itemData = new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, scriptDict);
@@ -109,21 +109,21 @@ namespace Bit.iOS.Extension
                 else if(_context.ProviderType == Constants.UTTypeAppExtensionFindLoginAction)
                 {
                     itemData = new NSDictionary(
-                        Constants.AppExtensionUsernameKey, "me@example.com",
-                        Constants.AppExtensionPasswordKey, "mypassword");
+                        Constants.AppExtensionUsernameKey, item.Username,
+                        Constants.AppExtensionPasswordKey, item.Password);
                 }
                 else if(_context.ProviderType == Constants.UTTypeAppExtensionFillBrowserAction
                     || _context.ProviderType == Constants.UTTypeAppExtensionFillWebViewAction)
                 {
-                    var fillScript = new FillScript(_context.Details);
+                    var fillScript = new FillScript(_context.Details, item.Username, item.Password);
                     var scriptJson = JsonConvert.SerializeObject(fillScript, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
                     itemData = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
                 }
                 else if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
                 {
                     itemData = new NSDictionary(
-                        Constants.AppExtensionUsernameKey, "me@example.com",
-                        Constants.AppExtensionPasswordKey, "mypassword");
+                        Constants.AppExtensionUsernameKey, item.Username,
+                        Constants.AppExtensionPasswordKey, item.Password);
                 }
                 else if(_context.ProviderType == Constants.UTTypeAppExtensionChangePasswordAction)
                 {

@@ -66,9 +66,9 @@ namespace Bit.iOS.Core.Services
         {
             var record = new SecRecord(SecKind.GenericPassword)
             {
-                Service = NSBundle.MainBundle.BundleIdentifier,
+                Service = "com.8bit.bitwarden",
                 Account = key,
-                AccessGroup = "TEAMID.bitwarden"
+                AccessGroup = "TEAMID.com.8bit.bitwarden"
             };
 
             if(data != null)

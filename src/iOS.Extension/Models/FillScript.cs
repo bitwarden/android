@@ -7,7 +7,7 @@ namespace Bit.iOS.Extension.Models
 {
     public class FillScript
     {
-        public FillScript(PageDetails pageDetails)
+        public FillScript(PageDetails pageDetails, string fillUsername, string fillPassword)
         {
             if(pageDetails == null)
             {
@@ -36,11 +36,11 @@ namespace Bit.iOS.Extension.Models
             if(username != null)
             {
                 Script.Add(new List<string> { "click_on_opid", username.OpId });
-                Script.Add(new List<string> { "fill_by_opid", username.OpId, "me@example.com" });
+                Script.Add(new List<string> { "fill_by_opid", username.OpId, fillUsername });
             }
 
             Script.Add(new List<string> { "click_on_opid", password.OpId });
-            Script.Add(new List<string> { "fill_by_opid", password.OpId, "mypassword" });
+            Script.Add(new List<string> { "fill_by_opid", password.OpId, fillPassword });
 
             if(loginForm.HtmlAction != null)
             {
