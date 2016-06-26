@@ -44,8 +44,9 @@ namespace Bit.App.Pages
 
             var table = new ExtendedTableView
             {
+                BackgroundColor = Color.FromHex("ecf0f5"),
                 Intent = TableIntent.Settings,
-                EnableScrolling = false,
+                EnableScrolling = true,
                 HasUnevenRows = true,
                 EnableSelection = false,
                 Root = new TableRoot
@@ -73,6 +74,7 @@ namespace Bit.App.Pages
             ToolbarItems.Add(loginToolbarItem);
             Title = AppResources.Bitwarden;
             Content = table;
+            BackgroundColor = Color.FromHex("ecf0f5");
         }
 
         protected override void OnAppearing()

@@ -128,6 +128,7 @@ namespace Bit.Android
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossDeviceInfo.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())

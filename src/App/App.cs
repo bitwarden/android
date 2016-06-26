@@ -42,8 +42,6 @@ namespace Bit.App
                 MainPage = new HomePage();
             }
 
-            MainPage.BackgroundColor = Color.FromHex("ecf0f5");
-
             MessagingCenter.Subscribe<Application, bool>(Current, "Lock", async (sender, args) =>
             {
                 await CheckLockAsync(args);

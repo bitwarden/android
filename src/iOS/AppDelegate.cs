@@ -62,7 +62,7 @@ namespace Bit.iOS
 
             var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                BackgroundColor = UIColor.FromPatternImage(new UIImage("bg.png"))
+                BackgroundColor = new UIColor(red: 0.93f, green: 0.94f, blue: 0.96f, alpha: 1.0f)
             };
 
             var imageView = new UIImageView(new UIImage("logo.png"))
@@ -188,6 +188,7 @@ namespace Bit.iOS
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossDeviceInfo.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())

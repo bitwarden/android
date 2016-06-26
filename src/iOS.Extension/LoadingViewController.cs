@@ -29,7 +29,7 @@ namespace Bit.iOS.Extension
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            View.BackgroundColor = UIColor.FromPatternImage(new UIImage("bg.png"));
+            View.BackgroundColor = new UIColor(red: 0.93f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
 
             if(!Resolver.IsSet)

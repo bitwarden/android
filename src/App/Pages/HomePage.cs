@@ -25,7 +25,6 @@ namespace Bit.App.Pages
             Init();
         }
 
-
         public void Init()
         {
             var logo = new Image
@@ -48,7 +47,7 @@ namespace Bit.App.Pages
             var createAccountButton = new Button
             {
                 Text = "Create Account",
-                //Command = new Command(async () => await RegisterAsync()),
+                Command = new Command(async () => await RegisterAsync()),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"],
@@ -74,12 +73,17 @@ namespace Bit.App.Pages
 
             Title = "bitwarden";
             Content = buttonStackLayout;
-            BackgroundImage = "bg.png";
+            BackgroundColor = Color.FromHex("ecf0f5");
         }
 
         public async Task LoginAsync()
         {
             await Navigation.PushModalAsync(new ExtendedNavigationPage(new LoginPage()));
+        }
+
+        public async Task RegisterAsync()
+        {
+            await Navigation.PushModalAsync(new ExtendedNavigationPage(new RegisterPage()));
         }
     }
 }
