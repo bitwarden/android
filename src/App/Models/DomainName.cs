@@ -20,6 +20,7 @@ namespace Bit.App.Models
         public string SLD => _domain;
         public string TLD => _tld;
         public TLDRule Rule => _tldRule;
+        public string BaseDomain => $"{_domain}.{_tld}";
 
         public DomainName(string TLD, string SLD, string SubDomain, TLDRule TLDRule)
         {

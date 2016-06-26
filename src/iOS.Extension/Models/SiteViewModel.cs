@@ -7,6 +7,7 @@ namespace Bit.iOS.Extension.Models
 {
     public class SiteViewModel
     {
+        private string _uri;
         private DomainName _domain = null;
         private bool _domainParsed = false;
 
@@ -23,7 +24,15 @@ namespace Bit.iOS.Extension.Models
         public string Name { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string Uri { get; set; }
+        public string Uri
+        {
+            get { return _uri; }
+            set
+            {
+                _domainParsed = false;
+                _uri = value;
+            }
+        }
         public string HostName
         {
             get
@@ -48,6 +57,11 @@ namespace Bit.iOS.Extension.Models
         {
             get
             {
+                if(string.IsNullOrWhiteSpace(Uri))
+                {
+                    return null;
+                }
+
                 if(_domainParsed)
                 {
                     return _domain;
@@ -56,7 +70,7 @@ namespace Bit.iOS.Extension.Models
                 _domainParsed = true;
 
                 DomainName domain;
-                if(DomainName.TryParse(Uri, out domain))
+                if(DomainName.TryParse(HostName, out domain))
                 {
                     _domain = domain;
                 }

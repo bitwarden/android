@@ -40,7 +40,7 @@ namespace Bit.iOS.Extension
                 var siteService = Resolver.Resolve<ISiteService>();
                 var sites = await siteService.GetAllAsync();
                 var siteModels = sites.Select(s => new SiteViewModel(s));
-                filteredSiteModels = siteModels.Where(s => s.Domain.Domain == domain.Domain);
+                filteredSiteModels = siteModels.Where(s => s.Domain.BaseDomain == domain.BaseDomain);
             }
 
             tableView.Source = new TableSource(filteredSiteModels, this);

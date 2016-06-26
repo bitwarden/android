@@ -81,14 +81,16 @@ namespace Bit.App.Models.Page
 
                 try
                 {
+                    var host = new Uri(Uri).Host;
+
                     DomainName domain;
-                    if(DomainName.TryParse(Uri, out domain))
+                    if(DomainName.TryParse(host, out domain))
                     {
-                        _uriHost = domain.Domain;
+                        _uriHost = domain.BaseDomain;
                     }
                     else
                     {
-                        _uriHost = new Uri(Uri).Host;
+                        _uriHost = host;
                     }
 
                     return _uriHost;
