@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.iOS.Core;
 using Bit.iOS.Extension.Models;
 using Foundation;
@@ -32,10 +33,16 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
-            var siteService = Resolver.Resolve<ISiteService>();
-            var sites = await siteService.GetAllAsync();
-            var siteModels = sites.Select(s => new SiteViewModel(s));
-            var filteredSiteModels = siteModels.Where(s => s.HostName == Context.Url?.Host);
+            IEnumerable<SiteViewModel> filteredSiteModels = new List< SiteViewModel>();
+            DomainName domain;
+            if(Context.Url?.Host != null && DomainName.TryParse(Context.Url?.Host, out domain))
+            {
+                var siteService = Resolver.Resolve<ISiteService>();
+                var sites = await siteService.GetAllAsync();
+                var siteModels = sites.Select(s => new SiteViewModel(s));
+                filteredSiteModels = siteModels.Where(s => s.Domain.Domain == domain.Domain);
+            }
+
             tableView.Source = new TableSource(filteredSiteModels, this);
             AutomaticallyAdjustsScrollViewInsets = false;
         }

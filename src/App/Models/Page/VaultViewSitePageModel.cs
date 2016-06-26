@@ -13,6 +13,7 @@ namespace Bit.App.Models.Page
         private string _uri;
         private string _notes;
         private bool _revealPassword;
+        private string _uriHost;
 
         public VaultViewSitePageModel() { }
 
@@ -68,19 +69,34 @@ namespace Bit.App.Models.Page
         {
             get
             {
-                if(ShowUri)
+                if(!ShowUri)
                 {
-                    try
-                    {
-                        return new Uri(Uri).Host;
-                    }
-                    catch
-                    {
-                        return Uri;
-                    }
+                    return null;
                 }
 
-                return null;
+                if(_uriHost != null)
+                {
+                    return _uriHost;
+                }
+
+                try
+                {
+                    DomainName domain;
+                    if(DomainName.TryParse(Uri, out domain))
+                    {
+                        _uriHost = domain.Domain;
+                    }
+                    else
+                    {
+                        _uriHost = new Uri(Uri).Host;
+                    }
+
+                    return _uriHost;
+                }
+                catch
+                {
+                    return Uri;
+                }
             }
         }
 

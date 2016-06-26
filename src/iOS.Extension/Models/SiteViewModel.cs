@@ -7,6 +7,9 @@ namespace Bit.iOS.Extension.Models
 {
     public class SiteViewModel
     {
+        private DomainName _domain = null;
+        private bool _domainParsed = false;
+
         public SiteViewModel(Site site)
         {
             Id = site.Id;
@@ -38,6 +41,27 @@ namespace Bit.iOS.Extension.Models
                 {
                     return null;
                 };
+            }
+        }
+
+        public DomainName Domain
+        {
+            get
+            {
+                if(_domainParsed)
+                {
+                    return _domain;
+                }
+
+                _domainParsed = true;
+
+                DomainName domain;
+                if(DomainName.TryParse(Uri, out domain))
+                {
+                    _domain = domain;
+                }
+
+                return _domain;
             }
         }
     }

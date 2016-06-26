@@ -87,6 +87,7 @@
     <Compile Include="Models\Data\FolderData.cs" />
     <Compile Include="Abstractions\IDataObject.cs" />
     <Compile Include="Models\Data\SiteData.cs" />
+    <Compile Include="Models\DomainName.cs" />
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
     <Compile Include="Models\Page\PinPageModel.cs" />
@@ -150,6 +151,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Acr.UserDialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
