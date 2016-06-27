@@ -68,7 +68,7 @@ namespace Bit.iOS.Core.Services
             {
                 Service = "com.8bit.bitwarden",
                 Account = key,
-                AccessGroup = "TEAMID.com.8bit.bitwarden"
+                AccessGroup = "LTZ2PFU5D6.com.8bit.bitwarden"
             };
 
             if(data != null)
