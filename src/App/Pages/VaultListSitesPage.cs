@@ -13,7 +13,7 @@ using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
-    public class VaultListSitesPage : ContentPage
+    public class VaultListSitesPage : ExtendedContentPage
     {
         private readonly IFolderService _folderService;
         private readonly ISiteService _siteService;
@@ -231,8 +231,7 @@ namespace Bit.App.Pages
                 {
                     Orientation = StackOrientation.Horizontal,
                     VerticalOptions = LayoutOptions.FillAndExpand,
-                    Children = { image, label },
-                    BackgroundColor = Color.FromHex("ecf0f5")
+                    Children = { image, label }
                 };
 
                 View = stackLayout;

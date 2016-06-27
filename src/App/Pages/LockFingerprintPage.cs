@@ -4,7 +4,6 @@ using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
-using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Plugin.Fingerprint.Abstractions;
@@ -12,7 +11,7 @@ using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
-    public class LockFingerprintPage : ContentPage
+    public class LockFingerprintPage : ExtendedContentPage
     {
         private readonly IFingerprint _fingerprint;
         private readonly IAuthService _authService;
@@ -55,7 +54,6 @@ namespace Bit.App.Pages
 
             Title = "Verify Fingerprint";
             Content = stackLayout;
-            BackgroundImage = "bg.png";
         }
 
         protected override bool OnBackButtonPressed()

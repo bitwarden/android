@@ -5,6 +5,11 @@ namespace Bit.App.Controls
 {
     public class ExtendedTabbedPage : TabbedPage
     {
+        public ExtendedTabbedPage()
+        {
+            BackgroundColor = Color.FromHex("efeff4");
+        }
+
         public static readonly BindableProperty TintColorProperty =
             BindableProperty.Create(nameof(TintColor), typeof(Color), typeof(ExtendedTabbedPage), Color.White);
 

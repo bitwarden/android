@@ -11,7 +11,7 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class VaultEditSitePage : ContentPage
+    public class VaultEditSitePage : ExtendedContentPage
     {
         private readonly string _siteId;
         private readonly ISiteService _siteService;

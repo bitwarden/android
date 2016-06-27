@@ -7,7 +7,6 @@ namespace Bit.App.Controls
     {
         public ExtendedTextCell()
         {
-            TextColor = Color.FromHex("333333");
             DetailColor = Color.FromHex("777777");
         }
 

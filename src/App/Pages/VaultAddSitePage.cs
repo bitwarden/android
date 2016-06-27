@@ -12,7 +12,7 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class VaultAddSitePage : ContentPage
+    public class VaultAddSitePage : ExtendedContentPage
     {
         private readonly ISiteService _siteService;
         private readonly IFolderService _folderService;

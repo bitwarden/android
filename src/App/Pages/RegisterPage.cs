@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Bit.App.Pages
 {
-    public class RegisterPage : ContentPage
+    public class RegisterPage : ExtendedContentPage
     {
         private ICryptoService _cryptoService;
         private IUserDialogs _userDialogs;
@@ -45,7 +45,6 @@ namespace Bit.App.Pages
 
             var table = new ExtendedTableView
             {
-                BackgroundColor = Color.FromHex("ecf0f5"),
                 Intent = TableIntent.Settings,
                 EnableScrolling = true,
                 HasUnevenRows = true,
@@ -78,7 +77,6 @@ namespace Bit.App.Pages
             ToolbarItems.Add(loginToolbarItem);
             Title = "Create Account";
             Content = table;
-            BackgroundColor = Color.FromHex("ecf0f5");
         }
 
         protected override void OnAppearing()

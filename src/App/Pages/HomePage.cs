@@ -10,7 +10,7 @@ using Bit.App.Controls;
 
 namespace Bit.App.Pages
 {
-    public class HomePage : ContentPage
+    public class HomePage : ExtendedContentPage
     {
         private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
@@ -73,7 +73,6 @@ namespace Bit.App.Pages
 
             Title = "bitwarden";
             Content = buttonStackLayout;
-            BackgroundColor = Color.FromHex("ecf0f5");
         }
 
         public async Task LoginAsync()

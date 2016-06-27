@@ -147,13 +147,6 @@ namespace Bit.App
 
             // Labels
 
-            Resources.Add(new Style(typeof(Label))
-            {
-                Setters = {
-                    new Setter { Property = Label.TextColorProperty, Value = gray }
-                }
-            });
-
             Resources.Add("text-muted", new Style(typeof(Label))
             {
                 Setters = {
@@ -201,24 +194,6 @@ namespace Bit.App
             {
                 Setters = {
                     new Setter { Property = Button.TextColorProperty, Value = primaryColor }
-                }
-            });
-
-            // Editors
-
-            Resources.Add(new Style(typeof(Editor))
-            {
-                Setters = {
-                    new Setter { Property = Editor.TextColorProperty, Value = gray }
-                }
-            });
-
-            // Entries
-
-            Resources.Add(new Style(typeof(Entry))
-            {
-                Setters = {
-                    new Setter { Property = Entry.TextColorProperty, Value = gray }
                 }
             });
 

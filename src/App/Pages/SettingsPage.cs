@@ -10,7 +10,7 @@ using Plugin.Fingerprint.Abstractions;
 
 namespace Bit.App.Pages
 {
-    public class SettingsPage : ContentPage
+    public class SettingsPage : ExtendedContentPage
     {
         private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
@@ -54,37 +54,32 @@ namespace Bit.App.Pages
             {
                 Text = "Lock Options",
                 Detail = GetLockOptionsDetailsText(),
-                ShowDisclousure = true,
-                TextColor = Color.FromHex("333333")
+                ShowDisclousure = true
             };
             LockOptionsCell.Tapped += LockOptionsCell_Tapped;
 
             var changeMasterPasswordCell = new ExtendedTextCell
             {
-                Text = "Change Master Password",
-                TextColor = Color.FromHex("333333")
+                Text = "Change Master Password"
             };
             changeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
 
             var foldersCell = new ExtendedTextCell
             {
                 Text = "Folders",
-                ShowDisclousure = true,
-                TextColor = Color.FromHex("333333")
+                ShowDisclousure = true
             };
             foldersCell.Tapped += FoldersCell_Tapped;
 
             var lockCell = new ExtendedTextCell
             {
-                Text = "Lock",
-                TextColor = Color.FromHex("333333")
+                Text = "Lock"
             };
             lockCell.Tapped += LockCell_Tapped;
 
             var logOutCell = new ExtendedTextCell
             {
-                Text = "Log Out",
-                TextColor = Color.FromHex("333333")
+                Text = "Log Out"
             };
             logOutCell.Tapped += LogOutCell_Tapped;
 

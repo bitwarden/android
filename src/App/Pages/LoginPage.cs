@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Bit.App.Pages
 {
-    public class LoginPage : ContentPage
+    public class LoginPage : ExtendedContentPage
     {
         private ICryptoService _cryptoService;
         private IAuthService _authService;
@@ -44,7 +44,6 @@ namespace Bit.App.Pages
 
             var table = new ExtendedTableView
             {
-                BackgroundColor = Color.FromHex("ecf0f5"),
                 Intent = TableIntent.Settings,
                 EnableScrolling = true,
                 HasUnevenRows = true,
@@ -74,7 +73,6 @@ namespace Bit.App.Pages
             ToolbarItems.Add(loginToolbarItem);
             Title = AppResources.Bitwarden;
             Content = table;
-            BackgroundColor = Color.FromHex("ecf0f5");
         }
 
         protected override void OnAppearing()

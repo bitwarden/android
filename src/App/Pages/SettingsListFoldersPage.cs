@@ -13,7 +13,7 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class SettingsListFoldersPage : ContentPage
+    public class SettingsListFoldersPage : ExtendedContentPage
     {
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
@@ -86,7 +86,6 @@ namespace Bit.App.Pages
             public SettingsFolderListViewCell(SettingsListFoldersPage page)
             {
                 this.SetBinding<SettingsFolderPageModel>(TextProperty, s => s.Name);
-                TextColor = Color.FromHex("333333");
             }
         }
     }

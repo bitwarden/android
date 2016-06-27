@@ -11,7 +11,7 @@ using Bit.App.Controls;
 
 namespace Bit.App.Pages
 {
-    public class LockPinPage : ContentPage
+    public class LockPinPage : ExtendedContentPage
     {
         private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
@@ -57,7 +57,6 @@ namespace Bit.App.Pages
             Title = "Verify PIN";
             Content = stackLayout;
             Content.GestureRecognizers.Add(tgr);
-            BackgroundImage = "bg.png";
             BindingContext = Model;
         }
 

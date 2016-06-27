@@ -10,7 +10,7 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class SettingsAddFolderPage : ContentPage
+    public class SettingsAddFolderPage : ExtendedContentPage
     {
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;

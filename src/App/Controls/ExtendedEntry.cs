@@ -6,11 +6,6 @@ namespace Bit.App.Controls
 {
     public class ExtendedEntry : Entry
     {
-        public ExtendedEntry()
-        {
-            TextColor = Color.FromHex("333333");
-        }
-
         public static readonly BindableProperty HasBorderProperty =
             BindableProperty.Create(nameof(HasBorder), typeof(bool), typeof(ExtendedEntry), true);
 

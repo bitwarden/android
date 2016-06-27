@@ -11,7 +11,7 @@ using Bit.App.Controls;
 
 namespace Bit.App.Pages
 {
-    public class SettingsPinPage : ContentPage
+    public class SettingsPinPage : ExtendedContentPage
     {
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;

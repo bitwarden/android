@@ -9,7 +9,7 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class SettingsEditFolderPage : ContentPage
+    public class SettingsEditFolderPage : ExtendedContentPage
     {
         private readonly string _folderId;
         private readonly IFolderService _folderService;

@@ -10,7 +10,7 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class SyncPage : ContentPage
+    public class SyncPage : ExtendedContentPage
     {
         private readonly ISyncService _syncService;
         private readonly IUserDialogs _userDialogs;
