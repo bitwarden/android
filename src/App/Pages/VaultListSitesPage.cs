@@ -10,6 +10,8 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Utilities;
+using PushNotification.Plugin.Abstractions;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -19,6 +21,8 @@ namespace Bit.App.Pages
         private readonly ISiteService _siteService;
         private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
+        private readonly IPushNotification _pushNotification;
+        private readonly ISettings _settings;
         private readonly bool _favorites;
 
         public VaultListSitesPage(bool favorites)
@@ -28,6 +32,8 @@ namespace Bit.App.Pages
             _siteService = Resolver.Resolve<ISiteService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
+            _pushNotification = Resolver.Resolve<IPushNotification>();
+            _settings = Resolver.Resolve<ISettings>();
 
             Init();
         }
@@ -59,10 +65,21 @@ namespace Bit.App.Pages
             Content = listView;
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
             LoadFoldersAsync().Wait();
+
+            if(Device.OS == TargetPlatform.iOS && !_favorites)
+            {
+                if(!_settings.GetValueOrDefault<bool>(Constants.PushPromptShown))
+                {
+                    _settings.AddOrUpdateValue(Constants.PushPromptShown, true);
+                    await _userDialogs.AlertAsync("bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.", "Enable Automatic Syncing", "Ok, got it!");
+                }
+
+                _pushNotification.Register();
+            }
         }
 
         private async Task LoadFoldersAsync()

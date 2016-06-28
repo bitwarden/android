@@ -33,7 +33,7 @@ namespace Bit.App.Services
             Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(values));
         }
 
-        public void OnRegistered(string token, DeviceType deviceType)
+        public async void OnRegistered(string token, DeviceType deviceType)
         {
             Debug.WriteLine(string.Format("Push Notification - Device Registered - Token : {0}", token));
 
@@ -42,8 +42,7 @@ namespace Bit.App.Services
                 return;
             }
 
-            var response = _deviceApiRepository.PutTokenAsync(_appIdService.AppId, new Models.Api.DeviceTokenRequest(token))
-                .GetAwaiter().GetResult();
+            var response = await _deviceApiRepository.PutTokenAsync(_appIdService.AppId, new Models.Api.DeviceTokenRequest(token));
             if(response.Succeeded)
             {
                 Debug.WriteLine("Registered device with server.");

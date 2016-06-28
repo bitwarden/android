@@ -6,5 +6,8 @@
         public const string SettingPinUnlockOn = "pinUnlockOn";
         public const string SettingLockSeconds = "lockSeconds";
         public const string SettingLastBackgroundedDate = "lastBackgroundedDate";
+
+
+        public const string PushPromptShown = "initialPushPromptShown";
     }
 }
