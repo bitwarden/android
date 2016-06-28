@@ -5,15 +5,18 @@ namespace Bit.App.Controls
 {
     public class FormEntryCell : ExtendedViewCell
     {
-        public FormEntryCell(string labelText, Keyboard entryKeyboard = null, bool IsPassword = false, VisualElement nextElement = null)
+        public FormEntryCell(string labelText, Keyboard entryKeyboard = null, bool IsPassword = false, VisualElement nextElement = null, bool useLabelAsPlaceholder = false)
         {
-            Label = new Label
+            if(!useLabelAsPlaceholder)
             {
-                Text = labelText,
-                FontSize = 14,
-                VerticalOptions = LayoutOptions.Start,
-                Style = (Style)Application.Current.Resources["text-muted"]
-            };
+                Label = new Label
+                {
+                    Text = labelText,
+                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                    VerticalOptions = LayoutOptions.Start,
+                    Style = (Style)Application.Current.Resources["text-muted"]
+                };
+            }
 
             Entry = new ExtendedEntry
             {
@@ -22,6 +25,11 @@ namespace Bit.App.Controls
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 IsPassword = IsPassword
             };
+
+            if(useLabelAsPlaceholder)
+            {
+                Entry.Placeholder = labelText;
+            }
 
             if(nextElement != null)
             {
@@ -34,7 +42,11 @@ namespace Bit.App.Controls
                 Padding = new Thickness(15, 10)
             };
 
-            stackLayout.Children.Add(Label);
+            if(!useLabelAsPlaceholder)
+            {
+                stackLayout.Children.Add(Label);
+            }
+
             stackLayout.Children.Add(Entry);
 
             View = stackLayout;

@@ -115,18 +115,20 @@ namespace Bit.App
             // What method are we using to unlock?
             var fingerprintUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn);
             var pinUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingPinUnlockOn);
+            var currentPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as ExtendedNavigationPage;
             if(fingerprintUnlock && _fingerprint.IsAvailable)
             {
-                if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockFingerprintPage == null)
+                if((currentPage?.CurrentPage as LockFingerprintPage) == null)
                 {
-                    await Current.MainPage.Navigation.PushModalAsync(new LockFingerprintPage(!forceLock), false);
+                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
                 }
             }
             else if(pinUnlock && !string.IsNullOrWhiteSpace(_authService.PIN))
             {
-                if(Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage == null)
+
+                if((currentPage?.CurrentPage as LockPinPage) == null)
                 {
-                    await Current.MainPage.Navigation.PushModalAsync(new LockPinPage(), false);
+                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPinPage()), false);
                 }
             }
             else

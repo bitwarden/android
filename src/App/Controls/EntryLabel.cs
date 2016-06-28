@@ -6,7 +6,7 @@ namespace Bit.App.Controls
     {
         public EntryLabel()
         {
-            FontSize = 14;
+            FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
             TextColor = Color.FromHex("777777");
         }
     }

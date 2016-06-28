@@ -48,7 +48,6 @@ namespace Bit.App.Pages
             Title = "Set PIN";
             Content = stackLayout;
             Content.GestureRecognizers.Add(tgr);
-            BackgroundImage = "bg.png";
             BindingContext = Model;
         }
 

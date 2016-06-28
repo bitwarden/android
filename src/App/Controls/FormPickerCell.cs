@@ -11,7 +11,7 @@ namespace Bit.App.Controls
             Label = new Label
             {
                 Text = labelText,
-                FontSize = 14,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 TextColor = Color.FromHex("777777"),
                 VerticalOptions = LayoutOptions.Start
             };

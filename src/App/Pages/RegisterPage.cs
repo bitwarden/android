@@ -34,11 +34,11 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            PasswordHintCell = new FormEntryCell("Master Password Hint (optional)");
-            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true, nextElement: PasswordHintCell.Entry);
-            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true, nextElement: ConfirmPasswordCell.Entry);
-            NameCell = new FormEntryCell("Your Name", nextElement: PasswordCell.Entry);
-            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: NameCell.Entry, entryKeyboard: Keyboard.Email);
+            PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true);
+            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true, nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true);
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true, nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true);
+            NameCell = new FormEntryCell("Your Name", nextElement: PasswordCell.Entry, useLabelAsPlaceholder: true);
+            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: NameCell.Entry, entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true);
 
             PasswordHintCell.Entry.ReturnType = Enums.ReturnType.Done;
             PasswordHintCell.Entry.Completed += Entry_Completed;

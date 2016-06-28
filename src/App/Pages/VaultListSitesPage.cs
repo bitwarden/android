@@ -221,7 +221,7 @@ namespace Bit.App.Pages
                 {
                     VerticalTextAlignment = TextAlignment.Center,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
-                    FontSize = 14,
+                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     Style = (Style)Application.Current.Resources["text-muted"]
                 };
 
@@ -231,7 +231,8 @@ namespace Bit.App.Pages
                 {
                     Orientation = StackOrientation.Horizontal,
                     VerticalOptions = LayoutOptions.FillAndExpand,
-                    Children = { image, label }
+                    Children = { image, label },
+                    BackgroundColor = Color.FromHex("efeff4")
                 };
 
                 View = stackLayout;

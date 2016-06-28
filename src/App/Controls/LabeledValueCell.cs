@@ -27,7 +27,7 @@ namespace Bit.App.Controls
                 Label = new Label
                 {
                     Text = labelText,
-                    FontSize = 14,
+                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     Style = (Style)Application.Current.Resources["text-muted"],
                     VerticalOptions = LayoutOptions.Start
                 };

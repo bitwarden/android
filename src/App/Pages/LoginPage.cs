@@ -36,8 +36,8 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true);
-            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry, entryKeyboard: Keyboard.Email);
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true, useLabelAsPlaceholder: true);
+            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry, entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true);
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
             PasswordCell.Entry.Completed += Entry_Completed;
