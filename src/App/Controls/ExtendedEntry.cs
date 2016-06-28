@@ -45,6 +45,7 @@ namespace Bit.App.Controls
         public ReturnType? ReturnType { get; set; }
         public bool? Autocorrect { get; set; }
         public bool DisableAutocapitalize { get; set; }
+        public bool AllowClear { get; set; }
 
         // Need to overwrite default handler because we cant Invoke otherwise
         public new event EventHandler Completed;

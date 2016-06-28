@@ -25,6 +25,11 @@ namespace Bit.iOS.Controls
                 SetMaxLength(view);
                 UpdateKeyboard();
 
+                if(view.AllowClear)
+                {
+                    Control.ClearButtonMode = UITextFieldViewMode.WhileEditing;
+                }
+
                 if(view.DisableAutocapitalize)
                 {
                     Control.AutocapitalizationType = UITextAutocapitalizationType.None;

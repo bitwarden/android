@@ -5,7 +5,13 @@ namespace Bit.App.Controls
 {
     public class FormEntryCell : ExtendedViewCell
     {
-        public FormEntryCell(string labelText, Keyboard entryKeyboard = null, bool IsPassword = false, VisualElement nextElement = null, bool useLabelAsPlaceholder = false)
+        public FormEntryCell(
+            string labelText,
+            Keyboard entryKeyboard = null,
+            bool IsPassword = false,
+            VisualElement nextElement = null,
+            bool useLabelAsPlaceholder = false,
+            string imageSource = null)
         {
             if(!useLabelAsPlaceholder)
             {
@@ -14,7 +20,8 @@ namespace Bit.App.Controls
                     Text = labelText,
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     VerticalOptions = LayoutOptions.Start,
-                    Style = (Style)Application.Current.Resources["text-muted"]
+                    Style = (Style)Application.Current.Resources["text-muted"],
+                    HorizontalOptions = LayoutOptions.FillAndExpand
                 };
             }
 
@@ -23,7 +30,9 @@ namespace Bit.App.Controls
                 Keyboard = entryKeyboard,
                 HasBorder = false,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                IsPassword = IsPassword
+                IsPassword = IsPassword,
+                AllowClear = true,
+                HorizontalOptions = LayoutOptions.FillAndExpand
             };
 
             if(useLabelAsPlaceholder)
@@ -37,22 +46,53 @@ namespace Bit.App.Controls
                 Entry.Completed += (object sender, EventArgs e) => { nextElement.Focus(); };
             }
 
-            var stackLayout = new StackLayout
+            var imageStackLayout = new StackLayout
             {
-                Padding = new Thickness(15, 10)
+                Padding = new Thickness(15, 10),
+                Orientation = StackOrientation.Horizontal,
+                Spacing = 10,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            if(!useLabelAsPlaceholder)
+            if(imageSource != null)
             {
-                stackLayout.Children.Add(Label);
+                var tgr = new TapGestureRecognizer();
+                tgr.Tapped += Tgr_Tapped;
+
+                var theImage = new Image
+                {
+                    Source = imageSource,
+                    HorizontalOptions = LayoutOptions.Start,
+                    VerticalOptions = LayoutOptions.Center
+                };
+                theImage.GestureRecognizers.Add(tgr);
+
+                imageStackLayout.Children.Add(theImage);
             }
 
-            stackLayout.Children.Add(Entry);
+            var formStackLayout = new StackLayout
+            {
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+            if(!useLabelAsPlaceholder)
+            {
+                formStackLayout.Children.Add(Label);
+            }
 
-            View = stackLayout;
+            formStackLayout.Children.Add(Entry);
+            imageStackLayout.Children.Add(formStackLayout);
+
+            View = imageStackLayout;
         }
 
         public Label Label { get; private set; }
         public ExtendedEntry Entry { get; private set; }
+
+        private void Tgr_Tapped(object sender, EventArgs e)
+        {
+            Entry.Focus();
+        }
     }
 }
