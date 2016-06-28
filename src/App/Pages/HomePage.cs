@@ -42,6 +42,7 @@ namespace Bit.App.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                TextColor = Color.FromHex("333333")
             };
 
             var createAccountButton = new Button
@@ -51,7 +52,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"],
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
 
             var loginButton = new Button
@@ -61,7 +62,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.End,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                 HorizontalOptions = LayoutOptions.Fill,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
 
             var buttonStackLayout = new StackLayout
