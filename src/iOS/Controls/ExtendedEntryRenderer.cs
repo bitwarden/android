@@ -21,6 +21,8 @@ namespace Bit.iOS.Controls
             var view = e.NewElement as ExtendedEntry;
             if(view != null)
             {
+                UIFont.FromDescriptor(UIFontDescriptor.PreferredBody, 1.0f);
+
                 SetBorder(view);
                 SetMaxLength(view);
                 UpdateKeyboard();
