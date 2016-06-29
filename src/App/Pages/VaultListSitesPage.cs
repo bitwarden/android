@@ -179,7 +179,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private class VaultListViewCell : ExtendedTextCell
+        private class VaultListViewCell : LabeledDetailCell
         {
             private VaultListSitesPage _page;
 
@@ -196,9 +196,9 @@ namespace Bit.App.Pages
                 moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 moreAction.Clicked += MoreAction_Clicked;
 
-                SetBinding(CommandParameterProperty, new Binding("."));
-                this.SetBinding<VaultListPageModel.Site>(TextProperty, s => s.Name);
-                this.SetBinding<VaultListPageModel.Site>(DetailProperty, s => s.Username);
+                //SetBinding(CommandParameterProperty, new Binding("."));
+                Label.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Name);
+                Detail.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Username);
 
                 ContextActions.Add(deleteAction);
                 ContextActions.Add(moreAction);
@@ -218,8 +218,8 @@ namespace Bit.App.Pages
             private void VaultListViewCell_DisclousureTapped(object sender, EventArgs e)
             {
                 var cell = sender as VaultListViewCell;
-                var site = cell.CommandParameter as VaultListPageModel.Site;
-                _page.MoreClickedAsync(site);
+                //var site = cell.CommandParameter as VaultListPageModel.Site;
+               // _page.MoreClickedAsync(site);
             }
         }
 

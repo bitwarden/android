@@ -43,6 +43,20 @@ namespace Bit.Android.Controls
             return View;
         }
 
+        protected override void OnCellPropertyChanged(object sender, PropertyChangedEventArgs args)
+        {
+            base.OnCellPropertyChanged(sender, args);
+
+            var cell = (ExtendedTextCell)Cell;
+
+            if(args.PropertyName == ExtendedTextCell.BackgroundColorProperty.PropertyName)
+            {
+                View.SetBackgroundColor(cell.BackgroundColor.ToAndroid());
+            }
+
+            // TODO: other properties
+        }
+
         private class DisclosureImage : ImageView
         {
             private ExtendedTextCell _cell;
@@ -65,20 +79,6 @@ namespace Bit.Android.Controls
 
                 return true;
             }
-        }
-
-        protected override void OnCellPropertyChanged(object sender, PropertyChangedEventArgs args)
-        {
-            base.OnCellPropertyChanged(sender, args);
-
-            var cell = (ExtendedTextCell)Cell;
-
-            if(args.PropertyName == ExtendedTextCell.BackgroundColorProperty.PropertyName)
-            {
-                View.SetBackgroundColor(cell.BackgroundColor.ToAndroid());
-            }
-
-            // TODO: other properties
         }
     }
 }

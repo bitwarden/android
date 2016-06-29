@@ -87,6 +87,7 @@ namespace Bit.App.Pages
             {
                 EnableScrolling = true,
                 Intent = TableIntent.Menu,
+                HasUnevenRows = true,
                 Root = new TableRoot
                 {
                     new TableSection("Security")
@@ -108,10 +109,11 @@ namespace Bit.App.Pages
                 }
             };
 
-            var scrollView = new ScrollView
+            if( Device.OS == TargetPlatform.iOS )
             {
-                Content = table
-            };
+                table.RowHeight = -1;
+                table.EstimatedRowHeight = 44;
+            }
 
             Title = AppResources.Settings;
             Content = table;

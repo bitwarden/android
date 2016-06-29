@@ -62,6 +62,7 @@
     <Compile Include="Controls\ExtendedViewCell.cs" />
     <Compile Include="Controls\FormEditorCell.cs" />
     <Compile Include="Controls\ExtendedTextCell.cs" />
+    <Compile Include="Controls\LabeledDetailCell.cs" />
     <Compile Include="Controls\LabeledValueCell.cs" />
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
