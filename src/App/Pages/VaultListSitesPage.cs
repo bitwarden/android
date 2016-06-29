@@ -12,6 +12,7 @@ using XLabs.Ioc;
 using Bit.App.Utilities;
 using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
+using System.Windows.Input;
 
 namespace Bit.App.Pages
 {
@@ -55,10 +56,13 @@ namespace Bit.App.Pages
                 GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this)),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
             };
+
             if(Device.OS == TargetPlatform.iOS)
             {
                 listView.Margin = new Thickness(0, 0, -15, 0);
+                listView.RowHeight = -1;
             }
+
             listView.ItemSelected += SiteSelected;
 
             Title = _favorites ? AppResources.Favorites : AppResources.MyVault;
@@ -183,6 +187,9 @@ namespace Bit.App.Pages
         {
             private VaultListSitesPage _page;
 
+            public static readonly BindableProperty SiteParameterProperty = BindableProperty.Create(nameof(SiteParameter), 
+                typeof(VaultListPageModel.Site), typeof(VaultListViewCell), null);
+
             public VaultListViewCell(VaultListSitesPage page)
             {
                 _page = page;
@@ -196,7 +203,7 @@ namespace Bit.App.Pages
                 moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 moreAction.Clicked += MoreAction_Clicked;
 
-                //SetBinding(CommandParameterProperty, new Binding("."));
+                SetBinding(SiteParameterProperty, new Binding("."));
                 Label.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Name);
                 Detail.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Username);
 
@@ -206,6 +213,12 @@ namespace Bit.App.Pages
                 DisclousureTapped += VaultListViewCell_DisclousureTapped;
                 ShowDisclousure = true;
                 DisclousureImage = "more";
+            }
+
+            public VaultListPageModel.Site SiteParameter
+            {
+                get { return GetValue(SiteParameterProperty) as VaultListPageModel.Site; }
+                set { SetValue(SiteParameterProperty, value); }
             }
 
             private void MoreAction_Clicked(object sender, EventArgs e)
@@ -218,8 +231,7 @@ namespace Bit.App.Pages
             private void VaultListViewCell_DisclousureTapped(object sender, EventArgs e)
             {
                 var cell = sender as VaultListViewCell;
-                //var site = cell.CommandParameter as VaultListPageModel.Site;
-               // _page.MoreClickedAsync(site);
+                _page.MoreClickedAsync(cell.SiteParameter);
             }
         }
 
@@ -230,7 +242,6 @@ namespace Bit.App.Pages
                 var image = new Image
                 {
                     Source = "fa_folder_open.png",
-                    Margin = new Thickness(16, 0, 0, 0),
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
 
@@ -238,7 +249,6 @@ namespace Bit.App.Pages
                 {
                     VerticalTextAlignment = TextAlignment.Center,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
-                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     Style = (Style)Application.Current.Resources["text-muted"]
                 };
 
@@ -249,11 +259,11 @@ namespace Bit.App.Pages
                     Orientation = StackOrientation.Horizontal,
                     VerticalOptions = LayoutOptions.FillAndExpand,
                     Children = { image, label },
-                    BackgroundColor = Color.FromHex("efeff4")
+                    BackgroundColor = Color.FromHex("efeff4"),
+                    Padding = new Thickness(16, 0, 0, 0)
                 };
 
                 View = stackLayout;
-                Height = 30;
             }
         }
     }

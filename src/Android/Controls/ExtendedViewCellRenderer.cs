@@ -17,7 +17,7 @@ namespace Bit.Android.Controls
 
         protected override AView GetCellCore(Cell item, AView convertView, ViewGroup parent, Context context)
         {
-            var View = (BaseCellView)base.GetCellCore(item, convertView, parent, context);
+            var View = base.GetCellCore(item, convertView, parent, context);
             var extendedCell = (ExtendedViewCell)item;
 
             if(View != null)
@@ -37,7 +37,7 @@ namespace Bit.Android.Controls
                     var image = new DisclosureImage(context, extendedCell);
                     image.SetImageResource(resourceId);
                     image.SetPadding(10, 10, 30, 10);
-                    View.SetAccessoryView(image);
+                    //View.SetAccessoryView(image);
                 }
             }
 

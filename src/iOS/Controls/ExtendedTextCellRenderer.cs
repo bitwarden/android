@@ -35,7 +35,7 @@ namespace Bit.iOS.Controls
                             detailDisclosureButton.SetImage(UIImage.FromBundle(extendedCell.DisclousureImage), UIControlState.Selected);
                         }
 
-                        detailDisclosureButton.Frame = new CGRect(0f, 0f, 50f, 40f);
+                        detailDisclosureButton.Frame = new CGRect(0f, 0f, 50f, 100f);
                         detailDisclosureButton.TouchUpInside += (sender, e) =>
                         {
                             extendedCell.OnDisclousureTapped();
