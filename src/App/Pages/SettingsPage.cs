@@ -7,6 +7,7 @@ using Bit.App.Controls;
 using Acr.UserDialogs;
 using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -16,6 +17,7 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private readonly IFingerprint _fingerprint;
+        private readonly IPushNotification _pushNotification;
 
         // TODO: Model binding context?
 
@@ -25,6 +27,7 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
+            _pushNotification = Resolver.Resolve<IPushNotification>();
 
             Init();
         }
@@ -174,6 +177,7 @@ namespace Bit.App.Pages
             }
 
             _authService.LogOut();
+            _pushNotification.Unregister();
             Application.Current.MainPage = new HomePage();
         }
 

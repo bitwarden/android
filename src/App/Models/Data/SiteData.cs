@@ -2,6 +2,7 @@
 using SQLite;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Models.Data
 {
@@ -44,11 +45,7 @@ namespace Bit.App.Models.Data
                 throw new ArgumentException(nameof(cipher.Type));
             }
 
-            var data = cipher.Data as SiteDataModel;
-            if(data == null)
-            {
-                throw new ArgumentException(nameof(cipher.Data));
-            }
+            var data = cipher.Data.ToObject<SiteDataModel>();
 
             Id = cipher.Id;
             UserId = userId;

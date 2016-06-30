@@ -32,11 +32,7 @@ namespace Bit.App.Models.Data
                 throw new ArgumentException(nameof(cipher.Type));
             }
 
-            var data = cipher.Data as FolderDataModel;
-            if(data == null)
-            {
-                throw new ArgumentException(nameof(cipher.Data));
-            }
+            var data = cipher.Data.ToObject<SiteDataModel>();
 
             Id = cipher.Id;
             UserId = userId;

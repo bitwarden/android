@@ -125,7 +125,7 @@ namespace Bit.App.Services
             var folderTask = SyncFoldersAsync(ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Folder), true);
             await Task.WhenAll(siteTask, folderTask);
 
-            if(folderTask.Exception == null || siteTask.Exception == null)
+            if(folderTask.Exception != null || siteTask.Exception != null)
             {
                 return false;
             }
@@ -164,7 +164,7 @@ namespace Bit.App.Services
 
             await Task.WhenAll(siteTask, folderTask);
 
-            if(folderTask.Exception == null || siteTask.Exception == null)
+            if(folderTask.Exception != null || siteTask.Exception != null)
             {
                 return false;
             }

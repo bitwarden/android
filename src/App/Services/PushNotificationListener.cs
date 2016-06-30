@@ -39,17 +39,18 @@ namespace Bit.App.Services
                 case Enums.PushType.SyncCipherUpdate:
                 case Enums.PushType.SyncCipherCreate:
                     var createUpdateMessage = values.ToObject<SyncCipherPushNotification>();
-                    _syncService.SyncAsync(createUpdateMessage.CipherId);
+                    _syncService.SyncAsync(createUpdateMessage.Id);
                     break;
                 case Enums.PushType.SyncFolderDelete:
                     var folderDeleteMessage = values.ToObject<SyncCipherPushNotification>();
-                    _syncService.SyncDeleteFolderAsync(folderDeleteMessage.CipherId);
+                    _syncService.SyncDeleteFolderAsync(folderDeleteMessage.Id);
                     break;
                 case Enums.PushType.SyncSiteDelete:
                     var siteDeleteMessage = values.ToObject<SyncCipherPushNotification>();
-                    _syncService.SyncDeleteFolderAsync(siteDeleteMessage.CipherId);
+                    _syncService.SyncDeleteSiteAsync(siteDeleteMessage.Id);
                     break;
                 case Enums.PushType.SyncCiphers:
+                    var cipherMessage = values.ToObject<SyncCiphersPushNotification>();
                     _syncService.FullSyncAsync();
                     break;
                 default:
