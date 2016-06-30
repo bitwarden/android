@@ -67,9 +67,12 @@
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
+    <Compile Include="Enums\CipherType.cs" />
+    <Compile Include="Enums\PushType.cs" />
     <Compile Include="Enums\ReturnType.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
+    <Compile Include="Models\Api\FolderDataModel.cs" />
     <Compile Include="Models\Api\Request\DeviceTokenRequest.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
@@ -77,6 +80,8 @@
     <Compile Include="Models\Api\Request\SiteRequest.cs" />
     <Compile Include="Models\Api\Request\TokenRequest.cs" />
     <Compile Include="Models\Api\Request\TokenTwoFactorRequest.cs" />
+    <Compile Include="Models\Api\Response\CipherHistoryResponse.cs" />
+    <Compile Include="Models\Api\Response\CipherResponse.cs" />
     <Compile Include="Models\Api\Response\ErrorResponse.cs" />
     <Compile Include="Models\Api\Response\FolderResponse.cs" />
     <Compile Include="Models\Api\Response\ListResponse.cs" />
@@ -84,6 +89,7 @@
     <Compile Include="Models\Api\Response\SiteResponse.cs" />
     <Compile Include="Models\Api\Response\TokenResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileResponse.cs" />
+    <Compile Include="Models\Api\SiteDataModel.cs" />
     <Compile Include="Models\Cipher.cs" />
     <Compile Include="Models\CipherString.cs" />
     <Compile Include="Models\Data\FolderData.cs" />
@@ -93,6 +99,7 @@
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
     <Compile Include="Models\Page\PinPageModel.cs" />
+    <Compile Include="Models\PushNotification.cs" />
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
     <Compile Include="Pages\HomePage.cs" />
@@ -116,6 +123,8 @@
     <Compile Include="Repositories\AuthApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IAuthApiRepository.cs" />
     <Compile Include="Repositories\DeviceApiRepository.cs" />
+    <Compile Include="Repositories\CipherApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ICipherApiRepository.cs" />
     <Compile Include="Repositories\SiteApiRepository.cs" />
     <Compile Include="Repositories\FolderApiRepository.cs" />
     <Compile Include="Repositories\SiteRepository.cs" />

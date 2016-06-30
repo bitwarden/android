@@ -37,6 +37,29 @@ namespace Bit.App.Models.Data
             Favorite = site.Favorite;
         }
 
+        public SiteData(CipherResponse cipher, string userId)
+        {
+            if(cipher.Type != Enums.CipherType.Site)
+            {
+                throw new ArgumentException(nameof(cipher.Type));
+            }
+
+            var data = cipher.Data as SiteDataModel;
+            if(data == null)
+            {
+                throw new ArgumentException(nameof(cipher.Data));
+            }
+
+            Id = cipher.Id;
+            UserId = userId;
+            Name = data.Name;
+            Uri = data.Uri;
+            Username = data.Username;
+            Password = data.Password;
+            Notes = data.Notes;
+            Favorite = cipher.Favorite;
+        }
+
         [PrimaryKey]
         public string Id { get; set; }
         public string FolderId { get; set; }

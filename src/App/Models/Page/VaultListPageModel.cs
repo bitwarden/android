@@ -15,7 +15,7 @@ namespace Bit.App.Models.Page
                 Id = site.Id;
                 FolderId = folderId;
                 Name = site.Name?.Decrypt();
-                Username = site.Username?.Decrypt() ?? " ";
+                Username = site.Username?.Decrypt();
                 Password = site.Password?.Decrypt();
                 Uri = site.Uri?.Decrypt();
             }

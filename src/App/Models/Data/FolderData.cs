@@ -25,6 +25,24 @@ namespace Bit.App.Models.Data
             Name = folder.Name;
         }
 
+        public FolderData(CipherResponse cipher, string userId)
+        {
+            if(cipher.Type != Enums.CipherType.Folder)
+            {
+                throw new ArgumentException(nameof(cipher.Type));
+            }
+
+            var data = cipher.Data as FolderDataModel;
+            if(data == null)
+            {
+                throw new ArgumentException(nameof(cipher.Data));
+            }
+
+            Id = cipher.Id;
+            UserId = userId;
+            Name = data.Name;
+        }
+
         [PrimaryKey]
         public string Id { get; set; }
         [Indexed]

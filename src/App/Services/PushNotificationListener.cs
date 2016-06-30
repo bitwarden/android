@@ -4,6 +4,7 @@ using PushNotification.Plugin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Bit.App.Abstractions;
+using Bit.App.Models;
 
 namespace Bit.App.Services
 {
@@ -31,6 +32,29 @@ namespace Bit.App.Services
         {
             _showNotification = false;
             Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(values));
+
+            var type = (Enums.PushType)values.GetValue("type", System.StringComparison.OrdinalIgnoreCase).ToObject<short>();
+            switch(type)
+            {
+                case Enums.PushType.SyncCipherUpdate:
+                case Enums.PushType.SyncCipherCreate:
+                    var createUpdateMessage = values.ToObject<SyncCipherPushNotification>();
+                    _syncService.SyncAsync(createUpdateMessage.CipherId);
+                    break;
+                case Enums.PushType.SyncFolderDelete:
+                    var folderDeleteMessage = values.ToObject<SyncCipherPushNotification>();
+                    _syncService.SyncDeleteFolderAsync(folderDeleteMessage.CipherId);
+                    break;
+                case Enums.PushType.SyncSiteDelete:
+                    var siteDeleteMessage = values.ToObject<SyncCipherPushNotification>();
+                    _syncService.SyncDeleteFolderAsync(siteDeleteMessage.CipherId);
+                    break;
+                case Enums.PushType.SyncCiphers:
+                    _syncService.FullSyncAsync();
+                    break;
+                default:
+                    break;
+            }
         }
 
         public async void OnRegistered(string token, DeviceType deviceType)

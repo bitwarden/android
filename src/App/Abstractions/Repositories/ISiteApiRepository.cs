@@ -7,6 +7,5 @@ namespace Bit.App.Abstractions
 {
     public interface ISiteApiRepository : IApiRepository<SiteRequest, SiteResponse, string>
     {
-        Task<ApiResult<ListResponse<SiteResponse>>> GetByRevisionDateAsync(DateTime since);
     }
 }

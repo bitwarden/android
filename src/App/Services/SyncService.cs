@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Data;
 using Plugin.Settings.Abstractions;
+using Bit.App.Models.Api;
+using System.Collections.Generic;
 
 namespace Bit.App.Services
 {
@@ -11,6 +13,7 @@ namespace Bit.App.Services
     {
         private const string LastSyncKey = "lastSync";
 
+        private readonly ICipherApiRepository _cipherApiRepository;
         private readonly IFolderApiRepository _folderApiRepository;
         private readonly ISiteApiRepository _siteApiRepository;
         private readonly IFolderRepository _folderRepository;
@@ -19,6 +22,7 @@ namespace Bit.App.Services
         private readonly ISettings _settings;
 
         public SyncService(
+            ICipherApiRepository cipherApiRepository,
             IFolderApiRepository folderApiRepository,
             ISiteApiRepository siteApiRepository,
             IFolderRepository folderRepository,
@@ -26,6 +30,7 @@ namespace Bit.App.Services
             IAuthService authService,
             ISettings settings)
         {
+            _cipherApiRepository = cipherApiRepository;
             _folderApiRepository = folderApiRepository;
             _siteApiRepository = siteApiRepository;
             _folderRepository = folderRepository;
@@ -34,36 +39,145 @@ namespace Bit.App.Services
             _settings = settings;
         }
 
-        public async Task<bool> SyncAsync()
+        public async Task<bool> SyncAsync(string id)
         {
-            var now = DateTime.UtcNow;
-            var lastSync = _settings.GetValueOrDefault(LastSyncKey, now.AddYears(-100));
-
-            var siteTask = SyncSitesAsync(lastSync);
-            var folderTask = SyncFoldersAsync(lastSync);
-            await Task.WhenAll(siteTask, folderTask);
-
-            if(await siteTask && await folderTask && folderTask.Exception == null && siteTask.Exception == null)
-            {
-                _settings.AddOrUpdateValue(LastSyncKey, now);
-                return true;
-            }
-
-            return false;
-        }
-
-        private async Task<bool> SyncFoldersAsync(DateTime lastSync)
-        {
-            var folderResponse = await _folderApiRepository.GetAsync();
-            if(!folderResponse.Succeeded)
+            if(!_authService.IsAuthenticated)
             {
                 return false;
             }
 
-            var serverFolders = folderResponse.Result.Data;
+            var cipher = await _cipherApiRepository.GetByIdAsync(id);
+            if(!cipher.Succeeded)
+            {
+                return false;
+            }
+
+            switch(cipher.Result.Type)
+            {
+                case Enums.CipherType.Folder:
+                    var folderData = new FolderData(cipher.Result, _authService.UserId);
+                    var existingLocalFolder = _folderRepository.GetByIdAsync(id);
+                    if(existingLocalFolder == null)
+                    {
+                        await _folderRepository.InsertAsync(folderData);
+                    }
+                    else
+                    {
+                        await _folderRepository.UpdateAsync(folderData);
+                    }
+                    break;
+                case Enums.CipherType.Site:
+                    var siteData = new SiteData(cipher.Result, _authService.UserId);
+                    var existingLocalSite = _siteRepository.GetByIdAsync(id);
+                    if(existingLocalSite == null)
+                    {
+                        await _siteRepository.InsertAsync(siteData);
+                    }
+                    else
+                    {
+                        await _siteRepository.UpdateAsync(siteData);
+                    }
+                    break;
+                default:
+                    return false;
+            }
+
+            return true;
+        }
+
+        public async Task<bool> SyncDeleteFolderAsync(string id)
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return false;
+            }
+
+            await _folderRepository.DeleteAsync(id);
+            return true;
+        }
+
+        public async Task<bool> SyncDeleteSiteAsync(string id)
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return false;
+            }
+
+            await _siteRepository.DeleteAsync(id);
+            return true;
+        }
+
+        public async Task<bool> FullSyncAsync()
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return false;
+            }
+
+            var now = DateTime.UtcNow;
+            var ciphers = await _cipherApiRepository.GetAsync();
+            if(!ciphers.Succeeded)
+            {
+                return false;
+            }
+
+            var siteTask = SyncSitesAsync(ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Site), true);
+            var folderTask = SyncFoldersAsync(ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Folder), true);
+            await Task.WhenAll(siteTask, folderTask);
+
+            if(folderTask.Exception == null || siteTask.Exception == null)
+            {
+                return false;
+            }
+
+            _settings.AddOrUpdateValue(LastSyncKey, now);
+            return true;
+        }
+
+        public async Task<bool> IncrementalSyncAsync()
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return false;
+            }
+
+            var now = DateTime.UtcNow;
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(LastSyncKey);
+            if(lastSync == null)
+            {
+                return await FullSyncAsync();
+            }
+
+            var ciphers = await _cipherApiRepository.GetByRevisionDateWithHistoryAsync(lastSync.Value);
+            if(!ciphers.Succeeded)
+            {
+                return false;
+            }
+
+            var siteTask = SyncSitesAsync(ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Site), false);
+            var folderTask = SyncFoldersAsync(ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Folder), false);
+
+            foreach(var cipherId in ciphers.Result.Deleted)
+            {
+                await _siteRepository.DeleteAsync(cipherId);
+            }
+
+            await Task.WhenAll(siteTask, folderTask);
+
+            if(folderTask.Exception == null || siteTask.Exception == null)
+            {
+                return false;
+            }
+
+            _settings.AddOrUpdateValue(LastSyncKey, now);
+            return true;
+        }
+
+        private async Task SyncFoldersAsync(IEnumerable<CipherResponse> serverFolders, bool deleteMissing)
+        {
             var localFolders = await _folderRepository.GetAllByUserIdAsync(_authService.UserId);
 
-            foreach(var serverFolder in serverFolders.Where(f => f.RevisionDate >= lastSync))
+            foreach(var serverFolder in serverFolders)
             {
                 var data = new FolderData(serverFolder, _authService.UserId);
                 var existingLocalFolder = localFolders.SingleOrDefault(f => f.Id == serverFolder.Id);
@@ -77,26 +191,22 @@ namespace Bit.App.Services
                 }
             }
 
+            if(!deleteMissing)
+            {
+                return;
+            }
+
             foreach(var folder in localFolders.Where(localFolder => !serverFolders.Any(serverFolder => serverFolder.Id == localFolder.Id)))
             {
                 await _folderRepository.DeleteAsync(folder.Id);
             }
-
-            return true;
         }
 
-        private async Task<bool> SyncSitesAsync(DateTime lastSync)
+        private async Task SyncSitesAsync(IEnumerable<CipherResponse> serverSites, bool deleteMissing)
         {
-            var siteResponse = await _siteApiRepository.GetAsync();
-            if(!siteResponse.Succeeded)
-            {
-                return false;
-            }
-
-            var serverSites = siteResponse.Result.Data;
             var localSites = await _siteRepository.GetAllByUserIdAsync(_authService.UserId);
 
-            foreach(var serverSite in serverSites.Where(s => s.RevisionDate >= lastSync))
+            foreach(var serverSite in serverSites)
             {
                 var data = new SiteData(serverSite, _authService.UserId);
                 var existingLocalSite = localSites.SingleOrDefault(s => s.Id == serverSite.Id);
@@ -110,12 +220,15 @@ namespace Bit.App.Services
                 }
             }
 
+            if(!deleteMissing)
+            {
+                return;
+            }
+
             foreach(var site in localSites.Where(localSite => !serverSites.Any(serverSite => serverSite.Id == localSite.Id)))
             {
                 await _siteRepository.DeleteAsync(site.Id);
             }
-
-            return true;
         }
     }
 }
