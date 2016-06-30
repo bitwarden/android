@@ -210,6 +210,9 @@ namespace Bit.App.Pages
 
                 Button.Image = "more";
                 Button.Command = new Command(() => ShowMore());
+                Button.BackgroundColor = Color.Transparent;
+
+                BackgroundColor = Color.White;
             }
 
             public VaultListPageModel.Site SiteParameter
@@ -231,7 +234,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private class VaultListHeaderViewCell : ViewCell
+        private class VaultListHeaderViewCell : ExtendedViewCell
         {
             public VaultListHeaderViewCell(VaultListSitesPage page)
             {
@@ -255,12 +258,12 @@ namespace Bit.App.Pages
                     Orientation = StackOrientation.Horizontal,
                     VerticalOptions = LayoutOptions.FillAndExpand,
                     Children = { image, label },
-                    BackgroundColor = Color.FromHex("efeff4"),
                     Padding = new Thickness(16, 0, 0, 0)
                 };
 
                 View = stackLayout;
                 Height = 40;
+                BackgroundColor = Color.FromHex("efeff4");
             }
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Bit.App.Controls
 {
-    public class LabeledDetailCell : ViewCell
+    public class LabeledDetailCell : ExtendedViewCell
     {
         public LabeledDetailCell()
         {
