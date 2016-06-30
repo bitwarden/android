@@ -55,7 +55,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading("Syncing...", MaskType.Black);
-            var succeeded = await _syncService.SyncAsync();
+            var succeeded = await _syncService.FullSyncAsync();
             _userDialogs.HideLoading();
             if(succeeded)
             {
