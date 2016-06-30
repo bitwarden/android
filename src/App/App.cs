@@ -125,10 +125,12 @@ namespace Bit.App
             }
             else if(pinUnlock && !string.IsNullOrWhiteSpace(_authService.PIN))
             {
-
-                if((currentPage?.CurrentPage as LockPinPage) == null)
+                var lockPinPage = (currentPage?.CurrentPage as LockPinPage);
+                if(lockPinPage == null)
                 {
-                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPinPage()), false);
+                    lockPinPage = new LockPinPage();
+                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(lockPinPage), false);
+                    lockPinPage.PinControl.Entry.Focus();
                 }
             }
             else

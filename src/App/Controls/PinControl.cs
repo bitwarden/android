@@ -12,7 +12,7 @@ namespace Bit.App.Controls
             Label = new Label
             {
                 HorizontalTextAlignment = TextAlignment.Center,
-                FontSize = 30,
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 FontFamily = "Courier"
             };
 

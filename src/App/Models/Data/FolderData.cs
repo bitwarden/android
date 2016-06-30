@@ -23,6 +23,7 @@ namespace Bit.App.Models.Data
             Id = folder.Id;
             UserId = userId;
             Name = folder.Name;
+            RevisionDateTime = folder.RevisionDate;
         }
 
         public FolderData(CipherResponse cipher, string userId)
@@ -37,6 +38,7 @@ namespace Bit.App.Models.Data
             Id = cipher.Id;
             UserId = userId;
             Name = data.Name;
+            RevisionDateTime = cipher.RevisionDate;
         }
 
         [PrimaryKey]

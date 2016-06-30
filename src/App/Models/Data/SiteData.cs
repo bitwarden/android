@@ -2,7 +2,6 @@
 using SQLite;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
-using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Models.Data
 {
@@ -36,6 +35,7 @@ namespace Bit.App.Models.Data
             Password = site.Password;
             Notes = site.Notes;
             Favorite = site.Favorite;
+            RevisionDateTime = site.RevisionDate;
         }
 
         public SiteData(CipherResponse cipher, string userId)
@@ -55,6 +55,7 @@ namespace Bit.App.Models.Data
             Password = data.Password;
             Notes = data.Notes;
             Favorite = cipher.Favorite;
+            RevisionDateTime = cipher.RevisionDate;
         }
 
         [PrimaryKey]

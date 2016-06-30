@@ -103,6 +103,7 @@
     <Compile Include="Controls\ContentPageRenderer.cs" />
     <Compile Include="Controls\CustomButtonRenderer.cs" />
     <Compile Include="Controls\CustomLabelRenderer.cs" />
+    <Compile Include="Controls\ExtendedEditorRenderer.cs" />
     <Compile Include="Controls\ExtendedSwitchCellRenderer.cs" />
     <Compile Include="Controls\ListViewRenderer.cs" />
     <Compile Include="Controls\ExtendedViewCellRenderer.cs" />

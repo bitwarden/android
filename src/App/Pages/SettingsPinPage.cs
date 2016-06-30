@@ -44,6 +44,7 @@ namespace Bit.App.Pages
 
             var tgr = new TapGestureRecognizer();
             tgr.Tapped += Tgr_Tapped;
+            PinControl.Label.GestureRecognizers.Add(tgr);
 
             Title = "Set PIN";
             Content = stackLayout;

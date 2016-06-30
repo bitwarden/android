@@ -12,7 +12,6 @@ using XLabs.Ioc;
 using Bit.App.Utilities;
 using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
-using System.Windows.Input;
 
 namespace Bit.App.Pages
 {
@@ -59,7 +58,6 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                listView.Margin = new Thickness(0, 0, -15, 0);
                 listView.RowHeight = -1;
             }
 
@@ -195,7 +193,7 @@ namespace Bit.App.Pages
                 _page = page;
 
                 // Adding whitespace to Delete action to account for the negative margin offset on the listview
-                var deleteAction = new MenuItem { Text = AppResources.Delete + "   ", IsDestructive = true };
+                var deleteAction = new MenuItem { Text = AppResources.Delete, IsDestructive = true };
                 deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 deleteAction.Clicked += page.DeleteClickedAsync;
 
@@ -210,9 +208,8 @@ namespace Bit.App.Pages
                 ContextActions.Add(deleteAction);
                 ContextActions.Add(moreAction);
 
-                DisclousureTapped += VaultListViewCell_DisclousureTapped;
-                ShowDisclousure = true;
-                DisclousureImage = "more";
+                Button.Image = "more";
+                Button.Command = new Command(() => ShowMore());
             }
 
             public VaultListPageModel.Site SiteParameter
@@ -228,10 +225,9 @@ namespace Bit.App.Pages
                 _page.MoreClickedAsync(site);
             }
 
-            private void VaultListViewCell_DisclousureTapped(object sender, EventArgs e)
+            private void ShowMore()
             {
-                var cell = sender as VaultListViewCell;
-                _page.MoreClickedAsync(cell.SiteParameter);
+                _page.MoreClickedAsync(SiteParameter);
             }
         }
 
@@ -264,6 +260,7 @@ namespace Bit.App.Pages
                 };
 
                 View = stackLayout;
+                Height = 40;
             }
         }
     }

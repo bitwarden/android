@@ -2,7 +2,7 @@
 
 namespace Bit.App.Controls
 {
-    public class LabeledDetailCell : ExtendedViewCell
+    public class LabeledDetailCell : ViewCell
     {
         public LabeledDetailCell()
         {
@@ -20,19 +20,33 @@ namespace Bit.App.Controls
                 Style = (Style)Application.Current.Resources["text-muted"],
             };
 
-            var stackLayout = new StackLayout
+            var labelDetailStackLayout = new StackLayout
             {
-                Padding = new Thickness(20, 5),
-                HorizontalOptions = LayoutOptions.FillAndExpand,
+                HorizontalOptions = LayoutOptions.StartAndExpand,
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 Children = { Label, Detail },
+                Padding = new Thickness(15, 5, 5, 5),
                 Spacing = 0
             };
 
-            View = stackLayout;
+            Button = new Button
+            {
+                HorizontalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                WidthRequest = 50
+            };
+
+            var containerStackLayout = new StackLayout
+            {
+                Orientation = StackOrientation.Horizontal,
+                Children = { labelDetailStackLayout, Button }
+            };
+
+            View = containerStackLayout;
         }
 
         public Label Label { get; private set; }
         public Label Detail { get; private set; }
+        public Button Button { get; private set; }
     }
 }

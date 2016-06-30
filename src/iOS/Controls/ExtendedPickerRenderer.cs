@@ -18,6 +18,9 @@ namespace Bit.iOS.Controls
             var view = e.NewElement as ExtendedPicker;
             if(view != null)
             {
+                var descriptor = UIFontDescriptor.PreferredBody;
+                Control.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
+
                 SetBorder(view);
             }
         }
