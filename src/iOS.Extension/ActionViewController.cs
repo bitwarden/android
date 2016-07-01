@@ -43,6 +43,8 @@ namespace Bit.iOS.Extension
                 filteredSiteModels = siteModels.Where(s => s.Domain.BaseDomain == domain.BaseDomain);
             }
 
+            tableView.RowHeight = UITableView.AutomaticDimension;
+            tableView.EstimatedRowHeight = 44;
             tableView.Source = new TableSource(filteredSiteModels, this);
             AutomaticallyAdjustsScrollViewInsets = false;
         }
@@ -94,6 +96,7 @@ namespace Bit.iOS.Extension
 
                 cell.TextLabel.Text = item.Name;
                 cell.DetailTextLabel.Text = item.Username;
+                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
                 return cell;
             }
 
