@@ -63,7 +63,8 @@ namespace Bit.App.Pages
 
             var changeMasterPasswordCell = new ExtendedTextCell
             {
-                Text = "Change Master Password"
+                Text = "Change Master Password",
+                ShowDisclousure = true
             };
             changeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
 
@@ -73,6 +74,13 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
             foldersCell.Tapped += FoldersCell_Tapped;
+
+            var syncCell = new ExtendedTextCell
+            {
+                Text = "Sync",
+                ShowDisclousure = true
+            };
+            syncCell.Tapped += SyncCell_Tapped;
 
             var lockCell = new ExtendedTextCell
             {
@@ -100,9 +108,10 @@ namespace Bit.App.Pages
                         PinCell,
                         changeMasterPasswordCell
                     },
-                    new TableSection("Manage Folders")
+                    new TableSection("Manage")
                     {
-                        foldersCell
+                        foldersCell,
+                        syncCell
                     },
                     new TableSection("Current Session")
                     {
@@ -162,6 +171,11 @@ namespace Bit.App.Pages
             }
 
             LockOptionsCell.Detail = selection;
+        }
+
+        private void SyncCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new SyncPage());
         }
 
         private void LockCell_Tapped(object sender, EventArgs e)

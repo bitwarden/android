@@ -109,6 +109,7 @@
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\SettingsEditFolderPage.cs" />
     <Compile Include="Pages\LockFingerprintPage.cs" />
+    <Compile Include="Pages\ToolsPage.cs" />
     <Compile Include="Pages\SyncPage.cs" />
     <Compile Include="Pages\SettingsPage.cs" />
     <Compile Include="Pages\SettingsListFoldersPage.cs" />

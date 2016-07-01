@@ -15,7 +15,7 @@ namespace Bit.App.Pages
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
             var favoritesNavigation = new ExtendedNavigationPage(new VaultListSitesPage(true));
             var vaultNavigation = new ExtendedNavigationPage(new VaultListSitesPage(false));
-            var syncNavigation = new ExtendedNavigationPage(new SyncPage());
+            var toolsNavigation = new ExtendedNavigationPage(new ToolsPage());
 
             favoritesNavigation.Title = AppResources.Favorites;
             favoritesNavigation.Icon = "star";
@@ -23,15 +23,15 @@ namespace Bit.App.Pages
             vaultNavigation.Title = AppResources.MyVault;
             vaultNavigation.Icon = "fa-lock";
 
-            syncNavigation.Title = AppResources.Sync;
-            syncNavigation.Icon = "fa-refresh";
+            toolsNavigation.Title = AppResources.Tools;
+            toolsNavigation.Icon = "fa-refresh";
 
             settingsNavigation.Title = AppResources.Settings;
             settingsNavigation.Icon = "cogs";
 
             Children.Add(favoritesNavigation);
             Children.Add(vaultNavigation);
-            Children.Add(syncNavigation);
+            Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
         }
     }
