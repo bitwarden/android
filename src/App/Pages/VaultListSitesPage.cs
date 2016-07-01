@@ -82,13 +82,21 @@ namespace Bit.App.Pages
 
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
-                if(!_settings.GetValueOrDefault<bool>(Constants.PushPromptShown))
+                var pushPromptShow = _settings.GetValueOrDefault<bool>(Constants.PushPromptShown);
+                if(!pushPromptShow)
                 {
                     _settings.AddOrUpdateValue(Constants.PushPromptShown, true);
-                    await _userDialogs.AlertAsync("bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.", "Enable Automatic Syncing", "Ok, got it!");
+                    await _userDialogs.AlertAsync(@"bitwarden keeps your vault automatically synced by using push notifications.
+                        For the best possible experience, please select ""Ok"" on the following prompt when asked to enable push notifications.",
+                        "Enable Automatic Syncing", "Ok, got it!");
                 }
 
-                _pushNotification.Register();
+                // Check push registration once per day
+                var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistration);
+                if(!pushPromptShow || !lastPushRegistration.HasValue || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
+                {
+                    _pushNotification.Register();
+                }
             }
         }
 
@@ -193,7 +201,7 @@ namespace Bit.App.Pages
         {
             private VaultListSitesPage _page;
 
-            public static readonly BindableProperty SiteParameterProperty = BindableProperty.Create(nameof(SiteParameter), 
+            public static readonly BindableProperty SiteParameterProperty = BindableProperty.Create(nameof(SiteParameter),
                 typeof(VaultListPageModel.Site), typeof(VaultListViewCell), null);
 
             public VaultListViewCell(VaultListSitesPage page)

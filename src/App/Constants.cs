@@ -7,7 +7,7 @@
         public const string SettingLockSeconds = "lockSeconds";
         public const string SettingLastBackgroundedDate = "lastBackgroundedDate";
 
-
         public const string PushPromptShown = "initialPushPromptShown";
+        public const string PushLastRegistration = "lastPushRegistration";
     }
 }

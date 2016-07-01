@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Plugin.Settings.Abstractions;
+using System;
 
 namespace Bit.App.Services
 {
@@ -15,17 +17,20 @@ namespace Bit.App.Services
         private readonly IDeviceApiRepository _deviceApiRepository;
         private readonly IAuthService _authService;
         private readonly IAppIdService _appIdService;
+        private readonly ISettings _settings;
 
         public PushNotificationListener(
             ISyncService syncService,
             IDeviceApiRepository deviceApiRepository,
             IAuthService authService,
-            IAppIdService appIdService)
+            IAppIdService appIdService,
+            ISettings settings)
         {
             _syncService = syncService;
             _deviceApiRepository = deviceApiRepository;
             _authService = authService;
             _appIdService = appIdService;
+            _settings = settings;
         }
 
         public void OnMessage(JObject values, DeviceType deviceType)
@@ -33,7 +38,7 @@ namespace Bit.App.Services
             _showNotification = false;
             Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(values));
 
-            var type = (Enums.PushType)values.GetValue("type", System.StringComparison.OrdinalIgnoreCase).ToObject<short>();
+            var type = (Enums.PushType)values.GetValue("type", StringComparison.OrdinalIgnoreCase).ToObject<short>();
             switch(type)
             {
                 case Enums.PushType.SyncCipherUpdate:
@@ -71,6 +76,7 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 Debug.WriteLine("Registered device with server.");
+                _settings.AddOrUpdateValue(Constants.PushLastRegistration, DateTime.UtcNow);
             }
             else
             {
@@ -81,6 +87,7 @@ namespace Bit.App.Services
         public void OnUnregistered(DeviceType deviceType)
         {
             Debug.WriteLine("Push Notification - Device Unnregistered");
+            _settings.Remove(Constants.PushLastRegistration);
         }
 
         public void OnError(string message, DeviceType deviceType)
