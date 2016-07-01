@@ -6,6 +6,7 @@ using Bit.App.Models.Data;
 using Plugin.Settings.Abstractions;
 using Bit.App.Models.Api;
 using System.Collections.Generic;
+using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
@@ -82,6 +83,7 @@ namespace Bit.App.Services
                     return false;
             }
 
+            BroadcastSyncCompleted();
             return true;
         }
 
@@ -93,6 +95,7 @@ namespace Bit.App.Services
             }
 
             await _folderRepository.DeleteAsync(id);
+            BroadcastSyncCompleted();
             return true;
         }
 
@@ -104,6 +107,7 @@ namespace Bit.App.Services
             }
 
             await _siteRepository.DeleteAsync(id);
+            BroadcastSyncCompleted();
             return true;
         }
 
@@ -131,6 +135,7 @@ namespace Bit.App.Services
             }
 
             _settings.AddOrUpdateValue(LastSyncKey, now);
+            BroadcastSyncCompleted();
             return true;
         }
 
@@ -165,6 +170,7 @@ namespace Bit.App.Services
             }
 
             _settings.AddOrUpdateValue(LastSyncKey, now);
+            BroadcastSyncCompleted();
             return true;
         }
 
@@ -237,6 +243,11 @@ namespace Bit.App.Services
                 tasks.Add(_folderRepository.DeleteAsync(cipherId));
             }
             await Task.WhenAll(tasks);
+        }
+
+        private void BroadcastSyncCompleted()
+        {
+            MessagingCenter.Send(Application.Current, "SyncCompleted");
         }
     }
 }

@@ -26,6 +26,7 @@ namespace Bit.Android
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IDatabaseService>(),
+                Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>()));
         }

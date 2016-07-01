@@ -44,6 +44,7 @@ namespace Bit.iOS
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IDatabaseService>(),
+                Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>()));
 
@@ -112,7 +113,7 @@ namespace Bit.iOS
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            SendLockMessage();
+            SendResumedMessage();
             base.WillEnterForeground(uiApplication);
             Debug.WriteLine("WillEnterForeground");
         }
@@ -159,9 +160,9 @@ namespace Bit.iOS
             }
         }
 
-        private void SendLockMessage()
+        private void SendResumedMessage()
         {
-            MessagingCenter.Send(Xamarin.Forms.Application.Current, "Lock", false);
+            MessagingCenter.Send(Xamarin.Forms.Application.Current, "Resumed", false);
         }
 
         private void SetIoc()

@@ -16,6 +16,7 @@ namespace Bit.App
     public class App : Application
     {
         private readonly IDatabaseService _databaseService;
+        private readonly ISyncService _syncService;
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
         private readonly ISettings _settings;
@@ -23,10 +24,12 @@ namespace Bit.App
         public App(
             IAuthService authService,
             IDatabaseService databaseService,
+            ISyncService syncService,
             IFingerprint fingerprint,
             ISettings settings)
         {
             _databaseService = databaseService;
+            _syncService = syncService;
             _authService = authService;
             _fingerprint = fingerprint;
             _settings = settings;
@@ -42,6 +45,13 @@ namespace Bit.App
                 MainPage = new HomePage();
             }
 
+            MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
+            {
+                var syncTask = _syncService.IncrementalSyncAsync();
+                await CheckLockAsync(args);
+                await syncTask;
+            });
+
             MessagingCenter.Subscribe<Application, bool>(Current, "Lock", async (sender, args) =>
             {
                 await CheckLockAsync(args);
@@ -51,8 +61,9 @@ namespace Bit.App
         protected override void OnStart()
         {
             // Handle when your app starts
-            CheckLockAsync(false);
+            var lockTask = CheckLockAsync(false);
             _databaseService.CreateTables();
+            var syncTask = _syncService.FullSyncAsync();
 
             Debug.WriteLine("OnStart");
         }
@@ -75,7 +86,7 @@ namespace Bit.App
 
             if(Device.OS == TargetPlatform.Android)
             {
-                CheckLockAsync(false);
+                var task = CheckLockAsync(false);
             }
 
             var lockPinPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage;

@@ -67,7 +67,7 @@ namespace Bit.App.Pages
 
             if(_checkFingerprintImmediately)
             {
-                CheckFingerprintAsync();
+                var task = CheckFingerprintAsync();
             }
         }
 

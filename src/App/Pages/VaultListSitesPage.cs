@@ -42,6 +42,11 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            MessagingCenter.Subscribe<Application>(Application.Current, "SyncCompleted", async (sender) =>
+            {
+                await LoadFoldersAsync();
+            });
+
             if(!_favorites)
             {
                 ToolbarItems.Add(new AddSiteToolBarItem(this));

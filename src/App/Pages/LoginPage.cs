@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private IDeviceInfo _deviceInfo;
         private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
+        private ISyncService _syncService;
 
         public LoginPage()
         {
@@ -27,6 +28,7 @@ namespace Bit.App.Pages
             _deviceInfo = Resolver.Resolve<IDeviceInfo>();
             _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _syncService = Resolver.Resolve<ISyncService>();
 
             Init();
         }
@@ -125,6 +127,7 @@ namespace Bit.App.Pages
             _authService.Token = response.Result.Token;
             _authService.UserId = response.Result.Profile.Id;
 
+            var syncTask = _syncService.FullSyncAsync();
             Application.Current.MainPage = new MainPage();
         }
     }

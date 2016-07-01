@@ -55,7 +55,7 @@ namespace Bit.App.Repositories
             var requestMessage = new TokenHttpRequestMessage()
             {
                 Method = HttpMethod.Get,
-                RequestUri = new Uri(Client.BaseAddress, string.Concat(ApiRoute, "?since=", since)),
+                RequestUri = new Uri(Client.BaseAddress, string.Concat(ApiRoute, "/history", "?since=", since)),
             };
 
             var response = await Client.SendAsync(requestMessage);
