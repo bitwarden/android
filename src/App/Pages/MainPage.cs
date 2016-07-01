@@ -24,7 +24,7 @@ namespace Bit.App.Pages
             vaultNavigation.Icon = "fa-lock";
 
             toolsNavigation.Title = AppResources.Tools;
-            toolsNavigation.Icon = "fa-refresh";
+            toolsNavigation.Icon = "wrench";
 
             settingsNavigation.Title = AppResources.Settings;
             settingsNavigation.Icon = "cogs";

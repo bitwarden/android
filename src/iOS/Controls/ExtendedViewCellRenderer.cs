@@ -17,6 +17,10 @@ namespace Bit.iOS.Controls
             if(cell != null)
             {
                 cell.BackgroundColor = extendedCell.BackgroundColor.ToUIColor();
+                if(extendedCell.ShowDisclousure)
+                {
+                    cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
+                }
             }
 
             return cell;

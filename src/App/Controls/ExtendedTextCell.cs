@@ -14,7 +14,7 @@ namespace Bit.App.Controls
             BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ExtendedTextCell), Color.White);
 
         public static readonly BindableProperty ShowDisclousureProperty =
-            BindableProperty.Create(nameof(DisclousureImage), typeof(bool), typeof(ExtendedTextCell), false);
+            BindableProperty.Create(nameof(ShowDisclousure), typeof(bool), typeof(ExtendedTextCell), false);
 
         public static readonly BindableProperty DisclousureImageProperty =
             BindableProperty.Create(nameof(DisclousureImage), typeof(string), typeof(ExtendedTextCell), string.Empty);
