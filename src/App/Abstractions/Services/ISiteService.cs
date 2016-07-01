@@ -11,6 +11,6 @@ namespace Bit.App.Abstractions
         Task<IEnumerable<Site>> GetAllAsync();
         Task<IEnumerable<Site>> GetAllAsync(bool favorites);
         Task<ApiResult<SiteResponse>> SaveAsync(Site site);
-        Task<ApiResult<object>> DeleteAsync(string id);
+        Task<ApiResult> DeleteAsync(string id);
     }
 }

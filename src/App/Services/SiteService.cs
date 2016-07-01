@@ -82,9 +82,9 @@ namespace Bit.App.Services
             return response;
         }
 
-        public async Task<ApiResult<object>> DeleteAsync(string id)
+        public async Task<ApiResult> DeleteAsync(string id)
         {
-            ApiResult<object> response = await _siteApiRepository.DeleteAsync(id);
+            var response = await _siteApiRepository.DeleteAsync(id);
             if(response.Succeeded)
             {
                 await _siteRepository.DeleteAsync(id);
