@@ -48,6 +48,7 @@ namespace Bit.App.Models.Data
             var data = cipher.Data.ToObject<SiteDataModel>();
 
             Id = cipher.Id;
+            FolderId = cipher.FolderId;
             UserId = userId;
             Name = data.Name;
             Uri = data.Uri;
