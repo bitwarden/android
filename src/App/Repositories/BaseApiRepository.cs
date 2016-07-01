@@ -1,27 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Bit.App.Models.Api;
-using ModernHttpClient;
 using Newtonsoft.Json;
+using Plugin.Connectivity.Abstractions;
 
 namespace Bit.App.Repositories
 {
     public abstract class BaseApiRepository
     {
-        public BaseApiRepository()
+        public BaseApiRepository(IConnectivity connectivity)
         {
-            Client = new HttpClient(new NativeMessageHandler());
-            Client.BaseAddress = new Uri("https://api.bitwarden.com");
-            Client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            Connectivity = connectivity;
         }
 
-        protected virtual HttpClient Client { get; private set; }
+        protected IConnectivity Connectivity { get; private set; }
         protected abstract string ApiRoute { get; }
 
-        public async Task<ApiResult<T>> HandleErrorAsync<T>(HttpResponseMessage response)
+        protected ApiResult HandledNotConnected()
+        {
+            return ApiResult.Failed(System.Net.HttpStatusCode.RequestTimeout, new ApiError { Message = "Not connected to the internet." });
+        }
+
+        protected ApiResult<T> HandledNotConnected<T>()
+        {
+            return ApiResult<T>.Failed(System.Net.HttpStatusCode.RequestTimeout, new ApiError { Message = "Not connected to the internet." });
+        }
+
+        protected async Task<ApiResult<T>> HandleErrorAsync<T>(HttpResponseMessage response)
         {
             try
             {
@@ -34,7 +41,7 @@ namespace Bit.App.Repositories
             return ApiResult<T>.Failed(response.StatusCode, new ApiError { Message = "An unknown error has occured." });
         }
 
-        public async Task<ApiResult> HandleErrorAsync(HttpResponseMessage response)
+        protected async Task<ApiResult> HandleErrorAsync(HttpResponseMessage response)
         {
             try
             {

@@ -10,6 +10,8 @@ using Bit.App.Abstractions;
 using XLabs.Ioc;
 using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
+using Plugin.Connectivity.Abstractions;
+using Acr.UserDialogs;
 
 namespace Bit.Android
 {
@@ -25,6 +27,8 @@ namespace Bit.Android
 
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),
+                Resolver.Resolve<IConnectivity>(),
+                Resolver.Resolve<IUserDialogs>(),
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
+using Plugin.Connectivity.Abstractions;
 
 namespace Bit.App.Repositories
 {
@@ -13,100 +14,141 @@ namespace Bit.App.Repositories
         where TRequest : class
         where TResponse : class
     {
-        public ApiRepository()
+        public ApiRepository(IConnectivity connectivity)
+            : base(connectivity)
         { }
 
         public virtual async Task<ApiResult<TResponse>> GetByIdAsync(TId id)
         {
-            var requestMessage = new TokenHttpRequestMessage()
+            if(!Connectivity.IsConnected)
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(Client.BaseAddress, string.Concat(ApiRoute, "/", id)),
-            };
-
-            var response = await Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await HandleErrorAsync<TResponse>(response);
+                return HandledNotConnected<TResponse>();
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
-            return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
+            using(var client = new ApiHttpClient())
+            {
+                var requestMessage = new TokenHttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", id)),
+                };
+
+                var response = await client.SendAsync(requestMessage);
+                if(!response.IsSuccessStatusCode)
+                {
+                    return await HandleErrorAsync<TResponse>(response);
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
+                return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
+            }
         }
 
         public virtual async Task<ApiResult<ListResponse<TResponse>>> GetAsync()
         {
-            var requestMessage = new TokenHttpRequestMessage()
+            if(!Connectivity.IsConnected)
             {
-                Method = HttpMethod.Get,
-                RequestUri = new Uri(Client.BaseAddress, ApiRoute),
-            };
-
-            var response = await Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await HandleErrorAsync<ListResponse<TResponse>>(response);
+                return HandledNotConnected<ListResponse<TResponse>>();
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<ListResponse<TResponse>>(responseContent);
-            return ApiResult<ListResponse<TResponse>>.Success(responseObj, response.StatusCode);
+            using(var client = new ApiHttpClient())
+            {
+                var requestMessage = new TokenHttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(client.BaseAddress, ApiRoute),
+                };
+
+                var response = await client.SendAsync(requestMessage);
+                if(!response.IsSuccessStatusCode)
+                {
+                    return await HandleErrorAsync<ListResponse<TResponse>>(response);
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<ListResponse<TResponse>>(responseContent);
+                return ApiResult<ListResponse<TResponse>>.Success(responseObj, response.StatusCode);
+            }
         }
 
         public virtual async Task<ApiResult<TResponse>> PostAsync(TRequest requestObj)
         {
-            var requestMessage = new TokenHttpRequestMessage(requestObj)
+            if(!Connectivity.IsConnected)
             {
-                Method = HttpMethod.Post,
-                RequestUri = new Uri(Client.BaseAddress, ApiRoute),
-            };
-
-            var response = await Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await HandleErrorAsync<TResponse>(response);
+                return HandledNotConnected<TResponse>();
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
-            return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
+            using(var client = new ApiHttpClient())
+            {
+                var requestMessage = new TokenHttpRequestMessage(requestObj)
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(client.BaseAddress, ApiRoute),
+                };
+
+                var response = await client.SendAsync(requestMessage);
+                if(!response.IsSuccessStatusCode)
+                {
+                    return await HandleErrorAsync<TResponse>(response);
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
+                return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
+            }
         }
 
         public virtual async Task<ApiResult<TResponse>> PutAsync(TId id, TRequest requestObj)
         {
-            var requestMessage = new TokenHttpRequestMessage(requestObj)
+            if(!Connectivity.IsConnected)
             {
-                Method = HttpMethod.Put,
-                RequestUri = new Uri(Client.BaseAddress, string.Concat(ApiRoute, "/", id)),
-            };
-
-            var response = await Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await HandleErrorAsync<TResponse>(response);
+                return HandledNotConnected<TResponse>();
             }
 
-            var responseContent = await response.Content.ReadAsStringAsync();
-            var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
-            return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
+            using(var client = new ApiHttpClient())
+            {
+                var requestMessage = new TokenHttpRequestMessage(requestObj)
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", id)),
+                };
+
+                var response = await client.SendAsync(requestMessage);
+                if(!response.IsSuccessStatusCode)
+                {
+                    return await HandleErrorAsync<TResponse>(response);
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
+                return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
+            }
         }
 
-        public virtual async Task<ApiResult<object>> DeleteAsync(TId id)
+        public virtual async Task<ApiResult> DeleteAsync(TId id)
         {
-            var requestMessage = new TokenHttpRequestMessage()
+            if(!Connectivity.IsConnected)
             {
-                Method = HttpMethod.Delete,
-                RequestUri = new Uri(Client.BaseAddress, string.Concat(ApiRoute, "/", id)),
-            };
-
-            var response = await Client.SendAsync(requestMessage);
-            if(!response.IsSuccessStatusCode)
-            {
-                return await HandleErrorAsync<object>(response);
+                return HandledNotConnected();
             }
 
-            return ApiResult<object>.Success(null, response.StatusCode);
+            using(var client = new ApiHttpClient())
+            {
+                var requestMessage = new TokenHttpRequestMessage()
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", id)),
+                };
+
+                var response = await client.SendAsync(requestMessage);
+                if(!response.IsSuccessStatusCode)
+                {
+                    return await HandleErrorAsync(response);
+                }
+
+                return ApiResult.Success(response.StatusCode);
+            }
         }
     }
 }

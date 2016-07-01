@@ -10,12 +10,17 @@ using Plugin.Fingerprint.Abstractions;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
 using Bit.App.Controls;
+using Plugin.Connectivity.Abstractions;
+using System.Net;
+using Acr.UserDialogs;
 
 namespace Bit.App
 {
     public class App : Application
     {
         private readonly IDatabaseService _databaseService;
+        private readonly IConnectivity _connectivity;
+        private readonly IUserDialogs _userDialogs;
         private readonly ISyncService _syncService;
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
@@ -23,12 +28,16 @@ namespace Bit.App
 
         public App(
             IAuthService authService,
+            IConnectivity connectivity,
+            IUserDialogs userDialogs,
             IDatabaseService databaseService,
             ISyncService syncService,
             IFingerprint fingerprint,
             ISettings settings)
         {
             _databaseService = databaseService;
+            _connectivity = connectivity;
+            _userDialogs = userDialogs;
             _syncService = syncService;
             _authService = authService;
             _fingerprint = fingerprint;
@@ -47,9 +56,36 @@ namespace Bit.App
 
             MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
             {
-                var syncTask = _syncService.IncrementalSyncAsync();
                 await CheckLockAsync(args);
-                await syncTask;
+                if(_connectivity.IsConnected)
+                {
+                    var attempt = 0;
+                    do
+                    {
+                        try
+                        {
+                            await _syncService.IncrementalSyncAsync();
+                            break;
+                        }
+                        catch(WebException)
+                        {
+                            Debug.WriteLine("Failed to sync.");
+                            if(attempt >= 1)
+                            {
+                                await _userDialogs.AlertAsync("Unable to automatically sync.");
+                            }
+                            else
+                            {
+                                await Task.Delay(1000);
+                            }
+                            attempt++;
+                        }
+                    } while(attempt <= 1);
+                }
+                else
+                {
+                    Debug.WriteLine("Not connected.");
+                }
             });
 
             MessagingCenter.Subscribe<Application, bool>(Current, "Lock", async (sender, args) =>
@@ -58,12 +94,35 @@ namespace Bit.App
             });
         }
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
             // Handle when your app starts
-            var lockTask = CheckLockAsync(false);
+            await CheckLockAsync(false);
             _databaseService.CreateTables();
-            var syncTask = _syncService.FullSyncAsync();
+            if(_connectivity.IsConnected)
+            {
+                var attempt = 0;
+                do
+                {
+                    try
+                    {
+                        await _syncService.FullSyncAsync();
+                        break;
+                    }
+                    catch(WebException)
+                    {
+                        if(attempt >= 1)
+                        {
+                            await _userDialogs.AlertAsync("Unable to automatically sync. Manual sync required.");
+                        }
+                        else
+                        {
+                            await Task.Delay(1000);
+                        }
+                        attempt++;
+                    }
+                } while(attempt <= 1);
+            }
 
             Debug.WriteLine("OnStart");
         }
@@ -79,14 +138,14 @@ namespace Bit.App
             }
         }
 
-        protected override void OnResume()
+        protected async override void OnResume()
         {
             // Handle when your app resumes
             Debug.WriteLine("OnResume");
 
             if(Device.OS == TargetPlatform.Android)
             {
-                var task = CheckLockAsync(false);
+                await CheckLockAsync(false);
             }
 
             var lockPinPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage;

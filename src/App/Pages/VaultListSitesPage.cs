@@ -12,6 +12,7 @@ using XLabs.Ioc;
 using Bit.App.Utilities;
 using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
+using Plugin.Connectivity.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -20,6 +21,7 @@ namespace Bit.App.Pages
         private readonly IFolderService _folderService;
         private readonly ISiteService _siteService;
         private readonly IUserDialogs _userDialogs;
+        private readonly IConnectivity _connectivity;
         private readonly IClipboardService _clipboardService;
         private readonly IPushNotification _pushNotification;
         private readonly ISettings _settings;
@@ -30,6 +32,7 @@ namespace Bit.App.Pages
             _favorites = favorites;
             _folderService = Resolver.Resolve<IFolderService>();
             _siteService = Resolver.Resolve<ISiteService>();
+            _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
@@ -77,7 +80,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
             LoadFoldersAsync().Wait();
 
-            if(Device.OS == TargetPlatform.iOS && !_favorites)
+            if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
                 if(!_settings.GetValueOrDefault<bool>(Constants.PushPromptShown))
                 {

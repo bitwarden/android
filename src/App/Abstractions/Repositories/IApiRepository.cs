@@ -14,6 +14,6 @@ namespace Bit.App.Abstractions
         Task<ApiResult<ListResponse<TResponse>>> GetAsync();
         Task<ApiResult<TResponse>> PostAsync(TRequest requestObj);
         Task<ApiResult<TResponse>> PutAsync(TId id, TRequest requestObj);
-        Task<ApiResult<object>> DeleteAsync(TId id);
+        Task<ApiResult> DeleteAsync(TId id);
     }
 }

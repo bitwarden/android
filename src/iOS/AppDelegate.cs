@@ -22,6 +22,7 @@ using Bit.App;
 using Bit.iOS.Core.Services;
 using PushNotification.Plugin;
 using Plugin.DeviceInfo;
+using Plugin.Connectivity.Abstractions;
 
 namespace Bit.iOS
 {
@@ -43,6 +44,8 @@ namespace Bit.iOS
 
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),
+                Resolver.Resolve<IConnectivity>(),
+                Resolver.Resolve<IUserDialogs>(),
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
