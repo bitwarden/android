@@ -10,13 +10,13 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class SyncPage : ExtendedContentPage
+    public class SettingsSyncPage : ExtendedContentPage
     {
         private readonly ISyncService _syncService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
 
-        public SyncPage()
+        public SettingsSyncPage()
         {
             _syncService = Resolver.Resolve<ISyncService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();

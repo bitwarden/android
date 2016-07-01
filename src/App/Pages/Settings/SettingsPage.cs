@@ -175,7 +175,7 @@ namespace Bit.App.Pages
 
         private void SyncCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SyncPage());
+            Navigation.PushAsync(new SettingsSyncPage());
         }
 
         private void LockCell_Tapped(object sender, EventArgs e)
