@@ -97,6 +97,7 @@
     <Compile Include="Models\Data\SiteData.cs" />
     <Compile Include="Models\DomainName.cs" />
     <Compile Include="Models\Folder.cs" />
+    <Compile Include="Models\Page\AppExtensionPageModel.cs" />
     <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
     <Compile Include="Models\Page\PinPageModel.cs" />
     <Compile Include="Models\Page\PasswordGeneratorPageModel.cs" />
@@ -110,6 +111,7 @@
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\Settings\SettingsEditFolderPage.cs" />
     <Compile Include="Pages\Lock\LockFingerprintPage.cs" />
+    <Compile Include="Pages\Tools\ToolsExtensionPage.cs" />
     <Compile Include="Pages\Tools\ToolsPasswordGeneratorSettingsPage.cs" />
     <Compile Include="Pages\Tools\ToolsPasswordGeneratorPage.cs" />
     <Compile Include="Pages\Tools\ToolsPage.cs" />

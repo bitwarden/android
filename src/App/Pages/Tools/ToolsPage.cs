@@ -4,7 +4,6 @@ using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
-using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -26,6 +25,7 @@ namespace Bit.App.Pages
             var generatorCell = new ToolsViewCell("Password Generator", "Automatically generate strong, unique passwords for your logins.", "refresh");
             generatorCell.Tapped += GeneratorCell_Tapped;
             var extensionCell = new ToolsViewCell("bitwarden App Extension", "Use bitwarden in Safari and other apps to auto-fill your logins.", "upload");
+            extensionCell.Tapped += ExtensionCell_Tapped;
             var webCell = new ToolsViewCell("bitwarden Web Vault", "Manage your logins from any web browser with the bitwarden web vault.", "globe");
             webCell.Tapped += WebCell_Tapped;
             var importCell = new ToolsViewCell("Import Logins", "Quickly bulk import your logins from other password management apps.", "cloudup");
@@ -56,6 +56,11 @@ namespace Bit.App.Pages
 
             Title = AppResources.Tools;
             Content = table;
+        }
+
+        private void ExtensionCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
         }
 
         private void GeneratorCell_Tapped(object sender, EventArgs e)

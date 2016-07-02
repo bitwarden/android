@@ -42,6 +42,7 @@
 			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.change-password-action&quot;
 			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.fill-webview-action&quot;
 			||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;org.appextension.fill-browser-action&quot;
+            ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;com.8bit.bitwarden.extension-setup&quot;
 		).@count == $extensionItem.attachments.@count
 	).@count == 1</string>
 			<key>NSExtensionPointName</key>

@@ -54,6 +54,22 @@ namespace Bit.iOS
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
 
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "ShowAppExtension", (sender) =>
+            {
+                var itemProvider = new NSItemProvider(new NSDictionary(), "com.8bit.bitwarden.extension-setup");
+                var extensionItem = new NSExtensionItem();
+                extensionItem.Attachments = new NSItemProvider[] { itemProvider };
+                var activityViewController = new UIActivityViewController(new NSExtensionItem[] { extensionItem }, null);
+                activityViewController.CompletionHandler = (activityType, completed) =>
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "EnabledAppExtension", 
+                        completed && activityType == "com.8bit.bitwarden.find-login-action-extension");
+                };
+
+                UIApplication.SharedApplication.KeyWindow.RootViewController.ModalViewController
+                    .PresentViewController(activityViewController, true, null);
+            });
+
             return base.FinishedLaunching(app, options);
         }
 
