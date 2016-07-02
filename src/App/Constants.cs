@@ -2,12 +2,21 @@
 {
     public static class Constants
     {
-        public const string SettingFingerprintUnlockOn = "fingerprintUnlockOn";
-        public const string SettingPinUnlockOn = "pinUnlockOn";
-        public const string SettingLockSeconds = "lockSeconds";
+        public const string SettingFingerprintUnlockOn = "setting:fingerprintUnlockOn";
+        public const string SettingPinUnlockOn = "setting:pinUnlockOn";
+        public const string SettingLockSeconds = "setting:lockSeconds";
         public const string SettingLastBackgroundedDate = "lastBackgroundedDate";
 
-        public const string PushPromptShown = "initialPushPromptShown";
-        public const string PushLastRegistration = "lastPushRegistration";
+        public const string PasswordGeneratorLength = "pwGenerator:length";
+        public const string PasswordGeneratorUppercase = "pwGenerator:uppercase";
+        public const string PasswordGeneratorLowercase = "pwGenerator:lowercase";
+        public const string PasswordGeneratorNumbers = "pwGenerator:numbers";
+        public const string PasswordGeneratorMinNumbers = "pwGenerator:minNumbers";
+        public const string PasswordGeneratorSpecial = "pwGenerator:special";
+        public const string PasswordGeneratorMinSpecial = "pwGenerator:minSpecial";
+        public const string PasswordGeneratorAmbiguous = "pwGenerator:ambiguous";
+
+        public const string PushInitialPromptShown = "push:initialPromptShown";
+        public const string PushLastRegistrationDate = "push:lastRegistrationDate";
     }
 }

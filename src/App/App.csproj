@@ -99,6 +99,7 @@
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
     <Compile Include="Models\Page\PinPageModel.cs" />
+    <Compile Include="Models\Page\PasswordGeneratorPageModel.cs" />
     <Compile Include="Models\PushNotification.cs" />
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
@@ -109,6 +110,8 @@
     <Compile Include="Pages\MainPage.cs" />
     <Compile Include="Pages\Settings\SettingsEditFolderPage.cs" />
     <Compile Include="Pages\Lock\LockFingerprintPage.cs" />
+    <Compile Include="Pages\Tools\ToolsPasswordGeneratorSettingsPage.cs" />
+    <Compile Include="Pages\Tools\ToolsPasswordGeneratorPage.cs" />
     <Compile Include="Pages\Tools\ToolsPage.cs" />
     <Compile Include="Pages\Settings\SettingsSyncPage.cs" />
     <Compile Include="Pages\Settings\SettingsPage.cs" />
@@ -144,6 +147,7 @@
     <Compile Include="Abstractions\Services\ICryptoService.cs" />
     <Compile Include="Abstractions\Services\IDatabaseService.cs" />
     <Compile Include="Abstractions\Services\ISyncService.cs" />
+    <Compile Include="Abstractions\Services\IPasswordGenerationService.cs" />
     <Compile Include="Services\SyncService.cs" />
     <Compile Include="Services\SiteService.cs" />
     <Compile Include="Services\AuthService.cs" />
@@ -155,6 +159,7 @@
     <Compile Include="Pages\Vault\VaultViewSitePage.cs" />
     <Compile Include="Pages\Vault\VaultEditSitePage.cs" />
     <Compile Include="Pages\Vault\VaultListSitesPage.cs" />
+    <Compile Include="Services\PasswordGenerationService.cs" />
     <Compile Include="Utilities\Extentions.cs" />
     <Compile Include="Utilities\ExtendedObservableCollection.cs" />
     <Compile Include="Utilities\ApiHttpClient.cs" />

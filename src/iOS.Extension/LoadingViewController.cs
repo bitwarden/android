@@ -94,6 +94,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
                 //.RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
@@ -101,10 +102,10 @@ namespace Bit.iOS.Extension
                 .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager());
-            // Other
-            //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-            //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
-            //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+                // Other
+                //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
+                //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
+                //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
             ISettings settings = new Settings("group.com.8bit.bitwarden");
             container.RegisterInstance(settings, new ContainerControlledLifetimeManager());

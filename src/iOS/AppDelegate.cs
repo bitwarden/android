@@ -185,6 +185,7 @@ namespace Bit.iOS
                 .RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPushNotificationListener, PushNotificationListener>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

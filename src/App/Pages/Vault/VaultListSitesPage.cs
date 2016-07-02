@@ -82,17 +82,17 @@ namespace Bit.App.Pages
 
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
-                var pushPromptShow = _settings.GetValueOrDefault<bool>(Constants.PushPromptShown);
+                var pushPromptShow = _settings.GetValueOrDefault<bool>(Constants.PushInitialPromptShown);
                 if(!pushPromptShow)
                 {
-                    _settings.AddOrUpdateValue(Constants.PushPromptShown, true);
+                    _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
                     await _userDialogs.AlertAsync(@"bitwarden keeps your vault automatically synced by using push notifications.
                         For the best possible experience, please select ""Ok"" on the following prompt when asked to enable push notifications.",
                         "Enable Automatic Syncing", "Ok, got it!");
                 }
 
                 // Check push registration once per day
-                var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistration);
+                var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate);
                 if(!pushPromptShow || !lastPushRegistration.HasValue || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
                 {
                     _pushNotification.Register();

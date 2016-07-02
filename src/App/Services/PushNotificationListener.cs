@@ -76,7 +76,7 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 Debug.WriteLine("Registered device with server.");
-                _settings.AddOrUpdateValue(Constants.PushLastRegistration, DateTime.UtcNow);
+                _settings.AddOrUpdateValue(Constants.PushLastRegistrationDate, DateTime.UtcNow);
             }
             else
             {
@@ -87,7 +87,7 @@ namespace Bit.App.Services
         public void OnUnregistered(DeviceType deviceType)
         {
             Debug.WriteLine("Push Notification - Device Unnregistered");
-            _settings.Remove(Constants.PushLastRegistration);
+            _settings.Remove(Constants.PushLastRegistrationDate);
         }
 
         public void OnError(string message, DeviceType deviceType)

@@ -24,6 +24,7 @@ namespace Bit.App.Pages
         public void Init()
         {
             var generatorCell = new ToolsViewCell("Password Generator", "Automatically generate strong, unique passwords for your logins.", "refresh");
+            generatorCell.Tapped += GeneratorCell_Tapped;
             var extensionCell = new ToolsViewCell("bitwarden App Extension", "Use bitwarden in Safari and other apps to auto-fill your logins.", "upload");
             var webCell = new ToolsViewCell("bitwarden Web Vault", "Manage your logins from any web browser with the bitwarden web vault.", "globe");
             webCell.Tapped += WebCell_Tapped;
@@ -55,6 +56,11 @@ namespace Bit.App.Pages
 
             Title = AppResources.Tools;
             Content = table;
+        }
+
+        private void GeneratorCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsPasswordGeneratorPage()));
         }
 
         private void WebCell_Tapped(object sender, EventArgs e)
