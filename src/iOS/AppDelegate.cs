@@ -33,8 +33,6 @@ namespace Bit.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            CrossFingerprint.AllowReuse = false;
-
             global::Xamarin.Forms.Forms.Init();
 
             if(!Resolver.IsSet)
