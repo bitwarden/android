@@ -15,6 +15,7 @@ using Newtonsoft.Json;
 using Bit.iOS.Extension.Models;
 using MobileCoreServices;
 using Plugin.Settings.Abstractions;
+using Plugin.Connectivity;
 
 namespace Bit.iOS.Extension
 {
@@ -101,9 +102,9 @@ namespace Bit.iOS.Extension
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager());
+                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
-                //.RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager());
                 //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
                 //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
