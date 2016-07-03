@@ -39,7 +39,8 @@ namespace Bit.App.Pages
                 Margin = new Thickness(15, 40, 15, 0),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontFamily = "Courier",
-                LineBreakMode = LineBreakMode.TailTruncation
+                LineBreakMode = LineBreakMode.TailTruncation,
+                VerticalOptions = LayoutOptions.Start
             };
 
             var tgr = new TapGestureRecognizer();
@@ -64,6 +65,7 @@ namespace Bit.App.Pages
                 EnableScrolling = false,
                 Intent = TableIntent.Menu,
                 HasUnevenRows = true,
+                VerticalOptions = LayoutOptions.End,
                 Root = new TableRoot
                 {
                     new TableSection

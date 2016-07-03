@@ -1,10 +1,21 @@
 ﻿using System;
 using Xamarin.Forms;
+using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.InteropServices;
+using XLabs.Ioc;
+using Bit.App.Abstractions;
 
 namespace Bit.App.Controls
 {
     public class ExtendedTableView : TableView
     {
+        public ExtendedTableView()
+            : base()
+        {
+            VerticalOptions = LayoutOptions.Start;
+        }
+
         public static readonly BindableProperty EnableScrollingProperty =
             BindableProperty.Create(nameof(EnableScrolling), typeof(bool), typeof(ExtendedTableView), true);
 
@@ -33,5 +44,17 @@ namespace Bit.App.Controls
         }
 
         public int EstimatedRowHeight { get; set; }
+
+        protected override SizeRequest OnSizeRequest(double widthConstraint, double heightConstraint)
+        {
+            if(Device.OS == TargetPlatform.iOS && VerticalOptions.Alignment != LayoutAlignment.Fill)
+            {
+                var reflectionService = Resolver.Resolve<IReflectionService>();
+                var baseBaseOnSizeRequest = reflectionService.GetVisualElementOnSizeRequest(this);
+                return baseBaseOnSizeRequest(widthConstraint, heightConstraint);
+            }
+
+            return base.OnSizeRequest(widthConstraint, heightConstraint);
+        }
     }
 }

@@ -259,6 +259,7 @@
     <Compile Include="Services\KeyStoreStorageService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SqlService.cs" />
   </ItemGroup>
   <ItemGroup>

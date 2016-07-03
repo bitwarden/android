@@ -40,6 +40,7 @@
     <Compile Include="Abstractions\Services\IAppIdService.cs" />
     <Compile Include="Abstractions\Services\IAuthService.cs" />
     <Compile Include="Abstractions\Services\IClipboardService.cs" />
+    <Compile Include="Abstractions\Services\IReflectionService.cs" />
     <Compile Include="Abstractions\Services\ISiteService.cs" />
     <Compile Include="Abstractions\Services\IFolderService.cs" />
     <Compile Include="App.cs" />

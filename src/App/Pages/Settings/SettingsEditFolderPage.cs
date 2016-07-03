@@ -47,6 +47,9 @@ namespace Bit.App.Pages
                 EnableScrolling = false,
                 EnableSelection = false,
                 HasUnevenRows = true,
+                VerticalOptions = LayoutOptions.Start,
+                BackgroundColor = Color.Gray,
+                Margin = new Thickness(0, -1),
                 Root = new TableRoot
                 {
                     new TableSection()
@@ -67,6 +70,9 @@ namespace Bit.App.Pages
                 Intent = TableIntent.Settings,
                 EnableScrolling = false,
                 EnableSelection = true,
+                VerticalOptions = LayoutOptions.End,
+                BackgroundColor = Color.Yellow,
+                Margin = new Thickness(0, -1),
                 Root = new TableRoot
                 {
                     new TableSection()
@@ -102,7 +108,7 @@ namespace Bit.App.Pages
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Edit Folder";
-            Content = new StackLayout { Children = { mainTable, deleteTable } };
+            Content = new ScrollView { Content = new StackLayout { Children = { mainTable, deleteTable } } };
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
