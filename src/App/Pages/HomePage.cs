@@ -51,8 +51,7 @@ namespace Bit.App.Pages
                 Command = new Command(async () => await RegisterAsync()),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
-                Style = (Style)Application.Current.Resources["btn-primary"],
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                Style = (Style)Application.Current.Resources["btn-primary"]
             };
 
             var loginButton = new Button
@@ -61,8 +60,7 @@ namespace Bit.App.Pages
                 Command = new Command(async () => await LoginAsync()),
                 VerticalOptions = LayoutOptions.End,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                HorizontalOptions = LayoutOptions.Fill,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                HorizontalOptions = LayoutOptions.Fill
             };
 
             var buttonStackLayout = new StackLayout

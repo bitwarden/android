@@ -22,7 +22,7 @@ namespace Bit.iOS.Controls
                 var size = view.FontSize;
                 if(size == Device.GetNamedSize(NamedSize.Large, typeof(Button)))
                 {
-                    pointSize *= 1.4f;
+                    pointSize *= 1.3f;
                 }
                 else if(size == Device.GetNamedSize(NamedSize.Small, typeof(Button)))
                 {

@@ -11,7 +11,8 @@ namespace Bit.App.Controls
             bool IsPassword = false,
             VisualElement nextElement = null,
             bool useLabelAsPlaceholder = false,
-            string imageSource = null)
+            string imageSource = null,
+            Thickness? containerPadding = null)
         {
             if(!useLabelAsPlaceholder)
             {
@@ -48,7 +49,7 @@ namespace Bit.App.Controls
 
             var imageStackLayout = new StackLayout
             {
-                Padding = new Thickness(15, 10),
+                Padding = containerPadding ?? new Thickness(15, 10),
                 Orientation = StackOrientation.Horizontal,
                 Spacing = 10,
                 HorizontalOptions = LayoutOptions.FillAndExpand,

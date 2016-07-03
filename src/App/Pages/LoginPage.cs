@@ -38,10 +38,13 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            var padding = new Thickness(15, 20);
+
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
-                useLabelAsPlaceholder: true, imageSource: "lock");
+                useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
             EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,
-                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope");
+                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",
+                containerPadding: padding);
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
             PasswordCell.Entry.Completed += Entry_Completed;

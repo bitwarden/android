@@ -34,11 +34,18 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true, imageSource: "lightbulb-o");
-            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true, nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock");
-            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true, nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock");
-            NameCell = new FormEntryCell("Your Name", nextElement: PasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "user");
-            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: NameCell.Entry, entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope");
+            var padding = new Thickness(15, 20);
+
+            PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true, 
+                imageSource: "lightbulb-o", containerPadding: padding);
+            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true, 
+                nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true, 
+                nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
+            NameCell = new FormEntryCell("Your Name", nextElement: PasswordCell.Entry, 
+                useLabelAsPlaceholder: true, imageSource: "user", containerPadding: padding);
+            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: NameCell.Entry, 
+                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope", containerPadding: padding);
 
             PasswordHintCell.Entry.ReturnType = Enums.ReturnType.Done;
             PasswordHintCell.Entry.Completed += Entry_Completed;
