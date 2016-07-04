@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Bit.App.Controls;
 using Bit.iOS.Controls;
+using CoreGraphics;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -23,10 +24,6 @@ namespace Bit.iOS.Controls
                 UpdateRowHeight(view);
                 UpdateEstimatedRowHeight(view);
                 UpdateSeparatorColor(view);
-
-                Control.SectionFooterHeight = 0.01f;
-                Control.EstimatedSectionFooterHeight = 1f;
-                Control.ContentInset = new UIEdgeInsets(0, 0, -35, 0);
             }
         }
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)

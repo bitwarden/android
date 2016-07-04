@@ -26,7 +26,6 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public FormEntryCell NameCell { get; set; }
         public FormEntryCell EmailCell { get; set; }
         public FormEntryCell PasswordCell { get; set; }
         public FormEntryCell ConfirmPasswordCell { get; set; }
@@ -36,40 +35,93 @@ namespace Bit.App.Pages
         {
             var padding = new Thickness(15, 20);
 
-            PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true, 
+            PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true,
                 imageSource: "lightbulb-o", containerPadding: padding);
-            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true, 
+            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true,
                 nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
-            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true, 
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
                 nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
-            NameCell = new FormEntryCell("Your Name", nextElement: PasswordCell.Entry, 
-                useLabelAsPlaceholder: true, imageSource: "user", containerPadding: padding);
-            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: NameCell.Entry, 
+            EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,
                 entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope", containerPadding: padding);
 
             PasswordHintCell.Entry.ReturnType = Enums.ReturnType.Done;
             PasswordHintCell.Entry.Completed += Entry_Completed;
 
-            var table = new ExtendedTableView
+            var table = new FormTableView
             {
-                Intent = TableIntent.Settings,
-                EnableScrolling = true,
-                HasUnevenRows = true,
-                EnableSelection = false,
                 Root = new TableRoot
                 {
-                    new TableSection()
+                    new TableSection
                     {
                         EmailCell,
-                        NameCell
-                    },
-                    new TableSection()
+                        PasswordCell
+                    }
+                }
+            };
+
+            var passwordLabel = new Label
+            {
+                Text = "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.",
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                Style = (Style)Application.Current.Resources["text-muted"]
+            };
+
+            var table2 = new FormTableView
+            {
+                Root = new TableRoot
+                {
+                    new TableSection
                     {
-                        PasswordCell,
                         ConfirmPasswordCell,
                         PasswordHintCell
                     }
                 }
+            };
+
+            var hintLabel = new Label
+            {
+                Text = "A master password hint can help you remember your password if you forget it.",
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                Style = (Style)Application.Current.Resources["text-muted"]
+            };
+
+            var layout = new RelativeLayout
+            {
+                Padding = new Thickness(0, 0, 0, 35)
+            };
+            layout.Children.Add(
+                table,
+                Constraint.Constant(0),
+                Constraint.Constant(0),
+                Constraint.RelativeToParent((parent) => { return parent.Width; })
+            );
+            layout.Children.Add(
+                passwordLabel,
+                Constraint.Constant(15),
+                Constraint.RelativeToView(table, (parent, sibling) => { return sibling.Y + sibling.Height - (this.IsPortrait() ? 45 : 25); }),
+                Constraint.RelativeToParent((parent) => { return parent.Width - 30; })
+            );
+            layout.Children.Add(
+                table2,
+                Constraint.Constant(0),
+                Constraint.RelativeToView(passwordLabel, (parent, sibling) => { return sibling.Y + sibling.Height - (this.IsPortrait() ? 15 : 10); }),
+                Constraint.RelativeToParent((parent) => { return parent.Width; })
+            );
+            layout.Children.Add(
+                hintLabel,
+                Constraint.Constant(15),
+                Constraint.RelativeToView(table2, (parent, sibling) => { return sibling.Y + sibling.Height - (this.IsPortrait() ? 45 : 25); }),
+                Constraint.RelativeToParent((parent) => { return parent.Width - 30; })
+            );
+
+            layout.LowerChild(table2);
+            layout.LowerChild(table);
+
+            var scrollView = new ScrollView
+            {
+                Content = layout
             };
 
             var loginToolbarItem = new ToolbarItem("Submit", null, async () =>
@@ -79,14 +131,14 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                table.RowHeight = -1;
-                table.EstimatedRowHeight = 70;
+                table.RowHeight = table2.RowHeight = table2.RowHeight = -1;
+                table.EstimatedRowHeight = table2.EstimatedRowHeight = table2.EstimatedRowHeight = 70;
                 ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
             }
 
             ToolbarItems.Add(loginToolbarItem);
             Title = "Create Account";
-            Content = table;
+            Content = scrollView;
         }
 
         protected override void OnAppearing()
@@ -108,12 +160,6 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if(string.IsNullOrWhiteSpace(NameCell.Entry.Text))
-            {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, "Your Name"), AppResources.Ok);
-                return;
-            }
-
             if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, "Your Name"), AppResources.Ok);
@@ -129,7 +175,6 @@ namespace Bit.App.Pages
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, EmailCell.Entry.Text);
             var request = new RegisterRequest
             {
-                Name = NameCell.Entry.Text,
                 Email = EmailCell.Entry.Text,
                 MasterPasswordHash = _cryptoService.HashPasswordBase64(key, PasswordCell.Entry.Text),
                 MasterPasswordHint = !string.IsNullOrWhiteSpace(PasswordHintCell.Entry.Text) ? PasswordHintCell.Entry.Text : null
@@ -147,6 +192,18 @@ namespace Bit.App.Pages
 
             _userDialogs.SuccessToast("Account Created", "Your new account has been created! You may now log in.");
             await Navigation.PopModalAsync();
+        }
+
+        private class FormTableView : ExtendedTableView
+        {
+            public FormTableView()
+            {
+                Intent = TableIntent.Settings;
+                EnableScrolling = false;
+                HasUnevenRows = true;
+                EnableSelection = false;
+                VerticalOptions = LayoutOptions.Start;
+            }
         }
     }
 }

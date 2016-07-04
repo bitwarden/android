@@ -1,6 +1,7 @@
 ﻿using System;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Xamarin.Forms;
 using XLabs.Ioc;
 
 namespace Bit.App
@@ -16,6 +17,16 @@ namespace Bit.App
 
             var cryptoService = Resolver.Resolve<ICryptoService>();
             return cryptoService.Encrypt(s);
+        }
+
+        public static bool IsPortrait(this Page page)
+        {
+            return page.Width < page.Height;
+        }
+
+        public static bool IsLandscape(this Page page)
+        {
+            return !page.IsPortrait();
         }
     }
 }

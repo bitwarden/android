@@ -10,12 +10,6 @@ namespace Bit.App.Controls
 {
     public class ExtendedTableView : TableView
     {
-        public ExtendedTableView()
-            : base()
-        {
-            VerticalOptions = LayoutOptions.Start;
-        }
-
         public static readonly BindableProperty EnableScrollingProperty =
             BindableProperty.Create(nameof(EnableScrolling), typeof(bool), typeof(ExtendedTableView), true);
 
@@ -47,7 +41,7 @@ namespace Bit.App.Controls
 
         protected override SizeRequest OnSizeRequest(double widthConstraint, double heightConstraint)
         {
-            if(Device.OS == TargetPlatform.iOS && VerticalOptions.Alignment != LayoutAlignment.Fill)
+            if(Device.OS == TargetPlatform.iOS && !VerticalOptions.Expands)
             {
                 var reflectionService = Resolver.Resolve<IReflectionService>();
                 var baseBaseOnSizeRequest = reflectionService.GetVisualElementOnSizeRequest(this);
