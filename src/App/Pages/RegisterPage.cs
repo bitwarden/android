@@ -61,11 +61,15 @@ namespace Bit.App.Pages
 
             var passwordLabel = new Label
             {
-                Text = "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.",
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"]
             };
+            var fs = new FormattedString();
+            fs.Spans.Add(new Span { Text = "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is" });
+            fs.Spans.Add(new Span { Text = " no way", FontAttributes = FontAttributes.Bold });
+            fs.Spans.Add(new Span { Text = " to recover the password in the event that you forget it." });
+            passwordLabel.FormattedText = fs;
 
             var table2 = new FormTableView
             {
