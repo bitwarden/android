@@ -65,7 +65,15 @@ namespace Bit.iOS.Controls
 
         private void SetSource()
         {
-            Control.Source = new CustomTableViewModelRenderer((ExtendedTableView)Element);
+            var view = (ExtendedTableView)Element;
+            if(view.NoFooter || view.NoHeader)
+            {
+                Control.Source = new CustomTableViewModelRenderer(view);
+            }
+            else
+            {
+                Control.Source = Element.HasUnevenRows ? new UnEvenTableViewModelRenderer(Element) : new TableViewModelRenderer(Element);
+            }
         }
 
         private void SetScrolling(ExtendedTableView view)
@@ -142,7 +150,10 @@ namespace Bit.iOS.Controls
             {
                 if(_view.NoHeader)
                 {
-                    return new UIView(CGRect.Empty);
+                    return new UIView(CGRect.Empty)
+                    {
+                        Hidden = true
+                    };
                 }
 
                 return base.GetViewForHeader(tableView, section);
@@ -162,11 +173,10 @@ namespace Bit.iOS.Controls
             {
                 if(_view.NoFooter)
                 {
-                    var view = new UIView(CGRect.Empty)
+                    return new UIView(CGRect.Empty)
                     {
                         Hidden = true
                     };
-                    return view;
                 }
 
                 return null;
