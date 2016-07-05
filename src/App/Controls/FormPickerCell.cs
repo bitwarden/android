@@ -36,10 +36,17 @@ namespace Bit.App.Controls
             stackLayout.Children.Add(Label);
             stackLayout.Children.Add(Picker);
 
+            Tapped += FormPickerCell_Tapped;
+
             View = stackLayout;
         }
 
         public Label Label { get; private set; }
         public ExtendedPicker Picker { get; private set; }
+
+        private void FormPickerCell_Tapped(object sender, EventArgs e)
+        {
+            Picker.Focus();
+        }
     }
 }

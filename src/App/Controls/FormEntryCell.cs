@@ -85,6 +85,8 @@ namespace Bit.App.Controls
             formStackLayout.Children.Add(Entry);
             imageStackLayout.Children.Add(formStackLayout);
 
+            Tapped += FormEntryCell_Tapped;
+
             View = imageStackLayout;
         }
 
@@ -92,6 +94,11 @@ namespace Bit.App.Controls
         public ExtendedEntry Entry { get; private set; }
 
         private void Tgr_Tapped(object sender, EventArgs e)
+        {
+            Entry.Focus();
+        }
+
+        private void FormEntryCell_Tapped(object sender, EventArgs e)
         {
             Entry.Focus();
         }

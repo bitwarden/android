@@ -25,9 +25,16 @@ namespace Bit.App.Controls
 
             stackLayout.Children.Add(Editor);
 
+            Tapped += FormEditorCell_Tapped;
+
             View = stackLayout;
         }
 
         public ExtendedEditor Editor { get; private set; }
+
+        private void FormEditorCell_Tapped(object sender, EventArgs e)
+        {
+            Editor.Focus();
+        }
     }
 }

@@ -37,7 +37,6 @@ namespace Bit.App.Pages
 
             var nameCell = new FormEntryCell(AppResources.Name);
             nameCell.Entry.Text = folder.Name.Decrypt();
-            nameCell.Tapped += NameCell_Tapped;
 
             var deleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
             deleteCell.Tapped += DeleteCell_Tapped;
@@ -46,7 +45,6 @@ namespace Bit.App.Pages
             {
                 Intent = TableIntent.Settings,
                 EnableScrolling = false,
-                EnableSelection = true,
                 HasUnevenRows = true,
                 VerticalOptions = LayoutOptions.Start,
                 Root = new TableRoot
@@ -104,15 +102,6 @@ namespace Bit.App.Pages
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
-            }
-        }
-
-        private void NameCell_Tapped(object sender, EventArgs e)
-        {
-            var cell = sender as FormEntryCell;
-            if(cell != null)
-            {
-                cell.Entry.Focus();
             }
         }
 

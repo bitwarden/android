@@ -83,7 +83,6 @@ namespace Bit.App.Pages
                 Intent = TableIntent.Settings,
                 EnableScrolling = true,
                 HasUnevenRows = true,
-                EnableSelection = false,
                 Root = new TableRoot
                 {
                     new TableSection("Site Information")
