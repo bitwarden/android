@@ -86,8 +86,8 @@ namespace Bit.App.Pages
                 if(!pushPromptShow)
                 {
                     _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
-                    await _userDialogs.AlertAsync(@"bitwarden keeps your vault automatically synced by using push notifications.
-                        For the best possible experience, please select ""Ok"" on the following prompt when asked to enable push notifications.",
+                    await _userDialogs.AlertAsync("bitwarden keeps your vault automatically synced by using push notifications."
+                        + " For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.",
                         "Enable Automatic Syncing", "Ok, got it!");
                 }
 
