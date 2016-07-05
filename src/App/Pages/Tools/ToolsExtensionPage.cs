@@ -58,8 +58,8 @@ namespace Bit.App.Pages
             var notStartedButton = new Button
             {
                 Text = "Enable App Extension",
-                Command = new Command(() => ActivateExtension()),
-                VerticalOptions = LayoutOptions.End,
+                Command = new Command(() => ShowExtension()),
+                VerticalOptions = LayoutOptions.EndAndExpand,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
             };
@@ -105,8 +105,8 @@ namespace Bit.App.Pages
             var notActivatedButton = new Button
             {
                 Text = "Enable App Extension",
-                Command = new Command(() => ActivateExtension()),
-                VerticalOptions = LayoutOptions.End,
+                Command = new Command(() => ShowExtension()),
+                VerticalOptions = LayoutOptions.EndAndExpand,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
             };
@@ -139,7 +139,8 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
-                LineBreakMode = LineBreakMode.WordWrap
+                LineBreakMode = LineBreakMode.WordWrap,
+                Margin = new Thickness(0, 10, 0, 0)
             };
 
             var activatedImage = new Image
@@ -153,17 +154,26 @@ namespace Bit.App.Pages
             {
                 Text = "See Supported Apps",
                 Command = new Command(() => Device.OpenUri(new Uri("https://bitwarden.com"))),
-                VerticalOptions = LayoutOptions.End,
+                VerticalOptions = LayoutOptions.EndAndExpand,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
+            };
+
+            var activatedButtonReenable = new Button
+            {
+                Text = "Re-enable App Extension",
+                Command = new Command(() => ShowExtension()),
+                VerticalOptions = LayoutOptions.End,
+                HorizontalOptions = LayoutOptions.Fill,
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
 
             var activatedStackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
-                Spacing = 20,
+                Spacing = 10,
                 Padding = new Thickness(30, 40),
-                Children = { activatedLabel, activatedSublabel, activatedImage, activatedButton }
+                Children = { activatedLabel, activatedSublabel, activatedImage, activatedButton, activatedButtonReenable }
             };
 
             activatedStackLayout.SetBinding<AppExtensionPageModel>(IsVisibleProperty, m => m.StartedAndActivated);
@@ -181,17 +191,20 @@ namespace Bit.App.Pages
             Title = "App Extension";
             Content = stackLayout;
             BindingContext = Model;
-
-            MessagingCenter.Subscribe<Application, bool>(Application.Current, "EnabledAppExtension", (sender, enabled) =>
-            {
-                Model.Started = true;
-                Model.Activated = enabled;
-            });
         }
 
-        private void ActivateExtension()
+        private void ShowExtension()
         {
-            MessagingCenter.Send(Application.Current, "ShowAppExtension");
+            MessagingCenter.Send(Application.Current, "ShowAppExtension", this);
+        }
+
+        public void EnabledExtension(bool enabled)
+        {
+            Model.Started = true;
+            if(!Model.Activated && enabled)
+            {
+                Model.Activated = enabled;
+            }
         }
     }
 }

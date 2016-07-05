@@ -65,7 +65,6 @@ namespace Bit.App.Pages
                 EnableScrolling = false,
                 Intent = TableIntent.Settings,
                 HasUnevenRows = true,
-                NoFooter = true,
                 Root = new TableRoot
                 {
                     new TableSection

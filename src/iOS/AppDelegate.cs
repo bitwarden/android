@@ -23,6 +23,7 @@ using Bit.iOS.Core.Services;
 using PushNotification.Plugin;
 using Plugin.DeviceInfo;
 using Plugin.Connectivity.Abstractions;
+using Bit.App.Pages;
 
 namespace Bit.iOS
 {
@@ -52,7 +53,7 @@ namespace Bit.iOS
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "ShowAppExtension", (sender) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, ToolsExtensionPage>(Xamarin.Forms.Application.Current, "ShowAppExtension", (sender, page) =>
             {
                 var itemProvider = new NSItemProvider(new NSDictionary(), "com.8bit.bitwarden.extension-setup");
                 var extensionItem = new NSExtensionItem();
@@ -60,8 +61,7 @@ namespace Bit.iOS
                 var activityViewController = new UIActivityViewController(new NSExtensionItem[] { extensionItem }, null);
                 activityViewController.CompletionHandler = (activityType, completed) =>
                 {
-                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "EnabledAppExtension", 
-                        completed && activityType == "com.8bit.bitwarden.find-login-action-extension");
+                    page.EnabledExtension(completed && activityType == "com.8bit.bitwarden.find-login-action-extension");
                 };
 
                 UIApplication.SharedApplication.KeyWindow.RootViewController.ModalViewController
