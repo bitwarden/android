@@ -37,6 +37,7 @@ namespace Bit.App.Pages
 
             var nameCell = new FormEntryCell(AppResources.Name);
             nameCell.Entry.Text = folder.Name.Decrypt();
+            nameCell.Tapped += NameCell_Tapped;
 
             var deleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
             deleteCell.Tapped += DeleteCell_Tapped;
@@ -45,16 +46,18 @@ namespace Bit.App.Pages
             {
                 Intent = TableIntent.Settings,
                 EnableScrolling = false,
-                EnableSelection = false,
+                EnableSelection = true,
                 HasUnevenRows = true,
                 VerticalOptions = LayoutOptions.Start,
-                BackgroundColor = Color.Gray,
-                Margin = new Thickness(0, -1),
                 Root = new TableRoot
                 {
-                    new TableSection()
+                    new TableSection
                     {
                         nameCell
+                    },
+                    new TableSection
+                    {
+                        deleteCell
                     }
                 }
             };
@@ -64,23 +67,6 @@ namespace Bit.App.Pages
                 mainTable.RowHeight = -1;
                 mainTable.EstimatedRowHeight = 70;
             }
-
-            var deleteTable = new ExtendedTableView
-            {
-                Intent = TableIntent.Settings,
-                EnableScrolling = false,
-                EnableSelection = true,
-                VerticalOptions = LayoutOptions.End,
-                BackgroundColor = Color.Yellow,
-                Margin = new Thickness(0, -1),
-                Root = new TableRoot
-                {
-                    new TableSection()
-                    {
-                        deleteCell
-                    }
-                }
-            };
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
@@ -108,7 +94,7 @@ namespace Bit.App.Pages
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Edit Folder";
-            Content = new ScrollView { Content = new StackLayout { Children = { mainTable, deleteTable } } };
+            Content = mainTable;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
@@ -118,6 +104,15 @@ namespace Bit.App.Pages
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
+            }
+        }
+
+        private void NameCell_Tapped(object sender, EventArgs e)
+        {
+            var cell = sender as FormEntryCell;
+            if(cell != null)
+            {
+                cell.Entry.Focus();
             }
         }
 

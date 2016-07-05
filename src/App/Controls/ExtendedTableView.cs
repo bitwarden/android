@@ -38,6 +38,8 @@ namespace Bit.App.Controls
         }
 
         public int EstimatedRowHeight { get; set; }
+        public bool NoHeader { get; set; }
+        public bool NoFooter { get; set; }
 
         protected override SizeRequest OnSizeRequest(double widthConstraint, double heightConstraint)
         {

@@ -71,7 +71,7 @@ namespace Bit.App.Pages
             };
 
             Title = "bitwarden";
-            Content = buttonStackLayout;
+            Content = new ScrollView { Content = buttonStackLayout };
         }
 
         public async Task LoginAsync()

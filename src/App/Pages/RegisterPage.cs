@@ -61,18 +61,16 @@ namespace Bit.App.Pages
 
             var passwordLabel = new Label
             {
+                Text = "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.",
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                Style = (Style)Application.Current.Resources["text-muted"]
+                Style = (Style)Application.Current.Resources["text-muted"],
+                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
             };
-            var fs = new FormattedString();
-            fs.Spans.Add(new Span { Text = "The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is" });
-            fs.Spans.Add(new Span { Text = " no way", FontAttributes = FontAttributes.Bold });
-            fs.Spans.Add(new Span { Text = " to recover the password in the event that you forget it." });
-            passwordLabel.FormattedText = fs;
 
             var table2 = new FormTableView
             {
+                NoHeader = true,
                 Root = new TableRoot
                 {
                     new TableSection
@@ -88,40 +86,21 @@ namespace Bit.App.Pages
                 Text = "A master password hint can help you remember your password if you forget it.",
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                Style = (Style)Application.Current.Resources["text-muted"]
+                Style = (Style)Application.Current.Resources["text-muted"],
+                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
             };
 
-            var layout = new RelativeLayout
+            var layout = new StackLayout
             {
-                Padding = new Thickness(0, 0, 0, 35)
+                Children = { table, passwordLabel, table2, hintLabel },
+                Spacing = 0
             };
-            layout.Children.Add(
-                table,
-                Constraint.Constant(0),
-                Constraint.Constant(0),
-                Constraint.RelativeToParent((parent) => { return parent.Width; })
-            );
-            layout.Children.Add(
-                passwordLabel,
-                Constraint.Constant(15),
-                Constraint.RelativeToView(table, (parent, sibling) => { return sibling.Y + sibling.Height - (this.IsPortrait() ? 45 : 25); }),
-                Constraint.RelativeToParent((parent) => { return parent.Width - 30; })
-            );
-            layout.Children.Add(
-                table2,
-                Constraint.Constant(0),
-                Constraint.RelativeToView(passwordLabel, (parent, sibling) => { return sibling.Y + sibling.Height - (this.IsPortrait() ? 15 : 10); }),
-                Constraint.RelativeToParent((parent) => { return parent.Width; })
-            );
-            layout.Children.Add(
-                hintLabel,
-                Constraint.Constant(15),
-                Constraint.RelativeToView(table2, (parent, sibling) => { return sibling.Y + sibling.Height - (this.IsPortrait() ? 45 : 25); }),
-                Constraint.RelativeToParent((parent) => { return parent.Width - 30; })
-            );
 
-            layout.LowerChild(table2);
-            layout.LowerChild(table);
+            layout.LayoutChanged += (sender, args) =>
+            {
+                passwordLabel.WidthRequest = layout.Bounds.Width - passwordLabel.Bounds.Left * 2;
+                hintLabel.WidthRequest = layout.Bounds.Width - hintLabel.Bounds.Left * 2;
+            };
 
             var scrollView = new ScrollView
             {
@@ -207,6 +186,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true;
                 EnableSelection = false;
                 VerticalOptions = LayoutOptions.Start;
+                NoFooter = true;
             }
         }
     }

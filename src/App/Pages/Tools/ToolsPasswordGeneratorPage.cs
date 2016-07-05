@@ -63,9 +63,9 @@ namespace Bit.App.Pages
             var table = new ExtendedTableView
             {
                 EnableScrolling = false,
-                Intent = TableIntent.Menu,
+                Intent = TableIntent.Settings,
                 HasUnevenRows = true,
-                VerticalOptions = LayoutOptions.End,
+                NoFooter = true,
                 Root = new TableRoot
                 {
                     new TableSection
@@ -95,13 +95,16 @@ namespace Bit.App.Pages
             var stackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
-                Children = { Password, table }
+                Children = { Password, table },
+                VerticalOptions = LayoutOptions.FillAndExpand,
+                Spacing = 0
             };
 
             var scrollView = new ScrollView
             {
                 Content = stackLayout,
-                Orientation = ScrollOrientation.Vertical
+                Orientation = ScrollOrientation.Vertical,
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
             Title = "Generate Password";
