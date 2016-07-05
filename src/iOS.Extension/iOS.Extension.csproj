@@ -109,6 +109,7 @@
     <Compile Include="LoadingViewController.designer.cs">
       <DependentUpon>LoadingViewController.cs</DependentUpon>
     </Compile>
+    <None Include="app.config" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Models\SiteViewModel.cs" />

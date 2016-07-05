@@ -34,11 +34,11 @@ namespace Bit.App.Pages
             var table = new ExtendedTableView
             {
                 EnableScrolling = true,
-                Intent = TableIntent.Menu,
+                Intent = TableIntent.Settings,
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection()
+                    new TableSection
                     {
                         generatorCell,
                         extensionCell,

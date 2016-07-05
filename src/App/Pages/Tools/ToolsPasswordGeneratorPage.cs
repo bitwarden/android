@@ -36,7 +36,7 @@ namespace Bit.App.Pages
             Password = new Label
             {
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                Margin = new Thickness(15, 40, 15, 0),
+                Margin = new Thickness(15, 40, 15, 40),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontFamily = "Courier",
                 LineBreakMode = LineBreakMode.TailTruncation,
@@ -62,9 +62,11 @@ namespace Bit.App.Pages
 
             var table = new ExtendedTableView
             {
+                VerticalOptions = LayoutOptions.Start,
                 EnableScrolling = false,
                 Intent = TableIntent.Settings,
                 HasUnevenRows = true,
+                NoHeader = true,
                 Root = new TableRoot
                 {
                     new TableSection

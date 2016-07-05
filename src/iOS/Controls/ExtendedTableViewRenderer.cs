@@ -13,6 +13,13 @@ namespace Bit.iOS.Controls
 {
     public class ExtendedTableViewRenderer : TableViewRenderer
     {
+        public override SizeRequest GetDesiredSize(double widthConstraint, double heightConstraint)
+        {
+            Control.LayoutIfNeeded();
+            var size = new Size(Control.ContentSize.Width, Control.ContentSize.Height);
+            return new SizeRequest(size);
+        }
+
         protected override void OnElementChanged(ElementChangedEventArgs<TableView> e)
         {
             base.OnElementChanged(e);
@@ -138,7 +145,7 @@ namespace Bit.iOS.Controls
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
             {
-                if(_view.NoHeader)
+                if(_view.NoHeader && section == 0)
                 {
                     return 0.00001f;
                 }
@@ -148,7 +155,7 @@ namespace Bit.iOS.Controls
 
             public override UIView GetViewForHeader(UITableView tableView, nint section)
             {
-                if(_view.NoHeader)
+                if(_view.NoHeader && section == 0)
                 {
                     return new UIView(CGRect.Empty)
                     {
@@ -161,17 +168,17 @@ namespace Bit.iOS.Controls
 
             public override nfloat GetHeightForFooter(UITableView tableView, nint section)
             {
-                if(_view.NoFooter)
+                if(_view.NoFooter && (section + 1) == NumberOfSections(tableView))
                 {
                     return 0.00001f;
                 }
 
-                return 1f;
+                return 35f;
             }
 
             public override UIView GetViewForFooter(UITableView tableView, nint section)
             {
-                if(_view.NoFooter)
+                if(_view.NoFooter && (section + 1) == NumberOfSections(tableView))
                 {
                     return new UIView(CGRect.Empty)
                     {

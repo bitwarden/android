@@ -43,7 +43,7 @@ namespace Bit.App.Controls
 
         protected override SizeRequest OnSizeRequest(double widthConstraint, double heightConstraint)
         {
-            if(Device.OS == TargetPlatform.iOS && !VerticalOptions.Expands)
+            if(!VerticalOptions.Expands)
             {
                 var reflectionService = Resolver.Resolve<IReflectionService>();
                 var baseBaseOnSizeRequest = reflectionService.GetVisualElementOnSizeRequest(this);
