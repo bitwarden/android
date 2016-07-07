@@ -104,14 +104,16 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            var selectToolBarItem = new ToolbarItem("Select", null, async () =>
+            if(_passwordValueAction != null)
             {
-                _passwordValueAction(Password.Text);
-                await Navigation.PopModalAsync();
-            }, ToolbarItemOrder.Default, 0);
+                var selectToolBarItem = new ToolbarItem("Select", null, async () =>
+                {
+                    _passwordValueAction(Password.Text);
+                    await Navigation.PopModalAsync();
+                }, ToolbarItemOrder.Default, 0);
 
-
-            ToolbarItems.Add(selectToolBarItem);
+                ToolbarItems.Add(selectToolBarItem);
+            }
 
             Title = "Generate Password";
             Content = scrollView;
