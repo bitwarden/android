@@ -16,16 +16,16 @@ namespace Bit.App.Models.Page
                 FolderId = folderId;
                 Name = site.Name?.Decrypt();
                 Username = site.Username?.Decrypt() ?? " ";
-                Password = site.Password?.Decrypt();
-                Uri = site.Uri?.Decrypt();
+                Password = new Lazy<string>(() => site.Password?.Decrypt());
+                Uri = new Lazy<string>(() => site.Uri?.Decrypt());
             }
 
             public string Id { get; set; }
             public string FolderId { get; set; }
             public string Name { get; set; }
             public string Username { get; set; }
-            public string Password { get; set; }
-            public string Uri { get; set; }
+            public Lazy<string> Password { get; set; }
+            public Lazy<string> Uri { get; set; }
         }
 
         public class Folder : List<Site>

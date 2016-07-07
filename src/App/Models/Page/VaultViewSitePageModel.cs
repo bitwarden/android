@@ -61,9 +61,11 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Uri)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(UriHost)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowUri)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowLaunch)));
             }
         }
         public bool ShowUri => !string.IsNullOrWhiteSpace(Uri);
+        public bool ShowLaunch => Uri.StartsWith("http://") || Uri.StartsWith("https://");
 
         public string UriHost
         {

@@ -13,6 +13,7 @@ using Bit.App.Utilities;
 using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
+using System.Collections.Generic;
 
 namespace Bit.App.Pages
 {
@@ -121,8 +122,21 @@ namespace Bit.App.Pages
 
         private async void MoreClickedAsync(VaultListPageModel.Site site)
         {
-            var selection = await DisplayActionSheet(site.Name, AppResources.Cancel, null,
-                AppResources.View, AppResources.Edit, AppResources.CopyPassword, AppResources.CopyUsername, AppResources.GoToWebsite);
+            var buttons = new List<string> { AppResources.View, AppResources.Edit };
+            if(!string.IsNullOrWhiteSpace(site.Password.Value))
+            {
+                buttons.Add(AppResources.CopyPassword);
+            }
+            if(!string.IsNullOrWhiteSpace(site.Username))
+            {
+                buttons.Add(AppResources.CopyUsername);
+            }
+            if(!string.IsNullOrWhiteSpace(site.Uri.Value) && (site.Uri.Value.StartsWith("http://") || site.Uri.Value.StartsWith("https://")))
+            {
+                buttons.Add(AppResources.GoToWebsite);
+            }
+
+            var selection = await DisplayActionSheet(site.Name, AppResources.Cancel, null, buttons.ToArray());
 
             if(selection == AppResources.View)
             {
@@ -136,7 +150,7 @@ namespace Bit.App.Pages
             }
             else if(selection == AppResources.CopyPassword)
             {
-                Copy(site.Password, AppResources.Password);
+                Copy(site.Password.Value, AppResources.Password);
             }
             else if(selection == AppResources.CopyUsername)
             {
@@ -144,7 +158,7 @@ namespace Bit.App.Pages
             }
             else if(selection == AppResources.GoToWebsite)
             {
-                Device.OpenUri(new Uri(site.Uri));
+                Device.OpenUri(new Uri(site.Uri.Value));
             }
         }
 

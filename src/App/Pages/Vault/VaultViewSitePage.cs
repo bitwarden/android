@@ -67,6 +67,7 @@ namespace Bit.App.Pages
             // URI
             UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
             UriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.UriHost);
+            UriCell.Button1.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowLaunch);
             UriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(Model.Uri)));
 
             // Notes
