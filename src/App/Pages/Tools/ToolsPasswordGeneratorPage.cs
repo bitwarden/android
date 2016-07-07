@@ -16,13 +16,15 @@ namespace Bit.App.Pages
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly ISettings _settings;
         private readonly IClipboardService _clipboardService;
+        private readonly Action<string> _passwordValueAction;
 
-        public ToolsPasswordGeneratorPage()
+        public ToolsPasswordGeneratorPage(Action<string> passwordValueAction = null)
         {
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _passwordGenerationService = Resolver.Resolve<IPasswordGenerationService>();
             _settings = Resolver.Resolve<ISettings>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
+            _passwordValueAction = passwordValueAction;
 
             Init();
         }
@@ -57,8 +59,6 @@ namespace Bit.App.Pages
             regenerateCell.Tapped += RegenerateCell_Tapped; ;
             var copyCell = new ExtendedTextCell { Text = "Copy Password", TextColor = buttonColor };
             copyCell.Tapped += CopyCell_Tapped;
-            var saveCell = new ExtendedTextCell { Text = "Save Password", TextColor = buttonColor };
-            saveCell.Tapped += SaveCell_Tapped;
 
             var table = new ExtendedTableView
             {
@@ -78,10 +78,6 @@ namespace Bit.App.Pages
                     {
                         regenerateCell,
                         copyCell
-                    },
-                    new TableSection
-                    {
-                        saveCell
                     }
                 }
             };
@@ -90,7 +86,7 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 44;
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Close"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, _passwordValueAction == null ? "Close" : "Cancel"));
             }
 
             var stackLayout = new StackLayout
@@ -107,6 +103,15 @@ namespace Bit.App.Pages
                 Orientation = ScrollOrientation.Vertical,
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
+
+            var selectToolBarItem = new ToolbarItem("Select", null, async () =>
+            {
+                _passwordValueAction(Password.Text);
+                await Navigation.PopModalAsync();
+            }, ToolbarItemOrder.Default, 0);
+
+
+            ToolbarItems.Add(selectToolBarItem);
 
             Title = "Generate Password";
             Content = scrollView;
@@ -128,11 +133,6 @@ namespace Bit.App.Pages
         private void RegenerateCell_Tapped(object sender, EventArgs e)
         {
             Model.Password = _passwordGenerationService.GeneratePassword();
-        }
-
-        private void SaveCell_Tapped(object sender, EventArgs e)
-        {
-
         }
 
         private void CopyCell_Tapped(object sender, EventArgs e)

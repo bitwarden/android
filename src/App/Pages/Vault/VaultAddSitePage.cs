@@ -29,15 +29,17 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public FormEntryCell PasswordCell { get; private set; }
+
         private void Init()
         {
             var notesCell = new FormEditorCell(height: 90);
-            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
-            var usernameCell = new FormEntryCell(AppResources.Username, nextElement: passwordCell.Entry);
+            PasswordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
+            var usernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
 
-            usernameCell.Entry.FontFamily = passwordCell.Entry.FontFamily = "Courier";
+            usernameCell.Entry.FontFamily = PasswordCell.Entry.FontFamily = "Courier";
 
             var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
             var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
@@ -50,6 +52,13 @@ namespace Bit.App.Pages
             }
             var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
 
+            var generateCell = new ExtendedTextCell
+            {
+                Text = "Generate Password",
+                ShowDisclousure = true
+            };
+            generateCell.Tapped += GenerateCell_Tapped; ;
+
             var favoriteCell = new ExtendedSwitchCell { Text = "Favorite" };
 
             var table = new ExtendedTableView
@@ -57,7 +66,6 @@ namespace Bit.App.Pages
                 Intent = TableIntent.Settings,
                 EnableScrolling = true,
                 HasUnevenRows = true,
-                EnableSelection = false,
                 Root = new TableRoot
                 {
                     new TableSection("Site Information")
@@ -65,11 +73,12 @@ namespace Bit.App.Pages
                         nameCell,
                         uriCell,
                         usernameCell,
-                        passwordCell,
-                        folderCell
+                        PasswordCell,
+                        generateCell
                     },
                     new TableSection
                     {
+                        folderCell,
                         favoriteCell
                     },
                     new TableSection(AppResources.Notes)
@@ -93,7 +102,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(passwordCell.Entry.Text))
+                if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Password), AppResources.Ok);
                     return;
@@ -110,7 +119,7 @@ namespace Bit.App.Pages
                     Uri = uriCell.Entry.Text?.Encrypt(),
                     Name = nameCell.Entry.Text?.Encrypt(),
                     Username = usernameCell.Entry.Text?.Encrypt(),
-                    Password = passwordCell.Entry.Text?.Encrypt(),
+                    Password = PasswordCell.Entry.Text?.Encrypt(),
                     Notes = notesCell.Editor.Text?.Encrypt(),
                     Favorite = favoriteCell.On
                 };
@@ -141,6 +150,16 @@ namespace Bit.App.Pages
             {
                 AlertNoConnection();
             }
+        }
+
+        private void GenerateCell_Tapped(object sender, EventArgs e)
+        {
+            var page = new ToolsPasswordGeneratorPage((password) =>
+            {
+                PasswordCell.Entry.Text = password;
+                _userDialogs.SuccessToast("Password generated.");
+            });
+            Navigation.PushModalAsync(new ExtendedNavigationPage(page));
         }
 
         private void AlertNoConnection()

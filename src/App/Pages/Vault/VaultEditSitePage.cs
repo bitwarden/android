@@ -30,6 +30,8 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public FormEntryCell PasswordCell { get; private set; }
+
         private void Init()
         {
             var site = _siteService.GetByIdAsync(_siteId).GetAwaiter().GetResult();
@@ -41,19 +43,26 @@ namespace Bit.App.Pages
 
             var notesCell = new FormEditorCell(height: 90);
             notesCell.Editor.Text = site.Notes?.Decrypt();
-            var passwordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
-            passwordCell.Entry.Text = site.Password?.Decrypt();
-            var usernameCell = new FormEntryCell(AppResources.Username, nextElement: passwordCell.Entry);
+            PasswordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
+            PasswordCell.Entry.Text = site.Password?.Decrypt();
+            var usernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
             usernameCell.Entry.Text = site.Username?.Decrypt();
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
 
-            usernameCell.Entry.FontFamily = passwordCell.Entry.FontFamily = "Courier";
+            usernameCell.Entry.FontFamily = PasswordCell.Entry.FontFamily = "Courier";
 
             var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
             uriCell.Entry.Text = site.Uri?.Decrypt();
             var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
             nameCell.Entry.Text = site.Name?.Decrypt();
+
+            var generateCell = new ExtendedTextCell
+            {
+                Text = "Generate Password",
+                ShowDisclousure = true
+            };
+            generateCell.Tapped += GenerateCell_Tapped; ;
 
             var folderOptions = new List<string> { AppResources.FolderNone };
             var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
@@ -93,11 +102,12 @@ namespace Bit.App.Pages
                         nameCell,
                         uriCell,
                         usernameCell,
-                        passwordCell,
-                        folderCell
+                        PasswordCell,
+                        generateCell
                     },
                     new TableSection
                     {
+                        folderCell,
                         favoriteCell
                     },
                     new TableSection(AppResources.Notes)
@@ -125,7 +135,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(passwordCell.Entry.Text))
+                if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Password), AppResources.Ok);
                     return;
@@ -140,7 +150,7 @@ namespace Bit.App.Pages
                 site.Uri = uriCell.Entry.Text?.Encrypt();
                 site.Name = nameCell.Entry.Text?.Encrypt();
                 site.Username = usernameCell.Entry.Text?.Encrypt();
-                site.Password = passwordCell.Entry.Text?.Encrypt();
+                site.Password = PasswordCell.Entry.Text?.Encrypt();
                 site.Notes = notesCell.Editor.Text?.Encrypt();
                 site.Favorite = favoriteCell.On;
 
@@ -174,6 +184,22 @@ namespace Bit.App.Pages
             {
                 AlertNoConnection();
             }
+        }
+
+        private async void GenerateCell_Tapped(object sender, EventArgs e)
+        {
+            if(!string.IsNullOrWhiteSpace(PasswordCell.Entry.Text)
+                && !await _userDialogs.ConfirmAsync("Are you sure you want to overwrite the current password?", null, AppResources.Yes, AppResources.No))
+            {
+                return;
+            }
+
+            var page = new ToolsPasswordGeneratorPage((password) =>
+            {
+                PasswordCell.Entry.Text = password;
+                _userDialogs.SuccessToast("Password generated.");
+            });
+            await Navigation.PushModalAsync(new ExtendedNavigationPage(page));
         }
 
         private async void DeleteCell_Tapped(object sender, EventArgs e)
