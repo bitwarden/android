@@ -78,6 +78,9 @@ namespace Bit.App.Pages
                 On = site.Favorite
             };
 
+            var deleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
+            deleteCell.Tapped += DeleteCell_Tapped;
+
             var table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
@@ -100,6 +103,10 @@ namespace Bit.App.Pages
                     new TableSection(AppResources.Notes)
                     {
                         notesCell
+                    },
+                    new TableSection
+                    {
+                        deleteCell
                     }
                 }
             };
@@ -166,6 +173,31 @@ namespace Bit.App.Pages
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
+            }
+        }
+
+        private async void DeleteCell_Tapped(object sender, EventArgs e)
+        {
+            if(!_connectivity.IsConnected)
+            {
+                AlertNoConnection();
+                return;
+            }
+
+            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
+            {
+                return;
+            }
+
+            var deleteTask = _siteService.DeleteAsync(_siteId);
+            _userDialogs.ShowLoading("Deleting...", MaskType.Black);
+            await deleteTask;
+            _userDialogs.HideLoading();
+
+            if((await deleteTask).Succeeded)
+            {
+                await Navigation.PopModalAsync();
+                _userDialogs.SuccessToast("Site deleted.");
             }
         }
 

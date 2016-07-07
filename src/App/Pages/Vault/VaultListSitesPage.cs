@@ -106,7 +106,8 @@ namespace Bit.App.Pages
             var folders = await _folderService.GetAllAsync();
             var sites = _favorites ? await _siteService.GetAllAsync(true) : await _siteService.GetAllAsync();
 
-            var pageFolders = folders.Select(f => new VaultListPageModel.Folder(f, sites.Where(s => s.FolderId == f.Id))).ToList();
+            var pageFolders = folders.Select(f => new VaultListPageModel.Folder(f, 
+                sites.Where(s => s.FolderId == f.Id))).OrderBy(f => f.Name).ToList();
             var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));
             pageFolders.Add(noneFolder);
 

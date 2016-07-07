@@ -68,6 +68,13 @@ namespace Bit.App.Pages
             };
             changeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
 
+            var changeEmailCell = new ExtendedTextCell
+            {
+                Text = "Change Email",
+                ShowDisclousure = true
+            };
+            changeEmailCell.Tapped += ChangeEmailCell_Tapped;
+
             var foldersCell = new ExtendedTextCell
             {
                 Text = "Folders",
@@ -106,7 +113,8 @@ namespace Bit.App.Pages
                         LockOptionsCell,
                         FingerprintCell,
                         PinCell,
-                        changeMasterPasswordCell
+                        changeMasterPasswordCell,
+                        changeEmailCell
                     },
                     new TableSection("Manage")
                     {
@@ -198,6 +206,16 @@ namespace Bit.App.Pages
         private async void ChangeMasterPasswordCell_Tapped(object sender, EventArgs e)
         {
             if(!await _userDialogs.ConfirmAsync("You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
+            {
+                return;
+            }
+
+            Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+        }
+
+        private async void ChangeEmailCell_Tapped(object sender, EventArgs e)
+        {
+            if(!await _userDialogs.ConfirmAsync("You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }

@@ -109,12 +109,12 @@ namespace Bit.App.Pages
             BindingContext = Model;
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
-            var site = _siteService.GetByIdAsync(_siteId).GetAwaiter().GetResult();
+            var site = await _siteService.GetByIdAsync(_siteId);
             if(site == null)
             {
-                // TODO: handle error. navigate back? should never happen...
+                await Navigation.PopModalAsync();
                 return;
             }
 

@@ -32,7 +32,7 @@ namespace Bit.App.Models.Page
         {
             public Folder(IEnumerable<Models.Site> sites, string folderId = null)
             {
-                var pageSites = sites.Select(s => new Site(s, folderId));
+                var pageSites = sites.Select(s => new Site(s, folderId)).OrderBy(s => s.Name);
                 AddRange(pageSites);
             }
 

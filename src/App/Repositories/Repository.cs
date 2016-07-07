@@ -20,7 +20,7 @@ namespace Bit.App.Repositories
 
         public virtual Task<T> GetByIdAsync(TId id)
         {
-            return Task.FromResult(Connection.Get<T>(id));
+            return Task.FromResult(Connection.Find<T>(id));
         }
 
         public virtual Task<IEnumerable<T>> GetAllAsync()

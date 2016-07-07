@@ -107,6 +107,12 @@ namespace Bit.App.Pages
 
         private async void DeleteCell_Tapped(object sender, EventArgs e)
         {
+            if(!_connectivity.IsConnected)
+            {
+                AlertNoConnection();
+                return;
+            }
+
             // TODO: Validate the delete operation. ex. Cannot delete a folder that has sites in it?
 
             if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
