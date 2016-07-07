@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Digests;
 using Org.BouncyCastle.Crypto.Engines;
 using Org.BouncyCastle.Crypto.Generators;
@@ -113,14 +115,20 @@ namespace Bit.App.Services
                 throw new ArgumentNullException(nameof(encyptedValue));
             }
 
-            var keyParamWithIV = new ParametersWithIV(_keyParameter, encyptedValue.InitializationVectorBytes, 0, InitializationVectorSize);
-
-            _cipher.Init(false, keyParamWithIV);
-            byte[] comparisonBytes = new byte[_cipher.GetOutputSize(encyptedValue.CipherTextBytes.Length)];
-            var length = _cipher.ProcessBytes(encyptedValue.CipherTextBytes, comparisonBytes, 0);
-            _cipher.DoFinal(comparisonBytes, length);
-
-            return Encoding.UTF8.GetString(comparisonBytes, 0, comparisonBytes.Length).TrimEnd('\0');
+            try
+            {
+                var keyParamWithIV = new ParametersWithIV(_keyParameter, encyptedValue.InitializationVectorBytes, 0, InitializationVectorSize);
+                _cipher.Init(false, keyParamWithIV);
+                byte[] comparisonBytes = new byte[_cipher.GetOutputSize(encyptedValue.CipherTextBytes.Length)];
+                var length = _cipher.ProcessBytes(encyptedValue.CipherTextBytes, comparisonBytes, 0);
+                _cipher.DoFinal(comparisonBytes, length);
+                return Encoding.UTF8.GetString(comparisonBytes, 0, comparisonBytes.Length).TrimEnd('\0');
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine("Could not decrypt '{0}'. {1}", encyptedValue, e.Message);
+                return "[error: cannot decrypt]";
+            }
         }
 
         public byte[] MakeKeyFromPassword(string password, string salt)

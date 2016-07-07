@@ -1,22 +1,29 @@
 ﻿using System;
 using System.IO;
 using Bit.App.Abstractions;
+using SQLite;
 
 namespace Bit.Android.Services
 {
     public class SqlService : ISqlService
     {
-        public SQLite.SQLiteConnection GetConnection()
+        private SQLiteConnection _connection;
+
+        public SQLiteConnection GetConnection()
         {
+            if(_connection != null)
+            {
+                return _connection;
+            }
+
             var sqliteFilename = "bitwarden.db3";
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal); // Documents folder
             var path = Path.Combine(documentsPath, sqliteFilename);
-
             Console.WriteLine(path);
-            var conn = new SQLite.SQLiteConnection(path);
 
-            // Return the database connection 
-            return conn;
+            _connection = new SQLiteConnection(path,
+                SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create | SQLiteOpenFlags.FullMutex | SQLiteOpenFlags.SharedCache);
+            return _connection;
         }
     }
 }

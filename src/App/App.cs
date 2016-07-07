@@ -57,35 +57,7 @@ namespace Bit.App
             MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
             {
                 await CheckLockAsync(args);
-                if(_connectivity.IsConnected)
-                {
-                    var attempt = 0;
-                    do
-                    {
-                        try
-                        {
-                            await _syncService.IncrementalSyncAsync();
-                            break;
-                        }
-                        catch(WebException)
-                        {
-                            Debug.WriteLine("Failed to sync.");
-                            if(attempt >= 1)
-                            {
-                                await _userDialogs.AlertAsync("Unable to automatically sync.");
-                            }
-                            else
-                            {
-                                await Task.Delay(1000);
-                            }
-                            attempt++;
-                        }
-                    } while(attempt <= 1);
-                }
-                else
-                {
-                    Debug.WriteLine("Not connected.");
-                }
+                await Task.Run(() => IncrementalSyncAsync()).ConfigureAwait(false);
             });
 
             MessagingCenter.Subscribe<Application, bool>(Current, "Lock", async (sender, args) =>
@@ -99,30 +71,7 @@ namespace Bit.App
             // Handle when your app starts
             await CheckLockAsync(false);
             _databaseService.CreateTables();
-            if(_connectivity.IsConnected)
-            {
-                var attempt = 0;
-                do
-                {
-                    try
-                    {
-                        await _syncService.FullSyncAsync();
-                        break;
-                    }
-                    catch(WebException)
-                    {
-                        if(attempt >= 1)
-                        {
-                            await _userDialogs.AlertAsync("Unable to automatically sync. Manual sync required.");
-                        }
-                        else
-                        {
-                            await Task.Delay(1000);
-                        }
-                        attempt++;
-                    }
-                } while(attempt <= 1);
-            }
+            await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
 
             Debug.WriteLine("OnStart");
         }
@@ -152,6 +101,68 @@ namespace Bit.App
             if(lockPinPage != null)
             {
                 lockPinPage.PinControl.Entry.Focus();
+            }
+        }
+
+        private async Task IncrementalSyncAsync()
+        {
+            if(_connectivity.IsConnected)
+            {
+                var attempt = 0;
+                do
+                {
+                    try
+                    {
+                        await _syncService.IncrementalSyncAsync();
+                        break;
+                    }
+                    catch(WebException)
+                    {
+                        Debug.WriteLine("Failed to incremental sync.");
+                        if(attempt >= 1)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            await Task.Delay(1000);
+                        }
+                        attempt++;
+                    }
+                } while(attempt <= 1);
+            }
+            else
+            {
+                Debug.WriteLine("Not connected.");
+            }
+        }
+
+        private async Task FullSyncAsync()
+        {
+            if(_connectivity.IsConnected)
+            {
+                var attempt = 0;
+                do
+                {
+                    try
+                    {
+                        await _syncService.FullSyncAsync();
+                        break;
+                    }
+                    catch(WebException)
+                    {
+                        Debug.WriteLine("Failed to full sync.");
+                        if(attempt >= 1)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            await Task.Delay(1000);
+                        }
+                        attempt++;
+                    }
+                } while(attempt <= 1);
             }
         }
 
