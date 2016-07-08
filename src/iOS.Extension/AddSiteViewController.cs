@@ -33,6 +33,7 @@ namespace Bit.iOS.Extension
         {
             tableView.RowHeight = UITableView.AutomaticDimension;
             tableView.EstimatedRowHeight = 44;
+            tableView.Source = new TableSource (this);
 
             base.ViewDidLoad();
         }
@@ -45,6 +46,65 @@ namespace Bit.iOS.Extension
         partial void UIBarButtonItem2290_Activated(UIBarButtonItem sender)
         {
             DismissViewController(true, null);
+        }
+
+        public class TableSource : UITableViewSource
+        {
+            private AddSiteViewController _controller;
+
+            public TableSource (AddSiteViewController controller)
+            {
+                _controller = controller;
+            }
+
+            public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+            {
+                if (indexPath.Row == 0) {
+                    return _controller.nameCell;
+                } else if (indexPath.Row == 1) {
+                    return _controller.uriCell;
+                } else if (indexPath.Row == 2) {
+                    return _controller.usernameCell;
+                } else if (indexPath.Row == 3) {
+                    return _controller.passwordCell;
+                } else if (indexPath.Row == 4) {
+                    return _controller.generatePasswordCell;
+                }
+
+                return new UITableViewCell();
+            }
+
+            public override nfloat GetHeightForRow (UITableView tableView, NSIndexPath indexPath)
+            {
+                return UITableView.AutomaticDimension;
+            }
+
+            public override nint RowsInSection (UITableView tableview, nint section)
+            {
+                if (section == 0) {
+                    return 5;
+                } else if (section == 1) {
+                    return 2;
+                } else {
+                    return 1;
+                }
+            }
+
+            public override nfloat GetHeightForHeader (UITableView tableView, nint section)
+            {
+                return UITableView.AutomaticDimension;
+             }
+
+            public override string TitleForHeader (UITableView tableView, nint section)
+            {
+                if (section == 0) {
+                    return "Site Information";
+                } else if (section == 2) {
+                    return "Notes";
+                }
+
+                return " ";
+            }
         }
     }
 }
