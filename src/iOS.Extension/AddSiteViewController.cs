@@ -31,11 +31,22 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
+            View.BackgroundColor = new UIColor(red: 0.93f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
+
+            nameField.Text = Context.Url.Host;
+            uriField.Text = Context.Url.ToString();
+
             tableView.RowHeight = UITableView.AutomaticDimension;
             tableView.EstimatedRowHeight = 44;
             tableView.Source = new TableSource (this);
 
             base.ViewDidLoad();
+        }
+
+        public override void ViewDidAppear(bool animated)
+        {
+            usernameCell.BecomeFirstResponder();
+            base.ViewDidAppear(animated);
         }
 
         partial void UIBarButtonItem2289_Activated(UIBarButtonItem sender)

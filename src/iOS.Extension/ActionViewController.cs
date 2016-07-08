@@ -33,14 +33,13 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
-            IEnumerable<SiteViewModel> filteredSiteModels = new List< SiteViewModel>();
-            DomainName domain;
-            if(Context.Url?.Host != null && DomainName.TryParse(Context.Url?.Host, out domain))
+            IEnumerable<SiteViewModel> filteredSiteModels = new List<SiteViewModel>();
+            if(Context.DomainName != null)
             {
                 var siteService = Resolver.Resolve<ISiteService>();
                 var sites = await siteService.GetAllAsync();
                 var siteModels = sites.Select(s => new SiteViewModel(s));
-                filteredSiteModels = siteModels.Where(s => s.Domain != null && s.Domain.BaseDomain == domain.BaseDomain);
+                filteredSiteModels = siteModels.Where(s => s.Domain != null && s.Domain.BaseDomain == Context.DomainName.BaseDomain);
             }
 
             tableView.RowHeight = UITableView.AutomaticDimension;
