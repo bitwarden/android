@@ -18,12 +18,14 @@ namespace Bit.iOS.Controls
             var page = (ExtendedTabbedPage)Element;
 
             TabBar.TintColor = page.TintColor.ToUIColor();
-            TabBar.BarTintColor = page.BarTintColor.ToUIColor();
             TabBar.BackgroundColor = page.BackgroundColor.ToUIColor();
 
-            // remove top border
-            // ref: http://stackoverflow.com/questions/14371343/ios-uitabbar-remove-top-shadow-gradient-line
-            TabBar.SetValueForKeyPath(FromObject(true), new NSString("_hidesShadow"));
+            if(page.NoBorder)
+            {
+                // remove top border
+                // ref: http://stackoverflow.com/questions/14371343/ios-uitabbar-remove-top-shadow-gradient-line
+                TabBar.SetValueForKeyPath(FromObject(true), new NSString("_hidesShadow"));
+            }
         }
 
         public override void ViewWillAppear(bool animated)

@@ -9,8 +9,7 @@ namespace Bit.App.Pages
     {
         public MainPage()
         {
-            BarTintColor = Color.FromHex("222d32");
-            TintColor = Color.FromHex("ffffff");
+            TintColor = Color.FromHex("3c8dbc");
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
             var favoritesNavigation = new ExtendedNavigationPage(new VaultListSitesPage(true));

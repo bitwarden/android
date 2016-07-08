@@ -95,6 +95,10 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AddSiteViewController.cs" />
+    <Compile Include="AddSiteViewController.designer.cs">
+      <DependentUpon>AddSiteViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="ActionViewController.cs" />
     <Compile Include="ActionViewController.designer.cs">
       <DependentUpon>ActionViewController.cs</DependentUpon>

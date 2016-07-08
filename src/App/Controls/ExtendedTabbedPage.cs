@@ -13,19 +13,12 @@ namespace Bit.App.Controls
         public static readonly BindableProperty TintColorProperty =
             BindableProperty.Create(nameof(TintColor), typeof(Color), typeof(ExtendedTabbedPage), Color.White);
 
-        public static readonly BindableProperty BarTintColorProperty =
-            BindableProperty.Create(nameof(BarTintColor), typeof(Color), typeof(ExtendedTabbedPage), Color.White);
-
         public Color TintColor
         {
             get { return (Color)GetValue(TintColorProperty); }
             set { SetValue(TintColorProperty, value); }
         }
 
-        public Color BarTintColor
-        {
-            get { return (Color)GetValue(BarTintColorProperty); }
-            set { SetValue(BarTintColorProperty, value); }
-        }
+        public bool NoBorder { get; set; }
     }
 }

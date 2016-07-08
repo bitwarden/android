@@ -81,14 +81,26 @@
                             </connections>
                             <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         </barButtonItem>
+                        <barButtonItem title="Add" id="2293" translatesAutoresizingMaskIntoConstraints="NO" key="rightBarButtonItem">
+                            <accessibilityConfiguration key="accessibilityConfiguration" label="Add Site">
+                                <traits key="traits" button="YES"/>
+                                <isElement key="isElement" value="YES"/>
+                            </accessibilityConfiguration>
+                            <userDefinedRuntimeAttribute key="userDefinedRuntimeAttribute"/>
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                            <connections>
+                                <action selector="UIBarButtonItem2293_Activated:" destination="ObA-dk-sSI" id="2294"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="tableView" destination="1823" id="name-outlet-1823"/>
+                        <segue id="2084" destination="1845" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" identifier="addSiteSegue"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1133" y="555"/>
+            <point key="canvasLocation" x="1114" y="556"/>
         </scene>
         <!--Splash View Controller-->
         <scene sceneID="42">
@@ -113,7 +125,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <segue destination="oCZ-GQ-aOK" kind="show" identifier="seque" id="1679"/>
+                        <segue destination="oCZ-GQ-aOK" kind="show" identifier="siteListSegue" id="1679"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="45" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -157,6 +169,174 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kkn-u3-rq1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="399" y="561"/>
+        </scene>
+        <scene sceneID="1844">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="1845" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1848" translucent="NO">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        </textAttributes>
+                        <color key="barTintColor" colorSpace="calibratedRGB" red="0.23529411764705882" green="0.55294117647058827" blue="0.73725490196078436" alpha="1"/>
+                    </navigationBar>
+                    <connections>
+                        <segue id="2253" destination="2087" kind="relationship" relationship="rootViewController"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1849" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1900" y="562"/>
+        </scene>
+        <scene sceneID="2086">
+            <objects>
+                <tableViewController id="2087" sceneMemberID="viewController" customClass="AddSiteViewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" id="2088" opaque="NO">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="2087" id="2089"/>
+                            <outlet property="delegate" destination="2087" id="2090"/>
+                        </connections>
+                        <sections>
+                            <tableViewSection headerTitle="Site Information" id="2266" footerTitle=" ">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2267" rowHeight="100">
+                                        <rect key="frame" x="0.0" y="55.5" width="600" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2267" id="2268">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="99.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Name" lineBreakMode="tailTruncation" minimumFontSize="10" id="2316" translatesAutoresizingMaskIntoConstraints="NO">
+                                                    <rect key="frame" x="0.0" y="12" width="600" height="21"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="scrollViewTexturedBackgroundColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Text" minimumFontSize="17" id="2317" translatesAutoresizingMaskIntoConstraints="NO" preservesSuperviewLayoutMargins="YES" clearButtonMode="whileEditing">
+                                                    <rect key="frame" x="0.0" y="41" width="600" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint id="2318" firstItem="2317" firstAttribute="leading" secondItem="2268" secondAttribute="leading" constant="15"/>
+                                                <constraint id="2319" firstItem="2268" firstAttribute="trailing" secondItem="2317" secondAttribute="trailing" constant="15"/>
+                                                <constraint id="2320" firstItem="2268" firstAttribute="bottom" secondItem="2317" secondAttribute="bottom" constant="15"/>
+                                                <constraint id="2323" firstItem="2268" firstAttribute="trailing" secondItem="2316" secondAttribute="trailing" constant="10"/>
+                                                <constraint id="2325" firstItem="2316" firstAttribute="leading" secondItem="2268" secondAttribute="leading" constant="10"/>
+                                                <constraint id="2326" firstItem="2316" firstAttribute="top" secondItem="2268" secondAttribute="top" constant="15"/>
+                                                <constraint id="2328" firstItem="2317" firstAttribute="top" secondItem="2316" secondAttribute="bottom" constant="10"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <edgeInsets key="layoutMargins" top="10" left="15" bottom="10" right="15"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2269" rowHeight="44">
+                                        <rect key="frame" x="0.0" y="155.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2269" id="2270">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2271" rowHeight="44">
+                                        <rect key="frame" x="0.0" y="199.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2271" id="2272">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2280" rowHeight="44">
+                                        <rect key="frame" x="0.0" y="243.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2280" id="2281">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2305" rowHeight="44" style="IBUITableViewCellStyleDefault" textLabel="2307" accessoryType="disclosureIndicator">
+                                        <rect key="frame" x="0.0" y="287.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2305" id="2306">
+                                            <rect key="frame" x="0.0" y="0.0" width="562" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Generate Password" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="2307">
+                                                    <rect key="frame" x="20" y="0.0" width="542" height="43.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="2273" headerTitle=" " footerTitle=" ">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2274" rowHeight="44">
+                                        <rect key="frame" x="0.0" y="768.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2274" id="2275">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2276" rowHeight="44">
+                                        <rect key="frame" x="0.0" y="812.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2276" id="2277">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Notes" id="2282" footerTitle=" ">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="2283" rowHeight="44">
+                                        <rect key="frame" x="0.0" y="1095.5" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2283" id="2284">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                        </sections>
+                        <color key="sectionIndexBackgroundColor" colorSpace="calibratedWhite" white="0" alpha="0"/>
+                    </tableView>
+                    <navigationItem title="Add Site" id="2252" key="navigationItem">
+                        <barButtonItem title="Cancel" id="2289" translatesAutoresizingMaskIntoConstraints="NO" key="leftBarButtonItem">
+                            <connections>
+                                <action selector="UIBarButtonItem2289_Activated:" destination="2087" id="2291"/>
+                            </connections>
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        </barButtonItem>
+                        <barButtonItem title="Save" id="2290" translatesAutoresizingMaskIntoConstraints="NO" key="rightBarButtonItem">
+                            <connections>
+                                <action selector="UIBarButtonItem2290_Activated:" destination="2087" id="2292"/>
+                            </connections>
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="tableView" destination="2088" id="name-outlet-2088"/>
+                        <outlet property="nameField" destination="2317" id="name-outlet-2317"/>
+                        <outlet property="nameLabel" destination="2316" id="name-outlet-2316"/>
+                        <outlet property="nameCell" destination="2267" id="name-outlet-2267"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2093" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2644" y="570"/>
         </scene>
     </scenes>
     <resources>

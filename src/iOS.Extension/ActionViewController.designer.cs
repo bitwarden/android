@@ -25,6 +25,10 @@ namespace Bit.iOS.Extension
 		[GeneratedCode ("iOS Designer", "1.0")]
 		partial void CancelClicked (UIBarButtonItem sender);
 
+		[Action ("UIBarButtonItem2293_Activated:")]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		partial void UIBarButtonItem2293_Activated (UIBarButtonItem sender);
+
 		void ReleaseDesignerOutlets ()
 		{
 			if (tableView != null) {

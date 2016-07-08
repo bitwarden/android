@@ -65,7 +65,7 @@ namespace Bit.iOS.Extension
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            PerformSegue("seque", this);
+            PerformSegue("siteListSegue", this);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

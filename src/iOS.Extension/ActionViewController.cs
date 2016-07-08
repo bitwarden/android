@@ -63,6 +63,24 @@ namespace Bit.iOS.Extension
             Context.ExtContext.CompleteRequest(returningItems, null);
         }
 
+        partial void UIBarButtonItem2293_Activated(UIBarButtonItem sender)
+        {
+            PerformSegue("addSiteSegue", this);
+        }
+
+        public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+        {
+            var navController = segue.DestinationViewController as UINavigationController;
+            if(navController != null)
+            {
+                var addSiteController = navController.TopViewController as AddSiteViewController;
+                if(addSiteController != null)
+                {
+                    addSiteController.Context = Context;
+                }
+            }
+        }
+
         public class TableSource : UITableViewSource
         {
             private const string CellIdentifier = "TableCell";
