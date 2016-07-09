@@ -74,8 +74,15 @@ namespace Bit.iOS.Extension
                 if(addSiteController != null)
                 {
                     addSiteController.Context = Context;
+                    addSiteController.Parent = this;
                 }
             }
+        }
+
+        public void DismissModal()
+        {
+            DismissModalViewController(true);
+            TableView.ReloadData();
         }
 
         public class TableSource : UITableViewSource

@@ -12,17 +12,20 @@ using UIKit;
 using XLabs.Ioc;
 using Bit.App;
 using Plugin.Connectivity.Abstractions;
-using Acr.UserDialogs;
-using System.Drawing;
+using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS.Extension
 {
     public partial class SiteAddViewController : UITableViewController
     {
+        private ISiteService _siteService;
+        private IConnectivity _connectivity;
+
         public SiteAddViewController(IntPtr handle) : base(handle)
         { }
 
         public Context Context { get; set; }
+        public SiteListViewController Parent { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
         public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username);
@@ -40,6 +43,9 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
+            _siteService = Resolver.Resolve<ISiteService>();
+            _connectivity = Resolver.Resolve<IConnectivity>();
+
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             NameCell.TextField.Text = Context.Url.Host;
@@ -88,18 +94,23 @@ namespace Bit.iOS.Extension
             base.ViewDidLoad();
         }
 
-        async partial void CancelBarButton_Activated(UIBarButtonItem sender)
+        public override void ViewDidAppear(bool animated)
+        {
+            base.ViewDidAppear(animated);
+            if(!_connectivity.IsConnected)
+            {
+                AlertNoConnection();
+            }
+        }
+
+        partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
             DismissViewController(true, null);
         }
 
         async partial void SaveBarButton_Activated(UIBarButtonItem sender)
         {
-            var siteService = Resolver.Resolve<ISiteService>();
-            var connectivity = Resolver.Resolve<IConnectivity>();
-            var userDialogs = Resolver.Resolve<IUserDialogs>();
-
-            if(!connectivity.IsConnected)
+            if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
                 return;
@@ -119,29 +130,27 @@ namespace Bit.iOS.Extension
 
             var site = new Site
             {
-                Uri = UriCell.TextField.Text?.Encrypt(),
-                Name = NameCell.TextField.Text?.Encrypt(),
-                Username = UsernameCell.TextField.Text?.Encrypt(),
-                Password = PasswordCell.TextField.Text?.Encrypt(),
-                Notes = NotesCell.TextView.Text?.Encrypt(),
+                Uri = string.IsNullOrWhiteSpace(UriCell.TextField.Text) ? null : UriCell.TextField.Text.Encrypt(),
+                Name = string.IsNullOrWhiteSpace(NameCell.TextField.Text) ? null : NameCell.TextField.Text.Encrypt(),
+                Username = string.IsNullOrWhiteSpace(UsernameCell.TextField.Text) ? null : UsernameCell.TextField.Text.Encrypt(),
+                Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ? null : PasswordCell.TextField.Text.Encrypt(),
+                Notes = string.IsNullOrWhiteSpace(NotesCell.TextView.Text) ? null : NotesCell.TextView.Text.Encrypt(),
                 Favorite = FavoriteCell.Switch.On
             };
 
-            var saveTask = siteService.SaveAsync(site);
-            userDialogs.ShowLoading("Saving...", MaskType.Black);
+            var saveTask = _siteService.SaveAsync(site);
+            var loadingAlert = Dialogs.CreateLoadingAlert("Saving...");
+            PresentViewController(loadingAlert, true, null);
             await saveTask;
-
-            userDialogs.HideLoading();
-            DismissViewController(true, null);
-            userDialogs.SuccessToast(NameCell.TextField.Text, "New site created.");
+            DismissViewController(false, () =>
+            {
+                Parent.DismissModal();
+            });
         }
 
         public void DisplayAlert(string title, string message, string accept)
         {
-            var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
-            var oldFrame = alert.View.Frame;
-            alert.View.Frame = new RectangleF((float)oldFrame.X, (float)oldFrame.Y, (float)oldFrame.Width, (float)oldFrame.Height - 20);
-            alert.AddAction(UIAlertAction.Create(accept, UIAlertActionStyle.Default, null));
+            var alert = Dialogs.CreateAlert(title, message, accept);
             PresentViewController(alert, true, null);
         }
 

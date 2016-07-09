@@ -16,7 +16,6 @@ using Bit.iOS.Extension.Models;
 using MobileCoreServices;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity;
-using Acr.UserDialogs;
 using Plugin.Fingerprint;
 
 namespace Bit.iOS.Extension
@@ -108,7 +107,6 @@ namespace Bit.iOS.Extension
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
             ISettings settings = new Settings("group.com.8bit.bitwarden");
