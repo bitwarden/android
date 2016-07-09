@@ -73,7 +73,7 @@ namespace Bit.iOS.Extension
             var navController = segue.DestinationViewController as UINavigationController;
             if(navController != null)
             {
-                var actionController = navController.TopViewController as ActionViewController;
+                var actionController = navController.TopViewController as SiteListViewController;
                 if(actionController != null)
                 {
                     actionController.Context = _context;

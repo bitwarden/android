@@ -12,9 +12,9 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-    public partial class AddSiteViewController : UITableViewController
+    public partial class SiteAddViewController : UITableViewController
     {
-        public AddSiteViewController(IntPtr handle) : base(handle)
+        public SiteAddViewController(IntPtr handle) : base(handle)
         { }
 
         public Context Context { get; set; }
@@ -76,28 +76,28 @@ namespace Bit.iOS.Extension
             GeneratePasswordCell.TextLabel.Text = "Generate Password";
             GeneratePasswordCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 
-            tableView.RowHeight = UITableView.AutomaticDimension;
-            tableView.EstimatedRowHeight = 70;
-            tableView.Source = new TableSource(this);
+            TableView.RowHeight = UITableView.AutomaticDimension;
+            TableView.EstimatedRowHeight = 70;
+            TableView.Source = new TableSource(this);
 
             base.ViewDidLoad();
         }
 
-        partial void UIBarButtonItem2289_Activated(UIBarButtonItem sender)
+        partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
             DismissViewController(true, null);
         }
 
-        partial void UIBarButtonItem2290_Activated(UIBarButtonItem sender)
+        partial void SaveBarButton_Activated(UIBarButtonItem sender)
         {
             DismissViewController(true, null);
         }
 
         public class TableSource : UITableViewSource
         {
-            private AddSiteViewController _controller;
+            private SiteAddViewController _controller;
 
-            public TableSource(AddSiteViewController controller)
+            public TableSource(SiteAddViewController controller)
             {
                 _controller = controller;
             }

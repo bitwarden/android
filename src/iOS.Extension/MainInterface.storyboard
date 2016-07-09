@@ -5,103 +5,6 @@
     </dependencies>
     <scenes>
         <!--Logins-->
-        <scene sceneID="7MM-of-jgj">
-            <objects>
-                <viewController id="ObA-dk-sSI" customClass="ActionViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qkL-Od-lgU"/>
-                        <viewControllerLayoutGuide type="bottom" id="n38-gi-rB5"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="zMn-AG-sqS">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
-                        <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="1823" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="gray" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1824" rowHeight="44" style="IBUITableViewCellStyleSubtitle" textLabel="1834" detailTextLabel="1835">
-                                        <rect key="frame" x="0.0" y="22" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="1825" tableViewCell="1824">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                            <subviews>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1834">
-                                                    <rect key="frame" x="15" y="4" width="35.5" height="21.5"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="1835">
-                                                    <rect key="frame" x="15" y="25.5" width="44" height="14.5"/>
-                                                    <autoresizingMask key="autoresizingMask"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </view>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1826" rowHeight="44">
-                                        <rect key="frame" x="0.0" y="66" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="1827" tableViewCell="1826">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="1828" rowHeight="44">
-                                        <rect key="frame" x="0.0" y="110" width="600" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="1829" tableViewCell="1828">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                    </tableViewCell>
-                                </prototypes>
-                            </tableView>
-                        </subviews>
-                        <constraints>
-                            <constraint id="1830" firstItem="1823" firstAttribute="top" secondItem="qkL-Od-lgU" secondAttribute="bottom"/>
-                            <constraint id="1831" firstItem="zMn-AG-sqS" firstAttribute="bottom" secondItem="1823" secondAttribute="bottom"/>
-                            <constraint id="1832" firstItem="1823" firstAttribute="leading" secondItem="zMn-AG-sqS" secondAttribute="leading"/>
-                            <constraint id="1833" firstItem="zMn-AG-sqS" firstAttribute="trailing" secondItem="1823" secondAttribute="trailing"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="yHH-Ee-etX" title="Sites">
-                        <barButtonItem title="Cancel" id="1714" translatesAutoresizingMaskIntoConstraints="NO" key="leftBarButtonItem">
-                            <connections>
-                                <action selector="CancelClicked:" destination="ObA-dk-sSI" id="1729"/>
-                            </connections>
-                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
-                        </barButtonItem>
-                        <barButtonItem title="Add" id="2293" translatesAutoresizingMaskIntoConstraints="NO" key="rightBarButtonItem">
-                            <accessibilityConfiguration key="accessibilityConfiguration" label="Add Site">
-                                <traits key="traits" button="YES"/>
-                                <isElement key="isElement" value="YES"/>
-                            </accessibilityConfiguration>
-                            <userDefinedRuntimeAttribute key="userDefinedRuntimeAttribute"/>
-                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
-                            <connections>
-                                <action selector="UIBarButtonItem2293_Activated:" destination="ObA-dk-sSI" id="2294"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="tableView" destination="1823" id="name-outlet-1823"/>
-                        <segue id="2084" destination="1845" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" identifier="addSiteSegue"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="X47-rx-isc" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1114" y="556"/>
-        </scene>
         <!--Splash View Controller-->
         <scene sceneID="42">
             <objects>
@@ -163,7 +66,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="ObA-dk-sSI" kind="relationship" relationship="rootViewController" id="B4Z-aR-cOD"/>
+                        <segue id="4562" destination="2304" kind="relationship" relationship="rootViewController"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Kkn-u3-rq1" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -191,7 +94,7 @@
         </scene>
         <scene sceneID="2086">
             <objects>
-                <tableViewController id="2087" sceneMemberID="viewController" customClass="AddSiteViewController">
+                <tableViewController id="2087" sceneMemberID="viewController" customClass="SiteAddViewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" id="2088" opaque="NO" allowsSelection="NO">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -204,26 +107,94 @@
                         <color key="sectionIndexBackgroundColor" colorSpace="calibratedWhite" white="0" alpha="0"/>
                     </tableView>
                     <navigationItem title="Add Site" id="2252" key="navigationItem">
-                        <barButtonItem title="Cancel" id="2289" translatesAutoresizingMaskIntoConstraints="NO" key="leftBarButtonItem">
-                            <connections>
-                                <action selector="UIBarButtonItem2289_Activated:" destination="2087" id="2291"/>
-                            </connections>
+                        <barButtonItem title="Cancel" id="3747" translatesAutoresizingMaskIntoConstraints="NO" key="leftBarButtonItem">
                             <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                            <connections>
+                                <action selector="CancelBarButton_Activated:" destination="2087" id="3751"/>
+                            </connections>
                         </barButtonItem>
-                        <barButtonItem title="Save" id="2290" translatesAutoresizingMaskIntoConstraints="NO" key="rightBarButtonItem">
-                            <connections>
-                                <action selector="UIBarButtonItem2290_Activated:" destination="2087" id="2292"/>
-                            </connections>
+                        <barButtonItem title="Save" id="3748" translatesAutoresizingMaskIntoConstraints="NO" key="rightBarButtonItem">
                             <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                            <connections>
+                                <action selector="SaveBarButton_Activated:" destination="2087" id="3752"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="tableView" destination="2088" id="name-outlet-2088"/>
+                        <outlet property="TableView" destination="2088" id="name-outlet-2088"/>
+                        <outlet property="SaveBarButton" destination="3748" id="name-outlet-3748"/>
+                        <outlet property="CancelBarButton" destination="3747" id="name-outlet-3747"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2093" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2644" y="570"/>
+        </scene>
+        <scene sceneID="2303">
+            <objects>
+                <tableViewController id="2304" sceneMemberID="viewController" customClass="SiteListViewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="2305">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="3761" rowHeight="44" style="IBUITableViewCellStyleSubtitle" textLabel="3763" detailTextLabel="3764">
+                                <rect key="frame" x="0.0" y="22" width="600" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="3761" id="3762">
+                                    <rect key="frame" x="0.0" y="0.0" width="600" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3763">
+                                            <rect key="frame" x="20" y="4" width="35.5" height="21.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3764">
+                                            <rect key="frame" x="20" y="25.5" width="44" height="14.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="2304" id="2306"/>
+                            <outlet property="delegate" destination="2304" id="2307"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue id="3731" destination="1845" kind="presentation" identifier="siteAddSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical"/>
+                        <outlet property="TableView" destination="2305" id="name-outlet-2305"/>
+                        <outlet property="AddBarButton" destination="3736" id="name-outlet-3736"/>
+                        <outlet property="CancelBarButton" destination="3735" id="name-outlet-3735"/>
+                        <outlet property="NavItem" destination="3734" id="name-outlet-3734"/>
+                    </connections>
+                    <toolbarItems/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationItem title="Sites" id="3734" translatesAutoresizingMaskIntoConstraints="NO" key="navigationItem">
+                        <barButtonItem title="Cancel" id="3735" translatesAutoresizingMaskIntoConstraints="NO" key="leftBarButtonItem">
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                            <connections>
+                                <action selector="CancelBarButton_Activated:" destination="2304" id="3750"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem id="3736" translatesAutoresizingMaskIntoConstraints="NO" key="rightBarButtonItem" systemItem="add">
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                            <connections>
+                                <action selector="AddBarButton_Activated:" destination="2304" id="3749"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2310" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1157" y="566"/>
         </scene>
     </scenes>
     <resources>

@@ -14,9 +14,9 @@ using XLabs.Ioc;
 
 namespace Bit.iOS.Extension
 {
-    public partial class ActionViewController : UIViewController
+    public partial class SiteListViewController : UITableViewController
     {
-        public ActionViewController(IntPtr handle) : base(handle)
+        public SiteListViewController(IntPtr handle) : base(handle)
         { }
 
         public Context Context { get; set; }
@@ -25,7 +25,6 @@ namespace Bit.iOS.Extension
         {
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-
             base.ViewWillAppear(animated);
         }
 
@@ -42,13 +41,12 @@ namespace Bit.iOS.Extension
                 filteredSiteModels = siteModels.Where(s => s.Domain != null && s.Domain.BaseDomain == Context.DomainName.BaseDomain);
             }
 
-            tableView.RowHeight = UITableView.AutomaticDimension;
-            tableView.EstimatedRowHeight = 44;
-            tableView.Source = new TableSource(filteredSiteModels, this);
-            AutomaticallyAdjustsScrollViewInsets = false;
+            TableView.RowHeight = UITableView.AutomaticDimension;
+            TableView.EstimatedRowHeight = 44;
+            TableView.Source = new TableSource(filteredSiteModels, this);
         }
 
-        partial void CancelClicked(UIBarButtonItem sender)
+        partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
             CompleteRequest(null);
         }
@@ -62,9 +60,9 @@ namespace Bit.iOS.Extension
             Context.ExtContext.CompleteRequest(returningItems, null);
         }
 
-        partial void UIBarButtonItem2293_Activated(UIBarButtonItem sender)
+        partial void AddBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue("addSiteSegue", this);
+            PerformSegue("siteAddSegue", this);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -72,7 +70,7 @@ namespace Bit.iOS.Extension
             var navController = segue.DestinationViewController as UINavigationController;
             if(navController != null)
             {
-                var addSiteController = navController.TopViewController as AddSiteViewController;
+                var addSiteController = navController.TopViewController as SiteAddViewController;
                 if(addSiteController != null)
                 {
                     addSiteController.Context = Context;
@@ -86,9 +84,9 @@ namespace Bit.iOS.Extension
 
             private IEnumerable<SiteViewModel> _tableItems;
             private Context _context;
-            private ActionViewController _controller;
+            private SiteListViewController _controller;
 
-            public TableSource(IEnumerable<SiteViewModel> items, ActionViewController controller)
+            public TableSource(IEnumerable<SiteViewModel> items, SiteListViewController controller)
             {
                 _tableItems = items;
                 _context = controller.Context;
