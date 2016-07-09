@@ -20,6 +20,7 @@ namespace Bit.App.Services
         private const int KeySize = 256;
         private const int Iterations = 5000;
 
+        private readonly Random _random = new Random();
         private readonly PaddedBufferedBlockCipher _cipher;
         private readonly ISecureStorageService _secureStorage;
         private KeyParameter _keyParameter;
@@ -184,9 +185,8 @@ namespace Bit.App.Services
 
         private byte[] GenerateRandomInitializationVector()
         {
-            var rand = new Random();
             var iv = new byte[InitializationVectorSize];
-            rand.NextBytes(iv);
+            _random.NextBytes(iv);
             return iv;
         }
     }
