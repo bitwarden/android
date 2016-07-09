@@ -16,47 +16,7 @@ namespace Bit.iOS.Extension
 	{
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UITableViewCell generatePasswordCell { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITableViewCell nameCell { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITextField nameField { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UILabel nameLabel { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITableViewCell passwordCell { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITextField passwordField { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
 		UITableView tableView { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITableViewCell uriCell { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITextField uriField { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITableViewCell usernameCell { get; set; }
-
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITextField usernameField { get; set; }
 
 		[Action ("UIBarButtonItem2289_Activated:")]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -68,49 +28,9 @@ namespace Bit.iOS.Extension
 
 		void ReleaseDesignerOutlets ()
 		{
-			if (generatePasswordCell != null) {
-				generatePasswordCell.Dispose ();
-				generatePasswordCell = null;
-			}
-			if (nameCell != null) {
-				nameCell.Dispose ();
-				nameCell = null;
-			}
-			if (nameField != null) {
-				nameField.Dispose ();
-				nameField = null;
-			}
-			if (nameLabel != null) {
-				nameLabel.Dispose ();
-				nameLabel = null;
-			}
-			if (passwordCell != null) {
-				passwordCell.Dispose ();
-				passwordCell = null;
-			}
-			if (passwordField != null) {
-				passwordField.Dispose ();
-				passwordField = null;
-			}
 			if (tableView != null) {
 				tableView.Dispose ();
 				tableView = null;
-			}
-			if (uriCell != null) {
-				uriCell.Dispose ();
-				uriCell = null;
-			}
-			if (uriField != null) {
-				uriField.Dispose ();
-				uriField = null;
-			}
-			if (usernameCell != null) {
-				usernameCell.Dispose ();
-				usernameCell = null;
-			}
-			if (usernameField != null) {
-				usernameField.Dispose ();
-				usernameField = null;
 			}
 		}
 	}

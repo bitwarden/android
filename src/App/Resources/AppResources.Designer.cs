@@ -23,7 +23,7 @@ namespace Bit.App.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class AppResources {
+    public class AppResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -37,7 +37,7 @@ namespace Bit.App.Resources {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Bit.App.Resources.AppResources", typeof(AppResources).GetTypeInfo().Assembly);
@@ -52,7 +52,7 @@ namespace Bit.App.Resources {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -64,7 +64,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
-        internal static string Add {
+        public static string Add {
             get {
                 return ResourceManager.GetString("Add", resourceCulture);
             }
@@ -73,7 +73,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Add Site.
         /// </summary>
-        internal static string AddSite {
+        public static string AddSite {
             get {
                 return ResourceManager.GetString("AddSite", resourceCulture);
             }
@@ -82,7 +82,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to An error has occurred..
         /// </summary>
-        internal static string AnErrorHasOccurred {
+        public static string AnErrorHasOccurred {
             get {
                 return ResourceManager.GetString("AnErrorHasOccurred", resourceCulture);
             }
@@ -91,7 +91,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
-        internal static string Back {
+        public static string Back {
             get {
                 return ResourceManager.GetString("Back", resourceCulture);
             }
@@ -100,7 +100,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to bitwarden.
         /// </summary>
-        internal static string Bitwarden {
+        public static string Bitwarden {
             get {
                 return ResourceManager.GetString("Bitwarden", resourceCulture);
             }
@@ -109,7 +109,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        internal static string Cancel {
+        public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
             }
@@ -118,7 +118,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
-        internal static string Copy {
+        public static string Copy {
             get {
                 return ResourceManager.GetString("Copy", resourceCulture);
             }
@@ -127,7 +127,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Copy Password.
         /// </summary>
-        internal static string CopyPassword {
+        public static string CopyPassword {
             get {
                 return ResourceManager.GetString("CopyPassword", resourceCulture);
             }
@@ -136,7 +136,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Copy Username.
         /// </summary>
-        internal static string CopyUsername {
+        public static string CopyUsername {
             get {
                 return ResourceManager.GetString("CopyUsername", resourceCulture);
             }
@@ -145,7 +145,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
-        internal static string Delete {
+        public static string Delete {
             get {
                 return ResourceManager.GetString("Delete", resourceCulture);
             }
@@ -154,7 +154,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Do you really want to delete? This cannot be undone..
         /// </summary>
-        internal static string DoYouReallyWantToDelete {
+        public static string DoYouReallyWantToDelete {
             get {
                 return ResourceManager.GetString("DoYouReallyWantToDelete", resourceCulture);
             }
@@ -163,7 +163,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
-        internal static string Edit {
+        public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
             }
@@ -172,7 +172,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
-        internal static string Email {
+        public static string Email {
             get {
                 return ResourceManager.GetString("Email", resourceCulture);
             }
@@ -181,7 +181,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Email Address.
         /// </summary>
-        internal static string EmailAddress {
+        public static string EmailAddress {
             get {
                 return ResourceManager.GetString("EmailAddress", resourceCulture);
             }
@@ -190,7 +190,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Favorites.
         /// </summary>
-        internal static string Favorites {
+        public static string Favorites {
             get {
                 return ResourceManager.GetString("Favorites", resourceCulture);
             }
@@ -199,7 +199,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Folder.
         /// </summary>
-        internal static string Folder {
+        public static string Folder {
             get {
                 return ResourceManager.GetString("Folder", resourceCulture);
             }
@@ -208,7 +208,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to (none).
         /// </summary>
-        internal static string FolderNone {
+        public static string FolderNone {
             get {
                 return ResourceManager.GetString("FolderNone", resourceCulture);
             }
@@ -217,7 +217,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Go To Website.
         /// </summary>
-        internal static string GoToWebsite {
+        public static string GoToWebsite {
             get {
                 return ResourceManager.GetString("GoToWebsite", resourceCulture);
             }
@@ -226,7 +226,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Hide.
         /// </summary>
-        internal static string Hide {
+        public static string Hide {
             get {
                 return ResourceManager.GetString("Hide", resourceCulture);
             }
@@ -235,7 +235,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Please connect to the internet before continuing..
         /// </summary>
-        internal static string InternetConnectionRequiredMessage {
+        public static string InternetConnectionRequiredMessage {
             get {
                 return ResourceManager.GetString("InternetConnectionRequiredMessage", resourceCulture);
             }
@@ -244,7 +244,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Internet Connection Required.
         /// </summary>
-        internal static string InternetConnectionRequiredTitle {
+        public static string InternetConnectionRequiredTitle {
             get {
                 return ResourceManager.GetString("InternetConnectionRequiredTitle", resourceCulture);
             }
@@ -253,7 +253,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Launch.
         /// </summary>
-        internal static string Launch {
+        public static string Launch {
             get {
                 return ResourceManager.GetString("Launch", resourceCulture);
             }
@@ -262,7 +262,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Log In.
         /// </summary>
-        internal static string LogIn {
+        public static string LogIn {
             get {
                 return ResourceManager.GetString("LogIn", resourceCulture);
             }
@@ -271,7 +271,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
-        internal static string LogInNoun {
+        public static string LogInNoun {
             get {
                 return ResourceManager.GetString("LogInNoun", resourceCulture);
             }
@@ -280,7 +280,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Log Out.
         /// </summary>
-        internal static string LogOut {
+        public static string LogOut {
             get {
                 return ResourceManager.GetString("LogOut", resourceCulture);
             }
@@ -289,7 +289,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Master Password.
         /// </summary>
-        internal static string MasterPassword {
+        public static string MasterPassword {
             get {
                 return ResourceManager.GetString("MasterPassword", resourceCulture);
             }
@@ -298,7 +298,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to More.
         /// </summary>
-        internal static string More {
+        public static string More {
             get {
                 return ResourceManager.GetString("More", resourceCulture);
             }
@@ -307,7 +307,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to My Vault.
         /// </summary>
-        internal static string MyVault {
+        public static string MyVault {
             get {
                 return ResourceManager.GetString("MyVault", resourceCulture);
             }
@@ -316,7 +316,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
-        internal static string Name {
+        public static string Name {
             get {
                 return ResourceManager.GetString("Name", resourceCulture);
             }
@@ -325,7 +325,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
-        internal static string No {
+        public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
             }
@@ -334,7 +334,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Notes.
         /// </summary>
-        internal static string Notes {
+        public static string Notes {
             get {
                 return ResourceManager.GetString("Notes", resourceCulture);
             }
@@ -343,7 +343,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
-        internal static string Ok {
+        public static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
             }
@@ -352,7 +352,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
-        internal static string Password {
+        public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
             }
@@ -361,7 +361,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
-        internal static string Save {
+        public static string Save {
             get {
                 return ResourceManager.GetString("Save", resourceCulture);
             }
@@ -370,7 +370,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Settings.
         /// </summary>
-        internal static string Settings {
+        public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
             }
@@ -379,7 +379,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
-        internal static string Show {
+        public static string Show {
             get {
                 return ResourceManager.GetString("Show", resourceCulture);
             }
@@ -388,7 +388,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Site has been deleted..
         /// </summary>
-        internal static string SiteDeleted {
+        public static string SiteDeleted {
             get {
                 return ResourceManager.GetString("SiteDeleted", resourceCulture);
             }
@@ -397,7 +397,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to No Name.
         /// </summary>
-        internal static string SiteNoName {
+        public static string SiteNoName {
             get {
                 return ResourceManager.GetString("SiteNoName", resourceCulture);
             }
@@ -406,7 +406,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Sync.
         /// </summary>
-        internal static string Sync {
+        public static string Sync {
             get {
                 return ResourceManager.GetString("Sync", resourceCulture);
             }
@@ -415,7 +415,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Tools.
         /// </summary>
-        internal static string Tools {
+        public static string Tools {
             get {
                 return ResourceManager.GetString("Tools", resourceCulture);
             }
@@ -424,7 +424,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to URI.
         /// </summary>
-        internal static string URI {
+        public static string URI {
             get {
                 return ResourceManager.GetString("URI", resourceCulture);
             }
@@ -433,7 +433,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Username.
         /// </summary>
-        internal static string Username {
+        public static string Username {
             get {
                 return ResourceManager.GetString("Username", resourceCulture);
             }
@@ -442,7 +442,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The {0} field is required..
         /// </summary>
-        internal static string ValidationFieldRequired {
+        public static string ValidationFieldRequired {
             get {
                 return ResourceManager.GetString("ValidationFieldRequired", resourceCulture);
             }
@@ -451,7 +451,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to {0} has been copied..
         /// </summary>
-        internal static string ValueHasBeenCopied {
+        public static string ValueHasBeenCopied {
             get {
                 return ResourceManager.GetString("ValueHasBeenCopied", resourceCulture);
             }
@@ -460,7 +460,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to View.
         /// </summary>
-        internal static string View {
+        public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
             }
@@ -469,7 +469,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Website.
         /// </summary>
-        internal static string Website {
+        public static string Website {
             get {
                 return ResourceManager.GetString("Website", resourceCulture);
             }
@@ -478,7 +478,7 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
-        internal static string Yes {
+        public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
             }

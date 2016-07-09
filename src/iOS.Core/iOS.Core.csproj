@@ -67,6 +67,9 @@
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\SqlService.cs" />
+    <Compile Include="Views\PickerTableViewCell.cs" />
+    <Compile Include="Views\SwitchTableViewCell.cs" />
+    <Compile Include="Views\FormEntryTableViewCell.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
