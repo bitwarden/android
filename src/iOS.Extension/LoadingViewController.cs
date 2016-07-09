@@ -16,6 +16,8 @@ using Bit.iOS.Extension.Models;
 using MobileCoreServices;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity;
+using Acr.UserDialogs;
+using Plugin.Fingerprint;
 
 namespace Bit.iOS.Extension
 {
@@ -96,6 +98,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
                 //.RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
@@ -104,9 +107,9 @@ namespace Bit.iOS.Extension
                 .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
-                .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager());
-                //.RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
-                //.RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+                .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
+                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
+                .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
             ISettings settings = new Settings("group.com.8bit.bitwarden");
             container.RegisterInstance(settings, new ContainerControlledLifetimeManager());

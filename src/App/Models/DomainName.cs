@@ -167,7 +167,7 @@ namespace Bit.App.Models
                     {
                         ruleMatches.Add(result);
                     }
-                    Debug.WriteLine(string.Format("Domain part {0} matched {1} {2} rules", checkAgainst, result == null ? 0 : 1, rule));
+                    //Debug.WriteLine(string.Format("Domain part {0} matched {1} {2} rules", checkAgainst, result == null ? 0 : 1, rule));
                 }
             }
 
@@ -180,11 +180,11 @@ namespace Bit.App.Models
             TLDRule primaryMatch = results.Take(1).SingleOrDefault();
             if(primaryMatch != null)
             {
-                Debug.WriteLine(string.Format("Looks like our match is: {0}, which is a(n) {1} rule.", primaryMatch.Name, primaryMatch.Type));
+                //Debug.WriteLine(string.Format("Looks like our match is: {0}, which is a(n) {1} rule.", primaryMatch.Name, primaryMatch.Type));
             }
             else
             {
-                Debug.WriteLine(string.Format("No rules matched domain: {0}", domainString));
+                //Debug.WriteLine(string.Format("No rules matched domain: {0}", domainString));
             }
 
             return primaryMatch;

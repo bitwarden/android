@@ -9,6 +9,11 @@ using Bit.iOS.Core.Views;
 using Bit.iOS.Extension.Models;
 using Foundation;
 using UIKit;
+using XLabs.Ioc;
+using Bit.App;
+using Plugin.Connectivity.Abstractions;
+using Acr.UserDialogs;
+using System.Drawing;
 
 namespace Bit.iOS.Extension
 {
@@ -83,14 +88,66 @@ namespace Bit.iOS.Extension
             base.ViewDidLoad();
         }
 
-        partial void CancelBarButton_Activated(UIBarButtonItem sender)
+        async partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
             DismissViewController(true, null);
         }
 
-        partial void SaveBarButton_Activated(UIBarButtonItem sender)
+        async partial void SaveBarButton_Activated(UIBarButtonItem sender)
         {
+            var siteService = Resolver.Resolve<ISiteService>();
+            var connectivity = Resolver.Resolve<IConnectivity>();
+            var userDialogs = Resolver.Resolve<IUserDialogs>();
+
+            if(!connectivity.IsConnected)
+            {
+                AlertNoConnection();
+                return;
+            }
+
+            if(string.IsNullOrWhiteSpace(PasswordCell.TextField.Text))
+            {
+                DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Password), AppResources.Ok);
+                return;
+            }
+
+            if(string.IsNullOrWhiteSpace(NameCell.TextField.Text))
+            {
+                DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
+                return;
+            }
+
+            var site = new Site
+            {
+                Uri = UriCell.TextField.Text?.Encrypt(),
+                Name = NameCell.TextField.Text?.Encrypt(),
+                Username = UsernameCell.TextField.Text?.Encrypt(),
+                Password = PasswordCell.TextField.Text?.Encrypt(),
+                Notes = NotesCell.TextView.Text?.Encrypt(),
+                Favorite = FavoriteCell.Switch.On
+            };
+
+            var saveTask = siteService.SaveAsync(site);
+            userDialogs.ShowLoading("Saving...", MaskType.Black);
+            await saveTask;
+
+            userDialogs.HideLoading();
             DismissViewController(true, null);
+            userDialogs.SuccessToast(NameCell.TextField.Text, "New site created.");
+        }
+
+        public void DisplayAlert(string title, string message, string accept)
+        {
+            var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);
+            var oldFrame = alert.View.Frame;
+            alert.View.Frame = new RectangleF((float)oldFrame.X, (float)oldFrame.Y, (float)oldFrame.Width, (float)oldFrame.Height - 20);
+            alert.AddAction(UIAlertAction.Create(accept, UIAlertActionStyle.Default, null));
+            PresentViewController(alert, true, null);
+        }
+
+        private void AlertNoConnection()
+        {
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
         }
 
         public class TableSource : UITableViewSource
