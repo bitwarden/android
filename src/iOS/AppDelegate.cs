@@ -64,8 +64,16 @@ namespace Bit.iOS
                     page.EnabledExtension(completed && activityType == "com.8bit.bitwarden.find-login-action-extension");
                 };
 
-                UIApplication.SharedApplication.KeyWindow.RootViewController.ModalViewController
-                    .PresentViewController(activityViewController, true, null);
+                var modal = UIApplication.SharedApplication.KeyWindow.RootViewController.ModalViewController;
+                if(activityViewController.PopoverPresentationController != null)
+                {
+                    activityViewController.PopoverPresentationController.SourceView = modal.View;
+                    var frame = UIScreen.MainScreen.Bounds;
+                    frame.Height /= 2;
+                    activityViewController.PopoverPresentationController.SourceRect = frame;
+                }
+
+                modal.PresentViewController(activityViewController, true, null);
             });
 
             return base.FinishedLaunching(app, options);
