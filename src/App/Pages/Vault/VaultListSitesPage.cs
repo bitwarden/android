@@ -48,6 +48,7 @@ namespace Bit.App.Pages
         public ListView ListView { get; set; }
         public IEnumerable<VaultListPageModel.Site> Sites { get; set; } = new List<VaultListPageModel.Site>();
         public IEnumerable<VaultListPageModel.Folder> Folders { get; set; } = new List<VaultListPageModel.Folder>();
+        public SearchBar Search { get; set; }
 
         private void Init()
         {
@@ -77,18 +78,18 @@ namespace Bit.App.Pages
 
             ListView.ItemSelected += SiteSelected;
 
-            var searchBar = new SearchBar
+            Search = new SearchBar
             {
                 Placeholder = "Search vault...",
                 BackgroundColor = Color.FromHex("efeff4")
             };
-            searchBar.TextChanged += SearchBar_TextChanged;
-            searchBar.SearchButtonPressed += SearchBar_SearchButtonPressed;
+            Search.TextChanged += SearchBar_TextChanged;
+            Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
 
             Title = _favorites ? AppResources.Favorites : AppResources.MyVault;
             Content = new StackLayout
             {
-                Children = { searchBar, ListView },
+                Children = { Search, ListView },
                 Spacing = 0
             };
         }
@@ -112,16 +113,25 @@ namespace Bit.App.Pages
 
         private void FilterResults(string searchFilter)
         {
-            if(string.IsNullOrWhiteSpace(searchFilter))
+            Task.Run(async () =>
             {
-                LoadFolders(Sites);
-            }
-            else
-            {
-                searchFilter = searchFilter.ToLower();
-                var filteredSites = Sites.Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter));
-                LoadFolders(filteredSites);
-            }
+                await Task.Delay(300);
+                if(searchFilter != Search.Text)
+                {
+                    return;
+                }
+
+                if(string.IsNullOrWhiteSpace(searchFilter))
+                {
+                    LoadFolders(Sites);
+                }
+                else
+                {
+                    searchFilter = searchFilter.ToLower();
+                    var filteredSites = Sites.Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter));
+                    LoadFolders(filteredSites);
+                }
+            });
         }
 
         protected async override void OnAppearing()
@@ -151,17 +161,20 @@ namespace Bit.App.Pages
 
         private async Task FetchAndLoadVaultAsync()
         {
-            var foldersTask = _folderService.GetAllAsync();
-            var sitesTask = _favorites ? _siteService.GetAllAsync(true) : _siteService.GetAllAsync();
-            await Task.WhenAll(foldersTask, sitesTask);
+            await Task.Run(async () =>
+            {
+                var foldersTask = _folderService.GetAllAsync();
+                var sitesTask = _favorites ? _siteService.GetAllAsync(true) : _siteService.GetAllAsync();
+                await Task.WhenAll(foldersTask, sitesTask);
 
-            var folders = await foldersTask;
-            var sites = await sitesTask;
+                var folders = await foldersTask;
+                var sites = await sitesTask;
 
-            Folders = folders.Select(f => new VaultListPageModel.Folder(f));
-            Sites = sites.Select(s => new VaultListPageModel.Site(s));
+                Folders = folders.Select(f => new VaultListPageModel.Folder(f));
+                Sites = sites.Select(s => new VaultListPageModel.Site(s));
 
-            LoadFolders(Sites);
+                LoadFolders(Sites);
+            });
         }
 
         private void LoadFolders(IEnumerable<VaultListPageModel.Site> sites)
