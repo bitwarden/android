@@ -10,10 +10,10 @@ namespace Bit.App.Models.Page
     {
         public class Site
         {
-            public Site(Models.Site site, string folderId)
+            public Site(Models.Site site)
             {
                 Id = site.Id;
-                FolderId = folderId;
+                FolderId = site.FolderId;
                 Name = site.Name?.Decrypt();
                 Username = site.Username?.Decrypt() ?? " ";
                 Password = new Lazy<string>(() => site.Password?.Decrypt());
@@ -30,17 +30,15 @@ namespace Bit.App.Models.Page
 
         public class Folder : List<Site>
         {
-            public Folder(IEnumerable<Models.Site> sites, string folderId = null)
-            {
-                var pageSites = sites.Select(s => new Site(s, folderId)).OrderBy(s => s.Name);
-                AddRange(pageSites);
-            }
-
-            public Folder(Models.Folder folder, IEnumerable<Models.Site> sites)
-                : this(sites, folder.Id)
+            public Folder(Models.Folder folder)
             {
                 Id = folder.Id;
                 Name = folder.Name?.Decrypt();
+            }
+
+            public Folder(IEnumerable<Site> sites)
+            {
+                AddRange(sites);
             }
 
             public string Id { get; set; }

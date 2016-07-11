@@ -14,6 +14,7 @@ using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using System.Collections.Generic;
+using Bit.App.Models;
 
 namespace Bit.App.Pages
 {
@@ -42,13 +43,17 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<VaultListPageModel.Folder> Folders { get; private set; } = new ExtendedObservableCollection<VaultListPageModel.Folder>();
+        public ExtendedObservableCollection<VaultListPageModel.Folder> PresentationFolders { get; private set; }
+            = new ExtendedObservableCollection<VaultListPageModel.Folder>();
+        public ListView ListView { get; set; }
+        public IEnumerable<VaultListPageModel.Site> Sites { get; set; } = new List<VaultListPageModel.Site>();
+        public IEnumerable<VaultListPageModel.Folder> Folders { get; set; } = new List<VaultListPageModel.Folder>();
 
         private void Init()
         {
             MessagingCenter.Subscribe<Application>(Application.Current, "SyncCompleted", async (sender) =>
             {
-                await LoadFoldersAsync();
+                await FetchAndLoadVaultAsync();
             });
 
             if(!_favorites)
@@ -56,10 +61,10 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(new AddSiteToolBarItem(this));
             }
 
-            var listView = new ListView
+            ListView = new ListView
             {
                 IsGroupingEnabled = true,
-                ItemsSource = Folders,
+                ItemsSource = PresentationFolders,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this)),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
@@ -67,19 +72,62 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                listView.RowHeight = -1;
+                ListView.RowHeight = -1;
             }
 
-            listView.ItemSelected += SiteSelected;
+            ListView.ItemSelected += SiteSelected;
+
+            var searchBar = new SearchBar
+            {
+                Placeholder = "Search vault...",
+                BackgroundColor = Color.FromHex("efeff4")
+            };
+            searchBar.TextChanged += SearchBar_TextChanged;
+            searchBar.SearchButtonPressed += SearchBar_SearchButtonPressed;
 
             Title = _favorites ? AppResources.Favorites : AppResources.MyVault;
-            Content = listView;
+            Content = new StackLayout
+            {
+                Children = { searchBar, ListView },
+                Spacing = 0
+            };
+        }
+
+        private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
+        {
+            FilterResults(((SearchBar)sender).Text);
+        }
+
+        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var oldLength = e.OldTextValue?.Length ?? 0;
+            var newLength = e.NewTextValue?.Length ?? 0;
+            if(oldLength < 2 && newLength < 2 && oldLength < newLength)
+            {
+                return;
+            }
+
+            FilterResults(e.NewTextValue);
+        }
+
+        private void FilterResults(string searchFilter)
+        {
+            if(string.IsNullOrWhiteSpace(searchFilter))
+            {
+                LoadFolders(Sites);
+            }
+            else
+            {
+                searchFilter = searchFilter.ToLower();
+                var filteredSites = Sites.Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter));
+                LoadFolders(filteredSites);
+            }
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            LoadFoldersAsync().Wait();
+            await FetchAndLoadVaultAsync();
 
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
@@ -101,17 +149,38 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task LoadFoldersAsync()
+        private async Task FetchAndLoadVaultAsync()
         {
-            var folders = await _folderService.GetAllAsync();
-            var sites = _favorites ? await _siteService.GetAllAsync(true) : await _siteService.GetAllAsync();
+            var foldersTask = _folderService.GetAllAsync();
+            var sitesTask = _favorites ? _siteService.GetAllAsync(true) : _siteService.GetAllAsync();
+            await Task.WhenAll(foldersTask, sitesTask);
 
-            var pageFolders = folders.Select(f => new VaultListPageModel.Folder(f, 
-                sites.Where(s => s.FolderId == f.Id))).OrderBy(f => f.Name).ToList();
+            var folders = await foldersTask;
+            var sites = await sitesTask;
+
+            Folders = folders.Select(f => new VaultListPageModel.Folder(f));
+            Sites = sites.Select(s => new VaultListPageModel.Site(s));
+
+            LoadFolders(Sites);
+        }
+
+        private void LoadFolders(IEnumerable<VaultListPageModel.Site> sites)
+        {
+            var folders = new List<VaultListPageModel.Folder>(Folders);
+
+            foreach(var folder in folders)
+            {
+                if(folder.Any())
+                {
+                    folder.Clear();
+                }
+                folder.AddRange(sites.Where(s => s.FolderId == folder.Id));
+            }
+
             var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));
-            pageFolders.Add(noneFolder);
+            folders.Add(noneFolder);
 
-            Folders.ResetWithRange(pageFolders.Where(f => f.Any()));
+            PresentationFolders.ResetWithRange(folders.Where(f => f.Any()));
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
@@ -182,7 +251,7 @@ namespace Bit.App.Pages
 
             if(deleteCall.Succeeded)
             {
-                var folder = Folders.Single(f => f.Id == site.FolderId);
+                var folder = PresentationFolders.Single(f => f.Id == site.FolderId);
                 var siteIndex = folder.Select((s, i) => new { s, i }).First(s => s.s.Id == site.Id).i;
                 folder.RemoveAt(siteIndex);
                 _userDialogs.SuccessToast(AppResources.SiteDeleted);
