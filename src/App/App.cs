@@ -290,6 +290,15 @@ namespace Bit.App
                     new Setter { Property = ListView.SeparatorColorProperty, Value = grayLighter }
                 }
             });
+
+            // Search Bar
+
+            Resources.Add(new Style(typeof(SearchBar))
+            {
+                Setters = {
+                    new Setter { Property = SearchBar.CancelButtonColorProperty, Value = primaryColor }
+                }
+            });
         }
     }
 }

@@ -4,6 +4,7 @@ namespace Bit.App.Abstractions
 {
     public interface ISyncService
     {
+        bool SyncInProgress { get; }
         Task<bool> SyncAsync(string id);
         Task<bool> SyncDeleteFolderAsync(string id);
         Task<bool> SyncDeleteSiteAsync(string id);

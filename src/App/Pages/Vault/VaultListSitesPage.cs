@@ -14,7 +14,6 @@ using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using System.Collections.Generic;
-using Bit.App.Models;
 
 namespace Bit.App.Pages
 {
@@ -25,6 +24,7 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IClipboardService _clipboardService;
+        private readonly ISyncService _syncService;
         private readonly IPushNotification _pushNotification;
         private readonly ISettings _settings;
         private readonly bool _favorites;
@@ -37,6 +37,7 @@ namespace Bit.App.Pages
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
+            _syncService = Resolver.Resolve<ISyncService>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
             _settings = Resolver.Resolve<ISettings>();
 
@@ -52,9 +53,12 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            MessagingCenter.Subscribe<Application>(Application.Current, "SyncCompleted", async (sender) =>
+            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", async (sender, success) =>
             {
-                await FetchAndLoadVaultAsync();
+                if(success)
+                {
+                    await FetchAndLoadVaultAsync();
+                }
             });
 
             if(!_favorites)
@@ -80,8 +84,8 @@ namespace Bit.App.Pages
 
             Search = new SearchBar
             {
-                Placeholder = "Search vault...",
-                BackgroundColor = Color.FromHex("efeff4")
+                Placeholder = "Search vault",
+                BackgroundColor = Color.FromHex("E8E8ED")
             };
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
@@ -96,7 +100,7 @@ namespace Bit.App.Pages
 
         private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
         {
-            FilterResults(((SearchBar)sender).Text);
+            FilterResultsBackground(((SearchBar)sender).Text);
         }
 
         private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
@@ -108,30 +112,38 @@ namespace Bit.App.Pages
                 return;
             }
 
-            FilterResults(e.NewTextValue);
+            FilterResultsBackground(e.NewTextValue);
+        }
+
+        private void FilterResultsBackground(string searchFilter)
+        {
+            Task.Run(async () =>
+            {
+                if(!string.IsNullOrWhiteSpace(searchFilter))
+                {
+                    await Task.Delay(300);
+                    if(searchFilter != Search.Text)
+                    {
+                        return;
+                    }
+                }
+
+                FilterResults(searchFilter);
+            });
         }
 
         private void FilterResults(string searchFilter)
         {
-            Task.Run(async () =>
+            if(string.IsNullOrWhiteSpace(searchFilter))
             {
-                await Task.Delay(300);
-                if(searchFilter != Search.Text)
-                {
-                    return;
-                }
-
-                if(string.IsNullOrWhiteSpace(searchFilter))
-                {
-                    LoadFolders(Sites);
-                }
-                else
-                {
-                    searchFilter = searchFilter.ToLower();
-                    var filteredSites = Sites.Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter));
-                    LoadFolders(filteredSites);
-                }
-            });
+                LoadFolders(Sites);
+            }
+            else
+            {
+                searchFilter = searchFilter.ToLower();
+                var filteredSites = Sites.Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter));
+                LoadFolders(filteredSites);
+            }
         }
 
         protected async override void OnAppearing()
@@ -161,6 +173,11 @@ namespace Bit.App.Pages
 
         private async Task FetchAndLoadVaultAsync()
         {
+            if(PresentationFolders.Count > 0 && _syncService.SyncInProgress)
+            {
+                return;
+            }
+
             await Task.Run(async () =>
             {
                 var foldersTask = _folderService.GetAllAsync();
@@ -173,7 +190,7 @@ namespace Bit.App.Pages
                 Folders = folders.Select(f => new VaultListPageModel.Folder(f));
                 Sites = sites.Select(s => new VaultListPageModel.Site(s));
 
-                LoadFolders(Sites);
+                FilterResults(Search.Text);
             });
         }
 

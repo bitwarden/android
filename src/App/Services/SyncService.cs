@@ -13,6 +13,7 @@ namespace Bit.App.Services
     public class SyncService : ISyncService
     {
         private const string LastSyncKey = "lastSync";
+        private int _syncsInProgress = 0;
 
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly IFolderApiRepository _folderApiRepository;
@@ -40,6 +41,8 @@ namespace Bit.App.Services
             _settings = settings;
         }
 
+        public bool SyncInProgress => _syncsInProgress > 0;
+
         public async Task<bool> SyncAsync(string id)
         {
             if(!_authService.IsAuthenticated)
@@ -47,9 +50,12 @@ namespace Bit.App.Services
                 return false;
             }
 
+            SyncStarted();
+
             var cipher = await _cipherApiRepository.GetByIdAsync(id);
             if(!cipher.Succeeded)
             {
+                SyncCompleted(false);
                 return false;
             }
 
@@ -80,10 +86,11 @@ namespace Bit.App.Services
                     }
                     break;
                 default:
+                    SyncCompleted(false);
                     return false;
             }
 
-            BroadcastSyncCompleted();
+            SyncCompleted(true);
             return true;
         }
 
@@ -94,8 +101,10 @@ namespace Bit.App.Services
                 return false;
             }
 
+            SyncStarted();
+
             await _folderRepository.DeleteAsync(id);
-            BroadcastSyncCompleted();
+            SyncCompleted(true);
             return true;
         }
 
@@ -106,8 +115,10 @@ namespace Bit.App.Services
                 return false;
             }
 
+            SyncStarted();
+
             await _siteRepository.DeleteAsync(id);
-            BroadcastSyncCompleted();
+            SyncCompleted(true);
             return true;
         }
 
@@ -118,10 +129,13 @@ namespace Bit.App.Services
                 return false;
             }
 
+            SyncStarted();
+
             var now = DateTime.UtcNow;
             var ciphers = await _cipherApiRepository.GetAsync();
             if(!ciphers.Succeeded)
             {
+                SyncCompleted(false);
                 return false;
             }
 
@@ -131,11 +145,12 @@ namespace Bit.App.Services
 
             if(folderTask.Exception != null || siteTask.Exception != null)
             {
+                SyncCompleted(false);
                 return false;
             }
 
             _settings.AddOrUpdateValue(LastSyncKey, now);
-            BroadcastSyncCompleted();
+            SyncCompleted(true);
             return true;
         }
 
@@ -153,9 +168,12 @@ namespace Bit.App.Services
                 return await FullSyncAsync();
             }
 
+            SyncStarted();
+
             var ciphers = await _cipherApiRepository.GetByRevisionDateWithHistoryAsync(lastSync.Value);
             if(!ciphers.Succeeded)
             {
+                SyncCompleted(false);
                 return false;
             }
 
@@ -166,11 +184,12 @@ namespace Bit.App.Services
             await Task.WhenAll(siteTask, folderTask, deleteTask);
             if(folderTask.Exception != null || siteTask.Exception != null || deleteTask.Exception != null)
             {
+                SyncCompleted(false);
                 return false;
             }
 
             _settings.AddOrUpdateValue(LastSyncKey, now);
-            BroadcastSyncCompleted();
+            SyncCompleted(true);
             return true;
         }
 
@@ -245,9 +264,16 @@ namespace Bit.App.Services
             await Task.WhenAll(tasks);
         }
 
-        private void BroadcastSyncCompleted()
+        private void SyncStarted()
         {
-            MessagingCenter.Send(Application.Current, "SyncCompleted");
+            _syncsInProgress++;
+            MessagingCenter.Send(Application.Current, "SyncStarted");
+        }
+
+        private void SyncCompleted(bool successfully)
+        {
+            _syncsInProgress--;
+            MessagingCenter.Send(Application.Current, "SyncCompleted", successfully);
         }
     }
 }
