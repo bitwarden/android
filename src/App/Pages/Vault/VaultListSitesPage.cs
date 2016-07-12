@@ -322,7 +322,6 @@ namespace Bit.App.Pages
             {
                 _page = page;
 
-                // Adding whitespace to Delete action to account for the negative margin offset on the listview
                 var deleteAction = new MenuItem { Text = AppResources.Delete, IsDestructive = true };
                 deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
                 deleteAction.Clicked += page.DeleteClickedAsync;

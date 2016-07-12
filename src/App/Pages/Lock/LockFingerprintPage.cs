@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly bool _checkFingerprintImmediately;
 
         public LockFingerprintPage(bool checkFingerprintImmediately)
+            : base(false)
         {
             _checkFingerprintImmediately = checkFingerprintImmediately;
             _fingerprint = Resolver.Resolve<IFingerprint>();

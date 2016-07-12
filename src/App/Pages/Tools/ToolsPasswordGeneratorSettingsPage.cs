@@ -29,8 +29,8 @@ namespace Bit.App.Pages
         public ExtendedSwitchCell SpecialCell { get; set; }
         public ExtendedSwitchCell NumbersCell { get; set; }
         public ExtendedSwitchCell AvoidAmbiguousCell { get; set; }
-        public EntryCell SpecialMinCell { get; set; }
-        public EntryCell NumbersMinCell { get; set; }
+        public StepperCell SpecialMinCell { get; set; }
+        public StepperCell NumbersMinCell { get; set; }
 
         public void Init()
         {
@@ -69,19 +69,10 @@ namespace Bit.App.Pages
             };
             AvoidAmbiguousCell.OnChanged += AvoidAmbiguousCell_OnChanged; ;
 
-            NumbersMinCell = new EntryCell
-            {
-                Label = "Minimum Numbers",
-                Text = _settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1).ToString(),
-                Keyboard = Keyboard.Numeric
-            };
-
-            SpecialMinCell = new EntryCell
-            {
-                Label = "Minimum Special",
-                Text = _settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1).ToString(),
-                Keyboard = Keyboard.Numeric
-            };
+            NumbersMinCell = new StepperCell("Minimum Numbers", 
+                _settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1), 0, 5, 1);
+            SpecialMinCell = new StepperCell("Minimum Special",
+                _settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1), 0, 5, 1);
 
             var table = new ExtendedTableView
             {
@@ -122,17 +113,11 @@ namespace Bit.App.Pages
 
         protected override void OnDisappearing()
         {
-            int minNumber;
-            if(int.TryParse(NumbersMinCell.Text, out minNumber))
-            {
-                _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinNumbers, minNumber);
-            }
+            _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinNumbers, 
+                Convert.ToInt32(NumbersMinCell.Stepper.Value));
 
-            int minSpecial;
-            if(int.TryParse(SpecialMinCell.Text, out minSpecial))
-            {
-                _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinSpecial, minSpecial);
-            }
+            _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinSpecial,
+                Convert.ToInt32(SpecialMinCell.Stepper.Value));
         }
 
         private void AvoidAmbiguousCell_OnChanged(object sender, ToggledEventArgs e)

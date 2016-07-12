@@ -9,22 +9,26 @@ namespace Bit.App.Controls
     {
         private ISyncService _syncService;
 
-        public ExtendedContentPage()
+        public ExtendedContentPage(bool syncIndicator = true)
         {
             _syncService = Resolver.Resolve<ISyncService>();
 
             BackgroundColor = Color.FromHex("efeff4");
-            IsBusy = _syncService.SyncInProgress;
 
-            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
+            if(syncIndicator)
             {
                 IsBusy = _syncService.SyncInProgress;
-            });
 
-            MessagingCenter.Subscribe<Application>(Application.Current, "SyncStarted", (sender) =>
-            {
-                IsBusy = _syncService.SyncInProgress;
-            });
+                MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
+                {
+                    IsBusy = _syncService.SyncInProgress;
+                });
+
+                MessagingCenter.Subscribe<Application>(Application.Current, "SyncStarted", (sender) =>
+                {
+                    IsBusy = _syncService.SyncInProgress;
+                });
+            }
         }
     }
 }

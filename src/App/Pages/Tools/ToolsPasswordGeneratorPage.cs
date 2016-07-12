@@ -153,6 +153,7 @@ namespace Bit.App.Pages
             _userDialogs.SuccessToast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
 
+        // TODO: move to standalone reusable control
         public class SliderViewCell : ExtendedViewCell
         {
             private readonly ToolsPasswordGeneratorPage _page;
@@ -200,7 +201,7 @@ namespace Bit.App.Pages
                     Orientation = StackOrientation.Horizontal,
                     Spacing = 15,
                     Children = { label, LengthSlider, Value },
-                    Padding = new Thickness(15)
+                    Padding = new Thickness(15, 8)
                 };
 
                 View = stackLayout;

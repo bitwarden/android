@@ -55,6 +55,7 @@
     <Compile Include="Controls\ExtendedEditor.cs" />
     <Compile Include="Controls\ExtendedNavigationPage.cs" />
     <Compile Include="Controls\ExtendedContentPage.cs" />
+    <Compile Include="Controls\StepperCell.cs" />
     <Compile Include="Controls\ExtendedTableView.cs" />
     <Compile Include="Controls\ExtendedPicker.cs" />
     <Compile Include="Controls\ExtendedEntry.cs" />
