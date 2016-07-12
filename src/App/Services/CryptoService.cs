@@ -22,12 +22,10 @@ namespace Bit.App.Services
 
         private readonly Random _random = new Random();
         private readonly ISecureStorageService _secureStorage;
-        private readonly CbcBlockCipher _aesBlockCipher;
         private KeyParameter _keyParameter;
 
         public CryptoService(ISecureStorageService secureStorage)
         {
-            _aesBlockCipher = new CbcBlockCipher(new AesEngine());
             _secureStorage = secureStorage;
         }
 
@@ -93,7 +91,8 @@ namespace Bit.App.Services
             var iv = GenerateRandomInitializationVector();
             var keyParamWithIV = new ParametersWithIV(_keyParameter, iv, 0, InitializationVectorSize);
 
-            var cipher = new PaddedBufferedBlockCipher(_aesBlockCipher);
+            var aesBlockCipher = new CbcBlockCipher(new AesEngine());
+            var cipher = new PaddedBufferedBlockCipher(aesBlockCipher);
             cipher.Init(true, keyParamWithIV);
             var encryptedBytes = new byte[cipher.GetOutputSize(plaintextBytes.Length)];
             var length = cipher.ProcessBytes(plaintextBytes, encryptedBytes, 0);
@@ -117,7 +116,8 @@ namespace Bit.App.Services
             try
             {
                 var keyParamWithIV = new ParametersWithIV(_keyParameter, encyptedValue.InitializationVectorBytes, 0, InitializationVectorSize);
-                var cipher = new PaddedBufferedBlockCipher(_aesBlockCipher);
+                var aesBlockCipher = new CbcBlockCipher(new AesEngine());
+                var cipher = new PaddedBufferedBlockCipher(aesBlockCipher);
                 cipher.Init(false, keyParamWithIV);
                 byte[] comparisonBytes = new byte[cipher.GetOutputSize(encyptedValue.CipherTextBytes.Length)];
                 var length = cipher.ProcessBytes(encyptedValue.CipherTextBytes, comparisonBytes, 0);
