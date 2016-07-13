@@ -95,6 +95,10 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="PasswordGeneratorViewController.cs" />
+    <Compile Include="PasswordGeneratorViewController.designer.cs">
+      <DependentUpon>PasswordGeneratorViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="SiteAddViewController.cs" />
     <Compile Include="SiteAddViewController.designer.cs">
       <DependentUpon>SiteAddViewController.cs</DependentUpon>
