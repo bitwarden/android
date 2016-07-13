@@ -30,10 +30,6 @@ namespace Bit.iOS.Extension
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem SelectBarButton { get; set; }
 
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITableView Table { get; set; }
-
         [Action ("CancelBarButton_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
@@ -62,11 +58,6 @@ namespace Bit.iOS.Extension
             if (SelectBarButton != null) {
                 SelectBarButton.Dispose ();
                 SelectBarButton = null;
-            }
-
-            if (Table != null) {
-                Table.Dispose ();
-                Table = null;
             }
         }
     }
