@@ -3,7 +3,7 @@ using UIKit;
 
 namespace Bit.iOS.Core.Views
 {
-    public class FormEntryTableViewCell : UITableViewCell
+    public class FormEntryTableViewCell : UITableViewCell, ISelectable
     {
         public FormEntryTableViewCell(
             string labelName = null,
@@ -107,5 +107,17 @@ namespace Bit.iOS.Core.Views
         public UILabel Label { get; set; }
         public UITextField TextField { get; set; }
         public UITextView TextView { get; set; }
+
+        public void Select()
+        {
+            if(TextView != null)
+            {
+                TextView.BecomeFirstResponder();
+            }
+            else if(TextField != null)
+            {
+                TextField.BecomeFirstResponder();
+            }
+        }
     }
 }

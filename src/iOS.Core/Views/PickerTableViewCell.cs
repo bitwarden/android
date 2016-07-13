@@ -6,10 +6,10 @@ using UIKit;
 
 namespace Bit.iOS.Core.Views
 {
-    public class PickerTableViewCell : UITableViewCell
+    public class PickerTableViewCell : UITableViewCell, ISelectable
     {
         private List<string> _items = new List<string>();
-        private int _selectedIndex = -1;
+        private int _selectedIndex = 0;
 
         public PickerTableViewCell(
             string labelName,
@@ -35,8 +35,6 @@ namespace Bit.iOS.Core.Views
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Font = UIFont.FromDescriptor(descriptor, pointSize)
             };
-            TextField.Started += Entry_Started;
-            TextField.Ended += Entry_Ended;
 
             var width = (float)UIScreen.MainScreen.Bounds.Width;
             var toolbar = new UIToolbar(new RectangleF(0, 0, width, 44))
@@ -134,14 +132,9 @@ namespace Bit.iOS.Core.Views
             Picker.Select(Math.Max(formsIndex, 0), 0, true);
         }
 
-        private void Entry_Ended(object sender, EventArgs e)
+        public void Select()
         {
-            //throw new NotImplementedException();
-        }
-
-        private void Entry_Started(object sender, EventArgs e)
-        {
-            //throw new NotImplementedException();
+            TextField?.BecomeFirstResponder();
         }
 
         private class NoCaretField : UITextField

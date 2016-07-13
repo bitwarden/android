@@ -19,7 +19,9 @@ namespace Bit.iOS.Extension
     public partial class SiteAddViewController : UITableViewController
     {
         private ISiteService _siteService;
+        private IFolderService _folderService;
         private IConnectivity _connectivity;
+        private IEnumerable<Folder> _folders;
 
         public SiteAddViewController(IntPtr handle) : base(handle)
         { }
@@ -46,6 +48,7 @@ namespace Bit.iOS.Extension
         {
             _siteService = Resolver.Resolve<ISiteService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
+            _folderService = Resolver.Resolve<IFolderService>();
 
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
@@ -88,12 +91,15 @@ namespace Bit.iOS.Extension
             GeneratePasswordCell.TextLabel.Text = "Generate Password";
             GeneratePasswordCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 
-            FolderCell.Items = new List<string> { "Folder 1", "Folder 2" };
-            FolderCell.SelectedIndex = 1;
+            _folders = _folderService.GetAllAsync().GetAwaiter().GetResult();
+            var folderNames = _folders.Select(s => s.Name.Decrypt()).OrderBy(s => s).ToList();
+            folderNames.Insert(0, AppResources.FolderNone);
+            FolderCell.Items = folderNames;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 70;
             TableView.Source = new TableSource(this);
+            TableView.AllowsSelection = true;
 
             base.ViewDidLoad();
         }
@@ -139,7 +145,8 @@ namespace Bit.iOS.Extension
                 Username = string.IsNullOrWhiteSpace(UsernameCell.TextField.Text) ? null : UsernameCell.TextField.Text.Encrypt(),
                 Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ? null : PasswordCell.TextField.Text.Encrypt(),
                 Notes = string.IsNullOrWhiteSpace(NotesCell.TextView.Text) ? null : NotesCell.TextView.Text.Encrypt(),
-                Favorite = FavoriteCell.Switch.On
+                Favorite = FavoriteCell.Switch.On,
+                FolderId = FolderCell.SelectedIndex == 0 ? null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id
             };
 
             var saveTask = _siteService.SaveAsync(site);
@@ -259,6 +266,29 @@ namespace Bit.iOS.Extension
                 }
 
                 return null;
+            }
+
+            public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
+            {
+                tableView.DeselectRow(indexPath, true);
+                tableView.EndEditing(true);
+
+                if(indexPath.Section == 0 && indexPath.Row == 4)
+                {
+                    // Generate password selected
+                }
+
+                var cell = tableView.CellAt(indexPath);
+                if(cell == null)
+                {
+                    return;
+                }
+
+                var selectableCell = cell as ISelectable;
+                if(selectableCell != null)
+                {
+                    selectableCell.Select();
+                }
             }
         }
     }
