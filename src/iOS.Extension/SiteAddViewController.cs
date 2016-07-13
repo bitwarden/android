@@ -33,6 +33,7 @@ namespace Bit.iOS.Extension
         public UITableViewCell GeneratePasswordCell { get; set; } = new UITableViewCell(UITableViewCellStyle.Subtitle, "GeneratePasswordCell");
         public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell("Favorite");
         public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(useTextView: true, height: 90);
+        public PickerTableViewCell FolderCell { get; set; } = new PickerTableViewCell(AppResources.Folder);
 
         public override void ViewWillAppear(bool animated)
         {
@@ -86,6 +87,9 @@ namespace Bit.iOS.Extension
 
             GeneratePasswordCell.TextLabel.Text = "Generate Password";
             GeneratePasswordCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
+
+            FolderCell.Items = new List<string> { "Folder 1", "Folder 2" };
+            FolderCell.SelectedIndex = 1;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 70;
@@ -195,7 +199,11 @@ namespace Bit.iOS.Extension
                 }
                 else if(indexPath.Section == 1)
                 {
-                    if(indexPath.Row == 1)
+                    if(indexPath.Row == 0)
+                    {
+                        return _controller.FolderCell;
+                    }
+                    else if(indexPath.Row == 1)
                     {
                         return _controller.FavoriteCell;
                     }
