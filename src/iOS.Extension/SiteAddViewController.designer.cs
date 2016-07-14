@@ -22,10 +22,6 @@ namespace Bit.iOS.Extension
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UIBarButtonItem SaveBarButton { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITableView TableView { get; set; }
-
 		[Action ("CancelBarButton_Activated:")]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		partial void CancelBarButton_Activated (UIBarButtonItem sender);

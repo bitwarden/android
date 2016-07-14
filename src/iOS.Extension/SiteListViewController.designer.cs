@@ -26,10 +26,6 @@ namespace Bit.iOS.Extension
 		[GeneratedCode ("iOS Designer", "1.0")]
 		UINavigationItem NavItem { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITableView TableView { get; set; }
-
 		[Action ("AddBarButton_Activated:")]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		partial void AddBarButton_Activated (UIBarButtonItem sender);

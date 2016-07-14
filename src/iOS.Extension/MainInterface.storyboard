@@ -121,7 +121,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="TableView" destination="2088" id="name-outlet-2088"/>
                         <outlet property="SaveBarButton" destination="3748" id="name-outlet-3748"/>
                         <outlet property="CancelBarButton" destination="3747" id="name-outlet-3747"/>
                         <segue id="4805" destination="4574" kind="show" identifier="passwordGeneratorSegue"/>
@@ -171,7 +170,6 @@
                     </tableView>
                     <connections>
                         <segue id="3731" destination="1845" kind="presentation" identifier="siteAddSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical"/>
-                        <outlet property="TableView" destination="2305" id="name-outlet-2305"/>
                         <outlet property="AddBarButton" destination="3736" id="name-outlet-3736"/>
                         <outlet property="CancelBarButton" destination="3735" id="name-outlet-3735"/>
                         <outlet property="NavItem" destination="3734" id="name-outlet-3734"/>
