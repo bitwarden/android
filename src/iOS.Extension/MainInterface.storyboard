@@ -223,36 +223,6 @@
                         <viewControllerLayoutGuide type="top" id="4571"/>
                         <viewControllerLayoutGuide type="bottom" id="4572"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="4581">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="4811" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="15" y="79" width="570" height="20.5"/>
-                                <color key="backgroundColor" colorSpace="calibratedRGB" red="0" green="0" blue="0" alpha="0"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <containerView contentMode="scaleToFill" id="4900" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="0.0" y="109.5" width="600" height="490.5"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                                <connections>
-                                    <segue id="5421" destination="4912" kind="embed"/>
-                                </connections>
-                            </containerView>
-                        </subviews>
-                        <constraints>
-                            <constraint id="4853" firstItem="4811" firstAttribute="leading" secondItem="4581" secondAttribute="leading" constant="15"/>
-                            <constraint id="4864" firstItem="4581" firstAttribute="trailing" secondItem="4811" secondAttribute="trailing" constant="15"/>
-                            <constraint id="4875" firstItem="4811" firstAttribute="top" secondItem="4571" secondAttribute="bottom" constant="15"/>
-                            <constraint id="4907" firstItem="4900" firstAttribute="leading" secondItem="4581" secondAttribute="leading"/>
-                            <constraint id="4908" firstItem="4581" firstAttribute="trailing" secondItem="4900" secondAttribute="trailing"/>
-                            <constraint id="4909" firstItem="4900" firstAttribute="top" secondItem="4811" secondAttribute="bottom" constant="10"/>
-                            <constraint id="4910" firstItem="4572" firstAttribute="top" secondItem="4900" secondAttribute="bottom"/>
-                        </constraints>
-                    </view>
                     <navigationItem key="navigationItem" title="Generate Password" id="4580">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="4807">
                             <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -270,9 +240,38 @@
                     <connections>
                         <outlet property="CancelBarButton" destination="4807" id="name-outlet-4807"/>
                         <outlet property="SelectBarButton" destination="4808" id="name-outlet-4808"/>
-                        <outlet property="BaseView" destination="4581" id="name-outlet-4581"/>
-                        <outlet property="PasswordLabel" destination="4811" id="name-outlet-4811"/>
+                        <outlet property="BaseView" destination="4930" id="name-outlet-4930"/>
+                        <outlet property="OptionsContainer" destination="4933" id="name-outlet-4933"/>
+                        <outlet property="PasswordLabel" destination="4940" id="name-outlet-4940"/>
                     </connections>
+                    <view contentMode="scaleToFill" id="4930" key="view">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <subviews>
+                            <containerView contentMode="scaleToFill" id="4933" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="0.0" y="119.5" width="600" height="480.5"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <connections>
+                                    <segue id="6480" destination="4912" kind="embed"/>
+                                </connections>
+                            </containerView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Label" lineBreakMode="tailTruncation" minimumFontSize="10" id="4940" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center">
+                                <rect key="frame" x="15" y="99" width="570" height="20.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint id="6484" firstItem="4930" firstAttribute="trailing" secondItem="4933" secondAttribute="trailing"/>
+                            <constraint id="6485" firstItem="4933" firstAttribute="top" secondItem="4940" secondAttribute="bottom"/>
+                            <constraint id="6486" firstItem="4933" firstAttribute="leading" secondItem="4930" secondAttribute="leading"/>
+                            <constraint id="6487" firstItem="4940" firstAttribute="leading" secondItem="4930" secondAttribute="leading" constant="15"/>
+                            <constraint id="6488" firstItem="4940" firstAttribute="top" secondItem="4571" secondAttribute="bottom" constant="35"/>
+                            <constraint id="6489" firstItem="4930" firstAttribute="trailing" secondItem="4940" secondAttribute="trailing" constant="15"/>
+                            <constraint id="6490" firstItem="4572" firstAttribute="top" secondItem="4933" secondAttribute="bottom"/>
+                        </constraints>
+                    </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4582" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -281,8 +280,8 @@
         <scene sceneID="4911">
             <objects>
                 <tableViewController id="4912" sceneMemberID="viewController">
-                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4913">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="490.5"/>
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4913">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="480.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>
@@ -290,13 +289,11 @@
                             <outlet property="delegate" destination="4912" id="4915"/>
                         </connections>
                     </tableView>
-                    <connections>
-                        <outlet property="Table" destination="4913" id="name-outlet-4913"/>
-                    </connections>
+                    <connections/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4918" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4678" y="661"/>
+            <point key="canvasLocation" x="4676" y="618"/>
         </scene>
     </scenes>
     <resources>

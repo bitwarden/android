@@ -159,6 +159,20 @@ namespace Bit.iOS.Extension
             });
         }
 
+        public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+        {
+            var navController = segue.DestinationViewController as UINavigationController;
+            if(navController != null)
+            {
+                var passwordGeneratorController = navController.TopViewController as PasswordGeneratorViewController;
+                if(passwordGeneratorController != null)
+                {
+                    passwordGeneratorController.Context = Context;
+                    passwordGeneratorController.Parent = this;
+                }
+            }
+        }
+
         public void DisplayAlert(string title, string message, string accept)
         {
             var alert = Dialogs.CreateAlert(title, message, accept);
@@ -275,7 +289,7 @@ namespace Bit.iOS.Extension
 
                 if(indexPath.Section == 0 && indexPath.Row == 4)
                 {
-                    // Generate password selected
+                    _controller.PerformSegue("passwordGeneratorSegue", this);
                 }
 
                 var cell = tableView.CellAt(indexPath);

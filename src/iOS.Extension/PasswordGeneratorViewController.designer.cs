@@ -24,6 +24,10 @@ namespace Bit.iOS.Extension
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIView OptionsContainer { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UILabel PasswordLabel { get; set; }
 
         [Outlet]
@@ -48,6 +52,11 @@ namespace Bit.iOS.Extension
             if (CancelBarButton != null) {
                 CancelBarButton.Dispose ();
                 CancelBarButton = null;
+            }
+
+            if (OptionsContainer != null) {
+                OptionsContainer.Dispose ();
+                OptionsContainer = null;
             }
 
             if (PasswordLabel != null) {
