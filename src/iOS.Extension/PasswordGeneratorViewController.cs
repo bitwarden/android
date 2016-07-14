@@ -35,6 +35,7 @@ namespace Bit.iOS.Extension
         public SwitchTableViewCell SpecialCell { get; set; } = new SwitchTableViewCell("!@#$%^&*");
         public StepperTableViewCell MinNumbersCell { get; set; } = new StepperTableViewCell("Minimum Numbers", 1, 0, 5, 1);
         public StepperTableViewCell MinSpecialCell { get; set; } = new StepperTableViewCell("Minimum Special", 1, 0, 5, 1);
+        public SliderTableViewCell LengthCell { get; set; } = new SliderTableViewCell("Length", 10, 5, 64);
 
         public override void ViewWillAppear(bool animated)
         {
@@ -113,7 +114,7 @@ namespace Bit.iOS.Extension
 
                 if(indexPath.Row == 0)
                 {
-                    // TODO: Length slider
+                    return _controller.LengthCell;
                 }
                 else if(indexPath.Row == 1)
                 {
