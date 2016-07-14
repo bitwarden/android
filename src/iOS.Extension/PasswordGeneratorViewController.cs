@@ -14,6 +14,7 @@ using Bit.App;
 using Plugin.Connectivity.Abstractions;
 using Bit.iOS.Core.Utilities;
 using Plugin.Settings.Abstractions;
+using CoreGraphics;
 
 namespace Bit.iOS.Extension
 {
@@ -32,6 +33,8 @@ namespace Bit.iOS.Extension
         public SwitchTableViewCell LowercaseCell { get; set; } = new SwitchTableViewCell("a-z");
         public SwitchTableViewCell NumbersCell { get; set; } = new SwitchTableViewCell("0-9");
         public SwitchTableViewCell SpecialCell { get; set; } = new SwitchTableViewCell("!@#$%^&*");
+        public StepperTableViewCell MinNumbersCell { get; set; } = new StepperTableViewCell("Minimum Numbers", 1, 0, 5, 1);
+        public StepperTableViewCell MinSpecialCell { get; set; } = new StepperTableViewCell("Minimum Special", 1, 0, 5, 1);
 
         public override void ViewWillAppear(bool animated)
         {
@@ -48,7 +51,11 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             PasswordLabel.Text = _passwordGenerationService.GeneratePassword();
-            PasswordLabel.Font = UIFont.FromName("Courier", 17);
+            var descriptor = UIFontDescriptor.PreferredBody;
+            PasswordLabel.Font = UIFont.FromName("Courier", descriptor.PointSize * 1.3f);
+            PasswordLabel.LineBreakMode = UILineBreakMode.TailTruncation;
+            PasswordLabel.Lines = 1;
+            PasswordLabel.AdjustsFontSizeToFitWidth = false;
 
             var controller = ChildViewControllers.LastOrDefault();
             if(controller != null)
@@ -126,11 +133,11 @@ namespace Bit.iOS.Extension
                 }
                 else if(indexPath.Row == 5)
                 {
-                    // TODO: Min numbers stepper
+                    return _controller.MinNumbersCell;
                 }
                 else if(indexPath.Row == 6)
                 {
-                    // TODO: Min special stepper
+                    return _controller.MinSpecialCell;
                 }
 
                 return new UITableViewCell();
@@ -158,7 +165,25 @@ namespace Bit.iOS.Extension
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
             {
+                if(section == 0)
+                {
+                    return 0.00001f;
+                }
+
                 return UITableView.AutomaticDimension;
+            }
+
+            public override UIView GetViewForHeader(UITableView tableView, nint section)
+            {
+                if(section == 0)
+                {
+                    return new UIView(CGRect.Empty)
+                    {
+                        Hidden = true
+                    };
+                }
+
+                return null;
             }
 
             public override string TitleForHeader(UITableView tableView, nint section)

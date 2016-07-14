@@ -40,7 +40,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="64" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="67" translucent="NO" hidden="YES">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </navigationBar>
                     <connections>
@@ -57,7 +57,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oCZ-GQ-aOK" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="8A5-AR-QHS" translucent="NO">
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -78,7 +78,7 @@
                 <navigationController definesPresentationContext="YES" id="1845" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1848" translucent="NO">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         </textAttributes>
@@ -200,7 +200,7 @@
                 <navigationController definesPresentationContext="YES" id="4574" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4577" translucent="NO">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
                         <color key="barTintColor" colorSpace="calibratedRGB" red="0.23529411764705882" green="0.55294117647058827" blue="0.73725490196078436" alpha="1"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -246,7 +246,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <subviews>
                             <containerView contentMode="scaleToFill" id="4933" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="0.0" y="119.5" width="600" height="480.5"/>
+                                <rect key="frame" x="0.0" y="154.5" width="600" height="445.5"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                                 <connections>
                                     <segue id="6480" destination="4912" kind="embed"/>
@@ -262,7 +262,7 @@
                         </subviews>
                         <constraints>
                             <constraint id="6484" firstItem="4930" firstAttribute="trailing" secondItem="4933" secondAttribute="trailing"/>
-                            <constraint id="6485" firstItem="4933" firstAttribute="top" secondItem="4940" secondAttribute="bottom"/>
+                            <constraint id="6485" firstItem="4933" firstAttribute="top" secondItem="4940" secondAttribute="bottom" constant="35"/>
                             <constraint id="6486" firstItem="4933" firstAttribute="leading" secondItem="4930" secondAttribute="leading"/>
                             <constraint id="6487" firstItem="4940" firstAttribute="leading" secondItem="4930" secondAttribute="leading" constant="15"/>
                             <constraint id="6488" firstItem="4940" firstAttribute="top" secondItem="4571" secondAttribute="bottom" constant="35"/>
@@ -279,7 +279,7 @@
             <objects>
                 <tableViewController id="4912" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="4913">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="480.5"/>
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="445.5"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <connections>

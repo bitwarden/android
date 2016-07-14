@@ -70,6 +70,7 @@
     <Compile Include="Utilities\Dialogs.cs" />
     <Compile Include="Views\ISelectable.cs" />
     <Compile Include="Views\PickerTableViewCell.cs" />
+    <Compile Include="Views\StepperTableViewCell.cs" />
     <Compile Include="Views\SwitchTableViewCell.cs" />
     <Compile Include="Views\FormEntryTableViewCell.cs" />
   </ItemGroup>

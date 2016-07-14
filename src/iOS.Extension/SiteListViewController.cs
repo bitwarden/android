@@ -108,18 +108,26 @@ namespace Bit.iOS.Extension
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
                 var cell = tableView.DequeueReusableCell(CellIdentifier);
-                var item = _tableItems.ElementAt(indexPath.Row);
 
                 // if there are no cells to reuse, create a new one
                 if(cell == null)
                 {
                     cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
                 }
+                return cell;
+            }
 
+            public override void WillDisplay( UITableView tableView, UITableViewCell cell, NSIndexPath indexPath )
+            {
+                if(cell == null)
+                {
+                    return;
+                }
+
+                var item = _tableItems.ElementAt( indexPath.Row );
                 cell.TextLabel.Text = item.Name;
                 cell.DetailTextLabel.Text = item.Username;
-                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
-                return cell;
+                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor( red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f );
             }
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
