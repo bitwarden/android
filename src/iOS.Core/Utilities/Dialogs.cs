@@ -20,6 +20,13 @@ namespace Bit.iOS.Core.Utilities
             return alert;
         }
 
+        public static UIAlertController CreateMessageAlert(string message)
+        {
+            var alert = UIAlertController.Create(null, message, UIAlertControllerStyle.Alert);
+            alert.View.TintColor = UIColor.Black;
+            return alert;
+        }
+
         public static UIAlertController CreateAlert(string title, string message, string accept)
         {
             var alert = UIAlertController.Create(title, message, UIAlertControllerStyle.Alert);

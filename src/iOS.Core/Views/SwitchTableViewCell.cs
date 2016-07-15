@@ -10,8 +10,16 @@ namespace Bit.iOS.Core.Views
         {
             TextLabel.Text = labelName;
             AccessoryView = Switch;
+
+            Switch.ValueChanged += Switch_ValueChanged;
+        }
+
+        private void Switch_ValueChanged(object sender, EventArgs e)
+        {
+            ValueChanged(this, null);
         }
 
         public UISwitch Switch { get; set; } = new UISwitch();
+        public event EventHandler ValueChanged;
     }
 }

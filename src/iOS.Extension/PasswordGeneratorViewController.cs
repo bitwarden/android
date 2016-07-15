@@ -1,20 +1,15 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Bit.App.Abstractions;
-using Bit.App.Models;
-using Bit.App.Resources;
 using Bit.iOS.Core.Views;
 using Bit.iOS.Extension.Models;
 using Foundation;
 using UIKit;
 using XLabs.Ioc;
-using Bit.App;
-using Plugin.Connectivity.Abstractions;
-using Bit.iOS.Core.Utilities;
 using Plugin.Settings.Abstractions;
 using CoreGraphics;
+using Bit.App;
+using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS.Extension
 {
@@ -51,7 +46,6 @@ namespace Bit.iOS.Extension
 
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
-            PasswordLabel.Text = _passwordGenerationService.GeneratePassword();
             var descriptor = UIFontDescriptor.PreferredBody;
             PasswordLabel.Font = UIFont.FromName("Courier", descriptor.PointSize * 1.3f);
             PasswordLabel.LineBreakMode = UILineBreakMode.TailTruncation;
@@ -73,7 +67,92 @@ namespace Bit.iOS.Extension
                 OptionsTableViewController.View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             }
 
+            UppercaseCell.Switch.On = _settings.GetValueOrDefault(Constants.PasswordGeneratorUppercase, true);
+            LowercaseCell.Switch.On = _settings.GetValueOrDefault(Constants.PasswordGeneratorLowercase, true);
+            SpecialCell.Switch.On = _settings.GetValueOrDefault(Constants.PasswordGeneratorSpecial, true);
+            NumbersCell.Switch.On = _settings.GetValueOrDefault(Constants.PasswordGeneratorNumbers, true);
+            MinNumbersCell.Value = _settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1);
+            MinSpecialCell.Value = _settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1);
+            LengthCell.Value = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10);
+
+            UppercaseCell.ValueChanged += Options_ValueChanged;
+            LowercaseCell.ValueChanged += Options_ValueChanged;
+            NumbersCell.ValueChanged += Options_ValueChanged;
+            SpecialCell.ValueChanged += Options_ValueChanged;
+            MinNumbersCell.ValueChanged += Options_ValueChanged;
+            MinSpecialCell.ValueChanged += Options_ValueChanged;
+            LengthCell.ValueChanged += Options_ValueChanged;
+
+            // Adjust based on context password options
+            if(Context.PasswordOptions != null)
+            {
+                if(Context.PasswordOptions.RequireDigits)
+                {
+                    NumbersCell.Switch.On = true;
+                    NumbersCell.Switch.Enabled = false;
+
+                    if(MinNumbersCell.Value < 1)
+                    {
+                        MinNumbersCell.Value = 1;
+                    }
+
+                    MinNumbersCell.Stepper.MinimumValue = 1;
+                }
+
+                if(Context.PasswordOptions.RequireSymbols)
+                {
+                    SpecialCell.Switch.On = true;
+                    SpecialCell.Switch.Enabled = false;
+
+                    if(MinSpecialCell.Value < 1)
+                    {
+                        MinSpecialCell.Value = 1;
+                    }
+
+                    MinSpecialCell.Stepper.MinimumValue = 1;
+                }
+
+                if(Context.PasswordOptions.MinLength < Context.PasswordOptions.MaxLength)
+                {
+                    if(Context.PasswordOptions.MinLength > 0 && Context.PasswordOptions.MinLength > LengthCell.Slider.MinValue)
+                    {
+                        if(LengthCell.Value < Context.PasswordOptions.MinLength)
+                        {
+                            LengthCell.Slider.Value = Context.PasswordOptions.MinLength;
+                        }
+
+                        LengthCell.Slider.MinValue = Context.PasswordOptions.MinLength;
+                    }
+
+                    if(Context.PasswordOptions.MaxLength > 5 && Context.PasswordOptions.MaxLength < LengthCell.Slider.MaxValue)
+                    {
+                        if(LengthCell.Value > Context.PasswordOptions.MaxLength)
+                        {
+                            LengthCell.Slider.Value = Context.PasswordOptions.MaxLength;
+                        }
+
+                        LengthCell.Slider.MaxValue = Context.PasswordOptions.MaxLength;
+                    }
+                }
+            }
+
+            GeneratePassword();
             base.ViewDidLoad();
+        }
+
+        private void Options_ValueChanged(object sender, EventArgs e)
+        {
+            if(InvalidState())
+            {
+                LowercaseCell.Switch.On = true;
+            }
+
+            GeneratePassword();
+        }
+
+        private bool InvalidState()
+        {
+            return !LowercaseCell.Switch.On && !UppercaseCell.Switch.On && !NumbersCell.Switch.On && !SpecialCell.Switch.On;
         }
 
         partial void SelectBarButton_Activated(UIBarButtonItem sender)
@@ -84,6 +163,18 @@ namespace Bit.iOS.Extension
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
             throw new NotImplementedException();
+        }
+
+        private void GeneratePassword()
+        {
+            PasswordLabel.Text = _passwordGenerationService.GeneratePassword(
+                length: LengthCell.Value,
+                uppercase: UppercaseCell.Switch.On,
+                lowercase: LowercaseCell.Switch.On,
+                numbers: NumbersCell.Switch.On,
+                special: SpecialCell.Switch.On,
+                minSpecial: MinSpecialCell.Value,
+                minNumbers: MinNumbersCell.Value);
         }
 
         public class TableSource : UITableViewSource
@@ -197,22 +288,46 @@ namespace Bit.iOS.Extension
                 return null;
             }
 
+            public override string TitleForFooter(UITableView tableView, nint section)
+            {
+                if(section == 1)
+                {
+                    return "Option defaults are set from the main bitwarden app's password generator tool.";
+                }
+
+                return null;
+            }
+
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
                 if(indexPath.Section == 0)
                 {
                     if(indexPath.Row == 0)
                     {
-                        _controller.PasswordLabel.Text = _controller._passwordGenerationService.GeneratePassword();
+                        _controller.GeneratePassword();
                     }
                     else if(indexPath.Row == 1)
                     {
-                        // TODO: copy to clipboard
+                        UIPasteboard clipboard = UIPasteboard.General;
+                        clipboard.String = _controller.PasswordLabel.Text;
+                        var alert = Dialogs.CreateMessageAlert("Copied!");
+                        _controller.PresentViewController(alert, true, () =>
+                        {
+                            _controller.DismissViewController(true, null);
+                        });
                     }
                 }
 
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
+            }
+
+            public NSDate DateTimeToNSDate(DateTime date)
+            {
+                DateTime reference = TimeZone.CurrentTimeZone.ToLocalTime(
+                    new DateTime(2001, 1, 1, 0, 0, 0));
+                return NSDate.FromTimeIntervalSinceReferenceDate(
+                    (date - reference).TotalSeconds);
             }
         }
     }

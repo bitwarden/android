@@ -17,78 +17,88 @@ namespace Bit.App.Services
             _settings = settings;
         }
 
-        public string GeneratePassword()
+        public string GeneratePassword(
+            int? length = null,
+            bool? uppercase = null,
+            bool? lowercase = null,
+            bool? numbers = null,
+            bool? special = null,
+            bool? ambiguous = null,
+            int? minUppercase = null,
+            int? minLowercase = null,
+            int? minNumbers = null,
+            int? minSpecial = null)
         {
-            int minUppercase = 1,
-                minLowercase = 1,
-                minNumbers = _settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1),
-                minSpecial = _settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1),
-                length = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10);
+            int minUppercaseValue = minUppercase.GetValueOrDefault(1),
+                minLowercaseValue = minLowercase.GetValueOrDefault(1),
+                minNumbersValue = minNumbers.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1)),
+                minSpecialValue = minSpecial.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1)),
+                lengthValue = length.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10));
 
-            bool uppercase = _settings.GetValueOrDefault(Constants.PasswordGeneratorUppercase, true),
-                lowercase = _settings.GetValueOrDefault(Constants.PasswordGeneratorLowercase, true),
-                numbers = _settings.GetValueOrDefault(Constants.PasswordGeneratorNumbers, true),
-                special = _settings.GetValueOrDefault(Constants.PasswordGeneratorSpecial, true),
-                ambiguous = _settings.GetValueOrDefault(Constants.PasswordGeneratorAmbiguous, false);
+            bool uppercaseValue = uppercase.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorUppercase, true)),
+                lowercaseValue = lowercase.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorLowercase, true)),
+                numbersValue = numbers.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorNumbers, true)),
+                specialValue = special.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorSpecial, true)),
+                ambiguousValue = ambiguous.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorAmbiguous, false));
 
             // Sanitize
-            if(uppercase && minUppercase < 0)
+            if(uppercaseValue && minUppercaseValue < 0)
             {
-                minUppercase = 1;
+                minUppercaseValue = 1;
             }
-            if(lowercase && minLowercase < 0)
+            if(lowercaseValue && minLowercaseValue < 0)
             {
-                minLowercase = 1;
+                minLowercaseValue = 1;
             }
-            if(numbers && minNumbers < 0)
+            if(numbersValue && minNumbersValue < 0)
             {
-                minNumbers = 1;
+                minNumbersValue = 1;
             }
-            if(special && minSpecial < 0)
+            if(specialValue && minSpecialValue < 0)
             {
-                minSpecial = 1;
+                minSpecialValue = 1;
             }
 
-            if(length < 1)
+            if(lengthValue < 1)
             {
-                length = 10;
+                lengthValue = 10;
             }
-            var minLength = minUppercase + minLowercase + minNumbers + minSpecial;
-            if(length < minLength)
+            var minLength = minUppercaseValue + minLowercaseValue + minNumbersValue + minSpecialValue;
+            if(lengthValue < minLength)
             {
-                length = minLength;
+                lengthValue = minLength;
             }
 
             var positionsBuilder = new StringBuilder();
-            if(lowercase && minLowercase > 0)
+            if(lowercaseValue && minLowercaseValue > 0)
             {
-                for(int i = 0; i < minLowercase; i++)
+                for(int i = 0; i < minLowercaseValue; i++)
                 {
                     positionsBuilder.Append("l");
                 }
             }
-            if(uppercase && minUppercase > 0)
+            if(uppercaseValue && minUppercaseValue > 0)
             {
-                for(int i = 0; i < minUppercase; i++)
+                for(int i = 0; i < minUppercaseValue; i++)
                 {
                     positionsBuilder.Append("u");
                 }
             }
-            if(numbers && minNumbers > 0)
+            if(numbersValue && minNumbersValue > 0)
             {
-                for(int i = 0; i < minNumbers; i++)
+                for(int i = 0; i < minNumbersValue; i++)
                 {
                     positionsBuilder.Append("n");
                 }
             }
-            if(special && minSpecial > 0)
+            if(specialValue && minSpecialValue > 0)
             {
-                for(int i = 0; i < minSpecial; i++)
+                for(int i = 0; i < minSpecialValue; i++)
                 {
                     positionsBuilder.Append("s");
                 }
             }
-            while(positionsBuilder.Length < length)
+            while(positionsBuilder.Length < lengthValue)
             {
                 positionsBuilder.Append("a");
             }
@@ -100,43 +110,43 @@ namespace Bit.App.Services
             var allCharSet = string.Empty;
 
             var lowercaseCharSet = "abcdefghijkmnopqrstuvwxyz";
-            if(ambiguous)
+            if(ambiguousValue)
             {
                 lowercaseCharSet = string.Concat(lowercaseCharSet, "l");
             }
-            if(lowercase)
+            if(lowercaseValue)
             {
                 allCharSet = string.Concat(allCharSet, lowercaseCharSet);
             }
 
             var uppercaseCharSet = "ABCDEFGHIJKLMNPQRSTUVWXYZ";
-            if(ambiguous)
+            if(ambiguousValue)
             {
                 uppercaseCharSet = string.Concat(uppercaseCharSet, "O");
             }
-            if(uppercase)
+            if(uppercaseValue)
             {
                 allCharSet = string.Concat(allCharSet, uppercaseCharSet);
             }
 
             var numberCharSet = "23456789";
-            if(ambiguous)
+            if(ambiguousValue)
             {
                 numberCharSet = string.Concat(numberCharSet, "01");
             }
-            if(numbers)
+            if(numbersValue)
             {
                 allCharSet = string.Concat(allCharSet, numberCharSet);
             }
 
             var specialCharSet = "!@#$%^&*";
-            if(special)
+            if(specialValue)
             {
                 allCharSet = string.Concat(allCharSet, specialCharSet);
             }
 
             var password = new StringBuilder();
-            for(var i = 0; i < length; i++)
+            for(var i = 0; i < lengthValue; i++)
             {
                 string positionChars = string.Empty;
                 switch(positions[i])
