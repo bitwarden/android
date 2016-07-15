@@ -157,12 +157,15 @@ namespace Bit.iOS.Extension
 
         partial void SelectBarButton_Activated(UIBarButtonItem sender)
         {
-            throw new NotImplementedException();
+            DismissViewController(true, () =>
+            {
+                Parent.PasswordCell.TextField.Text = PasswordLabel.Text;
+            });
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
-            throw new NotImplementedException();
+            DismissViewController(true, null);
         }
 
         private void GeneratePassword()
