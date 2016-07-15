@@ -53,11 +53,11 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", async (sender, success) =>
+            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
             {
                 if(success)
                 {
-                    await FetchAndLoadVaultAsync();
+                    FetchAndLoadVault();
                 }
             });
 
@@ -146,10 +146,10 @@ namespace Bit.App.Pages
             }
         }
 
-        protected async override void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
-            await FetchAndLoadVaultAsync();
+            FetchAndLoadVault();
 
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
@@ -157,7 +157,7 @@ namespace Bit.App.Pages
                 if(!pushPromptShow)
                 {
                     _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
-                    await _userDialogs.AlertAsync("bitwarden keeps your vault automatically synced by using push notifications."
+                    _userDialogs.Alert("bitwarden keeps your vault automatically synced by using push notifications."
                         + " For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.",
                         "Enable Automatic Syncing", "Ok, got it!");
                 }
@@ -171,14 +171,14 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task FetchAndLoadVaultAsync()
+        private void FetchAndLoadVault()
         {
             if(PresentationFolders.Count > 0 && _syncService.SyncInProgress)
             {
                 return;
             }
 
-            await Task.Run(async () =>
+            Task.Run(async () =>
             {
                 var foldersTask = _folderService.GetAllAsync();
                 var sitesTask = _favorites ? _siteService.GetAllAsync(true) : _siteService.GetAllAsync();
