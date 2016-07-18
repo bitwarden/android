@@ -5,8 +5,6 @@ using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
-using Plugin.Settings.Abstractions;
-using Bit.App.Models.Page;
 using Bit.App.Controls;
 using System.Linq;
 
@@ -16,7 +14,6 @@ namespace Bit.App.Pages
     {
         private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
-        private readonly ISettings _settings;
         private readonly ICryptoService _cryptoService;
 
         public LockPasswordPage()
@@ -24,22 +21,36 @@ namespace Bit.App.Pages
         {
             _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _settings = Resolver.Resolve<ISettings>();
             _cryptoService = Resolver.Resolve<ICryptoService>();
 
             Init();
         }
 
-        public Entry Password { get; private set; }
+        public FormEntryCell PasswordCell { get; set; }
 
         public void Init()
         {
-            Password = new ExtendedEntry
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
+                useLabelAsPlaceholder: true, imageSource: "lock");
+
+            PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
+            PasswordCell.Entry.Completed += Entry_Completed;
+
+            var table = new ExtendedTableView
             {
-                HasBorder = false,
-                IsPassword = true,
-                Placeholder = AppResources.MasterPassword,
-                ReturnType = Enums.ReturnType.Go
+                Intent = TableIntent.Settings,
+                EnableScrolling = false,
+                HasUnevenRows = true,
+                EnableSelection = false,
+                VerticalOptions = LayoutOptions.Start,
+                NoFooter = true,
+                Root = new TableRoot
+                {
+                    new TableSection()
+                    {
+                        PasswordCell
+                    }
+                }
             };
 
             var logoutButton = new Button
@@ -52,9 +63,8 @@ namespace Bit.App.Pages
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(30, 40),
                 Spacing = 10,
-                Children = { Password, logoutButton }
+                Children = { table, logoutButton }
             };
 
             var loginToolbarItem = new ToolbarItem("Submit", null, async () =>
@@ -67,6 +77,11 @@ namespace Bit.App.Pages
             Content = stackLayout;
         }
 
+        private void Entry_Completed(object sender, EventArgs e)
+        {
+            var task = CheckPasswordAsync();
+        }
+
         protected override bool OnBackButtonPressed()
         {
             return false;
@@ -75,18 +90,18 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            Password.Focus();
+            PasswordCell.Entry.Focus();
         }
 
         protected async Task CheckPasswordAsync()
         {
-            if(string.IsNullOrWhiteSpace(Password.Text))
+            if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword), AppResources.Ok);
                 return;
             }
 
-            var key = _cryptoService.MakeKeyFromPassword(Password.Text, _authService.Email);
+            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, _authService.Email);
             if(key.SequenceEqual(_cryptoService.Key))
             {
                 await Navigation.PopModalAsync();
@@ -96,8 +111,8 @@ namespace Bit.App.Pages
                 // TODO: keep track of invalid attempts and logout?
 
                 _userDialogs.Alert("Invalid Master Password. Try again.");
-                Password.Text = string.Empty;
-                Password.Focus();
+                PasswordCell.Entry.Text = string.Empty;
+                PasswordCell.Entry.Focus();
             }
         }
 
