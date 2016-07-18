@@ -188,6 +188,7 @@ namespace Bit.App.Pages
 
         private void LockCell_Tapped(object sender, EventArgs e)
         {
+            _settings.AddOrUpdateValue(Constants.SettingLocked, true);
             MessagingCenter.Send(Application.Current, "Lock", true);
         }
 

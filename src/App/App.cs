@@ -175,7 +175,7 @@ namespace Bit.App
             }
 
             // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
-            if(!forceLock)
+            if(!forceLock && !_settings.GetValueOrDefault(Constants.SettingLocked, false))
             {
                 // Lock seconds tells if if they want to lock the app or not
                 var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
