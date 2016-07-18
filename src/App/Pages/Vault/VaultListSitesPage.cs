@@ -85,7 +85,8 @@ namespace Bit.App.Pages
             Search = new SearchBar
             {
                 Placeholder = "Search vault",
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button))
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
+                CancelButtonColor = Color.FromHex("3c8dbc")
             };
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;

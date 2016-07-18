@@ -129,6 +129,7 @@ namespace Bit.App.Pages
             _cryptoService.Key = key;
             _authService.Token = response.Result.Token;
             _authService.UserId = response.Result.Profile.Id;
+            _authService.Email = response.Result.Profile.Email;
 
             var syncTask = _syncService.FullSyncAsync();
             Application.Current.MainPage = new MainPage();

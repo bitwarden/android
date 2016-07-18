@@ -216,7 +216,10 @@ namespace Bit.App
             }
             else
             {
-                // Use master password to unlock if no other methods are set
+                if((currentPage?.CurrentPage as LockPasswordPage) == null)
+                {
+                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPasswordPage()), false);
+                }
             }
         }
 

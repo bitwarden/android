@@ -8,6 +8,7 @@ namespace Bit.App.Abstractions
         bool IsAuthenticated { get; }
         string Token { get; set; }
         string UserId { get; set; }
+        string Email { get; set; }
         string PIN { get; set; }
 
         void LogOut();

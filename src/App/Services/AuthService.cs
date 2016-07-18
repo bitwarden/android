@@ -10,6 +10,7 @@ namespace Bit.App.Services
     public class AuthService : IAuthService
     {
         private const string TokenKey = "token";
+        private const string EmailKey = "email";
         private const string UserIdKey = "userId";
         private const string PinKey = "pin";
 
@@ -19,6 +20,7 @@ namespace Bit.App.Services
         private readonly IAuthApiRepository _authApiRepository;
 
         private string _token;
+        private string _email;
         private string _userId;
         private string _pin;
 
@@ -95,6 +97,33 @@ namespace Bit.App.Services
             }
         }
 
+        public string Email
+        {
+            get
+            {
+                if(_email != null)
+                {
+                    return _email;
+                }
+
+                _email = _settings.GetValueOrDefault<string>(EmailKey);
+                return _email;
+            }
+            set
+            {
+                if(value != null)
+                {
+                    _settings.AddOrUpdateValue(EmailKey, value);
+                }
+                else
+                {
+                    _settings.Remove(EmailKey);
+                }
+
+                _email = value;
+            }
+        }
+
         public bool IsAuthenticated
         {
             get
@@ -141,6 +170,7 @@ namespace Bit.App.Services
         {
             Token = null;
             UserId = null;
+            Email = null;
             _cryptoService.Key = null;
         }
 
