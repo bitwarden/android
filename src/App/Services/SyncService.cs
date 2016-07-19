@@ -13,7 +13,6 @@ namespace Bit.App.Services
     public class SyncService : ISyncService
     {
         private const string LastSyncKey = "lastSync";
-        private int _syncsInProgress = 0;
 
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly IFolderApiRepository _folderApiRepository;
@@ -41,7 +40,7 @@ namespace Bit.App.Services
             _settings = settings;
         }
 
-        public bool SyncInProgress => _syncsInProgress > 0;
+        public bool SyncInProgress { get; private set; }
 
         public async Task<bool> SyncAsync(string id)
         {
@@ -57,7 +56,7 @@ namespace Bit.App.Services
             {
                 SyncCompleted(false);
 
-                if(cipher.StatusCode == System.Net.HttpStatusCode.Forbidden 
+                if(cipher.StatusCode == System.Net.HttpStatusCode.Forbidden
                     || cipher.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     MessagingCenter.Send(Application.Current, "Logout", (string)null);
@@ -287,13 +286,13 @@ namespace Bit.App.Services
 
         private void SyncStarted()
         {
-            _syncsInProgress++;
+            SyncInProgress = true;
             MessagingCenter.Send(Application.Current, "SyncStarted");
         }
 
         private void SyncCompleted(bool successfully)
         {
-            _syncsInProgress--;
+            SyncInProgress = false;
             MessagingCenter.Send(Application.Current, "SyncCompleted", successfully);
         }
     }
