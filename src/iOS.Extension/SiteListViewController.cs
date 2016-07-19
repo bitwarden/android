@@ -32,6 +32,9 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
+
+
+
             IEnumerable<SiteViewModel> filteredSiteModels = new List<SiteViewModel>();
             if(Context.DomainName != null)
             {
