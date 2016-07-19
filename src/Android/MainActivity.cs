@@ -12,6 +12,7 @@ using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using Acr.UserDialogs;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.Android
 {
@@ -32,7 +33,8 @@ namespace Bit.Android
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
-                Resolver.Resolve<ISettings>()));
+                Resolver.Resolve<ISettings>(),
+                Resolver.Resolve<IPushNotification>()));
         }
 
         protected override void OnPause()

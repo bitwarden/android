@@ -102,9 +102,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _authService.LogOut();
-            await Navigation.PopModalAsync();
-            Application.Current.MainPage = new HomePage();
+            MessagingCenter.Send(Application.Current, "Logout", (string)null);
         }
     }
 }

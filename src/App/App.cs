@@ -13,6 +13,7 @@ using Bit.App.Controls;
 using Plugin.Connectivity.Abstractions;
 using System.Net;
 using Acr.UserDialogs;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App
 {
@@ -25,6 +26,7 @@ namespace Bit.App
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
         private readonly ISettings _settings;
+        private readonly IPushNotification _pushNotification;
 
         public App(
             IAuthService authService,
@@ -33,7 +35,8 @@ namespace Bit.App
             IDatabaseService databaseService,
             ISyncService syncService,
             IFingerprint fingerprint,
-            ISettings settings)
+            ISettings settings,
+            IPushNotification pushNotification)
         {
             _databaseService = databaseService;
             _connectivity = connectivity;
@@ -42,6 +45,7 @@ namespace Bit.App
             _authService = authService;
             _fingerprint = fingerprint;
             _settings = settings;
+            _pushNotification = pushNotification;
 
             SetStyles();
 
@@ -63,6 +67,11 @@ namespace Bit.App
             MessagingCenter.Subscribe<Application, bool>(Current, "Lock", async (sender, args) =>
             {
                 await CheckLockAsync(args);
+            });
+
+            MessagingCenter.Subscribe<Application, string>(Current, "Logout", (sender, args) =>
+            {
+                Logout(args);
             });
         }
 
@@ -163,6 +172,20 @@ namespace Bit.App
                         attempt++;
                     }
                 } while(attempt <= 1);
+            }
+        }
+
+        private void Logout(string logoutMessage)
+        {
+            _authService.LogOut();
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                _pushNotification.Unregister();
+            });
+            Current.MainPage = new HomePage();
+            if(!string.IsNullOrWhiteSpace(logoutMessage))
+            {
+                _userDialogs.WarnToast("Logged out", logoutMessage);
             }
         }
 

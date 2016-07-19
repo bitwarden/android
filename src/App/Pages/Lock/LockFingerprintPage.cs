@@ -14,7 +14,6 @@ namespace Bit.App.Pages
     public class LockFingerprintPage : ExtendedContentPage
     {
         private readonly IFingerprint _fingerprint;
-        private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private readonly bool _checkFingerprintImmediately;
@@ -24,7 +23,6 @@ namespace Bit.App.Pages
         {
             _checkFingerprintImmediately = checkFingerprintImmediately;
             _fingerprint = Resolver.Resolve<IFingerprint>();
-            _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
 
@@ -79,9 +77,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _authService.LogOut();
-            await Navigation.PopModalAsync();
-            Application.Current.MainPage = new HomePage();
+            MessagingCenter.Send(Application.Current, "Logout", (string)null);
         }
 
         public async Task CheckFingerprintAsync()

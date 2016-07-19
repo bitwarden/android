@@ -129,7 +129,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            if( Device.OS == TargetPlatform.iOS )
+            if(Device.OS == TargetPlatform.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 44;
@@ -199,9 +199,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _authService.LogOut();
-            _pushNotification.Unregister();
-            Application.Current.MainPage = new HomePage();
+            MessagingCenter.Send(Application.Current, "Logout", (string)null);
         }
 
         private async void ChangeMasterPasswordCell_Tapped(object sender, EventArgs e)

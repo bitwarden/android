@@ -6,6 +6,7 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Models.Data;
 using Bit.App.Models.Api;
+using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
@@ -71,6 +72,11 @@ namespace Bit.App.Services
                     await _folderRepository.UpdateAsync(data);
                 }
             }
+            else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
+                || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
+            }
 
             return response;
         }
@@ -81,6 +87,11 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 await _folderRepository.DeleteAsync(folderId);
+            }
+            else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
+                || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
             }
 
             return response;

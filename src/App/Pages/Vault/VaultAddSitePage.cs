@@ -134,8 +134,15 @@ namespace Bit.App.Pages
                 await saveTask;
 
                 _userDialogs.HideLoading();
-                await Navigation.PopModalAsync();
-                _userDialogs.SuccessToast(nameCell.Entry.Text, "New site created.");
+                if(saveTask.Result.Succeeded)
+                {
+                    await Navigation.PopModalAsync();
+                    _userDialogs.SuccessToast(nameCell.Entry.Text, "New site created.");
+                }
+                else if(saveTask.Result.Errors.Count() > 0)
+                {
+                    await _userDialogs.AlertAsync(saveTask.Result.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                }
             }, ToolbarItemOrder.Default, 0);
 
             Title = AppResources.AddSite;

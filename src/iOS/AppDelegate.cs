@@ -24,6 +24,7 @@ using PushNotification.Plugin;
 using Plugin.DeviceInfo;
 using Plugin.Connectivity.Abstractions;
 using Bit.App.Pages;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.iOS
 {
@@ -48,7 +49,8 @@ namespace Bit.iOS
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
-                Resolver.Resolve<ISettings>()));
+                Resolver.Resolve<ISettings>(),
+                Resolver.Resolve<IPushNotification>()));
 
             // Appearance stuff
 

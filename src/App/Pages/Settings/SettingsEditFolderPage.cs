@@ -6,6 +6,7 @@ using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using System.Linq;
 
 namespace Bit.App.Pages
 {
@@ -87,8 +88,16 @@ namespace Bit.App.Pages
                 await saveTask;
 
                 _userDialogs.HideLoading();
-                await Navigation.PopModalAsync();
-                _userDialogs.SuccessToast(nameCell.Entry.Text, "Folder updated.");
+
+                if(saveTask.Result.Succeeded)
+                {
+                    await Navigation.PopModalAsync();
+                    _userDialogs.SuccessToast(nameCell.Entry.Text, "Folder updated.");
+                }
+                else if(saveTask.Result.Errors.Count() > 0)
+                {
+                    await _userDialogs.AlertAsync(saveTask.Result.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                }
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Edit Folder";
