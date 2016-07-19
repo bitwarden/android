@@ -59,7 +59,7 @@ namespace Bit.App.Services
                 if(cipher.StatusCode == System.Net.HttpStatusCode.Forbidden
                     || cipher.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                    Device.BeginInvokeOnMainThread(() => MessagingCenter.Send(Application.Current, "Logout", (string)null));
                 }
 
                 return false;
@@ -146,7 +146,7 @@ namespace Bit.App.Services
                 if(ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
                     || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                    Device.BeginInvokeOnMainThread(() => MessagingCenter.Send(Application.Current, "Logout", (string)null));
                 }
 
                 return false;
@@ -191,7 +191,7 @@ namespace Bit.App.Services
                 if(ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
                     || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                    Device.BeginInvokeOnMainThread(() => MessagingCenter.Send(Application.Current, "Logout", (string)null));
                 }
 
                 return false;
