@@ -131,7 +131,7 @@ namespace Bit.App.Pages
             _authService.UserId = response.Result.Profile.Id;
             _authService.Email = response.Result.Profile.Email;
 
-            var syncTask = _syncService.FullSyncAsync();
+            var task = Task.Run(async () => await _syncService.FullSyncAsync());
             Application.Current.MainPage = new MainPage();
         }
     }
