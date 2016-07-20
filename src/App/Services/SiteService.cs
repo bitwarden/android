@@ -82,7 +82,7 @@ namespace Bit.App.Services
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden 
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                Device.BeginInvokeOnMainThread(() => MessagingCenter.Send(Application.Current, "Logout", (string)null));
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
             }
 
             return response;
@@ -98,7 +98,7 @@ namespace Bit.App.Services
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
             {
-                Device.BeginInvokeOnMainThread(() => MessagingCenter.Send(Application.Current, "Logout", (string)null));
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
             }
 
             return response;

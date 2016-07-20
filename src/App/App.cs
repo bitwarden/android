@@ -71,7 +71,7 @@ namespace Bit.App
 
             MessagingCenter.Subscribe<Application, string>(Current, "Logout", (sender, args) =>
             {
-                Logout(args);
+                Device.BeginInvokeOnMainThread(() => Logout(args));
             });
         }
 
