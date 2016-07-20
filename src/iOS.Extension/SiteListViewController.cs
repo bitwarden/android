@@ -32,8 +32,19 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
-
-
+            // TODO: lock logic
+            if(true)
+            {
+                PerformSegue("lockFingerprintSegue", this);
+            }
+            else if(true)
+            {
+                PerformSegue("lockPinSegue", this);
+            }
+            else
+            {
+                PerformSegue("lockPasswordSegue", this);
+            }
 
             IEnumerable<SiteViewModel> filteredSiteModels = new List<SiteViewModel>();
             if(Context.DomainName != null)
@@ -74,10 +85,26 @@ namespace Bit.iOS.Extension
             if(navController != null)
             {
                 var addSiteController = navController.TopViewController as SiteAddViewController;
+                var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
+                var pinViewController = navController.TopViewController as LockPinViewController;
+                var passwordViewController = navController.TopViewController as LockPasswordViewController;
+
                 if(addSiteController != null)
                 {
                     addSiteController.Context = Context;
                     addSiteController.Parent = this;
+                }
+                else if(fingerprintViewController != null)
+                {
+                    fingerprintViewController.Context = Context;
+                }
+                else if(pinViewController != null)
+                {
+                    pinViewController.Context = Context;
+                }
+                else if(passwordViewController != null)
+                {
+                    passwordViewController.Context = Context;
                 }
             }
         }
@@ -120,17 +147,17 @@ namespace Bit.iOS.Extension
                 return cell;
             }
 
-            public override void WillDisplay( UITableView tableView, UITableViewCell cell, NSIndexPath indexPath )
+            public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
             {
                 if(cell == null)
                 {
                     return;
                 }
 
-                var item = _tableItems.ElementAt( indexPath.Row );
+                var item = _tableItems.ElementAt(indexPath.Row);
                 cell.TextLabel.Text = item.Name;
                 cell.DetailTextLabel.Text = item.Username;
-                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor( red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f );
+                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
             }
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)

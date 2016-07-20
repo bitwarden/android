@@ -174,8 +174,8 @@
                         <outlet property="CancelBarButton" destination="3735" id="name-outlet-3735"/>
                         <outlet property="NavItem" destination="3734" id="name-outlet-3734"/>
                         <segue id="6763" destination="6512" kind="presentation" identifier="lockFingerprintSegue" animates="NO" modalPresentationStyle="" modalTransitionStyle=""/>
-                        <segue id="7049" destination="6815" kind="presentation" identifier="lockPinSegue"/>
-                        <segue id="7291" destination="6855" kind="presentation" identifier="lockPasswordSegue"/>
+                        <segue id="7049" destination="6815" kind="presentation" identifier="lockPinSegue" animates="NO"/>
+                        <segue id="7291" destination="6855" kind="presentation" identifier="lockPasswordSegue" animates="NO"/>
                     </connections>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
