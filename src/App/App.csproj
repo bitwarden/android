@@ -69,6 +69,7 @@
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
+    <Compile Include="Enums\LockType.cs" />
     <Compile Include="Enums\CipherType.cs" />
     <Compile Include="Enums\PushType.cs" />
     <Compile Include="Enums\ReturnType.cs" />
@@ -146,6 +147,8 @@
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\AppIdService.cs" />
+    <Compile Include="Abstractions\Services\ILockService.cs" />
+    <Compile Include="Services\LockService.cs" />
     <Compile Include="Services\DatabaseService.cs" />
     <Compile Include="Services\FolderService.cs" />
     <Compile Include="Repositories\Repository.cs" />

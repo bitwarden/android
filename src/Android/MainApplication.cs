@@ -123,6 +123,7 @@ namespace Bit.Android
                 .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IReflectionService, ReflectionService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

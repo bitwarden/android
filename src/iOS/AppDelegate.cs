@@ -50,7 +50,8 @@ namespace Bit.iOS
                 Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>(),
-                Resolver.Resolve<IPushNotification>()));
+                Resolver.Resolve<IPushNotification>(),
+                Resolver.Resolve<ILockService>()));
 
             // Appearance stuff
 
@@ -219,6 +220,7 @@ namespace Bit.iOS
                 .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IReflectionService, ReflectionService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

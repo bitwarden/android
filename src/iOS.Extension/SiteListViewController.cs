@@ -32,18 +32,21 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
-            // TODO: lock logic
-            if(true)
+            var lockService = Resolver.Resolve<ILockService>();
+            var lockType = lockService.GetLockType(false);
+            switch(lockType)
             {
-                PerformSegue("lockFingerprintSegue", this);
-            }
-            else if(true)
-            {
-                PerformSegue("lockPinSegue", this);
-            }
-            else
-            {
-                PerformSegue("lockPasswordSegue", this);
+                case App.Enums.LockType.Fingerprint:
+                    PerformSegue("lockFingerprintSegue", this);
+                    break;
+                case App.Enums.LockType.PIN:
+                    PerformSegue("lockPinSegue", this);
+                    break;
+                case App.Enums.LockType.Password:
+                    PerformSegue("lockPasswordSegue", this);
+                    break;
+                default:
+                    break;
             }
 
             IEnumerable<SiteViewModel> filteredSiteModels = new List<SiteViewModel>();

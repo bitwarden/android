@@ -27,6 +27,7 @@ namespace Bit.App
         private readonly IFingerprint _fingerprint;
         private readonly ISettings _settings;
         private readonly IPushNotification _pushNotification;
+        private readonly ILockService _lockService;
 
         public App(
             IAuthService authService,
@@ -36,7 +37,8 @@ namespace Bit.App
             ISyncService syncService,
             IFingerprint fingerprint,
             ISettings settings,
-            IPushNotification pushNotification)
+            IPushNotification pushNotification,
+            ILockService lockService)
         {
             _databaseService = databaseService;
             _connectivity = connectivity;
@@ -46,6 +48,7 @@ namespace Bit.App
             _fingerprint = fingerprint;
             _settings = settings;
             _pushNotification = pushNotification;
+            _lockService = lockService;
 
             SetStyles();
 
@@ -188,58 +191,33 @@ namespace Bit.App
 
         private async Task CheckLockAsync(bool forceLock)
         {
-            // Only lock if they are logged in
-            if(!_authService.IsAuthenticated)
-            {
-                return;
-            }
-
-            // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
-            if(!forceLock && !_settings.GetValueOrDefault(Constants.SettingLocked, false))
-            {
-                // Lock seconds tells if if they want to lock the app or not
-                var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
-                if(!lockSeconds.HasValue)
-                {
-                    return;
-                }
-
-                // Has it been longer than lockSeconds since the last time the app was backgrounded?
-                var now = DateTime.UtcNow;
-                var lastBackground = _settings.GetValueOrDefault(Constants.SettingLastBackgroundedDate, now.AddYears(-1));
-                if((now - lastBackground).TotalSeconds < lockSeconds.Value)
-                {
-                    return;
-                }
-            }
-
-            // What method are we using to unlock?
-            var fingerprintUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn);
-            var pinUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingPinUnlockOn);
+            var lockType = _lockService.GetLockType(forceLock);
             var currentPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as ExtendedNavigationPage;
-            if(fingerprintUnlock && _fingerprint.IsAvailable)
+            switch(lockType)
             {
-                if((currentPage?.CurrentPage as LockFingerprintPage) == null)
-                {
-                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
-                }
-            }
-            else if(pinUnlock && !string.IsNullOrWhiteSpace(_authService.PIN))
-            {
-                var lockPinPage = (currentPage?.CurrentPage as LockPinPage);
-                if(lockPinPage == null)
-                {
-                    lockPinPage = new LockPinPage();
-                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(lockPinPage), false);
-                    lockPinPage.PinControl.Entry.Focus();
-                }
-            }
-            else
-            {
-                if((currentPage?.CurrentPage as LockPasswordPage) == null)
-                {
-                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPasswordPage()), false);
-                }
+                case Enums.LockType.Fingerprint:
+                    if((currentPage?.CurrentPage as LockFingerprintPage) == null)
+                    {
+                        await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
+                    }
+                    break;
+                case Enums.LockType.PIN:
+                    var lockPinPage = (currentPage?.CurrentPage as LockPinPage);
+                    if(lockPinPage == null)
+                    {
+                        lockPinPage = new LockPinPage();
+                        await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(lockPinPage), false);
+                        lockPinPage.PinControl.Entry.Focus();
+                    }
+                    break;
+                case Enums.LockType.Password:
+                    if((currentPage?.CurrentPage as LockPasswordPage) == null)
+                    {
+                        await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPasswordPage()), false);
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
