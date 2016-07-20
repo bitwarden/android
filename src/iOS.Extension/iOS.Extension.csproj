@@ -95,6 +95,18 @@
     <CodesignKey>iPhone Distribution</CodesignKey>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LockPasswordViewController.cs" />
+    <Compile Include="LockPasswordViewController.designer.cs">
+      <DependentUpon>LockPasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LockPinViewController.cs" />
+    <Compile Include="LockPinViewController.designer.cs">
+      <DependentUpon>LockPinViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LockFingerprintViewController.cs" />
+    <Compile Include="LockFingerprintViewController.designer.cs">
+      <DependentUpon>LockFingerprintViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="PasswordGeneratorViewController.cs" />
     <Compile Include="PasswordGeneratorViewController.designer.cs">
       <DependentUpon>PasswordGeneratorViewController.cs</DependentUpon>

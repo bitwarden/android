@@ -40,7 +40,7 @@
             <objects>
                 <navigationController definesPresentationContext="YES" id="64" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="67" translucent="NO" hidden="YES">
-                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     </navigationBar>
                     <connections>
@@ -57,7 +57,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="oCZ-GQ-aOK" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="8A5-AR-QHS" translucent="NO">
-                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -78,7 +78,7 @@
                 <navigationController definesPresentationContext="YES" id="1845" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="1848" translucent="NO">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         </textAttributes>
@@ -173,7 +173,9 @@
                         <outlet property="AddBarButton" destination="3736" id="name-outlet-3736"/>
                         <outlet property="CancelBarButton" destination="3735" id="name-outlet-3735"/>
                         <outlet property="NavItem" destination="3734" id="name-outlet-3734"/>
-                        <segue id="6763" destination="6512" kind="presentation" identifier="lockFingerprintSegue" animates="NO"/>
+                        <segue id="6763" destination="6512" kind="presentation" identifier="lockFingerprintSegue" animates="NO" modalPresentationStyle="" modalTransitionStyle=""/>
+                        <segue id="7049" destination="6815" kind="presentation" identifier="lockPinSegue"/>
+                        <segue id="7291" destination="6855" kind="presentation" identifier="lockPasswordSegue"/>
                     </connections>
                     <toolbarItems/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
@@ -201,7 +203,7 @@
                 <navigationController definesPresentationContext="YES" id="4574" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4577" translucent="NO">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                         <color key="barTintColor" colorSpace="calibratedRGB" red="0.23529411764705882" green="0.55294117647058827" blue="0.73725490196078436" alpha="1"/>
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
@@ -299,7 +301,7 @@
                 <navigationController definesPresentationContext="YES" id="6512" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="6515">
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <rect key="frame" x="0.0" y="20" width="880" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                     </navigationBar>
                     <connections>
                         <segue destination="6514" kind="relationship" relationship="rootViewController" id="6513"/>
@@ -311,7 +313,7 @@
         </scene>
         <scene sceneID="6517">
             <objects>
-                <viewController id="6514" sceneMemberID="viewController">
+                <viewController id="6514" sceneMemberID="viewController" customClass="LockFingerprintViewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="6509"/>
                         <viewControllerLayoutGuide type="bottom" id="6510"/>
@@ -320,12 +322,123 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6777" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
+                                <rect key="frame" x="30" y="530" width="540" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Use Fingerprint To Unlock">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <constraints>
+                            <constraint id="6783" firstItem="6519" firstAttribute="trailing" secondItem="6777" secondAttribute="trailing" constant="30"/>
+                            <constraint id="6784" firstItem="6777" firstAttribute="leading" secondItem="6519" secondAttribute="leading" constant="30"/>
+                            <constraint id="6785" firstItem="6510" firstAttribute="top" secondItem="6777" secondAttribute="bottom" constant="40"/>
+                            <constraint id="6786" firstItem="6777" firstAttribute="centerX" secondItem="6519" secondAttribute="centerX"/>
+                        </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Verify Fingerprint" id="6518"/>
+                    <navigationItem key="navigationItem" title="Verify Fingerprint" id="6518">
+                        <barButtonItem key="leftBarButtonItem" id="6800" title="Cancel">
+                            <connections>
+                                <action selector="CancelButton_Activated:" destination="6514" id="7293"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="UseButton" destination="6777" id="name-outlet-6777"/>
+                        <outlet property="CancelButton" destination="6800" id="name-outlet-6800"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6520" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2655" y="1260"/>
+        </scene>
+        <scene sceneID="6801">
+            <objects>
+                <viewController id="6802" sceneMemberID="viewController" customClass="LockPinViewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6812"/>
+                        <viewControllerLayoutGuide type="bottom" id="6810"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6805">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Verify PIN" id="6803">
+                        <barButtonItem key="leftBarButtonItem" id="6804" title="Cancel">
+                            <connections>
+                                <action selector="CancelButton_Activated:" destination="6802" id="7313"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="CancelButton" destination="6804" id="name-outlet-6804"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6813" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2653" y="1933"/>
+        </scene>
+        <scene sceneID="6814">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="6815" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6817">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="6802" kind="relationship" relationship="rootViewController" id="6816"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6818" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1886" y="1931"/>
+        </scene>
+        <scene sceneID="6841">
+            <objects>
+                <viewController id="6842" sceneMemberID="viewController" customClass="LockPasswordViewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="6852"/>
+                        <viewControllerLayoutGuide type="bottom" id="6850"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6845">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Verify Master Password" id="6843">
+                        <barButtonItem key="leftBarButtonItem" id="6844" title="Cancel">
+                            <connections>
+                                <action selector="CancelButton_Activated:" destination="6842" id="7331"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="CancelButton" destination="6844" id="name-outlet-6844"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6853" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2653" y="2664"/>
+        </scene>
+        <scene sceneID="6854">
+            <objects>
+                <navigationController definesPresentationContext="YES" id="6855" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="6857">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="6842" kind="relationship" relationship="rootViewController" id="6856"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="6858" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1878" y="2669"/>
         </scene>
     </scenes>
     <resources>
