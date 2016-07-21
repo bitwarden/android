@@ -21,12 +21,10 @@ namespace Bit.iOS.Controls
             var view = e.NewElement as ExtendedEntry;
             if(view != null)
             {
-                var descriptor = UIFontDescriptor.PreferredBody;
-                Control.Font = UIFont.FromDescriptor( descriptor, descriptor.PointSize );
-
                 SetBorder(view);
                 SetMaxLength(view);
                 UpdateKeyboard();
+                UpdateFont();
 
                 if(view.AllowClear)
                 {
@@ -92,6 +90,39 @@ namespace Bit.iOS.Controls
             {
                 UpdateKeyboard();
             }
+            else if(e.PropertyName == Entry.FontAttributesProperty.PropertyName)
+            {
+                UpdateFont();
+            }
+            else if(e.PropertyName == Entry.FontFamilyProperty.PropertyName)
+            {
+                UpdateFont();
+            }
+            else if(e.PropertyName == Entry.FontSizeProperty.PropertyName)
+            {
+                UpdateFont();
+            }
+        }
+
+        private void UpdateFont()
+        {
+            var pointSize = UIFontDescriptor.PreferredBody.PointSize;
+
+            var size = Element.FontSize;
+            if(size == Device.GetNamedSize(NamedSize.Large, typeof(ExtendedEntry)))
+            {
+                pointSize *= 1.3f;
+            }
+            else if(size == Device.GetNamedSize(NamedSize.Small, typeof(ExtendedEntry)))
+            {
+                pointSize *= .8f;
+            }
+            else if(size == Device.GetNamedSize(NamedSize.Micro, typeof(ExtendedEntry)))
+            {
+                pointSize *= .6f;
+            }
+
+            Control.Font = UIFont.FromName(Element.FontFamily, pointSize);
         }
 
         private void SetBorder(ExtendedEntry view)
