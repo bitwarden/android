@@ -8,13 +8,14 @@ namespace Bit.iOS.Core.Views
         public FormEntryTableViewCell(
             string labelName = null,
             bool useTextView = false,
-            nfloat? height = null)
+            nfloat? height = null,
+            bool useLabelAsPlaceholder = false)
             : base(UITableViewCellStyle.Default, nameof(FormEntryTableViewCell))
         {
             var descriptor = UIFontDescriptor.PreferredBody;
             var pointSize = descriptor.PointSize;
 
-            if(labelName != null)
+            if(labelName != null && !useLabelAsPlaceholder)
             {
                 Label = new UILabel
                 {
@@ -42,7 +43,7 @@ namespace Bit.iOS.Core.Views
                     NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, TextView, NSLayoutAttribute.Bottom, 1f, 10f)
                 });
 
-                if(labelName != null)
+                if(labelName != null && !useLabelAsPlaceholder)
                 {
                     ContentView.AddConstraint(
                         NSLayoutConstraint.Create(TextView, NSLayoutAttribute.Top, NSLayoutRelation.Equal, Label, NSLayoutAttribute.Bottom, 1f, 10f));
@@ -69,6 +70,11 @@ namespace Bit.iOS.Core.Views
                     ClearButtonMode = UITextFieldViewMode.WhileEditing
                 };
 
+                if(useLabelAsPlaceholder)
+                {
+                    TextField.Placeholder = labelName;
+                }
+
                 ContentView.Add(TextField);
                 ContentView.AddConstraints(new NSLayoutConstraint[] {
                     NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Leading, 1f, 15f),
@@ -76,7 +82,7 @@ namespace Bit.iOS.Core.Views
                     NSLayoutConstraint.Create(ContentView, NSLayoutAttribute.Bottom, NSLayoutRelation.Equal, TextField, NSLayoutAttribute.Bottom, 1f, 10f)
                 });
 
-                if(labelName != null)
+                if(labelName != null && !useLabelAsPlaceholder)
                 {
                     ContentView.AddConstraint(
                         NSLayoutConstraint.Create(TextField, NSLayoutAttribute.Top, NSLayoutRelation.Equal, Label, NSLayoutAttribute.Bottom, 1f, 10f));
@@ -94,7 +100,7 @@ namespace Bit.iOS.Core.Views
                 }
             }
 
-            if(labelName != null)
+            if(labelName != null && !useLabelAsPlaceholder)
             {
                 ContentView.AddConstraints(new NSLayoutConstraint[] {
                     NSLayoutConstraint.Create(Label, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Leading, 1f, 15f),

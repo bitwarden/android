@@ -424,34 +424,6 @@
             </objects>
             <point key="canvasLocation" x="1886" y="1931"/>
         </scene>
-        <scene sceneID="6841">
-            <objects>
-                <viewController id="6842" sceneMemberID="viewController" customClass="LockPasswordViewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="6852"/>
-                        <viewControllerLayoutGuide type="bottom" id="6850"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="6845">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <subviews/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Verify Master Password" id="6843">
-                        <barButtonItem key="leftBarButtonItem" id="6844" title="Cancel">
-                            <connections>
-                                <action selector="CancelButton_Activated:" destination="6842" id="7331"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="CancelButton" destination="6844" id="name-outlet-6844"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="6853" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2653" y="2664"/>
-        </scene>
         <scene sceneID="6854">
             <objects>
                 <navigationController definesPresentationContext="YES" id="6855" sceneMemberID="viewController">
@@ -460,12 +432,46 @@
                         <rect key="frame" x="0.0" y="20" width="600" height="44"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="6842" kind="relationship" relationship="rootViewController" id="6856"/>
+                        <segue id="8266" destination="7413" kind="relationship" relationship="rootViewController"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6858" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1878" y="2669"/>
+        </scene>
+        <scene sceneID="7412">
+            <objects>
+                <tableViewController id="7413" sceneMemberID="viewController" customClass="LockPasswordViewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="7414">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <connections>
+                            <outlet property="dataSource" destination="7413" id="7415"/>
+                            <outlet property="delegate" destination="7413" id="7416"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem title="Verify Master Password" id="8265" key="navigationItem">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="8268">
+                            <connections>
+                                <action selector="CancelButton_Activated:" destination="7413" id="8287"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Submit" id="8269">
+                            <connections>
+                                <action selector="SubmitButton_Activated:" destination="7413" id="8288"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="SubmitButton" destination="8269" id="name-outlet-8269"/>
+                        <outlet property="CancelButton" destination="8268" id="name-outlet-8268"/>
+                        <outlet property="MainTableView" destination="7414" id="name-outlet-7414"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7419" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2532" y="2675"/>
         </scene>
     </scenes>
     <resources>

@@ -18,15 +18,37 @@ namespace Bit.iOS.Extension
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem CancelButton { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITableView MainTableView { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem SubmitButton { get; set; }
+
         [Action ("CancelButton_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void CancelButton_Activated (UIKit.UIBarButtonItem sender);
+
+        [Action ("SubmitButton_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void SubmitButton_Activated (UIKit.UIBarButtonItem sender);
 
         void ReleaseDesignerOutlets ()
         {
             if (CancelButton != null) {
                 CancelButton.Dispose ();
                 CancelButton = null;
+            }
+
+            if (MainTableView != null) {
+                MainTableView.Dispose ();
+                MainTableView = null;
+            }
+
+            if (SubmitButton != null) {
+                SubmitButton.Dispose ();
+                SubmitButton = null;
             }
         }
     }
