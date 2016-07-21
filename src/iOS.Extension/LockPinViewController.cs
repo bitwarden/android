@@ -51,13 +51,7 @@ namespace Bit.iOS.Extension
 
         private void PinTextField_EditingChanged(object sender, EventArgs e)
         {
-            var newText = string.Empty;
-            for(int i = 0; i < 4; i++)
-            {
-                newText += PinTextField.Text.Length <= i ? "- " : "● ";
-            }
-
-            PinLabel.Text = newText.TrimEnd();
+            SetLabelText();
 
             if(PinTextField.Text.Length >= 4)
             {
@@ -70,12 +64,26 @@ namespace Bit.iOS.Extension
                 {
                     // TODO: keep track of invalid attempts and logout?
 
-                    var alert = Dialogs.CreateAlert(null, "Invalid PIN. Try again.", AppResources.Ok);
+                    var alert = Dialogs.CreateAlert(null, "Invalid PIN. Try again.", AppResources.Ok, (a) =>
+                    {
+                        PinTextField.Text = string.Empty;
+                        SetLabelText();
+                        PinTextField.BecomeFirstResponder();
+                    });
                     PresentViewController(alert, true, null);
-                    PinTextField.Text = string.Empty;
-                    PinTextField.BecomeFirstResponder();
                 }
             }
+        }
+
+        private void SetLabelText()
+        {
+            var newText = string.Empty;
+            for(int i = 0; i < 4; i++)
+            {
+                newText += PinTextField.Text.Length <= i ? "- " : "● ";
+            }
+
+            PinLabel.Text = newText.TrimEnd();
         }
 
         partial void CancelButton_Activated(UIBarButtonItem sender)
