@@ -11,23 +11,39 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-    [Register ("LockPinViewController")]
-    partial class LockPinViewController
-    {
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem CancelButton { get; set; }
+	[Register ("LockPinViewController")]
+	partial class LockPinViewController
+	{
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIBarButtonItem CancelButton { get; set; }
 
-        [Action("CancelButton_Activated:")]
-        [GeneratedCode("iOS Designer", "1.0")]
-        partial void CancelButton_Activated(UIKit.UIBarButtonItem sender);
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UILabel PinLabel { get; set; }
 
-        void ReleaseDesignerOutlets ()
-        {
-            if (CancelButton != null) {
-                CancelButton.Dispose ();
-                CancelButton = null;
-            }
-        }
-    }
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UITextField PinTextField { get; set; }
+
+		[Action ("CancelButton_Activated:")]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		partial void CancelButton_Activated (UIBarButtonItem sender);
+
+		void ReleaseDesignerOutlets ()
+		{
+			if (CancelButton != null) {
+				CancelButton.Dispose ();
+				CancelButton = null;
+			}
+			if (PinLabel != null) {
+				PinLabel.Dispose ();
+				PinLabel = null;
+			}
+			if (PinTextField != null) {
+				PinTextField.Dispose ();
+				PinTextField = null;
+			}
+		}
+	}
 }
