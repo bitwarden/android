@@ -106,7 +106,8 @@ namespace Bit.iOS.Controls
 
         private void UpdateFont()
         {
-            var pointSize = UIFontDescriptor.PreferredBody.PointSize;
+            var descriptor = UIFontDescriptor.PreferredBody;
+            var pointSize = descriptor.PointSize;
 
             var size = Element.FontSize;
             if(size == Device.GetNamedSize(NamedSize.Large, typeof(ExtendedEntry)))
@@ -122,7 +123,14 @@ namespace Bit.iOS.Controls
                 pointSize *= .6f;
             }
 
-            Control.Font = UIFont.FromName(Element.FontFamily, pointSize);
+            if(!string.IsNullOrWhiteSpace(Element.FontFamily))
+            {
+                Control.Font = UIFont.FromName(Element.FontFamily, pointSize);
+            }
+            else
+            {
+                Control.Font = UIFont.FromDescriptor(descriptor, pointSize);
+            }
         }
 
         private void SetBorder(ExtendedEntry view)
