@@ -38,7 +38,7 @@ namespace Bit.iOS.Extension
             var descriptor = UIFontDescriptor.PreferredBody;
             PinLabel.Font = UIFont.FromName("Courier", descriptor.PointSize * 1.3f);
 
-            PinTextField.ValueChanged += PinTextField_ValueChanged;
+            PinTextField.EditingChanged += PinTextField_EditingChanged;
 
             base.ViewDidLoad();
         }
@@ -49,7 +49,7 @@ namespace Bit.iOS.Extension
             PinTextField.BecomeFirstResponder();
         }
 
-        private void PinTextField_ValueChanged(object sender, EventArgs e)
+        private void PinTextField_EditingChanged(object sender, EventArgs e)
         {
             var newText = string.Empty;
             for(int i = 0; i < 4; i++)
