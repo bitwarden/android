@@ -19,6 +19,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
+        public LoadingViewController LoadingViewController { get; set; }
 
         public override void ViewWillAppear(bool animated)
         {
@@ -73,7 +74,7 @@ namespace Bit.iOS.Extension
             var result = await _fingerprint.AuthenticateAsync("Use your fingerprint to verify.");
             if(result.Authenticated)
             {
-                DismissModalViewController(true);
+                LoadingViewController.DismissLockAndContinue();
             }
         }
     }

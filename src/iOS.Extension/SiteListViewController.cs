@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bit.App.Abstractions;
-using Bit.App.Models;
 using Bit.iOS.Core;
 using Bit.iOS.Extension.Models;
 using Foundation;
@@ -31,23 +30,6 @@ namespace Bit.iOS.Extension
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            var lockService = Resolver.Resolve<ILockService>();
-            var lockType = lockService.GetLockType(false);
-            switch(lockType)
-            {
-                case App.Enums.LockType.Fingerprint:
-                    PerformSegue("lockFingerprintSegue", this);
-                    break;
-                case App.Enums.LockType.PIN:
-                    PerformSegue("lockPinSegue", this);
-                    break;
-                case App.Enums.LockType.Password:
-                    PerformSegue("lockPasswordSegue", this);
-                    break;
-                default:
-                    break;
-            }
 
             IEnumerable<SiteViewModel> filteredSiteModels = new List<SiteViewModel>();
             if(Context.DomainName != null)
@@ -88,26 +70,10 @@ namespace Bit.iOS.Extension
             if(navController != null)
             {
                 var addSiteController = navController.TopViewController as SiteAddViewController;
-                var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
-                var pinViewController = navController.TopViewController as LockPinViewController;
-                var passwordViewController = navController.TopViewController as LockPasswordViewController;
-
                 if(addSiteController != null)
                 {
                     addSiteController.Context = Context;
                     addSiteController.Parent = this;
-                }
-                else if(fingerprintViewController != null)
-                {
-                    fingerprintViewController.Context = Context;
-                }
-                else if(pinViewController != null)
-                {
-                    pinViewController.Context = Context;
-                }
-                else if(passwordViewController != null)
-                {
-                    passwordViewController.Context = Context;
                 }
             }
         }

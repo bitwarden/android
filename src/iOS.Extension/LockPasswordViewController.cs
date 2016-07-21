@@ -24,6 +24,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
+        public LoadingViewController LoadingViewController { get; set; }
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword, useLabelAsPlaceholder: true);
 
@@ -85,7 +86,7 @@ namespace Bit.iOS.Extension
             if(key.SequenceEqual(_cryptoService.Key))
             {
                 MasterPasswordCell.TextField.ResignFirstResponder();
-                DismissModalViewController(true);
+                LoadingViewController.DismissLockAndContinue();
             }
             else
             {

@@ -20,6 +20,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
+        public LoadingViewController LoadingViewController { get; set; }
 
         public override void ViewWillAppear(bool animated)
         {
@@ -58,7 +59,7 @@ namespace Bit.iOS.Extension
                 if(PinTextField.Text == _authService.PIN)
                 {
                     PinTextField.ResignFirstResponder();
-                    DismissModalViewController(true);
+                    LoadingViewController.DismissLockAndContinue();
                 }
                 else
                 {

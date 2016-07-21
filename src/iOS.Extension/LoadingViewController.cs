@@ -66,7 +66,24 @@ namespace Bit.iOS.Extension
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            PerformSegue("siteListSegue", this);
+
+            var lockService = Resolver.Resolve<ILockService>();
+            var lockType = lockService.GetLockType(false);
+            switch(lockType)
+            {
+                case App.Enums.LockType.Fingerprint:
+                    PerformSegue("lockFingerprintSegue", this);
+                    break;
+                case App.Enums.LockType.PIN:
+                    PerformSegue("lockPinSegue", this);
+                    break;
+                case App.Enums.LockType.Password:
+                    PerformSegue("lockPasswordSegue", this);
+                    break;
+                default:
+                    PerformSegue("siteListSegue", this);
+                    break;
+            }
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -74,12 +91,44 @@ namespace Bit.iOS.Extension
             var navController = segue.DestinationViewController as UINavigationController;
             if(navController != null)
             {
-                var actionController = navController.TopViewController as SiteListViewController;
-                if(actionController != null)
+                var listSiteController = navController.TopViewController as SiteListViewController;
+                var addSiteController = navController.TopViewController as SiteAddViewController;
+                var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
+                var pinViewController = navController.TopViewController as LockPinViewController;
+                var passwordViewController = navController.TopViewController as LockPasswordViewController;
+
+                if(listSiteController != null)
                 {
-                    actionController.Context = _context;
+                    listSiteController.Context = _context;
+                }
+                else if(addSiteController != null)
+                {
+                    addSiteController.Context = _context;
+                }
+                else if(fingerprintViewController != null)
+                {
+                    fingerprintViewController.Context = _context;
+                    fingerprintViewController.LoadingViewController = this;
+                }
+                else if(pinViewController != null)
+                {
+                    pinViewController.Context = _context;
+                    pinViewController.LoadingViewController = this;
+                }
+                else if(passwordViewController != null)
+                {
+                    passwordViewController.Context = _context;
+                    passwordViewController.LoadingViewController = this;
                 }
             }
+        }
+
+        public void DismissLockAndContinue()
+        {
+            DismissViewController(true, () =>
+            {
+                PerformSegue("siteListSegue", this);
+            });
         }
 
         private void SetIoc()
