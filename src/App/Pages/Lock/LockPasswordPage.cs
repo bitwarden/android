@@ -7,12 +7,14 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Controls;
 using System.Linq;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
     public class LockPasswordPage : ExtendedContentPage
     {
         private readonly IAuthService _authService;
+        private readonly ISettings _settings;
         private readonly IUserDialogs _userDialogs;
         private readonly ICryptoService _cryptoService;
 
@@ -20,6 +22,7 @@ namespace Bit.App.Pages
             : base(false)
         {
             _authService = Resolver.Resolve<IAuthService>();
+            _settings = Resolver.Resolve<ISettings>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _cryptoService = Resolver.Resolve<ICryptoService>();
 
@@ -104,6 +107,7 @@ namespace Bit.App.Pages
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, _authService.Email);
             if(key.SequenceEqual(_cryptoService.Key))
             {
+                _settings.AddOrUpdateValue(Constants.SettingLocked, false);
                 await Navigation.PopModalAsync();
             }
             else

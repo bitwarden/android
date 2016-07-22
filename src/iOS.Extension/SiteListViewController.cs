@@ -10,6 +10,7 @@ using MobileCoreServices;
 using Newtonsoft.Json;
 using UIKit;
 using XLabs.Ioc;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.iOS.Extension
 {
@@ -88,8 +89,10 @@ namespace Bit.iOS.Extension
 
         public void DismissModal()
         {
-            DismissModalViewController(true);
-            TableView.ReloadData();
+            DismissViewController(true, () =>
+            {
+                TableView.ReloadData();
+            });
         }
 
         public class TableSource : UITableViewSource
@@ -109,16 +112,27 @@ namespace Bit.iOS.Extension
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                return _tableItems.Count();
+                return _tableItems.Count() == 0 ? 1 : _tableItems.Count();
             }
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
+                if(_tableItems.Count() == 0)
+                {
+                    var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
+                    noDataCell.TextLabel.Text = "There are no sites in your vault for this website. Tap to add one.";
+                    noDataCell.TextLabel.TextAlignment = UITextAlignment.Center;
+                    noDataCell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
+                    noDataCell.TextLabel.Lines = 0;
+                    return noDataCell;
+                }
+
                 var cell = tableView.DequeueReusableCell(CellIdentifier);
 
                 // if there are no cells to reuse, create a new one
                 if(cell == null)
                 {
+                    Debug.WriteLine("BW Log, Make new cell for list.");
                     cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
                 }
                 return cell;
@@ -126,7 +140,7 @@ namespace Bit.iOS.Extension
 
             public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
             {
-                if(cell == null)
+                if(_tableItems.Count() == 0 || cell == null)
                 {
                     return;
                 }
@@ -139,10 +153,19 @@ namespace Bit.iOS.Extension
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
+                if(_tableItems.Count() == 0)
+                {
+                    _controller.PerformSegue("siteAddSegue", this);
+                    return;
+                }
+
+                Resolver.Resolve<ISettings>().AddOrUpdateValue(Bit.App.Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
+
                 var item = _tableItems.ElementAt(indexPath.Row);
                 if(item == null)
                 {
                     _controller.CompleteRequest(null);
+                    return;
                 }
 
                 NSDictionary itemData = null;

@@ -7,6 +7,7 @@ using Foundation;
 using MobileCoreServices;
 using Plugin.Fingerprint.Abstractions;
 using System.Threading.Tasks;
+using Bit.App;
 
 namespace Bit.iOS.Extension
 {
@@ -74,6 +75,7 @@ namespace Bit.iOS.Extension
             var result = await _fingerprint.AuthenticateAsync("Use your fingerprint to verify.");
             if(result.Authenticated)
             {
+                _settings.AddOrUpdateValue(Constants.SettingLocked, false);
                 LoadingViewController.DismissLockAndContinue();
             }
         }

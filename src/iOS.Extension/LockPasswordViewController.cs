@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Bit.iOS.Core.Utilities;
 using Bit.App.Abstractions;
 using System.Linq;
+using Bit.App;
 
 namespace Bit.iOS.Extension
 {
@@ -85,6 +86,7 @@ namespace Bit.iOS.Extension
             var key = _cryptoService.MakeKeyFromPassword(MasterPasswordCell.TextField.Text, _authService.Email);
             if(key.SequenceEqual(_cryptoService.Key))
             {
+                _settings.AddOrUpdateValue(Constants.SettingLocked, false);
                 MasterPasswordCell.TextField.ResignFirstResponder();
                 LoadingViewController.DismissLockAndContinue();
             }

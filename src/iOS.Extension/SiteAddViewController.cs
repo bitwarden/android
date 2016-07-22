@@ -153,10 +153,7 @@ namespace Bit.iOS.Extension
             var loadingAlert = Dialogs.CreateLoadingAlert("Saving...");
             PresentViewController(loadingAlert, true, null);
             await saveTask;
-            DismissViewController(false, () =>
-            {
-                Parent.DismissModal();
-            });
+            Parent.DismissModal();
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
