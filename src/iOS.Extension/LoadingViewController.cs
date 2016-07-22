@@ -37,18 +37,19 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
 
+            if(!Resolver.IsSet)
+            {
+                SetIoc();
+            }
+
             if(!_setupHockeyApp)
             {
+                var crashManagerDelegate = new HockeyAppCrashManagerDelegate(Resolver.Resolve<IAppIdService>());
                 var manager = HockeyApp.iOS.BITHockeyManager.SharedHockeyManager;
                 manager.Configure("51f96ae568ba45f699a18ad9f63046c3");
                 manager.StartManager();
                 manager.Authenticator.AuthenticateInstallation();
                 _setupHockeyApp = true;
-            }
-
-            if(!Resolver.IsSet)
-            {
-                SetIoc();
             }
 
             foreach(var item in ExtensionContext.InputItems)

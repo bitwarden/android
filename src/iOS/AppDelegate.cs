@@ -26,6 +26,7 @@ using Plugin.Connectivity.Abstractions;
 using Bit.App.Pages;
 using PushNotification.Plugin.Abstractions;
 using HockeyApp.iOS;
+using Bit.iOS.Core;
 
 namespace Bit.iOS
 {
@@ -38,15 +39,16 @@ namespace Bit.iOS
         {
             global::Xamarin.Forms.Forms.Init();
 
-            var manager = BITHockeyManager.SharedHockeyManager;
-            manager.Configure("51f96ae568ba45f699a18ad9f63046c3");
-            manager.StartManager();
-            manager.Authenticator.AuthenticateInstallation();
-
             if(!Resolver.IsSet)
             {
                 SetIoc();
             }
+
+            var crashManagerDelegate = new HockeyAppCrashManagerDelegate(Resolver.Resolve<IAppIdService>());
+            var manager = BITHockeyManager.SharedHockeyManager;
+            manager.Configure("51f96ae568ba45f699a18ad9f63046c3", crashManagerDelegate);
+            manager.StartManager();
+            manager.Authenticator.AuthenticateInstallation();
 
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),
