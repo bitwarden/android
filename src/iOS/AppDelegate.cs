@@ -25,6 +25,7 @@ using Plugin.DeviceInfo;
 using Plugin.Connectivity.Abstractions;
 using Bit.App.Pages;
 using PushNotification.Plugin.Abstractions;
+using HockeyApp.iOS;
 
 namespace Bit.iOS
 {
@@ -36,6 +37,11 @@ namespace Bit.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+
+            var manager = BITHockeyManager.SharedHockeyManager;
+            manager.Configure("51f96ae568ba45f699a18ad9f63046c3");
+            manager.StartManager();
+            manager.Authenticator.AuthenticateInstallation();
 
             if(!Resolver.IsSet)
             {
@@ -116,7 +122,7 @@ namespace Bit.iOS
 
             // Log the date/time we last backgrounded
 
-            Settings.AddOrUpdateValue(Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
+            Settings.AddOrUpdateValue(Bit.App.Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
 
             base.DidEnterBackground(uiApplication);
             Debug.WriteLine("DidEnterBackground");
