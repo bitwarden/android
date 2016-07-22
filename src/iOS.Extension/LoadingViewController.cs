@@ -25,6 +25,7 @@ namespace Bit.iOS.Extension
     public partial class LoadingViewController : UIViewController
     {
         private Context _context = new Context();
+        private bool _setupHockeyApp = false;
 
         public LoadingViewController(IntPtr handle) : base(handle)
         {
@@ -35,6 +36,15 @@ namespace Bit.iOS.Extension
             base.ViewDidLoad();
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
+
+            if(!_setupHockeyApp)
+            {
+                var manager = HockeyApp.iOS.BITHockeyManager.SharedHockeyManager;
+                manager.Configure("51f96ae568ba45f699a18ad9f63046c3");
+                manager.StartManager();
+                manager.Authenticator.AuthenticateInstallation();
+                _setupHockeyApp = true;
+            }
 
             if(!Resolver.IsSet)
             {
