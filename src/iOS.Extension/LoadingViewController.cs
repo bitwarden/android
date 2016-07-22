@@ -125,8 +125,10 @@ namespace Bit.iOS.Extension
 
         public void DismissLockAndContinue()
         {
-            DismissViewController(true, () =>
+            Debug.WriteLine("BW Log, Dismissing lock controller.");
+            DismissViewController(false, () =>
             {
+                Debug.WriteLine("BW Log, Segue to site list.");
                 PerformSegue("siteListSegue", this);
             });
         }

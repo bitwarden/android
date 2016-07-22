@@ -8,6 +8,7 @@ using MobileCoreServices;
 using Bit.App.Abstractions;
 using Bit.iOS.Core.Utilities;
 using Bit.App.Resources;
+using System.Diagnostics;
 
 namespace Bit.iOS.Extension
 {
@@ -58,6 +59,7 @@ namespace Bit.iOS.Extension
             {
                 if(PinTextField.Text == _authService.PIN)
                 {
+                    Debug.WriteLine("BW Log, Start Dismiss PIN controller.");
                     PinTextField.ResignFirstResponder();
                     LoadingViewController.DismissLockAndContinue();
                 }

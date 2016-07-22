@@ -31,6 +31,9 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
+            Debug.WriteLine("BW LOG, Site list ViewDidLoad.");
+            var sw = Stopwatch.StartNew();
+
             IEnumerable<SiteViewModel> filteredSiteModels = new List<SiteViewModel>();
             if(Context.DomainName != null)
             {
@@ -40,9 +43,14 @@ namespace Bit.iOS.Extension
                 filteredSiteModels = siteModels.Where(s => s.Domain != null && s.Domain.BaseDomain == Context.DomainName.BaseDomain);
             }
 
+            Debug.WriteLine("BW LOG, Filtered sites at " + sw.ElapsedMilliseconds + "ms.");
+
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(filteredSiteModels, this);
+
+            Debug.WriteLine("BW LOG, Set TableView srouce at " + sw.ElapsedMilliseconds + "ms.");
+            sw.Stop();
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
