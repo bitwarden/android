@@ -17,6 +17,8 @@ using MobileCoreServices;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity;
 using Plugin.Fingerprint;
+using Bit.iOS.Core.Utilities;
+using Bit.App.Resources;
 
 namespace Bit.iOS.Extension
 {
@@ -67,6 +69,17 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidAppear(animated);
 
+            var authService = Resolver.Resolve<IAuthService>();
+            if(!authService.IsAuthenticated)
+            {
+                var alert = Dialogs.CreateAlert(null, "You must log into the main bitwarden app before you can use the extension.", AppResources.Ok, (a) =>
+                {
+                    CompleteRequest();
+                });
+                PresentViewController(alert, true, null);
+                return;
+            }
+
             var lockService = Resolver.Resolve<ILockService>();
             var lockType = lockService.GetLockType(false);
             switch(lockType)
@@ -84,6 +97,15 @@ namespace Bit.iOS.Extension
                     PerformSegue("siteListSegue", this);
                     break;
             }
+        }
+
+        private void CompleteRequest()
+        {
+            var resultsProvider = new NSItemProvider(null, UTType.PropertyList);
+            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
+            var returningItems = new NSExtensionItem[] { resultsItem };
+
+            ExtensionContext.CompleteRequest(returningItems, null);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -332,6 +354,5 @@ namespace Bit.iOS.Extension
 
             return default(T);
         }
-
     }
 }
