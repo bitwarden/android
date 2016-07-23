@@ -39,5 +39,30 @@ namespace Bit.App.Repositories
                 return ApiResult.Success(response.StatusCode);
             }
         }
+
+        public virtual async Task<ApiResult> PostPasswordHintAsync(PasswordHintRequest requestObj)
+        {
+            if(!Connectivity.IsConnected)
+            {
+                return HandledNotConnected();
+            }
+
+            using(var client = new ApiHttpClient())
+            {
+                var requestMessage = new TokenHttpRequestMessage(requestObj)
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/password-hint")),
+                };
+
+                var response = await client.SendAsync(requestMessage);
+                if(!response.IsSuccessStatusCode)
+                {
+                    return await HandleErrorAsync(response);
+                }
+
+                return ApiResult.Success(response.StatusCode);
+            }
+        }
     }
 }

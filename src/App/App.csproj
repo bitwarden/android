@@ -81,6 +81,7 @@
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
     <Compile Include="Models\Api\Request\RegisterRequest.cs" />
     <Compile Include="Models\Api\Request\SiteRequest.cs" />
+    <Compile Include="Models\Api\Request\PasswordHintRequest.cs" />
     <Compile Include="Models\Api\Request\TokenRequest.cs" />
     <Compile Include="Models\Api\Request\TokenTwoFactorRequest.cs" />
     <Compile Include="Models\Api\Response\CipherHistoryResponse.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\Lock\LockPasswordPage.cs" />
+    <Compile Include="Pages\PasswordHintPage.cs" />
     <Compile Include="Pages\RegisterPage.cs" />
     <Compile Include="Pages\Settings\SettingsPinPage.cs" />
     <Compile Include="Pages\Lock\LockPinPage.cs" />

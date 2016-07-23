@@ -52,9 +52,11 @@ namespace Bit.App.Pages
             var table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
-                EnableScrolling = true,
+                EnableScrolling = false,
                 HasUnevenRows = true,
-                EnableSelection = false,
+                EnableSelection = true,
+                NoFooter = true,
+                VerticalOptions = LayoutOptions.Start,
                 Root = new TableRoot
                 {
                     new TableSection()
@@ -65,10 +67,21 @@ namespace Bit.App.Pages
                 }
             };
 
-            var loginToolbarItem = new ToolbarItem(AppResources.LogIn, null, async () =>
+            var forgotPasswordButton = new Button
             {
-                await LogIn();
-            }, ToolbarItemOrder.Default, 0);
+                Text = "Get your master password hint",
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                Margin = new Thickness(15, 0, 15, 25),
+                Command = new Command(async () => await ForgotPasswordAsync())
+            };
+
+            var layout = new StackLayout
+            {
+                Children = { table, forgotPasswordButton },
+                Spacing = 0
+            };
+
+            var scrollView = new ScrollView { Content = layout };
 
             if(Device.OS == TargetPlatform.iOS)
             {
@@ -77,9 +90,15 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
             }
 
+            var loginToolbarItem = new ToolbarItem(AppResources.LogIn, null, async () =>
+            {
+                await LogIn();
+            }, ToolbarItemOrder.Default, 0);
+
             ToolbarItems.Add(loginToolbarItem);
             Title = AppResources.Bitwarden;
-            Content = table;
+            Content = scrollView;
+            NavigationPage.SetBackButtonTitle(this, "Log In");
         }
 
         protected override void OnAppearing()
@@ -91,6 +110,10 @@ namespace Bit.App.Pages
         private async void Entry_Completed(object sender, EventArgs e)
         {
             await LogIn();
+        }
+        private async Task ForgotPasswordAsync()
+        {
+            await Navigation.PushAsync(new PasswordHintPage());
         }
 
         private async Task LogIn()

@@ -6,5 +6,6 @@ namespace Bit.App.Abstractions
     public interface IAccountsApiRepository
     {
         Task<ApiResult> PostRegisterAsync(RegisterRequest requestObj);
+        Task<ApiResult> PostPasswordHintAsync(PasswordHintRequest requestObj);
     }
 }

@@ -187,7 +187,7 @@ namespace Bit.App.Pages
                 Intent = TableIntent.Settings;
                 EnableScrolling = false;
                 HasUnevenRows = true;
-                EnableSelection = false;
+                EnableSelection = true;
                 VerticalOptions = LayoutOptions.Start;
                 NoFooter = true;
             }
