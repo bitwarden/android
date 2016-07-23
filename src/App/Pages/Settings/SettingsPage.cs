@@ -40,7 +40,7 @@ namespace Bit.App.Pages
         {
             FingerprintCell = new ExtendedSwitchCell
             {
-                Text = "Use Touch ID" + (!_fingerprint.IsAvailable ? " (Unavilable)" : null),
+                Text = "Unlock with Touch ID" + (!_fingerprint.IsAvailable ? " (Unavilable)" : null),
                 On = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn),
                 IsEnabled = _fingerprint.IsAvailable
             };
@@ -48,7 +48,7 @@ namespace Bit.App.Pages
 
             PinCell = new ExtendedSwitchCell
             {
-                Text = "Use PIN Code",
+                Text = "Unlock with PIN Code",
                 On = _settings.GetValueOrDefault<bool>(Constants.SettingPinUnlockOn)
             };
             PinCell.OnChanged += PinCell_Changed;
@@ -101,6 +101,27 @@ namespace Bit.App.Pages
             };
             logOutCell.Tapped += LogOutCell_Tapped;
 
+            var aboutCell = new ExtendedTextCell
+            {
+                Text = "About",
+                ShowDisclousure = true
+            };
+            aboutCell.Tapped += AboutCell_Tapped;
+
+            var helpCell = new ExtendedTextCell
+            {
+                Text = "Help and Support",
+                ShowDisclousure = true
+            };
+            helpCell.Tapped += HelpCell_Tapped;
+
+            var rateCell = new ExtendedTextCell
+            {
+                Text = "Rate bitwarden",
+                ShowDisclousure = true
+            };
+            rateCell.Tapped += RateCell_Tapped;
+
             var table = new ExtendedTableView
             {
                 EnableScrolling = true,
@@ -112,7 +133,10 @@ namespace Bit.App.Pages
                     {
                         LockOptionsCell,
                         FingerprintCell,
-                        PinCell,
+                        PinCell
+                    },
+                    new TableSection
+                    {
                         changeMasterPasswordCell,
                         changeEmailCell
                     },
@@ -125,6 +149,12 @@ namespace Bit.App.Pages
                     {
                         lockCell,
                         logOutCell
+                    },
+                    new TableSection("Other")
+                    {
+                        helpCell,
+                        aboutCell,
+                        rateCell
                     }
                 }
             };
@@ -184,6 +214,21 @@ namespace Bit.App.Pages
         private void SyncCell_Tapped(object sender, EventArgs e)
         {
             Navigation.PushAsync(new SettingsSyncPage());
+        }
+
+        private void AboutCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new SettingsAboutPage());
+        }
+
+        private void RateCell_Tapped(object sender, EventArgs e)
+        {
+            // TODO: link to app stores
+        }
+
+        private void HelpCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new SettingsHelpPage());
         }
 
         private void LockCell_Tapped(object sender, EventArgs e)
