@@ -39,7 +39,12 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;
-            PinLabel.Font = UIFont.FromName("Courier", descriptor.PointSize * 1.3f);
+            PinLabel.Font = UIFont.FromName("Courier", 35);
+
+            InstructionLabel.LineBreakMode = UILineBreakMode.WordWrap;
+            InstructionLabel.Lines = 0;
+            InstructionLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize * 0.8f);
+            InstructionLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
 
             PinTextField.EditingChanged += PinTextField_EditingChanged;
 

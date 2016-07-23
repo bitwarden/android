@@ -373,14 +373,14 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="- - - -" lineBreakMode="tailTruncation" minimumFontSize="10" id="7373" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="- - - -" lineBreakMode="tailTruncation" minimumFontSize="10" id="7373" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" misplaced="YES">
                                 <rect key="frame" x="30" y="104" width="540" height="17"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="17"/>
+                                <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="40"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="7350" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="7350" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" misplaced="YES">
                                 <rect key="frame" x="30" y="79" width="540" height="77"/>
                                 <fontDescription key="fontDescription" name="Courier-BoldOblique" family="Courier" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
@@ -388,6 +388,13 @@
                                 <color key="tintColor" colorSpace="calibratedWhite" white="0" alpha="0"/>
                                 <color key="textColor" colorSpace="calibratedWhite" white="0" alpha="0"/>
                             </textField>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Enter your PIN Code." lineBreakMode="tailTruncation" minimumFontSize="10" id="10516" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center">
+                                <rect key="frame" x="30" y="179" width="540" height="20.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" colorSpace="calibratedWhite" white="0.333333333333333" alpha="1"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <constraints>
                             <constraint id="7351" firstItem="7350" firstAttribute="leading" secondItem="6805" secondAttribute="leading" constant="30"/>
@@ -397,6 +404,9 @@
                             <constraint id="7375" firstItem="6805" firstAttribute="trailing" secondItem="7373" secondAttribute="trailing" constant="30"/>
                             <constraint id="7376" firstItem="7373" firstAttribute="top" secondItem="6812" secondAttribute="bottom" constant="40"/>
                             <constraint id="7394" firstItem="7350" firstAttribute="height" secondItem="7373" secondAttribute="height" constant="60"/>
+                            <constraint id="10517" firstItem="10516" firstAttribute="leading" secondItem="6805" secondAttribute="leading" constant="30"/>
+                            <constraint id="10518" firstItem="6805" firstAttribute="trailing" secondItem="10516" secondAttribute="trailing" constant="30"/>
+                            <constraint id="10519" firstItem="10516" firstAttribute="top" secondItem="7350" secondAttribute="bottom"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Verify PIN" id="6803">
@@ -410,6 +420,7 @@
                         <outlet property="CancelButton" destination="6804" id="name-outlet-6804"/>
                         <outlet property="PinTextField" destination="7350" id="name-outlet-7350"/>
                         <outlet property="PinLabel" destination="7373" id="name-outlet-7373"/>
+                        <outlet property="InstructionLabel" destination="10516" id="name-outlet-10516"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6813" userLabel="First Responder" sceneMemberID="firstResponder"/>

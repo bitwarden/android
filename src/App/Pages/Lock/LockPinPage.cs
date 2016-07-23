@@ -32,6 +32,15 @@ namespace Bit.App.Pages
 
         public void Init()
         {
+            var instructionLabel = new Label
+            {
+                Text = "Enter your PIN code.",
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                HorizontalTextAlignment = TextAlignment.Center,
+                Style = (Style)Application.Current.Resources["text-muted"]
+            };
+
             PinControl = new PinControl();
             PinControl.OnPinEntered += PinEntered;
             PinControl.Label.SetBinding<PinPageModel>(Label.TextProperty, s => s.LabelText);
@@ -48,13 +57,14 @@ namespace Bit.App.Pages
             var stackLayout = new StackLayout
             {
                 Padding = new Thickness(30, 40),
-                Spacing = 10,
-                Children = { PinControl.Label, logoutButton, PinControl.Entry }
+                Spacing = 20,
+                Children = { PinControl.Label, instructionLabel, logoutButton, PinControl.Entry }
             };
 
             var tgr = new TapGestureRecognizer();
             tgr.Tapped += Tgr_Tapped;
             PinControl.Label.GestureRecognizers.Add(tgr);
+            instructionLabel.GestureRecognizers.Add(tgr);
 
             Title = "Verify PIN";
             Content = stackLayout;

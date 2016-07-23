@@ -60,6 +60,11 @@ namespace Bit.iOS.Controls
             {
                 pointSize *= .6f;
             }
+            else
+            {
+                // not using dyanmic font sizes, return
+                return;
+            }
 
             Control.Font = UIFont.FromDescriptor(Element.Font.ToUIFont().FontDescriptor, pointSize);
         }

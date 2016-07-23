@@ -11,39 +11,51 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-	[Register ("LockPinViewController")]
-	partial class LockPinViewController
-	{
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIBarButtonItem CancelButton { get; set; }
+    [Register ("LockPinViewController")]
+    partial class LockPinViewController
+    {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem CancelButton { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UILabel PinLabel { get; set; }
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel InstructionLabel { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UITextField PinTextField { get; set; }
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel PinLabel { get; set; }
 
-		[Action ("CancelButton_Activated:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void CancelButton_Activated (UIBarButtonItem sender);
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField PinTextField { get; set; }
 
-		void ReleaseDesignerOutlets ()
-		{
-			if (CancelButton != null) {
-				CancelButton.Dispose ();
-				CancelButton = null;
-			}
-			if (PinLabel != null) {
-				PinLabel.Dispose ();
-				PinLabel = null;
-			}
-			if (PinTextField != null) {
-				PinTextField.Dispose ();
-				PinTextField = null;
-			}
-		}
-	}
+
+        [Action ("CancelButton_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void CancelButton_Activated (UIBarButtonItem sender);
+
+        void ReleaseDesignerOutlets ()
+        {
+            if (CancelButton != null) {
+                CancelButton.Dispose ();
+                CancelButton = null;
+            }
+
+            if (InstructionLabel != null) {
+                InstructionLabel.Dispose ();
+                InstructionLabel = null;
+            }
+
+            if (PinLabel != null) {
+                PinLabel.Dispose ();
+                PinLabel = null;
+            }
+
+            if (PinTextField != null) {
+                PinTextField.Dispose ();
+                PinTextField = null;
+            }
+        }
+    }
 }
