@@ -47,6 +47,7 @@ namespace Bit.iOS
             var crashManagerDelegate = new HockeyAppCrashManagerDelegate(Resolver.Resolve<IAppIdService>());
             var manager = BITHockeyManager.SharedHockeyManager;
             manager.Configure("51f96ae568ba45f699a18ad9f63046c3", crashManagerDelegate);
+            manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
             manager.StartManager();
             manager.Authenticator.AuthenticateInstallation();
 
