@@ -110,14 +110,14 @@ namespace Bit.App.Pages
 
             var helpCell = new ExtendedTextCell
             {
-                Text = "Help and Support",
+                Text = "Help and Feedback",
                 ShowDisclousure = true
             };
             helpCell.Tapped += HelpCell_Tapped;
 
             var rateCell = new ExtendedTextCell
             {
-                Text = "Rate bitwarden",
+                Text = "Rate the App",
                 ShowDisclousure = true
             };
             rateCell.Tapped += RateCell_Tapped;
@@ -153,8 +153,8 @@ namespace Bit.App.Pages
                     new TableSection("Other")
                     {
                         helpCell,
-                        aboutCell,
-                        rateCell
+                        rateCell,
+                        aboutCell
                     }
                 }
             };
