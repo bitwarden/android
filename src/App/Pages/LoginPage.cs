@@ -38,6 +38,8 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
+
             var padding = new Thickness(15, 20);
 
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
@@ -87,7 +89,10 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel", () =>
+                {
+                    MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
+                }));
             }
 
             var loginToolbarItem = new ToolbarItem(AppResources.LogIn, null, async () =>
@@ -104,6 +109,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
             EmailCell.Entry.Focus();
         }
 
@@ -111,6 +117,7 @@ namespace Bit.App.Pages
         {
             await LogIn();
         }
+
         private async Task ForgotPasswordAsync()
         {
             await Navigation.PushAsync(new PasswordHintPage());

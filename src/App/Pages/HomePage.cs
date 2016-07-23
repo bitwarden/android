@@ -27,6 +27,8 @@ namespace Bit.App.Pages
 
         public void Init()
         {
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
+
             var logo = new Image
             {
                 Source = "logo",
@@ -72,6 +74,12 @@ namespace Bit.App.Pages
 
             Title = "bitwarden";
             Content = new ScrollView { Content = buttonStackLayout };
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
         }
 
         public async Task LoginAsync()

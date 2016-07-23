@@ -33,6 +33,8 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
+
             var padding = new Thickness(15, 20);
 
             PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true,
@@ -117,7 +119,10 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = table2.RowHeight = table2.RowHeight = -1;
                 table.EstimatedRowHeight = table2.EstimatedRowHeight = table2.EstimatedRowHeight = 70;
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel", () =>
+                {
+                    MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
+                }));
             }
 
             ToolbarItems.Add(loginToolbarItem);
@@ -128,6 +133,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
             EmailCell.Entry.Focus();
         }
 

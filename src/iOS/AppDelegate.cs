@@ -96,6 +96,14 @@ namespace Bit.iOS
                 modal.PresentViewController(activityViewController, true, null);
             });
 
+            UIApplication.SharedApplication.StatusBarHidden = false;
+            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current, "ShowStatusBar", (sender, show) =>
+            {
+                UIApplication.SharedApplication.SetStatusBarHidden(!show, false);
+            });
+
             return base.FinishedLaunching(app, options);
         }
 
