@@ -149,6 +149,8 @@ namespace Bit.iOS
             base.OnActivated(uiApplication);
             Debug.WriteLine("OnActivated");
 
+            UIApplication.SharedApplication.ApplicationIconBadgeNumber = 0;
+
             var view = UIApplication.SharedApplication.KeyWindow.ViewWithTag(4321);
             if(view != null)
             {
