@@ -14,22 +14,12 @@ namespace Bit.App.Pages
 {
     public class PasswordHintPage : ExtendedContentPage
     {
-        private ICryptoService _cryptoService;
-        private IAuthService _authService;
-        private IDeviceInfo _deviceInfo;
-        private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
-        private ISyncService _syncService;
         private IAccountsApiRepository _accountApiRepository;
 
         public PasswordHintPage()
         {
-            _cryptoService = Resolver.Resolve<ICryptoService>();
-            _authService = Resolver.Resolve<IAuthService>();
-            _deviceInfo = Resolver.Resolve<IDeviceInfo>();
-            _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _syncService = Resolver.Resolve<ISyncService>();
             _accountApiRepository = Resolver.Resolve<IAccountsApiRepository>();
 
             Init();

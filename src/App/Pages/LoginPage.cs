@@ -151,11 +151,18 @@ namespace Bit.App.Pages
 
             _cryptoService.Key = key;
             _authService.Token = response.Result.Token;
-            _authService.UserId = response.Result.Profile.Id;
-            _authService.Email = response.Result.Profile.Email;
+            _authService.UserId = response.Result?.Profile?.Id;
+            _authService.Email = response.Result?.Profile?.Email;
 
-            var task = Task.Run(async () => await _syncService.FullSyncAsync());
-            Application.Current.MainPage = new MainPage();
+            if(_authService.IsAuthenticatedTwoFactor)
+            {
+                await Navigation.PushAsync(new LoginTwoFactorPage());
+            }
+            else
+            {
+                var task = Task.Run(async () => await _syncService.FullSyncAsync());
+                Application.Current.MainPage = new MainPage();
+            }
         }
     }
 }

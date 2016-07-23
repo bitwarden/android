@@ -131,6 +131,13 @@ namespace Bit.App.Services
                 return _cryptoService.Key != null && Token != null && UserId != null;
             }
         }
+        public bool IsAuthenticatedTwoFactor
+        {
+            get
+            {
+                return _cryptoService.Key != null && Token != null && UserId == null;
+            }
+        }
 
         public string PIN
         {
@@ -178,6 +185,12 @@ namespace Bit.App.Services
         {
             // TODO: move more logic in here
             return await _authApiRepository.PostTokenAsync(request);
+        }
+
+        public async Task<ApiResult<TokenResponse>> TokenTwoFactorPostAsync(TokenTwoFactorRequest request)
+        {
+            // TODO: move more logic in here
+            return await _authApiRepository.PostTokenTwoFactorAsync(request);
         }
     }
 }

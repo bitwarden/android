@@ -4,5 +4,6 @@
     {
         public string Code { get; set; }
         public string Provider { get; set; }
+        public DeviceRequest Device { get; set; }
     }
 }

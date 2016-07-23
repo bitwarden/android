@@ -6,6 +6,7 @@ namespace Bit.App.Abstractions
     public interface IAuthService
     {
         bool IsAuthenticated { get; }
+        bool IsAuthenticatedTwoFactor { get; }
         string Token { get; set; }
         string UserId { get; set; }
         string Email { get; set; }
@@ -13,5 +14,6 @@ namespace Bit.App.Abstractions
 
         void LogOut();
         Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request);
+        Task<ApiResult<TokenResponse>> TokenTwoFactorPostAsync(TokenTwoFactorRequest request);
     }
 }
