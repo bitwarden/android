@@ -35,10 +35,21 @@ namespace Bit.App.Services
 
         public void OnMessage(JObject values, DeviceType deviceType)
         {
+            if(values == null)
+            {
+                return;
+            }
+
             _showNotification = false;
             Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(values));
 
-            var type = (Enums.PushType)values.GetValue("type", StringComparison.OrdinalIgnoreCase).ToObject<short>();
+            JToken token;
+            if(!values.TryGetValue("type", StringComparison.OrdinalIgnoreCase, out token) || token == null)
+            {
+                return;
+            }
+
+            var type = (Enums.PushType)token.ToObject<short>();
             switch(type)
             {
                 case Enums.PushType.SyncCipherUpdate:
