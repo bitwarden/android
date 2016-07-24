@@ -37,6 +37,10 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
 
+            var descriptor = UIFontDescriptor.PreferredBody;
+            DecryptingLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
+            DecryptingLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
+
             if(!Resolver.IsSet)
             {
                 SetIoc();

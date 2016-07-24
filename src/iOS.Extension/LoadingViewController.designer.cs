@@ -11,11 +11,19 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-	[Register ("LoadingViewController")]
-	partial class LoadingViewController
-	{
-		void ReleaseDesignerOutlets ()
-		{
-		}
-	}
+    [Register ("LoadingViewController")]
+    partial class LoadingViewController
+    {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UILabel DecryptingLabel { get; set; }
+
+        void ReleaseDesignerOutlets ()
+        {
+            if (DecryptingLabel != null) {
+                DecryptingLabel.Dispose ();
+                DecryptingLabel = null;
+            }
+        }
+    }
 }

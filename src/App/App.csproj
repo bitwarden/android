@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
+    <Compile Include="Abstractions\Services\IAppInfoService.cs" />
     <Compile Include="Abstractions\Services\IAppIdService.cs" />
     <Compile Include="Abstractions\Services\IAuthService.cs" />
     <Compile Include="Abstractions\Services\IClipboardService.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Pages\LoginTwoFactorPage.cs" />
     <Compile Include="Pages\PasswordHintPage.cs" />
     <Compile Include="Pages\RegisterPage.cs" />
+    <Compile Include="Pages\Settings\SettingsCreditsPage.cs" />
     <Compile Include="Pages\Settings\SettingsHelpPage.cs" />
     <Compile Include="Pages\Settings\SettingsPinPage.cs" />
     <Compile Include="Pages\Lock\LockPinPage.cs" />

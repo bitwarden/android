@@ -18,13 +18,23 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="1713" translatesAutoresizingMaskIntoConstraints="NO" image="logo.png">
-                                <rect key="frame" x="159" y="278" width="282" height="44"/>
+                                <rect key="frame" x="159" y="223" width="282" height="44"/>
                             </imageView>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Decrypting data..." lineBreakMode="tailTruncation" minimumFontSize="10" id="10537" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center">
+                                <rect key="frame" x="15" y="287" width="570" height="20.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint id="1763" firstItem="1713" firstAttribute="centerY" secondItem="44" secondAttribute="centerY"/>
+                            <constraint id="1763" firstItem="1713" firstAttribute="centerY" secondItem="44" secondAttribute="centerY" constant="-55"/>
                             <constraint id="1764" firstItem="1713" firstAttribute="centerX" secondItem="44" secondAttribute="centerX"/>
+                            <constraint id="10538" firstItem="10537" firstAttribute="top" secondItem="1713" secondAttribute="bottom" constant="20"/>
+                            <constraint id="10539" firstItem="10537" firstAttribute="leading" secondItem="44" secondAttribute="leading" constant="15"/>
+                            <constraint id="10540" firstItem="44" firstAttribute="trailing" secondItem="10537" secondAttribute="trailing" constant="15"/>
                         </constraints>
                     </view>
                     <connections>
@@ -33,6 +43,7 @@
                         <segue id="8924" destination="6815" kind="presentation" identifier="lockPinSegue"/>
                         <segue id="9874" destination="6855" kind="presentation" identifier="lockPasswordSegue"/>
                         <segue id="10498" destination="1845" kind="presentation" identifier="newSiteSegue" modalPresentationStyle="" modalTransitionStyle=""/>
+                        <outlet property="DecryptingLabel" destination="10537" id="name-outlet-10537"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="45" userLabel="First Responder" sceneMemberID="firstResponder"/>

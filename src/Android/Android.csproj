@@ -271,6 +271,7 @@
     <Compile Include="Controls\ExtendedEntryRenderer.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Services\AppInfoService.cs" />
     <Compile Include="Services\ClipboardService.cs" />
     <Compile Include="Services\KeyStoreStorageService.cs" />
     <Compile Include="MainActivity.cs" />

@@ -121,7 +121,7 @@ namespace Bit.iOS
 
             var imageView = new UIImageView(new UIImage("logo.png"))
             {
-                Center = view.Center
+                Center = new CoreGraphics.CGPoint(view.Center.X, view.Center.Y - 40)
             };
 
             view.AddSubview(backgroundView);
@@ -130,6 +130,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.AddSubview(view);
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
+            UIApplication.SharedApplication.SetStatusBarHidden(true, false);
 
             // Log the date/time we last backgrounded
 
@@ -163,6 +164,7 @@ namespace Bit.iOS
             if(view != null)
             {
                 view.RemoveFromSuperview();
+                UIApplication.SharedApplication.SetStatusBarHidden(false, false);
             }
         }
 
@@ -240,6 +242,7 @@ namespace Bit.iOS
                 .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IReflectionService, ReflectionService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAppInfoService, AppInfoService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
