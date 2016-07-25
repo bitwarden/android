@@ -52,7 +52,7 @@ namespace Bit.iOS.Extension
 
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
-            NameCell.TextField.Text = Context.Url.Host;
+            NameCell.TextField.Text = Context?.Url?.Host ?? string.Empty;
             NameCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
             NameCell.TextField.ShouldReturn += (UITextField tf) =>
             {
@@ -60,7 +60,7 @@ namespace Bit.iOS.Extension
                 return true;
             };
 
-            UriCell.TextField.Text = Context.Url.ToString();
+            UriCell.TextField.Text = Context?.Url?.ToString() ?? string.Empty;
             UriCell.TextField.KeyboardType = UIKeyboardType.Url;
             UriCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
             UriCell.TextField.ShouldReturn += (UITextField tf) =>
@@ -69,7 +69,6 @@ namespace Bit.iOS.Extension
                 return true;
             };
 
-            UsernameCell.TextField.BecomeFirstResponder();
             UsernameCell.TextField.AutocapitalizationType = UITextAutocapitalizationType.None;
             UsernameCell.TextField.AutocorrectionType = UITextAutocorrectionType.No;
             UsernameCell.TextField.SpellCheckingType = UITextSpellCheckingType.No;
