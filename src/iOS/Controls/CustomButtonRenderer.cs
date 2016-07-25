@@ -48,6 +48,11 @@ namespace Bit.iOS.Controls
             {
                 pointSize *= .6f;
             }
+            else if(size != Device.GetNamedSize(NamedSize.Default, typeof(Label)))
+            {
+                // not using dynamic font sizes, return
+                return;
+            }
 
             Control.Font = UIFont.FromDescriptor(Element.Font.ToUIFont().FontDescriptor, pointSize);
         }
