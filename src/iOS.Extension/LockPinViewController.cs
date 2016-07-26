@@ -3,8 +3,6 @@ using Bit.iOS.Extension.Models;
 using UIKit;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
-using Foundation;
-using MobileCoreServices;
 using Bit.App.Abstractions;
 using Bit.iOS.Core.Utilities;
 using Bit.App.Resources;
@@ -22,7 +20,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
-        public LoadingViewController LoadingViewController { get; set; }
+        public LoadingViewController LoadingController { get; set; }
 
         public override void ViewWillAppear(bool animated)
         {
@@ -68,7 +66,7 @@ namespace Bit.iOS.Extension
                     Debug.WriteLine("BW Log, Start Dismiss PIN controller.");
                     _settings.AddOrUpdateValue(Constants.SettingLocked, false);
                     PinTextField.ResignFirstResponder();
-                    LoadingViewController.DismissLockAndContinue();
+                    LoadingController.DismissLockAndContinue();
                 }
                 else
                 {
@@ -98,16 +96,7 @@ namespace Bit.iOS.Extension
 
         partial void CancelButton_Activated(UIBarButtonItem sender)
         {
-            CompleteRequest();
-        }
-
-        private void CompleteRequest()
-        {
-            var resultsProvider = new NSItemProvider(null, UTType.PropertyList);
-            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
-            var returningItems = new NSExtensionItem[] { resultsItem };
-
-            Context.ExtContext.CompleteRequest(returningItems, null);
+            LoadingController.CompleteRequest(null);
         }
     }
 }

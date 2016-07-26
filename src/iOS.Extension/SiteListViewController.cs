@@ -20,6 +20,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
+        public LoadingViewController LoadingController { get; set; }
 
         public override void ViewWillAppear(bool animated)
         {
@@ -50,22 +51,13 @@ namespace Bit.iOS.Extension
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(filteredSiteModels, this);
 
-            Debug.WriteLine("BW LOG, Set TableView srouce at " + sw.ElapsedMilliseconds + "ms.");
+            Debug.WriteLine("BW LOG, Set TableView source at " + sw.ElapsedMilliseconds + "ms.");
             sw.Stop();
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
-            CompleteRequest(null);
-        }
-
-        private void CompleteRequest(NSDictionary itemData)
-        {
-            var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
-            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
-            var returningItems = new NSExtensionItem[] { resultsItem };
-
-            Context.ExtContext.CompleteRequest(returningItems, null);
+            LoadingController.CompleteRequest(null);
         }
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)
@@ -82,7 +74,7 @@ namespace Bit.iOS.Extension
                 if(addSiteController != null)
                 {
                     addSiteController.Context = Context;
-                    addSiteController.Parent = this;
+                    addSiteController.SiteListController = this;
                 }
             }
         }
@@ -159,52 +151,16 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                Resolver.Resolve<ISettings>().AddOrUpdateValue(Bit.App.Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
+                Resolver.Resolve<ISettings>().AddOrUpdateValue(App.Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
 
                 var item = _tableItems.ElementAt(indexPath.Row);
                 if(item == null)
                 {
-                    _controller.CompleteRequest(null);
+                    _controller.LoadingController.CompleteRequest(null);
                     return;
                 }
 
-                NSDictionary itemData = null;
-                if(_context.ProviderType == UTType.PropertyList)
-                {
-                    var fillScript = new FillScript(_context.Details, item.Username, item.Password);
-                    var scriptJson = JsonConvert.SerializeObject(fillScript, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                    var scriptDict = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
-                    itemData = new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, scriptDict);
-                }
-                else if(_context.ProviderType == Constants.UTTypeAppExtensionFindLoginAction)
-                {
-                    itemData = new NSDictionary(
-                        Constants.AppExtensionUsernameKey, item.Username,
-                        Constants.AppExtensionPasswordKey, item.Password);
-                }
-                else if(_context.ProviderType == Constants.UTTypeAppExtensionFillBrowserAction
-                    || _context.ProviderType == Constants.UTTypeAppExtensionFillWebViewAction)
-                {
-                    var fillScript = new FillScript(_context.Details, item.Username, item.Password);
-                    var scriptJson = JsonConvert.SerializeObject(fillScript, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-                    itemData = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
-                }
-                else if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
-                {
-                    itemData = new NSDictionary(
-                        Constants.AppExtensionUsernameKey, item.Username,
-                        Constants.AppExtensionPasswordKey, item.Password);
-                }
-                else if(_context.ProviderType == Constants.UTTypeAppExtensionChangePasswordAction)
-                {
-                    itemData = new NSDictionary(
-                        Constants.AppExtensionPasswordKey, "mynewpassword",
-                        Constants.AppExtensionOldPasswordKey, "myoldpassword");
-                }
-
-                Debug.WriteLine("BW LOG, itemData: " + itemData);
-
-                _controller.CompleteRequest(itemData);
+                _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password);
             }
         }
     }

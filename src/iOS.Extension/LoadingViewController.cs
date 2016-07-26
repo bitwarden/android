@@ -26,6 +26,8 @@ namespace Bit.iOS.Extension
     {
         private Context _context = new Context();
         private bool _setupHockeyApp = false;
+        private readonly JsonSerializerSettings _jsonSettings = 
+            new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
 
         public LoadingViewController(IntPtr handle) : base(handle)
         {
@@ -90,7 +92,7 @@ namespace Bit.iOS.Extension
             {
                 var alert = Dialogs.CreateAlert(null, "You must log into the main bitwarden app before you can use the extension.", AppResources.Ok, (a) =>
                 {
-                    CompleteRequest();
+                    CompleteRequest(null);
                 });
                 PresentViewController(alert, true, null);
                 return;
@@ -110,18 +112,16 @@ namespace Bit.iOS.Extension
                     PerformSegue("lockPasswordSegue", this);
                     break;
                 default:
-                    PerformSegue("siteListSegue", this);
+                    if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
+                    {
+                        PerformSegue("newSiteSegue", this);
+                    }
+                    else
+                    {
+                        PerformSegue("siteListSegue", this);
+                    }
                     break;
             }
-        }
-
-        private void CompleteRequest()
-        {
-            var resultsProvider = new NSItemProvider(null, UTType.PropertyList);
-            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
-            var returningItems = new NSExtensionItem[] { resultsItem };
-
-            ExtensionContext.CompleteRequest(returningItems, null);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -138,25 +138,27 @@ namespace Bit.iOS.Extension
                 if(listSiteController != null)
                 {
                     listSiteController.Context = _context;
+                    listSiteController.LoadingController = this;
                 }
                 else if(addSiteController != null)
                 {
                     addSiteController.Context = _context;
+                    addSiteController.LoadingController = this;
                 }
                 else if(fingerprintViewController != null)
                 {
                     fingerprintViewController.Context = _context;
-                    fingerprintViewController.LoadingViewController = this;
+                    fingerprintViewController.LoadingController = this;
                 }
                 else if(pinViewController != null)
                 {
                     pinViewController.Context = _context;
-                    pinViewController.LoadingViewController = this;
+                    pinViewController.LoadingController = this;
                 }
                 else if(passwordViewController != null)
                 {
                     passwordViewController.Context = _context;
-                    passwordViewController.LoadingViewController = this;
+                    passwordViewController.LoadingController = this;
                 }
             }
         }
@@ -169,6 +171,56 @@ namespace Bit.iOS.Extension
                 Debug.WriteLine("BW Log, Segue to site list.");
                 PerformSegue("siteListSegue", this);
             });
+        }
+
+        public void CompleteUsernamePasswordRequest(string username, string password)
+        {
+            NSDictionary itemData = null;
+            if(_context.ProviderType == UTType.PropertyList)
+            {
+                var fillScript = new FillScript(_context.Details, username, password);
+                var scriptJson = JsonConvert.SerializeObject(fillScript, _jsonSettings);
+                var scriptDict = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
+                itemData = new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, scriptDict);
+            }
+            else if(_context.ProviderType == Constants.UTTypeAppExtensionFindLoginAction)
+            {
+                itemData = new NSDictionary(
+                    Constants.AppExtensionUsernameKey, username,
+                    Constants.AppExtensionPasswordKey, password);
+            }
+            else if(_context.ProviderType == Constants.UTTypeAppExtensionFillBrowserAction
+                || _context.ProviderType == Constants.UTTypeAppExtensionFillWebViewAction)
+            {
+                var fillScript = new FillScript(_context.Details, username, password);
+                var scriptJson = JsonConvert.SerializeObject(fillScript, _jsonSettings);
+                itemData = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
+            }
+            else if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
+            {
+                itemData = new NSDictionary(
+                    Constants.AppExtensionUsernameKey, username,
+                    Constants.AppExtensionPasswordKey, password);
+            }
+            else if(_context.ProviderType == Constants.UTTypeAppExtensionChangePasswordAction)
+            {
+                itemData = new NSDictionary(
+                    Constants.AppExtensionPasswordKey, string.Empty,
+                    Constants.AppExtensionOldPasswordKey, password);
+            }
+
+            CompleteRequest(itemData);
+        }
+
+        public void CompleteRequest(NSDictionary itemData)
+        {
+            Debug.WriteLine("BW LOG, itemData: " + itemData);
+
+            var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
+            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
+            var returningItems = new NSExtensionItem[] { resultsItem };
+
+            ExtensionContext.CompleteRequest(returningItems, null);
         }
 
         private void SetIoc()

@@ -27,7 +27,8 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
-        public SiteListViewController Parent { get; set; }
+        public SiteListViewController SiteListController { get; set; }
+        public LoadingViewController LoadingController { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
         public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username);
@@ -114,7 +115,14 @@ namespace Bit.iOS.Extension
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
-            DismissViewController(true, null);
+            if(SiteListController != null)
+            {
+                DismissViewController(true, null);
+            }
+            else
+            {
+                LoadingController.CompleteRequest(null);
+            }
         }
 
         async partial void SaveBarButton_Activated(UIBarButtonItem sender)
@@ -152,7 +160,15 @@ namespace Bit.iOS.Extension
             var loadingAlert = Dialogs.CreateLoadingAlert("Saving...");
             PresentViewController(loadingAlert, true, null);
             await saveTask;
-            Parent.DismissModal();
+
+            if(SiteListController != null)
+            {
+                SiteListController.DismissModal();
+            }
+            else if(LoadingController != null)
+            {
+                LoadingController.CompleteUsernamePasswordRequest(UsernameCell.TextField.Text, PasswordCell.TextField.Text);
+            }
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

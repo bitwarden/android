@@ -3,8 +3,6 @@ using Bit.iOS.Extension.Models;
 using UIKit;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
-using Foundation;
-using MobileCoreServices;
 using Plugin.Fingerprint.Abstractions;
 using System.Threading.Tasks;
 using Bit.App;
@@ -20,7 +18,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
-        public LoadingViewController LoadingViewController { get; set; }
+        public LoadingViewController LoadingController { get; set; }
 
         public override void ViewWillAppear(bool animated)
         {
@@ -58,16 +56,7 @@ namespace Bit.iOS.Extension
 
         partial void CancelButton_Activated(UIBarButtonItem sender)
         {
-            CompleteRequest();
-        }
-
-        private void CompleteRequest()
-        {
-            var resultsProvider = new NSItemProvider(null, UTType.PropertyList);
-            var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
-            var returningItems = new NSExtensionItem[] { resultsItem };
-
-            Context.ExtContext.CompleteRequest(returningItems, null);
+            LoadingController.CompleteRequest(null);
         }
 
         public async Task CheckFingerprintAsync()
@@ -76,7 +65,7 @@ namespace Bit.iOS.Extension
             if(result.Authenticated)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLocked, false);
-                LoadingViewController.DismissLockAndContinue();
+                LoadingController.DismissLockAndContinue();
             }
         }
     }
