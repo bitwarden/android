@@ -124,7 +124,9 @@ namespace Bit.App.Pages
 
             var table = new ExtendedTableView
             {
-                EnableScrolling = true,
+                NoFooter = true,
+                VerticalOptions = LayoutOptions.Start,
+                EnableScrolling = false,
                 Intent = TableIntent.Menu,
                 HasUnevenRows = true,
                 Root = new TableRoot
@@ -152,9 +154,9 @@ namespace Bit.App.Pages
                     },
                     new TableSection("Other")
                     {
+                        aboutCell,
                         helpCell,
-                        rateCell,
-                        aboutCell
+                        rateCell
                     }
                 }
             };
@@ -165,8 +167,31 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 44;
             }
 
+            var rateLabel = new Label
+            {
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                Style = (Style)Application.Current.Resources["text-muted"],
+                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
+            };
+
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                rateLabel.Text = "App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!";
+            }
+            else
+            {
+                rateLabel.Text = "Please consider helping us out with a good review!";
+            }
+
+            var stackLayout = new StackLayout
+            {
+                Children = { table, rateLabel },
+                Spacing = 0
+            };
+
             Title = AppResources.Settings;
-            Content = table;
+            Content = new ScrollView { Content = stackLayout };
         }
 
         private async void LockOptionsCell_Tapped(object sender, EventArgs e)
@@ -223,7 +248,11 @@ namespace Bit.App.Pages
 
         private void RateCell_Tapped(object sender, EventArgs e)
         {
-            // TODO: link to app stores
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                var appStoreId = "1137397744";
+                Device.OpenUri(new Uri($"tms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id={appStoreId}&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
+            }
         }
 
         private void HelpCell_Tapped(object sender, EventArgs e)
