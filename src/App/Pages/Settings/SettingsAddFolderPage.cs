@@ -79,7 +79,7 @@ namespace Bit.App.Pages
                 if(saveTask.Result.Succeeded)
                 {
                     await Navigation.PopModalAsync();
-                    _userDialogs.SuccessToast(nameCell.Entry.Text, "New folder created.");
+                    _userDialogs.Toast("New folder created.");
                 }
                 else if(saveTask.Result.Errors.Count() > 0)
                 {

@@ -162,7 +162,7 @@ namespace Bit.App.Pages
         private void Copy(string copyText, string alertLabel)
         {
             _clipboardService.CopyToClipboard(copyText);
-            _userDialogs.SuccessToast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private class EditSiteToolBarItem : ToolbarItem

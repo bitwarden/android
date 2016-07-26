@@ -279,7 +279,7 @@ namespace Bit.App.Pages
         private void Copy(string copyText, string alertLabel)
         {
             _clipboardService.CopyToClipboard(copyText);
-            _userDialogs.SuccessToast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private async void DeleteClickedAsync(object sender, EventArgs e)
@@ -298,7 +298,7 @@ namespace Bit.App.Pages
                 var folder = PresentationFolders.Single(f => f.Id == site.FolderId);
                 var siteIndex = folder.Select((s, i) => new { s, i }).First(s => s.s.Id == site.Id).i;
                 folder.RemoveAt(siteIndex);
-                _userDialogs.SuccessToast(AppResources.SiteDeleted);
+                _userDialogs.Toast(AppResources.SiteDeleted);
             }
             else if(deleteCall.Errors.Count() > 0)
             {

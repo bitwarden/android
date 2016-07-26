@@ -185,7 +185,7 @@ namespace Bit.App
             Current.MainPage = new HomePage();
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {
-                _userDialogs.WarnToast("Logged out", logoutMessage);
+                _userDialogs.Toast(logoutMessage);
             }
         }
 

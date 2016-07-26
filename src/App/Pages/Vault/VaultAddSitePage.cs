@@ -137,7 +137,7 @@ namespace Bit.App.Pages
                 if(saveTask.Result.Succeeded)
                 {
                     await Navigation.PopModalAsync();
-                    _userDialogs.SuccessToast(nameCell.Entry.Text, "New site created.");
+                    _userDialogs.Toast("New site created.");
                 }
                 else if(saveTask.Result.Errors.Count() > 0)
                 {
@@ -164,7 +164,7 @@ namespace Bit.App.Pages
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
                 PasswordCell.Entry.Text = password;
-                _userDialogs.SuccessToast("Password generated.");
+                _userDialogs.Toast("Password generated.");
             });
             Navigation.PushModalAsync(new ExtendedNavigationPage(page));
         }

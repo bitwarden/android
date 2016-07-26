@@ -172,7 +172,7 @@ namespace Bit.App.Pages
                 if(saveTask.Result.Succeeded)
                 {
                     await Navigation.PopModalAsync();
-                    _userDialogs.SuccessToast(nameCell.Entry.Text, "Site updated.");
+                    _userDialogs.Toast("Site updated.");
                 }
                 else if(saveTask.Result.Errors.Count() > 0)
                 {
@@ -205,7 +205,7 @@ namespace Bit.App.Pages
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
                 PasswordCell.Entry.Text = password;
-                _userDialogs.SuccessToast("Password generated.");
+                _userDialogs.Toast("Password generated.");
             });
             await Navigation.PushModalAsync(new ExtendedNavigationPage(page));
         }
@@ -231,7 +231,7 @@ namespace Bit.App.Pages
             if((await deleteTask).Succeeded)
             {
                 await Navigation.PopModalAsync();
-                _userDialogs.SuccessToast("Site deleted.");
+                _userDialogs.Toast("Site deleted.");
             }
         }
 

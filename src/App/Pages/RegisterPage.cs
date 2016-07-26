@@ -182,7 +182,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.SuccessToast("Account Created", "Your new account has been created! You may now log in.");
+            _userDialogs.Toast("Your new account has been created! You may now log in.");
             await Navigation.PopModalAsync();
         }
 

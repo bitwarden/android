@@ -92,7 +92,7 @@ namespace Bit.App.Pages
                 if(saveTask.Result.Succeeded)
                 {
                     await Navigation.PopModalAsync();
-                    _userDialogs.SuccessToast(nameCell.Entry.Text, "Folder updated.");
+                    _userDialogs.Toast("Folder updated.");
                 }
                 else if(saveTask.Result.Errors.Count() > 0)
                 {
@@ -137,7 +137,7 @@ namespace Bit.App.Pages
             if((await deleteTask).Succeeded)
             {
                 await Navigation.PopModalAsync();
-                _userDialogs.SuccessToast("Folder deleted.");
+                _userDialogs.Toast("Folder deleted.");
             }
         }
 

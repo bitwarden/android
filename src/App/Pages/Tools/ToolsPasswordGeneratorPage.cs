@@ -150,7 +150,7 @@ namespace Bit.App.Pages
         private void CopyPassword()
         {
             _clipboardService.CopyToClipboard(Password.Text);
-            _userDialogs.SuccessToast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
 
         // TODO: move to standalone reusable control

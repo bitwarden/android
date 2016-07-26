@@ -59,11 +59,11 @@ namespace Bit.App.Pages
             _userDialogs.HideLoading();
             if(succeeded)
             {
-                _userDialogs.SuccessToast("Syncing complete.");
+                _userDialogs.Toast("Syncing complete.");
             }
             else
             {
-                _userDialogs.ErrorToast("Syncing failed.");
+                _userDialogs.Toast("Syncing failed.");
             }
         }
 
