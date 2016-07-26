@@ -42,7 +42,7 @@
                         <segue id="8446" destination="6512" kind="presentation" identifier="lockFingerprintSegue"/>
                         <segue id="8924" destination="6815" kind="presentation" identifier="lockPinSegue"/>
                         <segue id="9874" destination="6855" kind="presentation" identifier="lockPasswordSegue"/>
-                        <segue id="10498" destination="1845" kind="presentation" identifier="newSiteSegue" modalPresentationStyle="" modalTransitionStyle=""/>
+                        <segue id="10498" destination="1845" kind="presentation" identifier="newSiteSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical"/>
                         <outlet property="DecryptingLabel" destination="10537" id="name-outlet-10537"/>
                     </connections>
                 </viewController>

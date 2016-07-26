@@ -32,7 +32,7 @@ namespace Bit.iOS.Core.Views
         private void Stepper_ValueChanged(object sender, EventArgs e)
         {
             Value = Convert.ToInt32(Stepper.Value);
-            ValueChanged(this, null);
+            ValueChanged?.Invoke(this, null);
         }
 
         public UIStepper Stepper { get; private set; }

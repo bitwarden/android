@@ -16,7 +16,7 @@ namespace Bit.iOS.Core.Views
 
         private void Switch_ValueChanged(object sender, EventArgs e)
         {
-            ValueChanged(this, null);
+            ValueChanged?.Invoke(this, null);
         }
 
         public UISwitch Switch { get; set; } = new UISwitch();
