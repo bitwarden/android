@@ -122,7 +122,7 @@ namespace Bit.iOS.Controls
             {
                 pointSize *= .6f;
             }
-            else if(size != Device.GetNamedSize(NamedSize.Default, typeof(Label)))
+            else if(size != Device.GetNamedSize(NamedSize.Default, typeof(ExtendedEntry)))
             {
                 // not using dynamic font sizes, return
                 return;
