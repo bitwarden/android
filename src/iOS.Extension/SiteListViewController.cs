@@ -42,7 +42,9 @@ namespace Bit.iOS.Extension
                 var siteService = Resolver.Resolve<ISiteService>();
                 var sites = await siteService.GetAllAsync();
                 var siteModels = sites.Select(s => new SiteViewModel(s));
-                filteredSiteModels = siteModels.Where(s => s.Domain != null && s.Domain.BaseDomain == Context.DomainName.BaseDomain);
+                filteredSiteModels = siteModels
+                    .Where(s => s.Domain != null && s.Domain.BaseDomain == Context.DomainName.BaseDomain)
+                    .ToList();
             }
 
             Debug.WriteLine("BW LOG, Filtered sites at " + sw.ElapsedMilliseconds + "ms.");
@@ -126,6 +128,7 @@ namespace Bit.iOS.Extension
                 {
                     Debug.WriteLine("BW Log, Make new cell for list.");
                     cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
+                    cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
                 }
                 return cell;
             }
@@ -140,7 +143,6 @@ namespace Bit.iOS.Extension
                 var item = _tableItems.ElementAt(indexPath.Row);
                 cell.TextLabel.Text = item.Name;
                 cell.DetailTextLabel.Text = item.Username;
-                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
             }
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)

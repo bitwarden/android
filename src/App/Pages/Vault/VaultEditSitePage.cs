@@ -65,7 +65,8 @@ namespace Bit.App.Pages
             generateCell.Tapped += GenerateCell_Tapped; ;
 
             var folderOptions = new List<string> { AppResources.FolderNone };
-            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
+            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult()
+                .OrderBy(f => f.Name?.Decrypt()).ToList();
             int selectedIndex = 0;
             int i = 0;
             foreach(var folder in folders)

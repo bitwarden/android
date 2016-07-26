@@ -45,7 +45,8 @@ namespace Bit.App.Pages
             var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
 
             var folderOptions = new List<string> { AppResources.FolderNone };
-            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult().OrderBy(f => f.Name?.Decrypt());
+            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult()
+                .OrderBy(f => f.Name?.Decrypt()).ToList();
             foreach(var folder in folders)
             {
                 folderOptions.Add(folder.Name.Decrypt());

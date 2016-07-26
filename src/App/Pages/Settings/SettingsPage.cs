@@ -184,12 +184,6 @@ namespace Bit.App.Pages
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
-            {
-                table.RowHeight = -1;
-                table.EstimatedRowHeight = 44;
-            }
-
             var rateLabel = new Label
             {
                 LineBreakMode = LineBreakMode.WordWrap,
@@ -279,7 +273,7 @@ namespace Bit.App.Pages
             if(Device.OS == TargetPlatform.iOS)
             {
                 var appStoreId = "1137397744";
-                Device.OpenUri(new Uri($"tms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id={appStoreId}&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
+                Device.OpenUri(new Uri($"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id={appStoreId}&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
             }
         }
 
