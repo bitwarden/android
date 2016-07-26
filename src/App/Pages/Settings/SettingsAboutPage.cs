@@ -26,31 +26,61 @@ namespace Bit.App.Pages
 
             var versionLabel = new Label
             {
-                Text = $@"Version {_appInfoService.Version}
+                Text = $@"Version {_appInfoService.Version} ({_appInfoService.Build})
 © 8bit Solutions LLC 2015-{DateTime.Now.Year}",
                 HorizontalTextAlignment = TextAlignment.Center
             };
 
-            var creditsButton = new Button
+            var logoVersionStackLayout = new StackLayout
+            {
+                Children = { logo, versionLabel },
+                Spacing = 20,
+                Padding = new Thickness(0, 40)
+            };
+
+            var creditsCell = new ExtendedTextCell
             {
                 Text = "Credits",
-                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                Margin = new Thickness(15, 0, 15, 25),
-                Command = new Command(async () => await Navigation.PushAsync(new SettingsCreditsPage())),
-                HorizontalOptions = LayoutOptions.Center
+                ShowDisclousure = true
             };
+            creditsCell.Tapped += RateCell_Tapped;
+
+            var table = new ExtendedTableView
+            {
+                VerticalOptions = LayoutOptions.Start,
+                EnableScrolling = false,
+                NoHeader = true,
+                Intent = TableIntent.Menu,
+                HasUnevenRows = true,
+                Root = new TableRoot
+                {
+                    new TableSection
+                    {
+                        creditsCell
+                    }
+                }
+            };
+
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                table.RowHeight = -1;
+                table.EstimatedRowHeight = 44;
+            }
 
             var stackLayout = new StackLayout
             {
-                Children = { logo, versionLabel, creditsButton },
-                VerticalOptions = LayoutOptions.Center,
-                Spacing = 20,
-                Margin = new Thickness(0, 0, 0, 40)
+                Children = { logoVersionStackLayout, table },
+                Spacing = 0
             };
 
             Title = "About bitwarden";
             Content = new ScrollView { Content = stackLayout };
             NavigationPage.SetBackButtonTitle(this, "About");
+        }
+
+        private void RateCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushAsync(new SettingsCreditsPage());
         }
     }
 }

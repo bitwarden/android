@@ -122,13 +122,8 @@ namespace Bit.App.Pages
             };
             rateCell.Tapped += RateCell_Tapped;
 
-            var table = new ExtendedTableView
+            var table = new CustomTable
             {
-                NoFooter = true,
-                VerticalOptions = LayoutOptions.Start,
-                EnableScrolling = false,
-                Intent = TableIntent.Menu,
-                HasUnevenRows = true,
                 Root = new TableRoot
                 {
                     new TableSection("Security")
@@ -136,22 +131,50 @@ namespace Bit.App.Pages
                         LockOptionsCell,
                         FingerprintCell,
                         PinCell
-                    },
-                    new TableSection
+                    }
+                }
+            };
+
+            var table2 = new CustomTable
+            {
+                Root = new TableRoot
+                {
+                    new TableSection("Account")
                     {
                         changeMasterPasswordCell,
                         changeEmailCell
-                    },
+                    }
+                }
+            };
+
+            var table3 = new CustomTable
+            {
+                Root = new TableRoot
+                {
                     new TableSection("Manage")
                     {
                         foldersCell,
                         syncCell
-                    },
+                    }
+                }
+            };
+
+            var table4 = new CustomTable
+            {
+                Root = new TableRoot
+                {
                     new TableSection("Current Session")
                     {
                         lockCell,
                         logOutCell
-                    },
+                    }
+                }
+            };
+
+            var table5 = new CustomTable
+            {
+                Root = new TableRoot
+                {
                     new TableSection("Other")
                     {
                         aboutCell,
@@ -186,8 +209,13 @@ namespace Bit.App.Pages
 
             var stackLayout = new StackLayout
             {
-                Children = { table, rateLabel },
+                Children = { table, table2, table3, table4, table5, rateLabel },
                 Spacing = 0
+            };
+
+            stackLayout.LayoutChanged += (sender, args) =>
+            {
+                rateLabel.WidthRequest = stackLayout.Bounds.Width - rateLabel.Bounds.Left * 2;
             };
 
             Title = AppResources.Settings;
@@ -381,6 +409,18 @@ namespace Bit.App.Pages
             else
             {
                 return "Immediately";
+            }
+        }
+
+        private class CustomTable : ExtendedTableView
+        {
+            public CustomTable()
+            {
+                NoFooter = true;
+                VerticalOptions = LayoutOptions.Start;
+                EnableScrolling = false;
+                Intent = TableIntent.Menu;
+                HasUnevenRows = true;
             }
         }
     }
