@@ -155,20 +155,33 @@ namespace Bit.App.Pages
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
                 var pushPromptShow = _settings.GetValueOrDefault<bool>(Constants.PushInitialPromptShown);
+                Action registerAction = () =>
+                {
+                    var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate);
+                    if(!pushPromptShow || !lastPushRegistration.HasValue || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
+                    {
+                        _pushNotification.Register();
+                    }
+                };
+
                 if(!pushPromptShow)
                 {
                     _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
-                    _userDialogs.Alert("bitwarden keeps your vault automatically synced by using push notifications."
+                    _userDialogs.Alert(new AlertConfig
+                    {
+                        Message = "bitwarden keeps your vault automatically synced by using push notifications."
                         + " For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.",
-                        "Enable Automatic Syncing", "Ok, got it!");
+                        Title = "Enable Automatic Syncing",
+                        OnOk = registerAction,
+                        OkText = "Ok, got it!"
+                    });
+                }
+                else
+                {
+                    // Check push registration once per day
+                    registerAction();
                 }
 
-                // Check push registration once per day
-                var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate);
-                if(!pushPromptShow || !lastPushRegistration.HasValue || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
-                {
-                    _pushNotification.Register();
-                }
             }
         }
 
