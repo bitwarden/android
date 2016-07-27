@@ -18,7 +18,6 @@ using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
 using System.Diagnostics;
 using Xamarin.Forms;
-using Bit.App;
 using Bit.iOS.Core.Services;
 using PushNotification.Plugin;
 using Plugin.DeviceInfo;
@@ -44,10 +43,13 @@ namespace Bit.iOS
                 SetIoc();
             }
 
-            var crashManagerDelegate = new HockeyAppCrashManagerDelegate(Resolver.Resolve<IAppIdService>());
+            var appIdService = Resolver.Resolve<IAppIdService>();
+            var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
+                appIdService, Resolver.Resolve<IAuthService>());
             var manager = BITHockeyManager.SharedHockeyManager;
             manager.Configure("51f96ae568ba45f699a18ad9f63046c3", crashManagerDelegate);
             manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
+            manager.UserId = appIdService.AppId;
             manager.StartManager();
             manager.Authenticator.AuthenticateInstallation();
 

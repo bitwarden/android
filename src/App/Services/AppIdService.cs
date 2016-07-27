@@ -1,38 +1,38 @@
 ﻿using System;
 using Bit.App.Abstractions;
-using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Services
 {
     public class AppIdService : IAppIdService
     {
         private const string AppIdKey = "appId";
-        private readonly ISettings _settings;
-        private string _appId;
+        private readonly ISecureStorageService _secureStorageService;
+        private Guid? _appId;
 
-        public AppIdService(ISettings settings)
+        public AppIdService(ISecureStorageService secureStorageService)
         {
-            _settings = settings;
+            _secureStorageService = secureStorageService;
         }
 
         public string AppId
         {
             get
             {
-                if(!string.IsNullOrWhiteSpace(_appId))
+                if(_appId.HasValue)
                 {
-                    return _appId;
+                    return _appId.Value.ToString();
                 }
 
-                _appId = _settings.GetValueOrDefault<string>(AppIdKey);
-                if(!string.IsNullOrWhiteSpace(_appId))
+                var appIdBytes = _secureStorageService.Retrieve(AppIdKey);
+                if(appIdBytes != null)
                 {
-                    return _appId;
+                    _appId = new Guid(appIdBytes);
+                    return _appId.Value.ToString();
                 }
 
-                _appId = Guid.NewGuid().ToString();
-                _settings.AddOrUpdateValue(AppIdKey, _appId);
-                return _appId;
+                _appId = Guid.NewGuid();
+                _secureStorageService.Store(AppIdKey, _appId.Value.ToByteArray());
+                return _appId.Value.ToString();
             }
         }
     }
