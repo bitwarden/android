@@ -474,15 +474,6 @@
     <BundleResource Include="Resources\user%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\wrench%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\wrench%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\wrench.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\upload%403x.png" />
   </ItemGroup>
   <ItemGroup>
@@ -517,6 +508,15 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\globe%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\tools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\tools%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\tools%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
