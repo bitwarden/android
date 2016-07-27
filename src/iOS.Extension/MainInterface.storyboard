@@ -522,15 +522,15 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Your logins are now instantly accessable from Safari, Chrome, and other supported apps." lineBreakMode="wordWrap" minimumFontSize="10" id="11093" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="0" textAlignment="center">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" lineBreakMode="wordWrap" minimumFontSize="10" id="11093" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="0" textAlignment="center" misplaced="YES">
                                 <rect key="frame" x="15" y="134.5" width="570" height="41"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="11094" translatesAutoresizingMaskIntoConstraints="NO" image="Icon.png">
-                                <rect key="frame" x="271.5" y="205.5" width="57" height="57"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="11094" translatesAutoresizingMaskIntoConstraints="NO" image="ext-icon.png" misplaced="YES">
+                                <rect key="frame" x="255" y="205.5" width="90" height="90"/>
                             </imageView>
                         </subviews>
                         <constraints>
@@ -587,7 +587,7 @@
     </scenes>
     <resources>
         <image name="logo.png" width="282" height="44"/>
-        <image name="Icon.png" width="57" height="57"/>
-        <image name="bg.png" width="400" height="400"/>
+        <image name="Icon.png" width="40" height="40"/>
+        <image name="ext-icon.png" width="90" height="90"/>
     </resources>
 </document>

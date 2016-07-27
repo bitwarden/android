@@ -135,7 +135,7 @@ namespace Bit.App.Pages
 
             var activatedSublabel = new Label
             {
-                Text = "In Safari, find bitwarden using the share icon (hint: scroll to the right on the second row of the menu).",
+                Text = "In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).",
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
