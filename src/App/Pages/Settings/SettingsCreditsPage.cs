@@ -23,8 +23,8 @@ namespace Bit.App.Pages
                 {
                     new TableSection("Icons")
                     {
-                        new CustomViewCell(@"Icon 1 - John Smith
-Icon 2 - Jane Doe")
+                        new CustomViewCell(@"Tools by Alex Auda Samora from the Noun Project
+")
                     }
                 }
             };
