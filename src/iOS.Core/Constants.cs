@@ -27,5 +27,6 @@
         public const string UTTypeAppExtensionChangePasswordAction = "org.appextension.change-password-action";
         public const string UTTypeAppExtensionFillWebViewAction = "org.appextension.fill-webview-action";
         public const string UTTypeAppExtensionFillBrowserAction = "org.appextension.fill-browser-action";
+        public const string UTTypeAppExtensionSetup = "com.8bit.bitwarden.extension-setup";
     }
 }

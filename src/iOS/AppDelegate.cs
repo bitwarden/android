@@ -75,7 +75,7 @@ namespace Bit.iOS
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, ToolsExtensionPage>(Xamarin.Forms.Application.Current, "ShowAppExtension", (sender, page) =>
             {
-                var itemProvider = new NSItemProvider(new NSDictionary(), "com.8bit.bitwarden.extension-setup");
+                var itemProvider = new NSItemProvider(new NSDictionary(), iOS.Core.Constants.UTTypeAppExtensionSetup);
                 var extensionItem = new NSExtensionItem();
                 extensionItem.Attachments = new NSItemProvider[] { itemProvider };
                 var activityViewController = new UIActivityViewController(new NSExtensionItem[] { extensionItem }, null);

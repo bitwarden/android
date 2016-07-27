@@ -99,6 +99,10 @@
     <Compile Include="LockPasswordViewController.designer.cs">
       <DependentUpon>LockPasswordViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="SetupViewController.cs" />
+    <Compile Include="SetupViewController.designer.cs">
+      <DependentUpon>SetupViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="LockPinViewController.cs" />
     <Compile Include="LockPinViewController.designer.cs">
       <DependentUpon>LockPinViewController.cs</DependentUpon>

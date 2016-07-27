@@ -18,23 +18,13 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="1713" translatesAutoresizingMaskIntoConstraints="NO" image="logo.png">
-                                <rect key="frame" x="159" y="223" width="282" height="44"/>
+                                <rect key="frame" x="159" y="248" width="282" height="44"/>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Decrypting data..." lineBreakMode="tailTruncation" minimumFontSize="10" id="10537" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center">
-                                <rect key="frame" x="15" y="287" width="570" height="20.5"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint id="1763" firstItem="1713" firstAttribute="centerY" secondItem="44" secondAttribute="centerY" constant="-55"/>
+                            <constraint id="1763" firstItem="1713" firstAttribute="centerY" secondItem="44" secondAttribute="centerY" constant="-30"/>
                             <constraint id="1764" firstItem="1713" firstAttribute="centerX" secondItem="44" secondAttribute="centerX"/>
-                            <constraint id="10538" firstItem="10537" firstAttribute="top" secondItem="1713" secondAttribute="bottom" constant="20"/>
-                            <constraint id="10539" firstItem="10537" firstAttribute="leading" secondItem="44" secondAttribute="leading" constant="15"/>
-                            <constraint id="10540" firstItem="44" firstAttribute="trailing" secondItem="10537" secondAttribute="trailing" constant="15"/>
                         </constraints>
                     </view>
                     <connections>
@@ -43,7 +33,7 @@
                         <segue id="8924" destination="6815" kind="presentation" identifier="lockPinSegue"/>
                         <segue id="9874" destination="6855" kind="presentation" identifier="lockPasswordSegue"/>
                         <segue id="10498" destination="1845" kind="presentation" identifier="newSiteSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical"/>
-                        <outlet property="DecryptingLabel" destination="10537" id="name-outlet-10537"/>
+                        <segue id="11089" destination="10580" kind="presentation" modalTransitionStyle="coverVertical" identifier="setupSegue"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="45" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -78,6 +68,7 @@
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         </textAttributes>
                         <color key="barTintColor" colorSpace="calibratedRGB" red="0.23529411764705882" green="0.55294117647058827" blue="0.73725490196078436" alpha="1"/>
+                        <color key="tintColor" colorSpace="calibratedRGB" red="0" green="0.52549019607843139" blue="1" alpha="1"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -511,6 +502,87 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7419" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="977" y="2775"/>
+        </scene>
+        <scene sceneID="10573">
+            <objects>
+                <viewController id="10570" sceneMemberID="viewController" customClass="SetupViewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="10565"/>
+                        <viewControllerLayoutGuide type="bottom" id="10566"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="10575">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Extension Activated!" lineBreakMode="tailTruncation" minimumFontSize="10" id="11092" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center">
+                                <rect key="frame" x="15" y="94" width="570" height="20.5"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Your logins are now instantly accessable from Safari, Chrome, and other supported apps." lineBreakMode="wordWrap" minimumFontSize="10" id="11093" translatesAutoresizingMaskIntoConstraints="NO" numberOfLines="0" textAlignment="center">
+                                <rect key="frame" x="15" y="134.5" width="570" height="41"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="11094" translatesAutoresizingMaskIntoConstraints="NO" image="Icon.png">
+                                <rect key="frame" x="271.5" y="205.5" width="57" height="57"/>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint id="11114" firstItem="11092" firstAttribute="leading" secondItem="10575" secondAttribute="leading" constant="15"/>
+                            <constraint id="11115" firstItem="10575" firstAttribute="trailing" secondItem="11092" secondAttribute="trailing" constant="15"/>
+                            <constraint id="11116" firstItem="11092" firstAttribute="top" secondItem="10565" secondAttribute="bottom" constant="30"/>
+                            <constraint id="11119" firstItem="11093" firstAttribute="leading" secondItem="10575" secondAttribute="leading" constant="15"/>
+                            <constraint id="11120" firstItem="10575" firstAttribute="trailing" secondItem="11093" secondAttribute="trailing" constant="15"/>
+                            <constraint id="11121" firstItem="11093" firstAttribute="top" secondItem="11092" secondAttribute="bottom" constant="20"/>
+                            <constraint id="11122" firstItem="11094" firstAttribute="centerX" secondItem="10575" secondAttribute="centerX"/>
+                            <constraint id="11123" firstItem="11094" firstAttribute="top" secondItem="11093" secondAttribute="bottom" constant="30"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="10574">
+                        <barButtonItem key="leftBarButtonItem" title="Back" id="11091">
+                            <connections>
+                                <action selector="BackButton_Activated:" destination="10570" id="11124"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="ActivatedLabel" destination="11092" id="name-outlet-11092"/>
+                        <outlet property="BackButton" destination="11091" id="name-outlet-11091"/>
+                        <outlet property="DescriptionLabel" destination="11093" id="name-outlet-11093"/>
+                        <outlet property="IconImage" destination="11094" id="name-outlet-11094"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="10576" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1129" y="-264"/>
+        </scene>
+        <scene sceneID="10579">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="10580" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="10583" translucent="NO">
+                        <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                        </textAttributes>
+                        <color key="barTintColor" colorSpace="calibratedRGB" red="0.23529411764705882" green="0.55294117647058827" blue="0.73725490196078436" alpha="1"/>
+                        <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue id="10939" destination="10570" kind="relationship" relationship="rootViewController"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="10584" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="362" y="-267"/>
         </scene>
     </scenes>
     <resources>

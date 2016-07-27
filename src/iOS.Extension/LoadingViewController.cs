@@ -26,7 +26,7 @@ namespace Bit.iOS.Extension
     {
         private Context _context = new Context();
         private bool _setupHockeyApp = false;
-        private readonly JsonSerializerSettings _jsonSettings = 
+        private readonly JsonSerializerSettings _jsonSettings =
             new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
 
         public LoadingViewController(IntPtr handle) : base(handle)
@@ -38,10 +38,6 @@ namespace Bit.iOS.Extension
             base.ViewDidLoad();
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
-
-            var descriptor = UIFontDescriptor.PreferredBody;
-            DecryptingLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
-            DecryptingLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
 
             if(!Resolver.IsSet)
             {
@@ -69,7 +65,8 @@ namespace Bit.iOS.Extension
                         || ProcessFindLoginBrowserProvider(itemProvider, Constants.UTTypeAppExtensionFillBrowserAction)
                         || ProcessFindLoginBrowserProvider(itemProvider, Constants.UTTypeAppExtensionFillWebViewAction)
                         || ProcessSaveLoginProvider(itemProvider)
-                        || ProcessChangePasswordProvider(itemProvider))
+                        || ProcessChangePasswordProvider(itemProvider)
+                        || ProcessExtensionSetupProvider(itemProvider))
                     {
                         processed = true;
                         break;
@@ -116,6 +113,10 @@ namespace Bit.iOS.Extension
                     {
                         PerformSegue("newSiteSegue", this);
                     }
+                    else if(_context.ProviderType == Constants.UTTypeAppExtensionSetup)
+                    {
+                        PerformSegue("setupSegue", this);
+                    }
                     else
                     {
                         PerformSegue("siteListSegue", this);
@@ -134,6 +135,7 @@ namespace Bit.iOS.Extension
                 var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
                 var pinViewController = navController.TopViewController as LockPinViewController;
                 var passwordViewController = navController.TopViewController as LockPasswordViewController;
+                var setupViewController = navController.TopViewController as SetupViewController;
 
                 if(listSiteController != null)
                 {
@@ -159,6 +161,11 @@ namespace Bit.iOS.Extension
                 {
                     passwordViewController.Context = _context;
                     passwordViewController.LoadingController = this;
+                }
+                else if(setupViewController != null)
+                {
+                    setupViewController.Context = _context;
+                    setupViewController.LoadingController = this;
                 }
             }
         }
@@ -401,6 +408,17 @@ namespace Bit.iOS.Extension
                 _context.Notes = notes;
                 _context.PasswordOptions = DeserializeDictionary<PasswordGenerationOptions>(dict[Constants.AppExtensionPasswordGeneratorOptionsKey] as NSDictionary);
             });
+        }
+
+        private bool ProcessExtensionSetupProvider(NSItemProvider itemProvider)
+        {
+            if(itemProvider.HasItemConformingTo(Constants.UTTypeAppExtensionSetup))
+            {
+                _context.ProviderType = Constants.UTTypeAppExtensionSetup;
+                return true;
+            }
+
+            return false;
         }
 
         private T DeserializeDictionary<T>(NSDictionary dict)
