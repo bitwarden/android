@@ -17,11 +17,11 @@
                         <color key="backgroundColor" customColorSpace="calibratedWhite" colorSpace="calibratedRGB" red="0.92549019607843142" green="0.94117647058823528" blue="0.96078431372549022" alpha="1"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="16" translatesAutoresizingMaskIntoConstraints="NO" image="logo.png">
-                                <rect key="frame" x="159" y="238" width="282" height="44"/>
+                                <rect key="frame" x="159" y="248" width="282" height="44"/>
                             </imageView>
                         </subviews>
                         <constraints>
-                            <constraint id="19" firstItem="16" firstAttribute="centerY" secondItem="6" secondAttribute="centerY" constant="-40"/>
+                            <constraint id="19" firstItem="16" firstAttribute="centerY" secondItem="6" secondAttribute="centerY" constant="-30"/>
                             <constraint id="20" firstItem="6" firstAttribute="centerX" secondItem="16" secondAttribute="centerX"/>
                         </constraints>
                     </view>
@@ -34,7 +34,6 @@
     </scenes>
     <resources>
         <image name="bg.png" width="400" height="400"/>
-        <image name="Default-Portrait.png" width="768" height="1004"/>
         <image name="Default.png" width="320" height="480"/>
         <image name="fa-cogs.png" width="22" height="22"/>
         <image name="fa-lock.png" width="22" height="22"/>

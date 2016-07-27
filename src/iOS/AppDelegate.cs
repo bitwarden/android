@@ -121,7 +121,7 @@ namespace Bit.iOS
 
             var imageView = new UIImageView(new UIImage("logo.png"))
             {
-                Center = new CoreGraphics.CGPoint(view.Center.X, view.Center.Y - 40)
+                Center = new CoreGraphics.CGPoint(view.Center.X, view.Center.Y - 30)
             };
 
             view.AddSubview(backgroundView);
