@@ -16,7 +16,7 @@ namespace Bit.App.Pages
             var table = new ExtendedTableView
             {
                 EnableScrolling = true,
-                Intent = TableIntent.Menu,
+                Intent = TableIntent.Settings,
                 HasUnevenRows = true,
                 EnableSelection = false,
                 Root = new TableRoot

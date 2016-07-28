@@ -61,6 +61,13 @@ namespace Bit.App.Pages
             };
             LockOptionsCell.Tapped += LockOptionsCell_Tapped;
 
+            var twoStepCell = new ExtendedTextCell
+            {
+                Text = "Two-step Login",
+                ShowDisclousure = true
+            };
+            twoStepCell.Tapped += TwoStepCell_Tapped; ;
+
             var changeMasterPasswordCell = new ExtendedTextCell
             {
                 Text = "Change Master Password",
@@ -130,7 +137,8 @@ namespace Bit.App.Pages
                     {
                         LockOptionsCell,
                         FingerprintCell,
-                        PinCell
+                        PinCell,
+                        twoStepCell
                     }
                 }
             };
@@ -214,6 +222,19 @@ namespace Bit.App.Pages
 
             Title = AppResources.Settings;
             Content = new ScrollView { Content = stackLayout };
+        }
+
+        private async void TwoStepCell_Tapped(object sender, EventArgs e)
+        {
+            if(!await _userDialogs.ConfirmAsync("Two-step login makes your account more secure my requiring you to enter"
+                + " a security code from an authenticator app whenever you log in. Two-step login can be enabled on the"
+                + " bitwarden.com web vault. Do you want to visit the website now?",
+                null, AppResources.Yes, AppResources.Cancel))
+            {
+                return;
+            }
+
+            Device.OpenUri(new Uri("https://vault.bitwarden.com"));
         }
 
         private async void LockOptionsCell_Tapped(object sender, EventArgs e)
@@ -300,7 +321,8 @@ namespace Bit.App.Pages
 
         private async void ChangeMasterPasswordCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync("You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync("You can change your master password on the bitwarden.com web vault."
+                + "Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }
@@ -310,7 +332,8 @@ namespace Bit.App.Pages
 
         private async void ChangeEmailCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync("You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync("You can change your email address on the bitwarden.com web vault."
+                + " Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }
@@ -415,6 +438,12 @@ namespace Bit.App.Pages
                 EnableScrolling = false;
                 Intent = TableIntent.Menu;
                 HasUnevenRows = true;
+
+                if(Device.OS == TargetPlatform.iOS)
+                {
+                    RowHeight = -1;
+                    EstimatedRowHeight = 44;
+                }
             }
         }
     }

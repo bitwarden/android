@@ -50,7 +50,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start,
                 EnableScrolling = false,
                 NoHeader = true,
-                Intent = TableIntent.Menu,
+                Intent = TableIntent.Settings,
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
@@ -73,9 +73,8 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
-            Title = "About bitwarden";
+            Title = "About";
             Content = new ScrollView { Content = stackLayout };
-            NavigationPage.SetBackButtonTitle(this, "About");
         }
 
         private void RateCell_Tapped(object sender, EventArgs e)
