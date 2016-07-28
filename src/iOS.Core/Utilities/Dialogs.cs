@@ -35,5 +35,21 @@ namespace Bit.iOS.Core.Utilities
             alert.AddAction(UIAlertAction.Create(accept, UIAlertActionStyle.Default, acceptHandle));
             return alert;
         }
+
+        public static UIAlertController CreateActionSheet(string title, UIViewController controller)
+        {
+            var sheet = UIAlertController.Create(title, null, UIAlertControllerStyle.ActionSheet);
+            if(UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad)
+            {
+                var x = controller.View.Bounds.Width / 2;
+                var y = controller.View.Bounds.Bottom;
+                var rect = new CGRect(x, y, 0, 0);
+
+                sheet.PopoverPresentationController.SourceView = controller.View;
+                sheet.PopoverPresentationController.SourceRect = rect;
+                sheet.PopoverPresentationController.PermittedArrowDirections = UIPopoverArrowDirection.Unknown;
+            }
+            return sheet;
+        }
     }
 }

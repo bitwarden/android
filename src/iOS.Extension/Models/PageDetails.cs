@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bit.iOS.Extension.Models
 {
@@ -13,6 +14,7 @@ namespace Bit.iOS.Extension.Models
         public Dictionary<string, Form> Forms { get; set; }
         public List<Field> Fields { get; set; }
         public long CollectedTimestamp { get; set; }
+        public bool HasPasswordField => Fields.Any(f => f.Type == "password");
 
         public class Form
         {

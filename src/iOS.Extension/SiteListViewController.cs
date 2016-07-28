@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using UIKit;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
+using CoreGraphics;
+using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS.Extension
 {
@@ -147,6 +149,9 @@ namespace Bit.iOS.Extension
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
             {
+                tableView.DeselectRow(indexPath, true);
+                tableView.EndEditing(true);
+
                 if(_tableItems.Count() == 0)
                 {
                     _controller.PerformSegue("siteAddSegue", this);
@@ -162,7 +167,49 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password);
+                if(_context?.Details?.HasPasswordField ?? false && !string.IsNullOrWhiteSpace(item.Password))
+                {
+                    _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password);
+                }
+                else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password))
+                {
+                    var sheet = Dialogs.CreateActionSheet(item.Name, _controller);
+                    if(!string.IsNullOrWhiteSpace(item.Username))
+                    {
+                        sheet.AddAction(UIAlertAction.Create("Copy Username", UIAlertActionStyle.Default, a =>
+                        {
+                            UIPasteboard clipboard = UIPasteboard.General;
+                            clipboard.String = item.Username;
+                            var alert = Dialogs.CreateMessageAlert("Copied username!");
+                            _controller.PresentViewController(alert, true, () =>
+                            {
+                                _controller.DismissViewController(true, null);
+                            });
+                        }));
+                    }
+
+                    if(!string.IsNullOrWhiteSpace(item.Password))
+                    {
+                        sheet.AddAction(UIAlertAction.Create("Copy Password", UIAlertActionStyle.Default, a =>
+                        {
+                            UIPasteboard clipboard = UIPasteboard.General;
+                            clipboard.String = item.Password;
+                            var alert = Dialogs.CreateMessageAlert("Copied password!");
+                            _controller.PresentViewController(alert, true, () =>
+                            {
+                                _controller.DismissViewController(true, null);
+                            });
+                        }));
+                    }
+
+                    sheet.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+                    _controller.PresentViewController(sheet, true, null);
+                }
+                else
+                {
+                    var alert = Dialogs.CreateAlert(null, "This site does not have a username or password configured.", "Ok");
+                    _controller.PresentViewController(alert, true, null);
+                }
             }
         }
     }
