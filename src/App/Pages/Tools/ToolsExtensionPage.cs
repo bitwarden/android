@@ -50,16 +50,17 @@ namespace Bit.App.Pages
 
             var notStartedImage = new Image
             {
-                Source = "",
+                Source = "ext-more",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, -10, 0, 0)
             };
 
             var notStartedButton = new Button
             {
                 Text = "Enable App Extension",
                 Command = new Command(() => ShowExtension()),
-                VerticalOptions = LayoutOptions.EndAndExpand,
+                VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
             };
@@ -68,8 +69,9 @@ namespace Bit.App.Pages
             {
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
-                Padding = new Thickness(30, 40),
-                Children = { notStartedLabel, notStartedSublabel, notStartedImage, notStartedButton }
+                Padding = new Thickness(20, 20, 20, 30),
+                Children = { notStartedLabel, notStartedSublabel, notStartedImage, notStartedButton },
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
             notStartedStackLayout.SetBinding<AppExtensionPageModel>(IsVisibleProperty, m => m.NotStarted);
@@ -97,16 +99,17 @@ namespace Bit.App.Pages
 
             var notActivatedImage = new Image
             {
-                Source = "",
+                Source = "ext-act",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, -10, 0, 0)
             };
 
             var notActivatedButton = new Button
             {
                 Text = "Enable App Extension",
                 Command = new Command(() => ShowExtension()),
-                VerticalOptions = LayoutOptions.EndAndExpand,
+                VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
             };
@@ -115,8 +118,9 @@ namespace Bit.App.Pages
             {
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
-                Padding = new Thickness(30, 40),
-                Children = { notActivatedLabel, notActivatedSublabel, notActivatedImage, notActivatedButton }
+                Padding = new Thickness(20, 20, 20, 30),
+                Children = { notActivatedLabel, notActivatedSublabel, notActivatedImage, notActivatedButton },
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
             notActivatedStackLayout.SetBinding<AppExtensionPageModel>(IsVisibleProperty, m => m.StartedAndNotActivated);
@@ -145,16 +149,17 @@ namespace Bit.App.Pages
 
             var activatedImage = new Image
             {
-                Source = "",
+                Source = "ext-use",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, -10, 0, 0)
             };
 
             var activatedButton = new Button
             {
                 Text = "See Supported Apps",
                 Command = new Command(() => Device.OpenUri(new Uri("https://bitwarden.com"))),
-                VerticalOptions = LayoutOptions.EndAndExpand,
+                VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
             };
@@ -172,7 +177,8 @@ namespace Bit.App.Pages
             {
                 Orientation = StackOrientation.Vertical,
                 Spacing = 10,
-                Padding = new Thickness(30, 40),
+                Padding = new Thickness(20, 20, 20, 30),
+                VerticalOptions = LayoutOptions.FillAndExpand,
                 Children = { activatedLabel, activatedSublabel, activatedImage, activatedButton, activatedButtonReenable }
             };
 
@@ -180,7 +186,8 @@ namespace Bit.App.Pages
 
             var stackLayout = new StackLayout
             {
-                Children = { notStartedStackLayout, notActivatedStackLayout, activatedStackLayout }
+                Children = { notStartedStackLayout, notActivatedStackLayout, activatedStackLayout },
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
             if(Device.OS == TargetPlatform.iOS)
@@ -189,7 +196,7 @@ namespace Bit.App.Pages
             }
 
             Title = "App Extension";
-            Content = stackLayout;
+            Content = new ScrollView { Content = stackLayout };
             BindingContext = Model;
         }
 
