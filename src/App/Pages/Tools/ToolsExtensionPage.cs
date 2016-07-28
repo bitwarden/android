@@ -41,7 +41,7 @@ namespace Bit.App.Pages
 
             var notStartedSublabel = new Label
             {
-                Text = "To turn on bitwarden in Safari and other apps, tap \"more\" on the second row of the menu.",
+                Text = "To turn on bitwarden in Safari and other apps, tap the \"more\" icon on the bottom row of the menu.",
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
