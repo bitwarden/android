@@ -71,13 +71,13 @@ namespace Bit.App.Pages
                 {
                     new TableSection
                     {
-                        SliderCell,
-                        settingsCell
-                    },
-                    new TableSection
-                    {
                         regenerateCell,
                         copyCell
+                    },
+                    new TableSection("Options")
+                    {
+                        SliderCell,
+                        settingsCell
                     }
                 }
             };

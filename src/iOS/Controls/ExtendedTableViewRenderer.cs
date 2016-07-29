@@ -173,7 +173,7 @@ namespace Bit.iOS.Controls
                     return 0.00001f;
                 }
 
-                return 35f;
+                return UITableView.AutomaticDimension;
             }
 
             public override UIView GetViewForFooter(UITableView tableView, nint section)
