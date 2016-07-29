@@ -126,6 +126,12 @@ namespace Bit.App.Pages
                 EnableSelection = true;
                 VerticalOptions = LayoutOptions.Start;
                 NoFooter = true;
+
+                if(Device.OS == TargetPlatform.iOS)
+                {
+                    RowHeight = -1;
+                    EstimatedRowHeight = 44;
+                }
             }
         }
 

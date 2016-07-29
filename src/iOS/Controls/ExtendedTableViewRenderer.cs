@@ -32,16 +32,6 @@ namespace Bit.iOS.Controls
                 UpdateRowHeight(view);
                 UpdateEstimatedRowHeight(view);
                 UpdateSeparatorColor(view);
-
-                if(view.NoFooter)
-                {
-                    Control.SectionFooterHeight = 0.00001f;
-                }
-                if(view.NoHeader)
-                {
-                    Control.SectionHeaderHeight = 0.00001f;
-                }
-
                 SetSource();
             }
         }
@@ -153,19 +143,6 @@ namespace Bit.iOS.Controls
                 return base.GetHeightForHeader(tableView, section);
             }
 
-            public override UIView GetViewForHeader(UITableView tableView, nint section)
-            {
-                if(_view.NoHeader && section == 0)
-                {
-                    return new UIView(CGRect.Empty)
-                    {
-                        Hidden = true
-                    };
-                }
-
-                return base.GetViewForHeader(tableView, section);
-            }
-
             public override nfloat GetHeightForFooter(UITableView tableView, nint section)
             {
                 if(_view.NoFooter && (section + 1) == NumberOfSections(tableView))
@@ -173,20 +150,7 @@ namespace Bit.iOS.Controls
                     return 0.00001f;
                 }
 
-                return UITableView.AutomaticDimension;
-            }
-
-            public override UIView GetViewForFooter(UITableView tableView, nint section)
-            {
-                if(_view.NoFooter && (section + 1) == NumberOfSections(tableView))
-                {
-                    return new UIView(CGRect.Empty)
-                    {
-                        Hidden = true
-                    };
-                }
-
-                return null;
+                return 10f;
             }
         }
     }

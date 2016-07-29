@@ -35,6 +35,7 @@ namespace Bit.App.Pages
         private ExtendedSwitchCell PinCell { get; set; }
         private ExtendedSwitchCell FingerprintCell { get; set; }
         private ExtendedTextCell LockOptionsCell { get; set; }
+        private ExtendedTableView Table { get; set; }
 
         private void Init()
         {
@@ -129,7 +130,7 @@ namespace Bit.App.Pages
             };
             rateCell.Tapped += RateCell_Tapped;
 
-            var table = new CustomTable
+            Table = new CustomTable
             {
                 Root = new TableRoot
                 {
@@ -139,50 +140,22 @@ namespace Bit.App.Pages
                         FingerprintCell,
                         PinCell,
                         twoStepCell
-                    }
-                }
-            };
-
-            var table2 = new CustomTable
-            {
-                Root = new TableRoot
-                {
+                    },
                     new TableSection("Account")
                     {
                         changeMasterPasswordCell,
                         changeEmailCell
-                    }
-                }
-            };
-
-            var table3 = new CustomTable
-            {
-                Root = new TableRoot
-                {
+                    },
                     new TableSection("Manage")
                     {
                         foldersCell,
                         syncCell
-                    }
-                }
-            };
-
-            var table4 = new CustomTable
-            {
-                Root = new TableRoot
-                {
+                    },
                     new TableSection("Current Session")
                     {
                         lockCell,
                         logOutCell
-                    }
-                }
-            };
-
-            var table5 = new CustomTable
-            {
-                Root = new TableRoot
-                {
+                    },
                     new TableSection("Other")
                     {
                         aboutCell,
@@ -197,7 +170,7 @@ namespace Bit.App.Pages
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"],
-                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
+                Margin = new Thickness(15, 0, 15, 25)
             };
 
             if(Device.OS == TargetPlatform.iOS)
@@ -211,7 +184,7 @@ namespace Bit.App.Pages
 
             var stackLayout = new StackLayout
             {
-                Children = { table, table2, table3, table4, table5, rateLabel },
+                Children = { Table, rateLabel },
                 Spacing = 0
             };
 
@@ -433,10 +406,9 @@ namespace Bit.App.Pages
         {
             public CustomTable()
             {
-                NoFooter = true;
                 VerticalOptions = LayoutOptions.Start;
                 EnableScrolling = false;
-                Intent = TableIntent.Menu;
+                Intent = TableIntent.Settings;
                 HasUnevenRows = true;
 
                 if(Device.OS == TargetPlatform.iOS)
