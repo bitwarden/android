@@ -125,7 +125,7 @@ namespace Bit.App
                 {
                     try
                     {
-                        await _syncService.IncrementalSyncAsync();
+                        await _syncService.IncrementalSyncAsync(TimeSpan.FromMinutes(30));
                         break;
                     }
                     catch(WebException)

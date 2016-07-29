@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace Bit.App.Abstractions
 {
@@ -9,6 +10,7 @@ namespace Bit.App.Abstractions
         Task<bool> SyncDeleteFolderAsync(string id);
         Task<bool> SyncDeleteSiteAsync(string id);
         Task<bool> FullSyncAsync();
+        Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold);
         Task<bool> IncrementalSyncAsync();
     }
 }

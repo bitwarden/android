@@ -167,6 +167,17 @@ namespace Bit.App.Services
             return true;
         }
 
+        public async Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold)
+        {
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(LastSyncKey);
+            if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
+            {
+                return false;
+            }
+
+            return await IncrementalSyncAsync();
+        }
+
         public async Task<bool> IncrementalSyncAsync()
         {
             if(!_authService.IsAuthenticated)
