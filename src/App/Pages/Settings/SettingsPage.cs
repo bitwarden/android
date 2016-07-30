@@ -123,12 +123,17 @@ namespace Bit.App.Pages
             };
             helpCell.Tapped += HelpCell_Tapped;
 
-            var rateCell = new ExtendedTextCell
-            {
-                Text = "Rate the App",
-                ShowDisclousure = true
-            };
+            var rateCell = new LongDetailViewCell("Rate the App", null);
             rateCell.Tapped += RateCell_Tapped;
+
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                rateCell.Detail.Text = "App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!";
+            }
+            else
+            {
+                rateCell.Detail.Text = "Please consider helping us out with a good review!";
+            }
 
             Table = new CustomTable
             {
@@ -165,36 +170,8 @@ namespace Bit.App.Pages
                 }
             };
 
-            var rateLabel = new Label
-            {
-                LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                Style = (Style)Application.Current.Resources["text-muted"],
-                Margin = new Thickness(15, 0, 15, 25)
-            };
-
-            if(Device.OS == TargetPlatform.iOS)
-            {
-                rateLabel.Text = "App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!";
-            }
-            else
-            {
-                rateLabel.Text = "Please consider helping us out with a good review!";
-            }
-
-            var stackLayout = new StackLayout
-            {
-                Children = { Table, rateLabel },
-                Spacing = 0
-            };
-
-            stackLayout.LayoutChanged += (sender, args) =>
-            {
-                rateLabel.WidthRequest = stackLayout.Bounds.Width - rateLabel.Bounds.Left * 2;
-            };
-
             Title = AppResources.Settings;
-            Content = new ScrollView { Content = stackLayout };
+            Content = Table;
         }
 
         private async void TwoStepCell_Tapped(object sender, EventArgs e)
@@ -406,8 +383,6 @@ namespace Bit.App.Pages
         {
             public CustomTable()
             {
-                VerticalOptions = LayoutOptions.Start;
-                EnableScrolling = false;
                 Intent = TableIntent.Settings;
                 HasUnevenRows = true;
 
@@ -417,6 +392,42 @@ namespace Bit.App.Pages
                     EstimatedRowHeight = 44;
                 }
             }
+        }
+
+        private class LongDetailViewCell : ExtendedViewCell
+        {
+            public LongDetailViewCell(string labelText, string detailText)
+            {
+                Label = new Label
+                {
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    LineBreakMode = LineBreakMode.TailTruncation,
+                    Text = labelText
+                };
+
+                Detail = new Label
+                {
+                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                    LineBreakMode = LineBreakMode.WordWrap,
+                    VerticalOptions = LayoutOptions.End,
+                    Style = (Style)Application.Current.Resources["text-muted"],
+                    Text = detailText
+                };
+
+                var labelDetailStackLayout = new StackLayout
+                {
+                    HorizontalOptions = LayoutOptions.StartAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    Children = { Label, Detail },
+                    Padding = new Thickness(15)
+                };
+
+                ShowDisclousure = true;
+                View = labelDetailStackLayout;
+            }
+
+            public Label Label { get; set; }
+            public Label Detail { get; set; }
         }
     }
 }

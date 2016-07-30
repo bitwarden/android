@@ -35,7 +35,7 @@ namespace Bit.App.Pages
             {
                 Children = { logo, versionLabel },
                 Spacing = 20,
-                Padding = new Thickness(0, 40)
+                Padding = new Thickness(0, 40, 0, 0)
             };
 
             var creditsCell = new ExtendedTextCell
@@ -49,7 +49,6 @@ namespace Bit.App.Pages
             {
                 VerticalOptions = LayoutOptions.Start,
                 EnableScrolling = false,
-                NoHeader = true,
                 Intent = TableIntent.Settings,
                 HasUnevenRows = true,
                 Root = new TableRoot
