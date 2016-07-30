@@ -339,12 +339,25 @@
                                 </state>
                                 <inset key="contentEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="10"/>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="11144" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="254.5" y="234" width="91" height="92"/>
+                                <color key="tintColor" colorSpace="calibratedRGB" red="0.46666666666666667" green="0.46666666666666667" blue="0.46666666666666667" alpha="1"/>
+                                <state key="normal" image="fingerprint.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleColor" colorSpace="calibratedRGB" red="0.46666666666666667" green="0.46666666666666667" blue="0.46666666666666667" alpha="1"/>
+                                </state>
+                                <connections>
+                                    <action selector="FingerprintButton_TouchUpInside:" destination="6514" id="11149" eventType="touchUpInside"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint id="6783" firstItem="6519" firstAttribute="trailing" secondItem="6777" secondAttribute="trailing" constant="30"/>
                             <constraint id="6784" firstItem="6777" firstAttribute="leading" secondItem="6519" secondAttribute="leading" constant="30"/>
                             <constraint id="6785" firstItem="6510" firstAttribute="top" secondItem="6777" secondAttribute="bottom" constant="40"/>
                             <constraint id="6786" firstItem="6777" firstAttribute="centerX" secondItem="6519" secondAttribute="centerX"/>
+                            <constraint id="11147" firstItem="6519" firstAttribute="centerY" secondItem="11144" secondAttribute="centerY" constant="60"/>
+                            <constraint id="11148" firstItem="11144" firstAttribute="centerX" secondItem="6519" secondAttribute="centerX"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Verify Fingerprint" id="6518">
@@ -357,6 +370,7 @@
                     <connections>
                         <outlet property="UseButton" destination="6777" id="name-outlet-6777"/>
                         <outlet property="CancelButton" destination="6800" id="name-outlet-6800"/>
+                        <outlet property="FingerprintButton" destination="11144" id="name-outlet-11144"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6520" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -589,5 +603,6 @@
         <image name="logo.png" width="282" height="44"/>
         <image name="Icon.png" width="40" height="40"/>
         <image name="ext-icon.png" width="90" height="90"/>
+        <image name="fingerprint.png" width="91" height="92"/>
     </resources>
 </document>

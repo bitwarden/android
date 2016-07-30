@@ -20,17 +20,30 @@ namespace Bit.iOS.Extension
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton FingerprintButton { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton UseButton { get; set; }
 
-        [Action ("CancelButton_Activated:")]
+        [Action ("FingerprintButton_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
-        partial void CancelButton_Activated (UIKit.UIBarButtonItem sender);
+        partial void FingerprintButton_TouchUpInside (UIKit.UIButton sender);
+
+        [Action("CancelButton_Activated:")]
+        [GeneratedCode("iOS Designer", "1.0")]
+        partial void CancelButton_Activated(UIKit.UIBarButtonItem sender);
 
         void ReleaseDesignerOutlets ()
         {
             if (CancelButton != null) {
                 CancelButton.Dispose ();
                 CancelButton = null;
+            }
+
+            if (FingerprintButton != null) {
+                FingerprintButton.Dispose ();
+                FingerprintButton = null;
             }
 
             if (UseButton != null) {

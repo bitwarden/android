@@ -36,7 +36,8 @@ namespace Bit.App.Pages
                 Image = "fingerprint",
                 BackgroundColor = Color.Transparent,
                 Command = new Command(async () => await CheckFingerprintAsync()),
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Margin = new Thickness(0, 0, 0, 15)
             };
 
             var fingerprintButton = new Button

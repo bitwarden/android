@@ -59,6 +59,11 @@ namespace Bit.iOS.Extension
             LoadingController.CompleteRequest(null);
         }
 
+        partial void FingerprintButton_TouchUpInside(UIButton sender)
+        {
+            var task = CheckFingerprintAsync();
+        }
+
         public async Task CheckFingerprintAsync()
         {
             var result = await _fingerprint.AuthenticateAsync("Use your fingerprint to verify.");

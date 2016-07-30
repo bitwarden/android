@@ -230,6 +230,9 @@
     <BundleResource Include="Resources\ext-icon.png" />
     <BundleResource Include="Resources\ext-icon%402x.png" />
     <BundleResource Include="Resources\ext-icon%403x.png" />
+    <BundleResource Include="Resources\fingerprint.png" />
+    <BundleResource Include="Resources\fingerprint%402x.png" />
+    <BundleResource Include="Resources\fingerprint%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
