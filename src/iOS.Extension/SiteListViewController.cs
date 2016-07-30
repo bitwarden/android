@@ -35,6 +35,11 @@ namespace Bit.iOS.Extension
         {
             base.ViewDidLoad();
 
+            if(!Context?.Details?.HasPasswordField ?? false)
+            {
+                CancelBarButton.Title = "Close";
+            }
+
             Debug.WriteLine("BW LOG, Site list ViewDidLoad.");
             var sw = Stopwatch.StartNew();
 
