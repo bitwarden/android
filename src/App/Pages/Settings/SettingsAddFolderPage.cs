@@ -84,6 +84,10 @@ namespace Bit.App.Pages
                 {
                     await _userDialogs.AlertAsync(saveTask.Result.Errors.First().Message, AppResources.AnErrorHasOccurred);
                 }
+                else
+                {
+                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                }
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Add Folder";

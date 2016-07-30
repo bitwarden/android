@@ -179,6 +179,10 @@ namespace Bit.App.Pages
                 {
                     await _userDialogs.AlertAsync(saveTask.Result.Errors.First().Message, AppResources.AnErrorHasOccurred);
                 }
+                else
+                {
+                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                }
             }, ToolbarItemOrder.Default, 0);
 
             Title = "Edit Site";
@@ -237,6 +241,14 @@ namespace Bit.App.Pages
             {
                 await Navigation.PopModalAsync();
                 _userDialogs.Toast("Site deleted.");
+            }
+            else if((await deleteTask).Errors.Count() > 0)
+            {
+                await _userDialogs.AlertAsync((await deleteTask).Errors.First().Message, AppResources.AnErrorHasOccurred);
+            }
+            else
+            {
+                await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
             }
         }
 

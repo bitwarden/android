@@ -161,13 +161,24 @@ namespace Bit.iOS.Extension
             PresentViewController(loadingAlert, true, null);
             await saveTask;
 
-            if(SiteListController != null)
+            if(saveTask.Result.Succeeded)
             {
-                SiteListController.DismissModal();
+                if(SiteListController != null)
+                {
+                    SiteListController.DismissModal();
+                }
+                else if(LoadingController != null)
+                {
+                    LoadingController.CompleteUsernamePasswordRequest(UsernameCell.TextField.Text, PasswordCell.TextField.Text);
+                }
             }
-            else if(LoadingController != null)
+            else if(saveTask.Result.Errors.Count() > 0)
             {
-                LoadingController.CompleteUsernamePasswordRequest(UsernameCell.TextField.Text, PasswordCell.TextField.Text);
+                DisplayAlert(AppResources.AnErrorHasOccurred, saveTask.Result.Errors.First().Message, AppResources.Ok);
+            }
+            else
+            {
+                DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
             }
         }
 
