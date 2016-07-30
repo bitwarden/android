@@ -24,7 +24,7 @@ namespace Bit.App.Pages
                     new TableSection("Icons")
                     {
                         new CustomViewCell(@"Tools by Alex Auda Samora from the Noun Project
-")
+Fingerprint by masterpage.com from the Noun Project")
                     }
                 }
             };

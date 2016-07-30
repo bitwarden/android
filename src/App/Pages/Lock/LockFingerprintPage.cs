@@ -31,6 +31,14 @@ namespace Bit.App.Pages
 
         public void Init()
         {
+            var fingerprintIcon = new Button
+            {
+                Image = "fingerprint",
+                BackgroundColor = Color.Transparent,
+                Command = new Command(async () => await CheckFingerprintAsync()),
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+
             var fingerprintButton = new Button
             {
                 Text = "Use Fingerprint to Unlock",
@@ -47,9 +55,12 @@ namespace Bit.App.Pages
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
 
-            var stackLayout = new StackLayout { Padding = new Thickness(30, 40), Spacing = 10 };
-            stackLayout.Children.Add(fingerprintButton);
-            stackLayout.Children.Add(logoutButton);
+            var stackLayout = new StackLayout
+            {
+                Padding = new Thickness(30, 40),
+                Spacing = 10,
+                Children = { fingerprintIcon, fingerprintButton, logoutButton }
+            };
 
             Title = "Verify Fingerprint";
             Content = stackLayout;
