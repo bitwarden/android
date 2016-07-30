@@ -7,6 +7,7 @@
         public const string SettingLockSeconds = "setting:lockSeconds";
         public const string SettingLastBackgroundedDate = "lastBackgroundedDate";
         public const string SettingLocked = "locked";
+        public const string SettingLastLoginEmail = "lastLoginEmail";
 
         public const string PasswordGeneratorLength = "pwGenerator:length";
         public const string PasswordGeneratorUppercase = "pwGenerator:uppercase";

@@ -19,7 +19,7 @@ namespace Bit.iOS.Core.Views
                 MinValue = min,
                 MaxValue = max,
                 TintColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f),
-                Frame = new CoreGraphics.CGRect(0, 0, 180, 20)
+                Frame = new CoreGraphics.CGRect(0, 0, 180, 30)
             };
             Slider.ValueChanged += Slider_ValueChanged;
             Value = value;

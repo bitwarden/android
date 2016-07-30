@@ -100,6 +100,10 @@ namespace Bit.App.Pages
                 _settings.AddOrUpdateValue(Constants.SettingLocked, false);
                 await Navigation.PopModalAsync();
             }
+            else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
+            {
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
+            }
         }
     }
 }

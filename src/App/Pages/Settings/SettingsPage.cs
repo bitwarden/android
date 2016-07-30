@@ -316,13 +316,14 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if(cell.On)
+            if(cell.On && !_settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false))
             {
+                cell.On = false;
                 var pinPage = new SettingsPinPage();
                 pinPage.OnPinEntered += PinEntered;
                 Navigation.PushAsync(pinPage);
             }
-            else
+            else if(!cell.On)
             {
                 _settings.AddOrUpdateValue(Constants.SettingPinUnlockOn, false);
             }
@@ -337,6 +338,7 @@ namespace Bit.App.Pages
 
             _settings.AddOrUpdateValue(Constants.SettingPinUnlockOn, true);
             _settings.AddOrUpdateValue(Constants.SettingFingerprintUnlockOn, false);
+            PinCell.On = true;
             FingerprintCell.On = false;
         }
 

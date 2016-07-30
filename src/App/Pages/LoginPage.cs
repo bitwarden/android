@@ -9,6 +9,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -20,6 +21,7 @@ namespace Bit.App.Pages
         private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
+        private ISettings _settings;
 
         public LoginPage()
         {
@@ -29,6 +31,7 @@ namespace Bit.App.Pages
             _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
+            _settings = Resolver.Resolve<ISettings>();
 
             Init();
         }
@@ -47,6 +50,12 @@ namespace Bit.App.Pages
             EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,
                 entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",
                 containerPadding: padding);
+
+            var lastLoginEmail = _settings.GetValueOrDefault<string>(Constants.SettingLastLoginEmail);
+            if(!string.IsNullOrWhiteSpace(lastLoginEmail))
+            {
+                EmailCell.Entry.Text = lastLoginEmail;
+            }
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
             PasswordCell.Entry.Completed += Entry_Completed;
@@ -110,7 +119,15 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
-            EmailCell.Entry.Focus();
+
+            if(!string.IsNullOrWhiteSpace(EmailCell.Entry.Text))
+            {
+                PasswordCell.Entry.Focus();
+            }
+            else
+            {
+                EmailCell.Entry.Focus();
+            }
         }
 
         private async void Entry_Completed(object sender, EventArgs e)
@@ -160,6 +177,7 @@ namespace Bit.App.Pages
             _authService.Token = response.Result.Token;
             _authService.UserId = response.Result?.Profile?.Id;
             _authService.Email = response.Result?.Profile?.Email;
+            _settings.AddOrUpdateValue(Constants.SettingLastLoginEmail, _authService.Email);
 
             if(_authService.IsAuthenticatedTwoFactor)
             {
