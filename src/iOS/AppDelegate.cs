@@ -72,6 +72,8 @@ namespace Bit.iOS
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             UIBarButtonItem.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
+            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).SetTitleColor(primaryColor, UIControlState.Normal);
+            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
             UIStepper.Appearance.TintColor = grayLight;
             UISlider.Appearance.TintColor = primaryColor;
 
