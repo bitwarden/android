@@ -20,7 +20,7 @@ namespace Bit.App.Pages
             favoritesNavigation.Icon = "star";
 
             vaultNavigation.Title = AppResources.MyVault;
-            vaultNavigation.Icon = "fa-lock";
+            vaultNavigation.Icon = "fa_lock";
 
             toolsNavigation.Title = AppResources.Tools;
             toolsNavigation.Icon = "tools";

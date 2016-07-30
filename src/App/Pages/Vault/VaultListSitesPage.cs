@@ -383,7 +383,7 @@ namespace Bit.App.Pages
             {
                 var image = new Image
                 {
-                    Source = "fa_folder_open.png",
+                    Source = "folder",
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };
 
