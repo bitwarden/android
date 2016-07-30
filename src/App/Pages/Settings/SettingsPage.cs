@@ -205,10 +205,6 @@ namespace Bit.App.Pages
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60);
             }
-            else if(selection == "5 minutes")
-            {
-                _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 5);
-            }
             else if(selection == "15 minutes")
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 15);
@@ -223,7 +219,7 @@ namespace Bit.App.Pages
             }
             else if(selection == "Never")
             {
-                _settings.Remove(Constants.SettingLockSeconds);
+                _settings.AddOrUpdateValue(Constants.SettingLockSeconds, -1);
             }
 
             LockOptionsCell.Detail = selection;
@@ -349,29 +345,24 @@ namespace Bit.App.Pages
 
         private string GetLockOptionsDetailsText()
         {
-            var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
-            if(!lockSeconds.HasValue)
+            var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
+            if(lockSeconds == -1)
             {
                 return "Never";
             }
-
-            if(lockSeconds.Value == 60)
+            else if(lockSeconds == 60)
             {
                 return "1 minute";
             }
-            else if(lockSeconds.Value == 60 * 5)
-            {
-                return "5 minutes";
-            }
-            else if(lockSeconds.Value == 60 * 15)
+            else if(lockSeconds == 60 * 15)
             {
                 return "15 minutes";
             }
-            else if(lockSeconds.Value == 60 * 60)
+            else if(lockSeconds == 60 * 60)
             {
                 return "1 hour";
             }
-            else if(lockSeconds.Value == 60 * 60 * 4)
+            else if(lockSeconds == 60 * 60 * 4)
             {
                 return "4 hours";
             }

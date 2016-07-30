@@ -33,9 +33,9 @@ namespace Bit.App.Services
             // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
             if(!forceLock && !_settings.GetValueOrDefault(Constants.SettingLocked, false))
             {
-                // Lock seconds tells if if they want to lock the app or not
-                var lockSeconds = _settings.GetValueOrDefault<int?>(Constants.SettingLockSeconds);
-                if(!lockSeconds.HasValue)
+                // Lock seconds tells if they want to lock the app or not
+                var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
+                if(lockSeconds == -1)
                 {
                     return LockType.None;
                 }
@@ -43,7 +43,7 @@ namespace Bit.App.Services
                 // Has it been longer than lockSeconds since the last time the app was backgrounded?
                 var now = DateTime.UtcNow;
                 var lastBackground = _settings.GetValueOrDefault(Constants.SettingLastBackgroundedDate, now.AddYears(-1));
-                if((now - lastBackground).TotalSeconds < lockSeconds.Value)
+                if((now - lastBackground).TotalSeconds < lockSeconds)
                 {
                     return LockType.None;
                 }

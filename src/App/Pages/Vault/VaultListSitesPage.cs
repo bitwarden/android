@@ -282,30 +282,6 @@ namespace Bit.App.Pages
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
-        private async void DeleteClickedAsync(object sender, EventArgs e)
-        {
-            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
-            {
-                return;
-            }
-
-            var mi = sender as MenuItem;
-            var site = mi.CommandParameter as VaultListPageModel.Site;
-            var deleteCall = await _siteService.DeleteAsync(site.Id);
-
-            if(deleteCall.Succeeded)
-            {
-                var folder = PresentationFolders.Single(f => f.Id == site.FolderId);
-                var siteIndex = folder.Select((s, i) => new { s, i }).First(s => s.s.Id == site.Id).i;
-                folder.RemoveAt(siteIndex);
-                _userDialogs.Toast(AppResources.SiteDeleted);
-            }
-            else if(deleteCall.Errors.Count() > 0)
-            {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, deleteCall.Errors.First().Message, AppResources.Ok);
-            }
-        }
-
         private class AddSiteToolBarItem : ToolbarItem
         {
             private readonly VaultListSitesPage _page;
@@ -336,20 +312,9 @@ namespace Bit.App.Pages
             {
                 _page = page;
 
-                var deleteAction = new MenuItem { Text = AppResources.Delete, IsDestructive = true };
-                deleteAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
-                deleteAction.Clicked += page.DeleteClickedAsync;
-
-                var moreAction = new MenuItem { Text = AppResources.More };
-                moreAction.SetBinding(MenuItem.CommandParameterProperty, new Binding("."));
-                moreAction.Clicked += MoreAction_Clicked;
-
                 SetBinding(SiteParameterProperty, new Binding("."));
                 Label.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Name);
                 Detail.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Username);
-
-                ContextActions.Add(deleteAction);
-                ContextActions.Add(moreAction);
 
                 Button.Image = "more";
                 Button.Command = new Command(() => ShowMore());
@@ -362,13 +327,6 @@ namespace Bit.App.Pages
             {
                 get { return GetValue(SiteParameterProperty) as VaultListPageModel.Site; }
                 set { SetValue(SiteParameterProperty, value); }
-            }
-
-            private void MoreAction_Clicked(object sender, EventArgs e)
-            {
-                var menuItem = sender as MenuItem;
-                var site = menuItem.CommandParameter as VaultListPageModel.Site;
-                _page.MoreClickedAsync(site);
             }
 
             private void ShowMore()
