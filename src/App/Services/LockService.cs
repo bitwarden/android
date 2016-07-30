@@ -41,7 +41,7 @@ namespace Bit.App.Services
                 }
 
                 // Has it been longer than lockSeconds since the last time the app was backgrounded?
-                var now = DateTime.UtcNow;
+                var now = DateTime.Now;
                 var lastBackground = _settings.GetValueOrDefault(Constants.SettingLastBackgroundedDate, now.AddYears(-1));
                 if((now - lastBackground).TotalSeconds < lockSeconds)
                 {

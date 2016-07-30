@@ -87,7 +87,7 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 Debug.WriteLine("Registered device with server.");
-                _settings.AddOrUpdateValue(Constants.PushLastRegistrationDate, DateTime.UtcNow);
+                _settings.AddOrUpdateValue(Constants.PushLastRegistrationDate, DateTime.Now);
             }
             else
             {

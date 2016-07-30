@@ -153,7 +153,11 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
             }
+        }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();

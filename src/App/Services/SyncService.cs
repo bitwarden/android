@@ -12,8 +12,6 @@ namespace Bit.App.Services
 {
     public class SyncService : ISyncService
     {
-        private const string LastSyncKey = "lastSync";
-
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly IFolderApiRepository _folderApiRepository;
         private readonly ISiteApiRepository _siteApiRepository;
@@ -137,7 +135,7 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
             var ciphers = await _cipherApiRepository.GetAsync();
             if(!ciphers.Succeeded)
             {
@@ -162,15 +160,15 @@ namespace Bit.App.Services
                 return false;
             }
 
-            _settings.AddOrUpdateValue(LastSyncKey, now);
+            _settings.AddOrUpdateValue(Constants.SettingLastSync, now);
             SyncCompleted(true);
             return true;
         }
 
         public async Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold)
         {
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(LastSyncKey);
-            if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
+            if(lastSync != null && DateTime.Now - lastSync.Value < syncThreshold)
             {
                 return false;
             }
@@ -185,8 +183,8 @@ namespace Bit.App.Services
                 return false;
             }
 
-            var now = DateTime.UtcNow;
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(LastSyncKey);
+            var now = DateTime.Now;
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
             if(lastSync == null)
             {
                 return await FullSyncAsync();
@@ -219,7 +217,7 @@ namespace Bit.App.Services
                 return false;
             }
 
-            _settings.AddOrUpdateValue(LastSyncKey, now);
+            _settings.AddOrUpdateValue(Constants.SettingLastSync, now);
             SyncCompleted(true);
             return true;
         }

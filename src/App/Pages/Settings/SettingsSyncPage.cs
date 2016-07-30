@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -15,35 +16,62 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
+        private readonly ISettings _settings;
 
         public SettingsSyncPage()
         {
             _syncService = Resolver.Resolve<ISyncService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
+            _settings = Resolver.Resolve<ISettings>();
 
             Init();
         }
+
+        public Label LastSyncLabel { get; set; }
 
         public void Init()
         {
             var syncButton = new Button
             {
-                Text = "Sync Vault",
-                Command = new Command(async () => await SyncAsync())
+                Text = "Sync Vault Now",
+                Command = new Command(async () => await SyncAsync()),
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
 
-            var stackLayout = new StackLayout { };
-            stackLayout.Children.Add(syncButton);
+            LastSyncLabel = new Label
+            {
+                Style = (Style)Application.Current.Resources["text-muted"],
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+
+            SetLastSync();
+
+            var stackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Children = { syncButton, LastSyncLabel },
+                Padding = new Thickness(15, 0)
+            };
 
             Title = "Sync";
             Content = stackLayout;
-            Icon = "fa-refresh";
+        }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
             }
+        }
+
+        private void SetLastSync()
+        {
+            var lastSyncDate = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
+            LastSyncLabel.Text = "Last Sync: " + lastSyncDate?.ToString() ?? "Never";
         }
 
         public async Task SyncAsync()
@@ -65,6 +93,8 @@ namespace Bit.App.Pages
             {
                 _userDialogs.Toast("Syncing failed.");
             }
+
+            SetLastSync();
         }
 
         public void AlertNoConnection()
