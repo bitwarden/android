@@ -59,7 +59,7 @@ namespace Bit.App.Services
                     break;
                 case Enums.PushType.SyncFolderDelete:
                     var folderDeleteMessage = values.ToObject<SyncCipherPushNotification>();
-                    _syncService.SyncDeleteFolderAsync(folderDeleteMessage.Id);
+                    _syncService.SyncDeleteFolderAsync(folderDeleteMessage.Id, folderDeleteMessage.RevisionDate);
                     break;
                 case Enums.PushType.SyncSiteDelete:
                     var siteDeleteMessage = values.ToObject<SyncCipherPushNotification>();

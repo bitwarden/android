@@ -98,7 +98,7 @@ namespace Bit.App.Services
             return true;
         }
 
-        public async Task<bool> SyncDeleteFolderAsync(string id)
+        public async Task<bool> SyncDeleteFolderAsync(string id, DateTime revisionDate)
         {
             if(!_authService.IsAuthenticated)
             {
@@ -107,7 +107,7 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            await _folderRepository.DeleteAsync(id);
+            await _folderRepository.DeleteWithSiteUpdateAsync(id, revisionDate);
             SyncCompleted(true);
             return true;
         }

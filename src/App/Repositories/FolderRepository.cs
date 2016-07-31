@@ -18,5 +18,23 @@ namespace Bit.App.Repositories
             var folders = Connection.Table<FolderData>().Where(f => f.UserId == userId).Cast<FolderData>();
             return Task.FromResult(folders);
         }
+
+        public override Task DeleteAsync(string id)
+        {
+            var now = DateTime.UtcNow;
+            DeleteWithSiteUpdateAsync(id, now);
+            return Task.FromResult(0);
+        }
+
+        public Task DeleteWithSiteUpdateAsync(string id, DateTime revisionDate)
+        {
+            Connection.RunInTransaction(() =>
+            {
+                Connection.Execute("UPDATE Site SET FolderId = ?, RevisionDateTime = ? WHERE FolderId = ?", null, revisionDate, id);
+                Connection.Delete<FolderData>(id);
+            });
+
+            return Task.FromResult(0);
+        }
     }
 }
