@@ -63,5 +63,9 @@
 	<string>9.0</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array/>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<true/>
+	<key>ITSEncryptionExportComplianceCode</key>
+	<string>4078b378-604a-4c47-8c42-11513d98596a</string> 
 </dict>
 </plist>
