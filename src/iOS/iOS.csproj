@@ -140,6 +140,7 @@
     <Compile Include="Services\ClipboardService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\KeyDerivationService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <None Include="app.config" />
     <None Include="Entitlements.plist" />
