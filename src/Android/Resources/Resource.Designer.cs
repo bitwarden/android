@@ -184,6 +184,8 @@ namespace Bit.Android
 			global::HockeyApp.Resource.Style.HockeyApp_EditTextStyle = global::Bit.Android.Resource.Style.HockeyApp_EditTextStyle;
 			global::HockeyApp.Resource.Style.HockeyApp_SingleLineInputStyle = global::Bit.Android.Resource.Style.HockeyApp_SingleLineInputStyle;
 			global::ModernHttpClient.Resource.String.library_name = global::Bit.Android.Resource.String.library_name;
+			global::PCLCrypto.Resource.String.ApplicationName = global::Bit.Android.Resource.String.ApplicationName;
+			global::PCLCrypto.Resource.String.Hello = global::Bit.Android.Resource.String.Hello;
 			global::Plugin.Fingerprint.Resource.Drawable.fingerprint_white = global::Bit.Android.Resource.Drawable.fingerprint_white;
 			global::Plugin.Fingerprint.Resource.Id.fingerprint_btnCancel = global::Bit.Android.Resource.Id.fingerprint_btnCancel;
 			global::Plugin.Fingerprint.Resource.Id.fingerprint_txtReason = global::Bit.Android.Resource.Id.fingerprint_txtReason;
