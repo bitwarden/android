@@ -23,6 +23,8 @@ namespace Bit.iOS.Controls
                 }
             }
 
+            WireUpForceUpdateSizeRequested(item, cell, tv);
+
             return cell;
         }
     }

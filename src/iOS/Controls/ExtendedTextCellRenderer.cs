@@ -43,6 +43,8 @@ namespace Bit.iOS.Controls
                         cell.AccessoryView = detailDisclosureButton;
                     }
                 }
+
+                WireUpForceUpdateSizeRequested(item, cell, tv);
             }
 
             return cell;
