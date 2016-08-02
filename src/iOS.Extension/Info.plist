@@ -4,16 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>CFBundleDisplayName</key>
-	<string>bitwarden</string>
 	<key>CFBundleExecutable</key>
 	<string>iOS.Extension</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.find-login-action-extension</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>com.companyname.iOS.Extension</string>
 	<key>CFBundlePackageType</key>
 	<string>XPC!</string>
 	<key>CFBundleShortVersionString</key>
@@ -66,6 +62,8 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<true/>
 	<key>ITSEncryptionExportComplianceCode</key>
-	<string>4078b378-604a-4c47-8c42-11513d98596a</string> 
+	<string>4078b378-604a-4c47-8c42-11513d98596a</string>
+	<key>CFBundleName</key>
+	<string>bitwarden extension</string>
 </dict>
 </plist>

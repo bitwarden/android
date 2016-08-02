@@ -74,6 +74,8 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<true/>
 	<key>ITSEncryptionExportComplianceCode</key>
-	<string>4078b378-604a-4c47-8c42-11513d98596a</string> 
+	<string>4078b378-604a-4c47-8c42-11513d98596a</string>
+	<key>CFBundleName</key>
+	<string>bitwarden</string>
 </dict>
 </plist>
