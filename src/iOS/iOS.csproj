@@ -199,6 +199,7 @@
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchFloat32>False</MtouchFloat32>
+    <OutputPath>bin\iPhoneSimulator\Ad-Hoc</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhoneSimulator'">
     <MtouchSdkVersion>9.3</MtouchSdkVersion>
@@ -216,6 +217,7 @@
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchFloat32>False</MtouchFloat32>
+    <OutputPath>bin\iPhoneSimulator\AppStore</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controls\ContentPageRenderer.cs" />
