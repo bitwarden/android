@@ -10,6 +10,8 @@ using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
 using Bit.iOS.Core.Utilities;
 using System.Threading.Tasks;
+using Bit.iOS.Core;
+using MobileCoreServices;
 
 namespace Bit.iOS.Extension
 {
@@ -31,8 +33,7 @@ namespace Bit.iOS.Extension
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
-
-            if(!Context?.Details?.HasPasswordField ?? false)
+            if(!CanAutoFill())
             {
                 CancelBarButton.Title = "Close";
             }
@@ -41,6 +42,19 @@ namespace Bit.iOS.Extension
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
             await ((TableSource)TableView.Source).LoadItemsAsync();
+        }
+
+        public bool CanAutoFill()
+        {
+            if(Context.ProviderType != Constants.UTTypeAppExtensionFillBrowserAction
+                && Context.ProviderType != Constants.UTTypeAppExtensionFillWebViewAction
+                && Context.ProviderType != UTType.PropertyList)
+            {
+                return true;
+            }
+
+            return Context.Details?.HasPasswordField ?? false;
+
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
@@ -168,7 +182,7 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                if(_context?.Details?.HasPasswordField ?? false && !string.IsNullOrWhiteSpace(item.Password))
+                if(_controller.CanAutoFill() && !string.IsNullOrWhiteSpace(item.Password))
                 {
                     _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password);
                 }
