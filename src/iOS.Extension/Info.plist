@@ -65,5 +65,7 @@
 	<string>4078b378-604a-4c47-8c42-11513d98596a</string>
 	<key>CFBundleName</key>
 	<string>bitwarden extension</string>
+	<key>CFBundleDisplayName</key>
+	<string>bitwarden extension</string>
 </dict>
 </plist>
