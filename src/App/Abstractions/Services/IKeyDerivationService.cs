@@ -2,6 +2,6 @@
 {
     public interface IKeyDerivationService
     {
-        byte[] DeriveKey(string password, string salt);
+        byte[] DeriveKey(byte[] password, byte[] salt, uint rounds);
     }
 }

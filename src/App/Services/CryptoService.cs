@@ -3,13 +3,7 @@ using System.Diagnostics;
 using System.Text;
 using Bit.App.Abstractions;
 using Bit.App.Models;
-using Org.BouncyCastle.Crypto;
-using Org.BouncyCastle.Crypto.Digests;
-using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.Crypto.Generators;
-using Org.BouncyCastle.Crypto.Modes;
-using Org.BouncyCastle.Crypto.Paddings;
-using Org.BouncyCastle.Crypto.Parameters;
+using PCLCrypto;
 
 namespace Bit.App.Services
 {
@@ -17,35 +11,30 @@ namespace Bit.App.Services
     {
         private const string KeyKey = "key";
         private const int InitializationVectorSize = 16;
-        private const int KeySize = 256;
-        private const int Iterations = 5000;
 
         private readonly Random _random = new Random();
         private readonly ISecureStorageService _secureStorage;
-        private KeyParameter _keyParameter;
+        private readonly IKeyDerivationService _keyDerivationService;
+        private byte[] _key;
 
-        public CryptoService(ISecureStorageService secureStorage)
+        public CryptoService(
+            ISecureStorageService secureStorage,
+            IKeyDerivationService keyDerivationService)
         {
             _secureStorage = secureStorage;
+            _keyDerivationService = keyDerivationService;
         }
 
         public byte[] Key
         {
             get
             {
-                if(_keyParameter != null)
+                if(_key == null)
                 {
-                    return _keyParameter.GetKey();
+                    _key = _secureStorage.Retrieve(KeyKey);
                 }
 
-                var storedKey = _secureStorage.Retrieve(KeyKey);
-                if(storedKey == null)
-                {
-                    return null;
-                }
-
-                _keyParameter = new KeyParameter(storedKey);
-                return _keyParameter.GetKey();
+                return _key;
             }
             set
             {
@@ -56,7 +45,7 @@ namespace Bit.App.Services
                 else
                 {
                     _secureStorage.Delete(KeyKey);
-                    _keyParameter = null;
+                    _key = null;
                 }
             }
         }
@@ -88,16 +77,10 @@ namespace Bit.App.Services
 
             var plaintextBytes = Encoding.UTF8.GetBytes(plaintextValue);
 
-            var iv = GenerateRandomInitializationVector();
-            var keyParamWithIV = new ParametersWithIV(_keyParameter, iv, 0, InitializationVectorSize);
-
-            var aesBlockCipher = new CbcBlockCipher(new AesEngine());
-            var cipher = new PaddedBufferedBlockCipher(aesBlockCipher);
-            cipher.Init(true, keyParamWithIV);
-            var encryptedBytes = new byte[cipher.GetOutputSize(plaintextBytes.Length)];
-            var length = cipher.ProcessBytes(plaintextBytes, encryptedBytes, 0);
-            cipher.DoFinal(encryptedBytes, length);
-
+            var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
+            var cryptoKey = provider.CreateSymmetricKey(Key);
+            var iv = WinRTCrypto.CryptographicBuffer.GenerateRandom(provider.BlockLength);
+            var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
             return new CipherString(Convert.ToBase64String(iv), Convert.ToBase64String(encryptedBytes));
         }
 
@@ -115,14 +98,11 @@ namespace Bit.App.Services
 
             try
             {
-                var keyParamWithIV = new ParametersWithIV(_keyParameter, encyptedValue.InitializationVectorBytes, 0, InitializationVectorSize);
-                var aesBlockCipher = new CbcBlockCipher(new AesEngine());
-                var cipher = new PaddedBufferedBlockCipher(aesBlockCipher);
-                cipher.Init(false, keyParamWithIV);
-                byte[] comparisonBytes = new byte[cipher.GetOutputSize(encyptedValue.CipherTextBytes.Length)];
-                var length = cipher.ProcessBytes(encyptedValue.CipherTextBytes, comparisonBytes, 0);
-                cipher.DoFinal(comparisonBytes, length);
-                return Encoding.UTF8.GetString(comparisonBytes, 0, comparisonBytes.Length).TrimEnd('\0');
+                var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
+                var cryptoKey = provider.CreateSymmetricKey(Key);
+                var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
+                    encyptedValue.InitializationVectorBytes);
+                return Encoding.UTF8.GetString(decryptedBytes, 0, decryptedBytes.Length).TrimEnd('\0');
             }
             catch(Exception e)
             {
@@ -146,9 +126,8 @@ namespace Bit.App.Services
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var saltBytes = Encoding.UTF8.GetBytes(salt);
 
-            var generator = new Pkcs5S2ParametersGenerator(new Sha256Digest());
-            generator.Init(passwordBytes, saltBytes, Iterations);
-            return ((KeyParameter)generator.GenerateDerivedMacParameters(KeySize)).GetKey();
+            var key = _keyDerivationService.DeriveKey(passwordBytes, saltBytes, 5000);
+            return key;
         }
 
         public string MakeKeyFromPasswordBase64(string password, string salt)
@@ -170,23 +149,14 @@ namespace Bit.App.Services
             }
 
             var passwordBytes = Encoding.UTF8.GetBytes(password);
-
-            var generator = new Pkcs5S2ParametersGenerator(new Sha256Digest());
-            generator.Init(key, passwordBytes, 1);
-            return ((KeyParameter)generator.GenerateDerivedMacParameters(KeySize)).GetKey();
+            var hash = _keyDerivationService.DeriveKey(key, passwordBytes, 1);
+            return hash;
         }
 
         public string HashPasswordBase64(byte[] key, string password)
         {
             var hash = HashPassword(key, password);
             return Convert.ToBase64String(hash);
-        }
-
-        private byte[] GenerateRandomInitializationVector()
-        {
-            var iv = new byte[InitializationVectorSize];
-            _random.NextBytes(iv);
-            return iv;
         }
     }
 }

@@ -114,6 +114,7 @@ namespace Bit.Android
                 .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISecureStorageService, KeyStoreStorageService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IKeyDerivationService, BouncyCastleKeyDerivationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
