@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Bit.App</RootNamespace>
-    <AssemblyName>Bit.App</AssemblyName>
+    <AssemblyName>BitwardenApp</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

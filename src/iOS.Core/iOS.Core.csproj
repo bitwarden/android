@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>Bit.iOS.Core</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>Bit.iOS.Core</AssemblyName>
+    <AssemblyName>BitwardeniOSCore</AssemblyName>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>

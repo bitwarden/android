@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<linker>
+  <assembly fullname="SQLite-net">
+    <type fullname="*" />
+  </assembly>
+  <assembly fullname="Microsoft.Practices.Unity">
+    <type fullname="UnityContainer">
+      <method name=".ctor" />
+    </type>
+  </assembly>
+</linker>
