@@ -201,8 +201,8 @@ namespace Bit.App.Pages
                 var folders = await foldersTask;
                 var sites = await sitesTask;
 
-                Folders = folders.Select(f => new VaultListPageModel.Folder(f));
-                Sites = sites.Select(s => new VaultListPageModel.Site(s));
+                Folders = folders.Select(f => new VaultListPageModel.Folder(f)).OrderBy(s => s.Name);
+                Sites = sites.Select(s => new VaultListPageModel.Site(s)).OrderBy(s => s.Name).ThenBy(s => s.Username);
 
                 FilterResults(Search.Text);
             });

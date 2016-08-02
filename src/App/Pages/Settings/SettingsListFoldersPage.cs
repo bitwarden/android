@@ -51,7 +51,7 @@ namespace Bit.App.Pages
         private async Task LoadFoldersAsync()
         {
             var folders = await _folderService.GetAllAsync();
-            var pageFolders = folders.Select(f => new SettingsFolderPageModel(f));
+            var pageFolders = folders.Select(f => new SettingsFolderPageModel(f)).OrderBy(f => f.Name);
             Folders.ResetWithRange(pageFolders);
         }
 

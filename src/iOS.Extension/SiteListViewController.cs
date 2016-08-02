@@ -100,6 +100,7 @@ namespace Bit.iOS.Extension
                     var siteModels = sites.Select(s => new SiteViewModel(s));
                     _tableItems = siteModels
                         .Where(s => s.Domain != null && s.Domain.BaseDomain == _context.DomainName.BaseDomain)
+                        .OrderBy(s => s.Name).ThenBy(s => s.Username)
                         .ToList();
                 }
             }
