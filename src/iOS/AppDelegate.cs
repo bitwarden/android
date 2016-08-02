@@ -138,7 +138,7 @@ namespace Bit.iOS
 
             // Log the date/time we last backgrounded
 
-            Settings.AddOrUpdateValue(Bit.App.Constants.SettingLastBackgroundedDate, DateTime.Now);
+            Settings.AddOrUpdateValue(Bit.App.Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
 
             base.DidEnterBackground(uiApplication);
             Debug.WriteLine("DidEnterBackground");

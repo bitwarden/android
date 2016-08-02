@@ -71,7 +71,7 @@ namespace Bit.App.Pages
         private void SetLastSync()
         {
             var lastSyncDate = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
-            LastSyncLabel.Text = "Last Sync: " + lastSyncDate?.ToString() ?? "Never";
+            LastSyncLabel.Text = "Last Sync: " + lastSyncDate?.ToLocalTime().ToString() ?? "Never";
         }
 
         public async Task SyncAsync()

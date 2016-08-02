@@ -135,7 +135,7 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             var ciphers = await _cipherApiRepository.GetAsync();
             if(!ciphers.Succeeded)
             {
@@ -168,7 +168,7 @@ namespace Bit.App.Services
         public async Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold)
         {
             DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
-            if(lastSync != null && DateTime.Now - lastSync.Value < syncThreshold)
+            if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
             {
                 return false;
             }
@@ -183,7 +183,7 @@ namespace Bit.App.Services
                 return false;
             }
 
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
             if(lastSync == null)
             {
