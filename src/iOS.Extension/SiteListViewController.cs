@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Bit.App.Abstractions;
-using Bit.iOS.Core;
 using Bit.iOS.Extension.Models;
 using Foundation;
-using MobileCoreServices;
-using Newtonsoft.Json;
 using UIKit;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
-using CoreGraphics;
 using Bit.iOS.Core.Utilities;
+using System.Threading.Tasks;
 
 namespace Bit.iOS.Extension
 {
@@ -40,28 +37,10 @@ namespace Bit.iOS.Extension
                 CancelBarButton.Title = "Close";
             }
 
-            Debug.WriteLine("BW LOG, Site list ViewDidLoad.");
-            var sw = Stopwatch.StartNew();
-
-            IEnumerable<SiteViewModel> filteredSiteModels = new List<SiteViewModel>();
-            if(Context.DomainName != null)
-            {
-                var siteService = Resolver.Resolve<ISiteService>();
-                var sites = await siteService.GetAllAsync();
-                var siteModels = sites.Select(s => new SiteViewModel(s));
-                filteredSiteModels = siteModels
-                    .Where(s => s.Domain != null && s.Domain.BaseDomain == Context.DomainName.BaseDomain)
-                    .ToList();
-            }
-
-            Debug.WriteLine("BW LOG, Filtered sites at " + sw.ElapsedMilliseconds + "ms.");
-
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
-            TableView.Source = new TableSource(filteredSiteModels, this);
-
-            Debug.WriteLine("BW LOG, Set TableView source at " + sw.ElapsedMilliseconds + "ms.");
-            sw.Stop();
+            TableView.Source = new TableSource(this);
+            await ((TableSource)TableView.Source).LoadItemsAsync();
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
@@ -90,8 +69,9 @@ namespace Bit.iOS.Extension
 
         public void DismissModal()
         {
-            DismissViewController(true, () =>
+            DismissViewController(true, async () =>
             {
+                await ((TableSource)TableView.Source).LoadItemsAsync();
                 TableView.ReloadData();
             });
         }
@@ -104,12 +84,27 @@ namespace Bit.iOS.Extension
             private Context _context;
             private SiteListViewController _controller;
 
-            public TableSource(IEnumerable<SiteViewModel> items, SiteListViewController controller)
+            public TableSource(SiteListViewController controller)
             {
-                _tableItems = items;
                 _context = controller.Context;
                 _controller = controller;
             }
+
+            public async Task LoadItemsAsync()
+            {
+                _tableItems = new List<SiteViewModel>();
+                if(_context.DomainName != null)
+                {
+                    var siteService = Resolver.Resolve<ISiteService>();
+                    var sites = await siteService.GetAllAsync();
+                    var siteModels = sites.Select(s => new SiteViewModel(s));
+                    _tableItems = siteModels
+                        .Where(s => s.Domain != null && s.Domain.BaseDomain == _context.DomainName.BaseDomain)
+                        .ToList();
+                }
+            }
+
+            public IEnumerable<SiteViewModel> TableItems { get; set; }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
