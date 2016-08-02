@@ -78,7 +78,7 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\Android\Android.csproj">
+    <ProjectReference Include="..\..\src\Android\Android.csproj">
       <Project>{04b18ed2-b76d-4947-8474-191f8fd2b5e0}</Project>
       <Name>Android</Name>
     </ProjectReference>

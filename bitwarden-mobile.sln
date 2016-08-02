@@ -21,7 +21,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS.Core", "src\iOS.Core\iO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iOS.Test", "test\iOS.Test\iOS.Test.csproj", "{6702027A-F726-4149-863E-7CB924674B9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android.Test", "Android.Test\Android.Test.csproj", "{FA507A17-D4E3-46DF-ACD8-D7E6D7D4E3AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android.Test", "test\Android.Test\Android.Test.csproj", "{FA507A17-D4E3-46DF-ACD8-D7E6D7D4E3AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
