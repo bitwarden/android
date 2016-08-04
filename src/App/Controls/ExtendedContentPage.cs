@@ -30,5 +30,12 @@ namespace Bit.App.Controls
                 });
             }
         }
+
+        protected override void OnAppearing()
+        {
+            var googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            googleAnalyticsService.TrackPage(GetType().Name);
+            base.OnAppearing();
+        }
     }
 }
