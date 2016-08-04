@@ -140,6 +140,7 @@ namespace Bit.iOS.Extension
             }
 
             GeneratePassword();
+            _googleAnalyticsService.TrackExtensionEvent("GeneratedPassword");
             base.ViewDidLoad();
         }
 

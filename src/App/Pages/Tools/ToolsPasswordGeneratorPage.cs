@@ -131,6 +131,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            _googleAnalyticsService.TrackAppEvent("GeneratedPassword");
             Model.Password = _passwordGenerationService.GeneratePassword();
             Model.Length = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10).ToString();
         }
