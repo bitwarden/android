@@ -16,6 +16,7 @@ namespace Bit.App.Pages
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly ISettings _settings;
         private readonly IClipboardService _clipboardService;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly Action<string> _passwordValueAction;
 
         public ToolsPasswordGeneratorPage(Action<string> passwordValueAction = null)
@@ -24,6 +25,7 @@ namespace Bit.App.Pages
             _passwordGenerationService = Resolver.Resolve<IPasswordGenerationService>();
             _settings = Resolver.Resolve<ISettings>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _passwordValueAction = passwordValueAction;
 
             Init();
@@ -127,14 +129,14 @@ namespace Bit.App.Pages
 
         protected override void OnAppearing()
         {
-            Model.Password = _passwordGenerationService.GeneratePassword();
-            Model.Length = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10).ToString();
             base.OnAppearing();
+            GeneratePassword();
+            Model.Length = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10).ToString();
         }
 
         private void RegenerateCell_Tapped(object sender, EventArgs e)
         {
-            Model.Password = _passwordGenerationService.GeneratePassword();
+            GeneratePassword();
         }
 
         private void CopyCell_Tapped(object sender, EventArgs e)
@@ -147,8 +149,15 @@ namespace Bit.App.Pages
             Navigation.PushAsync(new ToolsPasswordGeneratorSettingsPage());
         }
 
+        private void GeneratePassword()
+        {
+            _googleAnalyticsService.TrackAppEvent("GeneratedPassword");
+            Model.Password = _passwordGenerationService.GeneratePassword();
+        }
+
         private void CopyPassword()
         {
+            _googleAnalyticsService.TrackAppEvent("CopiedGeneratedPassword");
             _clipboardService.CopyToClipboard(Password.Text);
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }

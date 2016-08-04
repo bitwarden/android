@@ -184,6 +184,7 @@ namespace Bit.App
         private void Logout(string logoutMessage)
         {
             _authService.LogOut();
+            _googleAnalyticsService.TrackAppEvent("LoggedOut");
             _googleAnalyticsService.RefreshUserId();
             _pushNotification.Unregister();
             Current.MainPage = new HomePage();

@@ -181,6 +181,7 @@ namespace Bit.App.Pages
             _authService.Email = response.Result?.Profile?.Email;
             _settings.AddOrUpdateValue(Constants.SettingLastLoginEmail, _authService.Email);
             _googleAnalyticsService.RefreshUserId();
+            _googleAnalyticsService.TrackAppEvent("LoggedIn");
 
             if(_authService.IsAuthenticatedTwoFactor)
             {

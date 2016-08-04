@@ -16,12 +16,14 @@ namespace Bit.App.Pages
         private ICryptoService _cryptoService;
         private IUserDialogs _userDialogs;
         private IAccountsApiRepository _accountsApiRepository;
+        private IGoogleAnalyticsService _googleAnalyticsService;
 
         public RegisterPage()
         {
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _accountsApiRepository = Resolver.Resolve<IAccountsApiRepository>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
@@ -183,6 +185,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.Toast("Your new account has been created! You may now log in.");
+            _googleAnalyticsService.TrackAppEvent("Registered");
             await Navigation.PopModalAsync();
         }
 
