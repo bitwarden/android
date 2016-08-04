@@ -19,6 +19,7 @@ namespace Bit.iOS.Core.Services
             Gai.SharedInstance.DispatchInterval = 10;
             Gai.SharedInstance.TrackUncaughtExceptions = true;
             _tracker = Gai.SharedInstance.GetTracker("UA-81915606-1");
+            _tracker.SetAllowIdfaCollection(true);
             _tracker.Set(GaiConstants.ClientId, appIdService.AppId);
         }
 
