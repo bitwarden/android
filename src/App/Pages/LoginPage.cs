@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
         private ISettings _settings;
+        private IGoogleAnalyticsService _googleAnalyticsService;
 
         public LoginPage()
         {
@@ -32,6 +33,7 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
             _settings = Resolver.Resolve<ISettings>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
@@ -178,6 +180,7 @@ namespace Bit.App.Pages
             _authService.UserId = response.Result?.Profile?.Id;
             _authService.Email = response.Result?.Profile?.Email;
             _settings.AddOrUpdateValue(Constants.SettingLastLoginEmail, _authService.Email);
+            _googleAnalyticsService.RefreshUserId();
 
             if(_authService.IsAuthenticatedTwoFactor)
             {

@@ -2,10 +2,11 @@
 using Bit.iOS.Extension.Models;
 using UIKit;
 using Plugin.Settings.Abstractions;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class SetupViewController : UIViewController
+    public partial class SetupViewController : ExtendedUIViewController
     {
         public SetupViewController(IntPtr handle) : base(handle)
         { }

@@ -6,10 +6,11 @@ using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
 using System.Threading.Tasks;
 using Bit.App;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class LockFingerprintViewController : UIViewController
+    public partial class LockFingerprintViewController : ExtendedUIViewController
     {
         private ISettings _settings;
         private IFingerprint _fingerprint;

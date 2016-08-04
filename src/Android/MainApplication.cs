@@ -109,6 +109,9 @@ namespace Bit.Android
             var container = new UnityContainer();
 
             container
+                // Android Stuff
+                .RegisterInstance(ApplicationContext)
+                .RegisterInstance<Application>(this)
                 // Services
                 .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
@@ -126,6 +129,7 @@ namespace Bit.Android
                 .RegisterType<IReflectionService, ReflectionService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAppInfoService, AppInfoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

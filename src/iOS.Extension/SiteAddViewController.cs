@@ -13,10 +13,11 @@ using XLabs.Ioc;
 using Bit.App;
 using Plugin.Connectivity.Abstractions;
 using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class SiteAddViewController : UITableViewController
+    public partial class SiteAddViewController : ExtendedUITableViewController
     {
         private ISiteService _siteService;
         private IFolderService _folderService;

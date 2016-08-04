@@ -35,7 +35,8 @@ namespace Bit.Android
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<IPushNotification>(),
-                Resolver.Resolve<ILockService>()));
+                Resolver.Resolve<ILockService>(),
+                Resolver.Resolve<IGoogleAnalyticsService>()));
         }
 
         protected override void OnPause()

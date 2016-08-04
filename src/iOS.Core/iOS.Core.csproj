@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.props" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.props')" />
+  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -73,12 +73,18 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="XLabs.Ioc, Version=2.0.5782.12218, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\XLabs.IoC.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Ioc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ExtendedUITableViewController.cs" />
+    <Compile Include="Controllers\ExtendedUIViewController.cs" />
     <Compile Include="HockeyAppCrashManagerDelegate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\KeyChainStorageService.cs" />
@@ -111,10 +117,10 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.props'))" />
-    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.targets'))" />
     <Error Condition="!Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets'))" />
   </Target>
-  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.targets" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.1\build\Xamarin.Build.Download.targets')" />
   <Import Project="..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets" Condition="Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets')" />
+  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets')" />
 </Project>

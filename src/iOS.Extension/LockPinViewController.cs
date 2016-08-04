@@ -8,10 +8,11 @@ using Bit.iOS.Core.Utilities;
 using Bit.App.Resources;
 using System.Diagnostics;
 using Bit.App;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class LockPinViewController : UIViewController
+    public partial class LockPinViewController : ExtendedUIViewController
     {
         private ISettings _settings;
         private IAuthService _authService;

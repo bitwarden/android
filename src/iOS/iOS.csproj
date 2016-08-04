@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
@@ -42,7 +43,8 @@
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchFloat32>False</MtouchFloat32>
-    <MtouchExtraArgs></MtouchExtraArgs>
+    <MtouchExtraArgs>
+    </MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -100,7 +102,8 @@
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <MtouchFloat32>False</MtouchFloat32>
     <DeviceSpecificBuild>False</DeviceSpecificBuild>
-    <MtouchExtraArgs></MtouchExtraArgs>
+    <MtouchExtraArgs>
+    </MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -275,6 +278,10 @@
     </Reference>
     <Reference Include="BTProgressHUD, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\BTProgressHUD.1.2.0.3\lib\Xamarin.iOS10\BTProgressHUD.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Analytics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\lib\Xamarin.iOS10\Google.Analytics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HockeySDK, Version=1.0.6018.21546, Culture=neutral, processorArchitecture=MSIL">
@@ -688,5 +695,10 @@
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets'))" />
   </Target>
+  <Import Project="..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets" Condition="Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets')" />
+  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets')" />
 </Project>

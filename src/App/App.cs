@@ -28,6 +28,7 @@ namespace Bit.App
         private readonly ISettings _settings;
         private readonly IPushNotification _pushNotification;
         private readonly ILockService _lockService;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public App(
             IAuthService authService,
@@ -38,7 +39,8 @@ namespace Bit.App
             IFingerprint fingerprint,
             ISettings settings,
             IPushNotification pushNotification,
-            ILockService lockService)
+            ILockService lockService,
+            IGoogleAnalyticsService googleAnalyticsService)
         {
             _databaseService = databaseService;
             _connectivity = connectivity;
@@ -49,6 +51,7 @@ namespace Bit.App
             _settings = settings;
             _pushNotification = pushNotification;
             _lockService = lockService;
+            _googleAnalyticsService = googleAnalyticsService;
 
             SetStyles();
 
@@ -181,6 +184,7 @@ namespace Bit.App
         private void Logout(string logoutMessage)
         {
             _authService.LogOut();
+            _googleAnalyticsService.RefreshUserId();
             _pushNotification.Unregister();
             Current.MainPage = new HomePage();
             if(!string.IsNullOrWhiteSpace(logoutMessage))

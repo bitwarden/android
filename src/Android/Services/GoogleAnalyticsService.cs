@@ -11,6 +11,7 @@ namespace Bit.Android.Services
 
         private readonly IAuthService _authService;
         private readonly Tracker _tracker;
+        private bool _setUserId = true;
 
         public GoogleAnalyticsService(
             Context appContext,
@@ -29,7 +30,11 @@ namespace Bit.Android.Services
             _tracker.SetClientId(appIdService.AppId);
         }
 
-        public bool SetUserId { get; set; } = true;
+        public void RefreshUserId()
+        {
+            _tracker.Set(UserId, null);
+            _setUserId = true;
+        }
 
         public void TrackEvent(string category, string eventName)
         {
@@ -38,11 +43,7 @@ namespace Bit.Android.Services
             builder.SetAction(eventName);
             builder.SetLabel("AppEvent");
 
-            if(SetUserId)
-            {
-                _tracker.Set(UserId, _authService.UserId);
-                SetUserId = false;
-            }
+            SetUserId();
             _tracker.Send(builder.Build());
         }
 
@@ -52,23 +53,24 @@ namespace Bit.Android.Services
             builder.SetDescription(message);
             builder.SetFatal(fatal);
 
-            if(SetUserId)
-            {
-                _tracker.Set(UserId, _authService.UserId);
-                SetUserId = false;
-            }
+            SetUserId();
             _tracker.Send(builder.Build());
         }
 
         public void TrackPage(string pageName)
         {
-            if(SetUserId)
-            {
-                _tracker.Set(UserId, _authService.UserId);
-                SetUserId = false;
-            }
+            SetUserId();
             _tracker.SetScreenName(pageName);
             _tracker.Send(new HitBuilders.ScreenViewBuilder().Build());
+        }
+
+        private void SetUserId()
+        {
+            if(_setUserId && _authService.IsAuthenticated)
+            {
+                _tracker.Set(UserId, _authService.UserId);
+                _setUserId = false;
+            }
         }
     }
 }

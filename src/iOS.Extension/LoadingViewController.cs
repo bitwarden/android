@@ -19,10 +19,11 @@ using Plugin.Connectivity;
 using Plugin.Fingerprint;
 using Bit.iOS.Core.Utilities;
 using Bit.App.Resources;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class LoadingViewController : UIViewController
+    public partial class LoadingViewController : ExtendedUIViewController
     {
         private Context _context = new Context();
         private bool _setupHockeyApp = false;
@@ -30,8 +31,7 @@ namespace Bit.iOS.Extension
             new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
 
         public LoadingViewController(IntPtr handle) : base(handle)
-        {
-        }
+        { }
 
         public override void ViewDidLoad()
         {
@@ -258,6 +258,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

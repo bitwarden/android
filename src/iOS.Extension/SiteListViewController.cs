@@ -12,10 +12,11 @@ using Bit.iOS.Core.Utilities;
 using System.Threading.Tasks;
 using Bit.iOS.Core;
 using MobileCoreServices;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class SiteListViewController : UITableViewController
+    public partial class SiteListViewController : ExtendedUITableViewController
     {
         public SiteListViewController(IntPtr handle) : base(handle)
         { }

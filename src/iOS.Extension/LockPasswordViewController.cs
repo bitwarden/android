@@ -10,10 +10,11 @@ using Bit.iOS.Core.Utilities;
 using Bit.App.Abstractions;
 using System.Linq;
 using Bit.App;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class LockPasswordViewController : UITableViewController
+    public partial class LockPasswordViewController : ExtendedUITableViewController
     {
         private ISettings _settings;
         private IAuthService _authService;

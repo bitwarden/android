@@ -10,10 +10,11 @@ using Plugin.Settings.Abstractions;
 using CoreGraphics;
 using Bit.App;
 using Bit.iOS.Core.Utilities;
+using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class PasswordGeneratorViewController : UIViewController
+    public partial class PasswordGeneratorViewController : ExtendedUIViewController
     {
         private IPasswordGenerationService _passwordGenerationService;
         private ISettings _settings;

@@ -8,6 +8,7 @@ namespace Bit.iOS.Core.Services
     {
         private readonly ITracker _tracker;
         private readonly IAuthService _authService;
+        private bool _setUserId = true;
 
         public GoogleAnalyticsService(
             IAppIdService appIdService,
@@ -21,15 +22,15 @@ namespace Bit.iOS.Core.Services
             _tracker.Set(GaiConstants.ClientId, appIdService.AppId);
         }
 
-        public bool SetUserId { get; set; } = true;
+        public void RefreshUserId()
+        {
+            _tracker.Set(GaiConstants.UserId, null);
+            _setUserId = true;
+        }
 
         public void TrackEvent(string category, string eventName)
         {
-            if(SetUserId)
-            {
-                _tracker.Set(GaiConstants.UserId, _authService.UserId);
-                SetUserId = false;
-            }
+            SetUserId();
             var dict = DictionaryBuilder.CreateEvent(category, eventName, "AppEvent", null).Build();
             _tracker.Send(dict);
             Gai.SharedInstance.Dispatch();
@@ -37,25 +38,26 @@ namespace Bit.iOS.Core.Services
 
         public void TrackException(string message, bool fatal)
         {
-            if(SetUserId)
-            {
-                _tracker.Set(GaiConstants.UserId, _authService.UserId);
-                SetUserId = false;
-            }
+            SetUserId();
             var dict = DictionaryBuilder.CreateException(message, fatal).Build();
             _tracker.Send(dict);
         }
 
         public void TrackPage(string pageName)
         {
-            if(SetUserId)
-            {
-                _tracker.Set(GaiConstants.UserId, _authService.UserId);
-                SetUserId = false;
-            }
+            SetUserId();
             _tracker.Set(GaiConstants.ScreenName, pageName);
             var dict = DictionaryBuilder.CreateScreenView().Build();
             _tracker.Send(dict);
+        }
+
+        private void SetUserId()
+        {
+            if(_setUserId && _authService.IsAuthenticated)
+            {
+                _tracker.Set(GaiConstants.UserId, _authService.UserId);
+                _setUserId = false;
+            }
         }
     }
 }
