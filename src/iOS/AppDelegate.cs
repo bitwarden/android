@@ -26,12 +26,15 @@ using Bit.App.Pages;
 using PushNotification.Plugin.Abstractions;
 using HockeyApp.iOS;
 using Bit.iOS.Core;
+using Google.Analytics;
 
 namespace Bit.iOS
 {
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
+        private GaiCompletionHandler _dispatchHandler = null;
+
         public ISettings Settings { get; set; }
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
@@ -138,8 +141,10 @@ namespace Bit.iOS
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
 
             // Log the date/time we last backgrounded
+            Settings.AddOrUpdateValue(App.Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
 
-            Settings.AddOrUpdateValue(Bit.App.Constants.SettingLastBackgroundedDate, DateTime.UtcNow);
+            // Dispatch Google Analytics
+            SendGoogleAnalyticsHitsInBackground();
 
             base.DidEnterBackground(uiApplication);
             Debug.WriteLine("DidEnterBackground");
@@ -176,6 +181,11 @@ namespace Bit.iOS
         public override void WillEnterForeground(UIApplication uiApplication)
         {
             SendResumedMessage();
+
+            // Restores the dispatch interval because dispatchWithCompletionHandler
+            // has disabled automatic dispatching.
+            Gai.SharedInstance.DispatchInterval = 10;
+
             base.WillEnterForeground(uiApplication);
             Debug.WriteLine("WillEnterForeground");
         }
@@ -272,6 +282,39 @@ namespace Bit.iOS
             container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
+        }
+
+        /// <summary>
+        /// This method sends any queued hits when the app enters the background.
+        /// ref: https://developers.google.com/analytics/devguides/collection/ios/v3/dispatch
+        /// </summary>
+        private void SendGoogleAnalyticsHitsInBackground()
+        {
+            var taskExpired = false;
+            var taskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
+            {
+                taskExpired = true;
+            });
+
+            if(taskId == UIApplication.BackgroundTaskInvalid)
+            {
+                return;
+            }
+
+            _dispatchHandler = (result) =>
+            {
+                // Send hits until no hits are left, a dispatch error occurs, or the background task expires.
+                if(_dispatchHandler != null && result == DispatchResult.Good && !taskExpired)
+                {
+                    Gai.SharedInstance.Dispatch(_dispatchHandler);
+                }
+                else
+                {
+                    UIApplication.SharedApplication.EndBackgroundTask(taskId);
+                }
+            };
+
+            Gai.SharedInstance.Dispatch(_dispatchHandler);
         }
     }
 }

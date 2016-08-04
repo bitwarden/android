@@ -166,7 +166,7 @@ namespace Bit.iOS.Extension
 
             if(saveTask.Result.Succeeded)
             {
-                _googleAnalyticsService.TrackExtensionEvent("SiteCreated");
+                _googleAnalyticsService.TrackExtensionEvent("CreatedSite");
                 if(SiteListController != null)
                 {
                     SiteListController.DismissModal();

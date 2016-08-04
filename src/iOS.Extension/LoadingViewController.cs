@@ -228,7 +228,6 @@ namespace Bit.iOS.Extension
                     Constants.AppExtensionOldPasswordKey, password);
             }
 
-            _googleAnalyticsService.TrackExtensionEvent("AutoFilled", _context.ProviderType);
             CompleteRequest(itemData);
         }
 
@@ -240,7 +239,21 @@ namespace Bit.iOS.Extension
             var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
             var returningItems = new NSExtensionItem[] { resultsItem };
 
-            ExtensionContext.CompleteRequest(returningItems, null);
+            if(itemData != null)
+            {
+                _googleAnalyticsService.TrackExtensionEvent("AutoFilled", _context.ProviderType);
+            }
+            else
+            {
+                _googleAnalyticsService.TrackExtensionEvent("Closed", _context.ProviderType);
+            }
+
+            _googleAnalyticsService.Dispatch(() =>
+            {
+                NSRunLoop.Main.BeginInvokeOnMainThread(() => {
+                    ExtensionContext.CompleteRequest(returningItems, null);
+                });
+            });
         }
 
         private void SetIoc()
@@ -296,7 +309,7 @@ namespace Bit.iOS.Extension
                 var dict = list as NSDictionary;
                 action(dict);
 
-                _googleAnalyticsService.TrackExtensionEvent("ProviderType", type);
+                _googleAnalyticsService.TrackExtensionEvent("ProcessItemProvider", type);
 
                 Debug.WriteLine("BW LOG, ProviderType: " + _context.ProviderType);
                 Debug.WriteLine("BW LOG, Url: " + _context.Url);

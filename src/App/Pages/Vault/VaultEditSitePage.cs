@@ -18,6 +18,7 @@ namespace Bit.App.Pages
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public VaultEditSitePage(string siteId)
         {
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
@@ -174,6 +176,7 @@ namespace Bit.App.Pages
                 {
                     await Navigation.PopModalAsync();
                     _userDialogs.Toast("Site updated.");
+                    _googleAnalyticsService.TrackAppEvent("EditedSite");
                 }
                 else if(saveTask.Result.Errors.Count() > 0)
                 {
@@ -241,6 +244,7 @@ namespace Bit.App.Pages
             {
                 await Navigation.PopModalAsync();
                 _userDialogs.Toast("Site deleted.");
+                _googleAnalyticsService.TrackAppEvent("DeletedSite");
             }
             else if((await deleteTask).Errors.Count() > 0)
             {

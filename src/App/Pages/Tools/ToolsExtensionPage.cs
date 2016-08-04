@@ -6,6 +6,7 @@ using Bit.App.Models.Page;
 using Plugin.Settings.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Bit.App.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -13,11 +14,13 @@ namespace Bit.App.Pages
     {
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public ToolsExtensionPage()
         {
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             Model = new AppExtensionPageModel(_settings);
 
             Init();
@@ -59,7 +62,7 @@ namespace Bit.App.Pages
             var notStartedButton = new Button
             {
                 Text = "Enable App Extension",
-                Command = new Command(() => ShowExtension()),
+                Command = new Command(() => ShowExtension("NotStartedEnable")),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
@@ -108,7 +111,7 @@ namespace Bit.App.Pages
             var notActivatedButton = new Button
             {
                 Text = "Enable App Extension",
-                Command = new Command(() => ShowExtension()),
+                Command = new Command(() => ShowExtension("NotActivatedEnable")),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
@@ -167,7 +170,7 @@ namespace Bit.App.Pages
             var activatedButtonReenable = new Button
             {
                 Text = "Re-enable App Extension",
-                Command = new Command(() => ShowExtension()),
+                Command = new Command(() => ShowExtension("Re-enable")),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"]
@@ -200,13 +203,15 @@ namespace Bit.App.Pages
             BindingContext = Model;
         }
 
-        private void ShowExtension()
+        private void ShowExtension(string type)
         {
+            _googleAnalyticsService.TrackAppEvent("ShowExtension", type);
             MessagingCenter.Send(Application.Current, "ShowAppExtension", this);
         }
 
         public void EnabledExtension(bool enabled)
         {
+            _googleAnalyticsService.TrackAppEvent("EnabledExtension", enabled.ToString());
             Model.Started = true;
             if(!Model.Activated && enabled)
             {

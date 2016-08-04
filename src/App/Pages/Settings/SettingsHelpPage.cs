@@ -1,13 +1,19 @@
 ﻿using System;
 using Bit.App.Controls;
 using Xamarin.Forms;
+using Bit.App.Abstractions;
+using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
     public class SettingsHelpPage : ExtendedContentPage
     {
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
+
         public SettingsHelpPage()
         {
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+
             Init();
         }
 
@@ -103,16 +109,19 @@ namespace Bit.App.Pages
 
         private void EmailCell_Tapped(object sender, EventArgs e)
         {
+            _googleAnalyticsService.TrackAppEvent("HelpEmail");
             Device.OpenUri(new Uri("mailto:hello@bitwarden.com"));
         }
 
         private void WebsiteCell_Tapped(object sender, EventArgs e)
         {
+            _googleAnalyticsService.TrackAppEvent("HelpWebsite");
             Device.OpenUri(new Uri("https://bitwarden.com"));
         }
 
         private void BugCell_Tapped(object sender, EventArgs e)
         {
+            _googleAnalyticsService.TrackAppEvent("HelpBug");
             Device.OpenUri(new Uri("https://github.com/bitwarden/mobile"));
         }
 

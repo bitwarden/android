@@ -1,4 +1,6 @@
-﻿namespace Bit.App.Abstractions
+﻿using System;
+
+namespace Bit.App.Abstractions
 {
     public interface IGoogleAnalyticsService
     {
@@ -8,6 +10,6 @@
         void TrackExtensionEvent(string eventName, string label = null);
         void TrackEvent(string category, string eventName, string label = null);
         void TrackException(string message, bool fatal);
-        void Dispatch();
+        void Dispatch(Action completionHandler = null);
     }
 }

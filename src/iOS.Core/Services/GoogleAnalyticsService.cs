@@ -62,9 +62,12 @@ namespace Bit.iOS.Core.Services
             _tracker.Send(dict);
         }
 
-        public void Dispatch()
+        public void Dispatch(Action completionHandler = null)
         {
-            Gai.SharedInstance.Dispatch();
+            Gai.SharedInstance.Dispatch((result) =>
+            {
+                completionHandler?.Invoke();
+            });
         }
 
         private void SetUserId()

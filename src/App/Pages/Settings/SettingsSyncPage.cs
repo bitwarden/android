@@ -17,6 +17,7 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly ISettings _settings;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public SettingsSyncPage()
         {
@@ -24,6 +25,7 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _settings = Resolver.Resolve<ISettings>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
@@ -88,6 +90,7 @@ namespace Bit.App.Pages
             if(succeeded)
             {
                 _userDialogs.Toast("Syncing complete.");
+                _googleAnalyticsService.TrackAppEvent("Synced");
             }
             else
             {

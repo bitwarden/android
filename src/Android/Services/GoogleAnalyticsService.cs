@@ -87,9 +87,10 @@ namespace Bit.Android.Services
             }
         }
 
-        public void Dispatch()
+        public void Dispatch(Action completionHandler = null)
         {
             _instance.DispatchLocalHits();
+            completionHandler?.Invoke();
         }
     }
 }
