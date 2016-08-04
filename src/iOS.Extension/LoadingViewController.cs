@@ -228,6 +228,7 @@ namespace Bit.iOS.Extension
                     Constants.AppExtensionOldPasswordKey, password);
             }
 
+            _googleAnalyticsService.TrackExtensionEvent("AutoFilled", _context.ProviderType);
             CompleteRequest(itemData);
         }
 

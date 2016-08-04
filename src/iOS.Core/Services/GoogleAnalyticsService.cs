@@ -62,6 +62,11 @@ namespace Bit.iOS.Core.Services
             _tracker.Send(dict);
         }
 
+        public void Dispatch()
+        {
+            Gai.SharedInstance.Dispatch();
+        }
+
         private void SetUserId()
         {
             if(_setUserId && _authService.IsAuthenticated)

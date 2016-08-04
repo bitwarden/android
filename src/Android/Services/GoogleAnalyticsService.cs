@@ -9,6 +9,7 @@ namespace Bit.Android.Services
     {
         private const string UserId = "&uid";
 
+        private readonly GoogleAnalytics _instance;
         private readonly IAuthService _authService;
         private readonly Tracker _tracker;
         private bool _setUserId = true;
@@ -20,10 +21,10 @@ namespace Bit.Android.Services
         {
             _authService = authService;
 
-            var instance = GoogleAnalytics.GetInstance(appContext.ApplicationContext);
-            instance.SetLocalDispatchPeriod(10);
+            _instance = GoogleAnalytics.GetInstance(appContext.ApplicationContext);
+            _instance.SetLocalDispatchPeriod(10);
 
-            _tracker = instance.NewTracker("UA-81915606-2");
+            _tracker = _instance.NewTracker("UA-81915606-2");
             _tracker.EnableExceptionReporting(true);
             _tracker.EnableAdvertisingIdCollection(true);
             _tracker.EnableAutoActivityTracking(true);
@@ -84,6 +85,11 @@ namespace Bit.Android.Services
                 _tracker.Set(UserId, _authService.UserId);
                 _setUserId = false;
             }
+        }
+
+        public void Dispatch()
+        {
+            _instance.DispatchLocalHits();
         }
     }
 }
