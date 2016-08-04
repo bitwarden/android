@@ -28,10 +28,20 @@ namespace Bit.iOS.Core.Services
             _setUserId = true;
         }
 
-        public void TrackEvent(string category, string eventName)
+        public void TrackAppEvent(string eventName, string label = null)
+        {
+            TrackEvent("App", eventName, label);
+        }
+
+        public void TrackExtensionEvent(string eventName, string label = null)
+        {
+            TrackEvent("Extension", eventName, label);
+        }
+
+        public void TrackEvent(string category, string eventName, string label = null)
         {
             SetUserId();
-            var dict = DictionaryBuilder.CreateEvent(category, eventName, "AppEvent", null).Build();
+            var dict = DictionaryBuilder.CreateEvent(category, eventName, label, null).Build();
             _tracker.Send(dict);
             Gai.SharedInstance.Dispatch();
         }

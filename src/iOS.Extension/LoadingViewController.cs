@@ -29,6 +29,7 @@ namespace Bit.iOS.Extension
         private bool _setupHockeyApp = false;
         private readonly JsonSerializerSettings _jsonSettings =
             new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
+        private IGoogleAnalyticsService _googleAnalyticsService;
 
         public LoadingViewController(IntPtr handle) : base(handle)
         { }
@@ -36,6 +37,7 @@ namespace Bit.iOS.Extension
         public override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
 
@@ -292,6 +294,8 @@ namespace Bit.iOS.Extension
                 _context.ProviderType = type;
                 var dict = list as NSDictionary;
                 action(dict);
+
+                _googleAnalyticsService.TrackExtensionEvent("ProviderType", type);
 
                 Debug.WriteLine("BW LOG, ProviderType: " + _context.ProviderType);
                 Debug.WriteLine("BW LOG, Url: " + _context.Url);

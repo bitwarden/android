@@ -18,6 +18,7 @@ namespace Bit.iOS.Extension
     {
         private IPasswordGenerationService _passwordGenerationService;
         private ISettings _settings;
+        private IGoogleAnalyticsService _googleAnalyticsService;
 
         public PasswordGeneratorViewController(IntPtr handle) : base(handle)
         { }
@@ -44,6 +45,7 @@ namespace Bit.iOS.Extension
         {
             _passwordGenerationService = Resolver.Resolve<IPasswordGenerationService>();
             _settings = Resolver.Resolve<ISettings>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
@@ -171,6 +173,7 @@ namespace Bit.iOS.Extension
 
         private void GeneratePassword()
         {
+            _googleAnalyticsService.TrackExtensionEvent("GeneratePassword");
             PasswordLabel.Text = _passwordGenerationService.GeneratePassword(
                 length: LengthCell.Value,
                 uppercase: UppercaseCell.Switch.On,

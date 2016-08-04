@@ -36,12 +36,25 @@ namespace Bit.Android.Services
             _setUserId = true;
         }
 
-        public void TrackEvent(string category, string eventName)
+        public void TrackAppEvent(string eventName, string label = null)
+        {
+            TrackEvent("App", eventName, label);
+        }
+
+        public void TrackExtensionEvent(string eventName, string label = null)
+        {
+            throw new NotSupportedException();
+        }
+
+        public void TrackEvent(string category, string eventName, string label = null)
         {
             var builder = new HitBuilders.EventBuilder();
             builder.SetCategory(category);
             builder.SetAction(eventName);
-            builder.SetLabel("AppEvent");
+            if(label != null)
+            {
+                builder.SetLabel(label);
+            }
 
             SetUserId();
             _tracker.Send(builder.Build());

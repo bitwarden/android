@@ -23,6 +23,7 @@ namespace Bit.iOS.Extension
         private IFolderService _folderService;
         private IConnectivity _connectivity;
         private IEnumerable<Folder> _folders;
+        private IGoogleAnalyticsService _googleAnalyticsService;
 
         public SiteAddViewController(IntPtr handle) : base(handle)
         { }
@@ -51,6 +52,7 @@ namespace Bit.iOS.Extension
             _siteService = Resolver.Resolve<ISiteService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _folderService = Resolver.Resolve<IFolderService>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
@@ -164,6 +166,7 @@ namespace Bit.iOS.Extension
 
             if(saveTask.Result.Succeeded)
             {
+                _googleAnalyticsService.TrackExtensionEvent("SiteCreated");
                 if(SiteListController != null)
                 {
                     SiteListController.DismissModal();
