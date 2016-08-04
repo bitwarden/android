@@ -110,6 +110,7 @@ namespace Bit.App.Pages
             {
                 var selectToolBarItem = new ToolbarItem("Select", null, async () =>
                 {
+                    _googleAnalyticsService.TrackAppEvent("SelectedGeneratedPassword");
                     _passwordValueAction(Password.Text);
                     await Navigation.PopModalAsync();
                 }, ToolbarItemOrder.Default, 0);
@@ -130,13 +131,14 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            GeneratePassword();
+            Model.Password = _passwordGenerationService.GeneratePassword();
             Model.Length = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10).ToString();
         }
 
         private void RegenerateCell_Tapped(object sender, EventArgs e)
         {
-            GeneratePassword();
+            Model.Password = _passwordGenerationService.GeneratePassword();
+            _googleAnalyticsService.TrackAppEvent("RegeneratedPassword");
         }
 
         private void CopyCell_Tapped(object sender, EventArgs e)
@@ -147,12 +149,6 @@ namespace Bit.App.Pages
         private void SettingsCell_Tapped(object sender, EventArgs e)
         {
             Navigation.PushAsync(new ToolsPasswordGeneratorSettingsPage());
-        }
-
-        private void GeneratePassword()
-        {
-            _googleAnalyticsService.TrackAppEvent("GeneratedPassword");
-            Model.Password = _passwordGenerationService.GeneratePassword();
         }
 
         private void CopyPassword()

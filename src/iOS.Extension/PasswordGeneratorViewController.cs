@@ -160,6 +160,7 @@ namespace Bit.iOS.Extension
 
         partial void SelectBarButton_Activated(UIBarButtonItem sender)
         {
+            _googleAnalyticsService.TrackExtensionEvent("SelectedGeneratedPassword");
             DismissViewController(true, () =>
             {
                 Parent.PasswordCell.TextField.Text = PasswordLabel.Text;
@@ -173,7 +174,6 @@ namespace Bit.iOS.Extension
 
         private void GeneratePassword()
         {
-            _googleAnalyticsService.TrackExtensionEvent("GeneratePassword");
             PasswordLabel.Text = _passwordGenerationService.GeneratePassword(
                 length: LengthCell.Value,
                 uppercase: UppercaseCell.Switch.On,
@@ -311,10 +311,12 @@ namespace Bit.iOS.Extension
                 {
                     if(indexPath.Row == 0)
                     {
+                        _controller._googleAnalyticsService.TrackExtensionEvent("RegeneratedPassword");
                         _controller.GeneratePassword();
                     }
                     else if(indexPath.Row == 1)
                     {
+                        _controller._googleAnalyticsService.TrackExtensionEvent("CopiedGeneratedPassword");
                         UIPasteboard clipboard = UIPasteboard.General;
                         clipboard.String = _controller.PasswordLabel.Text;
                         var alert = Dialogs.CreateMessageAlert("Copied!");
