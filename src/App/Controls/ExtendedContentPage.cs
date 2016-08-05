@@ -7,14 +7,16 @@ namespace Bit.App.Controls
     public class ExtendedContentPage : ContentPage
     {
         private ISyncService _syncService;
+        private bool _syncIndicator;
 
         public ExtendedContentPage(bool syncIndicator = true)
         {
+            _syncIndicator = syncIndicator;
             _syncService = Resolver.Resolve<ISyncService>();
 
             BackgroundColor = Color.FromHex("efeff4");
 
-            if(syncIndicator)
+            if(_syncIndicator)
             {
                 IsBusy = _syncService.SyncInProgress;
 
@@ -32,6 +34,11 @@ namespace Bit.App.Controls
 
         protected override void OnAppearing()
         {
+            if(_syncIndicator)
+            {
+                IsBusy = _syncService.SyncInProgress;
+            }
+
             var googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             googleAnalyticsService.TrackPage(GetType().Name);
             base.OnAppearing();
@@ -39,7 +46,11 @@ namespace Bit.App.Controls
 
         protected override void OnDisappearing()
         {
-            IsBusy = false;
+            if(_syncIndicator)
+            {
+                IsBusy = _syncService.SyncInProgress;
+            }
+
             base.OnDisappearing();
         }
     }
