@@ -9,7 +9,6 @@ namespace Bit.App.Pages
     {
         public MainPage()
         {
-            MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
             TintColor = Color.FromHex("3c8dbc");
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
