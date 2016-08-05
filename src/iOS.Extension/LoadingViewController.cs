@@ -114,18 +114,7 @@ namespace Bit.iOS.Extension
                     PerformSegue("lockPasswordSegue", this);
                     break;
                 default:
-                    if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
-                    {
-                        PerformSegue("newSiteSegue", this);
-                    }
-                    else if(_context.ProviderType == Constants.UTTypeAppExtensionSetup)
-                    {
-                        PerformSegue("setupSegue", this);
-                    }
-                    else
-                    {
-                        PerformSegue("siteListSegue", this);
-                    }
+                    ContinueOn();
                     break;
             }
         }
@@ -180,16 +169,26 @@ namespace Bit.iOS.Extension
             Debug.WriteLine("BW Log, Dismissing lock controller.");
             DismissViewController(false, () =>
             {
-                Debug.WriteLine("BW Log, Segue to site add or list.");
-                if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
-                {
-                    PerformSegue("newSiteSegue", this);
-                }
-                else
-                {
-                    PerformSegue("siteListSegue", this);
-                }
+                ContinueOn();
             });
+        }
+
+        private void ContinueOn()
+        {
+            Debug.WriteLine("BW Log, Segue to setup, site add or list.");
+
+            if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
+            {
+                PerformSegue("newSiteSegue", this);
+            }
+            else if(_context.ProviderType == Constants.UTTypeAppExtensionSetup)
+            {
+                PerformSegue("setupSegue", this);
+            }
+            else
+            {
+                PerformSegue("siteListSegue", this);
+            }
         }
 
         public void CompleteUsernamePasswordRequest(string username, string password)
