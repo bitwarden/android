@@ -9,6 +9,7 @@ namespace Bit.App.Pages
     {
         public MainPage()
         {
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
             TintColor = Color.FromHex("3c8dbc");
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
@@ -32,12 +33,6 @@ namespace Bit.App.Pages
             Children.Add(vaultNavigation);
             Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
         }
     }
 }
