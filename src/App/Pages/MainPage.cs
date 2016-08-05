@@ -33,5 +33,11 @@ namespace Bit.App.Pages
             Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
+        }
     }
 }
