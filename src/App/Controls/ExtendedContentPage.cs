@@ -1,5 +1,4 @@
 ﻿using Bit.App.Abstractions;
-using System;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -36,6 +35,12 @@ namespace Bit.App.Controls
             var googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             googleAnalyticsService.TrackPage(GetType().Name);
             base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            IsBusy = false;
+            base.OnDisappearing();
         }
     }
 }
