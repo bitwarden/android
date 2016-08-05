@@ -12,10 +12,12 @@ namespace Bit.App.Pages
     public class ToolsPage : ExtendedContentPage
     {
         private readonly IUserDialogs _userDialogs;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public ToolsPage()
         {
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
@@ -70,6 +72,7 @@ namespace Bit.App.Pages
 
         private void WebCell_Tapped(object sender, EventArgs e)
         {
+            _googleAnalyticsService.TrackAppEvent("OpenedTool", "Web");
             Device.OpenUri(new Uri("https://vault.bitwarden.com"));
         }
 
@@ -80,6 +83,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _googleAnalyticsService.TrackAppEvent("OpenedTool", "Import");
             Device.OpenUri(new Uri("https://vault.bitwarden.com"));
         }
 
