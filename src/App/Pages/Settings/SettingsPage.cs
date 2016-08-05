@@ -18,6 +18,7 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
         private readonly IFingerprint _fingerprint;
         private readonly IPushNotification _pushNotification;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         // TODO: Model binding context?
 
@@ -28,6 +29,7 @@ namespace Bit.App.Pages
             _settings = Resolver.Resolve<ISettings>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
@@ -184,6 +186,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _googleAnalyticsService.TrackAppEvent("OpenedSetting", "TwoStep");
             Device.OpenUri(new Uri("https://vault.bitwarden.com"));
         }
 
@@ -239,6 +242,7 @@ namespace Bit.App.Pages
         {
             if(Device.OS == TargetPlatform.iOS)
             {
+                _googleAnalyticsService.TrackAppEvent("OpenedSetting", "RateApp");
                 var appStoreId = "1137397744";
                 Device.OpenUri(new Uri($"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id={appStoreId}&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
             }
@@ -251,6 +255,7 @@ namespace Bit.App.Pages
 
         private void LockCell_Tapped(object sender, EventArgs e)
         {
+            _googleAnalyticsService.TrackAppEvent("Locked");
             _settings.AddOrUpdateValue(Constants.SettingLocked, true);
             MessagingCenter.Send(Application.Current, "Lock", true);
         }
@@ -273,6 +278,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _googleAnalyticsService.TrackAppEvent("OpenedSetting", "ChangePassword");
             Device.OpenUri(new Uri("https://vault.bitwarden.com"));
         }
 
@@ -284,6 +290,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _googleAnalyticsService.TrackAppEvent("OpenedSetting", "ChangeEmail");
             Device.OpenUri(new Uri("https://vault.bitwarden.com"));
         }
 
