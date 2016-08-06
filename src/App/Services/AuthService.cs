@@ -12,6 +12,7 @@ namespace Bit.App.Services
         private const string TokenKey = "token";
         private const string EmailKey = "email";
         private const string UserIdKey = "userId";
+        private const string PreviousUserIdKey = "previousUserId";
         private const string PinKey = "pin";
 
         private readonly ISecureStorageService _secureStorage;
@@ -22,6 +23,7 @@ namespace Bit.App.Services
         private string _token;
         private string _email;
         private string _userId;
+        private string _previousUserId;
         private string _pin;
 
         public AuthService(
@@ -90,12 +92,37 @@ namespace Bit.App.Services
                 }
                 else
                 {
+                    PreviousUserId = _userId;
                     _settings.Remove(UserIdKey);
                 }
 
                 _userId = value;
             }
         }
+
+        public string PreviousUserId
+        {
+            get
+            {
+                if(_previousUserId != null)
+                {
+                    return _previousUserId;
+                }
+
+                _previousUserId = _settings.GetValueOrDefault<string>(PreviousUserIdKey);
+                return _previousUserId;
+            }
+            private set
+            {
+                if(value != null)
+                {
+                    _settings.AddOrUpdateValue(PreviousUserIdKey, value);
+                    _previousUserId = value;
+                }
+            }
+        }
+
+        public bool UserIdChanged => PreviousUserId != UserId;
 
         public string Email
         {

@@ -4,18 +4,21 @@ using System.Text;
 using Bit.App.Abstractions;
 using Bit.App.Models;
 using PCLCrypto;
+using System.Linq;
 
 namespace Bit.App.Services
 {
     public class CryptoService : ICryptoService
     {
         private const string KeyKey = "key";
+        private const string PreviousKeyKey = "previousKey";
         private const int InitializationVectorSize = 16;
 
         private readonly Random _random = new Random();
         private readonly ISecureStorageService _secureStorage;
         private readonly IKeyDerivationService _keyDerivationService;
         private byte[] _key;
+        private byte[] _previousKey;
 
         public CryptoService(
             ISecureStorageService secureStorage,
@@ -44,6 +47,7 @@ namespace Bit.App.Services
                 }
                 else
                 {
+                    PreviousKey = _key;
                     _secureStorage.Delete(KeyKey);
                     _key = null;
                 }
@@ -62,6 +66,29 @@ namespace Bit.App.Services
                 return Convert.ToBase64String(Key);
             }
         }
+
+        public byte[] PreviousKey
+        {
+            get
+            {
+                if(_previousKey == null)
+                {
+                    _previousKey = _secureStorage.Retrieve(PreviousKeyKey);
+                }
+
+                return _previousKey;
+            }
+            private set
+            {
+                if(value != null)
+                {
+                    _secureStorage.Store(PreviousKeyKey, value);
+                    _previousKey = value;
+                }
+            }
+        }
+
+        public bool KeyChanged => !PreviousKey?.SequenceEqual(Key) ?? Key == null ? false : true;
 
         public CipherString Encrypt(string plaintextValue)
         {

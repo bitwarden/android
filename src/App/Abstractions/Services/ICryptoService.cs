@@ -6,6 +6,8 @@ namespace Bit.App.Abstractions
     {
         string Base64Key { get; }
         byte[] Key { get; set; }
+        byte[] PreviousKey { get; }
+        bool KeyChanged { get; }
 
         string Decrypt(CipherString encyptedValue);
         CipherString Encrypt(string plaintextValue);

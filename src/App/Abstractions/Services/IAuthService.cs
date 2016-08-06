@@ -9,6 +9,8 @@ namespace Bit.App.Abstractions
         bool IsAuthenticatedTwoFactor { get; }
         string Token { get; set; }
         string UserId { get; set; }
+        string PreviousUserId { get; }
+        bool UserIdChanged { get; }
         string Email { get; set; }
         string PIN { get; set; }
 

@@ -161,7 +161,11 @@ namespace Bit.App.Pages
             var activatedButton = new Button
             {
                 Text = "See Supported Apps",
-                Command = new Command(() => Device.OpenUri(new Uri("https://bitwarden.com"))),
+                Command = new Command(() =>
+                {
+                    _googleAnalyticsService.TrackAppEvent("SeeSupportedApps");
+                    Device.OpenUri(new Uri("https://bitwarden.com"));
+                }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"]
