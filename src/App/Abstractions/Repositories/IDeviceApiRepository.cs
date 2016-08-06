@@ -8,7 +8,7 @@ namespace Bit.App.Abstractions
 {
     public interface IDeviceApiRepository : IApiRepository<DeviceRequest, DeviceResponse, string>
     {
-        Task<ApiResult<DeviceResponse>> PutTokenAsync(string identifier, DeviceTokenRequest request);
+        Task<ApiResult> PutTokenAsync(string identifier, DeviceTokenRequest request);
         Task<ApiResult> PutClearTokenAsync(string identifier);
     }
 }

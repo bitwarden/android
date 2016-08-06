@@ -95,7 +95,7 @@ namespace Bit.App.Services
             }
         }
 
-        public async void OnUnregistered(DeviceType deviceType)
+        public void OnUnregistered(DeviceType deviceType)
         {
             Debug.WriteLine("Push Notification - Device Unnregistered");
         }

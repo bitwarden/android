@@ -16,11 +16,11 @@ namespace Bit.App.Repositories
 
         protected override string ApiRoute => "devices";
 
-        public virtual async Task<ApiResult<DeviceResponse>> PutTokenAsync(string identifier, DeviceTokenRequest request)
+        public virtual async Task<ApiResult> PutTokenAsync(string identifier, DeviceTokenRequest request)
         {
             if(!Connectivity.IsConnected)
             {
-                return HandledNotConnected<DeviceResponse>();
+                return HandledNotConnected();
             }
 
             using(var client = new ApiHttpClient())
@@ -34,12 +34,10 @@ namespace Bit.App.Repositories
                 var response = await client.SendAsync(requestMessage);
                 if(!response.IsSuccessStatusCode)
                 {
-                    return await HandleErrorAsync<DeviceResponse>(response);
+                    return await HandleErrorAsync(response);
                 }
 
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var responseObj = JsonConvert.DeserializeObject<DeviceResponse>(responseContent);
-                return ApiResult<DeviceResponse>.Success(responseObj, response.StatusCode);
+                return ApiResult.Success(response.StatusCode);
             }
         }
 
