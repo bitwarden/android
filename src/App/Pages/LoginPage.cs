@@ -128,13 +128,16 @@ namespace Bit.App.Pages
             base.OnAppearing();
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
 
-            if(!string.IsNullOrWhiteSpace(EmailCell.Entry.Text))
+            if(string.IsNullOrWhiteSpace(_email))
             {
-                PasswordCell.Entry.Focus();
-            }
-            else
-            {
-                EmailCell.Entry.Focus();
+                if(!string.IsNullOrWhiteSpace(EmailCell.Entry.Text))
+                {
+                    PasswordCell.Entry.Focus();
+                }
+                else
+                {
+                    EmailCell.Entry.Focus();
+                }
             }
         }
 
