@@ -184,13 +184,6 @@ namespace Bit.App
 
         private async void Logout(string logoutMessage)
         {
-            var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
-            var appIdService = Resolver.Resolve<IAppIdService>();
-
-            _pushNotification.Unregister();
-            _settings.Remove(Constants.PushLastRegistrationDate);
-            await deviceApiRepository.PutClearTokenAsync(appIdService.AppId);
-
             _authService.LogOut();
 
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
@@ -201,6 +194,12 @@ namespace Bit.App
             {
                 _userDialogs.Toast(logoutMessage);
             }
+
+            var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
+            var appIdService = Resolver.Resolve<IAppIdService>();
+            _pushNotification.Unregister();
+            _settings.Remove(Constants.PushLastRegistrationDate);
+            await Task.Run(() => deviceApiRepository.PutClearTokenAsync(appIdService.AppId)).ConfigureAwait(false);
         }
 
         private async Task CheckLockAsync(bool forceLock)

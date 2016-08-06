@@ -43,11 +43,11 @@ namespace Bit.App.Repositories
             }
         }
 
-        public virtual async Task<ApiResult<DeviceResponse>> PutClearTokenAsync(string identifier)
+        public virtual async Task<ApiResult> PutClearTokenAsync(string identifier)
         {
             if(!Connectivity.IsConnected)
             {
-                return HandledNotConnected<DeviceResponse>();
+                return HandledNotConnected();
             }
 
             using(var client = new ApiHttpClient())
@@ -59,14 +59,7 @@ namespace Bit.App.Repositories
                 };
 
                 var response = await client.SendAsync(requestMessage);
-                if(!response.IsSuccessStatusCode)
-                {
-                    return await HandleErrorAsync<DeviceResponse>(response);
-                }
-
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var responseObj = JsonConvert.DeserializeObject<DeviceResponse>(responseContent);
-                return ApiResult<DeviceResponse>.Success(responseObj, response.StatusCode);
+                return ApiResult.Success(response.StatusCode);
             }
         }
     }
