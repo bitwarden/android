@@ -5,10 +5,6 @@
         public const string SettingFingerprintUnlockOn = "setting:fingerprintUnlockOn";
         public const string SettingPinUnlockOn = "setting:pinUnlockOn";
         public const string SettingLockSeconds = "setting:lockSeconds";
-        public const string SettingLastBackgroundedDate = "lastBackgroundedDate";
-        public const string SettingLocked = "locked";
-        public const string SettingLastLoginEmail = "lastLoginEmail";
-        public const string SettingLastSync = "lastSync";
 
         public const string PasswordGeneratorLength = "pwGenerator:length";
         public const string PasswordGeneratorUppercase = "pwGenerator:uppercase";
@@ -24,5 +20,11 @@
 
         public const string ExtensionStarted = "extension:started";
         public const string ExtensionActivated = "extension:activated";
+
+        public const string FirstVaultLoad = "other:firstVaultLoad";
+        public const string LastBackgroundedDate = "other:lastBackgroundedDate";
+        public const string Locked = "other:locked";
+        public const string LastLoginEmail = "other:lastLoginEmail";
+        public const string LastSync = "other:lastSync";
     }
 }

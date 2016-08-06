@@ -88,7 +88,23 @@ namespace Bit.App.Services
             }
         }
 
-        public bool KeyChanged => !PreviousKey?.SequenceEqual(Key) ?? Key == null ? false : true;
+        public bool KeyChanged
+        {
+            get
+            {
+                if(Key == null)
+                {
+                    throw new InvalidOperationException("Key must be set before asking if it has changed.");
+                }
+
+                if(PreviousKey == null)
+                {
+                    return Key != null;
+                }
+
+                return !PreviousKey.SequenceEqual(Key);
+            }
+        }
 
         public CipherString Encrypt(string plaintextValue)
         {

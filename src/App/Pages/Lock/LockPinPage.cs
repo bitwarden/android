@@ -92,7 +92,7 @@ namespace Bit.App.Pages
         {
             if(Model.PIN == _authService.PIN)
             {
-                _settings.AddOrUpdateValue(Constants.SettingLocked, false);
+                _settings.AddOrUpdateValue(Constants.Locked, false);
                 PinControl.Entry.Unfocus();
                 Navigation.PopModalAsync();
             }

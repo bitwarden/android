@@ -97,7 +97,7 @@ namespace Bit.App.Pages
             var result = await _fingerprint.AuthenticateAsync("Use your fingerprint to verify.");
             if(result.Authenticated)
             {
-                _settings.AddOrUpdateValue(Constants.SettingLocked, false);
+                _settings.AddOrUpdateValue(Constants.Locked, false);
                 await Navigation.PopModalAsync();
             }
             else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)

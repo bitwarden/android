@@ -65,7 +65,7 @@ namespace Bit.iOS.Extension
                 if(PinTextField.Text == _authService.PIN)
                 {
                     Debug.WriteLine("BW Log, Start Dismiss PIN controller.");
-                    _settings.AddOrUpdateValue(Constants.SettingLocked, false);
+                    _settings.AddOrUpdateValue(Constants.Locked, false);
                     PinTextField.ResignFirstResponder();
                     LoadingController.DismissLockAndContinue();
                 }

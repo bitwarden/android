@@ -256,7 +256,7 @@ namespace Bit.App.Pages
         private void LockCell_Tapped(object sender, EventArgs e)
         {
             _googleAnalyticsService.TrackAppEvent("Locked");
-            _settings.AddOrUpdateValue(Constants.SettingLocked, true);
+            _settings.AddOrUpdateValue(Constants.Locked, true);
             MessagingCenter.Send(Application.Current, "Lock", true);
         }
 

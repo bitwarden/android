@@ -160,14 +160,14 @@ namespace Bit.App.Services
                 return false;
             }
 
-            _settings.AddOrUpdateValue(Constants.SettingLastSync, now);
+            _settings.AddOrUpdateValue(Constants.LastSync, now);
             SyncCompleted(true);
             return true;
         }
 
         public async Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold)
         {
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync);
             if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
             {
                 return false;
@@ -184,7 +184,7 @@ namespace Bit.App.Services
             }
 
             var now = DateTime.UtcNow;
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.SettingLastSync);
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync);
             if(lastSync == null)
             {
                 return await FullSyncAsync();
@@ -217,7 +217,7 @@ namespace Bit.App.Services
                 return false;
             }
 
-            _settings.AddOrUpdateValue(Constants.SettingLastSync, now);
+            _settings.AddOrUpdateValue(Constants.LastSync, now);
             SyncCompleted(true);
             return true;
         }

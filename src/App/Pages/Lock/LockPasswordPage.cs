@@ -107,7 +107,7 @@ namespace Bit.App.Pages
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, _authService.Email);
             if(key.SequenceEqual(_cryptoService.Key))
             {
-                _settings.AddOrUpdateValue(Constants.SettingLocked, false);
+                _settings.AddOrUpdateValue(Constants.Locked, false);
                 await Navigation.PopModalAsync();
             }
             else

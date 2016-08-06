@@ -53,7 +53,7 @@ namespace Bit.App.Pages
                 entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",
                 containerPadding: padding);
 
-            var lastLoginEmail = _settings.GetValueOrDefault<string>(Constants.SettingLastLoginEmail);
+            var lastLoginEmail = _settings.GetValueOrDefault<string>(Constants.LastLoginEmail);
             if(!string.IsNullOrWhiteSpace(lastLoginEmail))
             {
                 EmailCell.Entry.Text = lastLoginEmail;
@@ -179,7 +179,7 @@ namespace Bit.App.Pages
             _authService.Token = response.Result.Token;
             _authService.UserId = response.Result?.Profile?.Id;
             _authService.Email = response.Result?.Profile?.Email;
-            _settings.AddOrUpdateValue(Constants.SettingLastLoginEmail, _authService.Email);
+            _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
             _googleAnalyticsService.RefreshUserId();
             _googleAnalyticsService.TrackAppEvent("LoggedIn");
 

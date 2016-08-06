@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IPushNotification _pushNotification;
         private readonly ISettings _settings;
         private readonly bool _favorites;
+        private bool _loadExistingData;
 
         public VaultListSitesPage(bool favorites)
         {
@@ -40,6 +41,9 @@ namespace Bit.App.Pages
             _syncService = Resolver.Resolve<ISyncService>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
             _settings = Resolver.Resolve<ISettings>();
+
+            var cryptoService = Resolver.Resolve<ICryptoService>();
+            _loadExistingData = !_settings.GetValueOrDefault(Constants.FirstVaultLoad, true) || !cryptoService.KeyChanged;
 
             Init();
         }
@@ -150,7 +154,10 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            FetchAndLoadVault();
+            if(_loadExistingData)
+            {
+                FetchAndLoadVault();
+            }
 
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
@@ -181,12 +188,14 @@ namespace Bit.App.Pages
                     // Check push registration once per day
                     registerAction();
                 }
-
             }
         }
 
         private void FetchAndLoadVault()
         {
+            _settings.AddOrUpdateValue(Constants.FirstVaultLoad, false);
+            _loadExistingData = true;
+
             if(PresentationFolders.Count > 0 && _syncService.SyncInProgress)
             {
                 return;
