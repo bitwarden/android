@@ -31,6 +31,7 @@ namespace Bit.App.Pages
         private bool _loadExistingData;
 
         public VaultListSitesPage(bool favorites)
+            : base(true)
         {
             _favorites = favorites;
             _folderService = Resolver.Resolve<IFolderService>();

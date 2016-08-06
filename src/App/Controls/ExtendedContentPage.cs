@@ -9,7 +9,7 @@ namespace Bit.App.Controls
         private ISyncService _syncService;
         private bool _syncIndicator;
 
-        public ExtendedContentPage(bool syncIndicator = true)
+        public ExtendedContentPage(bool syncIndicator = false)
         {
             _syncIndicator = syncIndicator;
             _syncService = Resolver.Resolve<ISyncService>();
@@ -18,8 +18,6 @@ namespace Bit.App.Controls
 
             if(_syncIndicator)
             {
-                IsBusy = _syncService.SyncInProgress;
-
                 MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
                 {
                     IsBusy = _syncService.SyncInProgress;
@@ -48,7 +46,7 @@ namespace Bit.App.Controls
         {
             if(_syncIndicator)
             {
-                IsBusy = _syncService.SyncInProgress;
+                IsBusy = false;
             }
 
             base.OnDisappearing();
