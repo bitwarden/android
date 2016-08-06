@@ -3,5 +3,6 @@
     public interface IAppIdService
     {
         string AppId { get; }
+        string AnonymousAppId { get; }
     }
 }

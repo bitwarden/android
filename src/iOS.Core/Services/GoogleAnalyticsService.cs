@@ -20,7 +20,7 @@ namespace Bit.iOS.Core.Services
             Gai.SharedInstance.TrackUncaughtExceptions = true;
             _tracker = Gai.SharedInstance.GetTracker("UA-81915606-1");
             _tracker.SetAllowIdfaCollection(true);
-            _tracker.Set(GaiConstants.ClientId, appIdService.AppId);
+            _tracker.Set(GaiConstants.ClientId, appIdService.AnonymousAppId);
         }
 
         public void RefreshUserId()

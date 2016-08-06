@@ -28,7 +28,7 @@ namespace Bit.Android.Services
             _tracker.EnableExceptionReporting(true);
             _tracker.EnableAdvertisingIdCollection(true);
             _tracker.EnableAutoActivityTracking(true);
-            _tracker.SetClientId(appIdService.AppId);
+            _tracker.SetClientId(appIdService.AnonymousAppId);
         }
 
         public void RefreshUserId()
