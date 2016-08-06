@@ -14,6 +14,7 @@ using Plugin.Connectivity.Abstractions;
 using System.Net;
 using Acr.UserDialogs;
 using PushNotification.Plugin.Abstractions;
+using XLabs.Ioc;
 
 namespace Bit.App
 {
@@ -181,12 +182,20 @@ namespace Bit.App
             }
         }
 
-        private void Logout(string logoutMessage)
+        private async void Logout(string logoutMessage)
         {
+            var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
+            var appIdService = Resolver.Resolve<IAppIdService>();
+
+            _pushNotification.Unregister();
+            _settings.Remove(Constants.PushLastRegistrationDate);
+            await deviceApiRepository.PutClearTokenAsync(appIdService.AppId);
+
             _authService.LogOut();
+
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
             _googleAnalyticsService.RefreshUserId();
-            _pushNotification.Unregister();
+
             Current.MainPage = new HomePage();
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {

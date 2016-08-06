@@ -98,8 +98,6 @@ namespace Bit.App.Services
         public async void OnUnregistered(DeviceType deviceType)
         {
             Debug.WriteLine("Push Notification - Device Unnregistered");
-            _settings.Remove(Constants.PushLastRegistrationDate);
-            await _deviceApiRepository.PutClearTokenAsync(_appIdService.AppId);
         }
 
         public void OnError(string message, DeviceType deviceType)
