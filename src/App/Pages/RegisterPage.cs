@@ -17,9 +17,11 @@ namespace Bit.App.Pages
         private IUserDialogs _userDialogs;
         private IAccountsApiRepository _accountsApiRepository;
         private IGoogleAnalyticsService _googleAnalyticsService;
+        private HomePage _homePage;
 
-        public RegisterPage()
+        public RegisterPage(HomePage homePage)
         {
+            _homePage = homePage;
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _accountsApiRepository = Resolver.Resolve<IAccountsApiRepository>();
@@ -148,14 +150,14 @@ namespace Bit.App.Pages
         {
             if(string.IsNullOrWhiteSpace(EmailCell.Entry.Text))
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, 
+                await DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress), AppResources.Ok);
                 return;
             }
 
             if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, 
+                await DisplayAlert(AppResources.AnErrorHasOccurred,
                     string.Format(AppResources.ValidationFieldRequired, "Your Name"), AppResources.Ok);
                 return;
             }
@@ -184,9 +186,8 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.Toast("Your new account has been created! You may now log in.");
             _googleAnalyticsService.TrackAppEvent("Registered");
-            await Navigation.PopModalAsync();
+            await _homePage.DismissRegisterAndLoginAsync(EmailCell.Entry.Text);
         }
 
         private class FormTableView : ExtendedTableView

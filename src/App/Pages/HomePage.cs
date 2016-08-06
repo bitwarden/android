@@ -89,7 +89,14 @@ namespace Bit.App.Pages
 
         public async Task RegisterAsync()
         {
-            await Navigation.PushModalAsync(new ExtendedNavigationPage(new RegisterPage()));
+            await Navigation.PushModalAsync(new ExtendedNavigationPage(new RegisterPage(this)));
+        }
+
+        public async Task DismissRegisterAndLoginAsync(string email)
+        {
+            await Navigation.PopModalAsync();
+            await Navigation.PushModalAsync(new ExtendedNavigationPage(new LoginPage(email)));
+            _userDialogs.Toast("Your new account has been created! You may now log in.");
         }
     }
 }

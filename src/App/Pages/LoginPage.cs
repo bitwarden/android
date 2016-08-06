@@ -23,9 +23,11 @@ namespace Bit.App.Pages
         private ISyncService _syncService;
         private ISettings _settings;
         private IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly string _email;
 
-        public LoginPage()
+        public LoginPage(string email = null)
         {
+            _email = email;
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
             _deviceInfo = Resolver.Resolve<IDeviceInfo>();
@@ -54,7 +56,11 @@ namespace Bit.App.Pages
                 containerPadding: padding);
 
             var lastLoginEmail = _settings.GetValueOrDefault<string>(Constants.LastLoginEmail);
-            if(!string.IsNullOrWhiteSpace(lastLoginEmail))
+            if(!string.IsNullOrWhiteSpace(_email))
+            {
+                EmailCell.Entry.Text = _email;
+            }
+            else if(!string.IsNullOrWhiteSpace(lastLoginEmail))
             {
                 EmailCell.Entry.Text = lastLoginEmail;
             }
