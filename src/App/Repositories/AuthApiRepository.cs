@@ -5,6 +5,7 @@ using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
+using System.Net;
 
 namespace Bit.App.Repositories
 {
@@ -31,15 +32,22 @@ namespace Bit.App.Repositories
                     RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/token")),
                 };
 
-                var response = await client.SendAsync(requestMessage);
-                if(!response.IsSuccessStatusCode)
+                try
                 {
-                    return await HandleErrorAsync<TokenResponse>(response);
-                }
+                    var response = await client.SendAsync(requestMessage);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return await HandleErrorAsync<TokenResponse>(response);
+                    }
 
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
-                return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
+                    return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
+                }
+                catch(WebException)
+                {
+                    return HandledWebException<TokenResponse>();
+                }
             }
         }
 
@@ -58,15 +66,22 @@ namespace Bit.App.Repositories
                     RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/token/two-factor")),
                 };
 
-                var response = await client.SendAsync(requestMessage);
-                if(!response.IsSuccessStatusCode)
+                try
                 {
-                    return await HandleErrorAsync<TokenResponse>(response);
-                }
+                    var response = await client.SendAsync(requestMessage);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return await HandleErrorAsync<TokenResponse>(response);
+                    }
 
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
-                return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
+                    return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
+                }
+                catch(WebException)
+                {
+                    return HandledWebException<TokenResponse>();
+                }
             }
         }
     }

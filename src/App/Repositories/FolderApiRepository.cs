@@ -6,6 +6,7 @@ using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
+using System.Net;
 
 namespace Bit.App.Repositories
 {
@@ -32,15 +33,22 @@ namespace Bit.App.Repositories
                     RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "?since=", since)),
                 };
 
-                var response = await client.SendAsync(requestMessage);
-                if(!response.IsSuccessStatusCode)
+                try
                 {
-                    return await HandleErrorAsync<ListResponse<FolderResponse>>(response);
-                }
+                    var response = await client.SendAsync(requestMessage);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return await HandleErrorAsync<ListResponse<FolderResponse>>(response);
+                    }
 
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var responseObj = JsonConvert.DeserializeObject<ListResponse<FolderResponse>>(responseContent);
-                return ApiResult<ListResponse<FolderResponse>>.Success(responseObj, response.StatusCode);
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseObj = JsonConvert.DeserializeObject<ListResponse<FolderResponse>>(responseContent);
+                    return ApiResult<ListResponse<FolderResponse>>.Success(responseObj, response.StatusCode);
+                }
+                catch(WebException)
+                {
+                    return HandledWebException<ListResponse<FolderResponse>>();
+                }
             }
         }
     }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Plugin.Connectivity.Abstractions;
+using System.Net;
 
 namespace Bit.App.Repositories
 {
@@ -30,13 +31,20 @@ namespace Bit.App.Repositories
                     RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/register")),
                 };
 
-                var response = await client.SendAsync(requestMessage);
-                if(!response.IsSuccessStatusCode)
+                try
                 {
-                    return await HandleErrorAsync(response);
-                }
+                    var response = await client.SendAsync(requestMessage);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return await HandleErrorAsync(response);
+                    }
 
-                return ApiResult.Success(response.StatusCode);
+                    return ApiResult.Success(response.StatusCode);
+                }
+                catch(WebException)
+                {
+                    return HandledWebException();
+                }
             }
         }
 
@@ -55,13 +63,20 @@ namespace Bit.App.Repositories
                     RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/password-hint")),
                 };
 
-                var response = await client.SendAsync(requestMessage);
-                if(!response.IsSuccessStatusCode)
+                try
                 {
-                    return await HandleErrorAsync(response);
-                }
+                    var response = await client.SendAsync(requestMessage);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return await HandleErrorAsync(response);
+                    }
 
-                return ApiResult.Success(response.StatusCode);
+                    return ApiResult.Success(response.StatusCode);
+                }
+                catch(WebException)
+                {
+                    return HandledWebException();
+                }
             }
         }
     }

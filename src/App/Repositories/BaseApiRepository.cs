@@ -28,6 +28,16 @@ namespace Bit.App.Repositories
             return ApiResult<T>.Failed(System.Net.HttpStatusCode.RequestTimeout, new ApiError { Message = "Not connected to the internet." });
         }
 
+        protected ApiResult HandledWebException()
+        {
+            return ApiResult.Failed(System.Net.HttpStatusCode.BadGateway, new ApiError { Message = "There is a problem connecting to the server." });
+        }
+
+        protected ApiResult<T> HandledWebException<T>()
+        {
+            return ApiResult<T>.Failed(System.Net.HttpStatusCode.BadGateway, new ApiError { Message = "There is a problem connecting to the server." });
+        }
+
         protected async Task<ApiResult<T>> HandleErrorAsync<T>(HttpResponseMessage response)
         {
             try
