@@ -12,7 +12,10 @@ namespace Bit.App
         {
             var authService = Resolver.Resolve<IAuthService>();
             var appIdService = Resolver.Resolve<IAppIdService>();
-            Headers.Add("Authorization", $"Bearer {authService.Token}");
+            if(authService.IsAuthenticated)
+            {
+                Headers.Add("Authorization", $"Bearer {authService.Token}");
+            }
             if(!string.IsNullOrWhiteSpace(appIdService.AppId))
             {
                 Headers.Add("DeviceIdentifier", appIdService.AppId);

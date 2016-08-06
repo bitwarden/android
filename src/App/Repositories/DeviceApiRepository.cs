@@ -42,5 +42,32 @@ namespace Bit.App.Repositories
                 return ApiResult<DeviceResponse>.Success(responseObj, response.StatusCode);
             }
         }
+
+        public virtual async Task<ApiResult<DeviceResponse>> PutClearTokenAsync(string identifier)
+        {
+            if(!Connectivity.IsConnected)
+            {
+                return HandledNotConnected<DeviceResponse>();
+            }
+
+            using(var client = new ApiHttpClient())
+            {
+                var requestMessage = new TokenHttpRequestMessage
+                {
+                    Method = HttpMethod.Put,
+                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/identifier/", identifier, "/clear-token")),
+                };
+
+                var response = await client.SendAsync(requestMessage);
+                if(!response.IsSuccessStatusCode)
+                {
+                    return await HandleErrorAsync<DeviceResponse>(response);
+                }
+
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseObj = JsonConvert.DeserializeObject<DeviceResponse>(responseContent);
+                return ApiResult<DeviceResponse>.Success(responseObj, response.StatusCode);
+            }
+        }
     }
 }
