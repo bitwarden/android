@@ -18,7 +18,7 @@ namespace Bit.App
             }
             if(!string.IsNullOrWhiteSpace(appIdService.AppId))
             {
-                Headers.Add("DeviceIdentifier", appIdService.AppId);
+                Headers.Add("Device-Identifier", appIdService.AppId);
             }
         }
 
