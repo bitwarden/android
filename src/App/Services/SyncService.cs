@@ -224,10 +224,19 @@ namespace Bit.App.Services
 
         private async Task SyncFoldersAsync(IEnumerable<CipherResponse> serverFolders, bool deleteMissing)
         {
+            if(!_authService.IsAuthenticated)
+            {
+                return;
+            }
             var localFolders = await _folderRepository.GetAllByUserIdAsync(_authService.UserId);
 
             foreach(var serverFolder in serverFolders)
             {
+                if(!_authService.IsAuthenticated)
+                {
+                    return;
+                }
+
                 var existingLocalFolder = localFolders.SingleOrDefault(f => f.Id == serverFolder.Id);
                 if(existingLocalFolder == null)
                 {
@@ -254,10 +263,20 @@ namespace Bit.App.Services
 
         private async Task SyncSitesAsync(IEnumerable<CipherResponse> serverSites, bool deleteMissing)
         {
+            if(!_authService.IsAuthenticated)
+            {
+                return;
+            }
+
             var localSites = await _siteRepository.GetAllByUserIdAsync(_authService.UserId);
 
             foreach(var serverSite in serverSites)
             {
+                if(!_authService.IsAuthenticated)
+                {
+                    return;
+                }
+
                 var existingLocalSite = localSites.SingleOrDefault(s => s.Id == serverSite.Id);
                 if(existingLocalSite == null)
                 {
@@ -287,6 +306,11 @@ namespace Bit.App.Services
             var tasks = new List<Task>();
             foreach(var cipherId in cipherIds)
             {
+                if(!_authService.IsAuthenticated)
+                {
+                    return;
+                }
+
                 tasks.Add(_siteRepository.DeleteAsync(cipherId));
                 tasks.Add(_folderRepository.DeleteAsync(cipherId));
             }
