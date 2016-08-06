@@ -5,6 +5,7 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using PCLCrypto;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
@@ -129,18 +130,19 @@ namespace Bit.App.Services
 
         public string Decrypt(CipherString encyptedValue)
         {
-            if(Key == null)
-            {
-                throw new ArgumentNullException(nameof(Key));
-            }
-
-            if(encyptedValue == null)
-            {
-                throw new ArgumentNullException(nameof(encyptedValue));
-            }
-
             try
             {
+                if(Key == null)
+                {
+                    throw new ArgumentNullException(nameof(Key));
+                }
+
+                if(encyptedValue == null)
+                {
+                    throw new ArgumentNullException(nameof(encyptedValue));
+                }
+
+
                 var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
                 var cryptoKey = provider.CreateSymmetricKey(Key);
                 var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
