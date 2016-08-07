@@ -63,5 +63,10 @@
 	<string>bitwarden extension</string>
 	<key>CFBundleDisplayName</key>
 	<string>bitwarden</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<dict>
+		<key>arm64</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
