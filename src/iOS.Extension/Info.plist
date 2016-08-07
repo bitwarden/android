@@ -62,6 +62,6 @@
 	<key>CFBundleName</key>
 	<string>bitwarden extension</string>
 	<key>CFBundleDisplayName</key>
-	<string>bitwarden extension</string>
+	<string>bitwarden</string>
 </dict>
 </plist>
