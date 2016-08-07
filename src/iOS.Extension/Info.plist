@@ -41,10 +41,6 @@
             ||  ANY $attachment.registeredTypeIdentifiers UTI-CONFORMS-TO &quot;com.8bit.bitwarden.extension-setup&quot;
 		).@count == $extensionItem.attachments.@count
 	).@count == 1</string>
-			<key>NSExtensionPointName</key>
-			<string>com.apple.ui-services</string>
-			<key>NSExtensionPointVersion</key>
-			<string>1.0</string>
 		</dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
@@ -66,6 +62,6 @@
 	<key>CFBundleName</key>
 	<string>bitwarden extension</string>
 	<key>CFBundleDisplayName</key>
-	<string>bitwarden</string>
+	<string>bitwarden extension</string>
 </dict>
 </plist>

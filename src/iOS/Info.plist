@@ -77,5 +77,10 @@
 	<string>ecf076d3-4824-4d7b-b716-2a9a47d7d296</string>
 	<key>CFBundleName</key>
 	<string>bitwarden</string>
+	<key>UIRequiredDeviceCapabilities</key>
+	<dict>
+		<key>arm64</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
