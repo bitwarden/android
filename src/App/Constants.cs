@@ -22,7 +22,7 @@
         public const string ExtensionActivated = "extension:activated";
 
         public const string FirstVaultLoad = "other:firstVaultLoad";
-        public const string LastBackgroundedDate = "other:lastBackgroundedDate";
+        public const string LastActivityDate = "other:lastActivityDate";
         public const string Locked = "other:locked";
         public const string LastLoginEmail = "other:lastLoginEmail";
         public const string LastSync = "other:lastSync";

@@ -99,7 +99,7 @@ namespace Bit.App
 
             if(Device.OS == TargetPlatform.Android)
             {
-                _settings.AddOrUpdateValue(Constants.LastBackgroundedDate, DateTime.UtcNow);
+                _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
             }
         }
 

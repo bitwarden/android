@@ -30,6 +30,7 @@ namespace Bit.iOS.Extension
         private readonly JsonSerializerSettings _jsonSettings =
             new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private IGoogleAnalyticsService _googleAnalyticsService;
+        private ISettings _settings;
 
         public LoadingViewController(IntPtr handle) : base(handle)
         { }
@@ -45,12 +46,12 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _settings = Resolver.Resolve<ISettings>();
 
             if(!_setupHockeyApp)
             {
                 var appIdService = Resolver.Resolve<IAppIdService>();
-                var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
-                    appIdService, Resolver.Resolve<IAuthService>());
+                var crashManagerDelegate = new HockeyAppCrashManagerDelegate(appIdService, Resolver.Resolve<IAuthService>());
                 var manager = HockeyApp.iOS.BITHockeyManager.SharedHockeyManager;
                 manager.Configure("51f96ae568ba45f699a18ad9f63046c3", crashManagerDelegate);
                 manager.CrashManager.CrashManagerStatus = HockeyApp.iOS.BITCrashManagerStatus.AutoSend;
@@ -92,7 +93,8 @@ namespace Bit.iOS.Extension
             var authService = Resolver.Resolve<IAuthService>();
             if(!authService.IsAuthenticated)
             {
-                var alert = Dialogs.CreateAlert(null, "You must log into the main bitwarden app before you can use the extension.", AppResources.Ok, (a) =>
+                var alert = Dialogs.CreateAlert(null,
+                    "You must log into the main bitwarden app before you can use the extension.", AppResources.Ok, (a) =>
                 {
                     CompleteRequest(null);
                 });
@@ -176,6 +178,7 @@ namespace Bit.iOS.Extension
         private void ContinueOn()
         {
             Debug.WriteLine("BW Log, Segue to setup, site add or list.");
+            _settings.AddOrUpdateValue(App.Constants.LastActivityDate, DateTime.UtcNow);
 
             if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
             {
@@ -240,6 +243,7 @@ namespace Bit.iOS.Extension
 
             if(itemData != null)
             {
+                _settings.AddOrUpdateValue(App.Constants.LastActivityDate, DateTime.UtcNow);
                 _googleAnalyticsService.TrackExtensionEvent("AutoFilled", _context.ProviderType);
             }
             else
@@ -249,7 +253,8 @@ namespace Bit.iOS.Extension
 
             _googleAnalyticsService.Dispatch(() =>
             {
-                NSRunLoop.Main.BeginInvokeOnMainThread(() => {
+                NSRunLoop.Main.BeginInvokeOnMainThread(() =>
+                {
                     ExtensionContext.CompleteRequest(returningItems, null);
                 });
             });

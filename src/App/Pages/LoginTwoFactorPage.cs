@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private ISyncService _syncService;
 
         public LoginTwoFactorPage()
+            : base(updateActivity: false)
         {
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();

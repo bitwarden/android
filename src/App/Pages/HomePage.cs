@@ -17,6 +17,7 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
 
         public HomePage()
+            : base(updateActivity: false)
         {
             _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();

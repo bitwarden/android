@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private HomePage _homePage;
 
         public RegisterPage(HomePage homePage)
+            : base(updateActivity: false)
         {
             _homePage = homePage;
             _cryptoService = Resolver.Resolve<ICryptoService>();

@@ -141,7 +141,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
 
             // Log the date/time we last backgrounded
-            Settings.AddOrUpdateValue(App.Constants.LastBackgroundedDate, DateTime.UtcNow);
+            Settings.AddOrUpdateValue(App.Constants.LastActivityDate, DateTime.UtcNow);
 
             // Dispatch Google Analytics
             SendGoogleAnalyticsHitsInBackground();

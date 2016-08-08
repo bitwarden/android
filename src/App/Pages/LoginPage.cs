@@ -26,6 +26,7 @@ namespace Bit.App.Pages
         private readonly string _email;
 
         public LoginPage(string email = null)
+            : base(updateActivity: false)
         {
             _email = email;
             _cryptoService = Resolver.Resolve<ICryptoService>();

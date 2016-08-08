@@ -40,9 +40,9 @@ namespace Bit.App.Services
                     return LockType.None;
                 }
 
-                // Has it been longer than lockSeconds since the last time the app was backgrounded?
+                // Has it been longer than lockSeconds since the last time the app was used?
                 var now = DateTime.UtcNow;
-                var lastBackground = _settings.GetValueOrDefault(Constants.LastBackgroundedDate, now.AddYears(-1));
+                var lastBackground = _settings.GetValueOrDefault(Constants.LastActivityDate, now.AddYears(-1));
                 if((now - lastBackground).TotalSeconds < lockSeconds)
                 {
                     return LockType.None;

@@ -1,4 +1,6 @@
 ﻿using Bit.App.Abstractions;
+using Plugin.Settings.Abstractions;
+using System;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -7,12 +9,18 @@ namespace Bit.App.Controls
     public class ExtendedContentPage : ContentPage
     {
         private ISyncService _syncService;
+        private IGoogleAnalyticsService _googleAnalyticsService;
+        private ISettings _settings;
         private bool _syncIndicator;
+        private bool _updateActivity;
 
-        public ExtendedContentPage(bool syncIndicator = false)
+        public ExtendedContentPage(bool syncIndicator = false, bool updateActivity = true)
         {
             _syncIndicator = syncIndicator;
+            _updateActivity = updateActivity;
             _syncService = Resolver.Resolve<ISyncService>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _settings = Resolver.Resolve<ISettings>();
 
             BackgroundColor = Color.FromHex("efeff4");
 
@@ -37,8 +45,12 @@ namespace Bit.App.Controls
                 IsBusy = _syncService.SyncInProgress;
             }
 
-            var googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
-            googleAnalyticsService.TrackPage(GetType().Name);
+            if(_updateActivity)
+            {
+                _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
+            }
+
+            _googleAnalyticsService.TrackPage(GetType().Name);
             base.OnAppearing();
         }
 

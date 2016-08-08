@@ -18,6 +18,7 @@ namespace Bit.App.Pages
         private IAccountsApiRepository _accountApiRepository;
 
         public PasswordHintPage()
+            : base(updateActivity: false)
         {
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _accountApiRepository = Resolver.Resolve<IAccountsApiRepository>();

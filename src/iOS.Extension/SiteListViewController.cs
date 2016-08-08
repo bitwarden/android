@@ -174,8 +174,6 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                Resolver.Resolve<ISettings>().AddOrUpdateValue(App.Constants.LastBackgroundedDate, DateTime.UtcNow);
-
                 var item = _tableItems.ElementAt(indexPath.Row);
                 if(item == null)
                 {
