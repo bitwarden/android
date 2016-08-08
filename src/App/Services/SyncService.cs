@@ -150,8 +150,11 @@ namespace Bit.App.Services
                 return false;
             }
 
-            var siteTask = SyncSitesAsync(ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Site), true);
-            var folderTask = SyncFoldersAsync(ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Folder), true);
+            var sites = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Site).ToDictionary(s => s.Id);
+            var folders = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Folder).ToDictionary(f => f.Id);
+
+            var siteTask = SyncSitesAsync(sites, true);
+            var folderTask = SyncFoldersAsync(folders, true);
             await Task.WhenAll(siteTask, folderTask);
 
             if(folderTask.Exception != null || siteTask.Exception != null)
@@ -206,8 +209,11 @@ namespace Bit.App.Services
                 return false;
             }
 
-            var siteTask = SyncSitesAsync(ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Site), false);
-            var folderTask = SyncFoldersAsync(ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Folder), false);
+            var sites = ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Site).ToDictionary(s => s.Id);
+            var folders = ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Folder).ToDictionary(f => f.Id);
+
+            var siteTask = SyncSitesAsync(sites, false);
+            var folderTask = SyncFoldersAsync(folders, false);
             var deleteTask = DeleteCiphersAsync(ciphers.Result.Deleted);
 
             await Task.WhenAll(siteTask, folderTask, deleteTask);
@@ -222,13 +228,14 @@ namespace Bit.App.Services
             return true;
         }
 
-        private async Task SyncFoldersAsync(IEnumerable<CipherResponse> serverFolders, bool deleteMissing)
+        private async Task SyncFoldersAsync(IDictionary<string, CipherResponse> serverFolders, bool deleteMissing)
         {
             if(!_authService.IsAuthenticated)
             {
                 return;
             }
-            var localFolders = await _folderRepository.GetAllByUserIdAsync(_authService.UserId);
+
+            var localFolders = (await _folderRepository.GetAllByUserIdAsync(_authService.UserId)).ToDictionary(f => f.Id);
 
             foreach(var serverFolder in serverFolders)
             {
@@ -237,15 +244,15 @@ namespace Bit.App.Services
                     return;
                 }
 
-                var existingLocalFolder = localFolders.SingleOrDefault(f => f.Id == serverFolder.Id);
+                var existingLocalFolder = localFolders.ContainsKey(serverFolder.Key) ? localFolders[serverFolder.Key] : null;
                 if(existingLocalFolder == null)
                 {
-                    var data = new FolderData(serverFolder, _authService.UserId);
+                    var data = new FolderData(serverFolder.Value, _authService.UserId);
                     await _folderRepository.InsertAsync(data);
                 }
-                else if(existingLocalFolder.RevisionDateTime != serverFolder.RevisionDate)
+                else if(existingLocalFolder.RevisionDateTime != serverFolder.Value.RevisionDate)
                 {
-                    var data = new FolderData(serverFolder, _authService.UserId);
+                    var data = new FolderData(serverFolder.Value, _authService.UserId);
                     await _folderRepository.UpdateAsync(data);
                 }
             }
@@ -255,20 +262,20 @@ namespace Bit.App.Services
                 return;
             }
 
-            foreach(var folder in localFolders.Where(localFolder => !serverFolders.Any(serverFolder => serverFolder.Id == localFolder.Id)))
+            foreach(var folder in localFolders.Where(localFolder => !serverFolders.ContainsKey(localFolder.Key)))
             {
-                await _folderRepository.DeleteAsync(folder.Id);
+                await _folderRepository.DeleteAsync(folder.Value.Id);
             }
         }
 
-        private async Task SyncSitesAsync(IEnumerable<CipherResponse> serverSites, bool deleteMissing)
+        private async Task SyncSitesAsync(IDictionary<string, CipherResponse> serverSites, bool deleteMissing)
         {
             if(!_authService.IsAuthenticated)
             {
                 return;
             }
 
-            var localSites = await _siteRepository.GetAllByUserIdAsync(_authService.UserId);
+            var localSites = (await _siteRepository.GetAllByUserIdAsync(_authService.UserId)).ToDictionary(s => s.Id);
 
             foreach(var serverSite in serverSites)
             {
@@ -277,15 +284,15 @@ namespace Bit.App.Services
                     return;
                 }
 
-                var existingLocalSite = localSites.SingleOrDefault(s => s.Id == serverSite.Id);
+                var existingLocalSite = localSites.ContainsKey(serverSite.Key) ? localSites[serverSite.Key] : null;
                 if(existingLocalSite == null)
                 {
-                    var data = new SiteData(serverSite, _authService.UserId);
+                    var data = new SiteData(serverSite.Value, _authService.UserId);
                     await _siteRepository.InsertAsync(data);
                 }
-                else if(existingLocalSite.RevisionDateTime != serverSite.RevisionDate)
+                else if(existingLocalSite.RevisionDateTime != serverSite.Value.RevisionDate)
                 {
-                    var data = new SiteData(serverSite, _authService.UserId);
+                    var data = new SiteData(serverSite.Value, _authService.UserId);
                     await _siteRepository.UpdateAsync(data);
                 }
             }
@@ -295,9 +302,9 @@ namespace Bit.App.Services
                 return;
             }
 
-            foreach(var site in localSites.Where(localSite => !serverSites.Any(serverSite => serverSite.Id == localSite.Id)))
+            foreach(var site in localSites.Where(localSite => !serverSites.ContainsKey(localSite.Key)))
             {
-                await _siteRepository.DeleteAsync(site.Id);
+                await _siteRepository.DeleteAsync(site.Value.Id);
             }
         }
 
