@@ -37,10 +37,7 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
-            if(!Resolver.IsSet)
-            {
-                SetIoc();
-            }
+            SetIoc();
 
             base.ViewDidLoad();
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
@@ -255,6 +252,7 @@ namespace Bit.iOS.Extension
             {
                 NSRunLoop.Main.BeginInvokeOnMainThread(() =>
                 {
+                    Resolver.ResetResolver();
                     ExtensionContext.CompleteRequest(returningItems, null);
                 });
             });
@@ -292,7 +290,7 @@ namespace Bit.iOS.Extension
             ISettings settings = new Settings("group.com.8bit.bitwarden");
             container.RegisterInstance(settings, new ContainerControlledLifetimeManager());
 
-            Resolver.SetResolver(new UnityResolver(container));
+            Resolver.ResetResolver(new UnityResolver(container));
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> action)
