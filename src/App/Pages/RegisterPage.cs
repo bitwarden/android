@@ -43,7 +43,7 @@ namespace Bit.App.Pages
             var padding = new Thickness(15, 20);
 
             PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true,
-                imageSource: "lightbulb-o", containerPadding: padding);
+                imageSource: "lightbulb", containerPadding: padding);
             ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true,
                 nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,

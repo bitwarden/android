@@ -581,13 +581,13 @@
     <BundleResource Include="Resources\lock.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\lightbulb-o.png" />
+    <BundleResource Include="Resources\lightbulb.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\lightbulb-o%402x.png" />
+    <BundleResource Include="Resources\lightbulb%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\lightbulb-o%403x.png" />
+    <BundleResource Include="Resources\lightbulb%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\user.png" />

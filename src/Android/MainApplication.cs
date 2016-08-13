@@ -106,6 +106,8 @@ namespace Bit.Android
 
         private void SetIoc()
         {
+            UserDialogs.Init(this);
+
             var container = new UnityContainer();
 
             container
@@ -146,13 +148,11 @@ namespace Bit.Android
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
 
-            CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>(), "SECRET_SENDER_ID");
+            CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>(), "962181367620");
             container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());
 
             Resolver.SetResolver(new UnityResolver(container));
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
-
-            UserDialogs.Init(this);
         }
     }
 }
