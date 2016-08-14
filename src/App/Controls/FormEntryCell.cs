@@ -20,7 +20,6 @@ namespace Bit.App.Controls
                 {
                     Text = labelText,
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                    VerticalOptions = LayoutOptions.Start,
                     Style = (Style)Application.Current.Resources["text-muted"],
                     HorizontalOptions = LayoutOptions.FillAndExpand
                 };
@@ -35,17 +34,10 @@ namespace Bit.App.Controls
             {
                 Keyboard = entryKeyboard,
                 HasBorder = false,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
                 IsPassword = IsPassword,
                 AllowClear = true,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
-
-            if(Device.OS == TargetPlatform.Android)
-            {
-                Entry.FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
-                Entry.TextColor = Color.Black;
-            }
 
             if(useLabelAsPlaceholder)
             {
@@ -86,8 +78,16 @@ namespace Bit.App.Controls
             var formStackLayout = new StackLayout
             {
                 HorizontalOptions = LayoutOptions.FillAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                Entry.FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
+                Entry.TextColor = Color.Black;
+                formStackLayout.Spacing = 0;
+            }
+
             if(!useLabelAsPlaceholder)
             {
                 formStackLayout.Children.Add(Label);

@@ -12,14 +12,12 @@ namespace Bit.App.Controls
             {
                 Text = labelText,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                TextColor = Color.FromHex("777777"),
-                VerticalOptions = LayoutOptions.Start
+                TextColor = Color.FromHex("777777")
             };
 
             Picker = new ExtendedPicker
             {
-                HasBorder = false,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                HasBorder = false
             };
 
             foreach(var item in pickerItems)
@@ -30,11 +28,18 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = new Thickness(15, 10)
+                Padding = new Thickness(15, 10),
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             stackLayout.Children.Add(Label);
             stackLayout.Children.Add(Picker);
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                Label.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
+                stackLayout.Spacing = 0;
+            }
 
             Tapped += FormPickerCell_Tapped;
 

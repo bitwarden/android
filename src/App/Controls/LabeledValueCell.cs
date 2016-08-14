@@ -19,7 +19,7 @@ namespace Bit.App.Controls
             var labelValueStackLayout = new StackLayout
             {
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.Center
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             if(labelText != null)
@@ -28,9 +28,13 @@ namespace Bit.App.Controls
                 {
                     Text = labelText,
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                    Style = (Style)Application.Current.Resources["text-muted"],
-                    VerticalOptions = LayoutOptions.Start
+                    Style = (Style)Application.Current.Resources["text-muted"]
                 };
+
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    Label.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
+                }
 
                 labelValueStackLayout.Children.Add(Label);
             }
@@ -39,9 +43,13 @@ namespace Bit.App.Controls
             {
                 Text = valueText,
                 FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)),
-                LineBreakMode = LineBreakMode.TailTruncation,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                LineBreakMode = LineBreakMode.TailTruncation
             };
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                Value.TextColor = Color.Black;
+            }
 
             labelValueStackLayout.Children.Add(Value);
 
@@ -49,7 +57,8 @@ namespace Bit.App.Controls
 
             var buttonStackLayout = new StackLayout
             {
-                Orientation = StackOrientation.Horizontal
+                Orientation = StackOrientation.Horizontal,
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             if(button1Text != null)
