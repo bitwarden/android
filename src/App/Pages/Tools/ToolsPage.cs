@@ -26,12 +26,25 @@ namespace Bit.App.Pages
         {
             var generatorCell = new ToolsViewCell("Password Generator", "Automatically generate strong, unique passwords for your logins.", "refresh");
             generatorCell.Tapped += GeneratorCell_Tapped;
-            var extensionCell = new ToolsViewCell("bitwarden App Extension", "Use bitwarden in Safari and other apps to auto-fill your logins.", "upload");
-            extensionCell.Tapped += ExtensionCell_Tapped;
             var webCell = new ToolsViewCell("bitwarden Web Vault", "Manage your logins from any web browser with the bitwarden web vault.", "globe");
             webCell.Tapped += WebCell_Tapped;
             var importCell = new ToolsViewCell("Import Logins", "Quickly bulk import your logins from other password management apps.", "cloudup");
             importCell.Tapped += ImportCell_Tapped;
+
+            var section = new TableSection { generatorCell };
+
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                var extensionCell = new ToolsViewCell("bitwarden App Extension", "Use bitwarden in Safari and other apps to auto-fill your logins.", "upload");
+                extensionCell.Tapped += (object sender, EventArgs e) =>
+                {
+                    Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
+                };
+                section.Add(extensionCell);
+            }
+
+            section.Add(webCell);
+            section.Add(importCell);
 
             var table = new ExtendedTableView
             {
@@ -40,13 +53,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection
-                    {
-                        generatorCell,
-                        extensionCell,
-                        webCell,
-                        importCell
-                    }
+                    section
                 }
             };
 
@@ -58,11 +65,6 @@ namespace Bit.App.Pages
 
             Title = AppResources.Tools;
             Content = table;
-        }
-
-        private void ExtensionCell_Tapped(object sender, EventArgs e)
-        {
-            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
         }
 
         private void GeneratorCell_Tapped(object sender, EventArgs e)
@@ -93,7 +95,6 @@ namespace Bit.App.Pages
             {
                 var label = new Label
                 {
-                    VerticalOptions = LayoutOptions.CenterAndExpand,
                     LineBreakMode = LineBreakMode.TailTruncation,
                     Text = labelText
                 };
@@ -102,10 +103,15 @@ namespace Bit.App.Pages
                 {
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     LineBreakMode = LineBreakMode.WordWrap,
-                    VerticalOptions = LayoutOptions.End,
                     Style = (Style)Application.Current.Resources["text-muted"],
                     Text = detailText
                 };
+
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    detail.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
+                    label.TextColor = Color.Black;
+                }
 
                 var labelDetailStackLayout = new StackLayout
                 {
@@ -127,7 +133,10 @@ namespace Bit.App.Pages
                 {
                     Orientation = StackOrientation.Horizontal,
                     Children = { image, labelDetailStackLayout },
-                    Padding = new Thickness(15, 25)
+                    Padding = Device.OnPlatform(
+                        iOS: new Thickness(15, 25),
+                        Android: new Thickness(15, 20),
+                        WinPhone: new Thickness(15, 25))
                 };
 
                 ShowDisclousure = true;
