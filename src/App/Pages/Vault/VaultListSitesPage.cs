@@ -14,6 +14,7 @@ using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Bit.App.Pages
 {
@@ -29,6 +30,7 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
         private readonly bool _favorites;
         private bool _loadExistingData;
+        private CancellationTokenSource _filterResultsCancellationTokenSource;
 
         public VaultListSitesPage(bool favorites)
             : base(true)
@@ -62,7 +64,7 @@ namespace Bit.App.Pages
             {
                 if(success)
                 {
-                    FetchAndLoadVault();
+                    _filterResultsCancellationTokenSource = FetchAndLoadVault();
                 }
             });
 
@@ -106,7 +108,7 @@ namespace Bit.App.Pages
 
         private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
         {
-            FilterResultsBackground(((SearchBar)sender).Text);
+            _filterResultsCancellationTokenSource = FilterResultsBackground(((SearchBar)sender).Text, _filterResultsCancellationTokenSource);
         }
 
         private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
@@ -118,11 +120,12 @@ namespace Bit.App.Pages
                 return;
             }
 
-            FilterResultsBackground(e.NewTextValue);
+            _filterResultsCancellationTokenSource = FilterResultsBackground(e.NewTextValue, _filterResultsCancellationTokenSource);
         }
 
-        private void FilterResultsBackground(string searchFilter)
+        private CancellationTokenSource FilterResultsBackground(string searchFilter, CancellationTokenSource previousCts)
         {
+            var cts = new CancellationTokenSource();
             Task.Run(async () =>
             {
                 if(!string.IsNullOrWhiteSpace(searchFilter))
@@ -132,23 +135,47 @@ namespace Bit.App.Pages
                     {
                         return;
                     }
+                    else
+                    {
+                        previousCts?.Cancel();
+                    }
                 }
 
-                FilterResults(searchFilter);
-            });
+                try
+                {
+                    FilterResults(searchFilter, cts.Token);
+                }
+                catch(OperationCanceledException) { }
+            }, cts.Token);
+
+            return cts;
         }
 
-        private void FilterResults(string searchFilter)
+        private void FilterResults(string searchFilter, CancellationToken ct)
         {
+            if(ct.IsCancellationRequested)
+            {
+                throw new OperationCanceledException(ct);
+            }
+
             if(string.IsNullOrWhiteSpace(searchFilter))
             {
-                LoadFolders(Sites);
+                LoadFolders(Sites, ct);
             }
             else
             {
                 searchFilter = searchFilter.ToLower();
-                var filteredSites = Sites.Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter));
-                LoadFolders(filteredSites);
+                var filteredSites = Sites
+                    .Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter))
+                    .TakeWhile(s => !ct.IsCancellationRequested)
+                    .ToList();
+
+                if(ct.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException(ct);
+                }
+
+                LoadFolders(filteredSites, ct);
             }
         }
 
@@ -157,7 +184,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
             if(_loadExistingData)
             {
-                FetchAndLoadVault();
+                _filterResultsCancellationTokenSource = FetchAndLoadVault();
             }
 
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
@@ -192,14 +219,15 @@ namespace Bit.App.Pages
             }
         }
 
-        private void FetchAndLoadVault()
+        private CancellationTokenSource FetchAndLoadVault()
         {
+            var cts = new CancellationTokenSource();
             _settings.AddOrUpdateValue(Constants.FirstVaultLoad, false);
             _loadExistingData = true;
 
             if(PresentationFolders.Count > 0 && _syncService.SyncInProgress)
             {
-                return;
+                return cts;
             }
 
             Task.Run(async () =>
@@ -214,11 +242,17 @@ namespace Bit.App.Pages
                 Folders = folders.Select(f => new VaultListPageModel.Folder(f)).OrderBy(s => s.Name);
                 Sites = sites.Select(s => new VaultListPageModel.Site(s)).OrderBy(s => s.Name).ThenBy(s => s.Username);
 
-                FilterResults(Search.Text);
-            });
+                try
+                {
+                    FilterResults(Search.Text, cts.Token);
+                }
+                catch(OperationCanceledException) { }
+            }, cts.Token);
+
+            return cts;
         }
 
-        private void LoadFolders(IEnumerable<VaultListPageModel.Site> sites)
+        private void LoadFolders(IEnumerable<VaultListPageModel.Site> sites, CancellationToken ct)
         {
             var folders = new List<VaultListPageModel.Folder>(Folders);
 
@@ -228,13 +262,44 @@ namespace Bit.App.Pages
                 {
                     folder.Clear();
                 }
-                folder.AddRange(sites.Where(s => s.FolderId == folder.Id));
+
+                var sitesToAdd = sites
+                    .Where(s => s.FolderId == folder.Id)
+                    .TakeWhile(s => !ct.IsCancellationRequested)
+                    .ToList();
+
+                if(ct.IsCancellationRequested)
+                {
+                    throw new OperationCanceledException(ct);
+                }
+
+                folder.AddRange(sitesToAdd);
             }
 
-            var noneFolder = new VaultListPageModel.Folder(sites.Where(s => s.FolderId == null));
+            var noneToAdd = sites
+                .Where(s => s.FolderId == null)
+                .TakeWhile(s => !ct.IsCancellationRequested)
+                .ToList();
+
+            if(ct.IsCancellationRequested)
+            {
+                throw new OperationCanceledException(ct);
+            }
+
+            var noneFolder = new VaultListPageModel.Folder(noneToAdd);
             folders.Add(noneFolder);
 
-            PresentationFolders.ResetWithRange(folders.Where(f => f.Any()));
+            var foldersToAdd = folders
+                .Where(f => f.Any())
+                .TakeWhile(s => !ct.IsCancellationRequested)
+                .ToList();
+
+            if(ct.IsCancellationRequested)
+            {
+                throw new OperationCanceledException(ct);
+            }
+
+            PresentationFolders.ResetWithRange(foldersToAdd);
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
