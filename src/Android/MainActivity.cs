@@ -19,12 +19,18 @@ namespace Bit.Android
     [Activity(Label = "bitwarden", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
+        private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
             Console.WriteLine("A OnCreate");
 
-            HockeyApp.Android.CrashManager.Register(this);
+            var appIdService = Resolver.Resolve<IAppIdService>();
+            var authService = Resolver.Resolve<IAuthService>();
+
+            HockeyApp.Android.CrashManager.Register(this, HockeyAppId,
+                new HockeyAppCrashManagerListener(appIdService, authService));
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
             LoadApplication(new App.App(

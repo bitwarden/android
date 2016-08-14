@@ -55,6 +55,7 @@ namespace Bit.iOS
             manager.UserId = appIdService.AppId;
             manager.StartManager();
             manager.Authenticator.AuthenticateInstallation();
+            manager.DisableMetricsManager = manager.DisableFeedbackManager = manager.DisableUpdateManager = true;
 
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),

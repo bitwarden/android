@@ -119,6 +119,10 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="mscorlib" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OkHttp, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\modernhttpclient.2.4.2\lib\MonoAndroid\OkHttp.dll</HintPath>
       <Private>True</Private>
@@ -292,6 +296,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
+    <Compile Include="HockeyAppCrashManagerListener.cs" />
     <Compile Include="LoginService.cs" />
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />
     <Compile Include="Controls\ExtendedNavigationPage.cs" />
