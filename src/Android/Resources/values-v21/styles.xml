@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <style name="BitwardenTheme" parent="android:Theme.Material.Light.DarkActionBar">
-        <item name="android:colorPrimary">@color/primary</item>
-        <item name="android:textColorPrimary">@color/darkgray</item>
-        <item name="android:colorAccent">@color/accent</item>
-        <item name="android:windowBackground">@color/lightgray</item>
-    </style>
+  <style name="BitwardenTheme" parent="android:Theme.Material.Light.DarkActionBar">
+    <item name="android:colorPrimary">@color/primary</item>
+    <item name="android:textColorPrimary">@color/black</item>
+    <item name="android:colorAccent">@color/accent</item>
+    <item name="android:windowBackground">@color/lightgray</item>
+  </style>
 </resources>

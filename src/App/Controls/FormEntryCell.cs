@@ -24,6 +24,11 @@ namespace Bit.App.Controls
                     Style = (Style)Application.Current.Resources["text-muted"],
                     HorizontalOptions = LayoutOptions.FillAndExpand
                 };
+
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    Label.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
+                }
             }
 
             Entry = new ExtendedEntry
@@ -35,6 +40,12 @@ namespace Bit.App.Controls
                 AllowClear = true,
                 HorizontalOptions = LayoutOptions.FillAndExpand
             };
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                Entry.FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
+                Entry.TextColor = Color.Black;
+            }
 
             if(useLabelAsPlaceholder)
             {

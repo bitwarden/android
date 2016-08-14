@@ -71,7 +71,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(new AddSiteToolBarItem(this));
             }
 
-            ListView = new ListView
+            ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
                 ItemsSource = PresentationFolders,

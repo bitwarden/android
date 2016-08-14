@@ -7,6 +7,11 @@ namespace Bit.App.Controls
     {
         public ExtendedTextCell()
         {
+            if(Device.OS == TargetPlatform.Android)
+            {
+                TextColor = Color.Black;
+            }
+
             DetailColor = Color.FromHex("777777");
         }
 
@@ -41,7 +46,13 @@ namespace Bit.App.Controls
 
         public void OnDisclousureTapped()
         {
-            DisclousureTapped?.Invoke(this, EventArgs.Empty);
+            if(DisclousureTapped == null)
+            {
+                OnTapped();
+                return;
+            }
+
+            DisclousureTapped.Invoke(this, EventArgs.Empty);
         }
     }
 }

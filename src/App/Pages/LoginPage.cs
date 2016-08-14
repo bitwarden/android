@@ -48,7 +48,10 @@ namespace Bit.App.Pages
         {
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
 
-            var padding = new Thickness(15, 20);
+            var padding = Device.OnPlatform(
+                iOS: new Thickness(15, 20),
+                Android: new Thickness(15, 8),
+                WinPhone: new Thickness(15, 20));
 
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
                 useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
@@ -166,11 +169,13 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, EmailCell.Entry.Text);
+            var normalizedEmail = EmailCell.Entry.Text.ToLower();
+
+            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail);
 
             var request = new TokenRequest
             {
-                Email = EmailCell.Entry.Text,
+                Email = normalizedEmail,
                 MasterPasswordHash = _cryptoService.HashPasswordBase64(key, PasswordCell.Entry.Text),
                 Device = new DeviceRequest(_appIdService, _deviceInfo)
             };

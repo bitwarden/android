@@ -38,8 +38,13 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            var padding = Device.OnPlatform(
+                iOS: new Thickness(15, 20),
+                Android: new Thickness(15, 8),
+                WinPhone: new Thickness(15, 20));
+
             CodeCell = new FormEntryCell("Verification Code", useLabelAsPlaceholder: true,
-                imageSource: "lock", containerPadding: new Thickness(15, 20));
+                imageSource: "lock", containerPadding: padding);
 
             CodeCell.Entry.Keyboard = Keyboard.Numeric;
             CodeCell.Entry.ReturnType = Enums.ReturnType.Go;

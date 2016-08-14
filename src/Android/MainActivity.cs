@@ -24,6 +24,7 @@ namespace Bit.Android
             base.OnCreate(bundle);
             Console.WriteLine("A OnCreate");
 
+            HockeyApp.Android.CrashManager.Register(this);
             global::Xamarin.Forms.Forms.Init(this, bundle);
 
             LoadApplication(new App.App(

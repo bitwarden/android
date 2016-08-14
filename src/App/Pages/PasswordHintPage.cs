@@ -30,8 +30,13 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            var padding = Device.OnPlatform(
+                iOS: new Thickness(15, 20),
+                Android: new Thickness(15, 8),
+                WinPhone: new Thickness(15, 20));
+
             EmailCell = new FormEntryCell(AppResources.EmailAddress, entryKeyboard: Keyboard.Email,
-                useLabelAsPlaceholder: true, imageSource: "envelope", containerPadding: new Thickness(15, 20));
+                useLabelAsPlaceholder: true, imageSource: "envelope", containerPadding: padding);
 
             EmailCell.Entry.ReturnType = Enums.ReturnType.Go;
             EmailCell.Entry.Completed += Entry_Completed;

@@ -6,6 +6,14 @@ namespace Bit.App.Controls
 {
     public class ExtendedEntry : Entry
     {
+        public ExtendedEntry()
+        {
+            if(Device.OS == TargetPlatform.Android)
+            {
+                PlaceholderColor = Color.FromHex("c7c7cd");
+            }
+        }
+
         public static readonly BindableProperty HasBorderProperty =
             BindableProperty.Create(nameof(HasBorder), typeof(bool), typeof(ExtendedEntry), true);
 

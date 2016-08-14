@@ -8,7 +8,6 @@ namespace Bit.App.Controls
         {
             Label = new Label
             {
-                VerticalOptions = LayoutOptions.CenterAndExpand,
                 LineBreakMode = LineBreakMode.TailTruncation
             };
 
@@ -16,14 +15,13 @@ namespace Bit.App.Controls
             {
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 LineBreakMode = LineBreakMode.TailTruncation,
-                VerticalOptions = LayoutOptions.End,
-                Style = (Style)Application.Current.Resources["text-muted"],
+                Style = (Style)Application.Current.Resources["text-muted"]
             };
 
             var labelDetailStackLayout = new StackLayout
             {
                 HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
                 Children = { Label, Detail },
                 Padding = new Thickness(15, 5, 5, 5),
                 Spacing = 0
@@ -32,7 +30,7 @@ namespace Bit.App.Controls
             Button = new Button
             {
                 HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.FillAndExpand,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
                 WidthRequest = 50
             };
 
@@ -41,6 +39,12 @@ namespace Bit.App.Controls
                 Orientation = StackOrientation.Horizontal,
                 Children = { labelDetailStackLayout, Button }
             };
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                Label.TextColor = Color.Black;
+                Detail.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
+            }
 
             View = containerStackLayout;
         }

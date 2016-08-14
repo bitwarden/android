@@ -1310,32 +1310,32 @@ namespace Bit.Android
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0a0069
-			public const int abc_background_cache_hint_selector_material_dark = 2131361897;
-			
 			// aapt resource value: 0x7f0a006a
-			public const int abc_background_cache_hint_selector_material_light = 2131361898;
+			public const int abc_background_cache_hint_selector_material_dark = 2131361898;
 			
 			// aapt resource value: 0x7f0a006b
-			public const int abc_color_highlight_material = 2131361899;
+			public const int abc_background_cache_hint_selector_material_light = 2131361899;
+			
+			// aapt resource value: 0x7f0a006c
+			public const int abc_color_highlight_material = 2131361900;
 			
 			// aapt resource value: 0x7f0a0015
 			public const int abc_input_method_navigation_guard = 2131361813;
 			
-			// aapt resource value: 0x7f0a006c
-			public const int abc_primary_text_disable_only_material_dark = 2131361900;
-			
 			// aapt resource value: 0x7f0a006d
-			public const int abc_primary_text_disable_only_material_light = 2131361901;
+			public const int abc_primary_text_disable_only_material_dark = 2131361901;
 			
 			// aapt resource value: 0x7f0a006e
-			public const int abc_primary_text_material_dark = 2131361902;
+			public const int abc_primary_text_disable_only_material_light = 2131361902;
 			
 			// aapt resource value: 0x7f0a006f
-			public const int abc_primary_text_material_light = 2131361903;
+			public const int abc_primary_text_material_dark = 2131361903;
 			
 			// aapt resource value: 0x7f0a0070
-			public const int abc_search_url_text = 2131361904;
+			public const int abc_primary_text_material_light = 2131361904;
+			
+			// aapt resource value: 0x7f0a0071
+			public const int abc_search_url_text = 2131361905;
 			
 			// aapt resource value: 0x7f0a0016
 			public const int abc_search_url_text_normal = 2131361814;
@@ -1346,14 +1346,14 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a0018
 			public const int abc_search_url_text_selected = 2131361816;
 			
-			// aapt resource value: 0x7f0a0071
-			public const int abc_secondary_text_material_dark = 2131361905;
-			
 			// aapt resource value: 0x7f0a0072
-			public const int abc_secondary_text_material_light = 2131361906;
+			public const int abc_secondary_text_material_dark = 2131361906;
 			
-			// aapt resource value: 0x7f0a0068
-			public const int accent = 2131361896;
+			// aapt resource value: 0x7f0a0073
+			public const int abc_secondary_text_material_light = 2131361907;
+			
+			// aapt resource value: 0x7f0a0069
+			public const int accent = 2131361897;
 			
 			// aapt resource value: 0x7f0a0019
 			public const int accent_material_dark = 2131361817;
@@ -1372,6 +1372,9 @@ namespace Bit.Android
 			
 			// aapt resource value: 0x7f0a001e
 			public const int background_material_light = 2131361822;
+			
+			// aapt resource value: 0x7f0a0064
+			public const int black = 2131361892;
 			
 			// aapt resource value: 0x7f0a001f
 			public const int bright_foreground_disabled_material_dark = 2131361823;
@@ -1412,8 +1415,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a0008
 			public const int common_action_bar_splitter = 2131361800;
 			
-			// aapt resource value: 0x7f0a0073
-			public const int common_google_signin_btn_text_dark = 2131361907;
+			// aapt resource value: 0x7f0a0074
+			public const int common_google_signin_btn_text_dark = 2131361908;
 			
 			// aapt resource value: 0x7f0a0009
 			public const int common_google_signin_btn_text_dark_default = 2131361801;
@@ -1427,8 +1430,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a000a
 			public const int common_google_signin_btn_text_dark_pressed = 2131361802;
 			
-			// aapt resource value: 0x7f0a0074
-			public const int common_google_signin_btn_text_light = 2131361908;
+			// aapt resource value: 0x7f0a0075
+			public const int common_google_signin_btn_text_light = 2131361909;
 			
 			// aapt resource value: 0x7f0a000d
 			public const int common_google_signin_btn_text_light_default = 2131361805;
@@ -1442,8 +1445,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a000e
 			public const int common_google_signin_btn_text_light_pressed = 2131361806;
 			
-			// aapt resource value: 0x7f0a0075
-			public const int common_plus_signin_btn_text_dark = 2131361909;
+			// aapt resource value: 0x7f0a0076
+			public const int common_plus_signin_btn_text_dark = 2131361910;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int common_plus_signin_btn_text_dark_default = 2131361792;
@@ -1457,8 +1460,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a0001
 			public const int common_plus_signin_btn_text_dark_pressed = 2131361793;
 			
-			// aapt resource value: 0x7f0a0076
-			public const int common_plus_signin_btn_text_light = 2131361910;
+			// aapt resource value: 0x7f0a0077
+			public const int common_plus_signin_btn_text_light = 2131361911;
 			
 			// aapt resource value: 0x7f0a0004
 			public const int common_plus_signin_btn_text_light_default = 2131361796;
@@ -1472,8 +1475,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a0005
 			public const int common_plus_signin_btn_text_light_pressed = 2131361797;
 			
-			// aapt resource value: 0x7f0a0064
-			public const int darkgray = 2131361892;
+			// aapt resource value: 0x7f0a0065
+			public const int darkgray = 2131361893;
 			
 			// aapt resource value: 0x7f0a004f
 			public const int design_fab_shadow_end_color = 2131361871;
@@ -1523,8 +1526,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a002c
 			public const int foreground_material_light = 2131361836;
 			
-			// aapt resource value: 0x7f0a0065
-			public const int gray = 2131361893;
+			// aapt resource value: 0x7f0a0066
+			public const int gray = 2131361894;
 			
 			// aapt resource value: 0x7f0a002d
 			public const int highlighted_text_material_dark = 2131361837;
@@ -1568,8 +1571,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a0062
 			public const int hockeyapp_text_white = 2131361890;
 			
-			// aapt resource value: 0x7f0a0066
-			public const int lightgray = 2131361894;
+			// aapt resource value: 0x7f0a0067
+			public const int lightgray = 2131361895;
 			
 			// aapt resource value: 0x7f0a0031
 			public const int material_blue_grey_800 = 2131361841;
@@ -1607,8 +1610,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a003c
 			public const int material_grey_900 = 2131361852;
 			
-			// aapt resource value: 0x7f0a0067
-			public const int primary = 2131361895;
+			// aapt resource value: 0x7f0a0068
+			public const int primary = 2131361896;
 			
 			// aapt resource value: 0x7f0a003d
 			public const int primary_dark_material_dark = 2131361853;
@@ -1658,11 +1661,11 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a004c
 			public const int switch_thumb_disabled_material_light = 2131361868;
 			
-			// aapt resource value: 0x7f0a0077
-			public const int switch_thumb_material_dark = 2131361911;
-			
 			// aapt resource value: 0x7f0a0078
-			public const int switch_thumb_material_light = 2131361912;
+			public const int switch_thumb_material_dark = 2131361912;
+			
+			// aapt resource value: 0x7f0a0079
+			public const int switch_thumb_material_light = 2131361913;
 			
 			// aapt resource value: 0x7f0a004d
 			public const int switch_thumb_normal_material_dark = 2131361869;
