@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
@@ -108,7 +107,8 @@ namespace Bit.App.Pages
 
         private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
         {
-            _filterResultsCancellationTokenSource = FilterResultsBackground(((SearchBar)sender).Text, _filterResultsCancellationTokenSource);
+            _filterResultsCancellationTokenSource = FilterResultsBackground(((SearchBar)sender).Text,
+                _filterResultsCancellationTokenSource);
         }
 
         private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
@@ -120,7 +120,8 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _filterResultsCancellationTokenSource = FilterResultsBackground(e.NewTextValue, _filterResultsCancellationTokenSource);
+            _filterResultsCancellationTokenSource = FilterResultsBackground(e.NewTextValue,
+                _filterResultsCancellationTokenSource);
         }
 
         private CancellationTokenSource FilterResultsBackground(string searchFilter, CancellationTokenSource previousCts)
@@ -153,10 +154,7 @@ namespace Bit.App.Pages
 
         private void FilterResults(string searchFilter, CancellationToken ct)
         {
-            if(ct.IsCancellationRequested)
-            {
-                throw new OperationCanceledException(ct);
-            }
+            ct.ThrowIfCancellationRequested();
 
             if(string.IsNullOrWhiteSpace(searchFilter))
             {
@@ -170,11 +168,7 @@ namespace Bit.App.Pages
                     .TakeWhile(s => !ct.IsCancellationRequested)
                     .ToList();
 
-                if(ct.IsCancellationRequested)
-                {
-                    throw new OperationCanceledException(ct);
-                }
-
+                ct.ThrowIfCancellationRequested();
                 LoadFolders(filteredSites, ct);
             }
         }
@@ -193,7 +187,8 @@ namespace Bit.App.Pages
                 Action registerAction = () =>
                 {
                     var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate);
-                    if(!pushPromptShow || !lastPushRegistration.HasValue || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
+                    if(!pushPromptShow || !lastPushRegistration.HasValue 
+                        || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
                     {
                         _pushNotification.Register();
                     }
@@ -205,7 +200,8 @@ namespace Bit.App.Pages
                     _userDialogs.Alert(new AlertConfig
                     {
                         Message = "bitwarden keeps your vault automatically synced by using push notifications."
-                        + " For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.",
+                        + " For the best possible experience, please select \"Ok\" on the following prompt when"
+                        + " asked to enable push notifications.",
                         Title = "Enable Automatic Syncing",
                         OnOk = registerAction,
                         OkText = "Ok, got it!"
@@ -229,6 +225,8 @@ namespace Bit.App.Pages
             {
                 return cts;
             }
+
+            _filterResultsCancellationTokenSource?.Cancel();
 
             Task.Run(async () =>
             {
@@ -268,11 +266,7 @@ namespace Bit.App.Pages
                     .TakeWhile(s => !ct.IsCancellationRequested)
                     .ToList();
 
-                if(ct.IsCancellationRequested)
-                {
-                    throw new OperationCanceledException(ct);
-                }
-
+                ct.ThrowIfCancellationRequested();
                 folder.AddRange(sitesToAdd);
             }
 
@@ -281,10 +275,7 @@ namespace Bit.App.Pages
                 .TakeWhile(s => !ct.IsCancellationRequested)
                 .ToList();
 
-            if(ct.IsCancellationRequested)
-            {
-                throw new OperationCanceledException(ct);
-            }
+            ct.ThrowIfCancellationRequested();
 
             var noneFolder = new VaultListPageModel.Folder(noneToAdd);
             folders.Add(noneFolder);
@@ -294,12 +285,8 @@ namespace Bit.App.Pages
                 .TakeWhile(s => !ct.IsCancellationRequested)
                 .ToList();
 
-            if(ct.IsCancellationRequested)
-            {
-                throw new OperationCanceledException(ct);
-            }
-
-            PresentationFolders.ResetWithRange(foldersToAdd);
+            ct.ThrowIfCancellationRequested();
+            Device.BeginInvokeOnMainThread(() => PresentationFolders.ResetWithRange(foldersToAdd));
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
@@ -320,7 +307,8 @@ namespace Bit.App.Pages
             {
                 buttons.Add(AppResources.CopyUsername);
             }
-            if(!string.IsNullOrWhiteSpace(site.Uri.Value) && (site.Uri.Value.StartsWith("http://") || site.Uri.Value.StartsWith("https://")))
+            if(!string.IsNullOrWhiteSpace(site.Uri.Value) && (site.Uri.Value.StartsWith("http://") 
+                || site.Uri.Value.StartsWith("https://")))
             {
                 buttons.Add(AppResources.GoToWebsite);
             }
