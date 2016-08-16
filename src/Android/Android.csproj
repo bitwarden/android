@@ -347,7 +347,7 @@
     <AndroidResource Include="Resources\xml\accessibilityservice.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\logo.png" />
+    <AndroidResource Include="Resources\drawable\logo.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxhdpi\logo.png" />
@@ -359,7 +359,7 @@
     <AndroidResource Include="Resources\drawable-hdpi\more.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\more.png" />
+    <AndroidResource Include="Resources\drawable\more.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\more.png" />
@@ -371,7 +371,7 @@
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
+    <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
@@ -398,7 +398,7 @@
     <AndroidResource Include="Resources\drawable-hdpi\plus.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\plus.png" />
+    <AndroidResource Include="Resources\drawable\plus.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\folder.png" />
@@ -413,7 +413,7 @@
     <AndroidResource Include="Resources\drawable-hdpi\folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\folder.png" />
+    <AndroidResource Include="Resources\drawable\folder.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\eye_slash.png" />
@@ -425,7 +425,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\eye_slash.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\eye_slash.png" />
+    <AndroidResource Include="Resources\drawable\eye_slash.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\eye_slash.png" />
@@ -443,7 +443,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\eye.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\eye.png" />
+    <AndroidResource Include="Resources\drawable\eye.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\user.png" />
@@ -455,7 +455,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\user.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\user.png" />
+    <AndroidResource Include="Resources\drawable\user.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\user.png" />
@@ -464,7 +464,7 @@
     <AndroidResource Include="Resources\drawable-hdpi\lightbulb.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\lightbulb.png" />
+    <AndroidResource Include="Resources\drawable\lightbulb.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xhdpi\lightbulb.png" />
@@ -485,7 +485,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\envelope.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\envelope.png" />
+    <AndroidResource Include="Resources\drawable\envelope.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\envelope.png" />
@@ -503,28 +503,28 @@
     <AndroidResource Include="Resources\drawable-xhdpi\lock.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\lock.png" />
+    <AndroidResource Include="Resources\drawable\lock.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\more.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\refresh.png" />
+    <AndroidResource Include="Resources\drawable\refresh.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\upload.png" />
+    <AndroidResource Include="Resources\drawable\upload.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\globe.png" />
+    <AndroidResource Include="Resources\drawable\globe.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\cloudup.png" />
+    <AndroidResource Include="Resources\drawable\cloudup.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\fingerprint.png" />
+    <AndroidResource Include="Resources\drawable\fingerprint.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable-mdpi\ion_chevron_right.png" />
+    <AndroidResource Include="Resources\drawable\ion_chevron_right.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-hdpi\ion_chevron_right.png" />

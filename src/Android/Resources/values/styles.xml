@@ -2,8 +2,10 @@
 <resources>
   <style name="BitwardenTheme" parent="android:Theme.Holo.Light.DarkActionBar">
     <item name="android:colorPrimary">@color/primary</item>
+    <item name="android:statusBarColor">@color/accent</item>
     <item name="android:textColorPrimary">@color/black</item>
-    <item name="android:colorAccent">@color/accent</item>
+    <item name="android:colorAccent">@color/primary</item>
     <item name="android:windowBackground">@color/lightgray</item>
+    <item name="android:navigationBarColor">@color/darkaccent</item>
   </style>
 </resources>

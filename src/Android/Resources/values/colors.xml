@@ -5,6 +5,7 @@
   <color name="darkgray">#333333</color>
   <color name="gray">#738182</color>
   <color name="lightgray">#efeff4</color>
-  <color name="primary">#222d32</color>
-  <color name="accent">#3c8dbc</color>
+  <color name="primary">#3c8dbc</color>
+  <color name="darkaccent">#222d32</color>
+  <color name="accent">#286090</color>
 </resources>
