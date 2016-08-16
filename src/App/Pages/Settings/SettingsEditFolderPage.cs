@@ -79,27 +79,27 @@ namespace Bit.App.Pages
 
                 if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
                 {
-                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                        AppResources.Name), AppResources.Ok);
                     return;
                 }
 
                 folder.Name = nameCell.Entry.Text.Encrypt();
 
-                var saveTask = _folderService.SaveAsync(folder);
                 _userDialogs.ShowLoading("Saving...", MaskType.Black);
-                await saveTask;
+                var saveResult = await _folderService.SaveAsync(folder);
 
                 _userDialogs.HideLoading();
 
-                if(saveTask.Result.Succeeded)
+                if(saveResult.Succeeded)
                 {
                     await Navigation.PopModalAsync();
                     _userDialogs.Toast("Folder updated.");
                     _googleAnalyticsService.TrackAppEvent("EditedFolder");
                 }
-                else if(saveTask.Result.Errors.Count() > 0)
+                else if(saveResult.Errors.Count() > 0)
                 {
-                    await _userDialogs.AlertAsync(saveTask.Result.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                    await _userDialogs.AlertAsync(saveResult.Errors.First().Message, AppResources.AnErrorHasOccurred);
                 }
                 else
                 {
@@ -140,19 +140,19 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var deleteTask = _folderService.DeleteAsync(_folderId);
+
             _userDialogs.ShowLoading("Deleting...", MaskType.Black);
-            await deleteTask;
+            var deleteTask = await _folderService.DeleteAsync(_folderId);
             _userDialogs.HideLoading();
 
-            if((await deleteTask).Succeeded)
+            if(deleteTask.Succeeded)
             {
                 await Navigation.PopModalAsync();
                 _userDialogs.Toast("Folder deleted.");
             }
-            else if((await deleteTask).Errors.Count() > 0)
+            else if(deleteTask.Errors.Count() > 0)
             {
-                await _userDialogs.AlertAsync((await deleteTask).Errors.First().Message, AppResources.AnErrorHasOccurred);
+                await _userDialogs.AlertAsync(deleteTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
             }
             else
             {
@@ -162,7 +162,8 @@ namespace Bit.App.Pages
 
         private void AlertNoConnection()
         {
-            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage,
+                AppResources.Ok);
         }
     }
 }

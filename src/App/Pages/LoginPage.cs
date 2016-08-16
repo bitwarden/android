@@ -159,13 +159,15 @@ namespace Bit.App.Pages
         {
             if(string.IsNullOrWhiteSpace(EmailCell.Entry.Text))
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress), AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                    AppResources.EmailAddress), AppResources.Ok);
                 return;
             }
 
             if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword), AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                    AppResources.MasterPassword), AppResources.Ok);
                 return;
             }
 
@@ -180,9 +182,8 @@ namespace Bit.App.Pages
                 Device = new DeviceRequest(_appIdService, _deviceInfo)
             };
 
-            var responseTask = _authService.TokenPostAsync(request);
             _userDialogs.ShowLoading("Logging in...", MaskType.Black);
-            var response = await responseTask;
+            var response = await _authService.TokenPostAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
             {

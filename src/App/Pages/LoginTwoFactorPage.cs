@@ -115,7 +115,8 @@ namespace Bit.App.Pages
         {
             if(string.IsNullOrWhiteSpace(CodeCell.Entry.Text))
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, "Verification code"), AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                    "Verification code"), AppResources.Ok);
                 return;
             }
 
@@ -126,9 +127,8 @@ namespace Bit.App.Pages
                 Device = new DeviceRequest(_appIdService, _deviceInfo)
             };
 
-            var responseTask = _authService.TokenTwoFactorPostAsync(request);
             _userDialogs.ShowLoading("Validating code...", MaskType.Black);
-            var response = await responseTask;
+            var response = await _authService.TokenTwoFactorPostAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
             {

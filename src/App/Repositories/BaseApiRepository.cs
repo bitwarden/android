@@ -20,48 +20,54 @@ namespace Bit.App.Repositories
 
         protected ApiResult HandledNotConnected()
         {
-            return ApiResult.Failed(System.Net.HttpStatusCode.RequestTimeout, new ApiError { Message = "Not connected to the internet." });
+            return ApiResult.Failed(System.Net.HttpStatusCode.RequestTimeout,
+                new ApiError { Message = "Not connected to the internet." });
         }
 
         protected ApiResult<T> HandledNotConnected<T>()
         {
-            return ApiResult<T>.Failed(System.Net.HttpStatusCode.RequestTimeout, new ApiError { Message = "Not connected to the internet." });
+            return ApiResult<T>.Failed(System.Net.HttpStatusCode.RequestTimeout,
+                new ApiError { Message = "Not connected to the internet." });
         }
 
         protected ApiResult HandledWebException()
         {
-            return ApiResult.Failed(System.Net.HttpStatusCode.BadGateway, new ApiError { Message = "There is a problem connecting to the server." });
+            return ApiResult.Failed(System.Net.HttpStatusCode.BadGateway,
+                new ApiError { Message = "There is a problem connecting to the server." });
         }
 
         protected ApiResult<T> HandledWebException<T>()
         {
-            return ApiResult<T>.Failed(System.Net.HttpStatusCode.BadGateway, new ApiError { Message = "There is a problem connecting to the server." });
+            return ApiResult<T>.Failed(System.Net.HttpStatusCode.BadGateway,
+                new ApiError { Message = "There is a problem connecting to the server." });
         }
 
         protected async Task<ApiResult<T>> HandleErrorAsync<T>(HttpResponseMessage response)
         {
             try
             {
-                var errors = await ParseErrorsAsync(response);
+                var errors = await ParseErrorsAsync(response).ConfigureAwait(false);
                 return ApiResult<T>.Failed(response.StatusCode, errors.ToArray());
             }
             catch(JsonReaderException)
             { }
 
-            return ApiResult<T>.Failed(response.StatusCode, new ApiError { Message = "An unknown error has occured." });
+            return ApiResult<T>.Failed(response.StatusCode,
+                new ApiError { Message = "An unknown error has occured." });
         }
 
         protected async Task<ApiResult> HandleErrorAsync(HttpResponseMessage response)
         {
             try
             {
-                var errors = await ParseErrorsAsync(response);
+                var errors = await ParseErrorsAsync(response).ConfigureAwait(false);
                 return ApiResult.Failed(response.StatusCode, errors.ToArray());
             }
             catch(JsonReaderException)
             { }
 
-            return ApiResult.Failed(response.StatusCode, new ApiError { Message = "An unknown error has occured." });
+            return ApiResult.Failed(response.StatusCode,
+                new ApiError { Message = "An unknown error has occured." });
         }
 
         private async Task<List<ApiError>> ParseErrorsAsync(HttpResponseMessage response)
@@ -69,7 +75,7 @@ namespace Bit.App.Repositories
             var errors = new List<ApiError>();
             if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                var responseContent = await response.Content.ReadAsStringAsync();
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var errorResponseModel = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
 
                 foreach(var valError in errorResponseModel.ValidationErrors)

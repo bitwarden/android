@@ -35,13 +35,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<CipherResponse>(response);
+                        return await HandleErrorAsync<CipherResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<CipherResponse>(responseContent);
                     return ApiResult<CipherResponse>.Success(responseObj, response.StatusCode);
                 }
@@ -69,13 +69,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<ListResponse<CipherResponse>>(response);
+                        return await HandleErrorAsync<ListResponse<CipherResponse>>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<CipherResponse>>(responseContent);
                     return ApiResult<ListResponse<CipherResponse>>.Success(responseObj, response.StatusCode);
                 }
@@ -103,13 +103,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<CipherHistoryResponse>(response);
+                        return await HandleErrorAsync<CipherHistoryResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<CipherHistoryResponse>(responseContent);
                     return ApiResult<CipherHistoryResponse>.Success(responseObj, response.StatusCode);
                 }

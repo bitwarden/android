@@ -107,13 +107,15 @@ namespace Bit.App.Pages
 
                 if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
                 {
-                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Password), AppResources.Ok);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                        AppResources.Password), AppResources.Ok);
                     return;
                 }
 
                 if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
                 {
-                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.Name), AppResources.Ok);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                        AppResources.Name), AppResources.Ok);
                     return;
                 }
 
@@ -132,20 +134,19 @@ namespace Bit.App.Pages
                     site.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
                 }
 
-                var saveTask = _siteService.SaveAsync(site);
                 _userDialogs.ShowLoading("Saving...", MaskType.Black);
-                await saveTask;
+                var saveTask = await _siteService.SaveAsync(site);
 
                 _userDialogs.HideLoading();
-                if(saveTask.Result.Succeeded)
+                if(saveTask.Succeeded)
                 {
                     await Navigation.PopModalAsync();
                     _userDialogs.Toast("New site created.");
                     _googleAnalyticsService.TrackAppEvent("CreatedSite");
                 }
-                else if(saveTask.Result.Errors.Count() > 0)
+                else if(saveTask.Errors.Count() > 0)
                 {
-                    await _userDialogs.AlertAsync(saveTask.Result.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
                 }
                 else
                 {
@@ -183,7 +184,8 @@ namespace Bit.App.Pages
 
         private void AlertNoConnection()
         {
-            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage,
+                AppResources.Ok);
         }
     }
 }

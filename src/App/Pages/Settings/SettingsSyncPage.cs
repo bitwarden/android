@@ -102,7 +102,8 @@ namespace Bit.App.Pages
 
         public void AlertNoConnection()
         {
-            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage,
+                AppResources.Ok);
         }
     }
 }

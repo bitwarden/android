@@ -36,13 +36,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<TResponse>(response);
+                        return await HandleErrorAsync<TResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
@@ -70,13 +70,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<ListResponse<TResponse>>(response);
+                        return await HandleErrorAsync<ListResponse<TResponse>>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<TResponse>>(responseContent);
                     return ApiResult<ListResponse<TResponse>>.Success(responseObj, response.StatusCode);
                 }
@@ -104,13 +104,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<TResponse>(response);
+                        return await HandleErrorAsync<TResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
@@ -138,13 +138,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<TResponse>(response);
+                        return await HandleErrorAsync<TResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
@@ -172,10 +172,10 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync(response);
+                        return await HandleErrorAsync(response).ConfigureAwait(false);
                     }
 
                     return ApiResult.Success(response.StatusCode);

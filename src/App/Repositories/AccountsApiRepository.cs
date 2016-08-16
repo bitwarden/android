@@ -33,10 +33,10 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync(response);
+                        return await HandleErrorAsync(response).ConfigureAwait(false);
                     }
 
                     return ApiResult.Success(response.StatusCode);
@@ -65,10 +65,10 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync(response);
+                        return await HandleErrorAsync(response).ConfigureAwait(false);
                     }
 
                     return ApiResult.Success(response.StatusCode);

@@ -34,13 +34,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<TokenResponse>(response);
+                        return await HandleErrorAsync<TokenResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
                     return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
                 }
@@ -68,13 +68,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<TokenResponse>(response);
+                        return await HandleErrorAsync<TokenResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
                     return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
                 }

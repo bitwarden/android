@@ -48,11 +48,14 @@ namespace Bit.App.Pages
             PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true,
                 imageSource: "lightbulb", containerPadding: padding);
             ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true,
-                nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
+                nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock",
+                containerPadding: padding);
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
-                nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
+                nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock",
+                containerPadding: padding);
             EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,
-                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope", containerPadding: padding);
+                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",
+                containerPadding: padding);
 
             PasswordHintCell.Entry.ReturnType = Enums.ReturnType.Done;
             PasswordHintCell.Entry.Completed += Entry_Completed;
@@ -178,16 +181,17 @@ namespace Bit.App.Pages
             {
                 Email = normalizedEmail,
                 MasterPasswordHash = _cryptoService.HashPasswordBase64(key, PasswordCell.Entry.Text),
-                MasterPasswordHint = !string.IsNullOrWhiteSpace(PasswordHintCell.Entry.Text) ? PasswordHintCell.Entry.Text : null
+                MasterPasswordHint = !string.IsNullOrWhiteSpace(PasswordHintCell.Entry.Text)
+                    ? PasswordHintCell.Entry.Text : null
             };
 
-            var responseTask = _accountsApiRepository.PostRegisterAsync(request);
             _userDialogs.ShowLoading("Creating account...", MaskType.Black);
-            var response = await responseTask;
+            var response = await _accountsApiRepository.PostRegisterAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.FirstOrDefault()?.Message, AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.FirstOrDefault()?.Message,
+                    AppResources.Ok);
                 return;
             }
 

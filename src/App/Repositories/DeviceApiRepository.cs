@@ -34,10 +34,10 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync(response);
+                        return await HandleErrorAsync(response).ConfigureAwait(false);
                     }
 
                     return ApiResult.Success(response.StatusCode);
@@ -61,15 +61,16 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/identifier/", identifier, "/clear-token")),
+                    RequestUri = new Uri(client.BaseAddress,
+                        string.Concat(ApiRoute, "/identifier/", identifier, "/clear-token"))
                 };
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync(response);
+                        return await HandleErrorAsync(response).ConfigureAwait(false);
                     }
 
                     return ApiResult.Success(response.StatusCode);

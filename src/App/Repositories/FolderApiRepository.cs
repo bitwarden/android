@@ -35,13 +35,13 @@ namespace Bit.App.Repositories
 
                 try
                 {
-                    var response = await client.SendAsync(requestMessage);
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<ListResponse<FolderResponse>>(response);
+                        return await HandleErrorAsync<ListResponse<FolderResponse>>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<FolderResponse>>(responseContent);
                     return ApiResult<ListResponse<FolderResponse>>.Success(responseObj, response.StatusCode);
                 }

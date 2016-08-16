@@ -4,7 +4,6 @@ using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Api;
 using Bit.App.Resources;
-using Plugin.DeviceInfo.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
@@ -106,7 +105,8 @@ namespace Bit.App.Pages
         {
             if(string.IsNullOrWhiteSpace(EmailCell.Entry.Text))
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired, AppResources.EmailAddress), AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                    AppResources.EmailAddress), AppResources.Ok);
                 return;
             }
 
@@ -115,9 +115,8 @@ namespace Bit.App.Pages
                 Email = EmailCell.Entry.Text
             };
 
-            var responseTask = _accountApiRepository.PostPasswordHintAsync(request);
             _userDialogs.ShowLoading("Submitting...", MaskType.Black);
-            var response = await responseTask;
+            var response = await _accountApiRepository.PostPasswordHintAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
             {
