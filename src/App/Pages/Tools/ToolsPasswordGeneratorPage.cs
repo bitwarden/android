@@ -42,7 +42,7 @@ namespace Bit.App.Pages
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 Margin = new Thickness(15, 40, 15, 40),
                 HorizontalTextAlignment = TextAlignment.Center,
-                FontFamily = "Courier",
+                FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier"),
                 LineBreakMode = LineBreakMode.TailTruncation,
                 VerticalOptions = LayoutOptions.Start
             };

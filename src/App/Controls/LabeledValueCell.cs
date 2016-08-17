@@ -63,7 +63,7 @@ namespace Bit.App.Controls
 
             if(button1Text != null)
             {
-                Button1 = new Button
+                Button1 = new ExtendedButton
                 {
                     Text = button1Text,
                     HorizontalOptions = LayoutOptions.End,
@@ -76,7 +76,7 @@ namespace Bit.App.Controls
 
             if(button2Text != null)
             {
-                Button2 = new Button
+                Button2 = new ExtendedButton
                 {
                     Text = button2Text,
                     HorizontalOptions = LayoutOptions.End,
@@ -87,6 +87,18 @@ namespace Bit.App.Controls
                 buttonStackLayout.Children.Add(Button2);
             }
 
+            if(Device.OS == TargetPlatform.Android)
+            {
+                if(Button1 != null)
+                {
+                    Button1.Padding = new Thickness(5);
+                }
+                if(Button2 != null)
+                {
+                    Button2.Padding = new Thickness(5);
+                }
+            }
+
             containerStackLayout.Children.Add(buttonStackLayout);
 
             View = containerStackLayout;
@@ -94,7 +106,7 @@ namespace Bit.App.Controls
 
         public Label Label { get; private set; }
         public Label Value { get; private set; }
-        public Button Button1 { get; private set; }
-        public Button Button2 { get; private set; }
+        public ExtendedButton Button1 { get; private set; }
+        public ExtendedButton Button2 { get; private set; }
     }
 }

@@ -13,8 +13,8 @@ namespace Bit.App.Controls
             {
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 35,
-                FontFamily = "Courier"
-            };
+                FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier")
+        };
 
             Entry = new ExtendedEntry
             {

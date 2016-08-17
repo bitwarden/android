@@ -41,7 +41,8 @@ namespace Bit.App.Pages
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
 
-            usernameCell.Entry.FontFamily = PasswordCell.Entry.FontFamily = "Courier";
+            usernameCell.Entry.FontFamily = PasswordCell.Entry.FontFamily = Device.OnPlatform(
+                iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
             var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);

@@ -295,6 +295,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controls\ExtendedButtonRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
     <Compile Include="HockeyAppCrashManagerListener.cs" />
     <Compile Include="LoginService.cs" />

@@ -52,7 +52,8 @@ namespace Bit.App.Pages
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
 
             // Password
-            PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty, button2Text: AppResources.Copy);
+            PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty,
+                button2Text: AppResources.Copy);
             PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
             PasswordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.ImageProperty, s => s.ShowHideImage);
             if(Device.OS == TargetPlatform.iOS)
@@ -62,7 +63,8 @@ namespace Bit.App.Pages
             PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
             PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
 
-            UsernameCell.Value.FontFamily = PasswordCell.Value.FontFamily = "Courier";
+            UsernameCell.Value.FontFamily = PasswordCell.Value.FontFamily = Device.OnPlatform(
+                iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             // URI
             UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
