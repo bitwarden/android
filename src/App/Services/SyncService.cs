@@ -49,7 +49,7 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            var cipher = await _cipherApiRepository.GetByIdAsync(id);
+            var cipher = await _cipherApiRepository.GetByIdAsync(id).ConfigureAwait(false);
             if(!cipher.Succeeded)
             {
                 SyncCompleted(false);
@@ -70,11 +70,11 @@ namespace Bit.App.Services
                     var existingLocalFolder = _folderRepository.GetByIdAsync(id);
                     if(existingLocalFolder == null)
                     {
-                        await _folderRepository.InsertAsync(folderData);
+                        await _folderRepository.InsertAsync(folderData).ConfigureAwait(false);
                     }
                     else
                     {
-                        await _folderRepository.UpdateAsync(folderData);
+                        await _folderRepository.UpdateAsync(folderData).ConfigureAwait(false);
                     }
                     break;
                 case Enums.CipherType.Site:
@@ -82,11 +82,11 @@ namespace Bit.App.Services
                     var existingLocalSite = _siteRepository.GetByIdAsync(id);
                     if(existingLocalSite == null)
                     {
-                        await _siteRepository.InsertAsync(siteData);
+                        await _siteRepository.InsertAsync(siteData).ConfigureAwait(false);
                     }
                     else
                     {
-                        await _siteRepository.UpdateAsync(siteData);
+                        await _siteRepository.UpdateAsync(siteData).ConfigureAwait(false);
                     }
                     break;
                 default:
@@ -107,7 +107,7 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            await _folderRepository.DeleteWithSiteUpdateAsync(id, revisionDate);
+            await _folderRepository.DeleteWithSiteUpdateAsync(id, revisionDate).ConfigureAwait(false);
             SyncCompleted(true);
             return true;
         }
@@ -121,7 +121,7 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            await _siteRepository.DeleteAsync(id);
+            await _siteRepository.DeleteAsync(id).ConfigureAwait(false);
             SyncCompleted(true);
             return true;
         }
@@ -136,7 +136,7 @@ namespace Bit.App.Services
             SyncStarted();
 
             var now = DateTime.UtcNow;
-            var ciphers = await _cipherApiRepository.GetAsync();
+            var ciphers = await _cipherApiRepository.GetAsync().ConfigureAwait(false);
             if(!ciphers.Succeeded)
             {
                 SyncCompleted(false);
@@ -155,7 +155,7 @@ namespace Bit.App.Services
 
             var siteTask = SyncSitesAsync(sites, true);
             var folderTask = SyncFoldersAsync(folders, true);
-            await Task.WhenAll(siteTask, folderTask);
+            await Task.WhenAll(siteTask, folderTask).ConfigureAwait(false);
 
             if(folderTask.Exception != null || siteTask.Exception != null)
             {
@@ -176,7 +176,7 @@ namespace Bit.App.Services
                 return false;
             }
 
-            return await IncrementalSyncAsync();
+            return await IncrementalSyncAsync().ConfigureAwait(false);
         }
 
         public async Task<bool> IncrementalSyncAsync()
@@ -190,12 +190,12 @@ namespace Bit.App.Services
             DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync);
             if(lastSync == null)
             {
-                return await FullSyncAsync();
+                return await FullSyncAsync().ConfigureAwait(false);
             }
 
             SyncStarted();
 
-            var ciphers = await _cipherApiRepository.GetByRevisionDateWithHistoryAsync(lastSync.Value);
+            var ciphers = await _cipherApiRepository.GetByRevisionDateWithHistoryAsync(lastSync.Value).ConfigureAwait(false);
             if(!ciphers.Succeeded)
             {
                 SyncCompleted(false);
@@ -216,7 +216,7 @@ namespace Bit.App.Services
             var folderTask = SyncFoldersAsync(folders, false);
             var deleteTask = DeleteCiphersAsync(ciphers.Result.Deleted);
 
-            await Task.WhenAll(siteTask, folderTask, deleteTask);
+            await Task.WhenAll(siteTask, folderTask, deleteTask).ConfigureAwait(false);
             if(folderTask.Exception != null || siteTask.Exception != null || deleteTask.Exception != null)
             {
                 SyncCompleted(false);
@@ -235,7 +235,8 @@ namespace Bit.App.Services
                 return;
             }
 
-            var localFolders = (await _folderRepository.GetAllByUserIdAsync(_authService.UserId)).ToDictionary(f => f.Id);
+            var localFolders = (await _folderRepository.GetAllByUserIdAsync(_authService.UserId).ConfigureAwait(false))
+                .ToDictionary(f => f.Id);
 
             foreach(var serverFolder in serverFolders)
             {
@@ -248,12 +249,12 @@ namespace Bit.App.Services
                 if(existingLocalFolder == null)
                 {
                     var data = new FolderData(serverFolder.Value, _authService.UserId);
-                    await _folderRepository.InsertAsync(data);
+                    await _folderRepository.InsertAsync(data).ConfigureAwait(false);
                 }
                 else if(existingLocalFolder.RevisionDateTime != serverFolder.Value.RevisionDate)
                 {
                     var data = new FolderData(serverFolder.Value, _authService.UserId);
-                    await _folderRepository.UpdateAsync(data);
+                    await _folderRepository.UpdateAsync(data).ConfigureAwait(false);
                 }
             }
 
@@ -264,7 +265,7 @@ namespace Bit.App.Services
 
             foreach(var folder in localFolders.Where(localFolder => !serverFolders.ContainsKey(localFolder.Key)))
             {
-                await _folderRepository.DeleteAsync(folder.Value.Id);
+                await _folderRepository.DeleteAsync(folder.Value.Id).ConfigureAwait(false);
             }
         }
 
@@ -275,7 +276,8 @@ namespace Bit.App.Services
                 return;
             }
 
-            var localSites = (await _siteRepository.GetAllByUserIdAsync(_authService.UserId)).ToDictionary(s => s.Id);
+            var localSites = (await _siteRepository.GetAllByUserIdAsync(_authService.UserId).ConfigureAwait(false))
+                .ToDictionary(s => s.Id);
 
             foreach(var serverSite in serverSites)
             {
@@ -288,12 +290,12 @@ namespace Bit.App.Services
                 if(existingLocalSite == null)
                 {
                     var data = new SiteData(serverSite.Value, _authService.UserId);
-                    await _siteRepository.InsertAsync(data);
+                    await _siteRepository.InsertAsync(data).ConfigureAwait(false);
                 }
                 else if(existingLocalSite.RevisionDateTime != serverSite.Value.RevisionDate)
                 {
                     var data = new SiteData(serverSite.Value, _authService.UserId);
-                    await _siteRepository.UpdateAsync(data);
+                    await _siteRepository.UpdateAsync(data).ConfigureAwait(false);
                 }
             }
 
@@ -304,7 +306,7 @@ namespace Bit.App.Services
 
             foreach(var site in localSites.Where(localSite => !serverSites.ContainsKey(localSite.Key)))
             {
-                await _siteRepository.DeleteAsync(site.Value.Id);
+                await _siteRepository.DeleteAsync(site.Value.Id).ConfigureAwait(false);
             }
         }
 
@@ -321,7 +323,7 @@ namespace Bit.App.Services
                 tasks.Add(_siteRepository.DeleteAsync(cipherId));
                 tasks.Add(_folderRepository.DeleteAsync(cipherId));
             }
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks).ConfigureAwait(false);
         }
 
         private void SyncStarted()

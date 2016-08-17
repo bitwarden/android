@@ -33,8 +33,13 @@ namespace Bit.App.Pages
 
         public void Init()
         {
+            var padding = Device.OnPlatform(
+                iOS: new Thickness(15, 20),
+                Android: new Thickness(15, 8),
+                WinPhone: new Thickness(15, 20));
+
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
-                useLabelAsPlaceholder: true, imageSource: "lock");
+                useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
             PasswordCell.Entry.Completed += Entry_Completed;
@@ -87,7 +92,7 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
-            return false;
+            return true;
         }
 
         protected override void OnAppearing()

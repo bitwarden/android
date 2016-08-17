@@ -84,8 +84,11 @@ namespace Bit.App.Controls
             if(Device.OS == TargetPlatform.Android)
             {
                 Entry.FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
-                Entry.TextColor = Color.Black;
                 formStackLayout.Spacing = 0;
+                if(!useLabelAsPlaceholder)
+                {
+                    Entry.Margin = new Thickness(-4, -2, -4, -10);
+                }
             }
 
             if(!useLabelAsPlaceholder)

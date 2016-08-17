@@ -28,12 +28,12 @@ namespace Bit.App.Controls
             {
                 MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
                 {
-                    IsBusy = _syncService.SyncInProgress;
+                    Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress);
                 });
 
                 MessagingCenter.Subscribe<Application>(Application.Current, "SyncStarted", (sender) =>
                 {
-                    IsBusy = _syncService.SyncInProgress;
+                    Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress);
                 });
             }
         }

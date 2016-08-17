@@ -71,9 +71,9 @@ namespace Bit.App
                 await Task.Run(() => IncrementalSyncAsync()).ConfigureAwait(false);
             });
 
-            MessagingCenter.Subscribe<Application, bool>(Current, "Lock", async (sender, args) =>
+            MessagingCenter.Subscribe<Application, bool>(Current, "Lock", (sender, args) =>
             {
-                await CheckLockAsync(args);
+                Device.BeginInvokeOnMainThread(async () => await CheckLockAsync(args));
             });
 
             MessagingCenter.Subscribe<Application, string>(Current, "Logout", (sender, args) =>
@@ -129,7 +129,7 @@ namespace Bit.App
                 {
                     try
                     {
-                        await _syncService.IncrementalSyncAsync(TimeSpan.FromMinutes(30));
+                        await _syncService.IncrementalSyncAsync(TimeSpan.FromMinutes(30)).ConfigureAwait(false);
                         break;
                     }
                     catch(WebException)
@@ -162,7 +162,7 @@ namespace Bit.App
                 {
                     try
                     {
-                        await _syncService.FullSyncAsync();
+                        await _syncService.FullSyncAsync().ConfigureAwait(false);
                         break;
                     }
                     catch(WebException)

@@ -69,7 +69,7 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
-            return false;
+            return true;
         }
 
         protected override void OnAppearing()
