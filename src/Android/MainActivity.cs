@@ -13,6 +13,7 @@ using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using Acr.UserDialogs;
 using PushNotification.Plugin.Abstractions;
+using Android.Content;
 
 namespace Bit.Android
 {
@@ -44,6 +45,12 @@ namespace Bit.Android
                 Resolver.Resolve<IPushNotification>(),
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>()));
+
+            Xamarin.Forms.MessagingCenter.Subscribe<Xamarin.Forms.Application>(
+                Xamarin.Forms.Application.Current, "RateApp", (sender) =>
+            {
+                RateApp();
+            });
         }
 
         protected override void OnPause()
@@ -80,6 +87,38 @@ namespace Bit.Android
         {
             Console.WriteLine("A OnResume");
             base.OnResume();
+        }
+
+        public void RateApp()
+        {
+            try
+            {
+                var rateIntent = RateIntentForUrl("market://details");
+                StartActivity(rateIntent);
+            }
+            catch(ActivityNotFoundException)
+            {
+                var rateIntent = RateIntentForUrl("https://play.google.com/store/apps/details");
+                StartActivity(rateIntent);
+            }
+        }
+
+        private Intent RateIntentForUrl(string url)
+        {
+            var intent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse($"{url}?id={PackageName}"));
+            var flags = ActivityFlags.NoHistory | ActivityFlags.MultipleTask;
+            if((int)Build.VERSION.SdkInt >= 21)
+            {
+                flags |= ActivityFlags.NewDocument;
+            }
+            else
+            {
+                // noinspection deprecation
+                flags |= ActivityFlags.ClearWhenTaskReset;
+            }
+
+            intent.AddFlags(flags);
+            return intent;
         }
     }
 }

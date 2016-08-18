@@ -130,7 +130,8 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                rateCell.Detail.Text = "App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!";
+                rateCell.Detail.Text = "App Store ratings are reset with every new version of bitwarden."
+                    + " Please consider helping us out with a good review!";
             }
             else
             {
@@ -240,11 +241,15 @@ namespace Bit.App.Pages
 
         private void RateCell_Tapped(object sender, EventArgs e)
         {
+            _googleAnalyticsService.TrackAppEvent("OpenedSetting", "RateApp");
             if(Device.OS == TargetPlatform.iOS)
             {
-                _googleAnalyticsService.TrackAppEvent("OpenedSetting", "RateApp");
-                var appStoreId = "1137397744";
-                Device.OpenUri(new Uri($"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews?id={appStoreId}&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
+                Device.OpenUri(new Uri($"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews" +
+                    "?id=1137397744&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
+            }
+            else if(Device.OS == TargetPlatform.Android)
+            {
+                MessagingCenter.Send(Application.Current, "RateApp");
             }
         }
 
@@ -262,7 +267,8 @@ namespace Bit.App.Pages
 
         private async void LogOutCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync("Are you sure you want to log out?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(
+                "Are you sure you want to log out?", null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }
