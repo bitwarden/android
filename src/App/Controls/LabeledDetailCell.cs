@@ -43,7 +43,6 @@ namespace Bit.App.Controls
             if(Device.OS == TargetPlatform.Android)
             {
                 Label.TextColor = Color.Black;
-                Detail.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
             }
 
             View = containerStackLayout;

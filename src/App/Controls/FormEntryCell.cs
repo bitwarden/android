@@ -23,11 +23,6 @@ namespace Bit.App.Controls
                     Style = (Style)Application.Current.Resources["text-muted"],
                     HorizontalOptions = LayoutOptions.FillAndExpand
                 };
-
-                if(Device.OS == TargetPlatform.Android)
-                {
-                    Label.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
-                }
             }
 
             Entry = new ExtendedEntry

@@ -109,7 +109,6 @@ namespace Bit.App.Pages
 
                 if(Device.OS == TargetPlatform.Android)
                 {
-                    detail.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
                     label.TextColor = Color.Black;
                 }
 

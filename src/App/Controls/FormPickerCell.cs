@@ -37,7 +37,6 @@ namespace Bit.App.Controls
 
             if(Device.OS == TargetPlatform.Android)
             {
-                Label.FontSize = Device.GetNamedSize(NamedSize.Micro, typeof(Label));
                 stackLayout.Spacing = 0;
             }
 
