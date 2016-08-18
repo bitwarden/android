@@ -26,6 +26,7 @@ namespace Bit.Android
         {
             base.OnCreate(bundle);
             Console.WriteLine("A OnCreate");
+            Window.SetSoftInputMode(SoftInput.StateAlwaysHidden);
 
             var appIdService = Resolver.Resolve<IAppIdService>();
             var authService = Resolver.Resolve<IAuthService>();

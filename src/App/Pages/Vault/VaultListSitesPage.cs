@@ -78,8 +78,7 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationFolders,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this)),
-                ItemTemplate = new DataTemplate(() => new VaultListViewCell(this)),
-                BackgroundColor = Color.White
+                ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
             };
 
             if(Device.OS == TargetPlatform.iOS)
@@ -391,6 +390,8 @@ namespace Bit.App.Pages
                 Button.Image = "more";
                 Button.Command = new Command(() => ShowMore());
                 Button.BackgroundColor = Color.Transparent;
+
+                BackgroundColor = Color.White;
             }
 
             public VaultListPageModel.Site SiteParameter

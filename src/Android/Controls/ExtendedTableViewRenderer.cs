@@ -21,6 +21,13 @@ namespace Bit.Android.Controls
 {
     public class ExtendedTableViewRenderer : TableViewRenderer
     {
+        protected override void OnElementChanged(ElementChangedEventArgs<TableView> e)
+        {
+            base.OnElementChanged(e);
+            Control.Divider = null;
+            Control.DividerHeight = 0;
+        }
+
         protected override TableViewModelRenderer GetModelRenderer(AListView listView, TableView view)
         {
             return new CustomTableViewModelRenderer(Context, listView, view);
@@ -51,13 +58,13 @@ namespace Bit.Android.Controls
 
         private class CustomTableViewModelRenderer : TableViewModelRenderer
         {
-            private readonly TableView _view;
+            private readonly ExtendedTableView _view;
             private readonly AListView _listView;
 
             public CustomTableViewModelRenderer(Context context, AListView listView, TableView view)
                 : base(context, listView, view)
             {
-                _view = view;
+                _view = view as ExtendedTableView;
                 _listView = listView;
             }
 
@@ -66,15 +73,24 @@ namespace Bit.Android.Controls
             public override AView GetView(int position, AView convertView, ViewGroup parent)
             {
                 var baseView = base.GetView(position, convertView, parent);
+                var layout = baseView as LinearLayout;
+
                 bool isHeader, nextIsHeader;
                 GetCellPosition(position, out isHeader, out nextIsHeader);
+
                 if(isHeader)
                 {
                     baseView.SetBackgroundColor(Xamarin.Forms.Color.Transparent.ToAndroid());
+
+                    var textCell = layout?.GetChildAt(0) as BaseCellView;
+                    if(textCell != null)
+                    {
+                        textCell.SetMainTextColor(Xamarin.Forms.Color.FromHex("777777"));
+                    }
                 }
                 else
                 {
-                    baseView.SetBackgroundColor(Xamarin.Forms.Color.Red.ToAndroid());
+                    baseView.SetBackgroundColor(_view.SeparatorColor.ToAndroid());
                 }
 
                 return baseView;
