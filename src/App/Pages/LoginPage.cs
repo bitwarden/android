@@ -90,12 +90,14 @@ namespace Bit.App.Pages
                 }
             };
 
-            var forgotPasswordButton = new Button
+            var forgotPasswordButton = new ExtendedButton
             {
                 Text = "Get your master password hint",
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                 Margin = new Thickness(15, 0, 15, 25),
-                Command = new Command(async () => await ForgotPasswordAsync())
+                Command = new Command(async () => await ForgotPasswordAsync()),
+                Uppercase = false,
+                BackgroundColor = Color.Transparent
             };
 
             var layout = new StackLayout

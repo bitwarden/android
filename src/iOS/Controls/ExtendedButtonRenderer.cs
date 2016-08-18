@@ -15,6 +15,7 @@ namespace Bit.iOS.Controls
         {
             base.OnElementChanged(e);
             SetPadding();
+            SetUppercase();
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -23,6 +24,10 @@ namespace Bit.iOS.Controls
             if(e.PropertyName == ExtendedButton.PaddingProperty.PropertyName)
             {
                 SetPadding();
+            }
+            else if(e.PropertyName == ExtendedButton.UppercaseProperty.PropertyName)
+            {
+                SetUppercase();
             }
         }
 
@@ -36,6 +41,15 @@ namespace Bit.iOS.Controls
                     (int)element.Padding.Left,
                     (int)element.Padding.Bottom,
                     (int)element.Padding.Right);
+            }
+        }
+
+        private void SetUppercase()
+        {
+            var element = Element as ExtendedButton;
+            if(element != null && element.Uppercase)
+            {
+                Control.TitleLabel.Text = Control.TitleLabel.Text.ToUpper();
             }
         }
     }

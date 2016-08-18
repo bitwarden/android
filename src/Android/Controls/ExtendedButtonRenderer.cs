@@ -14,6 +14,7 @@ namespace Bit.Android.Controls
         {
             base.OnElementChanged(e);
             SetPadding();
+            SetUppercase();
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -22,6 +23,10 @@ namespace Bit.Android.Controls
             if(e.PropertyName == ExtendedButton.PaddingProperty.PropertyName)
             {
                 SetPadding();
+            }
+            else if(e.PropertyName == ExtendedButton.UppercaseProperty.PropertyName)
+            {
+                SetUppercase();
             }
         }
 
@@ -35,6 +40,15 @@ namespace Bit.Android.Controls
                     (int)element.Padding.Top,
                     (int)element.Padding.Right,
                     (int)element.Padding.Bottom);
+            }
+        }
+
+        private void SetUppercase()
+        {
+            var element = Element as ExtendedButton;
+            if(element != null && !element.Uppercase)
+            {
+                Control.TransformationMethod = null;
             }
         }
     }
