@@ -14,6 +14,7 @@ using Plugin.Connectivity.Abstractions;
 using Acr.UserDialogs;
 using PushNotification.Plugin.Abstractions;
 using Android.Content;
+using System.Reflection;
 
 namespace Bit.Android
 {
@@ -33,7 +34,12 @@ namespace Bit.Android
 
             HockeyApp.Android.CrashManager.Register(this, HockeyAppId,
                 new HockeyAppCrashManagerListener(appIdService, authService));
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            typeof(Xamarin.Forms.Color).GetProperty("Accent", BindingFlags.Public | BindingFlags.Static)
+                .SetValue(null, Xamarin.Forms.Color.FromHex("d2d6de"));
+
 
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),

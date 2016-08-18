@@ -60,6 +60,7 @@ namespace Bit.Android.Controls
         {
             private readonly ExtendedTableView _view;
             private readonly AListView _listView;
+            private bool _removedHeader;
 
             public CustomTableViewModelRenderer(Context context, AListView listView, TableView view)
                 : base(context, listView, view)
@@ -85,7 +86,16 @@ namespace Bit.Android.Controls
                     var textCell = layout?.GetChildAt(0) as BaseCellView;
                     if(textCell != null)
                     {
-                        textCell.SetMainTextColor(Xamarin.Forms.Color.FromHex("777777"));
+                        if(!_removedHeader && position == 0 && _view.NoHeader)
+                        {
+                            textCell.Visibility = ViewStates.Gone;
+                            _removedHeader = true;
+                        }
+                        else
+                        {
+                            textCell.MainText = textCell.MainText?.ToUpperInvariant();
+                            textCell.SetMainTextColor(Xamarin.Forms.Color.FromHex("777777"));
+                        }
                     }
                 }
                 else
