@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bit.App.Resources;
-using Bit.App.Utilities;
-using System.Linq;
 
 namespace Bit.App.Models.Page
 {
@@ -36,7 +34,7 @@ namespace Bit.App.Models.Page
                 Name = folder.Name?.Decrypt();
             }
 
-            public Folder(IEnumerable<Site> sites)
+            public Folder(List<Site> sites)
             {
                 AddRange(sites);
             }

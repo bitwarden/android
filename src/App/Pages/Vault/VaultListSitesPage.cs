@@ -53,8 +53,8 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<VaultListPageModel.Folder> PresentationFolders { get; private set; }
             = new ExtendedObservableCollection<VaultListPageModel.Folder>();
         public ListView ListView { get; set; }
-        public IEnumerable<VaultListPageModel.Site> Sites { get; set; } = new List<VaultListPageModel.Site>();
-        public IEnumerable<VaultListPageModel.Folder> Folders { get; set; } = new List<VaultListPageModel.Folder>();
+        public VaultListPageModel.Site[] Sites { get; set; } = new VaultListPageModel.Site[] { };
+        public VaultListPageModel.Folder[] Folders { get; set; } = new VaultListPageModel.Folder[] { };
         public SearchBar Search { get; set; }
 
         private void Init()
@@ -166,7 +166,7 @@ namespace Bit.App.Pages
                 var filteredSites = Sites
                     .Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter))
                     .TakeWhile(s => !ct.IsCancellationRequested)
-                    .ToList();
+                    .ToArray();
 
                 ct.ThrowIfCancellationRequested();
                 LoadFolders(filteredSites, ct);
@@ -237,8 +237,16 @@ namespace Bit.App.Pages
                 var folders = await foldersTask;
                 var sites = await sitesTask;
 
-                Folders = folders.Select(f => new VaultListPageModel.Folder(f)).OrderBy(s => s.Name);
-                Sites = sites.Select(s => new VaultListPageModel.Site(s)).OrderBy(s => s.Name).ThenBy(s => s.Username);
+                Folders = folders
+                    .Select(f => new VaultListPageModel.Folder(f))
+                    .OrderBy(s => s.Name)
+                    .ToArray();
+
+                Sites = sites
+                    .Select(s => new VaultListPageModel.Site(s))
+                    .OrderBy(s => s.Name)
+                    .ThenBy(s => s.Username)
+                    .ToArray();
 
                 try
                 {
@@ -250,7 +258,7 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private void LoadFolders(IEnumerable<VaultListPageModel.Site> sites, CancellationToken ct)
+        private void LoadFolders(VaultListPageModel.Site[] sites, CancellationToken ct)
         {
             var folders = new List<VaultListPageModel.Folder>(Folders);
 
