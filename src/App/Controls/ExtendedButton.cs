@@ -9,8 +9,8 @@ namespace Bit.App.Controls
         public static readonly BindableProperty PaddingProperty =
             BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(ExtendedButton), default(Thickness));
         public static readonly BindableProperty UppercaseProperty =
-            BindableProperty.Create(nameof(Padding), typeof(bool), typeof(ExtendedButton),
-                Device.OS == TargetPlatform.Android ? true : false);
+            BindableProperty.Create(nameof(Uppercase), typeof(bool), typeof(ExtendedButton),
+                Device.OnPlatform(iOS: false, Android: true, WinPhone: false));
 
         public Thickness Padding
         {

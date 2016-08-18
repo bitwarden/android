@@ -103,7 +103,7 @@ namespace Bit.App.Pages
             var layout = new StackLayout
             {
                 Children = { table, forgotPasswordButton },
-                Spacing = 0
+                Spacing = Device.OnPlatform(iOS: 0, Android: 10, WinPhone: 0)
             };
 
             var scrollView = new ScrollView { Content = layout };

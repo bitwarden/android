@@ -296,6 +296,13 @@ namespace Bit.App
                 }
             });
 
+            Resources.Add(new Style(typeof(ExtendedButton))
+            {
+                Setters = {
+                    new Setter { Property = Button.TextColorProperty, Value = primaryColor }
+                }
+            });
+
             // List View
 
             Resources.Add(new Style(typeof(ListView))
