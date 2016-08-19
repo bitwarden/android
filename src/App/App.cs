@@ -145,6 +145,11 @@ namespace Bit.App
                         }
                         attempt++;
                     }
+                    catch(Exception e) when(e is TaskCanceledException || e is OperationCanceledException)
+                    {
+                        Debug.WriteLine("Cancellation exception.");
+                        break;
+                    }
                 } while(attempt <= 1);
             }
             else
@@ -178,7 +183,16 @@ namespace Bit.App
                         }
                         attempt++;
                     }
+                    catch(Exception e) when(e is TaskCanceledException || e is OperationCanceledException)
+                    {
+                        Debug.WriteLine("Cancellation exception.");
+                        break;
+                    }
                 } while(attempt <= 1);
+            }
+            else
+            {
+                Debug.WriteLine("Not connected.");
             }
         }
 
