@@ -12,16 +12,24 @@ namespace Bit.Android.Controls
 {
     public class ExtendedSwitchCellRenderer : SwitchCellRenderer
     {
-        protected AView View { get; private set; }
+        protected BaseCellView View { get; private set; }
 
         protected override AView GetCellCore(Cell item, AView convertView, ViewGroup parent, Context context)
         {
-            var View = base.GetCellCore(item, convertView, parent, context);
+            var View = base.GetCellCore(item, convertView, parent, context) as SwitchCellView;
             var extendedCell = (ExtendedSwitchCell)item;
 
             if(View != null)
             {
                 View.SetBackgroundColor(extendedCell.BackgroundColor.ToAndroid());
+                if(item.IsEnabled)
+                {
+                    View.SetMainTextColor(Color.Black);
+                }
+                else
+                {
+                    View.SetMainTextColor(Color.FromHex("d2d6de"));
+                }
             }
 
             return View;

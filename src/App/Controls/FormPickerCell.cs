@@ -38,6 +38,7 @@ namespace Bit.App.Controls
             if(Device.OS == TargetPlatform.Android)
             {
                 stackLayout.Spacing = 0;
+                Picker.Margin = new Thickness(-4, -2, -4, -10);
             }
 
             Tapped += FormPickerCell_Tapped;

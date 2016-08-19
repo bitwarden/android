@@ -41,9 +41,10 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            var fingerprintName = Device.OnPlatform(iOS: "Touch ID", Android: "Fingerprint", WinPhone: "Fingerprint");
             FingerprintCell = new ExtendedSwitchCell
             {
-                Text = "Unlock with Touch ID" + (!_fingerprint.IsAvailable ? " (Unavilable)" : null),
+                Text = "Unlock with " + fingerprintName + (!_fingerprint.IsAvailable ? " (Unavilable)" : null),
                 On = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn),
                 IsEnabled = _fingerprint.IsAvailable
             };
@@ -427,6 +428,12 @@ namespace Bit.App.Pages
                     Children = { Label, Detail },
                     Padding = new Thickness(15)
                 };
+
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    labelDetailStackLayout.Spacing = 5;
+                    Label.TextColor = Color.Black;
+                }
 
                 ShowDisclousure = true;
                 View = labelDetailStackLayout;
