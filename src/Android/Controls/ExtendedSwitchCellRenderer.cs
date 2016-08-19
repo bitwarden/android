@@ -28,7 +28,7 @@ namespace Bit.Android.Controls
                 }
                 else
                 {
-                    View.SetMainTextColor(Color.FromHex("d2d6de"));
+                    View.SetMainTextColor(Color.FromHex("777777"));
                 }
             }
 

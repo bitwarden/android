@@ -8,4 +8,8 @@
     <item name="android:windowBackground">@color/lightgray</item>
     <item name="android:navigationBarColor">@color/darkaccent</item>
   </style>
+  <style name="BitwardenTheme.Splash" parent="Theme.AppCompat.Light">
+    <item name="android:windowBackground">@drawable/splash_screen</item>
+    <item name="android:windowNoTitle">true</item>
+  </style>
 </resources>

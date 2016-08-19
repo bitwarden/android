@@ -145,7 +145,7 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
-            EmailCell.Entry.Focus();
+            EmailCell.Entry.FocusWithDelay();
         }
 
         private async void Entry_Completed(object sender, EventArgs e)

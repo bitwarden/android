@@ -42,11 +42,18 @@ namespace Bit.Android.Controls
 
         private int ComputeHeight(AListView listView, int width)
         {
+            var element = Element as ExtendedTableView;
+
             var adapter = listView.Adapter;
             var totalHeight = listView.PaddingTop + listView.PaddingBottom;
             var desiredWidth = MeasureSpec.MakeMeasureSpec(width, global::Android.Views.MeasureSpecMode.AtMost);
             for(var i = 0; i < adapter.Count; i++)
             {
+                if(i == 0 && (element?.NoHeader ?? false))
+                {
+                    continue;
+                }
+
                 var view = adapter.GetView(i, null, listView);
                 view.LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
                 view.Measure(desiredWidth, MeasureSpec.MakeMeasureSpec(0, global::Android.Views.MeasureSpecMode.Unspecified));

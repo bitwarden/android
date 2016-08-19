@@ -85,7 +85,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            PinControl.Entry.Focus();
+            PinControl.Entry.FocusWithDelay();
         }
 
         protected void PinEntered(object sender, EventArgs args)

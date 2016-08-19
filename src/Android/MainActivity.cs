@@ -18,7 +18,10 @@ using System.Reflection;
 
 namespace Bit.Android
 {
-    [Activity(Label = "bitwarden", Icon = "@drawable/icon", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "bitwarden",
+        Icon = "@drawable/icon", 
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        WindowSoftInputMode = SoftInput.StateHidden)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
@@ -27,7 +30,8 @@ namespace Bit.Android
         {
             base.OnCreate(bundle);
             Console.WriteLine("A OnCreate");
-            Window.SetSoftInputMode(SoftInput.StateAlwaysHidden);
+            Window.SetSoftInputMode(SoftInput.StateHidden);
+            Window.AddFlags(WindowManagerFlags.Secure);
 
             var appIdService = Resolver.Resolve<IAppIdService>();
             var authService = Resolver.Resolve<IAuthService>();

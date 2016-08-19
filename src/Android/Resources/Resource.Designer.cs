@@ -2710,8 +2710,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0200da
 			public const int mr_ic_play_light = 2130837722;
 			
-			// aapt resource value: 0x7f0200e1
-			public const int notification_template_icon_bg = 2130837729;
+			// aapt resource value: 0x7f0200e2
+			public const int notification_template_icon_bg = 2130837730;
 			
 			// aapt resource value: 0x7f0200db
 			public const int plus = 2130837723;
@@ -2726,10 +2726,13 @@ namespace Bit.Android
 			public const int roundedbgdark = 2130837726;
 			
 			// aapt resource value: 0x7f0200df
-			public const int upload = 2130837727;
+			public const int splash_screen = 2130837727;
 			
 			// aapt resource value: 0x7f0200e0
-			public const int user = 2130837728;
+			public const int upload = 2130837728;
+			
+			// aapt resource value: 0x7f0200e1
+			public const int user = 2130837729;
 			
 			static Drawable()
 			{
@@ -4519,6 +4522,9 @@ namespace Bit.Android
 			
 			// aapt resource value: 0x7f0d0175
 			public const int BitwardenTheme = 2131558773;
+			
+			// aapt resource value: 0x7f0d0176
+			public const int BitwardenTheme_Splash = 2131558774;
 			
 			// aapt resource value: 0x7f0d0017
 			public const int CardView = 2131558423;

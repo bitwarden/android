@@ -28,5 +28,21 @@ namespace Bit.App
         {
             return !page.IsPortrait();
         }
+
+        public static void FocusWithDelay(this Entry entry, int delay = 500)
+        {
+            if(Device.OS == TargetPlatform.Android)
+            {
+                System.Threading.Tasks.Task.Run(async () =>
+                {
+                    await System.Threading.Tasks.Task.Delay(delay);
+                    Device.BeginInvokeOnMainThread(() => entry.Focus());
+                });
+            }
+            else
+            {
+                entry.Focus();
+            }
+        }
     }
 }

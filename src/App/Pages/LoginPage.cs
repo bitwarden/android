@@ -138,11 +138,11 @@ namespace Bit.App.Pages
             {
                 if(!string.IsNullOrWhiteSpace(EmailCell.Entry.Text))
                 {
-                    PasswordCell.Entry.Focus();
+                    PasswordCell.Entry.FocusWithDelay();
                 }
                 else
                 {
-                    EmailCell.Entry.Focus();
+                    EmailCell.Entry.FocusWithDelay();
                 }
             }
         }

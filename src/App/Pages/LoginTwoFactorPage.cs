@@ -103,7 +103,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            CodeCell.Entry.Focus();
+            CodeCell.Entry.FocusWithDelay();
         }
 
         private async void Entry_Completed(object sender, EventArgs e)

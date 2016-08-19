@@ -98,7 +98,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            PasswordCell.Entry.Focus();
+            PasswordCell.Entry.FocusWithDelay();
         }
 
         protected async Task CheckPasswordAsync()
