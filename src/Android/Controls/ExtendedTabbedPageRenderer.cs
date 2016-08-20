@@ -67,15 +67,18 @@ namespace Bit.Android.Controls
                 return;
             }
 
-            var selectedResource = IdFromTitle(string.Format("{0}_selected", icon), ResourceManager.DrawableClass);
-            if(selected && selectedResource != 0)
+            if(selected)
             {
-                tab.SetIcon(selectedResource);
+                var selectedResource = IdFromTitle(string.Format("{0}_selected", icon), ResourceManager.DrawableClass);
+                if(selectedResource != 0)
+                {
+                    tab.SetIcon(selectedResource);
+                    return;
+                }
             }
-            else
-            {
-                tab.SetIcon(IdFromTitle(icon, ResourceManager.DrawableClass));
-            }
+
+            var resource = IdFromTitle(icon, ResourceManager.DrawableClass);
+            tab.SetIcon(resource);
         }
 
         private int IdFromTitle(string title, Type type)
