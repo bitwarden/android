@@ -41,8 +41,17 @@ namespace Bit.Android
             RegisterActivityLifecycleCallbacks(this);
             AppContext = ApplicationContext;
             StartPushService();
-            Resolver.Resolve<IPushNotification>().Unregister();
-            Resolver.Resolve<IPushNotification>().Register();
+
+            var pushNotification = Resolver.Resolve<IPushNotification>();
+#if DEBUG
+            // When running in debug mode you must unregister the previous instance first or else things wont work
+            // ref https://github.com/rdelrosario/xamarin-plugins/issues/65
+            pushNotification.Unregister();
+#endif
+            if(Resolver.Resolve<IAuthService>().IsAuthenticated)
+            {
+                pushNotification.Register();
+            }
         }
 
         public override void OnTerminate()
@@ -85,9 +94,10 @@ namespace Bit.Android
         public static void StartPushService()
         {
             AppContext.StartService(new Intent(AppContext, typeof(PushNotificationService)));
-            if(global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.Kitkat)
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
             {
-                PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext, typeof(PushNotificationService)), 0);
+                PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
+                    typeof(PushNotificationService)), 0);
                 AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
                 alarm.Cancel(pintent);
             }
@@ -96,9 +106,10 @@ namespace Bit.Android
         public static void StopPushService()
         {
             AppContext.StopService(new Intent(AppContext, typeof(PushNotificationService)));
-            if(global::Android.OS.Build.VERSION.SdkInt >= global::Android.OS.BuildVersionCodes.Kitkat)
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
             {
-                PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext, typeof(PushNotificationService)), 0);
+                PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
+                    typeof(PushNotificationService)), 0);
                 AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
                 alarm.Cancel(pintent);
             }

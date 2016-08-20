@@ -10,6 +10,7 @@ using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -23,6 +24,7 @@ namespace Bit.App.Pages
         private ISyncService _syncService;
         private ISettings _settings;
         private IGoogleAnalyticsService _googleAnalyticsService;
+        private IPushNotification _pushNotification;
         private readonly string _email;
 
         public LoginPage(string email = null)
@@ -37,6 +39,7 @@ namespace Bit.App.Pages
             _syncService = Resolver.Resolve<ISyncService>();
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _pushNotification = Resolver.Resolve<IPushNotification>();
 
             Init();
         }
@@ -200,6 +203,11 @@ namespace Bit.App.Pages
             _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
             _googleAnalyticsService.RefreshUserId();
             _googleAnalyticsService.TrackAppEvent("LoggedIn");
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                _pushNotification.Register();
+            }
 
             if(_authService.IsAuthenticatedTwoFactor)
             {

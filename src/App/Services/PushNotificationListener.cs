@@ -83,7 +83,8 @@ namespace Bit.App.Services
                 return;
             }
 
-            var response = await _deviceApiRepository.PutTokenAsync(_appIdService.AppId, new Models.Api.DeviceTokenRequest(token));
+            var response = await _deviceApiRepository.PutTokenAsync(_appIdService.AppId,
+                new Models.Api.DeviceTokenRequest(token));
             if(response.Succeeded)
             {
                 Debug.WriteLine("Registered device with server.");
