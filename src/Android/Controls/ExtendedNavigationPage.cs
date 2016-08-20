@@ -5,7 +5,7 @@ using Bit.App.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(ExtendedNavigationPage), typeof(ExtendedNavigationRenderer))]
+//[assembly: ExportRenderer(typeof(ExtendedNavigationPage), typeof(ExtendedNavigationRenderer))]
 namespace Bit.Android.Controls
 {
     public class ExtendedNavigationRenderer : NavigationRenderer

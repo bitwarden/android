@@ -2,9 +2,7 @@
 
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
 using Android.Views;
-using Android.Widget;
 using Android.OS;
 using Bit.App.Abstractions;
 using XLabs.Ioc;
@@ -15,6 +13,8 @@ using Acr.UserDialogs;
 using PushNotification.Plugin.Abstractions;
 using Android.Content;
 using System.Reflection;
+using Xamarin.Forms.Platform.Android;
+using Xamarin.Forms;
 
 namespace Bit.Android
 {
@@ -22,12 +22,15 @@ namespace Bit.Android
         Icon = "@drawable/icon", 
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         WindowSoftInputMode = SoftInput.StateHidden)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
+    public class MainActivity : FormsAppCompatActivity
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
 
         protected override void OnCreate(Bundle bundle)
         {
+            ToolbarResource = Resource.Layout.toolbar;
+            TabLayoutResource = Resource.Layout.tabs;
+
             base.OnCreate(bundle);
             Console.WriteLine("A OnCreate");
             Window.SetSoftInputMode(SoftInput.StateHidden);
@@ -39,10 +42,10 @@ namespace Bit.Android
             HockeyApp.Android.CrashManager.Register(this, HockeyAppId,
                 new HockeyAppCrashManagerListener(appIdService, authService));
 
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+            Forms.Init(this, bundle);
 
-            typeof(Xamarin.Forms.Color).GetProperty("Accent", BindingFlags.Public | BindingFlags.Static)
-                .SetValue(null, Xamarin.Forms.Color.FromHex("d2d6de"));
+            typeof(Color).GetProperty("Accent", BindingFlags.Public | BindingFlags.Static)
+                .SetValue(null, Color.FromHex("d2d6de"));
 
 
             LoadApplication(new App.App(
