@@ -51,6 +51,7 @@ namespace Bit.Android.Controls
             {
                 if(i == 0 && (element?.NoHeader ?? false))
                 {
+                    totalHeight += 1;
                     continue;
                 }
 
