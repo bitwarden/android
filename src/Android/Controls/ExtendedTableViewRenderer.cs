@@ -1,20 +1,13 @@
 ﻿using System;
-using System.ComponentModel;
-using Android.Graphics;
-using Android.Text;
-using Android.Text.Method;
-using Android.Views.InputMethods;
 using Android.Widget;
 using Bit.Android.Controls;
 using Bit.App.Controls;
-using Bit.App.Enums;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Android.Content;
 using AView = Android.Views.View;
 using AListView = Android.Widget.ListView;
 using Android.Views;
-using Android.Util;
 
 [assembly: ExportRenderer(typeof(ExtendedTableView), typeof(ExtendedTableViewRenderer))]
 namespace Bit.Android.Controls
@@ -37,7 +30,7 @@ namespace Bit.Android.Controls
         {
             var baseSize = base.GetDesiredSize(widthConstraint, heightConstraint);
             var height = ComputeHeight(Control, Convert.ToInt32(baseSize.Request.Width));
-            return new SizeRequest(new Xamarin.Forms.Size(baseSize.Request.Width, height));
+            return new SizeRequest(new Size(baseSize.Request.Width, height));
         }
 
         private int ComputeHeight(AListView listView, int width)
@@ -46,7 +39,7 @@ namespace Bit.Android.Controls
 
             var adapter = listView.Adapter;
             var totalHeight = listView.PaddingTop + listView.PaddingBottom;
-            var desiredWidth = MeasureSpec.MakeMeasureSpec(width, global::Android.Views.MeasureSpecMode.AtMost);
+            var desiredWidth = MeasureSpec.MakeMeasureSpec(width, MeasureSpecMode.AtMost);
             for(var i = 0; i < adapter.Count; i++)
             {
                 if(i == 0 && (element?.NoHeader ?? false))
@@ -57,7 +50,7 @@ namespace Bit.Android.Controls
 
                 var view = adapter.GetView(i, null, listView);
                 view.LayoutParameters = new LayoutParams(LayoutParams.WrapContent, LayoutParams.WrapContent);
-                view.Measure(desiredWidth, MeasureSpec.MakeMeasureSpec(0, global::Android.Views.MeasureSpecMode.Unspecified));
+                view.Measure(desiredWidth, MeasureSpec.MakeMeasureSpec(0, MeasureSpecMode.Unspecified));
                 totalHeight += view.MeasuredHeight;
             }
 
@@ -79,19 +72,25 @@ namespace Bit.Android.Controls
 
             private ITableViewController Controller => _view;
 
+            // ref SO post http://bit.ly/2b9cjnQ
             public override AView GetView(int position, AView convertView, ViewGroup parent)
             {
                 var baseView = base.GetView(position, convertView, parent);
                 var layout = baseView as LinearLayout;
 
                 bool isHeader, nextIsHeader;
-                GetCellPosition(position, out isHeader, out nextIsHeader);
+                var item = GetCellForPosition(position, out isHeader, out nextIsHeader);
+                var aview = CellFactory.GetCell(item, convertView, parent, Context, _view);
+                if(layout.ChildCount > 0)
+                {
+                    layout.RemoveViewAt(0);
+                }
+                layout.AddView(aview, 0);
 
                 if(isHeader)
                 {
-                    baseView.SetBackgroundColor(Xamarin.Forms.Color.Transparent.ToAndroid());
-
-                    var textCell = layout?.GetChildAt(0) as BaseCellView;
+                    baseView.SetBackgroundColor(Color.Transparent.ToAndroid());
+                    var textCell = aview as BaseCellView;
                     if(textCell != null)
                     {
                         if(!_removedHeader && position == 0 && _view.NoHeader)
@@ -102,7 +101,7 @@ namespace Bit.Android.Controls
                         else
                         {
                             textCell.MainText = textCell.MainText?.ToUpperInvariant();
-                            textCell.SetMainTextColor(Xamarin.Forms.Color.FromHex("777777"));
+                            textCell.SetMainTextColor(Color.FromHex("777777"));
                         }
                     }
                 }
@@ -114,7 +113,8 @@ namespace Bit.Android.Controls
                 return baseView;
             }
 
-            private void GetCellPosition(int position, out bool isHeader, out bool nextIsHeader)
+            // Copy/pasted from Xamarin source. Invoke via reflection instead maybe?
+            private Cell GetCellForPosition(int position, out bool isHeader, out bool nextIsHeader)
             {
                 isHeader = false;
                 nextIsHeader = false;
@@ -129,15 +129,33 @@ namespace Bit.Android.Controls
                     {
                         isHeader = true;
                         nextIsHeader = size == 0 && sectionIndex < sectionCount - 1;
+
+                        var header = model.GetHeaderCell(sectionIndex);
+                        Cell resultCell = null;
+                        if(header != null)
+                        {
+                            resultCell = header;
+                        }
+
+                        if(resultCell == null)
+                        {
+                            resultCell = new TextCell { Text = model.GetSectionTitle(sectionIndex) };
+                        }
+
+                        resultCell.Parent = _view;
+                        return resultCell;
                     }
 
                     if(position < size)
                     {
                         nextIsHeader = position == size - 1;
+                        return (Cell)model.GetItem(sectionIndex, position - 1);
                     }
 
                     position -= size;
                 }
+
+                return null;
             }
         }
     }
