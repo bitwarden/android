@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="BitwardenTheme.Splash" parent="BitwardenTheme.Base">
+  </style>
+  <style name="BitwardenTheme" parent="BitwardenTheme.Base">
+  </style>
+  <style name="BitwardenTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+  </style>
+</resources>

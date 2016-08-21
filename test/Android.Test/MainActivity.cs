@@ -5,7 +5,7 @@ using Xamarin.Android.NUnitLite;
 
 namespace Android.Test
 {
-    [Activity(Label = "Android.Test", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "bitwarden test", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : TestSuiteActivity
     {
         protected override void OnCreate(Bundle bundle)
