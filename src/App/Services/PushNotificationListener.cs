@@ -43,6 +43,11 @@ namespace Bit.App.Services
             _showNotification = false;
             Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(values));
 
+            if(!_authService.IsAuthenticated)
+            {
+                return;
+            }
+
             JToken token;
             if(!values.TryGetValue("type", StringComparison.OrdinalIgnoreCase, out token) || token == null)
             {
@@ -55,18 +60,34 @@ namespace Bit.App.Services
                 case Enums.PushType.SyncCipherUpdate:
                 case Enums.PushType.SyncCipherCreate:
                     var createUpdateMessage = values.ToObject<SyncCipherPushNotification>();
+                    if(createUpdateMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
                     _syncService.SyncAsync(createUpdateMessage.Id);
                     break;
                 case Enums.PushType.SyncFolderDelete:
                     var folderDeleteMessage = values.ToObject<SyncCipherPushNotification>();
+                    if(folderDeleteMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
                     _syncService.SyncDeleteFolderAsync(folderDeleteMessage.Id, folderDeleteMessage.RevisionDate);
                     break;
                 case Enums.PushType.SyncSiteDelete:
                     var siteDeleteMessage = values.ToObject<SyncCipherPushNotification>();
+                    if(siteDeleteMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
                     _syncService.SyncDeleteSiteAsync(siteDeleteMessage.Id);
                     break;
                 case Enums.PushType.SyncCiphers:
                     var cipherMessage = values.ToObject<SyncCiphersPushNotification>();
+                    if(cipherMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
                     _syncService.FullSyncAsync();
                     break;
                 default:

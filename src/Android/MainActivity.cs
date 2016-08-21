@@ -56,7 +56,6 @@ namespace Bit.Android
                 Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>(),
-                Resolver.Resolve<IPushNotification>(),
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>()));
 

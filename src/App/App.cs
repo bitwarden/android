@@ -27,7 +27,6 @@ namespace Bit.App
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
         private readonly ISettings _settings;
-        private readonly IPushNotification _pushNotification;
         private readonly ILockService _lockService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
@@ -39,7 +38,6 @@ namespace Bit.App
             ISyncService syncService,
             IFingerprint fingerprint,
             ISettings settings,
-            IPushNotification pushNotification,
             ILockService lockService,
             IGoogleAnalyticsService googleAnalyticsService)
         {
@@ -50,7 +48,6 @@ namespace Bit.App
             _authService = authService;
             _fingerprint = fingerprint;
             _settings = settings;
-            _pushNotification = pushNotification;
             _lockService = lockService;
             _googleAnalyticsService = googleAnalyticsService;
 
@@ -211,7 +208,6 @@ namespace Bit.App
 
             var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
             var appIdService = Resolver.Resolve<IAppIdService>();
-            _pushNotification.Unregister();
             _settings.Remove(Constants.PushLastRegistrationDate);
             await Task.Run(() => deviceApiRepository.PutClearTokenAsync(appIdService.AppId)).ConfigureAwait(false);
         }
