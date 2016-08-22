@@ -180,7 +180,7 @@ namespace Bit.App.Pages
 
         private async void TwoStepCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync("Two-step login makes your account more secure my requiring you to enter"
+            if(!await _userDialogs.ConfirmAsync("Two-step login makes your account more secure by requiring you to enter"
                 + " a security code from an authenticator app whenever you log in. Two-step login can be enabled on the"
                 + " bitwarden.com web vault. Do you want to visit the website now?",
                 null, AppResources.Yes, AppResources.Cancel))

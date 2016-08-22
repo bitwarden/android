@@ -72,31 +72,34 @@ namespace Bit.Android.Controls
 
             private ITableViewController Controller => _view;
 
-            // ref SO post http://bit.ly/2b9cjnQ
+            // ref http://bit.ly/2b9cjnQ
             public override AView GetView(int position, AView convertView, ViewGroup parent)
             {
                 var baseView = base.GetView(position, convertView, parent);
                 var layout = baseView as LinearLayout;
+                if(layout == null)
+                {
+                    return baseView;
+                }
 
                 bool isHeader, nextIsHeader;
-                var item = GetCellForPosition(position, out isHeader, out nextIsHeader);
-                var aview = CellFactory.GetCell(item, convertView, parent, Context, _view);
+                var cell = GetCellForPosition(position, out isHeader, out nextIsHeader);
                 if(layout.ChildCount > 0)
                 {
                     layout.RemoveViewAt(0);
+                    var cellView = CellFactory.GetCell(cell, convertView, parent, Context, _view);
+                    layout.AddView(cellView, 0);
                 }
-                layout.AddView(aview, 0);
 
                 if(isHeader)
                 {
-                    baseView.SetBackgroundColor(Color.Transparent.ToAndroid());
-                    var textCell = aview as BaseCellView;
+                    layout.SetBackgroundColor(Color.Transparent.ToAndroid());
+                    var textCell = layout?.GetChildAt(0) as BaseCellView;
                     if(textCell != null)
                     {
-                        if(!_removedHeader && position == 0 && _view.NoHeader)
+                        if(position == 0 && _view.NoHeader)
                         {
                             textCell.Visibility = ViewStates.Gone;
-                            _removedHeader = true;
                         }
                         else
                         {
@@ -107,10 +110,10 @@ namespace Bit.Android.Controls
                 }
                 else
                 {
-                    baseView.SetBackgroundColor(_view.SeparatorColor.ToAndroid());
+                    layout.SetBackgroundColor(_view.SeparatorColor.ToAndroid());
                 }
 
-                return baseView;
+                return layout;
             }
 
             // Copy/pasted from Xamarin source. Invoke via reflection instead maybe?
