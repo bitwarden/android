@@ -26,6 +26,7 @@ namespace Bit.App.Pages
 
             var versionLabel = new Label
             {
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 Text = $@"Version {_appInfoService.Version} ({_appInfoService.Build})
 © 8bit Solutions LLC 2015-{DateTime.Now.Year}",
                 HorizontalTextAlignment = TextAlignment.Center

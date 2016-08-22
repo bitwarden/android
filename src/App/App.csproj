@@ -54,7 +54,6 @@
     <Compile Include="Behaviors\RequiredValidationBehavior.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controls\DismissModalToolBarItem.cs" />
-    <Compile Include="Controls\EntryLabel.cs" />
     <Compile Include="Controls\ExtendedEditor.cs" />
     <Compile Include="Controls\ExtendedButton.cs" />
     <Compile Include="Controls\ExtendedNavigationPage.cs" />

@@ -31,7 +31,8 @@ namespace Bit.App.Controls
                 HasBorder = false,
                 IsPassword = IsPassword,
                 AllowClear = true,
-                HorizontalOptions = LayoutOptions.FillAndExpand
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry))
             };
 
             if(useLabelAsPlaceholder)
@@ -78,11 +79,9 @@ namespace Bit.App.Controls
 
             if(Device.OS == TargetPlatform.Android)
             {
-                Entry.FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
-                formStackLayout.Spacing = 0;
                 if(!useLabelAsPlaceholder)
                 {
-                    Entry.Margin = new Thickness(-4, -2, -4, -10);
+                    Entry.Margin = new Thickness(-11, 0, -11, -5);
                 }
             }
 

@@ -37,7 +37,7 @@ namespace Bit.App.Controls
             Value = new Label
             {
                 Text = valueText,
-                FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 LineBreakMode = LineBreakMode.TailTruncation
             };
 

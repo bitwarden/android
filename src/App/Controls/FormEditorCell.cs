@@ -10,7 +10,8 @@ namespace Bit.App.Controls
             Editor = new ExtendedEditor
             {
                 Keyboard = entryKeyboard,
-                HasBorder = false
+                HasBorder = false,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Editor))
             };
 
             if(height.HasValue)
@@ -29,7 +30,6 @@ namespace Bit.App.Controls
 
             if(Device.OS == TargetPlatform.Android)
             {
-                Editor.FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label));
                 Editor.Margin = new Thickness(-4, -2, -4, -10);
             }
 

@@ -95,6 +95,7 @@ namespace Bit.App.Pages
             {
                 var label = new Label
                 {
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                     LineBreakMode = LineBreakMode.TailTruncation,
                     Text = labelText
                 };

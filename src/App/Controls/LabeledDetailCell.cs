@@ -8,7 +8,8 @@ namespace Bit.App.Controls
         {
             Label = new Label
             {
-                LineBreakMode = LineBreakMode.TailTruncation
+                LineBreakMode = LineBreakMode.TailTruncation,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
 
             Detail = new Label

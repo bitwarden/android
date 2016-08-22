@@ -16,7 +16,7 @@ namespace Bit.Android.Controls
 
             var view = (ExtendedPicker)Element;
 
-            Control.TextSize = (float)Device.GetNamedSize(NamedSize.Small, typeof(Picker));
+            Control.TextSize = (float)Device.GetNamedSize(NamedSize.Medium, typeof(Picker));
             SetBorder(view);
         }
 

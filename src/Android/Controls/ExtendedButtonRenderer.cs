@@ -8,7 +8,7 @@ using Xamarin.Forms.Platform.Android;
 [assembly: ExportRenderer(typeof(ExtendedButton), typeof(ExtendedButtonRenderer))]
 namespace Bit.Android.Controls
 {
-    public class ExtendedButtonRenderer : ButtonRenderer
+    public class ExtendedButtonRenderer : CustomButtonRenderer
     {
         protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
         {

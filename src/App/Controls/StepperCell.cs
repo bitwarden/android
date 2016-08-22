@@ -10,7 +10,8 @@ namespace Bit.App.Controls
             {
                 Text = labelText,
                 HorizontalOptions = LayoutOptions.Start,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
 
             StepperValueLabel = new Label
@@ -19,7 +20,8 @@ namespace Bit.App.Controls
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalTextAlignment = TextAlignment.Start,
                 Text = value.ToString(),
-                Style = (Style)Application.Current.Resources["text-muted"]
+                Style = (Style)Application.Current.Resources["text-muted"],
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
 
             Stepper = new Stepper

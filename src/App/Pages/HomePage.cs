@@ -55,7 +55,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"],
-                FontSize = Device.GetNamedSize(NamedSize.Default, typeof(Button))
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
 
             var loginButton = new Button

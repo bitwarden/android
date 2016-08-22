@@ -418,6 +418,7 @@ namespace Bit.App.Pages
 
                 var label = new Label
                 {
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                     VerticalTextAlignment = TextAlignment.Center,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     Style = (Style)Application.Current.Resources["text-muted"]

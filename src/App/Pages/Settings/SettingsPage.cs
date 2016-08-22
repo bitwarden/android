@@ -407,6 +407,7 @@ namespace Bit.App.Pages
             {
                 Label = new Label
                 {
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                     VerticalOptions = LayoutOptions.CenterAndExpand,
                     LineBreakMode = LineBreakMode.TailTruncation,
                     Text = labelText

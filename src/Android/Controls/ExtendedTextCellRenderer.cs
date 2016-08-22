@@ -38,6 +38,19 @@ namespace Bit.Android.Controls
                     image.SetPadding(10, 10, 30, 10);
                     View.SetAccessoryView(image);
                 }
+
+                if(View.ChildCount > 1)
+                {
+                    var layout = View.GetChildAt(1) as LinearLayout;
+                    if(layout != null && layout.ChildCount > 0)
+                    {
+                        var textView = layout.GetChildAt(0) as TextView;
+                        if(textView != null)
+                        {
+                            textView.TextSize = (float)Device.GetNamedSize(NamedSize.Medium, typeof(Label));
+                        }
+                    }
+                }
             }
 
             return View;
