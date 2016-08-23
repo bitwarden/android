@@ -41,15 +41,6 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var fingerprintName = Device.OnPlatform(iOS: "Touch ID", Android: "Fingerprint", WinPhone: "Fingerprint");
-            FingerprintCell = new ExtendedSwitchCell
-            {
-                Text = "Unlock with " + fingerprintName + (!_fingerprint.IsAvailable ? " (Unavilable)" : null),
-                On = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn),
-                IsEnabled = _fingerprint.IsAvailable
-            };
-            FingerprintCell.OnChanged += FingerprintCell_Changed;
-
             PinCell = new ExtendedSwitchCell
             {
                 Text = "Unlock with PIN Code",
@@ -71,6 +62,26 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
             twoStepCell.Tapped += TwoStepCell_Tapped; ;
+
+            var securitySecion = new TableSection("Security")
+            {
+                LockOptionsCell,
+                PinCell,
+                twoStepCell
+            };
+
+            if(_fingerprint.IsAvailable)
+            {
+                var fingerprintName = Device.OnPlatform(iOS: "Touch ID", Android: "Fingerprint", WinPhone: "Fingerprint");
+                FingerprintCell = new ExtendedSwitchCell
+                {
+                    Text = "Unlock with " + fingerprintName,
+                    On = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn),
+                    IsEnabled = _fingerprint.IsAvailable
+                };
+                FingerprintCell.OnChanged += FingerprintCell_Changed;
+                securitySecion.Insert(1, FingerprintCell);
+            }
 
             var changeMasterPasswordCell = new ExtendedTextCell
             {
@@ -126,30 +137,38 @@ namespace Bit.App.Pages
             };
             helpCell.Tapped += HelpCell_Tapped;
 
-            var rateCell = new LongDetailViewCell("Rate the App", null);
-            rateCell.Tapped += RateCell_Tapped;
+            var otherSection = new TableSection("Other")
+            {
+                aboutCell,
+                helpCell
+            };
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                rateCell.Detail.Text = "App Store ratings are reset with every new version of bitwarden."
-                    + " Please consider helping us out with a good review!";
+                var rateCell = new LongDetailViewCell("Rate the App",
+                    "App Store ratings are reset with every new version of bitwarden."
+                    + " Please consider helping us out with a good review!");
+                rateCell.Tapped += RateCell_Tapped;
+                otherSection.Add(rateCell);
             }
             else
             {
-                rateCell.Detail.Text = "Please consider helping us out with a good review!";
+                var rateCell = new ExtendedTextCell
+                {
+                    Text = "Rate the App",
+                    Detail = "Please consider helping us out with a good review!",
+                    ShowDisclousure = true,
+                    DetailLineBreakMode = LineBreakMode.WordWrap
+                };
+                rateCell.Tapped += RateCell_Tapped;
+                otherSection.Add(rateCell);
             }
 
             Table = new CustomTable
             {
                 Root = new TableRoot
                 {
-                    new TableSection("Security")
-                    {
-                        LockOptionsCell,
-                        FingerprintCell,
-                        PinCell,
-                        twoStepCell
-                    },
+                    securitySecion,
                     new TableSection("Account")
                     {
                         changeMasterPasswordCell,
@@ -165,12 +184,7 @@ namespace Bit.App.Pages
                         lockCell,
                         logOutCell
                     },
-                    new TableSection("Other")
-                    {
-                        aboutCell,
-                        helpCell,
-                        rateCell
-                    }
+                    otherSection
                 }
             };
 
@@ -349,7 +363,11 @@ namespace Bit.App.Pages
             _settings.AddOrUpdateValue(Constants.SettingPinUnlockOn, true);
             _settings.AddOrUpdateValue(Constants.SettingFingerprintUnlockOn, false);
             PinCell.On = true;
-            FingerprintCell.On = false;
+
+            if(FingerprintCell != null)
+            {
+                FingerprintCell.On = false;
+            }
         }
 
         private void FoldersCell_Tapped(object sender, EventArgs e)
@@ -429,12 +447,6 @@ namespace Bit.App.Pages
                     Children = { Label, Detail },
                     Padding = new Thickness(15)
                 };
-
-                if(Device.OS == TargetPlatform.Android)
-                {
-                    labelDetailStackLayout.Spacing = 5;
-                    Label.TextColor = Color.Black;
-                }
 
                 ShowDisclousure = true;
                 View = labelDetailStackLayout;

@@ -24,7 +24,10 @@ namespace Bit.App.Controls
                 HorizontalOptions = LayoutOptions.StartAndExpand,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Children = { Label, Detail },
-                Padding = new Thickness(15, 5, 5, 5),
+                Padding = Device.OnPlatform(
+                    iOS: new Thickness(15, 5, 5, 5),
+                    Android: new Thickness(15, 0, 5, 5),
+                    WinPhone: new Thickness(15, 5, 5, 5)),
                 Spacing = 0
             };
 

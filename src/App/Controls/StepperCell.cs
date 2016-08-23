@@ -41,8 +41,16 @@ namespace Bit.App.Controls
                 Orientation = StackOrientation.Horizontal,
                 Children = { Label, StepperValueLabel, Stepper },
                 Spacing = 15,
-                Padding = new Thickness(15, 8)
+                Padding = Device.OnPlatform(
+                    iOS: new Thickness(15, 8),
+                    Android: new Thickness(15, 2),
+                    WinPhone: new Thickness(15, 8))
             };
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                Label.TextColor = Color.Black;
+            }
 
             View = stackLayout;
         }

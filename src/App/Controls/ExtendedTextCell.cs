@@ -42,6 +42,8 @@ namespace Bit.App.Controls
             set { SetValue(DisclousureImageProperty, value); }
         }
 
+        public LineBreakMode DetailLineBreakMode { get; set; } = LineBreakMode.TailTruncation;
+
         public event EventHandler DisclousureTapped;
 
         public void OnDisclousureTapped()

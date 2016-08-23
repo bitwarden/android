@@ -81,7 +81,7 @@ namespace Bit.App.Controls
             {
                 if(!useLabelAsPlaceholder)
                 {
-                    Entry.Margin = new Thickness(-11, 0, -11, -5);
+                    Entry.Margin = new Thickness(-4, -7, -4, -11);
                 }
             }
 

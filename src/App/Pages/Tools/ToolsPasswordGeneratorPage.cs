@@ -209,8 +209,16 @@ namespace Bit.App.Pages
                     Orientation = StackOrientation.Horizontal,
                     Spacing = 15,
                     Children = { label, LengthSlider, Value },
-                    Padding = new Thickness(15, 8)
+                    Padding = Device.OnPlatform(
+                        iOS: new Thickness(15, 8),
+                        Android: new Thickness(16, 10),
+                        WinPhone: new Thickness(15, 8))
                 };
+
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    label.TextColor = Color.Black;
+                }
 
                 View = stackLayout;
             }

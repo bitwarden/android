@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using AView = Android.Views.View;
 using Android.Widget;
+using Android.Text;
 
 [assembly: ExportRenderer(typeof(ExtendedTextCell), typeof(ExtendedTextCellRenderer))]
 namespace Bit.Android.Controls
@@ -42,12 +43,24 @@ namespace Bit.Android.Controls
                 if(View.ChildCount > 1)
                 {
                     var layout = View.GetChildAt(1) as LinearLayout;
-                    if(layout != null && layout.ChildCount > 0)
+                    if(layout != null)
                     {
-                        var textView = layout.GetChildAt(0) as TextView;
-                        if(textView != null)
+                        if(layout.ChildCount > 0)
                         {
-                            textView.TextSize = (float)Device.GetNamedSize(NamedSize.Medium, typeof(Label));
+                            var textView = layout.GetChildAt(0) as TextView;
+                            if(textView != null)
+                            {
+                                textView.TextSize = (float)Device.GetNamedSize(NamedSize.Medium, typeof(Label));
+                            }
+                        }
+
+                        if(layout.ChildCount > 1)
+                        {
+                            var detailView = layout.GetChildAt(1) as TextView;
+                            if(detailView != null)
+                            {
+                                UpdateLineBreakMode(detailView, extendedCell.DetailLineBreakMode);
+                            }
                         }
                     }
                 }
@@ -68,6 +81,44 @@ namespace Bit.Android.Controls
             }
 
             // TODO: other properties
+        }
+
+        private void UpdateLineBreakMode(TextView view, LineBreakMode lineBreakMode)
+        {
+            if(view == null)
+            {
+                return;
+            }
+
+            switch(lineBreakMode)
+            {
+                case LineBreakMode.NoWrap:
+                    view.SetSingleLine(true);
+                    view.Ellipsize = null;
+                    break;
+                case LineBreakMode.WordWrap:
+                    view.SetSingleLine(false);
+                    view.Ellipsize = null;
+                    view.SetMaxLines(100);
+                    break;
+                case LineBreakMode.CharacterWrap:
+                    view.SetSingleLine(false);
+                    view.Ellipsize = null;
+                    view.SetMaxLines(100);
+                    break;
+                case LineBreakMode.HeadTruncation:
+                    view.SetSingleLine(true);
+                    view.Ellipsize = TextUtils.TruncateAt.Start;
+                    break;
+                case LineBreakMode.TailTruncation:
+                    view.SetSingleLine(true);
+                    view.Ellipsize = TextUtils.TruncateAt.End;
+                    break;
+                case LineBreakMode.MiddleTruncation:
+                    view.SetSingleLine(true);
+                    view.Ellipsize = TextUtils.TruncateAt.Middle;
+                    break;
+            }
         }
 
         private class DisclosureImage : ImageView

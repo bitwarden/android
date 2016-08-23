@@ -53,9 +53,18 @@ Fingerprint by masterpage.com from the Noun Project")
                 var layout = new StackLayout
                 {
                     Children = { label },
-                    Padding = new Thickness(15, 20)
+                    Padding = Device.OnPlatform(
+                        iOS: new Thickness(15, 20),
+                        Android: new Thickness(16, 20),
+                        WinPhone: new Thickness(15, 20)),
+                    BackgroundColor = Color.White
                 };
 
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    label.TextColor = Color.Black;
+                }
+                
                 View = layout;
             }
         }

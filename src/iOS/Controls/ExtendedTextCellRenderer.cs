@@ -45,9 +45,46 @@ namespace Bit.iOS.Controls
                 }
 
                 WireUpForceUpdateSizeRequested(item, cell, tv);
+                UpdateLineBreakMode(cell.DetailTextLabel, extendedCell.DetailLineBreakMode);
             }
 
             return cell;
+        }
+
+        private void UpdateLineBreakMode(UILabel label, LineBreakMode lineBreakMode)
+        {
+            if(label == null)
+            {
+                return;
+            }
+
+            switch(lineBreakMode)
+            {
+                case LineBreakMode.NoWrap:
+                    label.LineBreakMode = UILineBreakMode.Clip;
+                    label.Lines = 1;
+                    break;
+                case LineBreakMode.WordWrap:
+                    label.LineBreakMode = UILineBreakMode.WordWrap;
+                    label.Lines = 0;
+                    break;
+                case LineBreakMode.CharacterWrap:
+                    label.LineBreakMode = UILineBreakMode.CharacterWrap;
+                    label.Lines = 0;
+                    break;
+                case LineBreakMode.HeadTruncation:
+                    label.LineBreakMode = UILineBreakMode.HeadTruncation;
+                    label.Lines = 1;
+                    break;
+                case LineBreakMode.MiddleTruncation:
+                    label.LineBreakMode = UILineBreakMode.MiddleTruncation;
+                    label.Lines = 1;
+                    break;
+                case LineBreakMode.TailTruncation:
+                    label.LineBreakMode = UILineBreakMode.TailTruncation;
+                    label.Lines = 1;
+                    break;
+            }
         }
     }
 }
