@@ -4,7 +4,6 @@ using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Api;
 using Bit.App.Resources;
-using Plugin.DeviceInfo.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
@@ -16,7 +15,7 @@ namespace Bit.App.Pages
     {
         private ICryptoService _cryptoService;
         private IAuthService _authService;
-        private IDeviceInfo _deviceInfo;
+        private IDeviceInfoService _deviceInfoService;
         private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
@@ -26,7 +25,7 @@ namespace Bit.App.Pages
         {
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
-            _deviceInfo = Resolver.Resolve<IDeviceInfo>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
@@ -124,7 +123,7 @@ namespace Bit.App.Pages
             {
                 Code = CodeCell.Entry.Text,
                 Provider = "Authenticator",
-                Device = new DeviceRequest(_appIdService, _deviceInfo)
+                Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 
             _userDialogs.ShowLoading("Validating code...", MaskType.Black);

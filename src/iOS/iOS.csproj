@@ -394,12 +394,6 @@
     <Reference Include="XLabs.Ioc.Unity, Version=2.0.5782.12230, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\XLabs.IoC.Unity.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Ioc.Unity.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.DeviceInfo, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Xam.Plugin.DeviceInfo.2.0.2\lib\Xamarin.iOS10\Plugin.DeviceInfo.dll</HintPath>
-    </Reference>
-    <Reference Include="Plugin.DeviceInfo.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\packages\Xam.Plugin.DeviceInfo.2.0.2\lib\Xamarin.iOS10\Plugin.DeviceInfo.Abstractions.dll</HintPath>
-    </Reference>
     <Reference Include="PushNotification.Plugin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\Xam.Plugin.PushNotification.1.2.2\lib\Xamarin.iOS10\PushNotification.Plugin.dll</HintPath>
     </Reference>

@@ -11,7 +11,6 @@ using Bit.App.Services;
 using Microsoft.Practices.Unity;
 using Plugin.Connectivity;
 using Plugin.CurrentActivity;
-using Plugin.DeviceInfo;
 using Plugin.Fingerprint;
 using Plugin.Settings;
 using PushNotification.Plugin;
@@ -143,6 +142,7 @@ namespace Bit.Android
                 .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAppInfoService, AppInfoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
@@ -153,7 +153,6 @@ namespace Bit.Android
                 .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICipherApiRepository, CipherApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
-                .RegisterInstance(CrossDeviceInfo.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())

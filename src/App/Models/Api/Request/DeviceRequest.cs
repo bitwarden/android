@@ -1,6 +1,6 @@
 ﻿using Bit.App.Abstractions;
-using Plugin.DeviceInfo.Abstractions;
 using PushNotification.Plugin.Abstractions;
+using Xamarin.Forms;
 
 namespace Bit.App.Models.Api
 {
@@ -8,11 +8,11 @@ namespace Bit.App.Models.Api
     {
         public DeviceRequest() { }
 
-        public DeviceRequest(IAppIdService appIdService, IDeviceInfo deviceInfo)
+        public DeviceRequest(IAppIdService appIdService, IDeviceInfoService deviceInfoService)
         {
             Identifier = appIdService.AppId;
-            Name = deviceInfo.Model;
-            Type = deviceInfo.Platform == Platform.Android ? DeviceType.Android : DeviceType.iOS;
+            Name = deviceInfoService.Model;
+            Type = Device.OS == TargetPlatform.Android ? DeviceType.Android : DeviceType.iOS;
         }
 
         public DeviceType Type { get; set; }

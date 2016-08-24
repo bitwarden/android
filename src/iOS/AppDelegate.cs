@@ -20,10 +20,8 @@ using System.Diagnostics;
 using Xamarin.Forms;
 using Bit.iOS.Core.Services;
 using PushNotification.Plugin;
-using Plugin.DeviceInfo;
 using Plugin.Connectivity.Abstractions;
 using Bit.App.Pages;
-using PushNotification.Plugin.Abstractions;
 using HockeyApp.iOS;
 using Bit.iOS.Core;
 using Google.Analytics;
@@ -260,6 +258,7 @@ namespace Bit.iOS
                 .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAppInfoService, AppInfoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
@@ -270,7 +269,6 @@ namespace Bit.iOS
                 .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICipherApiRepository, CipherApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
-                .RegisterInstance(CrossDeviceInfo.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
