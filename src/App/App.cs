@@ -94,7 +94,7 @@ namespace Bit.App
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
             }
@@ -214,15 +214,18 @@ namespace Bit.App
 
         private async Task CheckLockAsync(bool forceLock)
         {
+            if(TopPageIsLock())
+            {
+                // already locked
+                return;
+            }
+
             var lockType = _lockService.GetLockType(forceLock);
             var currentPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as ExtendedNavigationPage;
             switch(lockType)
             {
                 case Enums.LockType.Fingerprint:
-                    if((currentPage?.CurrentPage as LockFingerprintPage) == null)
-                    {
-                        await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
-                    }
+                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
                     break;
                 case Enums.LockType.PIN:
                     var lockPinPage = (currentPage?.CurrentPage as LockPinPage);
@@ -234,14 +237,30 @@ namespace Bit.App
                     }
                     break;
                 case Enums.LockType.Password:
-                    if((currentPage?.CurrentPage as LockPasswordPage) == null)
-                    {
-                        await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPasswordPage()), false);
-                    }
+                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPasswordPage()), false);
                     break;
                 default:
                     break;
             }
+        }
+
+        private bool TopPageIsLock()
+        {
+            var currentPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as ExtendedNavigationPage;
+            if((currentPage?.CurrentPage as LockFingerprintPage) != null)
+            {
+                return true;
+            }
+            if((currentPage?.CurrentPage as LockPinPage) != null)
+            {
+                return true;
+            }
+            if((currentPage?.CurrentPage as LockPasswordPage) != null)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void SetStyles()
