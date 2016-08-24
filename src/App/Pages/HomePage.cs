@@ -48,7 +48,7 @@ namespace Bit.App.Pages
                 TextColor = Color.FromHex("333333")
             };
 
-            var createAccountButton = new Button
+            var createAccountButton = new ExtendedButton
             {
                 Text = "Create Account",
                 Command = new Command(async () => await RegisterAsync()),
@@ -58,7 +58,7 @@ namespace Bit.App.Pages
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
 
-            var loginButton = new Button
+            var loginButton = new ExtendedButton
             {
                 Text = AppResources.LogIn,
                 Command = new Command(async () => await LoginAsync()),

@@ -34,7 +34,7 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            var syncButton = new Button
+            var syncButton = new ExtendedButton
             {
                 Text = "Sync Vault Now",
                 Command = new Command(async () => await SyncAsync()),

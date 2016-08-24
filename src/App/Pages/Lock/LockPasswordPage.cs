@@ -61,13 +61,14 @@ namespace Bit.App.Pages
                 }
             };
 
-            var logoutButton = new Button
+            var logoutButton = new ExtendedButton
             {
                 Text = AppResources.LogOut,
                 Command = new Command(async () => await LogoutAsync()),
                 VerticalOptions = LayoutOptions.End,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                BackgroundColor = Color.Transparent
+                BackgroundColor = Color.Transparent,
+                Uppercase = false
             };
 
             var stackLayout = new StackLayout

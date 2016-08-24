@@ -46,9 +46,16 @@ namespace Bit.Android.Controls
         private void SetUppercase()
         {
             var element = Element as ExtendedButton;
-            if(element != null && !element.Uppercase)
+            if(element != null && !string.IsNullOrWhiteSpace(element.Text))
             {
-                Control.TransformationMethod = null;
+                if(element.Uppercase)
+                {
+                    element.Text = element.Text.ToUpperInvariant();
+                }
+                else
+                {
+                    Control.TransformationMethod = null;
+                }
             }
         }
     }

@@ -31,7 +31,7 @@ namespace Bit.App.Controls
                 Spacing = 0
             };
 
-            Button = new Button
+            Button = new ExtendedButton
             {
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.CenterAndExpand,

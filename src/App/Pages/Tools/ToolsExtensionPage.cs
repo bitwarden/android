@@ -59,7 +59,7 @@ namespace Bit.App.Pages
                 Margin = new Thickness(0, -10, 0, 0)
             };
 
-            var notStartedButton = new Button
+            var notStartedButton = new ExtendedButton
             {
                 Text = "Enable App Extension",
                 Command = new Command(() => ShowExtension("NotStartedEnable")),
@@ -108,7 +108,7 @@ namespace Bit.App.Pages
                 Margin = new Thickness(0, -10, 0, 0)
             };
 
-            var notActivatedButton = new Button
+            var notActivatedButton = new ExtendedButton
             {
                 Text = "Enable App Extension",
                 Command = new Command(() => ShowExtension("NotActivatedEnable")),
@@ -158,7 +158,7 @@ namespace Bit.App.Pages
                 Margin = new Thickness(0, -10, 0, 0)
             };
 
-            var activatedButton = new Button
+            var activatedButton = new ExtendedButton
             {
                 Text = "See Supported Apps",
                 Command = new Command(() =>
@@ -171,7 +171,7 @@ namespace Bit.App.Pages
                 Style = (Style)Application.Current.Resources["btn-primary"]
             };
 
-            var activatedButtonReenable = new Button
+            var activatedButtonReenable = new ExtendedButton
             {
                 Text = "Re-enable App Extension",
                 Command = new Command(() => ShowExtension("Re-enable")),

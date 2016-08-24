@@ -31,7 +31,7 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            var fingerprintIcon = new Button
+            var fingerprintIcon = new ExtendedButton
             {
                 Image = "fingerprint",
                 BackgroundColor = Color.Transparent,
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
                 Margin = new Thickness(0, 0, 0, 15)
             };
 
-            var fingerprintButton = new Button
+            var fingerprintButton = new ExtendedButton
             {
                 Text = "Use Fingerprint to Unlock",
                 Command = new Command(async () => await CheckFingerprintAsync()),
@@ -48,13 +48,14 @@ namespace Bit.App.Pages
                 Style = (Style)Application.Current.Resources["btn-primary"]
             };
 
-            var logoutButton = new Button
+            var logoutButton = new ExtendedButton
             {
                 Text = AppResources.LogOut,
                 Command = new Command(async () => await LogoutAsync()),
                 VerticalOptions = LayoutOptions.End,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                BackgroundColor = Color.Transparent
+                BackgroundColor = Color.Transparent,
+                Uppercase = false
             };
 
             var stackLayout = new StackLayout
