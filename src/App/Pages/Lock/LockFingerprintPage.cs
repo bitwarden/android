@@ -53,7 +53,8 @@ namespace Bit.App.Pages
                 Text = AppResources.LogOut,
                 Command = new Command(async () => await LogoutAsync()),
                 VerticalOptions = LayoutOptions.End,
-                Style = (Style)Application.Current.Resources["btn-primaryAccent"]
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                BackgroundColor = Color.Transparent
             };
 
             var stackLayout = new StackLayout
