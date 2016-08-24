@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Bit.App.Abstractions;
+using System;
 using Xamarin.Forms;
+using XLabs.Ioc;
 
 namespace Bit.App.Controls
 {
@@ -79,9 +81,24 @@ namespace Bit.App.Controls
 
             if(Device.OS == TargetPlatform.Android)
             {
-                if(!useLabelAsPlaceholder)
+                var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
+                if(useLabelAsPlaceholder)
                 {
-                    Entry.Margin = new Thickness(-4, -7, -4, -11);
+                    if(deviceInfo.Version == 21)
+                    {
+                        Entry.Margin = new Thickness(0, 4, 0, -4);
+                    }
+                }
+                else
+                {
+                    if(deviceInfo.Version == 21)
+                    {
+                        Entry.Margin = new Thickness(-4, -2, -4, -11);
+                    }
+                    else
+                    {
+                        Entry.Margin = new Thickness(-4, -7, -4, -11);
+                    }
                 }
             }
 

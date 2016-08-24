@@ -23,6 +23,11 @@ namespace Bit.App.Controls
                 Margin = new Thickness(0, int.MaxValue, 0, 0)
             };
             Entry.TextChanged += Entry_TextChanged;
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                Label.TextColor = Color.Black;
+            }
         }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
