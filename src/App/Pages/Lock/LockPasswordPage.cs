@@ -19,7 +19,7 @@ namespace Bit.App.Pages
         private readonly ICryptoService _cryptoService;
 
         public LockPasswordPage()
-            : base(false)
+            : base(false, false)
         {
             _authService = Resolver.Resolve<IAuthService>();
             _settings = Resolver.Resolve<ISettings>();

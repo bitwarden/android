@@ -18,7 +18,7 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
 
         public LockPinPage()
-            : base(false)
+            : base(false, false)
         {
             _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();

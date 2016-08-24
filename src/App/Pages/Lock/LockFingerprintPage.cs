@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
-using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Xamarin.Forms;
@@ -19,7 +18,7 @@ namespace Bit.App.Pages
         private readonly bool _checkFingerprintImmediately;
 
         public LockFingerprintPage(bool checkFingerprintImmediately)
-            : base(false)
+            : base(false, false)
         {
             _checkFingerprintImmediately = checkFingerprintImmediately;
             _fingerprint = Resolver.Resolve<IFingerprint>();
