@@ -84,21 +84,18 @@ namespace Bit.App.Controls
                 var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
                 if(useLabelAsPlaceholder)
                 {
-                    if(deviceInfo.Version == 21)
+                    if(deviceInfo.Version < 21)
+                    {
+                        Entry.Margin = new Thickness(-9, 0);
+                    }
+                    else if(deviceInfo.Version == 21)
                     {
                         Entry.Margin = new Thickness(0, 4, 0, -4);
                     }
                 }
                 else
                 {
-                    if(deviceInfo.Version == 21)
-                    {
-                        Entry.Margin = new Thickness(-4, -2, -4, -11);
-                    }
-                    else
-                    {
-                        Entry.Margin = new Thickness(-4, -7, -4, -11);
-                    }
+                    Entry.AdjustMarginsForDevice();
                 }
             }
 

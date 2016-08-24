@@ -44,5 +44,25 @@ namespace Bit.App
                 entry.Focus();
             }
         }
+
+        public static void AdjustMarginsForDevice(this View view)
+        {
+            if(Device.OS == TargetPlatform.Android)
+            {
+                var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
+                if(deviceInfo.Version < 21)
+                {
+                    view.Margin = new Thickness(-12, -5, -12, -6);
+                }
+                else if(deviceInfo.Version == 21)
+                {
+                    view.Margin = new Thickness(-4, -2, -4, -11);
+                }
+                else
+                {
+                    view.Margin = new Thickness(-4, -7, -4, -11);
+                }
+            }
+        }
     }
 }

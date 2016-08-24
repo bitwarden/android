@@ -27,11 +27,7 @@ namespace Bit.App.Controls
             stackLayout.Children.Add(Editor);
 
             Tapped += FormEditorCell_Tapped;
-
-            if(Device.OS == TargetPlatform.Android)
-            {
-                Editor.Margin = new Thickness(-4, -2, -4, -10);
-            }
+            Editor.AdjustMarginsForDevice();
 
             View = stackLayout;
         }
