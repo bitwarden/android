@@ -9,16 +9,20 @@ using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
     public class VaultAddSitePage : ExtendedContentPage
     {
+        private const string AddedSiteAlertKey = "addedSiteAlert";
+
         private readonly ISiteService _siteService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly ISettings _settings;
 
         public VaultAddSitePage()
         {
@@ -27,6 +31,7 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _settings = Resolver.Resolve<ISettings>();
 
             Init();
         }
@@ -170,6 +175,15 @@ namespace Bit.App.Pages
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
+            }
+
+            if(Device.OS == TargetPlatform.iOS && !_settings.GetValueOrDefault(AddedSiteAlertKey, false))
+            {
+                _settings.AddOrUpdateValue(AddedSiteAlertKey, true);
+                DisplayAlert("bitwarden App Extension",
+                    "The easiest way to add new sites to your vault is from the bitwarden App Extension. " +
+                    "Learn more about using the bitwarden App Extension by navigating to the \"Tools\" screen.",
+                    AppResources.Ok);
             }
         }
 
