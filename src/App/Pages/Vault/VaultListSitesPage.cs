@@ -56,6 +56,9 @@ namespace Bit.App.Pages
         public VaultListPageModel.Site[] Sites { get; set; } = new VaultListPageModel.Site[] { };
         public VaultListPageModel.Folder[] Folders { get; set; } = new VaultListPageModel.Folder[] { };
         public SearchBar Search { get; set; }
+        public StackLayout NoDataStackLayout { get; set; }
+        public StackLayout ResultsStackLayout { get; set; }
+        public ActivityIndicator LoadingIndicator { get; set; }
 
         private void Init()
         {
@@ -98,11 +101,49 @@ namespace Bit.App.Pages
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
 
             Title = _favorites ? AppResources.Favorites : AppResources.MyVault;
-            Content = new StackLayout
+
+            ResultsStackLayout = new StackLayout
             {
                 Children = { Search, ListView },
                 Spacing = 0
             };
+
+            var noDataLabel = new Label
+            {
+                Text = _favorites ? "There are no favorites in your vault." : "There are no sites in your vault.",
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                Style = (Style)Application.Current.Resources["text-muted"]
+            };
+
+            NoDataStackLayout = new StackLayout
+            {
+                Children = { noDataLabel },
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Padding = new Thickness(20, 0),
+                Spacing = 20
+            };
+
+            if(!_favorites)
+            {
+                var addSiteButton = new ExtendedButton
+                {
+                    Text = "Add a site",
+                    IsVisible = !_favorites,
+                    Command = new Command(() => AddSite())
+                };
+
+                NoDataStackLayout.Children.Add(addSiteButton);
+            }
+
+            LoadingIndicator = new ActivityIndicator
+            {
+                IsRunning = true,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            Content = LoadingIndicator;
         }
 
         private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
@@ -187,7 +228,7 @@ namespace Bit.App.Pages
                 Action registerAction = () =>
                 {
                     var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate);
-                    if(!pushPromptShow || !lastPushRegistration.HasValue 
+                    if(!pushPromptShow || !lastPushRegistration.HasValue
                         || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
                     {
                         _pushNotification.Register();
@@ -212,6 +253,18 @@ namespace Bit.App.Pages
                     // Check push registration once per day
                     registerAction();
                 }
+            }
+        }
+
+        private void AdjustContent()
+        {
+            if(PresentationFolders.Count > 0)
+            {
+                Content = ResultsStackLayout;
+            }
+            else
+            {
+                Content = NoDataStackLayout;
             }
         }
 
@@ -294,7 +347,11 @@ namespace Bit.App.Pages
                 .ToList();
 
             ct.ThrowIfCancellationRequested();
-            Device.BeginInvokeOnMainThread(() => PresentationFolders.ResetWithRange(foldersToAdd));
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PresentationFolders.ResetWithRange(foldersToAdd);
+                AdjustContent();
+            });
         }
 
         private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
@@ -315,7 +372,7 @@ namespace Bit.App.Pages
             {
                 buttons.Add(AppResources.CopyUsername);
             }
-            if(!string.IsNullOrWhiteSpace(site.Uri.Value) && (site.Uri.Value.StartsWith("http://") 
+            if(!string.IsNullOrWhiteSpace(site.Uri.Value) && (site.Uri.Value.StartsWith("http://")
                 || site.Uri.Value.StartsWith("https://")))
             {
                 buttons.Add(AppResources.GoToWebsite);
@@ -353,6 +410,12 @@ namespace Bit.App.Pages
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
+        private async void AddSite()
+        {
+            var page = new ExtendedNavigationPage(new VaultAddSitePage());
+            await Navigation.PushModalAsync(page);
+        }
+
         private class AddSiteToolBarItem : ToolbarItem
         {
             private readonly VaultListSitesPage _page;
@@ -365,10 +428,9 @@ namespace Bit.App.Pages
                 Clicked += ClickedItem;
             }
 
-            private async void ClickedItem(object sender, EventArgs e)
+            private void ClickedItem(object sender, EventArgs e)
             {
-                var page = new ExtendedNavigationPage(new VaultAddSitePage());
-                await _page.Navigation.PushModalAsync(page);
+                _page.AddSite();
             }
         }
 
