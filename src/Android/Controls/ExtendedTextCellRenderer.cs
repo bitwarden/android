@@ -23,7 +23,14 @@ namespace Bit.Android.Controls
 
             if(View != null)
             {
-                View.SetBackgroundColor(extendedCell.BackgroundColor.ToAndroid());
+                if(extendedCell.BackgroundColor != Color.White)
+                {
+                    View.SetBackgroundColor(extendedCell.BackgroundColor.ToAndroid());
+                }
+                else
+                {
+                    View.SetBackgroundResource(Resource.Drawable.list_selector);
+                }
 
                 if(extendedCell.ShowDisclousure)
                 {

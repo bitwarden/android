@@ -61,7 +61,6 @@ namespace Bit.Android.Controls
         {
             private readonly ExtendedTableView _view;
             private readonly AListView _listView;
-            private bool _removedHeader;
 
             public CustomTableViewModelRenderer(Context context, AListView listView, TableView view)
                 : base(context, listView, view)
@@ -93,8 +92,7 @@ namespace Bit.Android.Controls
 
                 if(isHeader)
                 {
-                    layout.SetBackgroundColor(Color.Transparent.ToAndroid());
-                    var textCell = layout?.GetChildAt(0) as BaseCellView;
+                    var textCell = layout.GetChildAt(0) as BaseCellView;
                     if(textCell != null)
                     {
                         if(position == 0 && _view.NoHeader)
@@ -108,9 +106,11 @@ namespace Bit.Android.Controls
                         }
                     }
                 }
-                else
+
+                var bline = layout.GetChildAt(1);
+                if(bline != null)
                 {
-                    layout.SetBackgroundColor(_view.SeparatorColor.ToAndroid());
+                    bline.SetBackgroundColor(_view.SeparatorColor.ToAndroid());
                 }
 
                 return layout;
