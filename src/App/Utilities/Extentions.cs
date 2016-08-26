@@ -72,7 +72,7 @@ namespace Bit.App
                 var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
                 if(deviceInfo.Scale == 1) // mdpi
                 {
-                    view.Padding = new Thickness(21, view.Padding.Top, 21, view.Padding.Bottom);
+                    view.Padding = new Thickness(22, view.Padding.Top, 22, view.Padding.Bottom);
                 }
                 else if(deviceInfo.Scale < 2) // hdpi
                 {

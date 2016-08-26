@@ -31,12 +31,6 @@ namespace Bit.Android.Controls
             }
         }
 
-        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            base.OnElementPropertyChanged(sender, e);
-            var view = (ExtendedTabbedPage)Element;
-        }
-
         void TabLayout.IOnTabSelectedListener.OnTabSelected(TabLayout.Tab tab)
         {
             if(Element == null)
