@@ -289,7 +289,7 @@
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
     <Compile Include="HockeyAppCrashManagerListener.cs" />
-    <Compile Include="LoginService.cs" />
+    <Compile Include="AutofillService.cs" />
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />
     <Compile Include="Controls\ExtendedSwitchCellRenderer.cs" />
     <Compile Include="Controls\ExtendedViewCellRenderer.cs" />
