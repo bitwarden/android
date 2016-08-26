@@ -65,7 +65,8 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.End,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                 HorizontalOptions = LayoutOptions.Fill,
-                BackgroundColor = Color.Transparent
+                BackgroundColor = Color.Transparent,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
 
             var buttonStackLayout = new StackLayout

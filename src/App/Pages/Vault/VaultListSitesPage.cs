@@ -128,9 +128,10 @@ namespace Bit.App.Pages
             {
                 var addSiteButton = new ExtendedButton
                 {
-                    Text = "Add a site",
-                    IsVisible = !_favorites,
-                    Command = new Command(() => AddSite())
+                    Text = "Add a Site",
+                    Command = new Command(() => AddSite()),
+                    Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
                 };
 
                 NoDataStackLayout.Children.Add(addSiteButton);

@@ -45,12 +45,13 @@ namespace Bit.App.Pages
                 Text = "See Development Progress",
                 Command = new Command(() =>
                 {
-                    _googleAnalyticsService.TrackAppEvent("SeeProgress");
+                    _googleAnalyticsService.TrackAppEvent("SeeAutofillProgress");
                     Device.OpenUri(new Uri("https://github.com/bitwarden/mobile/issues/1"));
                 }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
-                Style = (Style)Application.Current.Resources["btn-primary"]
+                Style = (Style)Application.Current.Resources["btn-primary"],
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
 
             var stackLayout = new StackLayout
