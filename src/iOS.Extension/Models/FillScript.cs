@@ -16,10 +16,57 @@ namespace Bit.iOS.Extension.Models
 
             DocumentUUID = pageDetails.DocumentUUID;
 
-            var loginForm = pageDetails.Forms.FirstOrDefault(form => pageDetails.Fields.Any(f => f.Form == form.Key && f.Type == "password")).Value;
-            if(loginForm == null)
+            var passwordFields = pageDetails.Fields.Where(f => f.Type == "password");
+            var passwordForms = pageDetails.Forms.Where(form => passwordFields.Any(f => f.Form == form.Key));
+            if(!passwordForms.Any())
             {
                 return;
+            }
+
+            PageDetails.Form loginForm = null;
+            if(passwordForms.Count() > 1)
+            {
+                // More than one form with a password field is on the page.
+                // This usually occurs when a website has a login and signup form on the same page.
+                // Let's try to guess which one is the login form.
+
+                // First let's try to guess the correct login form by examining the form attribute strings
+                // for common login form attribute.
+                foreach(var form in passwordForms)
+                {
+                    var formDescriptor = string.Format("{0}~{1}~{2}",
+                        form.Value?.HtmlName, form.Value?.HtmlId, form.Value?.HtmlAction)
+                        ?.ToLowerInvariant()?.Replace('_', '-');
+
+                    if(formDescriptor.Contains("login") || formDescriptor.Contains("log-in")
+                        || formDescriptor.Contains("signin") || formDescriptor.Contains("sign-in")
+                        || formDescriptor.Contains("logon") || formDescriptor.Contains("log-on"))
+                    {
+                        loginForm = form.Value;
+                        break;
+                    }
+                }
+
+                if(loginForm == null)
+                {
+                    // Next we can try to find the login form that only has one password field. Typically
+                    // a registration form may have two password fields for password confirmation.
+                    var fieldGroups = passwordFields.GroupBy(f => f.Form);
+                    var singleFields = fieldGroups.FirstOrDefault(f => f.Count() == 1);
+                    if(singleFields.Any())
+                    {
+                        var singlePasswordForms = passwordForms.Where(f => f.Key == singleFields.Key);
+                        if(singlePasswordForms.Any())
+                        {
+                            loginForm = singlePasswordForms.First().Value;
+                        }
+                    }
+                }
+            }
+
+            if(loginForm == null)
+            {
+                loginForm = passwordForms.FirstOrDefault().Value;
             }
 
             Script = new List<List<string>>();

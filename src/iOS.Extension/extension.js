@@ -10,6 +10,7 @@ BitwardenExtension.prototype = {
             pageDetails: this.collect(document)
         };
 
+        console.log(args);
         arguments.completionFunction(args);
     },
     finalize: function (arguments) {
