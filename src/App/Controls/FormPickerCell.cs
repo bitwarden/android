@@ -40,6 +40,7 @@ namespace Bit.App.Controls
                 stackLayout.Spacing = 0;
             }
             Picker.AdjustMarginsForDevice();
+            stackLayout.AdjustPaddingForDevice();
 
             Tapped += FormPickerCell_Tapped;
 

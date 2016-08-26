@@ -28,6 +28,7 @@ namespace Bit.App.Controls
 
             Tapped += FormEditorCell_Tapped;
             Editor.AdjustMarginsForDevice();
+            stackLayout.AdjustPaddingForDevice();
 
             View = stackLayout;
         }

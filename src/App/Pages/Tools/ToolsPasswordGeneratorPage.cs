@@ -215,6 +215,7 @@ namespace Bit.App.Pages
                         WinPhone: new Thickness(15, 8))
                 };
 
+                stackLayout.AdjustPaddingForDevice();
                 if(Device.OS == TargetPlatform.Android)
                 {
                     label.TextColor = Color.Black;

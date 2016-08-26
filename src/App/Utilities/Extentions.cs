@@ -64,5 +64,29 @@ namespace Bit.App
                 }
             }
         }
+
+        public static void AdjustPaddingForDevice(this StackLayout view)
+        {
+            if(Device.OS == TargetPlatform.Android)
+            {
+                var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
+                if(deviceInfo.Scale == 1) // mdpi
+                {
+                    view.Padding = new Thickness(21, view.Padding.Top, 21, view.Padding.Bottom);
+                }
+                else if(deviceInfo.Scale < 2) // hdpi
+                {
+                    view.Padding = new Thickness(19, view.Padding.Top, 19, view.Padding.Bottom);
+                }
+                else if(deviceInfo.Scale < 3) // xhdpi
+                {
+                    view.Padding = new Thickness(17, view.Padding.Top, 17, view.Padding.Bottom);
+                }
+                else // xxhdpi and xxxhdpi
+                {
+                    view.Padding = new Thickness(15, view.Padding.Top, 15, view.Padding.Bottom);
+                }
+            }
+        }
     }
 }

@@ -51,6 +51,7 @@ namespace Bit.App.Controls
             {
                 Label.TextColor = Color.Black;
             }
+            stackLayout.AdjustPaddingForDevice();
 
             View = stackLayout;
         }

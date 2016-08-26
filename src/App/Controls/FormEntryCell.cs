@@ -86,7 +86,7 @@ namespace Bit.App.Controls
                 {
                     if(deviceInfo.Version < 21)
                     {
-                        Entry.Margin = new Thickness(-9, 0);
+                        Entry.Margin = new Thickness(-9, 1, -9, 0);
                     }
                     else if(deviceInfo.Version == 21)
                     {
@@ -96,6 +96,11 @@ namespace Bit.App.Controls
                 else
                 {
                     Entry.AdjustMarginsForDevice();
+                }
+
+                if(containerPadding == null)
+                {
+                    imageStackLayout.AdjustPaddingForDevice();
                 }
             }
 

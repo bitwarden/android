@@ -113,7 +113,7 @@ namespace Bit.App
             var lockPinPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage;
             if(lockPinPage != null)
             {
-                lockPinPage.PinControl.Entry.Focus();
+                lockPinPage.PinControl.Entry.FocusWithDelay();
             }
         }
 
@@ -228,13 +228,7 @@ namespace Bit.App
                     await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
                     break;
                 case Enums.LockType.PIN:
-                    var lockPinPage = (currentPage?.CurrentPage as LockPinPage);
-                    if(lockPinPage == null)
-                    {
-                        lockPinPage = new LockPinPage();
-                        await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(lockPinPage), false);
-                        lockPinPage.PinControl.Entry.Focus();
-                    }
+                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPinPage()), false);
                     break;
                 case Enums.LockType.Password:
                     await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPasswordPage()), false);

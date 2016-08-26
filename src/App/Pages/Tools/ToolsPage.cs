@@ -139,6 +139,8 @@ namespace Bit.App.Pages
                         WinPhone: new Thickness(15, 25))
                 };
 
+                containerStackLayout.AdjustPaddingForDevice();
+
                 ShowDisclousure = true;
                 View = containerStackLayout;
             }

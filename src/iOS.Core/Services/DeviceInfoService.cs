@@ -21,5 +21,6 @@ namespace Bit.iOS.Core.Services
                 return -1;
             }
         }
+        public float Scale => (float)UIScreen.MainScreen.Scale;
     }
 }

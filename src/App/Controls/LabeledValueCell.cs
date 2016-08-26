@@ -92,6 +92,9 @@ namespace Bit.App.Controls
                 {
                     Button2.Padding = new Thickness(5);
                 }
+
+
+                containerStackLayout.AdjustPaddingForDevice();
             }
 
             containerStackLayout.Children.Add(buttonStackLayout);

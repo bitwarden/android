@@ -4,5 +4,6 @@
     {
         string Model { get; }
         int Version { get; }
+        float Scale { get; }
     }
 }
