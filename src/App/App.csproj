@@ -125,6 +125,7 @@
     <Compile Include="Pages\Settings\SettingsEditFolderPage.cs" />
     <Compile Include="Pages\Lock\LockFingerprintPage.cs" />
     <Compile Include="Pages\Settings\SettingsAboutPage.cs" />
+    <Compile Include="Pages\Tools\ToolsAutofillServicePage.cs" />
     <Compile Include="Pages\Tools\ToolsExtensionPage.cs" />
     <Compile Include="Pages\Tools\ToolsPasswordGeneratorSettingsPage.cs" />
     <Compile Include="Pages\Tools\ToolsPasswordGeneratorPage.cs" />
