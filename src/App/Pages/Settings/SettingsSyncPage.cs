@@ -73,7 +73,16 @@ namespace Bit.App.Pages
         private void SetLastSync()
         {
             var lastSyncDate = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync);
-            LastSyncLabel.Text = "Last Sync: " + lastSyncDate?.ToLocalTime().ToString() ?? "Never";
+            try
+            {
+                LastSyncLabel.Text = "Last Sync: " + lastSyncDate?.ToLocalTime().ToString() ?? "Never";
+            }
+            catch
+            {
+                // some users with different calendars have issues with ToString()ing a date
+                // it seems the linker is at fault. just catch for now since this isn't that important.
+                // ref http://bit.ly/2c2JU7b
+            }
         }
 
         public async Task SyncAsync()
