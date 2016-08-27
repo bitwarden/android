@@ -102,6 +102,12 @@ namespace Bit.App
 
         protected async override void OnResume()
         {
+            base.OnResume();
+
+            // workaround for app compat bug
+            // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
+            await Task.Delay(10);
+
             // Handle when your app resumes
             Debug.WriteLine("OnResume");
 

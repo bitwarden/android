@@ -1,5 +1,4 @@
 ﻿using System;
-
 using Android.App;
 using Android.Content.PM;
 using Android.Views;
@@ -10,28 +9,33 @@ using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using Acr.UserDialogs;
-using PushNotification.Plugin.Abstractions;
 using Android.Content;
 using System.Reflection;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace Bit.Android
 {
     [Activity(Label = "bitwarden",
-        Icon = "@drawable/icon", 
+        Icon = "@drawable/icon",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         WindowSoftInputMode = SoftInput.StateHidden)]
     public class MainActivity : FormsAppCompatActivity
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
 
-        protected override void OnCreate(Bundle bundle)
+        protected async override void OnCreate(Bundle bundle)
         {
             ToolbarResource = Resource.Layout.toolbar;
             TabLayoutResource = Resource.Layout.tabs;
 
             base.OnCreate(bundle);
+
+            // workaround for app compat bug
+            // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
+            await Task.Delay(10);
+
             Console.WriteLine("A OnCreate");
             Window.SetSoftInputMode(SoftInput.StateHidden);
             Window.AddFlags(WindowManagerFlags.Secure);
@@ -59,8 +63,7 @@ namespace Bit.Android
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>()));
 
-            Xamarin.Forms.MessagingCenter.Subscribe<Xamarin.Forms.Application>(
-                Xamarin.Forms.Application.Current, "RateApp", (sender) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "RateApp", (sender) =>
             {
                 RateApp();
             });

@@ -17,16 +17,21 @@ using PushNotification.Plugin;
 using PushNotification.Plugin.Abstractions;
 using XLabs.Ioc;
 using XLabs.Ioc.Unity;
+using System.Threading.Tasks;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.Android
 {
 #if DEBUG
     [Application(Debuggable = true)]
 #else
-    [Application(Debuggable=false)]
+    [Application(Debuggable = false)]
 #endif
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {
+        private const string FirstLaunchKey = "firstLaunch";
+        private const string LastVersionCodeKey = "lastVersionCode";
+
         public static Context AppContext;
 
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
@@ -38,21 +43,74 @@ namespace Bit.Android
             }
         }
 
-        public override void OnCreate()
+        public async override void OnCreate()
         {
             base.OnCreate();
+
+            // workaround for app compat bug
+            // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
+            await Task.Delay(10);
+
             RegisterActivityLifecycleCallbacks(this);
             AppContext = ApplicationContext;
             StartPushService();
+            HandlePushReregistration();
+        }
 
+        private void HandlePushReregistration()
+        {
             var pushNotification = Resolver.Resolve<IPushNotification>();
-            // Must unregister the previous instance first or else things wont work
+            var settings = Resolver.Resolve<ISettings>();
+
+            // Reregister for push token based on certain conditions
             // ref https://github.com/rdelrosario/xamarin-plugins/issues/65
-            if(Resolver.Resolve<IAuthService>().IsAuthenticated)
+
+            var reregister = false;
+
+            // 1. First time starting the app after a new install
+            if(settings.GetValueOrDefault(FirstLaunchKey, true))
+            {
+                settings.AddOrUpdateValue(FirstLaunchKey, false);
+                reregister = true;
+            }
+
+            // 2. App version changed (installed update)
+            var versionCode = Context.ApplicationContext.PackageManager.GetPackageInfo(Context.PackageName, 0).VersionCode;
+            if(settings.GetValueOrDefault(LastVersionCodeKey, -1) != versionCode)
+            {
+                settings.AddOrUpdateValue(LastVersionCodeKey, versionCode);
+                reregister = true;
+            }
+
+            // 3. In debug mode
+            if(InDebugMode())
+            {
+                reregister = true;
+            }
+
+            // 4. Doesn't have a push token currently
+            if(string.IsNullOrWhiteSpace(pushNotification.Token))
+            {
+                reregister = true;
+            }
+
+            if(reregister)
             {
                 pushNotification.Unregister();
-                pushNotification.Register();
+                if(Resolver.Resolve<IAuthService>().IsAuthenticated)
+                {
+                    pushNotification.Register();
+                }
             }
+        }
+
+        private bool InDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
         }
 
         public override void OnTerminate()
