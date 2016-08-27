@@ -1,6 +1,7 @@
 using HockeyApp.Android;
 using Bit.App.Abstractions;
 using Newtonsoft.Json;
+using Android.Runtime;
 
 namespace Bit.Android
 {
@@ -8,6 +9,13 @@ namespace Bit.Android
     {
         private readonly IAppIdService _appIdService;
         private readonly IAuthService _authService;
+
+        public HockeyAppCrashManagerListener()
+        { }
+
+        public HockeyAppCrashManagerListener(System.IntPtr javaRef, JniHandleOwnership transfer)
+        : base(javaRef, transfer)
+        { }
 
         public HockeyAppCrashManagerListener(
             IAppIdService appIdService,
@@ -21,13 +29,20 @@ namespace Bit.Android
         {
             get
             {
-                var log = new
+                if(_appIdService != null && _authService != null)
                 {
-                    AppId = _appIdService.AppId,
-                    UserId = _authService.UserId
-                };
+                    var log = new
+                    {
+                        AppId = _appIdService.AppId,
+                        UserId = _authService.UserId
+                    };
 
-                return JsonConvert.SerializeObject(log, Formatting.Indented);
+                    return JsonConvert.SerializeObject(log, Formatting.Indented);
+                }
+                else
+                {
+                    return null;
+                }
             }
         }
 
