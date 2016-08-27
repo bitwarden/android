@@ -205,6 +205,7 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.Android)
             {
+                _pushNotification.Unregister();
                 _pushNotification.Register();
             }
 

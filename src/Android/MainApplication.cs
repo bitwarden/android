@@ -46,13 +46,11 @@ namespace Bit.Android
             StartPushService();
 
             var pushNotification = Resolver.Resolve<IPushNotification>();
-#if DEBUG
-            // When running in debug mode you must unregister the previous instance first or else things wont work
+            // Must unregister the previous instance first or else things wont work
             // ref https://github.com/rdelrosario/xamarin-plugins/issues/65
-            pushNotification.Unregister();
-#endif
             if(Resolver.Resolve<IAuthService>().IsAuthenticated)
             {
+                pushNotification.Unregister();
                 pushNotification.Register();
             }
         }
