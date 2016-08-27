@@ -43,13 +43,13 @@ namespace Bit.Android
             }
         }
 
-        public async override void OnCreate()
+        public override void OnCreate()
         {
             base.OnCreate();
 
             // workaround for app compat bug
             // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
-            await Task.Delay(10);
+            Task.Delay(10).Wait();
 
             RegisterActivityLifecycleCallbacks(this);
             AppContext = ApplicationContext;

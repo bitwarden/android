@@ -25,7 +25,7 @@ namespace Bit.Android
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
 
-        protected async override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle bundle)
         {
             ToolbarResource = Resource.Layout.toolbar;
             TabLayoutResource = Resource.Layout.tabs;
@@ -34,7 +34,7 @@ namespace Bit.Android
 
             // workaround for app compat bug
             // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
-            await Task.Delay(10);
+            Task.Delay(10).Wait();
 
             Console.WriteLine("A OnCreate");
             Window.SetSoftInputMode(SoftInput.StateHidden);

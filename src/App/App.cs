@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Xamarin.Forms;
@@ -13,7 +11,6 @@ using Bit.App.Controls;
 using Plugin.Connectivity.Abstractions;
 using System.Net;
 using Acr.UserDialogs;
-using PushNotification.Plugin.Abstractions;
 using XLabs.Ioc;
 
 namespace Bit.App
