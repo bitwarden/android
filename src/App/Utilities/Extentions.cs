@@ -29,7 +29,7 @@ namespace Bit.App
             return !page.IsPortrait();
         }
 
-        public static void FocusWithDelay(this Entry entry, int delay = 500)
+        public static void FocusWithDelay(this Entry entry, int delay = 1000)
         {
             if(Device.OS == TargetPlatform.Android)
             {
