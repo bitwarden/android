@@ -130,8 +130,7 @@ namespace Bit.App.Pages
                 {
                     Text = "Add a Site",
                     Command = new Command(() => AddSite()),
-                    Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
+                    Style = (Style)Application.Current.Resources["btn-primaryAccent"]
                 };
 
                 NoDataStackLayout.Children.Add(addSiteButton);

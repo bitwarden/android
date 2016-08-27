@@ -7,7 +7,7 @@ using System.Reflection;
 [assembly: AssemblyTitle("BitwardenApp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("8bit Solutions LLC")]
 [assembly: AssemblyProduct("bitwarden")]
 [assembly: AssemblyCopyright("Copyright © 2016")]
 [assembly: AssemblyTrademark("")]
