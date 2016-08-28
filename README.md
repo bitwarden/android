@@ -1,8 +1,6 @@
 # bitwarden mobile
 
-<a href="https://itunes.apple.com/us/app/bitwarden-free-password-manager/id1137397744?mt=8" target="_blank"><img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" width="165" height="40"></a>
-
-Android on the Google Play store coming soon!
+<a href="https://play.google.com/store/apps/details?id=com.x8bit.bitwarden" target="_blank"><img alt="Get it on Google Play" src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png"width="129" height="45"></a> <a href="https://itunes.apple.com/us/app/bitwarden-free-password-manager/id1137397744?mt=8" target="_blank"><img src="https://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg" width="165" height="40"></a>
 
 The bitwarden mobile application is written in C# with Xamarin Android, Xamarin iOS, and Xamarin Forms.
 
