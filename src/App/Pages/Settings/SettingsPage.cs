@@ -44,7 +44,7 @@ namespace Bit.App.Pages
             PinCell = new ExtendedSwitchCell
             {
                 Text = "Unlock with PIN Code",
-                On = _settings.GetValueOrDefault<bool>(Constants.SettingPinUnlockOn)
+                On = _settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false)
             };
             PinCell.OnChanged += PinCell_Changed;
 
@@ -76,7 +76,7 @@ namespace Bit.App.Pages
                 FingerprintCell = new ExtendedSwitchCell
                 {
                     Text = "Unlock with " + fingerprintName,
-                    On = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn),
+                    On = _settings.GetValueOrDefault(Constants.SettingFingerprintUnlockOn, false),
                     IsEnabled = _fingerprint.IsAvailable
                 };
                 FingerprintCell.OnChanged += FingerprintCell_Changed;

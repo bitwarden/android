@@ -50,8 +50,8 @@ namespace Bit.App.Services
             }
 
             // What method are we using to unlock?
-            var fingerprintUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingFingerprintUnlockOn);
-            var pinUnlock = _settings.GetValueOrDefault<bool>(Constants.SettingPinUnlockOn);
+            var fingerprintUnlock = _settings.GetValueOrDefault(Constants.SettingFingerprintUnlockOn, false);
+            var pinUnlock = _settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false);
             if(fingerprintUnlock && _fingerprint.IsAvailable)
             {
                 return LockType.Fingerprint;

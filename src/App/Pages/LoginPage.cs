@@ -61,7 +61,7 @@ namespace Bit.App.Pages
                 entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",
                 containerPadding: padding);
 
-            var lastLoginEmail = _settings.GetValueOrDefault<string>(Constants.LastLoginEmail);
+            var lastLoginEmail = _settings.GetValueOrDefault(Constants.LastLoginEmail, string.Empty);
             if(!string.IsNullOrWhiteSpace(_email))
             {
                 EmailCell.Entry.Text = _email;

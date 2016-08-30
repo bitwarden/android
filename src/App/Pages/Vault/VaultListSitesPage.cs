@@ -224,10 +224,10 @@ namespace Bit.App.Pages
 
             if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
             {
-                var pushPromptShow = _settings.GetValueOrDefault<bool>(Constants.PushInitialPromptShown);
+                var pushPromptShow = _settings.GetValueOrDefault(Constants.PushInitialPromptShown, false);
                 Action registerAction = () =>
                 {
-                    var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate);
+                    var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate, null);
                     if(!pushPromptShow || !lastPushRegistration.HasValue
                         || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
                     {

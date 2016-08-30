@@ -170,7 +170,7 @@ namespace Bit.App.Services
 
         public async Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold)
         {
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync);
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
             if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
             {
                 return false;
@@ -187,7 +187,7 @@ namespace Bit.App.Services
             }
 
             var now = DateTime.UtcNow;
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync);
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
             if(lastSync == null)
             {
                 return await FullSyncAsync().ConfigureAwait(false);

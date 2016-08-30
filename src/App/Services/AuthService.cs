@@ -76,12 +76,17 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_userId != null)
+                if(!string.IsNullOrWhiteSpace(_userId))
                 {
                     return _userId;
                 }
 
-                _userId = _settings.GetValueOrDefault<string>(UserIdKey);
+                var userId = _settings.GetValueOrDefault(UserIdKey, string.Empty);
+                if(!string.IsNullOrWhiteSpace(userId))
+                {
+                    _userId = userId;
+                }
+
                 return _userId;
             }
             set
@@ -104,12 +109,17 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_previousUserId != null)
+                if(!string.IsNullOrWhiteSpace(_previousUserId))
                 {
                     return _previousUserId;
                 }
 
-                _previousUserId = _settings.GetValueOrDefault<string>(PreviousUserIdKey);
+                var previousUserId = _settings.GetValueOrDefault(PreviousUserIdKey, string.Empty);
+                if(!string.IsNullOrWhiteSpace(previousUserId))
+                {
+                    _previousUserId = previousUserId;
+                }
+
                 return _previousUserId;
             }
             private set
@@ -128,12 +138,17 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_email != null)
+                if(!string.IsNullOrWhiteSpace(_email))
                 {
                     return _email;
                 }
 
-                _email = _settings.GetValueOrDefault<string>(EmailKey);
+                var email = _settings.GetValueOrDefault(EmailKey, string.Empty);
+                if(!string.IsNullOrWhiteSpace(email))
+                {
+                    _email = email;
+                }
+
                 return _email;
             }
             set
@@ -155,14 +170,14 @@ namespace Bit.App.Services
         {
             get
             {
-                return _cryptoService.Key != null && Token != null && UserId != null;
+                return _cryptoService.Key != null && !string.IsNullOrWhiteSpace(Token) && !string.IsNullOrWhiteSpace(UserId);
             }
         }
         public bool IsAuthenticatedTwoFactor
         {
             get
             {
-                return _cryptoService.Key != null && Token != null && UserId == null;
+                return _cryptoService.Key != null && !string.IsNullOrWhiteSpace(Token) && string.IsNullOrWhiteSpace(UserId);
             }
         }
 
