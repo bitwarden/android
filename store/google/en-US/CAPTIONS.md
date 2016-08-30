@@ -1,3 +1,7 @@
+# Feature Graphic
+
+A secure and free password manager for all of your devices
+
 # Screenshot 1
 
 Manage all your logins and passwords from a secure vault
