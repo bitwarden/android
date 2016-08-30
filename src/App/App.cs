@@ -56,7 +56,7 @@ namespace Bit.App
             }
             else
             {
-                MainPage = new HomePage();
+                MainPage = new ExtendedNavigationPage(new HomePage());
             }
 
             MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
@@ -203,7 +203,7 @@ namespace Bit.App
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
             _googleAnalyticsService.RefreshUserId();
 
-            Current.MainPage = new HomePage();
+            Current.MainPage = new ExtendedNavigationPage(new HomePage());
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {
                 _userDialogs.Toast(logoutMessage);

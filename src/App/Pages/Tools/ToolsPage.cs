@@ -52,7 +52,7 @@ namespace Bit.App.Pages
                     "Use the bitwarden accessibility service to auto-fill your logins.", "upload");
                 autofillServiceCell.Tapped += (object sender, EventArgs e) =>
                 {
-                    Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
+                    Navigation.PushAsync(new ToolsAutofillServicePage());
                 };
                 section.Add(autofillServiceCell);
             }
@@ -81,9 +81,9 @@ namespace Bit.App.Pages
             Content = table;
         }
 
-        private void GeneratorCell_Tapped(object sender, EventArgs e)
+        private async void GeneratorCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsPasswordGeneratorPage()));
+            await Navigation.PushForDeviceAsync(new ToolsPasswordGeneratorPage());
         }
 
         private void WebCell_Tapped(object sender, EventArgs e)

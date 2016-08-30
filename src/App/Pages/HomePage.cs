@@ -77,6 +77,7 @@ namespace Bit.App.Pages
             };
 
             Title = "bitwarden";
+            NavigationPage.SetHasNavigationBar(this, false);
             Content = new ScrollView { Content = buttonStackLayout };
         }
 
@@ -88,18 +89,18 @@ namespace Bit.App.Pages
 
         public async Task LoginAsync()
         {
-            await Navigation.PushModalAsync(new ExtendedNavigationPage(new LoginPage()));
+            await Navigation.PushForDeviceAsync(new LoginPage());
         }
 
         public async Task RegisterAsync()
         {
-            await Navigation.PushModalAsync(new ExtendedNavigationPage(new RegisterPage(this)));
+            await Navigation.PushForDeviceAsync(new RegisterPage(this));
         }
 
         public async Task DismissRegisterAndLoginAsync(string email)
         {
-            await Navigation.PopModalAsync();
-            await Navigation.PushModalAsync(new ExtendedNavigationPage(new LoginPage(email)));
+            await Navigation.PopForDeviceAsync();
+            await Navigation.PushForDeviceAsync(new LoginPage(email));
             _userDialogs.Toast("Your new account has been created! You may now log in.");
         }
     }

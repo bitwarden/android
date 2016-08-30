@@ -93,7 +93,7 @@ namespace Bit.App.Pages
 
                 if(saveResult.Succeeded)
                 {
-                    await Navigation.PopModalAsync();
+                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast("Folder updated.");
                     _googleAnalyticsService.TrackAppEvent("EditedFolder");
                 }
@@ -147,7 +147,7 @@ namespace Bit.App.Pages
 
             if(deleteTask.Succeeded)
             {
-                await Navigation.PopModalAsync();
+                await Navigation.PopForDeviceAsync();
                 _userDialogs.Toast("Folder deleted.");
             }
             else if(deleteTask.Errors.Count() > 0)

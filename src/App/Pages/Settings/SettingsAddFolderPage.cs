@@ -79,7 +79,7 @@ namespace Bit.App.Pages
 
                 if(saveResult.Succeeded)
                 {
-                    await Navigation.PopModalAsync();
+                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast("New folder created.");
                     _googleAnalyticsService.TrackAppEvent("CreatedFolder");
                 }

@@ -55,11 +55,11 @@ namespace Bit.App.Pages
             Folders.ResetWithRange(pageFolders);
         }
 
-        private void FolderSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void FolderSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var folder = e.SelectedItem as SettingsFolderPageModel;
-            var page = new ExtendedNavigationPage(new SettingsEditFolderPage(folder.Id));
-            Navigation.PushModalAsync(page);
+            var page = new SettingsEditFolderPage(folder.Id);
+            await Navigation.PushForDeviceAsync(page);
         }
 
         private class AddFolderToolBarItem : ToolbarItem
@@ -76,8 +76,8 @@ namespace Bit.App.Pages
 
             private async void ClickedItem(object sender, EventArgs e)
             {
-                var page = new ExtendedNavigationPage(new SettingsAddFolderPage());
-                await _page.Navigation.PushModalAsync(page);
+                var page = new SettingsAddFolderPage();
+                await _page.Navigation.PushForDeviceAsync(page);
             }
         }
 

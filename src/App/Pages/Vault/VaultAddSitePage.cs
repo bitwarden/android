@@ -146,7 +146,7 @@ namespace Bit.App.Pages
                 _userDialogs.HideLoading();
                 if(saveTask.Succeeded)
                 {
-                    await Navigation.PopModalAsync();
+                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast("New site created.");
                     _googleAnalyticsService.TrackAppEvent("CreatedSite");
                 }
@@ -187,14 +187,14 @@ namespace Bit.App.Pages
             }
         }
 
-        private void GenerateCell_Tapped(object sender, EventArgs e)
+        private async void GenerateCell_Tapped(object sender, EventArgs e)
         {
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
                 PasswordCell.Entry.Text = password;
                 _userDialogs.Toast("Password generated.");
             });
-            Navigation.PushModalAsync(new ExtendedNavigationPage(page));
+            await Navigation.PushForDeviceAsync(page);
         }
 
         private void AlertNoConnection()

@@ -176,7 +176,7 @@ namespace Bit.App.Pages
 
                 if(saveTask.Succeeded)
                 {
-                    await Navigation.PopModalAsync();
+                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast("Site updated.");
                     _googleAnalyticsService.TrackAppEvent("EditedSite");
                 }
@@ -222,7 +222,7 @@ namespace Bit.App.Pages
                 PasswordCell.Entry.Text = password;
                 _userDialogs.Toast("Password generated.");
             });
-            await Navigation.PushModalAsync(new ExtendedNavigationPage(page));
+            await Navigation.PushForDeviceAsync(page);
         }
 
         private async void DeleteCell_Tapped(object sender, EventArgs e)
@@ -244,7 +244,7 @@ namespace Bit.App.Pages
 
             if(deleteTask.Succeeded)
             {
-                await Navigation.PopModalAsync();
+                await Navigation.PopForDeviceAsync();
                 _userDialogs.Toast("Site deleted.");
                 _googleAnalyticsService.TrackAppEvent("DeletedSite");
             }

@@ -116,7 +116,7 @@ namespace Bit.App.Pages
             var site = await _siteService.GetByIdAsync(_siteId);
             if(site == null)
             {
-                await Navigation.PopModalAsync();
+                await Navigation.PopForDeviceAsync();
                 return;
             }
 
@@ -182,8 +182,8 @@ namespace Bit.App.Pages
 
             private async void ClickedItem(object sender, EventArgs e)
             {
-                var page = new ExtendedNavigationPage(new VaultEditSitePage(_siteId));
-                await _page.Navigation.PushModalAsync(page);
+                var page = new VaultEditSitePage(_siteId);
+                await _page.Navigation.PushForDeviceAsync(page);
             }
         }
     }

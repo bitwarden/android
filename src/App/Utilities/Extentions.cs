@@ -3,6 +3,8 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using System.Threading.Tasks;
+using Bit.App.Controls;
 
 namespace Bit.App
 {
@@ -33,15 +35,39 @@ namespace Bit.App
         {
             if(Device.OS == TargetPlatform.Android)
             {
-                System.Threading.Tasks.Task.Run(async () =>
+                Task.Run(async () =>
                 {
-                    await System.Threading.Tasks.Task.Delay(delay);
+                    await Task.Delay(delay);
                     Device.BeginInvokeOnMainThread(() => entry.Focus());
                 });
             }
             else
             {
                 entry.Focus();
+            }
+        }
+
+        public static async Task PushForDeviceAsync(this INavigation navigation, Page page)
+        {
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                await navigation.PushModalAsync(new ExtendedNavigationPage(page), true);
+            }
+            else
+            {
+                await navigation.PushAsync(page, true);
+            }
+        }
+
+        public static async Task PopForDeviceAsync(this INavigation navigation)
+        {
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                await navigation.PopModalAsync(true);
+            }
+            else
+            {
+                await navigation.PopAsync(true);
             }
         }
 

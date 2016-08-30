@@ -354,11 +354,11 @@ namespace Bit.App.Pages
             });
         }
 
-        private void SiteSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void SiteSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var site = e.SelectedItem as VaultListPageModel.Site;
-            var page = new ExtendedNavigationPage(new VaultViewSitePage(site.Id));
-            Navigation.PushModalAsync(page);
+            var page = new VaultViewSitePage(site.Id);
+            await Navigation.PushForDeviceAsync(page);
         }
 
         private async void MoreClickedAsync(VaultListPageModel.Site site)
@@ -382,13 +382,13 @@ namespace Bit.App.Pages
 
             if(selection == AppResources.View)
             {
-                var page = new ExtendedNavigationPage(new VaultViewSitePage(site.Id));
-                await Navigation.PushModalAsync(page);
+                var page = new VaultViewSitePage(site.Id);
+                await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.Edit)
             {
-                var page = new ExtendedNavigationPage(new VaultEditSitePage(site.Id));
-                await Navigation.PushModalAsync(page);
+                var page = new VaultEditSitePage(site.Id);
+                await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.CopyPassword)
             {
@@ -412,8 +412,8 @@ namespace Bit.App.Pages
 
         private async void AddSite()
         {
-            var page = new ExtendedNavigationPage(new VaultAddSitePage());
-            await Navigation.PushModalAsync(page);
+            var page = new VaultAddSitePage();
+            await Navigation.PushForDeviceAsync(page);
         }
 
         private class AddSiteToolBarItem : ToolbarItem

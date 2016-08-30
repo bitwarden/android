@@ -112,7 +112,7 @@ namespace Bit.App.Pages
                 {
                     _googleAnalyticsService.TrackAppEvent("SelectedGeneratedPassword");
                     _passwordValueAction(Password.Text);
-                    await Navigation.PopModalAsync();
+                    await Navigation.PopForDeviceAsync();
                 }, ToolbarItemOrder.Default, 0);
 
                 ToolbarItems.Add(selectToolBarItem);
