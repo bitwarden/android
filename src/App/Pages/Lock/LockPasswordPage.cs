@@ -77,6 +77,14 @@ namespace Bit.App.Pages
                 Children = { table, logoutButton }
             };
 
+            var scrollView = new ScrollView { Content = stackLayout };
+
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                table.RowHeight = -1;
+                table.EstimatedRowHeight = 70;
+            }
+
             var loginToolbarItem = new ToolbarItem("Submit", null, async () =>
             {
                 await CheckPasswordAsync();
@@ -84,7 +92,7 @@ namespace Bit.App.Pages
 
             ToolbarItems.Add(loginToolbarItem);
             Title = "Verify Master Password";
-            Content = stackLayout;
+            Content = scrollView;
         }
 
         private void Entry_Completed(object sender, EventArgs e)
