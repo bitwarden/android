@@ -258,7 +258,7 @@ namespace Bit.App.Pages
 
         private void AdjustContent()
         {
-            if(PresentationFolders.Count > 0)
+            if(PresentationFolders.Count > 0 || !string.IsNullOrWhiteSpace(Search.Text))
             {
                 Content = ResultsStackLayout;
             }
