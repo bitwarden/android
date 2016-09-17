@@ -16,69 +16,83 @@ namespace Bit.iOS.Extension.Models
 
             DocumentUUID = pageDetails.DocumentUUID;
 
-            var passwordFields = pageDetails.Fields.Where(f => f.Type == "password");
-            var passwordForms = pageDetails.Forms.Where(form => passwordFields.Any(f => f.Form == form.Key));
-            if(!passwordForms.Any())
-            {
-                return;
-            }
+            var passwordFields = pageDetails.Fields.Where(f => f.Type == "password").ToArray();
+            var passwordForms = pageDetails.Forms.Where(form => passwordFields.Any(f => f.Form == form.Key)).ToArray();
 
             PageDetails.Form loginForm = null;
-            if(passwordForms.Count() > 1)
+            PageDetails.Field username = null, password = null;
+
+            if(passwordForms.Any())
             {
-                // More than one form with a password field is on the page.
-                // This usually occurs when a website has a login and signup form on the same page.
-                // Let's try to guess which one is the login form.
-
-                // First let's try to guess the correct login form by examining the form attribute strings
-                // for common login form attribute.
-                foreach(var form in passwordForms)
+                if(passwordForms.Count() > 1)
                 {
-                    var formDescriptor = string.Format("{0}~{1}~{2}",
-                        form.Value?.HtmlName, form.Value?.HtmlId, form.Value?.HtmlAction)
-                        ?.ToLowerInvariant()?.Replace('_', '-');
+                    // More than one form with a password field is on the page.
+                    // This usually occurs when a website has a login and signup form on the same page.
+                    // Let's try to guess which one is the login form.
 
-                    if(formDescriptor.Contains("login") || formDescriptor.Contains("log-in")
-                        || formDescriptor.Contains("signin") || formDescriptor.Contains("sign-in")
-                        || formDescriptor.Contains("logon") || formDescriptor.Contains("log-on"))
+                    // First let's try to guess the correct login form by examining the form attribute strings
+                    // for common login form attribute.
+                    foreach(var form in passwordForms)
                     {
-                        loginForm = form.Value;
-                        break;
+                        var formDescriptor = string.Format("{0}~{1}~{2}",
+                            form.Value?.HtmlName, form.Value?.HtmlId, form.Value?.HtmlAction)
+                            ?.ToLowerInvariant()?.Replace('_', '-');
+
+                        if(formDescriptor.Contains("login") || formDescriptor.Contains("log-in")
+                            || formDescriptor.Contains("signin") || formDescriptor.Contains("sign-in")
+                            || formDescriptor.Contains("logon") || formDescriptor.Contains("log-on"))
+                        {
+                            loginForm = form.Value;
+                            break;
+                        }
+                    }
+
+                    if(loginForm == null)
+                    {
+                        // Next we can try to find the login form that only has one password field. Typically
+                        // a registration form may have two password fields for password confirmation.
+                        var fieldGroups = passwordFields.GroupBy(f => f.Form);
+                        var singleFields = fieldGroups.FirstOrDefault(f => f.Count() == 1);
+                        if(singleFields.Any())
+                        {
+                            var singlePasswordForms = passwordForms.Where(f => f.Key == singleFields.Key);
+                            if(singlePasswordForms.Any())
+                            {
+                                loginForm = singlePasswordForms.First().Value;
+                            }
+                        }
                     }
                 }
 
                 if(loginForm == null)
                 {
-                    // Next we can try to find the login form that only has one password field. Typically
-                    // a registration form may have two password fields for password confirmation.
-                    var fieldGroups = passwordFields.GroupBy(f => f.Form);
-                    var singleFields = fieldGroups.FirstOrDefault(f => f.Count() == 1);
-                    if(singleFields.Any())
-                    {
-                        var singlePasswordForms = passwordForms.Where(f => f.Key == singleFields.Key);
-                        if(singlePasswordForms.Any())
-                        {
-                            loginForm = singlePasswordForms.First().Value;
-                        }
-                    }
+                    loginForm = passwordForms.FirstOrDefault().Value;
+                }
+
+                password = pageDetails.Fields.FirstOrDefault(f =>
+                    f.Form == loginForm.OpId
+                    && f.Type == "password");
+
+                username = pageDetails.Fields.LastOrDefault(f =>
+                    f.Form == loginForm.OpId
+                    && (f.Type == "text" || f.Type == "email")
+                    && f.ElementNumber < password.ElementNumber);
+
+                if(loginForm.HtmlAction != null)
+                {
+                    AutoSubmit = new Submit { FocusOpId = password.OpId };
+                }
+            }
+            else if(passwordFields.Count() == 1)
+            {
+                password = passwordFields.First();
+                if(password.ElementNumber > 0)
+                {
+                    username = pageDetails.Fields[password.ElementNumber - 1];
                 }
             }
 
-            if(loginForm == null)
-            {
-                loginForm = passwordForms.FirstOrDefault().Value;
-            }
-
             Script = new List<List<string>>();
-
-            var password = pageDetails.Fields.FirstOrDefault(f =>
-                f.Form == loginForm.OpId
-                && f.Type == "password");
-
-            var username = pageDetails.Fields.LastOrDefault(f =>
-                f.Form == loginForm.OpId
-                && (f.Type == "text" || f.Type == "email")
-                && f.ElementNumber < password.ElementNumber);
 
             if(username != null)
             {
@@ -86,12 +100,10 @@ namespace Bit.iOS.Extension.Models
                 Script.Add(new List<string> { "fill_by_opid", username.OpId, fillUsername });
             }
 
-            Script.Add(new List<string> { "click_on_opid", password.OpId });
-            Script.Add(new List<string> { "fill_by_opid", password.OpId, fillPassword });
-
-            if(loginForm.HtmlAction != null)
+            if(password != null)
             {
-                AutoSubmit = new Submit { FocusOpId = password.OpId };
+                Script.Add(new List<string> { "click_on_opid", password.OpId });
+                Script.Add(new List<string> { "fill_by_opid", password.OpId, fillPassword });
             }
         }
 
