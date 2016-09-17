@@ -85,10 +85,20 @@ namespace Bit.iOS.Extension.Models
             }
             else if(passwordFields.Count() == 1)
             {
+                // The page does not have any forms with password fields. Use the one password field on the page and the
+                // input field just before it as the username.
+
                 password = passwordFields.First();
                 if(password.ElementNumber > 0)
                 {
-                    username = pageDetails.Fields[password.ElementNumber - 1];
+                    username = pageDetails.Fields.LastOrDefault(f => 
+                        (f.Type == "text" || f.Type == "email")
+                        && f.ElementNumber < password.ElementNumber);
+
+                    if(username == null)
+                    {
+                        username = pageDetails.Fields[password.ElementNumber - 1];
+                    }
                 }
             }
 
