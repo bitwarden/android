@@ -164,7 +164,7 @@ namespace Bit.App.Pages
                 Command = new Command(() =>
                 {
                     _googleAnalyticsService.TrackAppEvent("SeeSupportedApps");
-                    Device.OpenUri(new Uri("https://bitwarden.com"));
+                    Device.OpenUri(new Uri("https://bitwarden.com/ios/"));
                 }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,

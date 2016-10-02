@@ -116,7 +116,7 @@ namespace Bit.App.Pages
         private void WebsiteCell_Tapped(object sender, EventArgs e)
         {
             _googleAnalyticsService.TrackAppEvent("HelpWebsite");
-            Device.OpenUri(new Uri("https://bitwarden.com"));
+            Device.OpenUri(new Uri("https://bitwarden.com/contact/"));
         }
 
         private void BugCell_Tapped(object sender, EventArgs e)
