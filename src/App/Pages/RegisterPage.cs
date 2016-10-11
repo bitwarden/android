@@ -169,14 +169,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var passwordCharArray = PasswordCell.Entry.Text.ToCharArray();
-            if(PasswordCell.Entry.Text.Length < 8 || !passwordCharArray.Any(char.IsLetter)
-                || !(passwordCharArray.Any(char.IsDigit) || passwordCharArray.Any(c => !char.IsLetterOrDigit(c))))
+            if(PasswordCell.Entry.Text.Length < 8)
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred,
-                    "Master password must be at least 8 characters long and contain at least 1 letter and 1 number "
-                    + "or special character.",
-                    AppResources.Ok);
+                    "Master password must be at least 8 characters long.", AppResources.Ok);
                 return;
             }
 
