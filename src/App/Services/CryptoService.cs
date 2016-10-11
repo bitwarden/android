@@ -15,7 +15,6 @@ namespace Bit.App.Services
         private const string PreviousKeyKey = "previousKey";
         private const int InitializationVectorSize = 16;
 
-        private readonly Random _random = new Random();
         private readonly ISecureStorageService _secureStorage;
         private readonly IKeyDerivationService _keyDerivationService;
         private byte[] _key;
