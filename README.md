@@ -4,6 +4,8 @@
 
 The bitwarden mobile application is written in C# with Xamarin Android, Xamarin iOS, and Xamarin Forms.
 
+[![Join the chat at https://gitter.im/bitwarden/Lobby](https://badges.gitter.im/bitwarden/Lobby.svg)](https://gitter.im/bitwarden/Lobby)
+
 # Contribute
 
 Code contributions are welcome! Visual Studio or Xamarin Studio is required to work on this project. Please commit any pull requests against the `master` branch.
