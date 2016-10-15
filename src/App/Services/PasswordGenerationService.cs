@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using Bit.App.Abstractions;
 using Plugin.Settings.Abstractions;
+using PCLCrypto;
 
 namespace Bit.App.Services
 {
     public class PasswordGenerationService : IPasswordGenerationService
     {
         private readonly ISettings _settings;
-        private Random _random = new Random();
 
         public PasswordGenerationService(ISettings settings)
         {
@@ -104,7 +104,7 @@ namespace Bit.App.Services
             }
 
             // Shuffle
-            var positions = positionsBuilder.ToString().ToCharArray().OrderBy(a => _random.Next()).ToArray();
+            var positions = positionsBuilder.ToString().ToCharArray().OrderBy(a => Next(int.MaxValue)).ToArray();
 
             // Build out other character sets
             var allCharSet = string.Empty;
@@ -168,11 +168,21 @@ namespace Bit.App.Services
                         break;
                 }
 
-                var randomCharIndex = _random.Next(0, positionChars.Length - 1);
+                var randomCharIndex = Next(positionChars.Length - 1);
                 password.Append(positionChars[randomCharIndex]);
             }
 
             return password.ToString();
+        }
+
+        private int Next(int maxValue)
+        {
+            if(maxValue == 0)
+            {
+                return 0;
+            }
+
+            return (int)(WinRTCrypto.CryptographicBuffer.GenerateRandomNumber() % maxValue);
         }
     }
 }
