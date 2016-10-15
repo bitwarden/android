@@ -139,13 +139,6 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
-                {
-                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
-                        AppResources.Password), AppResources.Ok);
-                    return;
-                }
-
                 if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
