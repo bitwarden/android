@@ -54,8 +54,8 @@ namespace Bit.App.Services
             {
                 SyncCompleted(false);
 
-                if(cipher.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || cipher.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                if(Application.Current != null && (cipher.StatusCode == System.Net.HttpStatusCode.Forbidden
+                    || cipher.StatusCode == System.Net.HttpStatusCode.Unauthorized))
                 {
                     MessagingCenter.Send(Application.Current, "Logout", (string)null);
                 }
@@ -141,8 +141,8 @@ namespace Bit.App.Services
             {
                 SyncCompleted(false);
 
-                if(ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                if(Application.Current != null && (ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
+                    || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized))
                 {
                     MessagingCenter.Send(Application.Current, "Logout", (string)null);
                 }
@@ -200,8 +200,8 @@ namespace Bit.App.Services
             {
                 SyncCompleted(false);
 
-                if(ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                if(Application.Current != null && (ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
+                    || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized))
                 {
                     MessagingCenter.Send(Application.Current, "Logout", (string)null);
                 }
@@ -328,12 +328,22 @@ namespace Bit.App.Services
 
         private void SyncStarted()
         {
+            if(Application.Current == null)
+            {
+                return;
+            }
+
             SyncInProgress = true;
             MessagingCenter.Send(Application.Current, "SyncStarted");
         }
 
         private void SyncCompleted(bool successfully)
         {
+            if(Application.Current == null)
+            {
+                return;
+            }
+
             SyncInProgress = false;
             MessagingCenter.Send(Application.Current, "SyncCompleted", successfully);
         }
