@@ -49,12 +49,14 @@ namespace Bit.App.Pages
             // Username
             UsernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
             UsernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
+            UsernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.FontSizeProperty, s => s.UsernameFontSize);
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
 
             // Password
             PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty,
                 button2Text: AppResources.Copy);
             PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
+            PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.FontSizeProperty, s => s.PasswordFontSize);
             PasswordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.ImageProperty, s => s.ShowHideImage);
             if(Device.OS == TargetPlatform.iOS)
             {
