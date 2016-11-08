@@ -398,7 +398,6 @@ namespace Bit.iOS.Extension
                     _context.Url = new Uri(url);
                 }
 
-                _context.Url = new Uri(url);
                 _context.SiteTitle = title;
                 _context.Username = username;
                 _context.Password = password;
