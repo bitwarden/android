@@ -41,7 +41,11 @@ namespace Bit.App.Pages
         private void Init()
         {
             var notesCell = new FormEditorCell(height: 90);
-            PasswordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
+            PasswordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor,
+                useButton: true);
+            PasswordCell.Button.Image = "eye";
+            PasswordCell.Button.Clicked += PasswordButton_Clicked;
+
             var usernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
@@ -178,6 +182,12 @@ namespace Bit.App.Pages
                     "Learn more about using the bitwarden App Extension by navigating to the \"Tools\" screen.",
                     AppResources.Ok);
             }
+        }
+
+        private void PasswordButton_Clicked(object sender, EventArgs e)
+        {
+            PasswordCell.Entry.InvokeToggleIsPassword();
+            PasswordCell.Button.Image = "eye" + (!PasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
         }
 
         private async void GenerateCell_Tapped(object sender, EventArgs e)

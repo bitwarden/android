@@ -70,6 +70,7 @@ namespace Bit.App.Controls
             if(ToggleIsPassword == null)
             {
                 IsPassword = IsPasswordFromToggled = !IsPassword;
+                Focus();
             }
             else
             {

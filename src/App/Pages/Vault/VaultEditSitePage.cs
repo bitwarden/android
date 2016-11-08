@@ -57,7 +57,6 @@ namespace Bit.App.Pages
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
 
-
             usernameCell.Entry.FontFamily = PasswordCell.Entry.FontFamily =
                 Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
@@ -198,12 +197,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private void PasswordButton_Clicked(object sender, EventArgs e)
-        {
-            PasswordCell.Entry.InvokeToggleIsPassword();
-            PasswordCell.Button.Image = "eye" + (!PasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -211,6 +204,12 @@ namespace Bit.App.Pages
             {
                 AlertNoConnection();
             }
+        }
+
+        private void PasswordButton_Clicked(object sender, EventArgs e)
+        {
+            PasswordCell.Entry.InvokeToggleIsPassword();
+            PasswordCell.Button.Image = "eye" + (!PasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
         }
 
         private async void GenerateCell_Tapped(object sender, EventArgs e)
