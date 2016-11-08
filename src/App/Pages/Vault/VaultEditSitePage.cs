@@ -51,6 +51,8 @@ namespace Bit.App.Pages
             PasswordCell.Entry.Text = site.Password?.Decrypt();
             PasswordCell.Button.Image = "eye";
             PasswordCell.Button.Clicked += PasswordButton_Clicked;
+            PasswordCell.Entry.DisableAutocapitalize = true;
+            PasswordCell.Entry.Autocorrect = false;
 
             var usernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
             usernameCell.Entry.Text = site.Username?.Decrypt();
