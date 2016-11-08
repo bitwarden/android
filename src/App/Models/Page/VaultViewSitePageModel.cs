@@ -87,7 +87,7 @@ namespace Bit.App.Models.Page
                     {
                         return Device.GetNamedSize(NamedSize.Micro, typeof(Label));
                     }
-                    else if(length > 15)
+                    else if(length > 20)
                     {
                         return Device.GetNamedSize(NamedSize.Small, typeof(Label));
                     }

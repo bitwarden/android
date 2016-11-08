@@ -117,6 +117,12 @@ namespace Bit.App.Controls
             {
                 Button = new ExtendedButton();
                 imageStackLayout.Children.Add(Button);
+
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    Button.Padding = new Thickness(0);
+                    Button.BackgroundColor = Color.Transparent;
+                }
             }
 
             Tapped += FormEntryCell_Tapped;

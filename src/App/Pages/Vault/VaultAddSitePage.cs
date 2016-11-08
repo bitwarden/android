@@ -106,6 +106,10 @@ namespace Bit.App.Pages
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
             }
+            else if(Device.OS == TargetPlatform.Android)
+            {
+                PasswordCell.Button.WidthRequest = 40;
+            }
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {

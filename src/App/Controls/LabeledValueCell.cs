@@ -84,17 +84,19 @@ namespace Bit.App.Controls
 
             if(Device.OS == TargetPlatform.Android)
             {
-                //if(Button1 != null)
-                //{
-                //    Button1.Padding = new Thickness(5);
-                //    Button1.BackgroundColor = Color.Transparent;
-                //}
-                //if(Button2 != null)
-                //{
-                //    Button2.Padding = new Thickness(5);
-                //    Button2.BackgroundColor = Color.Transparent;
-                //}
-                
+                buttonStackLayout.Spacing = 5;
+
+                if(Button1 != null)
+                {
+                    Button1.Padding = new Thickness(0);
+                    Button1.BackgroundColor = Color.Transparent;
+                }
+                if(Button2 != null)
+                {
+                    Button2.Padding = new Thickness(0);
+                    Button2.BackgroundColor = Color.Transparent;
+                }
+
                 containerStackLayout.AdjustPaddingForDevice();
             }
 

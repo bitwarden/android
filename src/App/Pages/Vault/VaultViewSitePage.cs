@@ -107,6 +107,13 @@ namespace Bit.App.Pages
                 Table.RowHeight = -1;
                 Table.EstimatedRowHeight = 70;
             }
+            else if(Device.OS == TargetPlatform.Android)
+            {
+                PasswordCell.Button1.WidthRequest = 40;
+                PasswordCell.Button2.WidthRequest = 55;
+                UsernameCell.Button1.WidthRequest = 55;
+                UriCell.Button1.WidthRequest = 71;
+            }
 
             Title = "View Site";
             Content = Table;
