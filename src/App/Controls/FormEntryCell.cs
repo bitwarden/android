@@ -35,6 +35,7 @@ namespace Bit.App.Controls
                 IsPassword = IsPassword,
                 AllowClear = true,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
+                WidthRequest = 1,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Entry))
             };
 
