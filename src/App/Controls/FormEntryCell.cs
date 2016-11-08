@@ -14,7 +14,8 @@ namespace Bit.App.Controls
             VisualElement nextElement = null,
             bool useLabelAsPlaceholder = false,
             string imageSource = null,
-            Thickness? containerPadding = null)
+            Thickness? containerPadding = null,
+            bool useButton = false)
         {
             if(!useLabelAsPlaceholder)
             {
@@ -112,6 +113,12 @@ namespace Bit.App.Controls
             formStackLayout.Children.Add(Entry);
             imageStackLayout.Children.Add(formStackLayout);
 
+            if(useButton)
+            {
+                Button = new ExtendedButton();
+                imageStackLayout.Children.Add(Button);
+            }
+
             Tapped += FormEntryCell_Tapped;
 
             View = imageStackLayout;
@@ -119,6 +126,7 @@ namespace Bit.App.Controls
 
         public Label Label { get; private set; }
         public ExtendedEntry Entry { get; private set; }
+        public ExtendedButton Button { get; private set; }
 
         private void Tgr_Tapped(object sender, EventArgs e)
         {

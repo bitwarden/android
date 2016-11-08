@@ -16,11 +16,16 @@ namespace Bit.Android.Controls
 {
     public class ExtendedEntryRenderer : EntryRenderer
     {
+        private bool _isPassword;
+        private bool _toggledPassword;
+
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
         {
             base.OnElementChanged(e);
 
             var view = (ExtendedEntry)Element;
+            _isPassword = view.IsPassword;
+
             if(Control != null)
             {
                 Control.SetIncludeFontPadding(false);
@@ -56,8 +61,44 @@ namespace Bit.Android.Controls
             {
                 Control.SetRawInputType(Control.InputType |= InputTypes.TextFlagNoSuggestions);
             }
-        }
 
+            view.ToggleIsPassword += (object sender, EventArgs args) =>
+            {
+                var cursorStart = Control.SelectionStart;
+                var cursorEnd = Control.SelectionEnd;
+
+                Control.TransformationMethod = _isPassword ? null : new PasswordTransformationMethod();
+
+                // set focus
+                Control.RequestFocus();
+
+                if(_toggledPassword)
+                {
+                    // restore cursor position
+                    Control.SetSelection(cursorStart, cursorEnd);
+                }
+                else
+                {
+                    // set cursor to end
+                    Control.SetSelection(Control.Text.Length);
+                }
+
+                // show keyboard
+                var app = XLabs.Ioc.Resolver.Resolve<global::Android.App.Application>();
+                var inputMethodManager =
+                    app.GetSystemService(global::Android.Content.Context.InputMethodService) as InputMethodManager;
+                inputMethodManager.ShowSoftInput(Control, ShowFlags.Forced);
+                inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
+
+                _isPassword = view.IsPasswordFromToggled = !_isPassword;
+                _toggledPassword = true;
+            };
+
+            if(view.FontFamily == "monospace")
+            {
+                Control.Typeface = Typeface.Monospace;
+            }
+        }
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var view = (ExtendedEntry)Element;
@@ -75,6 +116,11 @@ namespace Bit.Android.Controls
                 {
                     Control.SetBackgroundColor(view.BackgroundColor.ToAndroid());
                 }
+            }
+
+            if(view.FontFamily == "monospace")
+            {
+                Control.Typeface = Typeface.Monospace;
             }
         }
 

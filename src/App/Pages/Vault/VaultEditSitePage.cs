@@ -45,15 +45,21 @@ namespace Bit.App.Pages
 
             var notesCell = new FormEditorCell(height: 90);
             notesCell.Editor.Text = site.Notes?.Decrypt();
-            PasswordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor);
+
+            PasswordCell = new FormEntryCell(AppResources.Password, IsPassword: true, nextElement: notesCell.Editor,
+                useButton: true);
             PasswordCell.Entry.Text = site.Password?.Decrypt();
+            PasswordCell.Button.Image = "eye";
+            PasswordCell.Button.Clicked += PasswordButton_Clicked;
+
             var usernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
             usernameCell.Entry.Text = site.Username?.Decrypt();
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
 
-            usernameCell.Entry.FontFamily = PasswordCell.Entry.FontFamily = Device.OnPlatform(
-                iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+
+            usernameCell.Entry.FontFamily = PasswordCell.Entry.FontFamily =
+                Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
             uriCell.Entry.Text = site.Uri?.Decrypt();
@@ -190,6 +196,12 @@ namespace Bit.App.Pages
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
             }
+        }
+
+        private void PasswordButton_Clicked(object sender, EventArgs e)
+        {
+            PasswordCell.Entry.InvokeToggleIsPassword();
+            PasswordCell.Button.Image = "eye" + (!PasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
         }
 
         protected override void OnAppearing()

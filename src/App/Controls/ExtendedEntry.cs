@@ -12,6 +12,8 @@ namespace Bit.App.Controls
             {
                 PlaceholderColor = Color.FromHex("c7c7cd");
             }
+
+            IsPasswordFromToggled = IsPassword;
         }
 
         public static readonly BindableProperty HasBorderProperty =
@@ -62,5 +64,20 @@ namespace Bit.App.Controls
         {
             Completed?.Invoke(this, null);
         }
+
+        public virtual void InvokeToggleIsPassword()
+        {
+            if(ToggleIsPassword == null)
+            {
+                IsPassword = IsPasswordFromToggled = !IsPassword;
+            }
+            else
+            {
+                ToggleIsPassword.Invoke(this, null);
+            }
+        }
+
+        public event EventHandler ToggleIsPassword;
+        public bool IsPasswordFromToggled { get; set; } = false;
     }
 }
