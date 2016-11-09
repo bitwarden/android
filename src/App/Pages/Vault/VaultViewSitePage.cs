@@ -64,9 +64,7 @@ namespace Bit.App.Pages
             }
             PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
             PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
-
-            UsernameCell.Value.FontFamily = PasswordCell.Value.FontFamily = Device.OnPlatform(
-                iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            PasswordCell.Value.FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             // URI
             UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);

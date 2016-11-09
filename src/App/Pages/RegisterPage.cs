@@ -47,10 +47,10 @@ namespace Bit.App.Pages
 
             PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true,
                 imageSource: "lightbulb", containerPadding: padding);
-            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", IsPassword: true,
+            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", isPassword: true,
                 nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock",
                 containerPadding: padding);
-            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
                 nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock",
                 containerPadding: padding);
             EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,

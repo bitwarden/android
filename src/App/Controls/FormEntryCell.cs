@@ -10,7 +10,7 @@ namespace Bit.App.Controls
         public FormEntryCell(
             string labelText,
             Keyboard entryKeyboard = null,
-            bool IsPassword = false,
+            bool isPassword = false,
             VisualElement nextElement = null,
             bool useLabelAsPlaceholder = false,
             string imageSource = null,
@@ -32,7 +32,7 @@ namespace Bit.App.Controls
             {
                 Keyboard = entryKeyboard,
                 HasBorder = false,
-                IsPassword = IsPassword,
+                IsPassword = isPassword,
                 AllowClear = true,
                 HorizontalOptions = LayoutOptions.FillAndExpand,
                 WidthRequest = 1,

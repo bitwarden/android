@@ -55,7 +55,7 @@ namespace Bit.App.Pages
                 Android: new Thickness(15, 8),
                 WinPhone: new Thickness(15, 20));
 
-            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
                 useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
             EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,
                 entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",

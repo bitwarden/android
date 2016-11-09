@@ -38,7 +38,7 @@ namespace Bit.App.Pages
                 Android: new Thickness(15, 8),
                 WinPhone: new Thickness(15, 20));
 
-            PasswordCell = new FormEntryCell(AppResources.MasterPassword, IsPassword: true,
+            PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
                 useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
