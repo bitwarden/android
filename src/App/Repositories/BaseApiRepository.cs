@@ -73,17 +73,25 @@ namespace Bit.App.Repositories
         private async Task<List<ApiError>> ParseErrorsAsync(HttpResponseMessage response)
         {
             var errors = new List<ApiError>();
-            if(response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            var statusCode = (int)response.StatusCode;
+            if(statusCode >= 400 && statusCode <= 500)
             {
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var errorResponseModel = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
 
-                foreach(var valError in errorResponseModel.ValidationErrors)
+                if(errorResponseModel.ValidationErrors.Count > 0)
                 {
-                    foreach(var errorMessage in valError.Value)
+                    foreach(var valError in errorResponseModel.ValidationErrors)
                     {
-                        errors.Add(new ApiError { Message = errorMessage });
+                        foreach(var errorMessage in valError.Value)
+                        {
+                            errors.Add(new ApiError { Message = errorMessage });
+                        }
                     }
+                }
+                else
+                {
+                    errors.Add(new ApiError { Message = errorResponseModel.Message });
                 }
             }
 
