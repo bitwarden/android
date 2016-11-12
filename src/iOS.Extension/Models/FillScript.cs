@@ -19,7 +19,7 @@ namespace Bit.iOS.Extension.Models
             List<PageDetails.Field> usernames = new List<PageDetails.Field>();
             List<PageDetails.Field> passwords = new List<PageDetails.Field>();
 
-            var passwordFields = pageDetails.Fields.Where(f => f.Type == "password").ToArray();
+            var passwordFields = pageDetails.Fields.Where(f => f.Type == "password" && f.Viewable).ToArray();
             foreach(var form in pageDetails.Forms)
             {
                 var passwordFieldsForForm = passwordFields.Where(f => f.Form == form.Key).ToArray();
@@ -32,7 +32,7 @@ namespace Bit.iOS.Extension.Models
 
                 foreach(var pf in passwordFieldsForForm)
                 {
-                    var username = pageDetails.Fields.LastOrDefault(f => f.Form == pf.Form
+                    var username = pageDetails.Fields.LastOrDefault(f => f.Form == pf.Form && f.Viewable
                         && f.ElementNumber < pf.ElementNumber && (f.Type == "text" || f.Type == "email" || f.Type == "tel"));
                     if(username != null)
                     {
@@ -51,7 +51,7 @@ namespace Bit.iOS.Extension.Models
 
                 if(!string.IsNullOrWhiteSpace(fillUsername) && pf.ElementNumber > 0)
                 {
-                    var username = pageDetails.Fields.LastOrDefault(f => f.ElementNumber < pf.ElementNumber
+                    var username = pageDetails.Fields.LastOrDefault(f => f.ElementNumber < pf.ElementNumber && f.Viewable
                         && (f.Type == "text" || f.Type == "email" || f.Type == "tel"));
                     if(username != null)
                     {
