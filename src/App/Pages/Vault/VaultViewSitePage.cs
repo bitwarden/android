@@ -77,7 +77,7 @@ namespace Bit.App.Pages
             notesCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
             notesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
-            SiteInformationSection = new TableSection("Site Information")
+            SiteInformationSection = new TableSection(AppResources.SiteInformation)
             {
                 nameCell
             };
@@ -113,7 +113,7 @@ namespace Bit.App.Pages
                 UriCell.Button1.WidthRequest = 71;
             }
 
-            Title = "View Site";
+            Title = AppResources.ViewSite;
             Content = Table;
             BindingContext = Model;
         }

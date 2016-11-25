@@ -67,12 +67,12 @@ namespace Bit.App.Pages
 
             var generateCell = new ExtendedTextCell
             {
-                Text = "Generate Password",
+                Text = AppResources.GeneratePassword,
                 ShowDisclousure = true
             };
             generateCell.Tapped += GenerateCell_Tapped; ;
 
-            var favoriteCell = new ExtendedSwitchCell { Text = "Favorite" };
+            var favoriteCell = new ExtendedSwitchCell { Text = AppResources.Favorite };
 
             var table = new ExtendedTableView
             {
@@ -81,7 +81,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection("Site Information")
+                    new TableSection(AppResources.SiteInformation)
                     {
                         nameCell,
                         uriCell,
@@ -141,14 +141,14 @@ namespace Bit.App.Pages
                     site.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
                 }
 
-                _userDialogs.ShowLoading("Saving...", MaskType.Black);
+                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveTask = await _siteService.SaveAsync(site);
 
                 _userDialogs.HideLoading();
                 if(saveTask.Succeeded)
                 {
                     await Navigation.PopForDeviceAsync();
-                    _userDialogs.Toast("New site created.");
+                    _userDialogs.Toast(AppResources.NewSiteCreated);
                     _googleAnalyticsService.TrackAppEvent("CreatedSite");
                 }
                 else if(saveTask.Errors.Count() > 0)
@@ -166,7 +166,7 @@ namespace Bit.App.Pages
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
         }
 
@@ -181,10 +181,7 @@ namespace Bit.App.Pages
             if(Device.OS == TargetPlatform.iOS && !_settings.GetValueOrDefault(AddedSiteAlertKey, false))
             {
                 _settings.AddOrUpdateValue(AddedSiteAlertKey, true);
-                DisplayAlert("bitwarden App Extension",
-                    "The easiest way to add new sites to your vault is from the bitwarden App Extension. " +
-                    "Learn more about using the bitwarden App Extension by navigating to the \"Tools\" screen.",
-                    AppResources.Ok);
+                DisplayAlert(AppResources.BitwardenAppExtension, AppResources.BitwardenAppExtensionAlert, AppResources.Ok);
             }
         }
 
@@ -199,7 +196,7 @@ namespace Bit.App.Pages
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
                 PasswordCell.Entry.Text = password;
-                _userDialogs.Toast("Password generated.");
+                _userDialogs.Toast(AppResources.PasswordGenerated);
             });
             await Navigation.PushForDeviceAsync(page);
         }

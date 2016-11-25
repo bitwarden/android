@@ -89,6 +89,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add a Site.
+        /// </summary>
+        public static string AddASite {
+            get {
+                return ResourceManager.GetString("AddASite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Folder.
         /// </summary>
         public static string AddFolder {
@@ -175,6 +184,15 @@ namespace Bit.App.Resources {
         public static string BitwardenAppExtension {
             get {
                 return ResourceManager.GetString("BitwardenAppExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The easiest way to add new sites to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the &quot;Tools&quot; screen..
+        /// </summary>
+        public static string BitwardenAppExtensionAlert {
+            get {
+                return ResourceManager.GetString("BitwardenAppExtensionAlert", resourceCulture);
             }
         }
         
@@ -359,6 +377,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit Site.
+        /// </summary>
+        public static string EditSite {
+            get {
+                return ResourceManager.GetString("EditSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Email.
         /// </summary>
         public static string Email {
@@ -391,6 +418,15 @@ namespace Bit.App.Resources {
         public static string EmailUsDescription {
             get {
                 return ResourceManager.GetString("EmailUsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Automatic Syncing.
+        /// </summary>
+        public static string EnableAutomaticSyncing {
+            get {
+                return ResourceManager.GetString("EnableAutomaticSyncing", resourceCulture);
             }
         }
         
@@ -481,6 +517,15 @@ namespace Bit.App.Resources {
         public static string ExtensionTurnOn {
             get {
                 return ResourceManager.GetString("ExtensionTurnOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Favorite.
+        /// </summary>
+        public static string Favorite {
+            get {
+                return ResourceManager.GetString("Favorite", resourceCulture);
             }
         }
         
@@ -890,11 +935,38 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New site created..
+        /// </summary>
+        public static string NewSiteCreated {
+            get {
+                return ResourceManager.GetString("NewSiteCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no favorites in your vault..
+        /// </summary>
+        public static string NoFavorites {
+            get {
+                return ResourceManager.GetString("NoFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no sites in your vault..
+        /// </summary>
+        public static string NoSites {
+            get {
+                return ResourceManager.GetString("NoSites", resourceCulture);
             }
         }
         
@@ -913,6 +985,15 @@ namespace Bit.App.Resources {
         public static string Ok {
             get {
                 return ResourceManager.GetString("Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ok, got it!.
+        /// </summary>
+        public static string OkGotIt {
+            get {
+                return ResourceManager.GetString("OkGotIt", resourceCulture);
             }
         }
         
@@ -944,6 +1025,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password generated..
+        /// </summary>
+        public static string PasswordGenerated {
+            get {
+                return ResourceManager.GetString("PasswordGenerated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password Generator.
         /// </summary>
         public static string PasswordGenerator {
@@ -958,6 +1048,24 @@ namespace Bit.App.Resources {
         public static string PasswordGeneratorDescription {
             get {
                 return ResourceManager.GetString("PasswordGeneratorDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to overwrite the current password?.
+        /// </summary>
+        public static string PasswordOverrideAlert {
+            get {
+                return ResourceManager.GetString("PasswordOverrideAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select \&quot;Ok\&quot; on the following prompt when asked to enable push notifications..
+        /// </summary>
+        public static string PushNotificationAlert {
+            get {
+                return ResourceManager.GetString("PushNotificationAlert", resourceCulture);
             }
         }
         
@@ -1012,6 +1120,15 @@ namespace Bit.App.Resources {
         public static string Saving {
             get {
                 return ResourceManager.GetString("Saving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search vault.
+        /// </summary>
+        public static string SearchVault {
+            get {
+                return ResourceManager.GetString("SearchVault", resourceCulture);
             }
         }
         
@@ -1088,11 +1205,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Site Information.
+        /// </summary>
+        public static string SiteInformation {
+            get {
+                return ResourceManager.GetString("SiteInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No Name.
         /// </summary>
         public static string SiteNoName {
             get {
                 return ResourceManager.GetString("SiteNoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Site updated..
+        /// </summary>
+        public static string SiteUpdated {
+            get {
+                return ResourceManager.GetString("SiteUpdated", resourceCulture);
             }
         }
         
@@ -1300,6 +1435,15 @@ namespace Bit.App.Resources {
         public static string View {
             get {
                 return ResourceManager.GetString("View", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Site.
+        /// </summary>
+        public static string ViewSite {
+            get {
+                return ResourceManager.GetString("ViewSite", resourceCulture);
             }
         }
         

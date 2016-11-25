@@ -394,6 +394,9 @@
   <data name="Account" xml:space="preserve">
     <value>Account</value>
   </data>
+  <data name="AddASite" xml:space="preserve">
+    <value>Add a Site</value>
+  </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App Extension</value>
   </data>
@@ -408,6 +411,9 @@
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>bitwarden App Extension</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert" xml:space="preserve">
+    <value>The easiest way to add new sites to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
@@ -439,6 +445,12 @@
   <data name="CurrentSession" xml:space="preserve">
     <value>Current Session</value>
   </data>
+  <data name="EditSite" xml:space="preserve">
+    <value>Edit Site</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>Enable Automatic Syncing</value>
+  </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Re-enable App Extension</value>
   </data>
@@ -466,6 +478,9 @@
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
     <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>Favorite</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>Fingerprint</value>
@@ -526,17 +541,40 @@
   <data name="Never" xml:space="preserve">
     <value>Never</value>
   </data>
+  <data name="NewSiteCreated" xml:space="preserve">
+    <value>New site created.</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>There are no favorites in your vault.</value>
+  </data>
+  <data name="NoSites" xml:space="preserve">
+    <value>There are no sites in your vault.</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>Ok, got it!</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
   <data name="Options" xml:space="preserve">
     <value>Options</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>Other</value>
   </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>Password generated.</value>
+  </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Password Generator</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
     <value>Automatically generate strong, unique passwords for your logins.</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>Are you sure you want to overwrite the current password?</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.</value>
+    <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
     <value>Rate the App</value>
@@ -549,6 +587,9 @@
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerate Password</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Security</value>
@@ -564,6 +605,12 @@
   </data>
   <data name="SetPINDirection" xml:space="preserve">
     <value>Enter a 4 digit PIN code to unlock the app with.</value>
+  </data>
+  <data name="SiteInformation" xml:space="preserve">
+    <value>Site Information</value>
+  </data>
+  <data name="SiteUpdated" xml:space="preserve">
+    <value>Site updated.</value>
   </data>
   <data name="Syncing" xml:space="preserve">
     <value>Syncing...</value>
@@ -593,6 +640,9 @@
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Unlock with PIN Code</value>
+  </data>
+  <data name="ViewSite" xml:space="preserve">
+    <value>View Site</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden Web Vault</value>

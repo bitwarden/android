@@ -93,7 +93,7 @@ namespace Bit.App.Pages
 
             Search = new SearchBar
             {
-                Placeholder = "Search vault",
+                Placeholder = AppResources.SearchVault,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
                 CancelButtonColor = Color.FromHex("3c8dbc")
             };
@@ -110,7 +110,7 @@ namespace Bit.App.Pages
 
             var noDataLabel = new Label
             {
-                Text = _favorites ? "There are no favorites in your vault." : "There are no sites in your vault.",
+                Text = _favorites ? AppResources.NoFavorites : AppResources.NoSites,
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"]
@@ -128,7 +128,7 @@ namespace Bit.App.Pages
             {
                 var addSiteButton = new ExtendedButton
                 {
-                    Text = "Add a Site",
+                    Text = AppResources.AddASite,
                     Command = new Command(() => AddSite()),
                     Style = (Style)Application.Current.Resources["btn-primaryAccent"]
                 };
@@ -240,12 +240,10 @@ namespace Bit.App.Pages
                     _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
                     _userDialogs.Alert(new AlertConfig
                     {
-                        Message = "bitwarden keeps your vault automatically synced by using push notifications."
-                        + " For the best possible experience, please select \"Ok\" on the following prompt when"
-                        + " asked to enable push notifications.",
-                        Title = "Enable Automatic Syncing",
+                        Message = AppResources.PushNotificationAlert,
+                        Title = AppResources.EnableAutomaticSyncing,
                         OnOk = registerAction,
-                        OkText = "Ok, got it!"
+                        OkText = AppResources.OkGotIt
                     });
                 }
                 else

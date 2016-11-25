@@ -67,7 +67,7 @@ namespace Bit.App.Pages
 
             var generateCell = new ExtendedTextCell
             {
-                Text = "Generate Password",
+                Text = AppResources.GeneratePassword,
                 ShowDisclousure = true
             };
             generateCell.Tapped += GenerateCell_Tapped; ;
@@ -92,7 +92,7 @@ namespace Bit.App.Pages
 
             var favoriteCell = new ExtendedSwitchCell
             {
-                Text = "Favorite",
+                Text = AppResources.Favorite,
                 On = site.Favorite
             };
 
@@ -106,7 +106,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection("Site Information")
+                    new TableSection(AppResources.SiteInformation)
                     {
                         nameCell,
                         uriCell,
@@ -171,7 +171,7 @@ namespace Bit.App.Pages
                     site.FolderId = null;
                 }
 
-                _userDialogs.ShowLoading("Saving...", MaskType.Black);
+                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveTask = await _siteService.SaveAsync(site);
 
                 _userDialogs.HideLoading();
@@ -179,7 +179,7 @@ namespace Bit.App.Pages
                 if(saveTask.Succeeded)
                 {
                     await Navigation.PopForDeviceAsync();
-                    _userDialogs.Toast("Site updated.");
+                    _userDialogs.Toast(AppResources.SiteUpdated);
                     _googleAnalyticsService.TrackAppEvent("EditedSite");
                 }
                 else if(saveTask.Errors.Count() > 0)
@@ -192,12 +192,12 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = "Edit Site";
+            Title = AppResources.EditSite;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
         }
 
@@ -219,8 +219,7 @@ namespace Bit.App.Pages
         private async void GenerateCell_Tapped(object sender, EventArgs e)
         {
             if(!string.IsNullOrWhiteSpace(PasswordCell.Entry.Text)
-                && !await _userDialogs.ConfirmAsync("Are you sure you want to overwrite the current password?", null,
-                AppResources.Yes, AppResources.No))
+                && !await _userDialogs.ConfirmAsync(AppResources.PasswordOverrideAlert, null, AppResources.Yes, AppResources.No))
             {
                 return;
             }
@@ -228,7 +227,7 @@ namespace Bit.App.Pages
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
                 PasswordCell.Entry.Text = password;
-                _userDialogs.Toast("Password generated.");
+                _userDialogs.Toast(AppResources.PasswordGenerated);
             });
             await Navigation.PushForDeviceAsync(page);
         }
@@ -246,14 +245,14 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading("Deleting...", MaskType.Black);
+            _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
             var deleteTask = await _siteService.DeleteAsync(_siteId);
             _userDialogs.HideLoading();
 
             if(deleteTask.Succeeded)
             {
                 await Navigation.PopForDeviceAsync();
-                _userDialogs.Toast("Site deleted.");
+                _userDialogs.Toast(AppResources.SiteDeleted);
                 _googleAnalyticsService.TrackAppEvent("DeletedSite");
             }
             else if(deleteTask.Errors.Count() > 0)
