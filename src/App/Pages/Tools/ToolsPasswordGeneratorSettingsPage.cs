@@ -64,14 +64,14 @@ namespace Bit.App.Pages
 
             AvoidAmbiguousCell = new ExtendedSwitchCell
             {
-                Text = "Avoid Ambiguous Characters",
+                Text = AppResources.AvoidAmbiguousCharacters,
                 On = !_settings.GetValueOrDefault(Constants.PasswordGeneratorAmbiguous, false)
             };
             AvoidAmbiguousCell.OnChanged += AvoidAmbiguousCell_OnChanged; ;
 
-            NumbersMinCell = new StepperCell("Minimum Numbers", 
+            NumbersMinCell = new StepperCell(AppResources.MinNumbers, 
                 _settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1), 0, 5, 1);
-            SpecialMinCell = new StepperCell("Minimum Special",
+            SpecialMinCell = new StepperCell(AppResources.MinSpecial,
                 _settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1), 0, 5, 1);
 
             var table = new ExtendedTableView
@@ -107,7 +107,7 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 44;
             }
 
-            Title = "Settings";
+            Title = AppResources.Settings;
             Content = table;
         }
 

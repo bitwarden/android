@@ -3,6 +3,7 @@ using Bit.App.Controls;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
 
 namespace Bit.App.Pages
 {
@@ -21,7 +22,7 @@ namespace Bit.App.Pages
         {
             var serviceLabel = new Label
             {
-                Text = "Use the bitwarden accessibility service to auto-fill your logins across apps and the web.",
+                Text = AppResources.AutofillDescription,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -31,7 +32,7 @@ namespace Bit.App.Pages
 
             var comingSoonLabel = new Label
             {
-                Text = "Coming Soon!",
+                Text = AppResources.ComingSoon,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -42,7 +43,7 @@ namespace Bit.App.Pages
 
             var progressButton = new ExtendedButton
             {
-                Text = "See Development Progress",
+                Text = AppResources.SeeDevProgress,
                 Command = new Command(() =>
                 {
                     _googleAnalyticsService.TrackAppEvent("SeeAutofillProgress");
@@ -63,7 +64,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            Title = "Auto-fill Service";
+            Title = AppResources.AutofillService;
             Content = new ScrollView { Content = stackLayout };
         }
     }

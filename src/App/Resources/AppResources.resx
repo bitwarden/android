@@ -394,6 +394,30 @@
   <data name="Account" xml:space="preserve">
     <value>Account</value>
   </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>App Extension</value>
+  </data>
+  <data name="AutofillDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>Auto-fill Service</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>Avoid Ambiguous Characters</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>bitwarden App Extension</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>bitwarden Auto-fill Service</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+  </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Change Email</value>
   </data>
@@ -406,14 +430,63 @@
   <data name="ChangePasswordConfirmation" xml:space="preserve">
     <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ComingSoon" xml:space="preserve">
+    <value>Coming Soon!</value>
+  </data>
   <data name="CurrentSession" xml:space="preserve">
     <value>Current Session</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>Re-enable App Extension</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>Almost done!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>Enable App Extension</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>Get instant access to your passwords!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>You're ready to log in!</value>
+  </data>
+  <data name="ExtensionSeeApps" xml:space="preserve">
+    <value>See Supported Apps</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Tap the bitwarden icon in the menu to launch the extension.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>Fingerprint</value>
   </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>Generate Password</value>
+  </data>
+  <data name="ImportLogins" xml:space="preserve">
+    <value>Import Logins</value>
+  </data>
+  <data name="ImportLoginsConfirmation" xml:space="preserve">
+    <value>You can bulk import logins from the bitwarden.com web vault. Do you want to visit the website now?</value>
+  </data>
+  <data name="ImportLoginsDescription" xml:space="preserve">
+    <value>Quickly bulk import your logins from other password management apps.</value>
+  </data>
   <data name="LastSync" xml:space="preserve">
     <value>Last Sync:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
   </data>
   <data name="Lock" xml:space="preserve">
     <value>Lock</value>
@@ -439,11 +512,31 @@
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>
   </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>Minimum Numbers</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>Minimum Special</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>More Settings</value>
+  </data>
   <data name="Never" xml:space="preserve">
     <value>Never</value>
   </data>
+  <data name="Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
   <data name="Other" xml:space="preserve">
     <value>Other</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>Password Generator</value>
+  </data>
+  <data name="PasswordGeneratorDescription" xml:space="preserve">
+    <value>Automatically generate strong, unique passwords for your logins.</value>
   </data>
   <data name="RateTheApp" xml:space="preserve">
     <value>Rate the App</value>
@@ -454,8 +547,17 @@
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
     <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
   </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>Regenerate Password</value>
+  </data>
   <data name="Security" xml:space="preserve">
     <value>Security</value>
+  </data>
+  <data name="SeeDevProgress" xml:space="preserve">
+    <value>See Development Progress</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>Select</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
     <value>Set PIN</value>
@@ -491,5 +593,11 @@
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Unlock with PIN Code</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>bitwarden Web Vault</value>
+  </data>
+  <data name="WebVaultDescription" xml:space="preserve">
+    <value>Manage your logins from any web browser with the bitwarden web vault.</value>
   </data>
 </root>

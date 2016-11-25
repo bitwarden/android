@@ -7,6 +7,7 @@ using Plugin.Settings.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
 
 namespace Bit.App.Pages
 {
@@ -34,7 +35,7 @@ namespace Bit.App.Pages
 
             var notStartedLabel = new Label
             {
-                Text = "Get instant access to your passwords!",
+                Text = AppResources.ExtensionInstantAccess,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -44,7 +45,7 @@ namespace Bit.App.Pages
 
             var notStartedSublabel = new Label
             {
-                Text = "To turn on bitwarden in Safari and other apps, tap the \"more\" icon on the bottom row of the menu.",
+                Text = AppResources.ExtensionTurnOn,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -61,7 +62,7 @@ namespace Bit.App.Pages
 
             var notStartedButton = new ExtendedButton
             {
-                Text = "Enable App Extension",
+                Text = AppResources.ExtensionEnable,
                 Command = new Command(() => ShowExtension("NotStartedEnable")),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
@@ -83,7 +84,7 @@ namespace Bit.App.Pages
 
             var notActivatedLabel = new Label
             {
-                Text = "Almost done!",
+                Text = AppResources.ExtensionAlmostDone,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -93,7 +94,7 @@ namespace Bit.App.Pages
 
             var notActivatedSublabel = new Label
             {
-                Text = "Tap the bitwarden icon in the menu to launch the extension.",
+                Text = AppResources.ExtensionTapIcon,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -110,7 +111,7 @@ namespace Bit.App.Pages
 
             var notActivatedButton = new ExtendedButton
             {
-                Text = "Enable App Extension",
+                Text = AppResources.ExtensionEnable,
                 Command = new Command(() => ShowExtension("NotActivatedEnable")),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
@@ -132,7 +133,7 @@ namespace Bit.App.Pages
 
             var activatedLabel = new Label
             {
-                Text = "You're ready to log in!",
+                Text = AppResources.ExtensionReady,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -142,7 +143,7 @@ namespace Bit.App.Pages
 
             var activatedSublabel = new Label
             {
-                Text = "In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).",
+                Text = AppResources.ExtensionInSafari,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -160,7 +161,7 @@ namespace Bit.App.Pages
 
             var activatedButton = new ExtendedButton
             {
-                Text = "See Supported Apps",
+                Text = AppResources.ExtensionSeeApps,
                 Command = new Command(() =>
                 {
                     _googleAnalyticsService.TrackAppEvent("SeeSupportedApps");
@@ -173,7 +174,7 @@ namespace Bit.App.Pages
 
             var activatedButtonReenable = new ExtendedButton
             {
-                Text = "Re-enable App Extension",
+                Text = AppResources.ExntesionReenable,
                 Command = new Command(() => ShowExtension("Re-enable")),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
@@ -199,10 +200,10 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Close"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }
 
-            Title = "App Extension";
+            Title = AppResources.AppExtension;
             Content = new ScrollView { Content = stackLayout };
             BindingContext = Model;
         }

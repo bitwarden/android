@@ -53,13 +53,13 @@ namespace Bit.App.Pages
             Password.SetBinding<PasswordGeneratorPageModel>(Label.TextProperty, m => m.Password);
 
             SliderCell = new SliderViewCell(this, _passwordGenerationService, _settings);
-            var settingsCell = new ExtendedTextCell { Text = "More Settings", ShowDisclousure = true };
+            var settingsCell = new ExtendedTextCell { Text = AppResources.MoreSettings, ShowDisclousure = true };
             settingsCell.Tapped += SettingsCell_Tapped;
 
             var buttonColor = Color.FromHex("3c8dbc");
-            var regenerateCell = new ExtendedTextCell { Text = "Regenerate Password", TextColor = buttonColor };
+            var regenerateCell = new ExtendedTextCell { Text = AppResources.RegeneratePassword, TextColor = buttonColor };
             regenerateCell.Tapped += RegenerateCell_Tapped; ;
-            var copyCell = new ExtendedTextCell { Text = "Copy Password", TextColor = buttonColor };
+            var copyCell = new ExtendedTextCell { Text = AppResources.CopyPassword, TextColor = buttonColor };
             copyCell.Tapped += CopyCell_Tapped;
 
             var table = new ExtendedTableView
@@ -76,7 +76,7 @@ namespace Bit.App.Pages
                         regenerateCell,
                         copyCell
                     },
-                    new TableSection("Options")
+                    new TableSection(AppResources.Options)
                     {
                         SliderCell,
                         settingsCell
@@ -88,7 +88,8 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 44;
-                ToolbarItems.Add(new DismissModalToolBarItem(this, _passwordValueAction == null ? "Close" : "Cancel"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this,
+                    _passwordValueAction == null ? AppResources.Close : AppResources.Cancel));
             }
 
             var stackLayout = new StackLayout
@@ -108,7 +109,7 @@ namespace Bit.App.Pages
 
             if(_passwordValueAction != null)
             {
-                var selectToolBarItem = new ToolbarItem("Select", null, async () =>
+                var selectToolBarItem = new ToolbarItem(AppResources.Select, null, async () =>
                 {
                     _googleAnalyticsService.TrackAppEvent("SelectedGeneratedPassword");
                     _passwordValueAction(Password.Text);
@@ -118,7 +119,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(selectToolBarItem);
             }
 
-            Title = "Generate Password";
+            Title = AppResources.GeneratePassword;
             Content = scrollView;
             BindingContext = Model;
         }
@@ -181,7 +182,7 @@ namespace Bit.App.Pages
                 var label = new Label
                 {
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                    Text = "Length",
+                    Text = AppResources.Length,
                     HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.CenterAndExpand
                 };

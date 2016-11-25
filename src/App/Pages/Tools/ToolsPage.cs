@@ -24,22 +24,20 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            var generatorCell = new ToolsViewCell("Password Generator",
-                "Automatically generate strong, unique passwords for your logins.", "refresh");
+            var generatorCell = new ToolsViewCell(AppResources.PasswordGenerator, AppResources.PasswordGeneratorDescription,
+                "refresh");
             generatorCell.Tapped += GeneratorCell_Tapped;
-            var webCell = new ToolsViewCell("bitwarden Web Vault",
-                "Manage your logins from any web browser with the bitwarden web vault.", "globe");
+            var webCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe");
             webCell.Tapped += WebCell_Tapped;
-            var importCell = new ToolsViewCell("Import Logins", 
-                "Quickly bulk import your logins from other password management apps.", "cloudup");
+            var importCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup");
             importCell.Tapped += ImportCell_Tapped;
 
             var section = new TableSection { generatorCell };
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                var extensionCell = new ToolsViewCell("bitwarden App Extension",
-                    "Use bitwarden in Safari and other apps to auto-fill your logins.", "upload");
+                var extensionCell = new ToolsViewCell(AppResources.BitwardenAppExtension,
+                    AppResources.BitwardenAppExtensionDescription, "upload");
                 extensionCell.Tapped += (object sender, EventArgs e) =>
                 {
                     Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
@@ -48,8 +46,8 @@ namespace Bit.App.Pages
             }
             else
             {
-                var autofillServiceCell = new ToolsViewCell("bitwarden Auto-fill Service",
-                    "Use the bitwarden accessibility service to auto-fill your logins.", "upload");
+                var autofillServiceCell = new ToolsViewCell(AppResources.BitwardenAutofillService,
+                    AppResources.BitwardenAutofillServiceDescription, "upload");
                 autofillServiceCell.Tapped += (object sender, EventArgs e) =>
                 {
                     Navigation.PushAsync(new ToolsAutofillServicePage());
@@ -94,9 +92,8 @@ namespace Bit.App.Pages
 
         private async void ImportCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(
-                "You can bulk import logins from the bitwarden.com web vault. Do you want to visit the website now?", 
-                null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.ImportLoginsConfirmation, null, AppResources.Yes,
+                AppResources.Cancel))
             {
                 return;
             }
