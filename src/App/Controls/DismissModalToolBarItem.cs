@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Resources;
+using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -12,7 +13,7 @@ namespace Bit.App.Controls
         {
             _cancelClickedAction = cancelClickedAction;
             _page = page;
-            Text = text ?? "Close";
+            Text = text ?? AppResources.Close;
             Clicked += ClickedItem;
             Priority = -1;
         }
