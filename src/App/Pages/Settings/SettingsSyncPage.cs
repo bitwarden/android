@@ -36,7 +36,7 @@ namespace Bit.App.Pages
         {
             var syncButton = new ExtendedButton
             {
-                Text = "Sync Vault Now",
+                Text = AppResources.SyncVaultNow,
                 Command = new Command(async () => await SyncAsync()),
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
@@ -57,7 +57,7 @@ namespace Bit.App.Pages
                 Padding = new Thickness(15, 0)
             };
 
-            Title = "Sync";
+            Title = AppResources.Sync;
             Content = stackLayout;
         }
 
@@ -75,7 +75,7 @@ namespace Bit.App.Pages
             var lastSyncDate = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
             try
             {
-                LastSyncLabel.Text = "Last Sync: " + lastSyncDate?.ToLocalTime().ToString() ?? "Never";
+                LastSyncLabel.Text = AppResources.LastSync + " " + lastSyncDate?.ToLocalTime().ToString() ?? AppResources.Never;
             }
             catch
             {
@@ -93,17 +93,17 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading("Syncing...", MaskType.Black);
+            _userDialogs.ShowLoading(AppResources.Syncing, MaskType.Black);
             var succeeded = await _syncService.FullSyncAsync();
             _userDialogs.HideLoading();
             if(succeeded)
             {
-                _userDialogs.Toast("Syncing complete.");
+                _userDialogs.Toast(AppResources.SyncingComplete);
                 _googleAnalyticsService.TrackAppEvent("Synced");
             }
             else
             {
-                _userDialogs.Toast("Syncing failed.");
+                _userDialogs.Toast(AppResources.SyncingFailed);
             }
 
             SetLastSync();

@@ -1,6 +1,7 @@
 ﻿using System;
 using Bit.App.Controls;
 using Xamarin.Forms;
+using Bit.App.Resources;
 
 namespace Bit.App.Pages
 {
@@ -35,7 +36,7 @@ Fingerprint by masterpage.com from the Noun Project")
                 table.EstimatedRowHeight = 100;
             }
 
-            Title = "Thank You";
+            Title = AppResources.ThankYou;
             Content = table;
         }
 

@@ -38,7 +38,7 @@ namespace Bit.App.Pages
             listView.ItemSelected += FolderSelected;
             listView.ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this));
 
-            Title = "Folders";
+            Title = AppResources.Folders;
             Content = listView;
         }
 

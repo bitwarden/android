@@ -34,7 +34,7 @@ namespace Bit.App.Pages
         {
             var instructionLabel = new Label
             {
-                Text = "Enter your PIN code.",
+                Text = AppResources.EnterPIN,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -68,7 +68,7 @@ namespace Bit.App.Pages
             PinControl.Label.GestureRecognizers.Add(tgr);
             instructionLabel.GestureRecognizers.Add(tgr);
 
-            Title = "Verify PIN";
+            Title = AppResources.VerifyPIN;
             Content = stackLayout;
             Content.GestureRecognizers.Add(tgr);
             BindingContext = Model;
@@ -102,7 +102,7 @@ namespace Bit.App.Pages
             {
                 // TODO: keep track of invalid attempts and logout?
 
-                _userDialogs.Alert("Invalid PIN. Try again.");
+                _userDialogs.Alert(AppResources.InvalidPIN);
                 Model.PIN = string.Empty;
                 PinControl.Entry.Focus();
             }
@@ -110,7 +110,7 @@ namespace Bit.App.Pages
 
         private async Task LogoutAsync()
         {
-            if(!await _userDialogs.ConfirmAsync("Are you sure you want to log out?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }

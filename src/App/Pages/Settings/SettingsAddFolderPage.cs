@@ -72,7 +72,7 @@ namespace Bit.App.Pages
                     Name = nameCell.Entry.Text.Encrypt()
                 };
 
-                _userDialogs.ShowLoading("Saving...", MaskType.Black);
+                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveResult = await _folderService.SaveAsync(folder);
 
                 _userDialogs.HideLoading();
@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                 if(saveResult.Succeeded)
                 {
                     await Navigation.PopForDeviceAsync();
-                    _userDialogs.Toast("New folder created.");
+                    _userDialogs.Toast(AppResources.FolderCreated);
                     _googleAnalyticsService.TrackAppEvent("CreatedFolder");
                 }
                 else if(saveResult.Errors.Count() > 0)
@@ -93,12 +93,12 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = "Add Folder";
+            Title = AppResources.AddFolder;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
         }
 

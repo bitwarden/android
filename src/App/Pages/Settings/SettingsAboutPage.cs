@@ -3,6 +3,7 @@ using Bit.App.Controls;
 using Xamarin.Forms;
 using Bit.App.Abstractions;
 using XLabs.Ioc;
+using Bit.App.Resources;
 
 namespace Bit.App.Pages
 {
@@ -27,7 +28,7 @@ namespace Bit.App.Pages
             var versionLabel = new Label
             {
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                Text = $@"Version {_appInfoService.Version} ({_appInfoService.Build})
+                Text = $@"{AppResources.Version} {_appInfoService.Version} ({_appInfoService.Build})
 © 8bit Solutions LLC 2015-{DateTime.Now.Year}",
                 HorizontalTextAlignment = TextAlignment.Center
             };
@@ -41,7 +42,7 @@ namespace Bit.App.Pages
 
             var creditsCell = new ExtendedTextCell
             {
-                Text = "Credits",
+                Text = AppResources.Credits,
                 ShowDisclousure = true
             };
             creditsCell.Tapped += RateCell_Tapped;
@@ -73,7 +74,7 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
-            Title = "About";
+            Title = AppResources.About;
             Content = new ScrollView { Content = stackLayout };
         }
 

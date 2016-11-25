@@ -41,7 +41,7 @@ namespace Bit.App.Pages
 
             var fingerprintButton = new ExtendedButton
             {
-                Text = "Use Fingerprint to Unlock",
+                Text = AppResources.UseFingerprintToUnlock,
                 Command = new Command(async () => await CheckFingerprintAsync()),
                 VerticalOptions = LayoutOptions.EndAndExpand,
                 Style = (Style)Application.Current.Resources["btn-primary"]
@@ -64,7 +64,7 @@ namespace Bit.App.Pages
                 Children = { fingerprintIcon, fingerprintButton, logoutButton }
             };
 
-            Title = "Verify Fingerprint";
+            Title = AppResources.VerifyFingerprint;
             Content = stackLayout;
         }
 
@@ -85,7 +85,7 @@ namespace Bit.App.Pages
 
         public async Task LogoutAsync()
         {
-            if(!await _userDialogs.ConfirmAsync("Are you sure you want to log out?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }
@@ -95,7 +95,7 @@ namespace Bit.App.Pages
 
         public async Task CheckFingerprintAsync()
         {
-            var result = await _fingerprint.AuthenticateAsync("Use your fingerprint to verify.");
+            var result = await _fingerprint.AuthenticateAsync(AppResources.FingerprintDirection);
             if(result.Authenticated)
             {
                 _settings.AddOrUpdateValue(Constants.Locked, false);

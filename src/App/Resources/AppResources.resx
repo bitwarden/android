@@ -117,9 +117,15 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="Add" xml:space="preserve">
     <value>Add</value>
     <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>Add Folder</value>
   </data>
   <data name="AddSite" xml:space="preserve">
     <value>Add Site</value>
@@ -153,9 +159,17 @@
     <value>Copy Username</value>
     <comment>The button text that allows a user to copy the site's username to their clipboard.</comment>
   </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Credits</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
   <data name="Delete" xml:space="preserve">
     <value>Delete</value>
     <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>Deleting...</value>
+    <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
     <value>Do you really want to delete? This cannot be undone.</value>
@@ -163,6 +177,9 @@
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Edit</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>Edit Folder</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>Email</value>
@@ -172,21 +189,54 @@
     <value>Email Address</value>
     <comment>Full label for a email address.</comment>
   </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>Email Us</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>Email us directly to get help or leave feedback.</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>Enter your PIN code.</value>
+  </data>
   <data name="Favorites" xml:space="preserve">
     <value>Favorites</value>
     <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>File a Bug Report</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>Open an issue at our GitHub repository.</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>Use your fingerprint to verify.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Folder</value>
     <comment>Label for a folder.</comment>
   </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>New folder created.</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>Folder deleted.</value>
+  </data>
   <data name="FolderNone" xml:space="preserve">
     <value>(none)</value>
     <comment>Sites that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
+  <data name="Folders" xml:space="preserve">
+    <value>Folders</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>Folder updated.</value>
+  </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Go To Website</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>Help and Feedback</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Hide</value>
@@ -199,6 +249,12 @@
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
     <value>Internet Connection Required</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>Invalid Master Password. Try again.</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>Invalid PIN. Try again.</value>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>Launch</value>
@@ -215,6 +271,9 @@
   <data name="LogOut" xml:space="preserve">
     <value>Log Out</value>
     <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>Are you sure you want to log out?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Master Password</value>
@@ -251,6 +310,10 @@
     <value>Save</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
+  <data name="Saving" xml:space="preserve">
+    <value>Saving...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
     <comment>The title for the settings page.</comment>
@@ -267,9 +330,15 @@
     <value>No Name</value>
     <comment>Title text to display when there is no name given for a site.</comment>
   </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Submit</value>
+  </data>
   <data name="Sync" xml:space="preserve">
     <value>Sync</value>
     <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>Thank You</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Tools</value>
@@ -278,6 +347,9 @@
   <data name="URI" xml:space="preserve">
     <value>URI</value>
     <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>Use Fingerprint to Unlock</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Username</value>
@@ -291,8 +363,26 @@
     <value>{0} has been copied.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>Verify Fingerprint</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>Verify Master Password</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>Verify PIN</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Version</value>
+  </data>
   <data name="View" xml:space="preserve">
     <value>View</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>Visit Our Website</value>
+  </data>
+  <data name="VisitOurWebsiteDescription" xml:space="preserve">
+    <value>Visit our website to get help, news, email us, and/or learn more about how to use bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Website</value>
@@ -300,5 +390,106 @@
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Account</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>Change Email</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>Change Master Password</value>
+  </data>
+  <data name="ChangePasswordConfirmation" xml:space="preserve">
+    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+  </data>
+  <data name="CurrentSession" xml:space="preserve">
+    <value>Current Session</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>Fingerprint</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>Last Sync:</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>Lock</value>
+  </data>
+  <data name="LockOption15Minutes" xml:space="preserve">
+    <value>15 minutes</value>
+  </data>
+  <data name="LockOption1Hour" xml:space="preserve">
+    <value>1 hour</value>
+  </data>
+  <data name="LockOption1Minute" xml:space="preserve">
+    <value>1 minute</value>
+  </data>
+  <data name="LockOption4Hours" xml:space="preserve">
+    <value>4 hours</value>
+  </data>
+  <data name="LockOptionImmediately" xml:space="preserve">
+    <value>Immediately</value>
+  </data>
+  <data name="LockOptions" xml:space="preserve">
+    <value>Lock Options</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>Manage</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>Never</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>Rate the App</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>Please consider helping us out with a good review!</value>
+  </data>
+  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
+    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>Security</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>Set PIN</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>Syncing...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>Syncing complete.</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>Syncing failed.</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>Sync Vault Now</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Touch ID</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>Two-step Login</value>
+  </data>
+  <data name="TwoStepLoginConfirmation" xml:space="preserve">
+    <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>Unlock with {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>Unlock with PIN Code</value>
   </data>
 </root>

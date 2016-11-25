@@ -85,13 +85,13 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 70;
             }
 
-            var loginToolbarItem = new ToolbarItem("Submit", null, async () =>
+            var loginToolbarItem = new ToolbarItem(AppResources.Submit, null, async () =>
             {
                 await CheckPasswordAsync();
             }, ToolbarItemOrder.Default, 0);
 
             ToolbarItems.Add(loginToolbarItem);
-            Title = "Verify Master Password";
+            Title = AppResources.VerifyMasterPassword;
             Content = scrollView;
         }
 
@@ -129,7 +129,7 @@ namespace Bit.App.Pages
             {
                 // TODO: keep track of invalid attempts and logout?
 
-                _userDialogs.Alert("Invalid Master Password. Try again.");
+                _userDialogs.Alert(AppResources.InvalidMasterPassword);
                 PasswordCell.Entry.Text = string.Empty;
                 PasswordCell.Entry.Focus();
             }
@@ -137,7 +137,7 @@ namespace Bit.App.Pages
 
         private async Task LogoutAsync()
         {
-            if(!await _userDialogs.ConfirmAsync("Are you sure you want to log out?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }

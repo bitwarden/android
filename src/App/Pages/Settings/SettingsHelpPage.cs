@@ -3,6 +3,7 @@ using Bit.App.Controls;
 using Xamarin.Forms;
 using Bit.App.Abstractions;
 using XLabs.Ioc;
+using Bit.App.Resources;
 
 namespace Bit.App.Pages
 {
@@ -21,7 +22,7 @@ namespace Bit.App.Pages
         {
             var emailCell = new ExtendedTextCell
             {
-                Text = "Email Us",
+                Text = AppResources.EmailUs,
                 ShowDisclousure = true
             };
             emailCell.Tapped += EmailCell_Tapped;
@@ -39,12 +40,12 @@ namespace Bit.App.Pages
 
             var emailLabel = new CustomLabel(this)
             {
-                Text = "Email us directly to get help or leave feedback."
+                Text = AppResources.EmailUsDescription
             };
 
             var websiteCell = new ExtendedTextCell
             {
-                Text = "Visit Our Website",
+                Text = AppResources.VisitOurWebsite,
                 ShowDisclousure = true
             };
             websiteCell.Tapped += WebsiteCell_Tapped;
@@ -63,12 +64,12 @@ namespace Bit.App.Pages
 
             var websiteLabel = new CustomLabel(this)
             {
-                Text = "Visit our website to get help, news, email us, and/or learn more about how to use bitwarden."
+                Text = AppResources.VisitOurWebsiteDescription
             };
 
             var bugCell = new ExtendedTextCell
             {
-                Text = "File a Bug Report",
+                Text = AppResources.FileBugReport,
                 ShowDisclousure = true
             };
             bugCell.Tapped += BugCell_Tapped;
@@ -87,7 +88,7 @@ namespace Bit.App.Pages
 
             var bugLabel = new CustomLabel(this)
             {
-                Text = "Open an issue at our GitHub repository."
+                Text = AppResources.FileBugReportDescription
             };
 
             var stackLayout = new StackLayout
@@ -103,7 +104,7 @@ namespace Bit.App.Pages
                 bugLabel.WidthRequest = stackLayout.Bounds.Width - bugLabel.Bounds.Left * 2;
             };
 
-            Title = "Help and Feedback";
+            Title = AppResources.HelpAndFeedback;
             Content = new ScrollView { Content = stackLayout };
         }
 

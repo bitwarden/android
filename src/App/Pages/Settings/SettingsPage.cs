@@ -43,14 +43,14 @@ namespace Bit.App.Pages
         {
             PinCell = new ExtendedSwitchCell
             {
-                Text = "Unlock with PIN Code",
+                Text = AppResources.UnlockWithPIN,
                 On = _settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false)
             };
             PinCell.OnChanged += PinCell_Changed;
 
             LockOptionsCell = new ExtendedTextCell
             {
-                Text = "Lock Options",
+                Text = AppResources.LockOptions,
                 Detail = GetLockOptionsDetailsText(),
                 ShowDisclousure = true
             };
@@ -58,12 +58,12 @@ namespace Bit.App.Pages
 
             var twoStepCell = new ExtendedTextCell
             {
-                Text = "Two-step Login",
+                Text = AppResources.TwoStepLogin,
                 ShowDisclousure = true
             };
             twoStepCell.Tapped += TwoStepCell_Tapped; ;
 
-            var securitySecion = new TableSection("Security")
+            var securitySecion = new TableSection(AppResources.Security)
             {
                 LockOptionsCell,
                 PinCell,
@@ -72,10 +72,11 @@ namespace Bit.App.Pages
 
             if(_fingerprint.IsAvailable)
             {
-                var fingerprintName = Device.OnPlatform(iOS: "Touch ID", Android: "Fingerprint", WinPhone: "Fingerprint");
+                var fingerprintName = Device.OnPlatform(iOS: AppResources.TouchID, Android: AppResources.Fingerprint,
+                    WinPhone: AppResources.Fingerprint);
                 FingerprintCell = new ExtendedSwitchCell
                 {
-                    Text = "Unlock with " + fingerprintName,
+                    Text = string.Format(AppResources.UnlockWith, fingerprintName),
                     On = _settings.GetValueOrDefault(Constants.SettingFingerprintUnlockOn, false),
                     IsEnabled = _fingerprint.IsAvailable
                 };
@@ -85,59 +86,59 @@ namespace Bit.App.Pages
 
             var changeMasterPasswordCell = new ExtendedTextCell
             {
-                Text = "Change Master Password",
+                Text = AppResources.ChangeMasterPassword,
                 ShowDisclousure = true
             };
             changeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
 
             var changeEmailCell = new ExtendedTextCell
             {
-                Text = "Change Email",
+                Text = AppResources.ChangeEmail,
                 ShowDisclousure = true
             };
             changeEmailCell.Tapped += ChangeEmailCell_Tapped;
 
             var foldersCell = new ExtendedTextCell
             {
-                Text = "Folders",
+                Text = AppResources.Folders,
                 ShowDisclousure = true
             };
             foldersCell.Tapped += FoldersCell_Tapped;
 
             var syncCell = new ExtendedTextCell
             {
-                Text = "Sync",
+                Text = AppResources.Sync,
                 ShowDisclousure = true
             };
             syncCell.Tapped += SyncCell_Tapped;
 
             var lockCell = new ExtendedTextCell
             {
-                Text = "Lock"
+                Text = AppResources.Lock
             };
             lockCell.Tapped += LockCell_Tapped;
 
             var logOutCell = new ExtendedTextCell
             {
-                Text = "Log Out"
+                Text = AppResources.LogOut
             };
             logOutCell.Tapped += LogOutCell_Tapped;
 
             var aboutCell = new ExtendedTextCell
             {
-                Text = "About",
+                Text = AppResources.About,
                 ShowDisclousure = true
             };
             aboutCell.Tapped += AboutCell_Tapped;
 
             var helpCell = new ExtendedTextCell
             {
-                Text = "Help and Feedback",
+                Text = AppResources.HelpAndFeedback,
                 ShowDisclousure = true
             };
             helpCell.Tapped += HelpCell_Tapped;
 
-            var otherSection = new TableSection("Other")
+            var otherSection = new TableSection(AppResources.Other)
             {
                 aboutCell,
                 helpCell
@@ -145,9 +146,7 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                var rateCell = new LongDetailViewCell("Rate the App",
-                    "App Store ratings are reset with every new version of bitwarden."
-                    + " Please consider helping us out with a good review!");
+                var rateCell = new LongDetailViewCell(AppResources.RateTheApp, AppResources.RateTheAppDescriptionAppStore);
                 rateCell.Tapped += RateCell_Tapped;
                 otherSection.Add(rateCell);
             }
@@ -155,8 +154,8 @@ namespace Bit.App.Pages
             {
                 var rateCell = new ExtendedTextCell
                 {
-                    Text = "Rate the App",
-                    Detail = "Please consider helping us out with a good review!",
+                    Text = AppResources.RateTheApp,
+                    Detail = AppResources.RateTheAppDescription,
                     ShowDisclousure = true,
                     DetailLineBreakMode = LineBreakMode.WordWrap
                 };
@@ -169,17 +168,17 @@ namespace Bit.App.Pages
                 Root = new TableRoot
                 {
                     securitySecion,
-                    new TableSection("Account")
+                    new TableSection(AppResources.Account)
                     {
                         changeMasterPasswordCell,
                         changeEmailCell
                     },
-                    new TableSection("Manage")
+                    new TableSection(AppResources.Manage)
                     {
                         foldersCell,
                         syncCell
                     },
-                    new TableSection("Current Session")
+                    new TableSection(AppResources.CurrentSession)
                     {
                         lockCell,
                         logOutCell
@@ -194,10 +193,8 @@ namespace Bit.App.Pages
 
         private async void TwoStepCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync("Two-step login makes your account more secure by requiring you to enter"
-                + " a security code from an authenticator app whenever you log in. Two-step login can be enabled on the"
-                + " bitwarden.com web vault. Do you want to visit the website now?",
-                null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.TwoStepLoginConfirmation, null, AppResources.Yes,
+                AppResources.Cancel))
             {
                 return;
             }
@@ -208,35 +205,36 @@ namespace Bit.App.Pages
 
         private async void LockOptionsCell_Tapped(object sender, EventArgs e)
         {
-            var selection = await DisplayActionSheet("Lock Options", AppResources.Cancel, null,
-                "Immediately", "1 minute", "15 minutes", "1 hour", "4 hours", "Never");
+            var selection = await DisplayActionSheet(AppResources.LockOptions, AppResources.Cancel, null,
+                AppResources.LockOptionImmediately, AppResources.LockOption1Minute, AppResources.LockOption15Minutes,
+                AppResources.LockOption1Hour, AppResources.LockOption4Hours, AppResources.Never);
 
             if(selection == AppResources.Cancel)
             {
                 return;
             }
 
-            if(selection == "Immediately")
+            if(selection == AppResources.LockOptionImmediately)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 0);
             }
-            else if(selection == "1 minute")
+            else if(selection == AppResources.LockOption1Minute)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60);
             }
-            else if(selection == "15 minutes")
+            else if(selection == AppResources.LockOption15Minutes)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 15);
             }
-            else if(selection == "1 hour")
+            else if(selection == AppResources.LockOption1Hour)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 60);
             }
-            else if(selection == "4 hours")
+            else if(selection == AppResources.LockOption4Hours)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, 60 * 60 * 4);
             }
-            else if(selection == "Never")
+            else if(selection == AppResources.Never)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, -1);
             }
@@ -282,8 +280,7 @@ namespace Bit.App.Pages
 
         private async void LogOutCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(
-                "Are you sure you want to log out?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
             {
                 return;
             }
@@ -293,8 +290,8 @@ namespace Bit.App.Pages
 
         private async void ChangeMasterPasswordCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync("You can change your master password on the bitwarden.com web vault."
-                + "Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.ChangePasswordConfirmation, null, AppResources.Yes,
+                AppResources.Cancel))
             {
                 return;
             }
@@ -305,8 +302,8 @@ namespace Bit.App.Pages
 
         private async void ChangeEmailCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync("You can change your email address on the bitwarden.com web vault."
-                + " Do you want to visit the website now?", null, AppResources.Yes, AppResources.Cancel))
+            if(!await _userDialogs.ConfirmAsync(AppResources.ChangeEmailConfirmation, null, AppResources.Yes,
+                AppResources.Cancel))
             {
                 return;
             }
@@ -380,27 +377,27 @@ namespace Bit.App.Pages
             var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
             if(lockSeconds == -1)
             {
-                return "Never";
+                return AppResources.Never;
             }
             else if(lockSeconds == 60)
             {
-                return "1 minute";
+                return AppResources.LockOption1Minute;
             }
             else if(lockSeconds == 60 * 15)
             {
-                return "15 minutes";
+                return AppResources.LockOption15Minutes;
             }
             else if(lockSeconds == 60 * 60)
             {
-                return "1 hour";
+                return AppResources.LockOption1Hour;
             }
             else if(lockSeconds == 60 * 60 * 4)
             {
-                return "4 hours";
+                return AppResources.LockOption4Hours;
             }
             else
             {
-                return "Immediately";
+                return AppResources.LockOptionImmediately;
             }
         }
 

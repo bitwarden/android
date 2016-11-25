@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         {
             var instructionLabel = new Label
             {
-                Text = "Enter a 4 digit PIN code to unlock the app with.",
+                Text = AppResources.SetPINDirection,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -56,7 +56,7 @@ namespace Bit.App.Pages
             PinControl.Label.GestureRecognizers.Add(tgr);
             instructionLabel.GestureRecognizers.Add(tgr);
 
-            Title = "Set PIN";
+            Title = AppResources.SetPIN;
             Content = stackLayout;
             Content.GestureRecognizers.Add(tgr);
             BindingContext = Model;

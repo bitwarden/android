@@ -86,7 +86,7 @@ namespace Bit.App.Pages
 
                 folder.Name = nameCell.Entry.Text.Encrypt();
 
-                _userDialogs.ShowLoading("Saving...", MaskType.Black);
+                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveResult = await _folderService.SaveAsync(folder);
 
                 _userDialogs.HideLoading();
@@ -94,7 +94,7 @@ namespace Bit.App.Pages
                 if(saveResult.Succeeded)
                 {
                     await Navigation.PopForDeviceAsync();
-                    _userDialogs.Toast("Folder updated.");
+                    _userDialogs.Toast(AppResources.FolderUpdated);
                     _googleAnalyticsService.TrackAppEvent("EditedFolder");
                 }
                 else if(saveResult.Errors.Count() > 0)
@@ -107,12 +107,12 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = "Edit Folder";
+            Title = AppResources.EditFolder;
             Content = mainTable;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
             {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel"));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
         }
 
@@ -141,14 +141,14 @@ namespace Bit.App.Pages
             }
 
 
-            _userDialogs.ShowLoading("Deleting...", MaskType.Black);
+            _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
             var deleteTask = await _folderService.DeleteAsync(_folderId);
             _userDialogs.HideLoading();
 
             if(deleteTask.Succeeded)
             {
                 await Navigation.PopForDeviceAsync();
-                _userDialogs.Toast("Folder deleted.");
+                _userDialogs.Toast(AppResources.FolderDeleted);
             }
             else if(deleteTask.Errors.Count() > 0)
             {
