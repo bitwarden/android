@@ -36,7 +36,7 @@ namespace Bit.iOS.Extension
         public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username);
         public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password);
         public UITableViewCell GeneratePasswordCell { get; set; } = new UITableViewCell(UITableViewCellStyle.Subtitle, "GeneratePasswordCell");
-        public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell("Favorite");
+        public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell(AppResources.Favorite);
         public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(useTextView: true, height: 90);
         public PickerTableViewCell FolderCell { get; set; } = new PickerTableViewCell(AppResources.Folder);
 
@@ -91,7 +91,7 @@ namespace Bit.iOS.Extension
                 return true;
             };
 
-            GeneratePasswordCell.TextLabel.Text = "Generate Password";
+            GeneratePasswordCell.TextLabel.Text = AppResources.GeneratePassword;
             GeneratePasswordCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 
             _folders = _folderService.GetAllAsync().GetAwaiter().GetResult();
@@ -160,7 +160,7 @@ namespace Bit.iOS.Extension
             };
 
             var saveTask = _siteService.SaveAsync(site);
-            var loadingAlert = Dialogs.CreateLoadingAlert("Saving...");
+            var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
             PresentViewController(loadingAlert, true, null);
             await saveTask;
 
@@ -299,11 +299,11 @@ namespace Bit.iOS.Extension
             {
                 if(section == 0)
                 {
-                    return "Site Information";
+                    return AppResources.SiteInformation;
                 }
                 else if(section == 2)
                 {
-                    return "Notes";
+                    return AppResources.Notes;
                 }
 
                 return null;

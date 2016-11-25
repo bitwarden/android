@@ -11,6 +11,7 @@ using CoreGraphics;
 using Bit.App;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Controllers;
+using Bit.App.Resources;
 
 namespace Bit.iOS.Extension
 {
@@ -30,9 +31,9 @@ namespace Bit.iOS.Extension
         public SwitchTableViewCell LowercaseCell { get; set; } = new SwitchTableViewCell("a-z");
         public SwitchTableViewCell NumbersCell { get; set; } = new SwitchTableViewCell("0-9");
         public SwitchTableViewCell SpecialCell { get; set; } = new SwitchTableViewCell("!@#$%^&*");
-        public StepperTableViewCell MinNumbersCell { get; set; } = new StepperTableViewCell("Minimum Numbers", 1, 0, 5, 1);
-        public StepperTableViewCell MinSpecialCell { get; set; } = new StepperTableViewCell("Minimum Special", 1, 0, 5, 1);
-        public SliderTableViewCell LengthCell { get; set; } = new SliderTableViewCell("Length", 10, 5, 64);
+        public StepperTableViewCell MinNumbersCell { get; set; } = new StepperTableViewCell(AppResources.MinNumbers, 1, 0, 5, 1);
+        public StepperTableViewCell MinSpecialCell { get; set; } = new StepperTableViewCell(AppResources.MinSpecial, 1, 0, 5, 1);
+        public SliderTableViewCell LengthCell { get; set; } = new SliderTableViewCell(AppResources.Length, 10, 5, 64);
 
         public override void ViewWillAppear(bool animated)
         {
@@ -202,11 +203,11 @@ namespace Bit.iOS.Extension
                     cell.TextLabel.TextColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
                     if(indexPath.Row == 0)
                     {
-                        cell.TextLabel.Text = "Regenerate Password";
+                        cell.TextLabel.Text = AppResources.RegeneratePassword;
                     }
                     else if(indexPath.Row == 1)
                     {
-                        cell.TextLabel.Text = "Copy Password";
+                        cell.TextLabel.Text = AppResources.CopyPassword;
                     }
                     return cell;
                 }
@@ -290,7 +291,7 @@ namespace Bit.iOS.Extension
             {
                 if(section == 1)
                 {
-                    return "Options";
+                    return AppResources.Options;
                 }
 
                 return null;
@@ -300,7 +301,7 @@ namespace Bit.iOS.Extension
             {
                 if(section == 1)
                 {
-                    return "Option defaults are set from the main bitwarden app's password generator tool.";
+                    return AppResources.OptionDefaults;
                 }
 
                 return null;
@@ -320,7 +321,7 @@ namespace Bit.iOS.Extension
                         _controller._googleAnalyticsService.TrackExtensionEvent("CopiedGeneratedPassword");
                         UIPasteboard clipboard = UIPasteboard.General;
                         clipboard.String = _controller.PasswordLabel.Text;
-                        var alert = Dialogs.CreateMessageAlert("Copied!");
+                        var alert = Dialogs.CreateMessageAlert(AppResources.Copied);
                         _controller.PresentViewController(alert, true, () =>
                         {
                             _controller.DismissViewController(true, null);

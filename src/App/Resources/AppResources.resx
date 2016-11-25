@@ -448,6 +448,15 @@
   <data name="Continue" xml:space="preserve">
     <value>Continue</value>
   </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Copied!</value>
+  </data>
+  <data name="CopiedPassword" xml:space="preserve">
+    <value>Copied password!</value>
+  </data>
+  <data name="CopiedUsername" xml:space="preserve">
+    <value>Copied username!</value>
+  </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Create Account</value>
   </data>
@@ -491,6 +500,12 @@
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
     <value>See Supported Apps</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
     <value>Tap the bitwarden icon in the menu to launch the extension.</value>
@@ -582,6 +597,9 @@
   <data name="MoreSettings" xml:space="preserve">
     <value>More Settings</value>
   </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>You must log into the main bitwarden app before you can use the extension.</value>
+  </data>
   <data name="Never" xml:space="preserve">
     <value>Never</value>
   </data>
@@ -594,9 +612,18 @@
   <data name="NoSites" xml:space="preserve">
     <value>There are no sites in your vault.</value>
   </data>
+  <data name="NoSitesTap" xml:space="preserve">
+    <value>There are no sites in your vault for this website. Tap to add one.</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>This site does not have a username or password configured.</value>
+  </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, got it!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Options</value>

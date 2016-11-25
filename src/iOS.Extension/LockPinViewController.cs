@@ -73,7 +73,7 @@ namespace Bit.iOS.Extension
                 {
                     // TODO: keep track of invalid attempts and logout?
 
-                    var alert = Dialogs.CreateAlert(null, "Invalid PIN. Try again.", AppResources.Ok, (a) =>
+                    var alert = Dialogs.CreateAlert(null, AppResources.InvalidPIN, AppResources.Ok, (a) =>
                     {
                         PinTextField.Text = string.Empty;
                         SetLabelText();

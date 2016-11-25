@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Bit.iOS.Core;
 using MobileCoreServices;
 using Bit.iOS.Core.Controllers;
+using Bit.App.Resources;
 
 namespace Bit.iOS.Extension
 {
@@ -36,7 +37,7 @@ namespace Bit.iOS.Extension
             base.ViewDidLoad();
             if(!CanAutoFill())
             {
-                CancelBarButton.Title = "Close";
+                CancelBarButton.Title = AppResources.Close;
             }
 
             TableView.RowHeight = UITableView.AutomaticDimension;
@@ -132,7 +133,7 @@ namespace Bit.iOS.Extension
                 if(_tableItems.Count() == 0)
                 {
                     var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
-                    noDataCell.TextLabel.Text = "There are no sites in your vault for this website. Tap to add one.";
+                    noDataCell.TextLabel.Text = AppResources.NoSitesTap;
                     noDataCell.TextLabel.TextAlignment = UITextAlignment.Center;
                     noDataCell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
                     noDataCell.TextLabel.Lines = 0;
@@ -190,11 +191,11 @@ namespace Bit.iOS.Extension
                     var sheet = Dialogs.CreateActionSheet(item.Name, _controller);
                     if(!string.IsNullOrWhiteSpace(item.Username))
                     {
-                        sheet.AddAction(UIAlertAction.Create("Copy Username", UIAlertActionStyle.Default, a =>
+                        sheet.AddAction(UIAlertAction.Create(AppResources.CopyUsername, UIAlertActionStyle.Default, a =>
                         {
                             UIPasteboard clipboard = UIPasteboard.General;
                             clipboard.String = item.Username;
-                            var alert = Dialogs.CreateMessageAlert("Copied username!");
+                            var alert = Dialogs.CreateMessageAlert(AppResources.CopyUsername);
                             _controller.PresentViewController(alert, true, () =>
                             {
                                 _controller.DismissViewController(true, null);
@@ -204,11 +205,11 @@ namespace Bit.iOS.Extension
 
                     if(!string.IsNullOrWhiteSpace(item.Password))
                     {
-                        sheet.AddAction(UIAlertAction.Create("Copy Password", UIAlertActionStyle.Default, a =>
+                        sheet.AddAction(UIAlertAction.Create(AppResources.CopyPassword, UIAlertActionStyle.Default, a =>
                         {
                             UIPasteboard clipboard = UIPasteboard.General;
                             clipboard.String = item.Password;
-                            var alert = Dialogs.CreateMessageAlert("Copied password!");
+                            var alert = Dialogs.CreateMessageAlert(AppResources.CopiedPassword);
                             _controller.PresentViewController(alert, true, () =>
                             {
                                 _controller.DismissViewController(true, null);
@@ -216,12 +217,12 @@ namespace Bit.iOS.Extension
                         }));
                     }
 
-                    sheet.AddAction(UIAlertAction.Create("Cancel", UIAlertActionStyle.Cancel, null));
+                    sheet.AddAction(UIAlertAction.Create(AppResources.Cancel, UIAlertActionStyle.Cancel, null));
                     _controller.PresentViewController(sheet, true, null);
                 }
                 else
                 {
-                    var alert = Dialogs.CreateAlert(null, "This site does not have a username or password configured.", "Ok");
+                    var alert = Dialogs.CreateAlert(null, AppResources.NoUsernamePasswordConfigured, AppResources.Ok);
                     _controller.PresentViewController(alert, true, null);
                 }
             }

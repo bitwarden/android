@@ -305,6 +305,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copied!.
+        /// </summary>
+        public static string Copied {
+            get {
+                return ResourceManager.GetString("Copied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copied password!.
+        /// </summary>
+        public static string CopiedPassword {
+            get {
+                return ResourceManager.GetString("CopiedPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copied username!.
+        /// </summary>
+        public static string CopiedUsername {
+            get {
+                return ResourceManager.GetString("CopiedUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Copy {
@@ -553,6 +580,24 @@ namespace Bit.App.Resources {
         public static string ExtensionSeeApps {
             get {
                 return ResourceManager.GetString("ExtensionSeeApps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your logins are now easily accessable from Safari, Chrome, and other supported apps..
+        /// </summary>
+        public static string ExtensionSetup {
+            get {
+                return ResourceManager.GetString("ExtensionSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu)..
+        /// </summary>
+        public static string ExtensionSetup2 {
+            get {
+                return ResourceManager.GetString("ExtensionSetup2", resourceCulture);
             }
         }
         
@@ -1034,6 +1079,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must log into the main bitwarden app before you can use the extension..
+        /// </summary>
+        public static string MustLogInMainApp {
+            get {
+                return ResourceManager.GetString("MustLogInMainApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Vault.
         /// </summary>
         public static string MyVault {
@@ -1097,11 +1151,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no sites in your vault for this website. Tap to add one..
+        /// </summary>
+        public static string NoSitesTap {
+            get {
+                return ResourceManager.GetString("NoSitesTap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Notes.
         /// </summary>
         public static string Notes {
             get {
                 return ResourceManager.GetString("Notes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This site does not have a username or password configured..
+        /// </summary>
+        public static string NoUsernamePasswordConfigured {
+            get {
+                return ResourceManager.GetString("NoUsernamePasswordConfigured", resourceCulture);
             }
         }
         
@@ -1120,6 +1192,15 @@ namespace Bit.App.Resources {
         public static string OkGotIt {
             get {
                 return ResourceManager.GetString("OkGotIt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Option defaults are set from the main bitwarden app&apos;s password generator tool..
+        /// </summary>
+        public static string OptionDefaults {
+            get {
+                return ResourceManager.GetString("OptionDefaults", resourceCulture);
             }
         }
         

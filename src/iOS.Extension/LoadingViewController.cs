@@ -90,8 +90,7 @@ namespace Bit.iOS.Extension
             var authService = Resolver.Resolve<IAuthService>();
             if(!authService.IsAuthenticated)
             {
-                var alert = Dialogs.CreateAlert(null,
-                    "You must log into the main bitwarden app before you can use the extension.", AppResources.Ok, (a) =>
+                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
                 {
                     CompleteRequest(null);
                 });

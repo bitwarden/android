@@ -3,6 +3,7 @@ using Bit.iOS.Extension.Models;
 using UIKit;
 using Plugin.Settings.Abstractions;
 using Bit.iOS.Core.Controllers;
+using Bit.App.Resources;
 
 namespace Bit.iOS.Extension
 {
@@ -25,9 +26,9 @@ namespace Bit.iOS.Extension
         {
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             var descriptor = UIFontDescriptor.PreferredBody;
-            DescriptionLabel.Text = @"Your logins are now easily accessable from Safari, Chrome, and other supported apps.
+            DescriptionLabel.Text = $@"{AppResources.ExtensionSetup}
 
-In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).";
+{AppResources.ExtensionSetup2}";
             DescriptionLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
             DescriptionLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
             ActivatedLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize * 1.3f);

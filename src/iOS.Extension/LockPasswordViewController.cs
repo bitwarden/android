@@ -94,7 +94,7 @@ namespace Bit.iOS.Extension
                 // TODO: keep track of invalid attempts and logout?
 
                 var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
-                    string.Format(null, "Invalid Master Password. Try again."), AppResources.Ok, (a) =>
+                    string.Format(null, AppResources.InvalidMasterPassword), AppResources.Ok, (a) =>
                     {
 
                         MasterPasswordCell.TextField.Text = string.Empty;
