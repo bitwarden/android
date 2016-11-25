@@ -39,7 +39,7 @@ namespace Bit.App.Pages
 
             var message = new Label
             {
-                Text = "Log in or create a new account to access your secure vault.",
+                Text = AppResources.LoginOrCreateNewAccount,
                 VerticalOptions = LayoutOptions.StartAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
@@ -50,7 +50,7 @@ namespace Bit.App.Pages
 
             var createAccountButton = new ExtendedButton
             {
-                Text = "Create Account",
+                Text = AppResources.CreateAccount,
                 Command = new Command(async () => await RegisterAsync()),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
@@ -76,7 +76,7 @@ namespace Bit.App.Pages
                 Children = { logo, message, createAccountButton, loginButton }
             };
 
-            Title = "bitwarden";
+            Title = AppResources.Bitwarden;
             NavigationPage.SetHasNavigationBar(this, false);
             Content = new ScrollView { Content = buttonStackLayout };
         }
@@ -101,7 +101,7 @@ namespace Bit.App.Pages
         {
             await Navigation.PopForDeviceAsync();
             await Navigation.PushForDeviceAsync(new LoginPage(email));
-            _userDialogs.Toast("Your new account has been created! You may now log in.");
+            _userDialogs.Toast(AppResources.AccountCreated);
         }
     }
 }

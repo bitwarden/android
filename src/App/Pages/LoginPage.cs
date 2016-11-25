@@ -94,7 +94,7 @@ namespace Bit.App.Pages
 
             var forgotPasswordButton = new ExtendedButton
             {
-                Text = "Get your master password hint",
+                Text = AppResources.GetPasswordHint,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                 Margin = new Thickness(15, 0, 15, 25),
                 Command = new Command(async () => await ForgotPasswordAsync()),
@@ -114,7 +114,7 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel", () =>
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel, () =>
                 {
                     MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
                 }));
@@ -128,7 +128,7 @@ namespace Bit.App.Pages
             ToolbarItems.Add(loginToolbarItem);
             Title = AppResources.Bitwarden;
             Content = scrollView;
-            NavigationPage.SetBackButtonTitle(this, "Log In");
+            NavigationPage.SetBackButtonTitle(this, AppResources.LogIn);
         }
 
         protected override void OnAppearing()
@@ -186,7 +186,7 @@ namespace Bit.App.Pages
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 
-            _userDialogs.ShowLoading("Logging in...", MaskType.Black);
+            _userDialogs.ShowLoading(AppResources.LoggingIn, MaskType.Black);
             var response = await _authService.TokenPostAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)

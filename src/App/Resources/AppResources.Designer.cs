@@ -80,6 +80,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your new account has been created! You may now log in..
+        /// </summary>
+        public static string AccountCreated {
+            get {
+                return ResourceManager.GetString("AccountCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string Add {
@@ -287,6 +296,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Continue.
+        /// </summary>
+        public static string Continue {
+            get {
+                return ResourceManager.GetString("Continue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy.
         /// </summary>
         public static string Copy {
@@ -310,6 +328,24 @@ namespace Bit.App.Resources {
         public static string CopyUsername {
             get {
                 return ResourceManager.GetString("CopyUsername", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create Account.
+        /// </summary>
+        public static string CreateAccount {
+            get {
+                return ResourceManager.GetString("CreateAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Creating account....
+        /// </summary>
+        public static string CreatingAccount {
+            get {
+                return ResourceManager.GetString("CreatingAccount", resourceCulture);
             }
         }
         
@@ -431,11 +467,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enter your account email address to receive your master password hint..
+        /// </summary>
+        public static string EnterEmailForHint {
+            get {
+                return ResourceManager.GetString("EnterEmailForHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter your PIN code..
         /// </summary>
         public static string EnterPIN {
             get {
                 return ResourceManager.GetString("EnterPIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter your two-step verification code..
+        /// </summary>
+        public static string EnterVerificationCode {
+            get {
+                return ResourceManager.GetString("EnterVerificationCode", resourceCulture);
             }
         }
         
@@ -638,6 +692,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Get your master password hint.
+        /// </summary>
+        public static string GetPasswordHint {
+            get {
+                return ResourceManager.GetString("GetPasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go To Website.
         /// </summary>
         public static string GoToWebsite {
@@ -818,6 +881,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logging in....
+        /// </summary>
+        public static string LoggingIn {
+            get {
+                return ResourceManager.GetString("LoggingIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Log In.
         /// </summary>
         public static string LogIn {
@@ -832,6 +904,15 @@ namespace Bit.App.Resources {
         public static string LogInNoun {
             get {
                 return ResourceManager.GetString("LogInNoun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log in or create a new account to access your secure vault..
+        /// </summary>
+        public static string LoginOrCreateNewAccount {
+            get {
+                return ResourceManager.GetString("LoginOrCreateNewAccount", resourceCulture);
             }
         }
         
@@ -868,6 +949,51 @@ namespace Bit.App.Resources {
         public static string MasterPassword {
             get {
                 return ResourceManager.GetString("MasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password confirmation is not correct..
+        /// </summary>
+        public static string MasterPasswordConfirmationValMessage {
+            get {
+                return ResourceManager.GetString("MasterPasswordConfirmationValMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it..
+        /// </summary>
+        public static string MasterPasswordDescription {
+            get {
+                return ResourceManager.GetString("MasterPasswordDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master Password Hint (optional).
+        /// </summary>
+        public static string MasterPasswordHint {
+            get {
+                return ResourceManager.GetString("MasterPasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A master password hint can help you remember your password if you forget it..
+        /// </summary>
+        public static string MasterPasswordHintDescription {
+            get {
+                return ResourceManager.GetString("MasterPasswordHintDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Master password must be at least 8 characters long..
+        /// </summary>
+        public static string MasterPasswordLengthValMessage {
+            get {
+                return ResourceManager.GetString("MasterPasswordLengthValMessage", resourceCulture);
             }
         }
         
@@ -1052,6 +1178,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password Hint.
+        /// </summary>
+        public static string PasswordHint {
+            get {
+                return ResourceManager.GetString("PasswordHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We&apos;ve sent you an email with your master password hint..
+        /// </summary>
+        public static string PasswordHintAlert {
+            get {
+                return ResourceManager.GetString("PasswordHintAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to overwrite the current password?.
         /// </summary>
         public static string PasswordOverrideAlert {
@@ -1102,6 +1246,15 @@ namespace Bit.App.Resources {
         public static string RegeneratePassword {
             get {
                 return ResourceManager.GetString("RegeneratePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Re-type Master Password.
+        /// </summary>
+        public static string RetypeMasterPassword {
+            get {
+                return ResourceManager.GetString("RetypeMasterPassword", resourceCulture);
             }
         }
         
@@ -1241,6 +1394,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Submitting....
+        /// </summary>
+        public static string Submitting {
+            get {
+                return ResourceManager.GetString("Submitting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sync.
         /// </summary>
         public static string Sync {
@@ -1376,6 +1538,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validating code....
+        /// </summary>
+        public static string ValidatingCode {
+            get {
+                return ResourceManager.GetString("ValidatingCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The {0} field is required..
         /// </summary>
         public static string ValidationFieldRequired {
@@ -1390,6 +1561,15 @@ namespace Bit.App.Resources {
         public static string ValueHasBeenCopied {
             get {
                 return ResourceManager.GetString("ValueHasBeenCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification Code.
+        /// </summary>
+        public static string VerificationCode {
+            get {
+                return ResourceManager.GetString("VerificationCode", resourceCulture);
             }
         }
         

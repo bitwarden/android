@@ -394,6 +394,9 @@
   <data name="Account" xml:space="preserve">
     <value>Account</value>
   </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>Your new account has been created! You may now log in.</value>
+  </data>
   <data name="AddASite" xml:space="preserve">
     <value>Add a Site</value>
   </data>
@@ -442,6 +445,16 @@
   <data name="ComingSoon" xml:space="preserve">
     <value>Coming Soon!</value>
   </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continue</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>Create Account</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>Creating account...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
   <data name="CurrentSession" xml:space="preserve">
     <value>Current Session</value>
   </data>
@@ -450,6 +463,12 @@
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Enable Automatic Syncing</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>Enter your account email address to receive your master password hint.</value>
+  </data>
+  <data name="EnterVerificationCode" xml:space="preserve">
+    <value>Enter your two-step verification code.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Re-enable App Extension</value>
@@ -488,6 +507,9 @@
   <data name="GeneratePassword" xml:space="preserve">
     <value>Generate Password</value>
   </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>Get your master password hint</value>
+  </data>
   <data name="ImportLogins" xml:space="preserve">
     <value>Import Logins</value>
   </data>
@@ -524,8 +546,30 @@
   <data name="LockOptions" xml:space="preserve">
     <value>Lock Options</value>
   </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>Logging in...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>Log in or create a new account to access your secure vault.</value>
+  </data>
   <data name="Manage" xml:space="preserve">
     <value>Manage</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>Password confirmation is not correct.</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>Master Password Hint (optional)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>A master password hint can help you remember your password if you forget it.</value>
+  </data>
+  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
+    <value>Master password must be at least 8 characters long.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum Numbers</value>
@@ -569,6 +613,12 @@
   <data name="PasswordGeneratorDescription" xml:space="preserve">
     <value>Automatically generate strong, unique passwords for your logins.</value>
   </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>Password Hint</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>We've sent you an email with your master password hint.</value>
+  </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Are you sure you want to overwrite the current password?</value>
   </data>
@@ -587,6 +637,9 @@
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerate Password</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>Re-type Master Password</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Search vault</value>
@@ -611,6 +664,10 @@
   </data>
   <data name="SiteUpdated" xml:space="preserve">
     <value>Site updated.</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>Submitting...</value>
+    <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
     <value>Syncing...</value>
@@ -640,6 +697,13 @@
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Unlock with PIN Code</value>
+  </data>
+  <data name="ValidatingCode" xml:space="preserve">
+    <value>Validating code...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>Verification Code</value>
   </data>
   <data name="ViewSite" xml:space="preserve">
     <value>View Site</value>

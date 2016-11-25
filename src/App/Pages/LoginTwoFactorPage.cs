@@ -42,7 +42,7 @@ namespace Bit.App.Pages
                 Android: new Thickness(15, 8),
                 WinPhone: new Thickness(15, 20));
 
-            CodeCell = new FormEntryCell("Verification Code", useLabelAsPlaceholder: true,
+            CodeCell = new FormEntryCell(AppResources.VerificationCode, useLabelAsPlaceholder: true,
                 imageSource: "lock", containerPadding: padding);
 
             CodeCell.Entry.Keyboard = Keyboard.Numeric;
@@ -68,7 +68,7 @@ namespace Bit.App.Pages
 
             var codeLabel = new Label
             {
-                Text = "Enter your two-step verification code.",
+                Text = AppResources.EnterVerificationCode,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"],
@@ -89,13 +89,13 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 70;
             }
 
-            var continueToolbarItem = new ToolbarItem("Continue", null, async () =>
+            var continueToolbarItem = new ToolbarItem(AppResources.Continue, null, async () =>
             {
                 await LogIn();
             }, ToolbarItemOrder.Default, 0);
 
             ToolbarItems.Add(continueToolbarItem);
-            Title = "Verification Code";
+            Title = AppResources.VerificationCode;
             Content = scrollView;
         }
 
@@ -115,7 +115,7 @@ namespace Bit.App.Pages
             if(string.IsNullOrWhiteSpace(CodeCell.Entry.Text))
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
-                    "Verification code"), AppResources.Ok);
+                    AppResources.VerificationCode), AppResources.Ok);
                 return;
             }
 
@@ -126,7 +126,7 @@ namespace Bit.App.Pages
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 
-            _userDialogs.ShowLoading("Validating code...", MaskType.Black);
+            _userDialogs.ShowLoading(AppResources.ValidatingCode, MaskType.Black);
             var response = await _authService.TokenTwoFactorPostAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)

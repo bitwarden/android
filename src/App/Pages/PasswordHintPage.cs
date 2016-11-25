@@ -59,7 +59,7 @@ namespace Bit.App.Pages
 
             var hintLabel = new Label
             {
-                Text = "Enter your account email address to receive your master password hint.",
+                Text = AppResources.EnterEmailForHint,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"],
@@ -80,13 +80,13 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 70;
             }
 
-            var submitToolbarItem = new ToolbarItem("Submit", null, async () =>
+            var submitToolbarItem = new ToolbarItem(AppResources.Submit, null, async () =>
             {
                 await SubmitAsync();
             }, ToolbarItemOrder.Default, 0);
 
             ToolbarItems.Add(submitToolbarItem);
-            Title = "Password Hint";
+            Title = AppResources.PasswordHint;
             Content = scrollView;
         }
 
@@ -115,7 +115,7 @@ namespace Bit.App.Pages
                 Email = EmailCell.Entry.Text
             };
 
-            _userDialogs.ShowLoading("Submitting...", MaskType.Black);
+            _userDialogs.ShowLoading(AppResources.Submitting, MaskType.Black);
             var response = await _accountApiRepository.PostPasswordHintAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
@@ -125,7 +125,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                await DisplayAlert(null, "We've sent you an email with your master password hint. ", AppResources.Ok);
+                await DisplayAlert(null, AppResources.PasswordHintAlert, AppResources.Ok);
             }
 
             await Navigation.PopAsync();

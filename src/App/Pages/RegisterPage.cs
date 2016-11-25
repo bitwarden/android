@@ -45,9 +45,9 @@ namespace Bit.App.Pages
                 Android: new Thickness(15, 8),
                 WinPhone: new Thickness(15, 20));
 
-            PasswordHintCell = new FormEntryCell("Master Password Hint (optional)", useLabelAsPlaceholder: true,
+            PasswordHintCell = new FormEntryCell(AppResources.MasterPasswordHint, useLabelAsPlaceholder: true,
                 imageSource: "lightbulb", containerPadding: padding);
-            ConfirmPasswordCell = new FormEntryCell("Re-type Master Password", isPassword: true,
+            ConfirmPasswordCell = new FormEntryCell(AppResources.RetypeMasterPassword, isPassword: true,
                 nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock",
                 containerPadding: padding);
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
@@ -74,8 +74,7 @@ namespace Bit.App.Pages
 
             var passwordLabel = new Label
             {
-                Text = "The master password is the password you use to access your vault. It is very important that you do not"
-                + " forget your master password. There is no way to recover the password in the event that you forget it.",
+                Text = AppResources.MasterPasswordDescription,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"],
@@ -97,7 +96,7 @@ namespace Bit.App.Pages
 
             var hintLabel = new Label
             {
-                Text = "A master password hint can help you remember your password if you forget it.",
+                Text = AppResources.MasterPasswordHintDescription,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"],
@@ -121,7 +120,7 @@ namespace Bit.App.Pages
                 Content = layout
             };
 
-            var loginToolbarItem = new ToolbarItem("Submit", null, async () =>
+            var loginToolbarItem = new ToolbarItem(AppResources.Submit, null, async () =>
             {
                 await Register();
             }, ToolbarItemOrder.Default, 0);
@@ -130,14 +129,14 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = table2.RowHeight = table2.RowHeight = -1;
                 table.EstimatedRowHeight = table2.EstimatedRowHeight = table2.EstimatedRowHeight = 70;
-                ToolbarItems.Add(new DismissModalToolBarItem(this, "Cancel", () =>
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel, () =>
                 {
                     MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
                 }));
             }
 
             ToolbarItems.Add(loginToolbarItem);
-            Title = "Create Account";
+            Title = AppResources.CreateAccount;
             Content = scrollView;
         }
 
@@ -171,14 +170,15 @@ namespace Bit.App.Pages
 
             if(PasswordCell.Entry.Text.Length < 8)
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred,
-                    "Master password must be at least 8 characters long.", AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.MasterPasswordLengthValMessage,
+                    AppResources.Ok);
                 return;
             }
 
             if(ConfirmPasswordCell.Entry.Text != PasswordCell.Entry.Text)
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, "Password confirmation is not correct.", AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.MasterPasswordLengthValMessage,
+                    AppResources.Ok);
                 return;
             }
 
@@ -192,7 +192,7 @@ namespace Bit.App.Pages
                     ? PasswordHintCell.Entry.Text : null
             };
 
-            _userDialogs.ShowLoading("Creating account...", MaskType.Black);
+            _userDialogs.ShowLoading(AppResources.CreatingAccount, MaskType.Black);
             var response = await _accountsApiRepository.PostRegisterAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
