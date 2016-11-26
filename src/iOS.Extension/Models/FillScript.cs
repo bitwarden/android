@@ -20,6 +20,12 @@ namespace Bit.iOS.Extension.Models
             List<PageDetails.Field> passwords = new List<PageDetails.Field>();
 
             var passwordFields = pageDetails.Fields.Where(f => f.Type == "password" && f.Viewable).ToArray();
+            if(!passwordFields.Any())
+            {
+                // not able to find any viewable password fields. maybe there are some "hidden" ones?
+                passwordFields = pageDetails.Fields.Where(f => f.Type == "password").ToArray();
+            }
+
             foreach(var form in pageDetails.Forms)
             {
                 var passwordFieldsForForm = passwordFields.Where(f => f.Form == form.Key).ToArray();
@@ -32,8 +38,13 @@ namespace Bit.iOS.Extension.Models
 
                 foreach(var pf in passwordFieldsForForm)
                 {
-                    var username = pageDetails.Fields.LastOrDefault(f => f.Form == pf.Form && f.Viewable
-                        && f.ElementNumber < pf.ElementNumber && (f.Type == "text" || f.Type == "email" || f.Type == "tel"));
+                    var username = FindUsernameField(pageDetails, pf, false, true);
+                    if(username == null)
+                    {
+                        // not able to find any viewable username fields. maybe there are some "hidden" ones?
+                        username = FindUsernameField(pageDetails, pf, true, true);
+                    }
+
                     if(username != null)
                     {
                         usernames.Add(username);
@@ -51,8 +62,13 @@ namespace Bit.iOS.Extension.Models
 
                 if(!string.IsNullOrWhiteSpace(fillUsername) && pf.ElementNumber > 0)
                 {
-                    var username = pageDetails.Fields.LastOrDefault(f => f.ElementNumber < pf.ElementNumber && f.Viewable
-                        && (f.Type == "text" || f.Type == "email" || f.Type == "tel"));
+                    var username = FindUsernameField(pageDetails, pf, false, false);
+                    if(username == null)
+                    {
+                        // not able to find any viewable username fields. maybe there are some "hidden" ones?
+                        username = FindUsernameField(pageDetails, pf, true, false);
+                    }
+
                     if(username != null)
                     {
                         usernames.Add(username);
@@ -76,6 +92,16 @@ namespace Bit.iOS.Extension.Models
             {
                 AutoSubmit = new Submit { FocusOpId = passwords.First().OpId };
             }
+        }
+
+        private PageDetails.Field FindUsernameField(PageDetails pageDetails, PageDetails.Field passwordField, bool canBeHidden,
+            bool checkForm)
+        {
+            return pageDetails.Fields.LastOrDefault(f =>
+                (!checkForm || f.Form == passwordField.Form)
+                && (canBeHidden || f.Viewable)
+                && f.ElementNumber < passwordField.ElementNumber
+                && (f.Type == "text" || f.Type == "email" || f.Type == "tel"));
         }
 
         [JsonProperty(PropertyName = "script")]
