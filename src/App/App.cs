@@ -12,6 +12,8 @@ using Plugin.Connectivity.Abstractions;
 using System.Net;
 using Acr.UserDialogs;
 using XLabs.Ioc;
+using System.Reflection;
+using Bit.App.Resources;
 
 namespace Bit.App
 {
@@ -26,6 +28,7 @@ namespace Bit.App
         private readonly ISettings _settings;
         private readonly ILockService _lockService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly ILocalizeService _localizeService;
 
         public App(
             IAuthService authService,
@@ -36,7 +39,8 @@ namespace Bit.App
             IFingerprint fingerprint,
             ISettings settings,
             ILockService lockService,
-            IGoogleAnalyticsService googleAnalyticsService)
+            IGoogleAnalyticsService googleAnalyticsService,
+            ILocalizeService localizeService)
         {
             _databaseService = databaseService;
             _connectivity = connectivity;
@@ -47,7 +51,9 @@ namespace Bit.App
             _settings = settings;
             _lockService = lockService;
             _googleAnalyticsService = googleAnalyticsService;
+            _localizeService = localizeService;
 
+            SetCulture();
             SetStyles();
 
             if(authService.IsAuthenticated)
@@ -346,6 +352,25 @@ namespace Bit.App
                     new Setter { Property = SearchBar.CancelButtonColorProperty, Value = primaryColor }
                 }
             });
+        }
+
+        private void SetCulture()
+        {
+            Debug.WriteLine("====== resource debug info =========");
+            var assembly = typeof(App).GetTypeInfo().Assembly;
+            foreach(var res in assembly.GetManifestResourceNames())
+            {
+                Debug.WriteLine("found resource: " + res);
+            }
+            Debug.WriteLine("====================================");
+
+            // This lookup NOT required for Windows platforms - the Culture will be automatically set
+            if(Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
+            {
+                var ci = _localizeService.GetCurrentCultureInfo();
+                AppResources.Culture = ci;
+                _localizeService.SetLocale(ci);
+            }
         }
     }
 }

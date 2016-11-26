@@ -64,7 +64,8 @@ namespace Bit.iOS
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<ILockService>(),
-                Resolver.Resolve<IGoogleAnalyticsService>()));
+                Resolver.Resolve<IGoogleAnalyticsService>(),
+                Resolver.Resolve<ILocalizeService>()));
 
             // Appearance stuff
 
@@ -259,6 +260,8 @@ namespace Bit.iOS
                 .RegisterType<IAppInfoService, AppInfoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
+                // Repositories
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

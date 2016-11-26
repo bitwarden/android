@@ -38,6 +38,7 @@ namespace Bit.iOS.Extension
         public override void ViewDidLoad()
         {
             SetIoc();
+            SetCulture();
 
             base.ViewDidLoad();
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
@@ -276,6 +277,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
@@ -290,6 +292,14 @@ namespace Bit.iOS.Extension
             container.RegisterInstance(settings, new ContainerControlledLifetimeManager());
 
             Resolver.ResetResolver(new UnityResolver(container));
+        }
+
+        private void SetCulture()
+        {
+            var localizeService = Resolver.Resolve<ILocalizeService>();
+            var ci = localizeService.GetCurrentCultureInfo();
+            AppResources.Culture = ci;
+            localizeService.SetLocale(ci);
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> action)

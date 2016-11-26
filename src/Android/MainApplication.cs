@@ -203,6 +203,7 @@ namespace Bit.Android
                 .RegisterType<IAppInfoService, AppInfoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

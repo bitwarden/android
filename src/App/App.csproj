@@ -77,6 +77,7 @@
     <Compile Include="Enums\CipherType.cs" />
     <Compile Include="Enums\PushType.cs" />
     <Compile Include="Enums\ReturnType.cs" />
+    <Compile Include="Abstractions\Services\ILocalizeService.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
     <Compile Include="Models\Api\FolderDataModel.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
     <Compile Include="Models\Page\PinPageModel.cs" />
     <Compile Include="Models\Page\PasswordGeneratorPageModel.cs" />
+    <Compile Include="Models\PlatformCulture.cs" />
     <Compile Include="Models\PushNotification.cs" />
     <Compile Include="Models\Site.cs" />
     <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
