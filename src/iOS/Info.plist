@@ -83,5 +83,11 @@
 		<key>arm64</key>
 		<true/>
 	</dict>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>es</string>
+	</array>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>en</string>
 </dict>
 </plist>
