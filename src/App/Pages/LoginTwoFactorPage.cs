@@ -136,7 +136,7 @@ namespace Bit.App.Pages
 
             var request = new TokenTwoFactorRequest
             {
-                Code = CodeCell.Entry.Text,
+                Code = CodeCell.Entry.Text.Replace(" ", ""),
                 Provider = "Authenticator",
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
