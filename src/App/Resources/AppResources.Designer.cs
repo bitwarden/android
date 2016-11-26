@@ -980,6 +980,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lost authenticator app?.
+        /// </summary>
+        public static string Lost2FAApp {
+            get {
+                return ResourceManager.GetString("Lost2FAApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manage.
         /// </summary>
         public static string Manage {

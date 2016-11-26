@@ -741,4 +741,7 @@
   <data name="WebVaultDescription" xml:space="preserve">
     <value>Manage your logins from any web browser with the bitwarden web vault.</value>
   </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>Lost authenticator app?</value>
+  </data>
 </root>

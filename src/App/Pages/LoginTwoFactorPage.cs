@@ -75,9 +75,19 @@ namespace Bit.App.Pages
                 Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
             };
 
+            var lostAppButton = new ExtendedButton
+            {
+                Text = AppResources.Lost2FAApp,
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                Margin = new Thickness(15, 0, 15, 25),
+                Command = new Command(() => Lost2FAApp()),
+                Uppercase = false,
+                BackgroundColor = Color.Transparent
+            };
+
             var layout = new StackLayout
             {
-                Children = { table, codeLabel },
+                Children = { table, codeLabel, lostAppButton },
                 Spacing = 0
             };
 
@@ -103,6 +113,11 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             CodeCell.Entry.FocusWithDelay();
+        }
+
+        private void Lost2FAApp()
+        {
+            Device.OpenUri(new Uri("https://vault.bitwarden.com/#/recover"));
         }
 
         private async void Entry_Completed(object sender, EventArgs e)
