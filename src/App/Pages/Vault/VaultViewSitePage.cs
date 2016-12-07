@@ -15,7 +15,6 @@ namespace Bit.App.Pages
         private readonly ISiteService _siteService;
         private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
-        private readonly IDeviceInfoService _deviceInfo;
 
         public VaultViewSitePage(string siteId)
         {
@@ -23,7 +22,6 @@ namespace Bit.App.Pages
             _siteService = Resolver.Resolve<ISiteService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
-            _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
 
             Init();
         }
@@ -113,7 +111,7 @@ namespace Bit.App.Pages
                 PasswordCell.Button1.WidthRequest = 40;
                 PasswordCell.Button2.WidthRequest = 55;
                 UsernameCell.Button1.WidthRequest = 55;
-                UriCell.Button1.WidthRequest = _deviceInfo.Version < 21 ? 75 : 71;
+                UriCell.Button1.WidthRequest = 75;
             }
 
             Title = AppResources.ViewSite;
