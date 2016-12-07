@@ -109,8 +109,8 @@ namespace Bit.App.Pages
             {
                 // NOTE: This is going to cause problems with i18n strings since various languages have difference string sizes
                 PasswordCell.Button1.WidthRequest = 40;
-                PasswordCell.Button2.WidthRequest = 55;
-                UsernameCell.Button1.WidthRequest = 55;
+                PasswordCell.Button2.WidthRequest = 59;
+                UsernameCell.Button1.WidthRequest = 59;
                 UriCell.Button1.WidthRequest = 75;
             }
 

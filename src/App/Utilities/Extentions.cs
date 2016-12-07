@@ -49,26 +49,12 @@ namespace Bit.App
 
         public static async Task PushForDeviceAsync(this INavigation navigation, Page page)
         {
-            if(Device.OS == TargetPlatform.iOS)
-            {
-                await navigation.PushModalAsync(new ExtendedNavigationPage(page), true);
-            }
-            else
-            {
-                await navigation.PushAsync(page, true);
-            }
+            await navigation.PushModalAsync(new ExtendedNavigationPage(page), true);
         }
 
         public static async Task PopForDeviceAsync(this INavigation navigation)
         {
-            if(Device.OS == TargetPlatform.iOS)
-            {
-                await navigation.PopModalAsync(true);
-            }
-            else
-            {
-                await navigation.PopAsync(true);
-            }
+            await navigation.PopModalAsync(true);
         }
 
         public static void AdjustMarginsForDevice(this View view)
