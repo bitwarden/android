@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props')" />
+  <Import Project="..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.props" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Google.Analytics, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\lib\Xamarin.iOS10\Google.Analytics.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Google.iOS.Analytics.3.17.0\lib\Xamarin.iOS10\Google.Analytics.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HockeySDK, Version=1.0.6103.22142, Culture=neutral, processorArchitecture=MSIL">
@@ -50,16 +50,16 @@
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Plugin.Settings, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugins.Settings.2.1.0\lib\Xamarin.iOS10\Plugin.Settings.dll</HintPath>
+    <Reference Include="Plugin.Settings, Version=2.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugins.Settings.2.5.1.0\lib\Xamarin.iOS10\Plugin.Settings.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Plugin.Settings.Abstractions, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugins.Settings.2.1.0\lib\Xamarin.iOS10\Plugin.Settings.Abstractions.dll</HintPath>
+    <Reference Include="Plugin.Settings.Abstractions, Version=2.5.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugins.Settings.2.5.1.0\lib\Xamarin.iOS10\Plugin.Settings.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\sqlite-net-pcl.1.1.2\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+      <HintPath>..\..\packages\sqlite-net-pcl.1.2.1\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCL.batteries, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -68,6 +68,22 @@
     </Reference>
     <Reference Include="SQLitePCL.raw, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SQLitePCL.raw.0.9.3\lib\Xamarin.iOS10\SQLitePCL.raw.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.1\lib\Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.1\lib\Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.core.1.1.1\lib\Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.provider.sqlite3, Version=1.0.0.0, Culture=neutral, PublicKeyToken=62684c7b4f184e3f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.provider.sqlite3.ios_unified.1.1.1\lib\Xamarin.iOS10\SQLitePCLRaw.provider.sqlite3.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -119,10 +135,10 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.props'))" />
-    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.props'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.17.0\build\Xamarin.Google.iOS.Analytics.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Google.iOS.Analytics.3.17.0\build\Xamarin.Google.iOS.Analytics.targets'))" />
   </Target>
-  <Import Project="..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets" Condition="Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.14.0.7\build\Xamarin.Google.iOS.Analytics.targets')" />
-  <Import Project="..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.2.2-beta2\build\Xamarin.Build.Download.targets')" />
+  <Import Project="..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.targets" Condition="Exists('..\..\packages\Xamarin.Build.Download.0.3.0\build\Xamarin.Build.Download.targets')" />
+  <Import Project="..\..\packages\Xamarin.Google.iOS.Analytics.3.17.0\build\Xamarin.Google.iOS.Analytics.targets" Condition="Exists('..\..\packages\Xamarin.Google.iOS.Analytics.3.17.0\build\Xamarin.Google.iOS.Analytics.targets')" />
 </Project>

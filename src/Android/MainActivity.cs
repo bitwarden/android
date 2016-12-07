@@ -27,6 +27,9 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
+            var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
+            StrictMode.SetThreadPolicy(policy);
+
             ToolbarResource = Resource.Layout.toolbar;
             TabLayoutResource = Resource.Layout.tabs;
 

@@ -242,7 +242,7 @@ namespace Bit.App.Pages
                     {
                         Message = AppResources.PushNotificationAlert,
                         Title = AppResources.EnableAutomaticSyncing,
-                        OnOk = registerAction,
+                        OnAction = registerAction,
                         OkText = AppResources.OkGotIt
                     });
                 }

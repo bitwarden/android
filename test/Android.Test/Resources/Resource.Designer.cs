@@ -28,6 +28,10 @@ namespace Bit.Android.Test
 		{
 			global::PCLCrypto.Resource.String.ApplicationName = global::Bit.Android.Test.Resource.String.ApplicationName;
 			global::PCLCrypto.Resource.String.Hello = global::Bit.Android.Test.Resource.String.Hello;
+			global::Plugin.Fingerprint.Resource.Drawable.fingerprint_white = global::Bit.Android.Test.Resource.Drawable.fingerprint_white;
+			global::Plugin.Fingerprint.Resource.Id.fingerprint_btnCancel = global::Bit.Android.Test.Resource.Id.fingerprint_btnCancel;
+			global::Plugin.Fingerprint.Resource.Id.fingerprint_txtReason = global::Bit.Android.Test.Resource.Id.fingerprint_txtReason;
+			global::Plugin.Fingerprint.Resource.Layout.FingerprintDialog = global::Bit.Android.Test.Resource.Layout.FingerprintDialog;
 			global::Xamarin.Android.NUnitLite.Resource.Id.OptionHostName = global::Bit.Android.Test.Resource.Id.OptionHostName;
 			global::Xamarin.Android.NUnitLite.Resource.Id.OptionPort = global::Bit.Android.Test.Resource.Id.OptionPort;
 			global::Xamarin.Android.NUnitLite.Resource.Id.OptionRemoteServer = global::Bit.Android.Test.Resource.Id.OptionRemoteServer;
