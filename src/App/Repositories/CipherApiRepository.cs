@@ -79,7 +79,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<CipherResponse>>(responseContent);
                     return ApiResult<ListResponse<CipherResponse>>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch(WebException e)
                 {
                     return HandledWebException<ListResponse<CipherResponse>>();
                 }

@@ -1,0 +1,1 @@
+﻿XA_HTTP_CLIENT_HANDLER_TYPE=Xamarin.Android.Net.AndroidClientHandler
