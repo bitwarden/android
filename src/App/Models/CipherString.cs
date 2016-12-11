@@ -18,7 +18,7 @@ namespace Bit.App.Models
             EncryptedString = encryptedString;
         }
 
-        public CipherString(string initializationVector, string cipherText)
+        public CipherString(string initializationVector, string cipherText, string mac = null)
         {
             if(string.IsNullOrWhiteSpace(initializationVector))
             {
@@ -31,13 +31,32 @@ namespace Bit.App.Models
             }
 
             EncryptedString = string.Format("{0}|{1}", initializationVector, cipherText);
+
+            if(!string.IsNullOrWhiteSpace(mac))
+            {
+                EncryptedString = string.Format("{0}|{1}", EncryptedString, mac);
+            }
         }
 
         public string EncryptedString { get; private set; }
-        public string InitializationVector { get { return EncryptedString?.Split('|')[0]; } }
-        public string CipherText { get { return EncryptedString?.Split('|')[1]; } }
-        public byte[] InitializationVectorBytes { get { return Convert.FromBase64String(InitializationVector); } }
-        public byte[] CipherTextBytes { get { return Convert.FromBase64String(CipherText); } }
+        public string InitializationVector => EncryptedString?.Split('|')[0] ?? null;
+        public string CipherText => EncryptedString?.Split('|')[1] ?? null;
+        public string Mac
+        {
+            get
+            {
+                var pieces = EncryptedString?.Split('|') ?? new string[0];
+                if(pieces.Length > 2)
+                {
+                    return pieces[2];
+                }
+
+                return null;
+            }
+        }
+        public byte[] InitializationVectorBytes => Convert.FromBase64String(InitializationVector);
+        public byte[] CipherTextBytes => Convert.FromBase64String(CipherText);
+        public byte[] MacBytes => Mac == null ? null : Convert.FromBase64String(Mac);
 
         public string Decrypt()
         {

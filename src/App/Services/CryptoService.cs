@@ -106,6 +106,9 @@ namespace Bit.App.Services
             }
         }
 
+        public byte[] EncKey => Key?.Take(16).ToArray();
+        public byte[] MacKey => Key?.Skip(16).Take(16).ToArray();
+
         public CipherString Encrypt(string plaintextValue)
         {
             if(Key == null)
@@ -121,10 +124,14 @@ namespace Bit.App.Services
             var plaintextBytes = Encoding.UTF8.GetBytes(plaintextValue);
 
             var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-            var cryptoKey = provider.CreateSymmetricKey(Key);
+            // TODO: Turn on whenever ready to support encrypt-then-mac
+            var cryptoKey = provider.CreateSymmetricKey(false ? EncKey : Key);
             var iv = WinRTCrypto.CryptographicBuffer.GenerateRandom(provider.BlockLength);
             var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
-            return new CipherString(Convert.ToBase64String(iv), Convert.ToBase64String(encryptedBytes));
+            // TODO: Turn on whenever ready to support encrypt-then-mac
+            var mac = false ? ComputeMac(encryptedBytes, iv) : null;
+
+            return new CipherString(Convert.ToBase64String(iv), Convert.ToBase64String(encryptedBytes), mac);
         }
 
         public string Decrypt(CipherString encyptedValue)
@@ -141,9 +148,17 @@ namespace Bit.App.Services
                     throw new ArgumentNullException(nameof(encyptedValue));
                 }
 
+                if(encyptedValue.Mac != null)
+                {
+                    var computedMac = ComputeMac(encyptedValue.CipherTextBytes, encyptedValue.InitializationVectorBytes);
+                    if(computedMac != encyptedValue.Mac)
+                    {
+                        throw new InvalidOperationException("MAC failed.");
+                    }
+                }
 
                 var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-                var cryptoKey = provider.CreateSymmetricKey(Key);
+                var cryptoKey = provider.CreateSymmetricKey(encyptedValue.Mac != null ? MacKey : Key);
                 var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
                     encyptedValue.InitializationVectorBytes);
                 return Encoding.UTF8.GetString(decryptedBytes, 0, decryptedBytes.Length).TrimEnd('\0');
@@ -153,6 +168,30 @@ namespace Bit.App.Services
                 Debug.WriteLine("Could not decrypt '{0}'. {1}", encyptedValue, e.Message);
                 return "[error: cannot decrypt]";
             }
+        }
+
+        private string ComputeMac(byte[] ctBytes, byte[] ivBytes)
+        {
+            if(MacKey == null)
+            {
+                throw new ArgumentNullException(nameof(MacKey));
+            }
+
+            if(ctBytes == null)
+            {
+                throw new ArgumentNullException(nameof(ctBytes));
+            }
+
+            if(ivBytes == null)
+            {
+                throw new ArgumentNullException(nameof(ivBytes));
+            }
+
+            var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
+            var hasher = algorithm.CreateHash(MacKey);
+            hasher.Append(ivBytes.Concat(ctBytes).ToArray());
+            var mac = hasher.GetValueAndReset();
+            return Convert.ToBase64String(mac);
         }
 
         public byte[] MakeKeyFromPassword(string password, string salt)
