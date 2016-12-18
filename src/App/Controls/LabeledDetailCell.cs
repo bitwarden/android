@@ -19,37 +19,32 @@ namespace Bit.App.Controls
                 Style = (Style)Application.Current.Resources["text-muted"]
             };
 
-            var labelDetailStackLayout = new StackLayout
-            {
-                HorizontalOptions = LayoutOptions.StartAndExpand,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Children = { Label, Detail },
-                Padding = Device.OnPlatform(
-                    iOS: new Thickness(15, 5, 5, 5),
-                    Android: new Thickness(15, 0, 5, 5),
-                    WinPhone: new Thickness(15, 5, 5, 5)),
-                Spacing = 0
-            };
-
             Button = new ExtendedButton
             {
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                WidthRequest = 50
+                WidthRequest = 60
             };
 
-            var containerStackLayout = new StackLayout
+            var grid = new Grid
             {
-                Orientation = StackOrientation.Horizontal,
-                Children = { labelDetailStackLayout, Button }
+                ColumnSpacing = 0,
+                RowSpacing = 0,
+                Padding = new Thickness(15, 3, 0, 3)
             };
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(60, GridUnitType.Absolute) });
+            grid.Children.Add(Label, 0, 0);
+            grid.Children.Add(Detail, 0, 1);
+            grid.Children.Add(Button, 1, 0);
+            Grid.SetRowSpan(Button, 2);
 
             if(Device.OS == TargetPlatform.Android)
             {
                 Label.TextColor = Color.Black;
             }
 
-            View = containerStackLayout;
+            View = grid;
         }
 
         public Label Label { get; private set; }

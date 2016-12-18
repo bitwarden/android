@@ -473,29 +473,30 @@ namespace Bit.App.Pages
                 var image = new Image
                 {
                     Source = "folder",
-                    VerticalOptions = LayoutOptions.CenterAndExpand
+                    WidthRequest = 18,
+                    HeightRequest = 18
                 };
 
                 var label = new Label
                 {
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                    VerticalTextAlignment = TextAlignment.Center,
-                    VerticalOptions = LayoutOptions.CenterAndExpand,
                     Style = (Style)Application.Current.Resources["text-muted"]
                 };
 
                 label.SetBinding<VaultListPageModel.Folder>(Label.TextProperty, s => s.Name);
 
-                var stackLayout = new StackLayout
+                var grid = new Grid
                 {
-                    Orientation = StackOrientation.Horizontal,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                    Children = { image, label },
-                    Padding = new Thickness(16, 0, 0, 0)
+                    ColumnSpacing = 10,
+                    Padding = new Thickness(16, 8, 0, 8)
                 };
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(18, GridUnitType.Absolute) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                grid.Children.Add(image, 0, 0);
+                grid.Children.Add(label, 1, 0);
 
-                View = stackLayout;
-                Height = 40;
+                View = grid;
                 BackgroundColor = Color.FromHex("efeff4");
             }
         }
