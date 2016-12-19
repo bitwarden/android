@@ -77,7 +77,7 @@ namespace Bit.App
             }
         }
 
-        public static void AdjustPaddingForDevice(this StackLayout view)
+        public static void AdjustPaddingForDevice(this Layout view)
         {
             if(Device.OS == TargetPlatform.Android)
             {

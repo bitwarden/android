@@ -113,6 +113,11 @@ namespace Bit.App.Pages
                     Text = labelText
                 };
 
+                if(Device.OS == TargetPlatform.Android)
+                {
+                    label.TextColor = Color.Black;
+                }
+
                 var detail = new Label
                 {
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
@@ -121,41 +126,30 @@ namespace Bit.App.Pages
                     Text = detailText
                 };
 
-                if(Device.OS == TargetPlatform.Android)
-                {
-                    label.TextColor = Color.Black;
-                }
-
-                var labelDetailStackLayout = new StackLayout
-                {
-                    HorizontalOptions = LayoutOptions.StartAndExpand,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                    Children = { label, detail },
-                    Spacing = 0
-                };
-
                 var image = new Image
                 {
-                    HorizontalOptions = LayoutOptions.Start,
-                    VerticalOptions = LayoutOptions.FillAndExpand,
-                    Source = imageSource,
-                    Margin = new Thickness(0, 0, 10, 0)
+                    Source = imageSource
                 };
 
-                var containerStackLayout = new StackLayout
+                var grid = new Grid
                 {
-                    Orientation = StackOrientation.Horizontal,
-                    Children = { image, labelDetailStackLayout },
-                    Padding = Device.OnPlatform(
-                        iOS: new Thickness(15, 25),
-                        Android: new Thickness(15, 20),
-                        WinPhone: new Thickness(15, 25))
+                    ColumnSpacing = 15,
+                    RowSpacing = 0,
+                    Padding = new Thickness(15, 25)
                 };
+                grid.AdjustPaddingForDevice();
 
-                containerStackLayout.AdjustPaddingForDevice();
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(44, GridUnitType.Absolute) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+                grid.Children.Add(image, 0, 0);
+                Grid.SetRowSpan(image, 2);
+                grid.Children.Add(label, 1, 0);
+                grid.Children.Add(detail, 1, 1);
 
                 ShowDisclousure = true;
-                View = containerStackLayout;
+                View = grid;
             }
         }
     }
