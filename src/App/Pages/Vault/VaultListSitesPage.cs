@@ -26,6 +26,7 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly ISyncService _syncService;
         private readonly IPushNotification _pushNotification;
+        private readonly IDeviceInfoService _deviceInfoService;
         private readonly ISettings _settings;
         private readonly bool _favorites;
         private bool _loadExistingData;
@@ -42,6 +43,7 @@ namespace Bit.App.Pages
             _clipboardService = Resolver.Resolve<IClipboardService>();
             _syncService = Resolver.Resolve<ISyncService>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _settings = Resolver.Resolve<ISettings>();
 
             var cryptoService = Resolver.Resolve<ICryptoService>();
@@ -99,6 +101,11 @@ namespace Bit.App.Pages
             };
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
+            // Bug with searchbar on android 7, ref https://bugzilla.xamarin.com/show_bug.cgi?id=43975
+            if(Device.OS == TargetPlatform.Android && _deviceInfoService.Version >= 24)
+            {
+                Search.HeightRequest = 50;
+            }
 
             Title = _favorites ? AppResources.Favorites : AppResources.MyVault;
 
