@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.x8bit.bitwarden" android:versionName="1.1.0" android:installLocation="auto" android:versionCode="8">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.x8bit.bitwarden" android:versionName="1.2.0" android:installLocation="auto" android:versionCode="9">
 	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="23" />
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.USE_FINGERPRINT" />
