@@ -161,6 +161,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.es.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.zh.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.zh.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\AppIdService.cs" />
     <Compile Include="Abstractions\Services\ILockService.cs" />
     <Compile Include="Services\LockService.cs" />
@@ -196,6 +201,10 @@
     <EmbeddedResource Include="Resources\AppResources.es.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.es.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.zh.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.zh.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
