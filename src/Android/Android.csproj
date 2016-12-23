@@ -36,7 +36,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <AndroidLinkSkip>Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;Microsoft.Practices.Unity;SQLite-net;Xamarin.Android.Net</AndroidLinkSkip>
+    <AndroidLinkSkip>PushNotification.Plugin;PushNotification.Plugin.Abstractions;Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;Microsoft.Practices.Unity;SQLite-net;Xamarin.Android.Net</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -68,6 +68,7 @@
     <DebugSymbols>False</DebugSymbols>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <AndroidLinkSkip>PushNotification.Plugin;PushNotification.Plugin.Abstractions;Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;Microsoft.Practices.Unity;SQLite-net;Xamarin.Android.Net</AndroidLinkSkip>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Acr.Support.Android, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -321,6 +322,7 @@
     <Compile Include="Services\KeyStoreStorageService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\LogService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SqlService.cs" />
     <Compile Include="SplashActivity.cs" />

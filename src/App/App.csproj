@@ -44,6 +44,7 @@
     <Compile Include="Abstractions\Services\IAuthService.cs" />
     <Compile Include="Abstractions\Services\IClipboardService.cs" />
     <Compile Include="Abstractions\Services\IKeyDerivationService.cs" />
+    <Compile Include="Abstractions\Services\ILogService.cs" />
     <Compile Include="Abstractions\Services\IReflectionService.cs" />
     <Compile Include="Abstractions\Services\ISiteService.cs" />
     <Compile Include="Abstractions\Services\IFolderService.cs" />
@@ -228,6 +229,9 @@
     <Reference Include="Microsoft.Practices.Unity, Version=3.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Unity.3.5.1405-prerelease\lib\portable-net45+wp80+win8+wpa81+MonoAndroid10+MonoTouch10\Microsoft.Practices.Unity.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v6.0\Mono.Android.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>

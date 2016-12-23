@@ -19,6 +19,7 @@ using XLabs.Ioc;
 using XLabs.Ioc.Unity;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
+using Xamarin.Android.Net;
 
 namespace Bit.Android
 {
@@ -37,6 +38,9 @@ namespace Bit.Android
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
+            // NOTE: This is just here to stop the linker from removing AndroidClientHandler references
+            var handler = new AndroidClientHandler();
+
             if(!Resolver.IsSet)
             {
                 SetIoc();
@@ -204,6 +208,7 @@ namespace Bit.Android
                 .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

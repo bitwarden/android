@@ -261,6 +261,7 @@ namespace Bit.iOS
                 .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
