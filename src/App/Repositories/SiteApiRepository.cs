@@ -11,8 +11,10 @@ namespace Bit.App.Repositories
 {
     public class SiteApiRepository : ApiRepository<SiteRequest, SiteResponse, string>, ISiteApiRepository
     {
-        public SiteApiRepository(IConnectivity connectivity)
-            : base(connectivity)
+        public SiteApiRepository(
+            IConnectivity connectivity,
+            IHttpService httpService)
+            : base(connectivity, httpService)
         { }
 
         protected override string ApiRoute => "sites";

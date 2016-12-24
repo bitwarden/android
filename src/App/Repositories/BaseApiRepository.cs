@@ -5,17 +5,20 @@ using System.Threading.Tasks;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
+using Bit.App.Abstractions;
 
 namespace Bit.App.Repositories
 {
     public abstract class BaseApiRepository
     {
-        public BaseApiRepository(IConnectivity connectivity)
+        public BaseApiRepository(IConnectivity connectivity, IHttpService httpService)
         {
             Connectivity = connectivity;
+            HttpService = httpService;
         }
 
         protected IConnectivity Connectivity { get; private set; }
+        protected IHttpService HttpService { get; private set; }
         protected abstract string ApiRoute { get; }
 
         protected ApiResult HandledNotConnected()

@@ -215,6 +215,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="Validation, Version=2.3.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Validation.2.3.7\lib\dotnet\Validation.dll</HintPath>
       <Private>True</Private>
@@ -303,6 +304,7 @@
     <Compile Include="Controls\ExtendedButtonRenderer.cs" />
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
+    <Compile Include="CustomAndroidClientHandler.cs" />
     <Compile Include="HockeyAppCrashManagerListener.cs" />
     <Compile Include="AutofillService.cs" />
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />
@@ -311,6 +313,7 @@
     <Compile Include="Controls\ExtendedTextCellRenderer.cs" />
     <Compile Include="Controls\ExtendedPickerRenderer.cs" />
     <Compile Include="Controls\ExtendedEntryRenderer.cs" />
+    <Compile Include="Services\HttpService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />

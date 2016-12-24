@@ -10,8 +10,10 @@ namespace Bit.App.Repositories
 {
     public class AccountsApiRepository : BaseApiRepository, IAccountsApiRepository
     {
-        public AccountsApiRepository(IConnectivity connectivity)
-            : base(connectivity)
+        public AccountsApiRepository(
+            IConnectivity connectivity,
+            IHttpService httpService)
+            : base(connectivity, httpService)
         { }
 
         protected override string ApiRoute => "accounts";
@@ -23,7 +25,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
@@ -55,7 +57,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {

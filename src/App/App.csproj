@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
+    <Compile Include="Abstractions\Services\IHttpService.cs" />
     <Compile Include="Abstractions\Services\IDeviceInfoService.cs" />
     <Compile Include="Abstractions\Services\IGoogleAnalyticsService.cs" />
     <Compile Include="Abstractions\Services\IAppInfoService.cs" />

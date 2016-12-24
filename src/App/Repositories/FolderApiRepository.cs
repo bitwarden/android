@@ -12,8 +12,10 @@ namespace Bit.App.Repositories
 {
     public class FolderApiRepository : ApiRepository<FolderRequest, FolderResponse, string>, IFolderApiRepository
     {
-        public FolderApiRepository(IConnectivity connectivity)
-            : base(connectivity)
+        public FolderApiRepository(
+            IConnectivity connectivity,
+            IHttpService httpService)
+            : base(connectivity, httpService)
         { }
 
         protected override string ApiRoute => "folders";
@@ -25,7 +27,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<ListResponse<FolderResponse>>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {

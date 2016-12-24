@@ -15,8 +15,10 @@ namespace Bit.App.Repositories
         where TRequest : class
         where TResponse : class
     {
-        public ApiRepository(IConnectivity connectivity)
-            : base(connectivity)
+        public ApiRepository(
+            IConnectivity connectivity,
+            IHttpService httpService)
+            : base(connectivity, httpService)
         { }
 
         public virtual async Task<ApiResult<TResponse>> GetByIdAsync(TId id)
@@ -26,7 +28,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<TResponse>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {
@@ -60,7 +62,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<ListResponse<TResponse>>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {
@@ -94,7 +96,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<TResponse>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
@@ -128,7 +130,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<TResponse>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
@@ -162,7 +164,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {

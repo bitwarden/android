@@ -12,8 +12,10 @@ namespace Bit.App.Repositories
 {
     public class CipherApiRepository : BaseApiRepository, ICipherApiRepository
     {
-        public CipherApiRepository(IConnectivity connectivity)
-            : base(connectivity)
+        public CipherApiRepository(
+            IConnectivity connectivity,
+            IHttpService httpService)
+            : base(connectivity, httpService)
         { }
 
         protected override string ApiRoute => "ciphers";
@@ -25,7 +27,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<CipherResponse>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {
@@ -59,7 +61,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<ListResponse<CipherResponse>>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {
@@ -93,7 +95,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<CipherHistoryResponse>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {

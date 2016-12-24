@@ -11,8 +11,10 @@ namespace Bit.App.Repositories
 {
     public class AuthApiRepository : BaseApiRepository, IAuthApiRepository
     {
-        public AuthApiRepository(IConnectivity connectivity)
-            : base(connectivity)
+        public AuthApiRepository(
+            IConnectivity connectivity,
+            IHttpService httpService)
+            : base(connectivity, httpService)
         { }
 
         protected override string ApiRoute => "auth";
@@ -24,7 +26,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<TokenResponse>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
@@ -44,7 +46,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
                     return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch(WebException e)
                 {
                     return HandledWebException<TokenResponse>();
                 }
@@ -58,7 +60,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<TokenResponse>();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {

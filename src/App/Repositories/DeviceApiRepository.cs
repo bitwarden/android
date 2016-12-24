@@ -11,8 +11,10 @@ namespace Bit.App.Repositories
 {
     public class DeviceApiRepository : ApiRepository<DeviceRequest, DeviceResponse, string>, IDeviceApiRepository
     {
-        public DeviceApiRepository(IConnectivity connectivity)
-            : base(connectivity)
+        public DeviceApiRepository(
+            IConnectivity connectivity,
+            IHttpService httpService)
+            : base(connectivity, httpService)
         { }
 
         protected override string ApiRoute => "devices";
@@ -24,7 +26,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(request)
                 {
@@ -56,7 +58,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected();
             }
 
-            using(var client = new ApiHttpClient())
+            using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage
                 {

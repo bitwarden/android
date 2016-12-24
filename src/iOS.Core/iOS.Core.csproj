@@ -106,6 +106,7 @@
     <Compile Include="Services\DeviceInfoService.cs" />
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Services\CommonCryptoKeyDerivationService.cs" />
+    <Compile Include="Services\HttpService.cs" />
     <Compile Include="Services\LogService.cs" />
     <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\GoogleAnalyticsService.cs" />
