@@ -52,7 +52,7 @@ namespace Bit.App.Repositories
                 var errors = await ParseErrorsAsync(response).ConfigureAwait(false);
                 return ApiResult<T>.Failed(response.StatusCode, errors.ToArray());
             }
-            catch(JsonReaderException)
+            catch
             { }
 
             return ApiResult<T>.Failed(response.StatusCode,
@@ -66,7 +66,7 @@ namespace Bit.App.Repositories
                 var errors = await ParseErrorsAsync(response).ConfigureAwait(false);
                 return ApiResult.Failed(response.StatusCode, errors.ToArray());
             }
-            catch(JsonReaderException)
+            catch
             { }
 
             return ApiResult.Failed(response.StatusCode,
@@ -82,19 +82,26 @@ namespace Bit.App.Repositories
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                 var errorResponseModel = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
 
-                if(errorResponseModel.ValidationErrors.Count > 0)
+                if(errorResponseModel != null)
                 {
-                    foreach(var valError in errorResponseModel.ValidationErrors)
+                    if((errorResponseModel.ValidationErrors?.Count ?? 0) > 0)
                     {
-                        foreach(var errorMessage in valError.Value)
+                        foreach(var valError in errorResponseModel.ValidationErrors)
                         {
-                            errors.Add(new ApiError { Message = errorMessage });
+                            foreach(var errorMessage in valError.Value)
+                            {
+                                errors.Add(new ApiError { Message = errorMessage });
+                            }
                         }
+                    }
+                    else
+                    {
+                        errors.Add(new ApiError { Message = errorResponseModel.Message });
                     }
                 }
                 else
                 {
-                    errors.Add(new ApiError { Message = errorResponseModel.Message });
+                    errors.Add(new ApiError { Message = "An unknown error has occured." });
                 }
             }
 
