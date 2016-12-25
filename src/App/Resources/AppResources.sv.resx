@@ -128,7 +128,7 @@
     <value>Skapa mapp</value>
   </data>
   <data name="AddSite" xml:space="preserve">
-    <value>Lägg till webbplats</value>
+    <value>Lägg till inloggning</value>
     <comment>The title for the add site page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -415,7 +415,7 @@
     <value>Ditt nya konto har blivit skapat! Du kan nu logga in.</value>
   </data>
   <data name="AddASite" xml:space="preserve">
-    <value>Lägg till en webbplats</value>
+    <value>Lägg till en inloggning</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Apptillägg</value>
@@ -490,7 +490,7 @@
     <comment>Current Session</comment>
   </data>
   <data name="EditSite" xml:space="preserve">
-    <value>Ändra webbplats</value>
+    <value>Ändra inloggning</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Aktivera automatisk synkronisering</value>
@@ -529,11 +529,11 @@
     <comment>You're ready to log in!</comment>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Visa appar som stödjs</value>
+    <value>Visa appar som stöds</value>
     <comment>See Supported Apps</comment>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Dina inloggningar är nu enkelt tillgängliga från Safari, Chrome och andra appar som stödjs.</value>
+    <value>Dina inloggningar är nu enkelt tillgängliga från Safari, Chrome och andra appar som stöds.</value>
     <comment>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</comment>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
