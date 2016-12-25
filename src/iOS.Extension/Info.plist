@@ -72,6 +72,8 @@
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>es</string>
+		<string>zh-Hans</string>
+		<string>sv</string>
 	</array>
 </dict>
 </plist>
