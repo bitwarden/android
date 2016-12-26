@@ -135,12 +135,12 @@ namespace Bit.App.Pages
                 {
                     ColumnSpacing = 15,
                     RowSpacing = 0,
-                    Padding = new Thickness(15, 25)
+                    Padding = new Thickness(15, 20)
                 };
                 grid.AdjustPaddingForDevice();
 
                 grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
-                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Auto) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(44, GridUnitType.Absolute) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 grid.Children.Add(image, 0, 0);

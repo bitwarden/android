@@ -487,7 +487,8 @@ namespace Bit.App.Pages
                 var label = new Label
                 {
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                    Style = (Style)Application.Current.Resources["text-muted"]
+                    Style = (Style)Application.Current.Resources["text-muted"],
+                    VerticalTextAlignment = TextAlignment.Center
                 };
 
                 label.SetBinding<VaultListPageModel.Folder>(Label.TextProperty, s => s.Name);
