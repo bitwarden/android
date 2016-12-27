@@ -1,4 +1,4 @@
-// WARNING
+﻿// WARNING
 //
 // This file has been generated automatically by Xamarin Studio from the outlets and
 // actions declared in your storyboard file.
@@ -30,6 +30,10 @@ namespace Bit.iOS.Extension
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIImageView IconImage { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UINavigationItem NavItem { get; set; }
+
         [Action ("BackButton_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void BackButton_Activated (UIKit.UIBarButtonItem sender);
@@ -54,6 +58,11 @@ namespace Bit.iOS.Extension
             if (IconImage != null) {
                 IconImage.Dispose ();
                 IconImage = null;
+            }
+
+            if (NavItem != null) {
+                NavItem.Dispose ();
+                NavItem = null;
             }
         }
     }

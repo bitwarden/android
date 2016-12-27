@@ -41,6 +41,9 @@ namespace Bit.iOS.Extension
             _authService = Resolver.Resolve<IAuthService>();
             _cryptoService = Resolver.Resolve<ICryptoService>();
 
+            NavItem.Title = AppResources.VerifyMasterPassword;
+            CancelButton.Title = AppResources.Cancel;
+            SubmitButton.Title = AppResources.Submit;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;

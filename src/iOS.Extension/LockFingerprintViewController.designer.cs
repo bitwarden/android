@@ -1,4 +1,4 @@
-// WARNING
+﻿// WARNING
 //
 // This file has been generated automatically by Xamarin Studio from the outlets and
 // actions declared in your storyboard file.
@@ -24,15 +24,19 @@ namespace Bit.iOS.Extension
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UINavigationItem NavItem { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton UseButton { get; set; }
+
+        [Action ("CancelButton_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void CancelButton_Activated (UIKit.UIBarButtonItem sender);
 
         [Action ("FingerprintButton_TouchUpInside:")]
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void FingerprintButton_TouchUpInside (UIKit.UIButton sender);
-
-        [Action("CancelButton_Activated:")]
-        [GeneratedCode("iOS Designer", "1.0")]
-        partial void CancelButton_Activated(UIKit.UIBarButtonItem sender);
 
         void ReleaseDesignerOutlets ()
         {
@@ -44,6 +48,11 @@ namespace Bit.iOS.Extension
             if (FingerprintButton != null) {
                 FingerprintButton.Dispose ();
                 FingerprintButton = null;
+            }
+
+            if (NavItem != null) {
+                NavItem.Dispose ();
+                NavItem = null;
             }
 
             if (UseButton != null) {

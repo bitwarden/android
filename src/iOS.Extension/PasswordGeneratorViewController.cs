@@ -48,6 +48,9 @@ namespace Bit.iOS.Extension
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
+            NavItem.Title = AppResources.PasswordGenerator;
+            CancelBarButton.Title = AppResources.Cancel;
+            SelectBarButton.Title = AppResources.Select;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;

@@ -35,9 +35,14 @@ namespace Bit.iOS.Extension
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            NavItem.Title = AppResources.Sites;
             if(!CanAutoFill())
             {
                 CancelBarButton.Title = AppResources.Close;
+            }
+            else
+            {
+                CancelBarButton.Title = AppResources.Cancel;
             }
 
             TableView.RowHeight = UITableView.AutomaticDimension;

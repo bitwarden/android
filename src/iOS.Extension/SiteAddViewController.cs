@@ -54,6 +54,9 @@ namespace Bit.iOS.Extension
             _folderService = Resolver.Resolve<IFolderService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
+            NavItem.Title = AppResources.AddSite;
+            CancelBarButton.Title = AppResources.Cancel;
+            SaveBarButton.Title = AppResources.Save;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             NameCell.TextField.Text = Context?.Url?.Host ?? string.Empty;

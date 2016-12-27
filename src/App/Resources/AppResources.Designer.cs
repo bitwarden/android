@@ -530,6 +530,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension Activated!.
+        /// </summary>
+        public static string ExtensionActivated {
+            get {
+                return ResourceManager.GetString("ExtensionActivated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Almost done!.
         /// </summary>
         public static string ExtensionAlmostDone {
@@ -1462,6 +1471,15 @@ namespace Bit.App.Resources {
         public static string SiteNoName {
             get {
                 return ResourceManager.GetString("SiteNoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sites.
+        /// </summary>
+        public static string Sites {
+            get {
+                return ResourceManager.GetString("Sites", resourceCulture);
             }
         }
         

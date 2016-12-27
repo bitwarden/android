@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="64">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -130,6 +130,7 @@
                         <outlet property="SaveBarButton" destination="3748" id="name-outlet-3748"/>
                         <outlet property="CancelBarButton" destination="3747" id="name-outlet-3747"/>
                         <segue id="4805" destination="4574" kind="show" identifier="passwordGeneratorSegue"/>
+                        <outlet property="NavItem" destination="2252" id="name-outlet-2252"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2093" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -211,6 +212,7 @@
                         <textAttributes key="titleTextAttributes">
                             <color key="textColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         </textAttributes>
+                        <color key="tintColor" colorSpace="calibratedRGB" red="0" green="0.52549019607843139" blue="1" alpha="1"/>
                     </navigationBar>
                     <connections>
                         <segue destination="4576" kind="relationship" relationship="rootViewController" id="4575"/>
@@ -227,7 +229,7 @@
                         <viewControllerLayoutGuide type="top" id="4571"/>
                         <viewControllerLayoutGuide type="bottom" id="4572"/>
                     </layoutGuides>
-                    <navigationItem key="navigationItem" title="Generate Password" id="4580">
+                    <navigationItem key="navigationItem" id="4580" title="Generate Password">
                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="4807">
                             <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                             <connections>
@@ -247,6 +249,7 @@
                         <outlet property="BaseView" destination="4930" id="name-outlet-4930"/>
                         <outlet property="OptionsContainer" destination="4933" id="name-outlet-4933"/>
                         <outlet property="PasswordLabel" destination="4940" id="name-outlet-4940"/>
+                        <outlet property="NavItem" destination="4580" id="name-outlet-4580"/>
                     </connections>
                     <view contentMode="scaleToFill" id="4930" key="view">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
@@ -339,7 +342,7 @@
                                 </state>
                                 <inset key="contentEdgeInsets" minX="0.0" minY="10" maxX="0.0" maxY="10"/>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="11144" translatesAutoresizingMaskIntoConstraints="NO">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="11144" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
                                 <rect key="frame" x="254.5" y="234" width="91" height="92"/>
                                 <color key="tintColor" colorSpace="calibratedRGB" red="0.46666666666666667" green="0.46666666666666667" blue="0.46666666666666667" alpha="1"/>
                                 <state key="normal" image="fingerprint.png">
@@ -371,6 +374,7 @@
                         <outlet property="UseButton" destination="6777" id="name-outlet-6777"/>
                         <outlet property="CancelButton" destination="6800" id="name-outlet-6800"/>
                         <outlet property="FingerprintButton" destination="11144" id="name-outlet-11144"/>
+                        <outlet property="NavItem" destination="6518" id="name-outlet-6518"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6520" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -437,6 +441,7 @@
                         <outlet property="PinTextField" destination="7350" id="name-outlet-7350"/>
                         <outlet property="PinLabel" destination="7373" id="name-outlet-7373"/>
                         <outlet property="InstructionLabel" destination="10516" id="name-outlet-10516"/>
+                        <outlet property="NavItem" destination="6803" id="name-outlet-6803"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6813" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -511,6 +516,7 @@
                         <outlet property="SubmitButton" destination="8269" id="name-outlet-8269"/>
                         <outlet property="CancelButton" destination="8268" id="name-outlet-8268"/>
                         <outlet property="MainTableView" destination="7414" id="name-outlet-7414"/>
+                        <outlet property="NavItem" destination="8265" id="name-outlet-8265"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7419" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -570,6 +576,7 @@
                         <outlet property="BackButton" destination="11091" id="name-outlet-11091"/>
                         <outlet property="DescriptionLabel" destination="11093" id="name-outlet-11093"/>
                         <outlet property="IconImage" destination="11094" id="name-outlet-11094"/>
+                        <outlet property="NavItem" destination="10574" id="name-outlet-10574"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="10576" userLabel="First Responder" sceneMemberID="firstResponder"/>

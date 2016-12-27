@@ -35,11 +35,14 @@ namespace Bit.iOS.Extension
             _settings = Resolver.Resolve<ISettings>();
             _authService = Resolver.Resolve<IAuthService>();
 
+            NavItem.Title = AppResources.VerifyPIN;
+            CancelButton.Title = AppResources.Cancel;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;
             PinLabel.Font = UIFont.FromName("Courier", 35);
 
+            InstructionLabel.Text = AppResources.EnterPIN;
             InstructionLabel.LineBreakMode = UILineBreakMode.WordWrap;
             InstructionLabel.Lines = 0;
             InstructionLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize * 0.8f);

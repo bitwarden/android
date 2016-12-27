@@ -1,4 +1,4 @@
-// WARNING
+﻿// WARNING
 //
 // This file has been generated automatically by Xamarin Studio from the outlets and
 // actions declared in your storyboard file.
@@ -11,39 +11,45 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-	[Register ("SiteAddViewController")]
-	partial class SiteAddViewController
-	{
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIBarButtonItem CancelBarButton { get; set; }
+    [Register ("SiteAddViewController")]
+    partial class SiteAddViewController
+    {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem CancelBarButton { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIBarButtonItem SaveBarButton { get; set; }
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UINavigationItem NavItem { get; set; }
 
-		[Action ("CancelBarButton_Activated:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void CancelBarButton_Activated (UIBarButtonItem sender);
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem SaveBarButton { get; set; }
 
-		[Action ("SaveBarButton_Activated:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void SaveBarButton_Activated (UIBarButtonItem sender);
+        [Action ("CancelBarButton_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
 
-		void ReleaseDesignerOutlets ()
-		{
-			if (CancelBarButton != null) {
-				CancelBarButton.Dispose ();
-				CancelBarButton = null;
-			}
-			if (SaveBarButton != null) {
-				SaveBarButton.Dispose ();
-				SaveBarButton = null;
-			}
-			if (TableView != null) {
-				TableView.Dispose ();
-				TableView = null;
-			}
-		}
-	}
+        [Action ("SaveBarButton_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void SaveBarButton_Activated (UIKit.UIBarButtonItem sender);
+
+        void ReleaseDesignerOutlets ()
+        {
+            if (CancelBarButton != null) {
+                CancelBarButton.Dispose ();
+                CancelBarButton = null;
+            }
+
+            if (NavItem != null) {
+                NavItem.Dispose ();
+                NavItem = null;
+            }
+
+            if (SaveBarButton != null) {
+                SaveBarButton.Dispose ();
+                SaveBarButton = null;
+            }
+        }
+    }
 }

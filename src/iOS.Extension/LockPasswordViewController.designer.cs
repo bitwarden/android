@@ -1,4 +1,4 @@
-// WARNING
+﻿// WARNING
 //
 // This file has been generated automatically by Xamarin Studio from the outlets and
 // actions declared in your storyboard file.
@@ -24,6 +24,10 @@ namespace Bit.iOS.Extension
 
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UINavigationItem NavItem { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem SubmitButton { get; set; }
 
         [Action ("CancelButton_Activated:")]
@@ -44,6 +48,11 @@ namespace Bit.iOS.Extension
             if (MainTableView != null) {
                 MainTableView.Dispose ();
                 MainTableView = null;
+            }
+
+            if (NavItem != null) {
+                NavItem.Dispose ();
+                NavItem = null;
             }
 
             if (SubmitButton != null) {

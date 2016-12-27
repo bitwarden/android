@@ -1,4 +1,4 @@
-// WARNING
+﻿// WARNING
 //
 // This file has been generated automatically by Xamarin Studio from the outlets and
 // actions declared in your storyboard file.
@@ -11,47 +11,45 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-	[Register ("SiteListViewController")]
-	partial class SiteListViewController
-	{
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIBarButtonItem AddBarButton { get; set; }
+    [Register ("SiteListViewController")]
+    partial class SiteListViewController
+    {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem AddBarButton { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UIBarButtonItem CancelBarButton { get; set; }
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIBarButtonItem CancelBarButton { get; set; }
 
-		[Outlet]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		UINavigationItem NavItem { get; set; }
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UINavigationItem NavItem { get; set; }
 
-		[Action ("AddBarButton_Activated:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void AddBarButton_Activated (UIBarButtonItem sender);
+        [Action ("AddBarButton_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void AddBarButton_Activated (UIKit.UIBarButtonItem sender);
 
-		[Action ("CancelBarButton_Activated:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void CancelBarButton_Activated (UIBarButtonItem sender);
+        [Action ("CancelBarButton_Activated:")]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
 
-		void ReleaseDesignerOutlets ()
-		{
-			if (AddBarButton != null) {
-				AddBarButton.Dispose ();
-				AddBarButton = null;
-			}
-			if (CancelBarButton != null) {
-				CancelBarButton.Dispose ();
-				CancelBarButton = null;
-			}
-			if (NavItem != null) {
-				NavItem.Dispose ();
-				NavItem = null;
-			}
-			if (TableView != null) {
-				TableView.Dispose ();
-				TableView = null;
-			}
-		}
-	}
+        void ReleaseDesignerOutlets ()
+        {
+            if (AddBarButton != null) {
+                AddBarButton.Dispose ();
+                AddBarButton = null;
+            }
+
+            if (CancelBarButton != null) {
+                CancelBarButton.Dispose ();
+                CancelBarButton = null;
+            }
+
+            if (NavItem != null) {
+                NavItem.Dispose ();
+                NavItem = null;
+            }
+        }
+    }
 }

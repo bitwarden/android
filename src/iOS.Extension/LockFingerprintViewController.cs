@@ -34,8 +34,11 @@ namespace Bit.iOS.Extension
             _settings = Resolver.Resolve<ISettings>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
 
+            NavItem.Title = AppResources.VerifyFingerprint;
+            CancelButton.Title = AppResources.Cancel;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
+            UseButton.SetTitle(AppResources.UseFingerprintToUnlock, UIControlState.Normal);
             var descriptor = UIFontDescriptor.PreferredBody;
             UseButton.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
             UseButton.BackgroundColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);

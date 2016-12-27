@@ -744,4 +744,11 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Lost authenticator app?</value>
   </data>
+  <data name="Sites" xml:space="preserve">
+    <value>Sites</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Extension Activated!</value>
+  </data>
 </root>
