@@ -817,4 +817,11 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Förlorat autentiseringsapp?</value>
   </data>
+  <data name="Sites" xml:space="preserve">
+    <value>Inloggningar</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Tillägg aktiverat!</value>
+  </data>
 </root>
