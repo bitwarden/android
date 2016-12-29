@@ -25,7 +25,7 @@ when creating your pull request:
 6. Be sure to watch for [future changes](https://github.com/bitwarden/mobile/commits/master/src/App/Resources/AppResources.resx)
    to the `/src/App/Resources/AppResources.resx` file so that your translation will stay up to date.
 
-You can find an example of a proper translation pull request here: <https://github.com/bitwarden/mobile/pull/22>
+You can find an example of a proper translation pull request here: <https://github.com/bitwarden/mobile/pull/22/files>
 
 You can read more about localizing a Xamarin.Forms app here:
 <https://developer.xamarin.com/guides/xamarin-forms/advanced/localization/>
