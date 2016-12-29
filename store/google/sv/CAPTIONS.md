@@ -16,13 +16,13 @@ Skydda ditt valv med fingeravtryck, PIN-kod eller huvudlösenord
 
 # Screenshot 4
 
-Snabb och enkelt åtkomst när du behöver dina inloggningar och lösenord
+Snabb och enkel åtkomst när du behöver dina inloggningar och lösenord
 
 # Screenshot 5
 
 Synkronisera och kom åt ditt valv från flera olika enheter
 
-- Phone
-- Tablet
-- Desktop
-- Web
+- Telefon
+- Surfplatta
+- Dator
+- Webbläsare
