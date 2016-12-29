@@ -7,6 +7,18 @@
 
 The bitwarden mobile application is written in C# with Xamarin Android, Xamarin iOS, and Xamarin Forms.
 
+# Build/Run
+
+**Requirements**
+
+- [Visual Studio w/ Xamarin -or- Xamarin Studio](https://store.xamarin.com/)
+
+By default the app is targeting the production API. If you are running the [Core](https://github.com/bitwarden/core) API locally,
+you'll need to switch the extension to target your local API. Open `src/App/Utilities/ApiHttpClient.cs` and set `BaseAddress` to your local
+API instance (ex. `new Uri("http://localhost:4000")`).
+
+After restoring the nuget packages, you can now build and run the app.
+
 # Contribute
 
 Code contributions are welcome! Visual Studio or Xamarin Studio is required to work on this project. Please commit any pull requests against the `master` branch.
