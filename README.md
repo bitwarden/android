@@ -10,5 +10,6 @@ The bitwarden mobile application is written in C# with Xamarin Android, Xamarin 
 # Contribute
 
 Code contributions are welcome! Visual Studio or Xamarin Studio is required to work on this project. Please commit any pull requests against the `master` branch.
+Learn more about how to contribute by reading the [`CONTRIBUTING.md`](CONTRIBUTING.md) file.
 
 Security audits and feedback are welcome. Please open an issue or email us privately if the report is sensitive in nature.
