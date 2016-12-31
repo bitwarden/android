@@ -744,4 +744,10 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>认证应用已丢失？</value>
   </data>
+  <data name="Icons" xml:space="preserve">
+    <value>图标</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>译者</value>
+  </data>
 </root>

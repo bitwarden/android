@@ -824,4 +824,10 @@
   <data name="ExtensionActivated" xml:space="preserve">
     <value>Tillägg aktiverat!</value>
   </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikoner</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Översättningar</value>
+  </data>
 </root>
