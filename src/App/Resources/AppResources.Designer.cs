@@ -782,6 +782,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icons.
+        /// </summary>
+        public static string Icons {
+            get {
+                return ResourceManager.GetString("Icons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Logins.
         /// </summary>
         public static string ImportLogins {
@@ -1579,6 +1588,15 @@ namespace Bit.App.Resources {
         public static string TouchID {
             get {
                 return ResourceManager.GetString("TouchID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translations.
+        /// </summary>
+        public static string Translations {
+            get {
+                return ResourceManager.GetString("Translations", resourceCulture);
             }
         }
         
