@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Skapa mapp</value>
   </data>
-  <data name="AddSite" xml:space="preserve">
+  <data name="AddLogin" xml:space="preserve">
     <value>Lägg till inloggning</value>
-    <comment>The title for the add site page.</comment>
+    <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>Ett fel har inträffat.</value>
@@ -153,11 +153,11 @@
   </data>
   <data name="CopyPassword" xml:space="preserve">
     <value>Kopiera lösenord</value>
-    <comment>The button text that allows a user to copy the site's password to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
     <value>Kopiera användarnamn</value>
-    <comment>The button text that allows a user to copy the site's username to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
     <value>Tillskrivningar</value>
@@ -229,7 +229,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>(ingen)</value>
-    <comment>Sites that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Mappar</value>
@@ -334,13 +334,13 @@
     <value>Visa</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="SiteDeleted" xml:space="preserve">
+  <data name="LoginDeleted" xml:space="preserve">
     <value>Tog bort inloggning.</value>
-    <comment>Confirmation message after successfully deleting a site.</comment>
+    <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
-  <data name="SiteNoName" xml:space="preserve">
+  <data name="LoginNoName" xml:space="preserve">
     <value>Inget namn</value>
-    <comment>Title text to display when there is no name given for a site.</comment>
+    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Skicka</value>
@@ -414,7 +414,7 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Ditt nya konto har blivit skapat! Du kan nu logga in.</value>
   </data>
-  <data name="AddASite" xml:space="preserve">
+  <data name="AddALogin" xml:space="preserve">
     <value>Lägg till en inloggning</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
@@ -489,7 +489,7 @@
     <value>Nuvarande session</value>
     <comment>Current Session</comment>
   </data>
-  <data name="EditSite" xml:space="preserve">
+  <data name="EditLogin" xml:space="preserve">
     <value>Ändra inloggning</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
@@ -651,25 +651,25 @@
   <data name="Never" xml:space="preserve">
     <value>Aldrig</value>
   </data>
-  <data name="NewSiteCreated" xml:space="preserve">
+  <data name="NewLoginCreated" xml:space="preserve">
     <value>Ny inlogging skapad.</value>
-    <comment>New site created.</comment>
+    <comment>New login created.</comment>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Det finns inga favoriter i ditt valv.</value>
     <comment>There are no favorites in your vault.</comment>
   </data>
-  <data name="NoSites" xml:space="preserve">
+  <data name="NoLogins" xml:space="preserve">
     <value>Det finns inga inloggningar i ditt valv.</value>
-    <comment>There are no sites in your vault.</comment>
+    <comment>There are no logins in your vault.</comment>
   </data>
-  <data name="NoSitesTap" xml:space="preserve">
+  <data name="NoLoginsTap" xml:space="preserve">
     <value>Det finns inga inloggningar i ditt valv för den här webbplatsen. Tryck för att skapa en.</value>
-    <comment>There are no sites in your vault for this website. Tap to add one.</comment>
+    <comment>There are no logins in your vault for this website. Tap to add one.</comment>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Den här inloggningen har inte ett användarnamn eller lösenord inskrivet.</value>
-    <comment>This site does not have a username or password configured.</comment>
+    <comment>This login does not have a username or password configured.</comment>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, fattar!</value>
@@ -753,11 +753,11 @@
     <value>Skriv in en fyrsiffrig PIN-kod som du låser upp appen med.</value>
     <comment>Enter a 4 digit PIN code to unlock the app with.</comment>
   </data>
-  <data name="SiteInformation" xml:space="preserve">
+  <data name="LoginInformation" xml:space="preserve">
     <value>Inloggningsinformation</value>
-    <comment>Site Information</comment>
+    <comment>Login Information</comment>
   </data>
-  <data name="SiteUpdated" xml:space="preserve">
+  <data name="LoginUpdated" xml:space="preserve">
     <value>Inloggning uppdaterad.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
@@ -804,7 +804,7 @@
     <value>Verifieringskod</value>
     <comment>Verification Code</comment>
   </data>
-  <data name="ViewSite" xml:space="preserve">
+  <data name="ViewLogin" xml:space="preserve">
     <value>Visa inloggning</value>
   </data>
   <data name="WebVault" xml:space="preserve">
@@ -817,7 +817,7 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Förlorat autentiseringsapp?</value>
   </data>
-  <data name="Sites" xml:space="preserve">
+  <data name="Logins" xml:space="preserve">
     <value>Inloggningar</value>
     <comment>Screen title</comment>
   </data>

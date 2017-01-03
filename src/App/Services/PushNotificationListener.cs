@@ -74,13 +74,13 @@ namespace Bit.App.Services
                     }
                     _syncService.SyncDeleteFolderAsync(folderDeleteMessage.Id, folderDeleteMessage.RevisionDate);
                     break;
-                case Enums.PushType.SyncSiteDelete:
-                    var siteDeleteMessage = values.ToObject<SyncCipherPushNotification>();
-                    if(siteDeleteMessage.UserId != _authService.UserId)
+                case Enums.PushType.SyncLoginDelete:
+                    var loginDeleteMessage = values.ToObject<SyncCipherPushNotification>();
+                    if(loginDeleteMessage.UserId != _authService.UserId)
                     {
                         break;
                     }
-                    _syncService.SyncDeleteSiteAsync(siteDeleteMessage.Id);
+                    _syncService.SyncDeleteLoginAsync(loginDeleteMessage.Id);
                     break;
                 case Enums.PushType.SyncCiphers:
                     var cipherMessage = values.ToObject<SyncCiphersPushNotification>();

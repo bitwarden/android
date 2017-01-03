@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Ajouter dossier</value>
   </data>
-  <data name="AddSite" xml:space="preserve">
+  <data name="AddLogin" xml:space="preserve">
     <value>Ajouter site</value>
-    <comment>The title for the add site page.</comment>
+    <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>Une erreur est survenue.</value>
@@ -153,11 +153,11 @@
   </data>
   <data name="CopyPassword" xml:space="preserve">
     <value>Copier mot de passe</value>
-    <comment>The button text that allows a user to copy the site's password to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
     <value>Copier nom d'utilisateur</value>
-    <comment>The button text that allows a user to copy the site's username to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
     <value>Remerciements</value>
@@ -223,7 +223,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>(aucun)</value>
-    <comment>Sites that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Dossiers</value>
@@ -322,13 +322,13 @@
     <value>Afficher</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="SiteDeleted" xml:space="preserve">
+  <data name="LoginDeleted" xml:space="preserve">
     <value>Le site a été supprimé.</value>
-    <comment>Confirmation message after successfully deleting a site.</comment>
+    <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
-  <data name="SiteNoName" xml:space="preserve">
+  <data name="LoginNoName" xml:space="preserve">
     <value>Aucun nom</value>
-    <comment>Title text to display when there is no name given for a site.</comment>
+    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Soumettre</value>
@@ -397,7 +397,7 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Votre nouveau compte a été créé ! Vous pouvez maintenant vous identifier.</value>
   </data>
-  <data name="AddASite" xml:space="preserve">
+  <data name="AddALogin" xml:space="preserve">
     <value>Ajouter un site</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
@@ -467,7 +467,7 @@
   <data name="CurrentSession" xml:space="preserve">
     <value>Session actuelle</value>
   </data>
-  <data name="EditSite" xml:space="preserve">
+  <data name="EditLogin" xml:space="preserve">
     <value>Modifier Site</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
@@ -603,16 +603,16 @@
   <data name="Never" xml:space="preserve">
     <value>Jamais</value>
   </data>
-  <data name="NewSiteCreated" xml:space="preserve">
+  <data name="NewLoginCreated" xml:space="preserve">
     <value>Nouveau site créé.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Aucun favori dans votre coffre.</value>
   </data>
-  <data name="NoSites" xml:space="preserve">
+  <data name="NoLogins" xml:space="preserve">
     <value>Aucun site dans votre coffre.</value>
   </data>
-  <data name="NoSitesTap" xml:space="preserve">
+  <data name="NoLoginsTap" xml:space="preserve">
     <value>Aucun site dans votre coffre pour ce site web. Appuyez pour en ajouter un.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
@@ -686,10 +686,10 @@
   <data name="SetPINDirection" xml:space="preserve">
     <value>Saisissez un code PIN à 4 chiffres pour déverrouiller l'application.</value>
   </data>
-  <data name="SiteInformation" xml:space="preserve">
+  <data name="LoginInformation" xml:space="preserve">
     <value>Informations sur le site</value>
   </data>
-  <data name="SiteUpdated" xml:space="preserve">
+  <data name="LoginUpdated" xml:space="preserve">
     <value>Site mis à jour.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
@@ -732,7 +732,7 @@
   <data name="VerificationCode" xml:space="preserve">
     <value>Code de vérification</value>
   </data>
-  <data name="ViewSite" xml:space="preserve">
+  <data name="ViewLogin" xml:space="preserve">
     <value>Voir le site</value>
   </data>
   <data name="WebVault" xml:space="preserve">
@@ -744,7 +744,7 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Application d'authentification perdue ?</value>
   </data>
-  <data name="Sites" xml:space="preserve">
+  <data name="Logins" xml:space="preserve">
     <value>Sites</value>
     <comment>Screen title</comment>
   </data>

@@ -7,22 +7,23 @@ using Bit.App.Models.Data;
 
 namespace Bit.App.Repositories
 {
-    public class SiteRepository : Repository<SiteData, string>, ISiteRepository
+    public class LoginRepository : Repository<LoginData, string>, ILoginRepository
     {
-        public SiteRepository(ISqlService sqlService)
+        public LoginRepository(ISqlService sqlService)
             : base(sqlService)
         { }
 
-        public Task<IEnumerable<SiteData>> GetAllByUserIdAsync(string userId)
+        public Task<IEnumerable<LoginData>> GetAllByUserIdAsync(string userId)
         {
-            var sites = Connection.Table<SiteData>().Where(f => f.UserId == userId).Cast<SiteData>();
-            return Task.FromResult(sites);
+            var logins = Connection.Table<LoginData>().Where(f => f.UserId == userId).Cast<LoginData>();
+            return Task.FromResult(logins);
         }
 
-        public Task<IEnumerable<SiteData>> GetAllByUserIdAsync(string userId, bool favorite)
+        public Task<IEnumerable<LoginData>> GetAllByUserIdAsync(string userId, bool favorite)
         {
-            var sites = Connection.Table<SiteData>().Where(f => f.UserId == userId && f.Favorite == favorite).Cast<SiteData>();
-            return Task.FromResult(sites);
+            var logins = Connection.Table<LoginData>().Where(f => f.UserId == userId && f.Favorite == favorite)
+                .Cast<LoginData>();
+            return Task.FromResult(logins);
         }
     }
 }

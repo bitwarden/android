@@ -9,26 +9,26 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class VaultViewSitePage : ExtendedContentPage
+    public class VaultViewLoginPage : ExtendedContentPage
     {
-        private readonly string _siteId;
-        private readonly ISiteService _siteService;
+        private readonly string _loginId;
+        private readonly ILoginService _loginService;
         private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
 
-        public VaultViewSitePage(string siteId)
+        public VaultViewLoginPage(string loginId)
         {
-            _siteId = siteId;
-            _siteService = Resolver.Resolve<ISiteService>();
+            _loginId = loginId;
+            _loginService = Resolver.Resolve<ILoginService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
 
             Init();
         }
 
-        private VaultViewSitePageModel Model { get; set; } = new VaultViewSitePageModel();
+        private VaultViewLoginPageModel Model { get; set; } = new VaultViewLoginPageModel();
         private ExtendedTableView Table { get; set; }
-        private TableSection SiteInformationSection { get; set; }
+        private TableSection LoginInformationSection { get; set; }
         private TableSection NotesSection { get; set; }
         public LabeledValueCell UsernameCell { get; set; }
         public LabeledValueCell PasswordCell { get; set; }
@@ -36,7 +36,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            ToolbarItems.Add(new EditSiteToolBarItem(this, _siteId));
+            ToolbarItems.Add(new EditLoginToolBarItem(this, _loginId));
             if(Device.OS == TargetPlatform.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this));
@@ -44,20 +44,20 @@ namespace Bit.App.Pages
 
             // Name
             var nameCell = new LabeledValueCell(AppResources.Name);
-            nameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Name);
+            nameCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Name);
 
             // Username
             UsernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
-            UsernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Username);
-            UsernameCell.Value.SetBinding<VaultViewSitePageModel>(Label.FontSizeProperty, s => s.UsernameFontSize);
+            UsernameCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Username);
+            UsernameCell.Value.SetBinding<VaultViewLoginPageModel>(Label.FontSizeProperty, s => s.UsernameFontSize);
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
 
             // Password
             PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty,
                 button2Text: AppResources.Copy);
-            PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.MaskedPassword);
-            PasswordCell.Value.SetBinding<VaultViewSitePageModel>(Label.FontSizeProperty, s => s.PasswordFontSize);
-            PasswordCell.Button1.SetBinding<VaultViewSitePageModel>(Button.ImageProperty, s => s.ShowHideImage);
+            PasswordCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.MaskedPassword);
+            PasswordCell.Value.SetBinding<VaultViewLoginPageModel>(Label.FontSizeProperty, s => s.PasswordFontSize);
+            PasswordCell.Button1.SetBinding<VaultViewLoginPageModel>(Button.ImageProperty, s => s.ShowHideImage);
             if(Device.OS == TargetPlatform.iOS)
             {
                 PasswordCell.Button1.Margin = new Thickness(10, 0);
@@ -68,16 +68,16 @@ namespace Bit.App.Pages
 
             // URI
             UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
-            UriCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.UriHost);
-            UriCell.Button1.SetBinding<VaultViewSitePageModel>(IsVisibleProperty, s => s.ShowLaunch);
+            UriCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.UriHost);
+            UriCell.Button1.SetBinding<VaultViewLoginPageModel>(IsVisibleProperty, s => s.ShowLaunch);
             UriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(Model.Uri)));
 
             // Notes
             var notesCell = new LabeledValueCell();
-            notesCell.Value.SetBinding<VaultViewSitePageModel>(Label.TextProperty, s => s.Notes);
+            notesCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Notes);
             notesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
-            SiteInformationSection = new TableSection(AppResources.SiteInformation)
+            LoginInformationSection = new TableSection(AppResources.LoginInformation)
             {
                 nameCell
             };
@@ -95,7 +95,7 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 Root = new TableRoot
                 {
-                    SiteInformationSection,
+                    LoginInformationSection,
                     NotesSection
                 }
             };
@@ -114,47 +114,47 @@ namespace Bit.App.Pages
                 UriCell.Button1.WidthRequest = 75;
             }
 
-            Title = AppResources.ViewSite;
+            Title = AppResources.ViewLogin;
             Content = Table;
             BindingContext = Model;
         }
 
         protected async override void OnAppearing()
         {
-            var site = await _siteService.GetByIdAsync(_siteId);
-            if(site == null)
+            var login = await _loginService.GetByIdAsync(_loginId);
+            if(login == null)
             {
                 await Navigation.PopForDeviceAsync();
                 return;
             }
 
-            Model.Update(site);
+            Model.Update(login);
 
             if(!Model.ShowUri)
             {
-                SiteInformationSection.Remove(UriCell);
+                LoginInformationSection.Remove(UriCell);
             }
-            else if(!SiteInformationSection.Contains(UriCell))
+            else if(!LoginInformationSection.Contains(UriCell))
             {
-                SiteInformationSection.Add(UriCell);
+                LoginInformationSection.Add(UriCell);
             }
 
             if(!Model.ShowUsername)
             {
-                SiteInformationSection.Remove(UsernameCell);
+                LoginInformationSection.Remove(UsernameCell);
             }
-            else if(!SiteInformationSection.Contains(UsernameCell))
+            else if(!LoginInformationSection.Contains(UsernameCell))
             {
-                SiteInformationSection.Add(UsernameCell);
+                LoginInformationSection.Add(UsernameCell);
             }
 
             if(!Model.ShowPassword)
             {
-                SiteInformationSection.Remove(PasswordCell);
+                LoginInformationSection.Remove(PasswordCell);
             }
-            else if(!SiteInformationSection.Contains(PasswordCell))
+            else if(!LoginInformationSection.Contains(PasswordCell))
             {
-                SiteInformationSection.Add(PasswordCell);
+                LoginInformationSection.Add(PasswordCell);
             }
 
             if(!Model.ShowNotes)
@@ -175,22 +175,22 @@ namespace Bit.App.Pages
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
-        private class EditSiteToolBarItem : ToolbarItem
+        private class EditLoginToolBarItem : ToolbarItem
         {
-            private readonly VaultViewSitePage _page;
-            private readonly string _siteId;
+            private readonly VaultViewLoginPage _page;
+            private readonly string _loginId;
 
-            public EditSiteToolBarItem(VaultViewSitePage page, string siteId)
+            public EditLoginToolBarItem(VaultViewLoginPage page, string loginId)
             {
                 _page = page;
-                _siteId = siteId;
+                _loginId = loginId;
                 Text = AppResources.Edit;
                 Clicked += ClickedItem;
             }
 
             private async void ClickedItem(object sender, EventArgs e)
             {
-                var page = new VaultEditSitePage(_siteId);
+                var page = new VaultEditLoginPage(_loginId);
                 await _page.Navigation.PushForDeviceAsync(page);
             }
         }

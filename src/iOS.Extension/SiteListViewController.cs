@@ -17,9 +17,9 @@ using Bit.App.Resources;
 
 namespace Bit.iOS.Extension
 {
-    public partial class SiteListViewController : ExtendedUITableViewController
+    public partial class LoginListViewController : ExtendedUITableViewController
     {
-        public SiteListViewController(IntPtr handle) : base(handle)
+        public LoginListViewController(IntPtr handle) : base(handle)
         { }
 
         public Context Context { get; set; }
@@ -35,7 +35,7 @@ namespace Bit.iOS.Extension
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            NavItem.Title = AppResources.Sites;
+            NavItem.Title = AppResources.Logins;
             if(!CanAutoFill())
             {
                 CancelBarButton.Title = AppResources.Close;
@@ -71,7 +71,7 @@ namespace Bit.iOS.Extension
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue("siteAddSegue", this);
+            PerformSegue("loginAddSegue", this);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -79,11 +79,11 @@ namespace Bit.iOS.Extension
             var navController = segue.DestinationViewController as UINavigationController;
             if(navController != null)
             {
-                var addSiteController = navController.TopViewController as SiteAddViewController;
-                if(addSiteController != null)
+                var addLoginController = navController.TopViewController as LoginAddViewController;
+                if(addLoginController != null)
                 {
-                    addSiteController.Context = Context;
-                    addSiteController.SiteListController = this;
+                    addLoginController.Context = Context;
+                    addLoginController.LoginListController = this;
                 }
             }
         }
@@ -101,11 +101,11 @@ namespace Bit.iOS.Extension
         {
             private const string CellIdentifier = "TableCell";
 
-            private IEnumerable<SiteViewModel> _tableItems;
+            private IEnumerable<LoginViewModel> _tableItems;
             private Context _context;
-            private SiteListViewController _controller;
+            private LoginListViewController _controller;
 
-            public TableSource(SiteListViewController controller)
+            public TableSource(LoginListViewController controller)
             {
                 _context = controller.Context;
                 _controller = controller;
@@ -113,20 +113,20 @@ namespace Bit.iOS.Extension
 
             public async Task LoadItemsAsync()
             {
-                _tableItems = new List<SiteViewModel>();
+                _tableItems = new List<LoginViewModel>();
                 if(_context.DomainName != null)
                 {
-                    var siteService = Resolver.Resolve<ISiteService>();
-                    var sites = await siteService.GetAllAsync();
-                    var siteModels = sites.Select(s => new SiteViewModel(s));
-                    _tableItems = siteModels
+                    var loginService = Resolver.Resolve<ILoginService>();
+                    var logins = await loginService.GetAllAsync();
+                    var loginModels = logins.Select(s => new LoginViewModel(s));
+                    _tableItems = loginModels
                         .Where(s => s.Domain != null && s.Domain.BaseDomain == _context.DomainName.BaseDomain)
                         .OrderBy(s => s.Name).ThenBy(s => s.Username)
                         .ToList();
                 }
             }
 
-            public IEnumerable<SiteViewModel> TableItems { get; set; }
+            public IEnumerable<LoginViewModel> TableItems { get; set; }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
@@ -138,7 +138,7 @@ namespace Bit.iOS.Extension
                 if(_tableItems.Count() == 0)
                 {
                     var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
-                    noDataCell.TextLabel.Text = AppResources.NoSitesTap;
+                    noDataCell.TextLabel.Text = AppResources.NoLoginsTap;
                     noDataCell.TextLabel.TextAlignment = UITextAlignment.Center;
                     noDataCell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
                     noDataCell.TextLabel.Lines = 0;
@@ -176,7 +176,7 @@ namespace Bit.iOS.Extension
 
                 if(_tableItems.Count() == 0)
                 {
-                    _controller.PerformSegue("siteAddSegue", this);
+                    _controller.PerformSegue("loginAddSegue", this);
                     return;
                 }
 

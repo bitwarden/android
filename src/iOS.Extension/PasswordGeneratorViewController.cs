@@ -25,7 +25,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
-        public SiteAddViewController Parent { get; set; }
+        public LoginAddViewController Parent { get; set; }
         public UITableViewController OptionsTableViewController { get; set; }
         public SwitchTableViewCell UppercaseCell { get; set; } = new SwitchTableViewCell("A-Z");
         public SwitchTableViewCell LowercaseCell { get; set; } = new SwitchTableViewCell("a-z");

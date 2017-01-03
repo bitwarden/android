@@ -5,12 +5,12 @@ using Bit.App.Models.Api;
 
 namespace Bit.App.Abstractions
 {
-    public interface ISiteService
+    public interface ILoginService
     {
-        Task<Site> GetByIdAsync(string id);
-        Task<IEnumerable<Site>> GetAllAsync();
-        Task<IEnumerable<Site>> GetAllAsync(bool favorites);
-        Task<ApiResult<SiteResponse>> SaveAsync(Site site);
+        Task<Login> GetByIdAsync(string id);
+        Task<IEnumerable<Login>> GetAllAsync();
+        Task<IEnumerable<Login>> GetAllAsync(bool favorites);
+        Task<ApiResult<LoginResponse>> SaveAsync(Login login);
         Task<ApiResult> DeleteAsync(string id);
     }
 }

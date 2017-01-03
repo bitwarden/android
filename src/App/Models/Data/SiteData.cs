@@ -6,46 +6,46 @@ using Bit.App.Models.Api;
 namespace Bit.App.Models.Data
 {
     [Table("Site")]
-    public class SiteData : IDataObject<string>
+    public class LoginData : IDataObject<string>
     {
-        public SiteData()
+        public LoginData()
         { }
 
-        public SiteData(Site site, string userId)
+        public LoginData(Login login, string userId)
         {
-            Id = site.Id;
-            FolderId = site.FolderId;
+            Id = login.Id;
+            FolderId = login.FolderId;
             UserId = userId;
-            Name = site.Name?.EncryptedString;
-            Uri = site.Uri?.EncryptedString;
-            Username = site.Username?.EncryptedString;
-            Password = site.Password?.EncryptedString;
-            Notes = site.Notes?.EncryptedString;
-            Favorite = site.Favorite;
+            Name = login.Name?.EncryptedString;
+            Uri = login.Uri?.EncryptedString;
+            Username = login.Username?.EncryptedString;
+            Password = login.Password?.EncryptedString;
+            Notes = login.Notes?.EncryptedString;
+            Favorite = login.Favorite;
         }
 
-        public SiteData(SiteResponse site, string userId)
+        public LoginData(LoginResponse login, string userId)
         {
-            Id = site.Id;
-            FolderId = site.FolderId;
+            Id = login.Id;
+            FolderId = login.FolderId;
             UserId = userId;
-            Name = site.Name;
-            Uri = site.Uri;
-            Username = site.Username;
-            Password = site.Password;
-            Notes = site.Notes;
-            Favorite = site.Favorite;
-            RevisionDateTime = site.RevisionDate;
+            Name = login.Name;
+            Uri = login.Uri;
+            Username = login.Username;
+            Password = login.Password;
+            Notes = login.Notes;
+            Favorite = login.Favorite;
+            RevisionDateTime = login.RevisionDate;
         }
 
-        public SiteData(CipherResponse cipher, string userId)
+        public LoginData(CipherResponse cipher, string userId)
         {
-            if(cipher.Type != Enums.CipherType.Site)
+            if(cipher.Type != Enums.CipherType.Login)
             {
                 throw new ArgumentException(nameof(cipher.Type));
             }
 
-            var data = cipher.Data.ToObject<SiteDataModel>();
+            var data = cipher.Data.ToObject<LoginDataModel>();
 
             Id = cipher.Id;
             FolderId = cipher.FolderId;
@@ -72,9 +72,9 @@ namespace Bit.App.Models.Data
         public bool Favorite { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;
 
-        public Site ToSite()
+        public Login ToLogin()
         {
-            return new Site(this);
+            return new Login(this);
         }
     }
 }

@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>添加文件夹</value>
   </data>
-  <data name="AddSite" xml:space="preserve">
+  <data name="AddLogin" xml:space="preserve">
     <value>添加网站</value>
-    <comment>The title for the add site page.</comment>
+    <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>发生错误。</value>
@@ -153,11 +153,11 @@
   </data>
   <data name="CopyPassword" xml:space="preserve">
     <value>复制密码</value>
-    <comment>The button text that allows a user to copy the site's password to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
     <value>复制用户名</value>
-    <comment>The button text that allows a user to copy the site's username to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
     <value>Credits</value>
@@ -223,7 +223,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>(无)</value>
-    <comment>Sites that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>文件夹</value>
@@ -322,13 +322,13 @@
     <value>显示</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="SiteDeleted" xml:space="preserve">
+  <data name="LoginDeleted" xml:space="preserve">
     <value>网站已被删除。</value>
-    <comment>Confirmation message after successfully deleting a site.</comment>
+    <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
-  <data name="SiteNoName" xml:space="preserve">
+  <data name="LoginNoName" xml:space="preserve">
     <value>无名</value>
-    <comment>Title text to display when there is no name given for a site.</comment>
+    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>提交</value>
@@ -397,7 +397,7 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>已经为您创建账号！您可以登录了。</value>
   </data>
-  <data name="AddASite" xml:space="preserve">
+  <data name="AddALogin" xml:space="preserve">
     <value>添加网站</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
@@ -467,7 +467,7 @@
   <data name="CurrentSession" xml:space="preserve">
     <value>当前会话</value>
   </data>
-  <data name="EditSite" xml:space="preserve">
+  <data name="EditLogin" xml:space="preserve">
     <value>编辑网站</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
@@ -603,16 +603,16 @@
   <data name="Never" xml:space="preserve">
     <value>从不</value>
   </data>
-  <data name="NewSiteCreated" xml:space="preserve">
+  <data name="NewLoginCreated" xml:space="preserve">
     <value>以创建新网站。</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>你没有收藏任何网站。</value>
   </data>
-  <data name="NoSites" xml:space="preserve">
+  <data name="NoLogins" xml:space="preserve">
     <value>您的密码库里没有网站。</value>
   </data>
-  <data name="NoSitesTap" xml:space="preserve">
+  <data name="NoLoginsTap" xml:space="preserve">
     <value>您的密码库里没有此网站的登录信息。请添加一个。</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
@@ -686,10 +686,10 @@
   <data name="SetPINDirection" xml:space="preserve">
     <value>输入一个 4 位的 PIN 码来解锁应用。</value>
   </data>
-  <data name="SiteInformation" xml:space="preserve">
+  <data name="LoginInformation" xml:space="preserve">
     <value>网站信息</value>
   </data>
-  <data name="SiteUpdated" xml:space="preserve">
+  <data name="LoginUpdated" xml:space="preserve">
     <value>网站已更新。</value>
   </data>
   <data name="Submitting" xml:space="preserve">
@@ -732,7 +732,7 @@
   <data name="VerificationCode" xml:space="preserve">
     <value>验证码</value>
   </data>
-  <data name="ViewSite" xml:space="preserve">
+  <data name="ViewLogin" xml:space="preserve">
     <value>查看网站</value>
   </data>
   <data name="WebVault" xml:space="preserve">

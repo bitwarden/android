@@ -10,73 +10,73 @@ using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
-    public class SiteService : ISiteService
+    public class LoginService : ILoginService
     {
-        private readonly ISiteRepository _siteRepository;
+        private readonly ILoginRepository _loginRepository;
         private readonly IAuthService _authService;
-        private readonly ISiteApiRepository _siteApiRepository;
+        private readonly ILoginApiRepository _loginApiRepository;
 
-        public SiteService(
-            ISiteRepository siteRepository,
+        public LoginService(
+            ILoginRepository loginRepository,
             IAuthService authService,
-            ISiteApiRepository siteApiRepository)
+            ILoginApiRepository loginApiRepository)
         {
-            _siteRepository = siteRepository;
+            _loginRepository = loginRepository;
             _authService = authService;
-            _siteApiRepository = siteApiRepository;
+            _loginApiRepository = loginApiRepository;
         }
 
-        public async Task<Site> GetByIdAsync(string id)
+        public async Task<Login> GetByIdAsync(string id)
         {
-            var data = await _siteRepository.GetByIdAsync(id);
+            var data = await _loginRepository.GetByIdAsync(id);
             if(data == null || data.UserId != _authService.UserId)
             {
                 return null;
             }
 
-            var site = new Site(data);
-            return site;
+            var login = new Login(data);
+            return login;
         }
 
-        public async Task<IEnumerable<Site>> GetAllAsync()
+        public async Task<IEnumerable<Login>> GetAllAsync()
         {
-            var data = await _siteRepository.GetAllByUserIdAsync(_authService.UserId);
-            var sites = data.Select(f => new Site(f));
-            return sites;
+            var data = await _loginRepository.GetAllByUserIdAsync(_authService.UserId);
+            var logins = data.Select(f => new Login(f));
+            return logins;
         }
 
-        public async Task<IEnumerable<Site>> GetAllAsync(bool favorites)
+        public async Task<IEnumerable<Login>> GetAllAsync(bool favorites)
         {
-            var data = await _siteRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
-            var sites = data.Select(f => new Site(f));
-            return sites;
+            var data = await _loginRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
+            var logins = data.Select(f => new Login(f));
+            return logins;
         }
 
-        public async Task<ApiResult<SiteResponse>> SaveAsync(Site site)
+        public async Task<ApiResult<LoginResponse>> SaveAsync(Login login)
         {
-            ApiResult<SiteResponse> response = null;
-            var request = new SiteRequest(site);
+            ApiResult<LoginResponse> response = null;
+            var request = new LoginRequest(login);
 
-            if(site.Id == null)
+            if(login.Id == null)
             {
-                response = await _siteApiRepository.PostAsync(request);
+                response = await _loginApiRepository.PostAsync(request);
             }
             else
             {
-                response = await _siteApiRepository.PutAsync(site.Id, request);
+                response = await _loginApiRepository.PutAsync(login.Id, request);
             }
 
             if(response.Succeeded)
             {
-                var data = new SiteData(response.Result, _authService.UserId);
-                if(site.Id == null)
+                var data = new LoginData(response.Result, _authService.UserId);
+                if(login.Id == null)
                 {
-                    await _siteRepository.InsertAsync(data);
-                    site.Id = data.Id;
+                    await _loginRepository.InsertAsync(data);
+                    login.Id = data.Id;
                 }
                 else
                 {
-                    await _siteRepository.UpdateAsync(data);
+                    await _loginRepository.UpdateAsync(data);
                 }
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden 
@@ -90,10 +90,10 @@ namespace Bit.App.Services
 
         public async Task<ApiResult> DeleteAsync(string id)
         {
-            var response = await _siteApiRepository.DeleteAsync(id);
+            var response = await _loginApiRepository.DeleteAsync(id);
             if(response.Succeeded)
             {
-                await _siteRepository.DeleteAsync(id);
+                await _loginRepository.DeleteAsync(id);
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)

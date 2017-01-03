@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Models.Page
 {
-    public class VaultViewSitePageModel : INotifyPropertyChanged
+    public class VaultViewLoginPageModel : INotifyPropertyChanged
     {
         private string _name;
         private string _username;
@@ -15,7 +15,7 @@ namespace Bit.App.Models.Page
         private bool _revealPassword;
         private string _uriHost;
 
-        public VaultViewSitePageModel() { }
+        public VaultViewLoginPageModel() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -176,13 +176,13 @@ namespace Bit.App.Models.Page
         public string ShowHideText => RevealPassword ? AppResources.Hide : AppResources.Show;
         public ImageSource ShowHideImage => RevealPassword ? ImageSource.FromFile("eye_slash") : ImageSource.FromFile("eye");
 
-        public void Update(Site site)
+        public void Update(Login login)
         {
-            Name = site.Name?.Decrypt();
-            Username = site.Username?.Decrypt();
-            Password = site.Password?.Decrypt();
-            Uri = site.Uri?.Decrypt();
-            Notes = site.Notes?.Decrypt();
+            Name = login.Name?.Decrypt();
+            Username = login.Username?.Decrypt();
+            Password = login.Password?.Decrypt();
+            Uri = login.Uri?.Decrypt();
+            Notes = login.Notes?.Decrypt();
         }
     }
 }

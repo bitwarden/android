@@ -8,6 +8,6 @@ namespace Bit.App.Abstractions
     public interface IFolderRepository : IRepository<FolderData, string>
     {
         Task<IEnumerable<FolderData>> GetAllByUserIdAsync(string userId);
-        Task DeleteWithSiteUpdateAsync(string id, DateTime revisionDate);
+        Task DeleteWithLoginUpdateAsync(string id, DateTime revisionDate);
     }
 }

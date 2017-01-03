@@ -1,16 +1,16 @@
 ﻿namespace Bit.App.Models.Api
 {
-    public class SiteRequest
+    public class LoginRequest
     {
-        public SiteRequest(Site site)
+        public LoginRequest(Login login)
         {
-            FolderId = site.FolderId;
-            Name = site.Name?.EncryptedString;
-            Uri = site.Uri?.EncryptedString;
-            Username = site.Username?.EncryptedString;
-            Password = site.Password?.EncryptedString;
-            Notes = site.Notes?.EncryptedString;
-            Favorite = site.Favorite;
+            FolderId = login.FolderId;
+            Name = login.Name?.EncryptedString;
+            Uri = login.Uri?.EncryptedString;
+            Username = login.Username?.EncryptedString;
+            Password = login.Password?.EncryptedString;
+            Notes = login.Notes?.EncryptedString;
+            Favorite = login.Favorite;
         }
 
         public string FolderId { get; set; }

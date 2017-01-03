@@ -29,7 +29,7 @@ namespace Bit.iOS.Extension.Models
                 return _domainName;
             }
         }
-        public string SiteTitle { get; set; }
+        public string LoginTitle { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string OldPassword { get; set; }

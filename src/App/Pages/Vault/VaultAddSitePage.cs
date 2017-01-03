@@ -13,20 +13,20 @@ using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
-    public class VaultAddSitePage : ExtendedContentPage
+    public class VaultAddLoginPage : ExtendedContentPage
     {
-        private const string AddedSiteAlertKey = "addedSiteAlert";
+        private const string AddedLoginAlertKey = "addedSiteAlert";
 
-        private readonly ISiteService _siteService;
+        private readonly ILoginService _loginService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ISettings _settings;
 
-        public VaultAddSitePage()
+        public VaultAddLoginPage()
         {
-            _siteService = Resolver.Resolve<ISiteService>();
+            _loginService = Resolver.Resolve<ILoginService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
@@ -81,7 +81,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection(AppResources.SiteInformation)
+                    new TableSection(AppResources.LoginInformation)
                     {
                         nameCell,
                         uriCell,
@@ -126,7 +126,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                var site = new Site
+                var login = new Login
                 {
                     Uri = uriCell.Entry.Text?.Encrypt(),
                     Name = nameCell.Entry.Text?.Encrypt(),
@@ -138,18 +138,18 @@ namespace Bit.App.Pages
 
                 if(folderCell.Picker.SelectedIndex > 0)
                 {
-                    site.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
+                    login.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _siteService.SaveAsync(site);
+                var saveTask = await _loginService.SaveAsync(login);
 
                 _userDialogs.HideLoading();
                 if(saveTask.Succeeded)
                 {
                     await Navigation.PopForDeviceAsync();
-                    _userDialogs.Toast(AppResources.NewSiteCreated);
-                    _googleAnalyticsService.TrackAppEvent("CreatedSite");
+                    _userDialogs.Toast(AppResources.NewLoginCreated);
+                    _googleAnalyticsService.TrackAppEvent("CreatedLogin");
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
@@ -161,7 +161,7 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = AppResources.AddSite;
+            Title = AppResources.AddLogin;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
@@ -178,9 +178,9 @@ namespace Bit.App.Pages
                 AlertNoConnection();
             }
 
-            if(Device.OS == TargetPlatform.iOS && !_settings.GetValueOrDefault(AddedSiteAlertKey, false))
+            if(Device.OS == TargetPlatform.iOS && !_settings.GetValueOrDefault(AddedLoginAlertKey, false))
             {
-                _settings.AddOrUpdateValue(AddedSiteAlertKey, true);
+                _settings.AddOrUpdateValue(AddedLoginAlertKey, true);
                 DisplayAlert(AppResources.BitwardenAppExtension, AppResources.BitwardenAppExtensionAlert, AppResources.Ok);
             }
         }

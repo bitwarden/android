@@ -11,19 +11,19 @@ using XLabs.Ioc;
 
 namespace Bit.App.Pages
 {
-    public class VaultEditSitePage : ExtendedContentPage
+    public class VaultEditLoginPage : ExtendedContentPage
     {
-        private readonly string _siteId;
-        private readonly ISiteService _siteService;
+        private readonly string _loginId;
+        private readonly ILoginService _loginService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
-        public VaultEditSitePage(string siteId)
+        public VaultEditLoginPage(string loginId)
         {
-            _siteId = siteId;
-            _siteService = Resolver.Resolve<ISiteService>();
+            _loginId = loginId;
+            _loginService = Resolver.Resolve<ILoginService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
@@ -36,19 +36,19 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var site = _siteService.GetByIdAsync(_siteId).GetAwaiter().GetResult();
-            if(site == null)
+            var login = _loginService.GetByIdAsync(_loginId).GetAwaiter().GetResult();
+            if(login == null)
             {
                 // TODO: handle error. navigate back? should never happen...
                 return;
             }
 
             var notesCell = new FormEditorCell(height: 90);
-            notesCell.Editor.Text = site.Notes?.Decrypt();
+            notesCell.Editor.Text = login.Notes?.Decrypt();
 
             PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: notesCell.Editor,
                 useButton: true);
-            PasswordCell.Entry.Text = site.Password?.Decrypt();
+            PasswordCell.Entry.Text = login.Password?.Decrypt();
             PasswordCell.Button.Image = "eye";
             PasswordCell.Button.Clicked += PasswordButton_Clicked;
             PasswordCell.Entry.DisableAutocapitalize = true;
@@ -56,14 +56,14 @@ namespace Bit.App.Pages
             PasswordCell.Entry.FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             var usernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
-            usernameCell.Entry.Text = site.Username?.Decrypt();
+            usernameCell.Entry.Text = login.Username?.Decrypt();
             usernameCell.Entry.DisableAutocapitalize = true;
             usernameCell.Entry.Autocorrect = false;
 
             var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
-            uriCell.Entry.Text = site.Uri?.Decrypt();
+            uriCell.Entry.Text = login.Uri?.Decrypt();
             var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
-            nameCell.Entry.Text = site.Name?.Decrypt();
+            nameCell.Entry.Text = login.Name?.Decrypt();
 
             var generateCell = new ExtendedTextCell
             {
@@ -80,7 +80,7 @@ namespace Bit.App.Pages
             foreach(var folder in folders)
             {
                 i++;
-                if(folder.Id == site.FolderId)
+                if(folder.Id == login.FolderId)
                 {
                     selectedIndex = i;
                 }
@@ -93,7 +93,7 @@ namespace Bit.App.Pages
             var favoriteCell = new ExtendedSwitchCell
             {
                 Text = AppResources.Favorite,
-                On = site.Favorite
+                On = login.Favorite
             };
 
             var deleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
@@ -106,7 +106,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection(AppResources.SiteInformation)
+                    new TableSection(AppResources.LoginInformation)
                     {
                         nameCell,
                         uriCell,
@@ -155,32 +155,32 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                site.Uri = uriCell.Entry.Text?.Encrypt();
-                site.Name = nameCell.Entry.Text?.Encrypt();
-                site.Username = usernameCell.Entry.Text?.Encrypt();
-                site.Password = PasswordCell.Entry.Text?.Encrypt();
-                site.Notes = notesCell.Editor.Text?.Encrypt();
-                site.Favorite = favoriteCell.On;
+                login.Uri = uriCell.Entry.Text?.Encrypt();
+                login.Name = nameCell.Entry.Text?.Encrypt();
+                login.Username = usernameCell.Entry.Text?.Encrypt();
+                login.Password = PasswordCell.Entry.Text?.Encrypt();
+                login.Notes = notesCell.Editor.Text?.Encrypt();
+                login.Favorite = favoriteCell.On;
 
                 if(folderCell.Picker.SelectedIndex > 0)
                 {
-                    site.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
+                    login.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
                 }
                 else
                 {
-                    site.FolderId = null;
+                    login.FolderId = null;
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _siteService.SaveAsync(site);
+                var saveTask = await _loginService.SaveAsync(login);
 
                 _userDialogs.HideLoading();
 
                 if(saveTask.Succeeded)
                 {
                     await Navigation.PopForDeviceAsync();
-                    _userDialogs.Toast(AppResources.SiteUpdated);
-                    _googleAnalyticsService.TrackAppEvent("EditedSite");
+                    _userDialogs.Toast(AppResources.LoginUpdated);
+                    _googleAnalyticsService.TrackAppEvent("EditeLogin");
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
@@ -192,7 +192,7 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = AppResources.EditSite;
+            Title = AppResources.EditLogin;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.OS == TargetPlatform.iOS)
@@ -246,14 +246,14 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
-            var deleteTask = await _siteService.DeleteAsync(_siteId);
+            var deleteTask = await _loginService.DeleteAsync(_loginId);
             _userDialogs.HideLoading();
 
             if(deleteTask.Succeeded)
             {
                 await Navigation.PopForDeviceAsync();
-                _userDialogs.Toast(AppResources.SiteDeleted);
-                _googleAnalyticsService.TrackAppEvent("DeletedSite");
+                _userDialogs.Toast(AppResources.LoginDeleted);
+                _googleAnalyticsService.TrackAppEvent("DeletedLogin");
             }
             else if(deleteTask.Errors.Count() > 0)
             {

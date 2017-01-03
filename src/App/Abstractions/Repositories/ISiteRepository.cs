@@ -5,9 +5,9 @@ using Bit.App.Models.Data;
 
 namespace Bit.App.Abstractions
 {
-    public interface ISiteRepository : IRepository<SiteData, string>
+    public interface ILoginRepository : IRepository<LoginData, string>
     {
-        Task<IEnumerable<SiteData>> GetAllByUserIdAsync(string userId);
-        Task<IEnumerable<SiteData>> GetAllByUserIdAsync(string userId, bool favorite);
+        Task<IEnumerable<LoginData>> GetAllByUserIdAsync(string userId);
+        Task<IEnumerable<LoginData>> GetAllByUserIdAsync(string userId, bool favorite);
     }
 }

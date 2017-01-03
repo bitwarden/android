@@ -17,10 +17,10 @@ using System.Threading;
 
 namespace Bit.App.Pages
 {
-    public class VaultListSitesPage : ExtendedContentPage
+    public class VaultListLoginsPage : ExtendedContentPage
     {
         private readonly IFolderService _folderService;
-        private readonly ISiteService _siteService;
+        private readonly ILoginService _loginService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IClipboardService _clipboardService;
@@ -32,12 +32,12 @@ namespace Bit.App.Pages
         private bool _loadExistingData;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
 
-        public VaultListSitesPage(bool favorites)
+        public VaultListLoginsPage(bool favorites)
             : base(true)
         {
             _favorites = favorites;
             _folderService = Resolver.Resolve<IFolderService>();
-            _siteService = Resolver.Resolve<ISiteService>();
+            _loginService = Resolver.Resolve<ILoginService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
@@ -55,7 +55,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<VaultListPageModel.Folder> PresentationFolders { get; private set; }
             = new ExtendedObservableCollection<VaultListPageModel.Folder>();
         public ListView ListView { get; set; }
-        public VaultListPageModel.Site[] Sites { get; set; } = new VaultListPageModel.Site[] { };
+        public VaultListPageModel.Login[] Logins { get; set; } = new VaultListPageModel.Login[] { };
         public VaultListPageModel.Folder[] Folders { get; set; } = new VaultListPageModel.Folder[] { };
         public SearchBar Search { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
@@ -74,7 +74,7 @@ namespace Bit.App.Pages
 
             if(!_favorites)
             {
-                ToolbarItems.Add(new AddSiteToolBarItem(this));
+                ToolbarItems.Add(new AddLoginToolBarItem(this));
             }
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
@@ -91,7 +91,7 @@ namespace Bit.App.Pages
                 ListView.RowHeight = -1;
             }
 
-            ListView.ItemSelected += SiteSelected;
+            ListView.ItemSelected += LoginSelected;
 
             Search = new SearchBar
             {
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
 
             var noDataLabel = new Label
             {
-                Text = _favorites ? AppResources.NoFavorites : AppResources.NoSites,
+                Text = _favorites ? AppResources.NoFavorites : AppResources.NoLogins,
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"]
@@ -133,14 +133,14 @@ namespace Bit.App.Pages
 
             if(!_favorites)
             {
-                var addSiteButton = new ExtendedButton
+                var addLoginButton = new ExtendedButton
                 {
-                    Text = AppResources.AddASite,
-                    Command = new Command(() => AddSite()),
+                    Text = AppResources.AddALogin,
+                    Command = new Command(() => AddLogin()),
                     Style = (Style)Application.Current.Resources["btn-primaryAccent"]
                 };
 
-                NoDataStackLayout.Children.Add(addSiteButton);
+                NoDataStackLayout.Children.Add(addLoginButton);
             }
 
             LoadingIndicator = new ActivityIndicator
@@ -206,18 +206,18 @@ namespace Bit.App.Pages
 
             if(string.IsNullOrWhiteSpace(searchFilter))
             {
-                LoadFolders(Sites, ct);
+                LoadFolders(Logins, ct);
             }
             else
             {
                 searchFilter = searchFilter.ToLower();
-                var filteredSites = Sites
+                var filteredLogins = Logins
                     .Where(s => s.Name.ToLower().Contains(searchFilter) || s.Username.ToLower().Contains(searchFilter))
                     .TakeWhile(s => !ct.IsCancellationRequested)
                     .ToArray();
 
                 ct.ThrowIfCancellationRequested();
-                LoadFolders(filteredSites, ct);
+                LoadFolders(filteredLogins, ct);
             }
         }
 
@@ -289,19 +289,19 @@ namespace Bit.App.Pages
             Task.Run(async () =>
             {
                 var foldersTask = _folderService.GetAllAsync();
-                var sitesTask = _favorites ? _siteService.GetAllAsync(true) : _siteService.GetAllAsync();
-                await Task.WhenAll(foldersTask, sitesTask);
+                var loginsTask = _favorites ? _loginService.GetAllAsync(true) : _loginService.GetAllAsync();
+                await Task.WhenAll(foldersTask, loginsTask);
 
                 var folders = await foldersTask;
-                var sites = await sitesTask;
+                var logins = await loginsTask;
 
                 Folders = folders
                     .Select(f => new VaultListPageModel.Folder(f))
                     .OrderBy(s => s.Name)
                     .ToArray();
 
-                Sites = sites
-                    .Select(s => new VaultListPageModel.Site(s))
+                Logins = logins
+                    .Select(s => new VaultListPageModel.Login(s))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username)
                     .ToArray();
@@ -316,7 +316,7 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private void LoadFolders(VaultListPageModel.Site[] sites, CancellationToken ct)
+        private void LoadFolders(VaultListPageModel.Login[] logins, CancellationToken ct)
         {
             var folders = new List<VaultListPageModel.Folder>(Folders);
 
@@ -327,16 +327,16 @@ namespace Bit.App.Pages
                     folder.Clear();
                 }
 
-                var sitesToAdd = sites
+                var loginsToAdd = logins
                     .Where(s => s.FolderId == folder.Id)
                     .TakeWhile(s => !ct.IsCancellationRequested)
                     .ToList();
 
                 ct.ThrowIfCancellationRequested();
-                folder.AddRange(sitesToAdd);
+                folder.AddRange(loginsToAdd);
             }
 
-            var noneToAdd = sites
+            var noneToAdd = logins
                 .Where(s => s.FolderId == null)
                 .TakeWhile(s => !ct.IsCancellationRequested)
                 .ToList();
@@ -359,53 +359,53 @@ namespace Bit.App.Pages
             });
         }
 
-        private async void SiteSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void LoginSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var site = e.SelectedItem as VaultListPageModel.Site;
-            var page = new VaultViewSitePage(site.Id);
+            var login = e.SelectedItem as VaultListPageModel.Login;
+            var page = new VaultViewLoginPage(login.Id);
             await Navigation.PushForDeviceAsync(page);
         }
 
-        private async void MoreClickedAsync(VaultListPageModel.Site site)
+        private async void MoreClickedAsync(VaultListPageModel.Login login)
         {
             var buttons = new List<string> { AppResources.View, AppResources.Edit };
-            if(!string.IsNullOrWhiteSpace(site.Password.Value))
+            if(!string.IsNullOrWhiteSpace(login.Password.Value))
             {
                 buttons.Add(AppResources.CopyPassword);
             }
-            if(!string.IsNullOrWhiteSpace(site.Username))
+            if(!string.IsNullOrWhiteSpace(login.Username))
             {
                 buttons.Add(AppResources.CopyUsername);
             }
-            if(!string.IsNullOrWhiteSpace(site.Uri.Value) && (site.Uri.Value.StartsWith("http://")
-                || site.Uri.Value.StartsWith("https://")))
+            if(!string.IsNullOrWhiteSpace(login.Uri.Value) && (login.Uri.Value.StartsWith("http://")
+                || login.Uri.Value.StartsWith("https://")))
             {
                 buttons.Add(AppResources.GoToWebsite);
             }
 
-            var selection = await DisplayActionSheet(site.Name, AppResources.Cancel, null, buttons.ToArray());
+            var selection = await DisplayActionSheet(login.Name, AppResources.Cancel, null, buttons.ToArray());
 
             if(selection == AppResources.View)
             {
-                var page = new VaultViewSitePage(site.Id);
+                var page = new VaultViewLoginPage(login.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.Edit)
             {
-                var page = new VaultEditSitePage(site.Id);
+                var page = new VaultEditLoginPage(login.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.CopyPassword)
             {
-                Copy(site.Password.Value, AppResources.Password);
+                Copy(login.Password.Value, AppResources.Password);
             }
             else if(selection == AppResources.CopyUsername)
             {
-                Copy(site.Username, AppResources.Username);
+                Copy(login.Username, AppResources.Username);
             }
             else if(selection == AppResources.GoToWebsite)
             {
-                Device.OpenUri(new Uri(site.Uri.Value));
+                Device.OpenUri(new Uri(login.Uri.Value));
             }
         }
 
@@ -415,17 +415,17 @@ namespace Bit.App.Pages
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
-        private async void AddSite()
+        private async void AddLogin()
         {
-            var page = new VaultAddSitePage();
+            var page = new VaultAddLoginPage();
             await Navigation.PushForDeviceAsync(page);
         }
 
-        private class AddSiteToolBarItem : ToolbarItem
+        private class AddLoginToolBarItem : ToolbarItem
         {
-            private readonly VaultListSitesPage _page;
+            private readonly VaultListLoginsPage _page;
 
-            public AddSiteToolBarItem(VaultListSitesPage page)
+            public AddLoginToolBarItem(VaultListLoginsPage page)
             {
                 _page = page;
                 Text = AppResources.Add;
@@ -435,24 +435,24 @@ namespace Bit.App.Pages
 
             private void ClickedItem(object sender, EventArgs e)
             {
-                _page.AddSite();
+                _page.AddLogin();
             }
         }
 
         private class VaultListViewCell : LabeledDetailCell
         {
-            private VaultListSitesPage _page;
+            private VaultListLoginsPage _page;
 
-            public static readonly BindableProperty SiteParameterProperty = BindableProperty.Create(nameof(SiteParameter),
-                typeof(VaultListPageModel.Site), typeof(VaultListViewCell), null);
+            public static readonly BindableProperty LoginParameterProperty = BindableProperty.Create(nameof(LoginParameter),
+                typeof(VaultListPageModel.Login), typeof(VaultListViewCell), null);
 
-            public VaultListViewCell(VaultListSitesPage page)
+            public VaultListViewCell(VaultListLoginsPage page)
             {
                 _page = page;
 
-                SetBinding(SiteParameterProperty, new Binding("."));
-                Label.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Name);
-                Detail.SetBinding<VaultListPageModel.Site>(Label.TextProperty, s => s.Username);
+                SetBinding(LoginParameterProperty, new Binding("."));
+                Label.SetBinding<VaultListPageModel.Login>(Label.TextProperty, s => s.Name);
+                Detail.SetBinding<VaultListPageModel.Login>(Label.TextProperty, s => s.Username);
 
                 Button.Image = "more";
                 Button.Command = new Command(() => ShowMore());
@@ -461,21 +461,21 @@ namespace Bit.App.Pages
                 BackgroundColor = Color.White;
             }
 
-            public VaultListPageModel.Site SiteParameter
+            public VaultListPageModel.Login LoginParameter
             {
-                get { return GetValue(SiteParameterProperty) as VaultListPageModel.Site; }
-                set { SetValue(SiteParameterProperty, value); }
+                get { return GetValue(LoginParameterProperty) as VaultListPageModel.Login; }
+                set { SetValue(LoginParameterProperty, value); }
             }
 
             private void ShowMore()
             {
-                _page.MoreClickedAsync(SiteParameter);
+                _page.MoreClickedAsync(LoginParameter);
             }
         }
 
         private class VaultListHeaderViewCell : ExtendedViewCell
         {
-            public VaultListHeaderViewCell(VaultListSitesPage page)
+            public VaultListHeaderViewCell(VaultListLoginsPage page)
             {
                 var image = new Image
                 {

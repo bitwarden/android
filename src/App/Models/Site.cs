@@ -3,12 +3,12 @@ using Bit.App.Models.Data;
 
 namespace Bit.App.Models
 {
-    public class Site : Cipher
+    public class Login : Cipher
     {
-        public Site()
+        public Login()
         { }
 
-        public Site(SiteData data)
+        public Login(LoginData data)
         {
             Id = data.Id;
             FolderId = data.FolderId;
@@ -20,7 +20,7 @@ namespace Bit.App.Models
             Favorite = data.Favorite;
         }
 
-        public Site(SiteResponse response)
+        public Login(LoginResponse response)
         {
             Id = response.Id;
             FolderId = response.FolderId;
@@ -39,14 +39,14 @@ namespace Bit.App.Models
         public CipherString Notes { get; set; }
         public bool Favorite { get; set; }
 
-        public SiteRequest ToSiteRequest()
+        public LoginRequest ToLoginRequest()
         {
-            return new SiteRequest(this);
+            return new LoginRequest(this);
         }
 
-        public SiteData ToSiteData(string userId)
+        public LoginData ToLoginData(string userId)
         {
-            return new SiteData(this, userId);
+            return new LoginData(this, userId);
         }
     }
 }

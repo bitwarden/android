@@ -11,8 +11,8 @@ using UIKit;
 
 namespace Bit.iOS.Extension
 {
-    [Register ("SiteListViewController")]
-    partial class SiteListViewController
+    [Register ("LoginListViewController")]
+    partial class LoginListViewController
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]

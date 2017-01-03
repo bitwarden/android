@@ -9,9 +9,9 @@ using Plugin.Connectivity.Abstractions;
 
 namespace Bit.App.Repositories
 {
-    public class SiteApiRepository : ApiRepository<SiteRequest, SiteResponse, string>, ISiteApiRepository
+    public class LoginApiRepository : ApiRepository<LoginRequest, LoginResponse, string>, ILoginApiRepository
     {
-        public SiteApiRepository(
+        public LoginApiRepository(
             IConnectivity connectivity,
             IHttpService httpService)
             : base(connectivity, httpService)

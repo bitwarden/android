@@ -17,19 +17,19 @@ using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
-    public partial class SiteAddViewController : ExtendedUITableViewController
+    public partial class LoginAddViewController : ExtendedUITableViewController
     {
-        private ISiteService _siteService;
+        private ILoginService _loginService;
         private IFolderService _folderService;
         private IConnectivity _connectivity;
         private IEnumerable<Folder> _folders;
         private IGoogleAnalyticsService _googleAnalyticsService;
 
-        public SiteAddViewController(IntPtr handle) : base(handle)
+        public LoginAddViewController(IntPtr handle) : base(handle)
         { }
 
         public Context Context { get; set; }
-        public SiteListViewController SiteListController { get; set; }
+        public LoginListViewController LoginListController { get; set; }
         public LoadingViewController LoadingController { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
         public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
@@ -49,12 +49,12 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
-            _siteService = Resolver.Resolve<ISiteService>();
+            _loginService = Resolver.Resolve<ILoginService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _folderService = Resolver.Resolve<IFolderService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
-            NavItem.Title = AppResources.AddSite;
+            NavItem.Title = AppResources.AddLogin;
             CancelBarButton.Title = AppResources.Cancel;
             SaveBarButton.Title = AppResources.Save;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
@@ -121,7 +121,7 @@ namespace Bit.iOS.Extension
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
-            if(SiteListController != null)
+            if(LoginListController != null)
             {
                 DismissViewController(true, null);
             }
@@ -151,7 +151,7 @@ namespace Bit.iOS.Extension
                 return;
             }
 
-            var site = new Site
+            var login = new Login
             {
                 Uri = string.IsNullOrWhiteSpace(UriCell.TextField.Text) ? null : UriCell.TextField.Text.Encrypt(),
                 Name = string.IsNullOrWhiteSpace(NameCell.TextField.Text) ? null : NameCell.TextField.Text.Encrypt(),
@@ -162,17 +162,17 @@ namespace Bit.iOS.Extension
                 FolderId = FolderCell.SelectedIndex == 0 ? null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id
             };
 
-            var saveTask = _siteService.SaveAsync(site);
+            var saveTask = _loginService.SaveAsync(login);
             var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
             PresentViewController(loadingAlert, true, null);
             await saveTask;
 
             if(saveTask.Result.Succeeded)
             {
-                _googleAnalyticsService.TrackExtensionEvent("CreatedSite");
-                if(SiteListController != null)
+                _googleAnalyticsService.TrackExtensionEvent("CreatedLogin");
+                if(LoginListController != null)
                 {
-                    SiteListController.DismissModal();
+                    LoginListController.DismissModal();
                 }
                 else if(LoadingController != null)
                 {
@@ -216,9 +216,9 @@ namespace Bit.iOS.Extension
 
         public class TableSource : UITableViewSource
         {
-            private SiteAddViewController _controller;
+            private LoginAddViewController _controller;
 
-            public TableSource(SiteAddViewController controller)
+            public TableSource(LoginAddViewController controller)
             {
                 _controller = controller;
             }
@@ -302,7 +302,7 @@ namespace Bit.iOS.Extension
             {
                 if(section == 0)
                 {
-                    return AppResources.SiteInformation;
+                    return AppResources.LoginInformation;
                 }
                 else if(section == 2)
                 {

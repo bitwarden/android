@@ -5,19 +5,19 @@ using Bit.App.Models;
 
 namespace Bit.iOS.Extension.Models
 {
-    public class SiteViewModel
+    public class LoginViewModel
     {
         private string _uri;
         private DomainName _domain = null;
         private bool _domainParsed = false;
 
-        public SiteViewModel(Site site)
+        public LoginViewModel(Login login)
         {
-            Id = site.Id;
-            Name = site.Name?.Decrypt();
-            Username = site.Username?.Decrypt();
-            Password = site.Password?.Decrypt();
-            Uri = site.Uri?.Decrypt();
+            Id = login.Id;
+            Name = login.Name?.Decrypt();
+            Username = login.Username?.Decrypt();
+            Password = login.Password?.Decrypt();
+            Uri = login.Uri?.Decrypt();
         }
 
         public string Id { get; set; }

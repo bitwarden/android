@@ -2,7 +2,7 @@
 
 namespace Bit.App.Models.Api
 {
-    public class SiteResponse
+    public class LoginResponse
     {
         public string Id { get; set; }
         public string FolderId { get; set; }

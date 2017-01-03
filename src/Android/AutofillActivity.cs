@@ -33,7 +33,7 @@ namespace Bit.Android
 
             try
             {
-                // TODO: lookup site
+                // TODO: lookup login
                 LastReceivedCredentials = new Credentials { User = "username", Password = "12345678", Url = _lastQueriedUrl };
             }
             catch(Exception e)

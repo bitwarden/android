@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Add Folder</value>
   </data>
-  <data name="AddSite" xml:space="preserve">
-    <value>Add Site</value>
-    <comment>The title for the add site page.</comment>
+  <data name="AddLogin" xml:space="preserve">
+    <value>Add Login</value>
+    <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>An error has occurred.</value>
@@ -153,11 +153,11 @@
   </data>
   <data name="CopyPassword" xml:space="preserve">
     <value>Copy Password</value>
-    <comment>The button text that allows a user to copy the site's password to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
     <value>Copy Username</value>
-    <comment>The button text that allows a user to copy the site's username to their clipboard.</comment>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
     <value>Credits</value>
@@ -223,7 +223,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>(none)</value>
-    <comment>Sites that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Folders</value>
@@ -322,13 +322,13 @@
     <value>Show</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="SiteDeleted" xml:space="preserve">
-    <value>Site has been deleted.</value>
-    <comment>Confirmation message after successfully deleting a site.</comment>
+  <data name="LoginDeleted" xml:space="preserve">
+    <value>Login has been deleted.</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
-  <data name="SiteNoName" xml:space="preserve">
+  <data name="LoginNoName" xml:space="preserve">
     <value>No Name</value>
-    <comment>Title text to display when there is no name given for a site.</comment>
+    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Submit</value>
@@ -397,8 +397,8 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Your new account has been created! You may now log in.</value>
   </data>
-  <data name="AddASite" xml:space="preserve">
-    <value>Add a Site</value>
+  <data name="AddALogin" xml:space="preserve">
+    <value>Add a Login</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App Extension</value>
@@ -416,7 +416,7 @@
     <value>bitwarden App Extension</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>The easiest way to add new sites to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
+    <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
@@ -467,8 +467,8 @@
   <data name="CurrentSession" xml:space="preserve">
     <value>Current Session</value>
   </data>
-  <data name="EditSite" xml:space="preserve">
-    <value>Edit Site</value>
+  <data name="EditLogin" xml:space="preserve">
+    <value>Edit Login</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Enable Automatic Syncing</value>
@@ -603,20 +603,20 @@
   <data name="Never" xml:space="preserve">
     <value>Never</value>
   </data>
-  <data name="NewSiteCreated" xml:space="preserve">
-    <value>New site created.</value>
+  <data name="NewLoginCreated" xml:space="preserve">
+    <value>New login created.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>There are no favorites in your vault.</value>
   </data>
-  <data name="NoSites" xml:space="preserve">
-    <value>There are no sites in your vault.</value>
+  <data name="NoLogins" xml:space="preserve">
+    <value>There are no logins in your vault.</value>
   </data>
-  <data name="NoSitesTap" xml:space="preserve">
-    <value>There are no sites in your vault for this website. Tap to add one.</value>
+  <data name="NoLoginsTap" xml:space="preserve">
+    <value>There are no logins in your vault for this website. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This site does not have a username or password configured.</value>
+    <value>This login does not have a username or password configured.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, got it!</value>
@@ -686,11 +686,11 @@
   <data name="SetPINDirection" xml:space="preserve">
     <value>Enter a 4 digit PIN code to unlock the app with.</value>
   </data>
-  <data name="SiteInformation" xml:space="preserve">
-    <value>Site Information</value>
+  <data name="LoginInformation" xml:space="preserve">
+    <value>Login Information</value>
   </data>
-  <data name="SiteUpdated" xml:space="preserve">
-    <value>Site updated.</value>
+  <data name="LoginUpdated" xml:space="preserve">
+    <value>Login updated.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Submitting...</value>
@@ -732,8 +732,8 @@
   <data name="VerificationCode" xml:space="preserve">
     <value>Verification Code</value>
   </data>
-  <data name="ViewSite" xml:space="preserve">
-    <value>View Site</value>
+  <data name="ViewLogin" xml:space="preserve">
+    <value>View Login</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden Web Vault</value>
@@ -744,8 +744,8 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Lost authenticator app?</value>
   </data>
-  <data name="Sites" xml:space="preserve">
-    <value>Sites</value>
+  <data name="Logins" xml:space="preserve">
+    <value>Logins</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">

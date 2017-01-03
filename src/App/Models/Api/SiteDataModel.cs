@@ -1,6 +1,6 @@
 ﻿namespace Bit.App.Models.Api
 {
-    public class SiteDataModel
+    public class LoginDataModel
     {
         public string Name { get; set; }
         public string Uri { get; set; }
