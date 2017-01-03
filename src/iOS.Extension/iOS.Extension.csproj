@@ -234,13 +234,13 @@
     <Compile Include="PasswordGeneratorViewController.designer.cs">
       <DependentUpon>PasswordGeneratorViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="SiteAddViewController.cs" />
-    <Compile Include="SiteAddViewController.designer.cs">
-      <DependentUpon>SiteAddViewController.cs</DependentUpon>
+    <Compile Include="LoginAddViewController.cs" />
+    <Compile Include="LoginAddViewController.designer.cs">
+      <DependentUpon>LoginAddViewController.cs</DependentUpon>
     </Compile>
-    <Compile Include="SiteListViewController.cs" />
-    <Compile Include="SiteListViewController.designer.cs">
-      <DependentUpon>SiteListViewController.cs</DependentUpon>
+    <Compile Include="LoginListViewController.cs" />
+    <Compile Include="LoginListViewController.designer.cs">
+      <DependentUpon>LoginListViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
@@ -255,7 +255,7 @@
     <None Include="app.config" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
-    <Compile Include="Models\SiteViewModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="MainInterface.storyboard" />
     <None Include="packages.config">
