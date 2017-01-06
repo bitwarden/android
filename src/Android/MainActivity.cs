@@ -54,7 +54,6 @@ namespace Bit.Android
             typeof(Color).GetProperty("Accent", BindingFlags.Public | BindingFlags.Static)
                 .SetValue(null, Color.FromHex("d2d6de"));
 
-
             LoadApplication(new App.App(
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
