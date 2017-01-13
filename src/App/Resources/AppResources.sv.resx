@@ -160,7 +160,7 @@
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Tillskrivningar</value>
+    <value>Credits</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -451,14 +451,14 @@
     <value>Ändra e-postadress</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Du kan ändra din e-postadress på bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
-    <comment>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</comment>
+    <value>Du kan ändra din e-postadress på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <comment>You can change your email address on the bitwarden web vault. Do you want to visit the website now?</comment>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Ändra huvudlösenord</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Du kan ändra ditt huvudlösenord på bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>Du kan ändra ditt huvudlösenord på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Stäng</value>
@@ -517,7 +517,7 @@
     <comment>Enable App Extension</comment>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>Inuti Safari hittar du bitwarden genom att trycka på dela-ikonen (hjälp: skrolla till höger på den nedersta raden i dela-menyn).</value>
+    <value>Inuti Safari hittar du bitwarden genom att trycka på dela-ikonen (scrolla till höger på den nedersta raden i dela-menyn).</value>
     <comment>Safari is the name of apple's web browser (In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).)</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -525,7 +525,7 @@
     <comment>Get instant access to your passwords!</comment>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Du är redo att logga in!</value>
+    <value>Du är nu redo att logga in!</value>
     <comment>You're ready to log in!</comment>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
@@ -568,8 +568,8 @@
     <comment>Import Logins</comment>
   </data>
   <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>Du kan massimportera inloggningar på bitwarden.com webbvalv. Vill du besöka webbsidan nu?</value>
-    <comment>You can bulk import logins from the bitwarden.com web vault. Do you want to visit the website now?</comment>
+    <value>Du kan massimportera inloggningar på bitwardens webbvalv. Vill du besöka webbsidan nu?</value>
+    <comment>You can bulk import logins from the bitwardens web vault. Do you want to visit the website now?</comment>
   </data>
   <data name="ImportLoginsDescription" xml:space="preserve">
     <value>Massimportera snabbt dina inloggningar från en annan lösenordshanterare.</value>
@@ -614,11 +614,11 @@
     <value>Hantera</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Bekräftelsen för huvudlösenordet stämde inte överens med huvudlösenordet.</value>
+    <value>Bekräftelsen för huvudlösenordet stämde ej.</value>
     <comment>Password confirmation is not correct.</comment>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord eftersom det inte går att hämta lösenordet om du skulle glömma bort det.</value>
+    <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det ej går att hämta lösenordet.</value>
     <comment>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</comment>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
