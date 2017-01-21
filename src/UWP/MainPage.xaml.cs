@@ -24,7 +24,7 @@ namespace Bit.UWP
         public MainPage()
         {
             this.InitializeComponent();
-           
+           /*
             LoadApplication(new Bit.App.App(
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
@@ -35,7 +35,7 @@ namespace Bit.UWP
                 Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>(),
-                Resolver.Resolve<ILocalizeService>()));
+                Resolver.Resolve<ILocalizeService>()));*/
         }
 
       
