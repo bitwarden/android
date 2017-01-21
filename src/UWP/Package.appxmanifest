@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+  <Identity Name="b972519b-0b7e-451c-89a3-ddb6a90d77f8" Publisher="CN=tasos" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="b972519b-0b7e-451c-89a3-ddb6a90d77f8" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Properties>
+    <DisplayName>UWP</DisplayName>
+    <PublisherDisplayName>tasos</PublisherDisplayName>
+    <Logo>UWP\Assets\logo@2x.png</Logo>
+  </Properties>
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Universal" MinVersion="10.0.0.0" MaxVersionTested="10.0.0.0" />
+  </Dependencies>
+  <Resources>
+    <Resource Language="x-generate" />
+  </Resources>
+  <Applications>
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="UWP.App">
+      <uap:VisualElements DisplayName="UWP" Square150x150Logo="UWP\Assets\Icon@3x.png" Square44x44Logo="UWP\Assets\Icon.png" Description="UWP" BackgroundColor="transparent">
+        <uap:DefaultTile Wide310x150Logo="WP\Assets\logo@2x.png" Square71x71Logo="UWP\Assets\Icon@2x.png">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="wide310x150Logo" />
+          </uap:ShowNameOnTiles>
+        </uap:DefaultTile>
+        <uap:SplashScreen Image="UWP\Assets\logo@3x.png" />
+      </uap:VisualElements>
+    </Application>
+  </Applications>
+  <Capabilities>
+    <Capability Name="internetClient" />
+  </Capabilities>
+</Package>

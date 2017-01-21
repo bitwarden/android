@@ -1,0 +1,252 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{89F3F8F2-5BB8-4039-8E40-7D8F0D4C5CA7}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bit.UWP</RootNamespace>
+    <AssemblyName>UWP</AssemblyName>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>UWP_TemporaryKey.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="project.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="Service References\HockeyApp\ConnectedService.json" />
+    <None Include="UWP_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Assets\cloudup.png" />
+    <BundleResource Include="Assets\cloudup%402x.png" />
+    <BundleResource Include="Assets\cloudup%403x.png" />
+    <BundleResource Include="Assets\cogs.png" />
+    <BundleResource Include="Assets\cogs%402x.png" />
+    <BundleResource Include="Assets\cogs%403x.png" />
+    <BundleResource Include="Assets\envelope.png" />
+    <BundleResource Include="Assets\envelope%402x.png" />
+    <BundleResource Include="Assets\envelope%403x.png" />
+    <BundleResource Include="Assets\ext-act.png" />
+    <BundleResource Include="Assets\ext-act%402x.png" />
+    <BundleResource Include="Assets\ext-act%403x.png" />
+    <BundleResource Include="Assets\ext-more.png" />
+    <BundleResource Include="Assets\ext-more%402x.png" />
+    <BundleResource Include="Assets\ext-more%403x.png" />
+    <BundleResource Include="Assets\ext-use.png" />
+    <BundleResource Include="Assets\ext-use%402x.png" />
+    <BundleResource Include="Assets\ext-use%403x.png" />
+    <BundleResource Include="Assets\eye.png" />
+    <BundleResource Include="Assets\eye%402x.png" />
+    <BundleResource Include="Assets\eye%403x.png" />
+    <BundleResource Include="Assets\eye_slash.png" />
+    <BundleResource Include="Assets\eye_slash%402x.png" />
+    <BundleResource Include="Assets\eye_slash%403x.png" />
+    <BundleResource Include="Assets\fa_lock.png" />
+    <BundleResource Include="Assets\fa_lock%402x.png" />
+    <BundleResource Include="Assets\fa_lock%403x.png" />
+    <BundleResource Include="Assets\fingerprint.png" />
+    <BundleResource Include="Assets\fingerprint%402x.png" />
+    <BundleResource Include="Assets\fingerprint%403x.png" />
+    <BundleResource Include="Assets\folder.png" />
+    <BundleResource Include="Assets\folder%402x.png" />
+    <BundleResource Include="Assets\folder%403x.png" />
+    <BundleResource Include="Assets\globe.png" />
+    <BundleResource Include="Assets\globe%402x.png" />
+    <BundleResource Include="Assets\globe%403x.png" />
+    <BundleResource Include="Assets\Icon-120.png" />
+    <BundleResource Include="Assets\Icon-152.png" />
+    <BundleResource Include="Assets\Icon-16.png" />
+    <BundleResource Include="Assets\Icon-24.png" />
+    <BundleResource Include="Assets\Icon-32.png" />
+    <BundleResource Include="Assets\Icon-40.png" />
+    <BundleResource Include="Assets\Icon-40%402x.png" />
+    <BundleResource Include="Assets\Icon-40%403x.png" />
+    <BundleResource Include="Assets\Icon-60.png" />
+    <BundleResource Include="Assets\Icon-60%402x.png" />
+    <BundleResource Include="Assets\Icon-60%403x.png" />
+    <BundleResource Include="Assets\Icon-64.png" />
+    <BundleResource Include="Assets\Icon-72.png" />
+    <BundleResource Include="Assets\Icon-72%402x.png" />
+    <BundleResource Include="Assets\Icon-76.png" />
+    <BundleResource Include="Assets\Icon-76%402x.png" />
+    <BundleResource Include="Assets\Icon-83.5%402x.png" />
+    <BundleResource Include="Assets\Icon-Small-40.png" />
+    <BundleResource Include="Assets\Icon-Small-40%402x.png" />
+    <BundleResource Include="Assets\Icon-Small-40%403x.png" />
+    <BundleResource Include="Assets\Icon-Small-50.png" />
+    <BundleResource Include="Assets\Icon-Small-50%402x.png" />
+    <BundleResource Include="Assets\Icon-Small.png" />
+    <BundleResource Include="Assets\Icon-Small%402x.png" />
+    <BundleResource Include="Assets\Icon-Small%403x.png" />
+    <BundleResource Include="Assets\Icon.png" />
+    <BundleResource Include="Assets\Icon%402x.png" />
+    <BundleResource Include="Assets\Icon%403x.png" />
+    <ITunesArtwork Include="Assets\iTunesArtwork.png" />
+    <ITunesArtwork Include="Assets\iTunesArtwork%402x.png" />
+    <BundleResource Include="Assets\lightbulb.png" />
+    <BundleResource Include="Assets\lightbulb%402x.png" />
+    <BundleResource Include="Assets\lightbulb%403x.png" />
+    <BundleResource Include="Assets\lock.png" />
+    <BundleResource Include="Assets\lock%402x.png" />
+    <BundleResource Include="Assets\lock%403x.png" />
+    <BundleResource Include="Assets\logo.png" />
+    <BundleResource Include="Assets\logo%402x.png" />
+    <BundleResource Include="Assets\logo%403x.png" />
+    <BundleResource Include="Assets\more.png" />
+    <BundleResource Include="Assets\more%402x.png" />
+    <BundleResource Include="Assets\more%403x.png" />
+    <BundleResource Include="Assets\more_selected.png" />
+    <BundleResource Include="Assets\more_selected%402x.png" />
+    <BundleResource Include="Assets\more_selected%403x.png" />
+    <BundleResource Include="Assets\plus.png" />
+    <BundleResource Include="Assets\plus%402x.png" />
+    <BundleResource Include="Assets\plus%403x.png" />
+    <BundleResource Include="Assets\refresh.png" />
+    <BundleResource Include="Assets\refresh%402x.png" />
+    <BundleResource Include="Assets\refresh%403x.png" />
+    <BundleResource Include="Assets\star.png" />
+    <BundleResource Include="Assets\star%402x.png" />
+    <BundleResource Include="Assets\star%403x.png" />
+    <BundleResource Include="Assets\tools.png" />
+    <BundleResource Include="Assets\tools%402x.png" />
+    <BundleResource Include="Assets\tools%403x.png" />
+    <BundleResource Include="Assets\upload.png" />
+    <BundleResource Include="Assets\upload%402x.png" />
+    <BundleResource Include="Assets\upload%403x.png" />
+    <BundleResource Include="Assets\user.png" />
+    <BundleResource Include="Assets\user%402x.png" />
+    <BundleResource Include="Assets\user%403x.png" />
+    <Content Include="Properties\Default.rd.xml">
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\App\App.csproj">
+      <Project>{b490c5da-639e-4994-abd2-54222b8a348e}</Project>
+      <Name>App</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MonoTouch.NUnitLite">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Xamarin.iOS\v1.0\MonoTouch.NUnitLite.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.iOS">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\Xamarin.iOS\v1.0\Xamarin.iOS.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
