@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(NuGetPackageRoot)' == ''">
+    <NuGetPackageRoot>$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+  </PropertyGroup>
+  <ImportGroup>
+    <Import Project="$(NuGetPackageRoot)\Xamarin.Forms\2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('$(NuGetPackageRoot)\Xamarin.Forms\2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
+  </ImportGroup>
+</Project>

@@ -1,0 +1,23 @@
+﻿{
+  "dependencies": {
+    "Acr.UserDialogs": "6.3.7",
+    "HockeySDK.UWP": "4.1.5",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.2.2",
+    "Plugin.Connectivity": "1.0.2",
+    "Plugin.Fingerprint": "1.4.0",
+    "Xam.Plugins.Settings": "2.5.1",
+    "Xamarin.Forms": "2.3.0.107",
+    "XLabs.IoC": "2.0.5782"
+  },
+  "frameworks": {
+    "uap10.0": {}
+  },
+  "runtimes": {
+    "win10-arm": {},
+    "win10-arm-aot": {},
+    "win10-x86": {},
+    "win10-x86-aot": {},
+    "win10-x64": {},
+    "win10-x64-aot": {}
+  }
+}
