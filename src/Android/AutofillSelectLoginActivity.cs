@@ -9,16 +9,16 @@ using Android.OS;
 
 namespace Bit.Android
 {
-    //[Activity(LaunchMode = global::Android.Content.PM.LaunchMode.SingleInstance)]
+    [Activity(LaunchMode = global::Android.Content.PM.LaunchMode.SingleInstance)]
     public class AutofillSelectLoginActivity : Activity
     {
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            var url = Intent.GetStringExtra("url");
+            var uri = Intent.GetStringExtra("uri");
 
             Intent data = new Intent();
-            data.PutExtra("url", url);
+            data.PutExtra("uri", uri);
             data.PutExtra("username", "user123");
             data.PutExtra("password", "pass123");
 
