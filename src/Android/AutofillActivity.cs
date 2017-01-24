@@ -22,19 +22,25 @@ namespace Bit.Android
 
             var url = Intent.GetStringExtra("url");
             _lastQueriedUrl = url;
-            //StartActivityForResult(Kp2aControl.GetQueryEntryIntent(url), 123);
+
+            Intent intent = new Intent(this, typeof(AutofillSelectLoginActivity));
+            intent.PutExtra("url", url);
+            StartActivityForResult(intent, 123);
         }
 
         string _lastQueriedUrl;
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
+            var url = data.GetStringExtra("url");
+            var username = data.GetStringExtra("username");
+            var password = data.GetStringExtra("password");
+
             base.OnActivityResult(requestCode, resultCode, data);
 
             try
             {
-                // TODO: lookup login
-                LastReceivedCredentials = new Credentials { User = "username", Password = "12345678", Url = _lastQueriedUrl };
+                LastReceivedCredentials = new Credentials { User = username, Password = password, Url = _lastQueriedUrl };
             }
             catch(Exception e)
             {

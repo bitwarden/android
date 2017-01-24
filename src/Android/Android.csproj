@@ -298,6 +298,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutofillSelectLoginActivity.cs" />
     <Compile Include="AutofillActivity.cs" />
     <Compile Include="Controls\CustomSearchBarRenderer.cs" />
     <Compile Include="Controls\CustomButtonRenderer.cs" />

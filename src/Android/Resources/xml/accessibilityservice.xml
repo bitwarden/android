@@ -4,4 +4,5 @@
     android:accessibilityFeedbackType="feedbackSpoken"
     android:accessibilityFlags="flagDefault"
     android:notificationTimeout="100"
-    android:canRetrieveWindowContent="true"/>
+    android:canRetrieveWindowContent="true"
+    android:canRequestEnhancedWebAccessibility="true"/>

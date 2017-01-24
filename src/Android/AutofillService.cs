@@ -25,6 +25,7 @@ namespace Bit.Android
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var eventType = e.EventType;
+            System.Diagnostics.Debug.WriteLine(DateTime.UtcNow.ToString() + " Event Type: " + eventType);
             var package = e.PackageName;
             switch(eventType)
             {
@@ -122,8 +123,9 @@ namespace Bit.Android
         {
             if(url1.StartsWith("androidapp://"))
                 return url1 == url2;
-            //return KeePassLib.Utility.UrlUtil.GetHost(url1) == KeePassLib.Utility.UrlUtil.GetHost(url2);
-            return false;
+            // TODO: host check
+            return url1 == url2;
+            //return false;
         }
 
         private static bool IsPasswordField(AccessibilityNodeInfo n)
