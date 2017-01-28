@@ -60,7 +60,7 @@ namespace Bit.Android
                         var allEditTexts = GetNodeOrChildren(root, n => EditText(n));
                         var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
 
-                        if(AutofillActivity.LastCredentials != null && SameUri(AutofillActivity.LastCredentials.Uri, uri))
+                        if(AutofillActivity.LastCredentials != null && SameUri(AutofillActivity.LastCredentials.LastUri, uri))
                         {
                             FillCredentials(usernameEditText, avialablePasswordNodes);
                         }
@@ -168,7 +168,7 @@ namespace Bit.Android
 
         private void FillCredentials(AccessibilityNodeInfo usernameNode, IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
-            FillEditText(usernameNode, AutofillActivity.LastCredentials.User);
+            FillEditText(usernameNode, AutofillActivity.LastCredentials.Username);
             foreach(var pNode in passwordNodes)
             {
                 FillEditText(pNode, AutofillActivity.LastCredentials.Password);

@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -18,7 +13,8 @@ namespace Bit.Android
     public class AutofillActivity : Activity
     {
         private string _lastQueriedUri;
-        public static Credentials LastCredentials;
+
+        public static AutofillCredentials LastCredentials { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -40,25 +36,22 @@ namespace Bit.Android
                 var username = data.GetStringExtra("username");
                 var password = data.GetStringExtra("password");
 
-                LastCredentials = new Credentials
+                LastCredentials = new AutofillCredentials
                 {
-                    User = username,
+                    Username = username,
                     Password = password,
-                    Uri = _lastQueriedUri
+                    Uri = uri,
+                    LastUri = _lastQueriedUri
                 };
             }
-            catch { }
+            catch
+            {
+                LastCredentials = null;
+            }
             finally
             {
                 Finish();
             }
-        }
-
-        public class Credentials
-        {
-            public string User;
-            public string Password;
-            public string Uri;
         }
     }
 }
