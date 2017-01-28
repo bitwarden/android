@@ -43,7 +43,7 @@ namespace Bit.Android
 
             if(!Resolver.IsSet)
             {
-                SetIoc();
+                SetIoc(this);
             }
         }
 
@@ -178,16 +178,16 @@ namespace Bit.Android
             }
         }
 
-        private void SetIoc()
+        public static void SetIoc(Application application)
         {
-            UserDialogs.Init(this);
+            UserDialogs.Init(application);
 
             var container = new UnityContainer();
 
             container
                 // Android Stuff
-                .RegisterInstance(ApplicationContext)
-                .RegisterInstance<Application>(this)
+                .RegisterInstance(application.ApplicationContext)
+                .RegisterInstance<Application>(application)
                 // Services
                 .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())

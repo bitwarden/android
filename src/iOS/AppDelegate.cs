@@ -56,6 +56,7 @@ namespace Bit.iOS
             manager.DisableMetricsManager = manager.DisableFeedbackManager = manager.DisableUpdateManager = true;
 
             LoadApplication(new App.App(
+                null,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),

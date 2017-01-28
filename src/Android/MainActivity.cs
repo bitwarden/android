@@ -14,6 +14,7 @@ using System.Reflection;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Bit.App.Models.Page;
 
 namespace Bit.Android
 {
@@ -27,6 +28,12 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
+            var uri = Intent.GetStringExtra("uri");
+            if(uri != null && !Resolver.IsSet)
+            {
+                MainApplication.SetIoc(Application);
+            }
+
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
 
@@ -55,6 +62,7 @@ namespace Bit.Android
                 .SetValue(null, Color.FromHex("d2d6de"));
 
             LoadApplication(new App.App(
+                uri,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),
@@ -70,6 +78,31 @@ namespace Bit.Android
             {
                 RateApp();
             });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, VaultListPageModel.Login>(
+                Xamarin.Forms.Application.Current, "Autofill", (sender, args) =>
+            {
+                ReturnCredentials(args);
+            });
+        }
+
+        private void ReturnCredentials(VaultListPageModel.Login login)
+        {
+            Intent data = new Intent();
+            data.PutExtra("uri", login.Uri.Value);
+            data.PutExtra("username", login.Username);
+            data.PutExtra("password", login.Password.Value);
+
+            if(Parent == null)
+            {
+                SetResult(Result.Ok, data);
+            }
+            else
+            {
+                Parent.SetResult(Result.Ok, data);
+            }
+
+            Finish();
         }
 
         protected override void OnPause()

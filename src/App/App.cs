@@ -19,6 +19,7 @@ namespace Bit.App
 {
     public class App : Application
     {
+        private readonly string _uri;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
         private readonly IUserDialogs _userDialogs;
@@ -31,6 +32,7 @@ namespace Bit.App
         private readonly ILocalizeService _localizeService;
 
         public App(
+            string uri,
             IAuthService authService,
             IConnectivity connectivity,
             IUserDialogs userDialogs,
@@ -42,6 +44,7 @@ namespace Bit.App
             IGoogleAnalyticsService googleAnalyticsService,
             ILocalizeService localizeService)
         {
+            _uri = uri;
             _databaseService = databaseService;
             _connectivity = connectivity;
             _userDialogs = userDialogs;
@@ -56,7 +59,11 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
-            if(authService.IsAuthenticated)
+            if(authService.IsAuthenticated && _uri != null)
+            {
+                MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
+            }
+            else if(authService.IsAuthenticated)
             {
                 MainPage = new MainPage();
             }

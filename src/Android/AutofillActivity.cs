@@ -7,17 +7,17 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
-using Bit.App.Models;
+using Android.Views;
 
 namespace Bit.Android
 {
-    [Activity(Label = "bitwarden Autofill",
+    [Activity(Label = "bitwarden",
+        Icon = "@drawable/icon",
         LaunchMode = global::Android.Content.PM.LaunchMode.SingleInstance,
-        Theme = "@style/android:Theme.Material.Light")]
+        WindowSoftInputMode = SoftInput.StateHidden)]
     public class AutofillActivity : Activity
     {
         private string _lastQueriedUri;
-
         public static Credentials LastCredentials;
 
         protected override void OnCreate(Bundle bundle)
@@ -25,11 +25,10 @@ namespace Bit.Android
             base.OnCreate(bundle);
             _lastQueriedUri = Intent.GetStringExtra("uri");
 
-            var intent = new Intent(this, typeof(AutofillSelectLoginActivity));
+            var intent = new Intent(this, typeof(MainActivity));
             intent.PutExtra("uri", _lastQueriedUri);
             StartActivityForResult(intent, 123);
         }
-
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
