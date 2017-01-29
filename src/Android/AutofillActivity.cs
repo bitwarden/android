@@ -22,6 +22,7 @@ namespace Bit.Android
             _lastQueriedUri = Intent.GetStringExtra("uri");
 
             var intent = new Intent(this, typeof(MainActivity));
+            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
             intent.PutExtra("uri", _lastQueriedUri);
             StartActivityForResult(intent, 123);
         }

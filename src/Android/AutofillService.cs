@@ -132,36 +132,15 @@ namespace Bit.Android
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
             var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.UpdateCurrent);
 
-            var targetName = uri;
-            if(uri.StartsWith(AndroidAppProtocol))
-            {
-                var packageName = uri.Substring(AndroidAppProtocol.Length);
-                try
-                {
-                    var appInfo = PackageManager.GetApplicationInfo(packageName, 0);
-                    targetName = appInfo != null ? PackageManager.GetApplicationLabel(appInfo) : packageName;
-                }
-                catch
-                {
-                    targetName = packageName;
-                }
-            }
-            else
-            {
-                //targetName = KeePassLib.Utility.UrlUtil.GetHost(uri);
-            }
-
-
             var builder = new Notification.Builder(this);
-            //TODO icon
-            //TODO plugin icon
-            builder.SetSmallIcon(Resource.Drawable.icon)
+            builder.SetSmallIcon(Resource.Drawable.notification_sm)
                    .SetContentText("Tap this notification to autofill a login from your bitwarden vault.")
                    .SetContentTitle("bitwarden Autofill Service")
                    .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
                    .SetTicker("Tap this notification to autofill a login from your bitwarden vault.")
                    .SetVisibility(NotificationVisibility.Secret)
                    .SetContentIntent(pendingIntent);
+
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
             notificationManager.Notify(AutoFillNotificationId, builder.Build());
         }
