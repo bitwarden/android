@@ -19,7 +19,7 @@ when creating your pull request:
 5. If you have a Xamarin development environment setup, test your translations to make sure they look correct in the
    app on iOS and Android. Sometimes the UI can break due to translations taking up more space than the original UI was
    built for. If possible, use a shorter or abbreviated version of the word/sentence to accomedate the available space.
-   If you are inable to accomedate the avaialable space for a particular translation, just let us know in your pull
+   If you are unable to accomedate the avaialable space for a particular translation, just let us know in your pull
    request comments. If you are unable to test your translations, just let us know in your pull request comments so
    that we can check it for you.
 6. Be sure to watch for [future changes](https://github.com/bitwarden/mobile/commits/master/src/App/Resources/AppResources.resx)
