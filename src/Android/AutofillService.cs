@@ -149,6 +149,8 @@ namespace Bit.Android
                    .SetTicker("Tap this notification to autofill a login from your bitwarden vault.")
                    .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
                    .SetVisibility(NotificationVisibility.Secret)
+                   .SetColor(global::Android.Support.V4.Content.ContextCompat.GetColor(ApplicationContext,
+                        Resource.Color.primary))
                    .SetContentIntent(pendingIntent);
 
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
