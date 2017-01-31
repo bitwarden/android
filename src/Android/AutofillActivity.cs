@@ -8,7 +8,7 @@ namespace Bit.Android
 {
     [Activity(Label = "bitwarden",
         Icon = "@drawable/icon",
-        LaunchMode = global::Android.Content.PM.LaunchMode.SingleInstance,
+        LaunchMode = global::Android.Content.PM.LaunchMode.SingleTask,
         WindowSoftInputMode = SoftInput.StateHidden)]
     public class AutofillActivity : Activity
     {

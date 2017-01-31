@@ -31,6 +31,8 @@ namespace Bit.App
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
 
+        public static bool WasFromAutofillService { get; set; } = false;
+
         public App(
             string uri,
             IAuthService authService,
@@ -59,6 +61,7 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
+            WasFromAutofillService = !string.IsNullOrWhiteSpace(_uri);
             if(authService.IsAuthenticated && _uri != null)
             {
                 MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
@@ -123,6 +126,12 @@ namespace Bit.App
 
             if(Device.OS == TargetPlatform.Android)
             {
+                if(WasFromAutofillService)
+                {
+                    WasFromAutofillService = false;
+                    MainPage = new MainPage();
+
+                }
                 await CheckLockAsync(false);
             }
 
