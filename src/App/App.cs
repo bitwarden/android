@@ -61,7 +61,6 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
-            WasFromAutofillService = !string.IsNullOrWhiteSpace(_uri);
             if(authService.IsAuthenticated && _uri != null)
             {
                 MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
@@ -95,6 +94,7 @@ namespace Bit.App
         protected async override void OnStart()
         {
             // Handle when your app starts
+            ResumeFromAutofill();
             await CheckLockAsync(false);
             _databaseService.CreateTables();
             await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
@@ -123,15 +123,10 @@ namespace Bit.App
 
             // Handle when your app resumes
             Debug.WriteLine("OnResume");
+            ResumeFromAutofill();
 
             if(Device.OS == TargetPlatform.Android)
             {
-                if(WasFromAutofillService)
-                {
-                    WasFromAutofillService = false;
-                    MainPage = new MainPage();
-
-                }
                 await CheckLockAsync(false);
             }
 
@@ -139,6 +134,19 @@ namespace Bit.App
             if(lockPinPage != null)
             {
                 lockPinPage.PinControl.Entry.FocusWithDelay();
+            }
+        }
+
+        private void ResumeFromAutofill()
+        {
+            if(Device.OS == TargetPlatform.Android && WasFromAutofillService)
+            {
+                WasFromAutofillService = false;
+                MainPage = new MainPage();
+            }
+            else
+            {
+                WasFromAutofillService = !string.IsNullOrWhiteSpace(_uri);
             }
         }
 
