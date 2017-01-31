@@ -1016,6 +1016,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logins for {0}.
+        /// </summary>
+        public static string LoginsForUri {
+            get {
+                return ResourceManager.GetString("LoginsForUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login updated..
         /// </summary>
         public static string LoginUpdated {
@@ -1219,6 +1228,15 @@ namespace Bit.App.Resources {
         public static string NoLogins {
             get {
                 return ResourceManager.GetString("NoLogins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no logins in your vault for {0}..
+        /// </summary>
+        public static string NoLoginsForUri {
+            get {
+                return ResourceManager.GetString("NoLoginsForUri", resourceCulture);
             }
         }
         

@@ -89,9 +89,16 @@ namespace Bit.Android
         private void ReturnCredentials(VaultListPageModel.Login login)
         {
             Intent data = new Intent();
-            data.PutExtra("uri", login.Uri.Value);
-            data.PutExtra("username", login.Username);
-            data.PutExtra("password", login.Password.Value);
+            if(login == null)
+            {
+                data.PutExtra("canceled", "true");
+            }
+            else
+            {
+                data.PutExtra("uri", login.Uri.Value);
+                data.PutExtra("username", login.Username);
+                data.PutExtra("password", login.Password.Value);
+            }
 
             if(Parent == null)
             {

@@ -72,6 +72,7 @@
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
+    <Compile Include="Controls\VaultListViewCell.cs" />
     <Compile Include="Enums\LockType.cs" />
     <Compile Include="Enums\CipherType.cs" />
     <Compile Include="Enums\PushType.cs" />

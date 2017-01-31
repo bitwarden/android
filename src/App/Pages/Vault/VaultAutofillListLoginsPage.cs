@@ -12,49 +12,53 @@ using Bit.App.Utilities;
 using PushNotification.Plugin.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
-using System.Collections.Generic;
 using System.Threading;
 using Bit.App.Models;
+using System.Collections.Generic;
 
 namespace Bit.App.Pages
 {
     public class VaultAutofillListLoginsPage : ExtendedContentPage
     {
-        private readonly IFolderService _folderService;
         private readonly ILoginService _loginService;
         private readonly IUserDialogs _userDialogs;
-        private readonly IConnectivity _connectivity;
         private readonly IClipboardService _clipboardService;
-        private readonly ISyncService _syncService;
-        private readonly IPushNotification _pushNotification;
-        private readonly IDeviceInfoService _deviceInfoService;
-        private readonly ISettings _settings;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly DomainName _domainName;
+        private readonly string _uri;
+        private readonly string _name;
+        private readonly bool _androidApp = false;
 
         public VaultAutofillListLoginsPage(string uriString)
             : base(true)
         {
+            _uri = uriString;
             Uri uri;
-            if(Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out uri) &&
-                DomainName.TryParse(uri.Host, out _domainName)) { }
-
-            _folderService = Resolver.Resolve<IFolderService>();
+            if(!Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out uri) ||
+                !DomainName.TryParse(uri.Host, out _domainName))
+            {
+                if(uriString != null && uriString.StartsWith(Constants.AndroidAppProtocol))
+                {
+                    _androidApp = true;
+                    _name = uriString.Substring(Constants.AndroidAppProtocol.Length);
+                }
+            }
+            else
+            {
+                _name = _domainName.BaseDomain;
+            }
+            
             _loginService = Resolver.Resolve<ILoginService>();
-            _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
-            _syncService = Resolver.Resolve<ISyncService>();
-            _pushNotification = Resolver.Resolve<IPushNotification>();
-            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _settings = Resolver.Resolve<ISettings>();
 
             Init();
         }
         public ExtendedObservableCollection<VaultListPageModel.Login> PresentationLogins { get; private set; }
             = new ExtendedObservableCollection<VaultListPageModel.Login>();
-
+        public StackLayout NoDataStackLayout { get; set; }
         public ListView ListView { get; set; }
+        public ActivityIndicator LoadingIndicator { get; set; }
 
         private void Init()
         {
@@ -66,13 +70,37 @@ namespace Bit.App.Pages
                 }
             });
 
+            var noDataLabel = new Label
+            {
+                Text = string.Format(AppResources.NoLoginsForUri, _name ?? "--"),
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                Style = (Style)Application.Current.Resources["text-muted"]
+            };
+
+            var addLoginButton = new ExtendedButton
+            {
+                Text = AppResources.AddALogin,
+                Command = new Command(() => AddLoginAsync()),
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"]
+            };
+
+            NoDataStackLayout = new StackLayout
+            {
+                Children = { noDataLabel, addLoginButton },
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Padding = new Thickness(20, 0),
+                Spacing = 20
+            };
+
             ToolbarItems.Add(new AddLoginToolBarItem(this));
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = PresentationLogins,
                 HasUnevenRows = true,
-                ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
+                ItemTemplate = new DataTemplate(() => new VaultListViewCell(
+                    (VaultListPageModel.Login l) => MoreClickedAsync(l)))
             };
 
             if(Device.OS == TargetPlatform.iOS)
@@ -82,9 +110,16 @@ namespace Bit.App.Pages
 
             ListView.ItemSelected += LoginSelected;
 
-            Title = AppResources.Logins;
+            Title = string.Format(AppResources.LoginsForUri, _name ?? "--");
 
-            Content = ListView;
+            LoadingIndicator = new ActivityIndicator
+            {
+                IsRunning = true,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            Content = LoadingIndicator;
         }
 
         protected override void OnAppearing()
@@ -93,16 +128,27 @@ namespace Bit.App.Pages
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Login)null);
+            return true;
+        }
+
+        private void AdjustContent()
+        {
+            if(PresentationLogins.Count > 0)
+            {
+                Content = ListView;
+            }
+            else
+            {
+                Content = NoDataStackLayout;
+            }
+        }
+
         private CancellationTokenSource FetchAndLoadVault()
         {
             var cts = new CancellationTokenSource();
-            _settings.AddOrUpdateValue(Constants.FirstVaultLoad, false);
-
-            if(PresentationLogins.Count > 0 && _syncService.SyncInProgress)
-            {
-                return cts;
-            }
-
             _filterResultsCancellationTokenSource?.Cancel();
 
             Task.Run(async () =>
@@ -110,12 +156,16 @@ namespace Bit.App.Pages
                 var logins = await _loginService.GetAllAsync();
                 var filteredLogins = logins
                     .Select(s => new VaultListPageModel.Login(s))
-                    .Where(s => s.BaseDomain != null && s.BaseDomain == _domainName.BaseDomain)
+                    .Where(s => (_androidApp && _domainName == null && s.Uri.Value == _uri) ||
+                        (_domainName != null && s.BaseDomain != null && s.BaseDomain == _domainName.BaseDomain))
                     .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Username)
-                    .ToArray();
+                    .ThenBy(s => s.Username);
 
-                PresentationLogins.ResetWithRange(filteredLogins);
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    PresentationLogins.ResetWithRange(filteredLogins);
+                    AdjustContent();
+                });
             }, cts.Token);
 
             return cts;
@@ -127,10 +177,50 @@ namespace Bit.App.Pages
             MessagingCenter.Send(Application.Current, "Autofill", login);
         }
 
-        private async void AddLogin()
+        private async void AddLoginAsync()
         {
-            var page = new VaultAddLoginPage();
+            var page = new VaultAddLoginPage(_uri, _name);
             await Navigation.PushForDeviceAsync(page);
+        }
+
+        private async void MoreClickedAsync(VaultListPageModel.Login login)
+        {
+            var buttons = new List<string> { AppResources.View, AppResources.Edit };
+            if(!string.IsNullOrWhiteSpace(login.Password.Value))
+            {
+                buttons.Add(AppResources.CopyPassword);
+            }
+            if(!string.IsNullOrWhiteSpace(login.Username))
+            {
+                buttons.Add(AppResources.CopyUsername);
+            }
+
+            var selection = await DisplayActionSheet(login.Name, AppResources.Cancel, null, buttons.ToArray());
+
+            if(selection == AppResources.View)
+            {
+                var page = new VaultViewLoginPage(login.Id);
+                await Navigation.PushForDeviceAsync(page);
+            }
+            else if(selection == AppResources.Edit)
+            {
+                var page = new VaultEditLoginPage(login.Id);
+                await Navigation.PushForDeviceAsync(page);
+            }
+            else if(selection == AppResources.CopyPassword)
+            {
+                Copy(login.Password.Value, AppResources.Password);
+            }
+            else if(selection == AppResources.CopyUsername)
+            {
+                Copy(login.Username, AppResources.Username);
+            }
+        }
+
+        private void Copy(string copyText, string alertLabel)
+        {
+            _clipboardService.CopyToClipboard(copyText);
+            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private class AddLoginToolBarItem : ToolbarItem
@@ -147,32 +237,7 @@ namespace Bit.App.Pages
 
             private void ClickedItem(object sender, EventArgs e)
             {
-                _page.AddLogin();
-            }
-        }
-
-        private class VaultListViewCell : LabeledDetailCell
-        {
-            private VaultAutofillListLoginsPage _page;
-
-            public static readonly BindableProperty LoginParameterProperty = BindableProperty.Create(nameof(LoginParameter),
-                typeof(VaultListPageModel.Login), typeof(VaultListViewCell), null);
-
-            public VaultListViewCell(VaultAutofillListLoginsPage page)
-            {
-                _page = page;
-
-                SetBinding(LoginParameterProperty, new Binding("."));
-                Label.SetBinding<VaultListPageModel.Login>(Label.TextProperty, s => s.Name);
-                Detail.SetBinding<VaultListPageModel.Login>(Label.TextProperty, s => s.Username);
-
-                BackgroundColor = Color.White;
-            }
-
-            public VaultListPageModel.Login LoginParameter
-            {
-                get { return GetValue(LoginParameterProperty) as VaultListPageModel.Login; }
-                set { SetValue(LoginParameterProperty, value); }
+                _page.AddLoginAsync();
             }
         }
     }

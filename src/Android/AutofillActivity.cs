@@ -19,31 +19,49 @@ namespace Bit.Android
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            _lastQueriedUri = Intent.GetStringExtra("uri");
+            LaunchMainActivity(Intent, 932473);
+        }
 
-            var intent = new Intent(this, typeof(MainActivity));
-            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
-            intent.PutExtra("uri", _lastQueriedUri);
-            StartActivityForResult(intent, 123);
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            LaunchMainActivity(intent, 489729);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
         }
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
+            if(data == null)
+            {
+                LastCredentials = null;
+                return;
+            }
 
             try
             {
-                var uri = data.GetStringExtra("uri");
-                var username = data.GetStringExtra("username");
-                var password = data.GetStringExtra("password");
-
-                LastCredentials = new AutofillCredentials
+                if(data.GetStringExtra("canceled") != null)
                 {
-                    Username = username,
-                    Password = password,
-                    Uri = uri,
-                    LastUri = _lastQueriedUri
-                };
+                    LastCredentials = null;
+                }
+                else
+                {
+                    var uri = data.GetStringExtra("uri");
+                    var username = data.GetStringExtra("username");
+                    var password = data.GetStringExtra("password");
+
+                    LastCredentials = new AutofillCredentials
+                    {
+                        Username = username,
+                        Password = password,
+                        Uri = uri,
+                        LastUri = _lastQueriedUri
+                    };
+                }
             }
             catch
             {
@@ -53,6 +71,19 @@ namespace Bit.Android
             {
                 Finish();
             }
+        }
+
+        private void LaunchMainActivity(Intent callingIntent, int requestCode)
+        {
+            _lastQueriedUri = callingIntent?.GetStringExtra("uri");
+            if(_lastQueriedUri == null)
+            {
+                return;
+            }
+
+            var intent = new Intent(this, typeof(MainActivity));
+            intent.PutExtra("uri", _lastQueriedUri);
+            StartActivityForResult(intent, requestCode);
         }
     }
 }

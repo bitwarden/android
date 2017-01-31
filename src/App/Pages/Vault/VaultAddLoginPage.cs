@@ -23,9 +23,14 @@ namespace Bit.App.Pages
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ISettings _settings;
+        private readonly string _defaultUri;
+        private readonly string _defaultName;
 
-        public VaultAddLoginPage()
+        public VaultAddLoginPage(string defaultUri = null, string defaultName = null)
         {
+            _defaultUri = defaultUri;
+            _defaultName = defaultName;
+
             _loginService = Resolver.Resolve<ILoginService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -54,7 +59,16 @@ namespace Bit.App.Pages
             usernameCell.Entry.Autocorrect = false;
 
             var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
+            if(!string.IsNullOrWhiteSpace(_defaultUri))
+            {
+                uriCell.Entry.Text = _defaultUri;
+            }
+
             var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
+            if(!string.IsNullOrWhiteSpace(_defaultName))
+            {
+                nameCell.Entry.Text = _defaultName;
+            }
 
             var folderOptions = new List<string> { AppResources.FolderNone };
             var folders = _folderService.GetAllAsync().GetAwaiter().GetResult()

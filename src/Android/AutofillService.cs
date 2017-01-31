@@ -15,17 +15,17 @@ namespace Bit.Android
     public class AutofillService : AccessibilityService
     {
         private const int AutoFillNotificationId = 34573;
-        private const string AndroidAppProtocol = "androidapp://";
         private const string SystemUiPackage = "com.android.systemui";
         private const string ChromePackage = "com.android.chrome";
         private const string BrowserPackage = "com.android.browser";
+        private const string BitwardenPackage = "com.x8bit.bitwarden";
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var eventType = e.EventType;
             var packageName = e.PackageName;
 
-            if(packageName == SystemUiPackage)
+            if(packageName == SystemUiPackage || packageName == BitwardenPackage)
             {
                 return;
             }
@@ -34,15 +34,14 @@ namespace Bit.Android
             {
                 case EventTypes.WindowContentChanged:
                 case EventTypes.WindowStateChanged:
+                    var cancelNotification = true;
                     var root = RootInActiveWindow;
                     var isChrome = root == null ? false : root.PackageName == ChromePackage;
-                    var cancelNotification = true;
-                    var avialablePasswordNodes = GetNodeOrChildren(root, n => AvailablePasswordField(n, isChrome));
+                    var avialablePasswordNodes = GetWindowNodes(root, e, n => AvailablePasswordField(n, isChrome));
 
-                    if(avialablePasswordNodes.Any() && AnyNodeOrChildren(root, n => n.WindowId == e.WindowId &&
-                        !(n.ViewIdResourceName != null && n.ViewIdResourceName.StartsWith(SystemUiPackage))))
+                    if(avialablePasswordNodes.Any())
                     {
-                        var uri = string.Concat(AndroidAppProtocol, root.PackageName);
+                        var uri = string.Concat(App.Constants.AndroidAppProtocol, root.PackageName);
                         if(isChrome)
                         {
                             var addressNode = root.FindAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar")
@@ -57,23 +56,25 @@ namespace Bit.Android
                             uri = ExtractUriFromAddressField(uri, addressNode);
                         }
 
-                        var allEditTexts = GetNodeOrChildren(root, n => EditText(n));
-                        var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
-
-                        if(AutofillActivity.LastCredentials != null && SameUri(AutofillActivity.LastCredentials.LastUri, uri))
+                        if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                         {
+                            var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
+                            var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
                             FillCredentials(usernameEditText, avialablePasswordNodes);
                         }
                         else
                         {
-                            AskFillPassword(uri, usernameEditText, avialablePasswordNodes);
+                            NotifyToAutofill(uri);
                             cancelNotification = false;
                         }
+
+                        AutofillActivity.LastCredentials = null;
                     }
 
                     if(cancelNotification)
                     {
-                        ((NotificationManager)GetSystemService(NotificationService)).Cancel(AutoFillNotificationId);
+                        var notificationManager = ((NotificationManager)GetSystemService(NotificationService));
+                        notificationManager.Cancel(AutoFillNotificationId);
                     }
                     break;
                 default:
@@ -100,11 +101,21 @@ namespace Bit.Android
             return uri;
         }
 
-        private bool SameUri(string uriString1, string uriString2)
+        /// <summary>
+        /// Check to make sure it is ok to autofill still on the current screen
+        /// </summary>
+        private bool NeedToAutofill(AutofillCredentials creds, string currentUriString)
         {
-            Uri uri1, uri2;
-            if(Uri.TryCreate(uriString1, UriKind.RelativeOrAbsolute, out uri1) &&
-                Uri.TryCreate(uriString2, UriKind.RelativeOrAbsolute, out uri2) && uri1.Host == uri2.Host)
+            if(creds == null)
+            {
+                return false;
+            }
+
+            Uri credsUri, lastUri, currentUri;
+            if(Uri.TryCreate(creds.Uri, UriKind.Absolute, out credsUri) &&
+                Uri.TryCreate(creds.LastUri, UriKind.Absolute, out lastUri) &&
+                Uri.TryCreate(currentUriString, UriKind.Absolute, out currentUri) &&
+                credsUri.Host == currentUri.Host && lastUri.Host == currentUri.Host)
             {
                 return true;
             }
@@ -124,8 +135,7 @@ namespace Bit.Android
             return n.ClassName != null && n.ClassName.Contains("EditText");
         }
 
-        private void AskFillPassword(string uri, AccessibilityNodeInfo usernameNode,
-            IEnumerable<AccessibilityNodeInfo> passwordNodes)
+        private void NotifyToAutofill(string uri)
         {
             var intent = new Intent(this, typeof(AutofillActivity));
             intent.PutExtra("uri", uri);
@@ -134,10 +144,10 @@ namespace Bit.Android
 
             var builder = new Notification.Builder(this);
             builder.SetSmallIcon(Resource.Drawable.notification_sm)
-                   .SetContentText("Tap this notification to autofill a login from your bitwarden vault.")
                    .SetContentTitle("bitwarden Autofill Service")
-                   .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
+                   .SetContentText("Tap this notification to autofill a login from your bitwarden vault.")
                    .SetTicker("Tap this notification to autofill a login from your bitwarden vault.")
+                   .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
                    .SetVisibility(NotificationVisibility.Secret)
                    .SetContentIntent(pendingIntent);
 
@@ -148,39 +158,37 @@ namespace Bit.Android
         private void FillCredentials(AccessibilityNodeInfo usernameNode, IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
             FillEditText(usernameNode, AutofillActivity.LastCredentials.Username);
-            foreach(var pNode in passwordNodes)
+            foreach(var n in passwordNodes)
             {
-                FillEditText(pNode, AutofillActivity.LastCredentials.Password);
+                FillEditText(n, AutofillActivity.LastCredentials.Password);
             }
-
-            AutofillActivity.LastCredentials = null;
         }
 
         private static void FillEditText(AccessibilityNodeInfo editTextNode, string value)
         {
+            if(editTextNode == null || value == null)
+            {
+                return;
+            }
+
             var bundle = new Bundle();
             bundle.PutString(AccessibilityNodeInfo.ActionArgumentSetTextCharsequence, value);
             editTextNode.PerformAction(global::Android.Views.Accessibility.Action.SetText, bundle);
         }
 
-        private bool AnyNodeOrChildren(AccessibilityNodeInfo n, Func<AccessibilityNodeInfo, bool> p)
-        {
-            return GetNodeOrChildren(n, p).Any();
-        }
-
-        private IEnumerable<AccessibilityNodeInfo> GetNodeOrChildren(AccessibilityNodeInfo n,
-            Func<AccessibilityNodeInfo, bool> p)
+        private IEnumerable<AccessibilityNodeInfo> GetWindowNodes(AccessibilityNodeInfo n,
+            AccessibilityEvent e, Func<AccessibilityNodeInfo, bool> p)
         {
             if(n != null)
             {
-                if(p(n))
+                if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && p(n))
                 {
                     yield return n;
                 }
 
                 for(int i = 0; i < n.ChildCount; i++)
                 {
-                    foreach(var node in GetNodeOrChildren(n.GetChild(i), p))
+                    foreach(var node in GetWindowNodes(n.GetChild(i), e, p))
                     {
                         yield return node;
                     }

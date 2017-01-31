@@ -757,4 +757,12 @@
   <data name="Translations" xml:space="preserve">
     <value>Translations</value>
   </data>
+  <data name="LoginsForUri" xml:space="preserve">
+    <value>Logins for {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoLoginsForUri" xml:space="preserve">
+    <value>There are no logins in your vault for {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
+  </data>
 </root>

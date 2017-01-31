@@ -83,7 +83,8 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationFolders,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new VaultListHeaderViewCell(this)),
-                ItemTemplate = new DataTemplate(() => new VaultListViewCell(this))
+                ItemTemplate = new DataTemplate(() => new VaultListViewCell(
+                    (VaultListPageModel.Login l) => MoreClickedAsync(l)))
             };
 
             if(Device.OS == TargetPlatform.iOS)
@@ -436,40 +437,6 @@ namespace Bit.App.Pages
             private void ClickedItem(object sender, EventArgs e)
             {
                 _page.AddLogin();
-            }
-        }
-
-        private class VaultListViewCell : LabeledDetailCell
-        {
-            private VaultListLoginsPage _page;
-
-            public static readonly BindableProperty LoginParameterProperty = BindableProperty.Create(nameof(LoginParameter),
-                typeof(VaultListPageModel.Login), typeof(VaultListViewCell), null);
-
-            public VaultListViewCell(VaultListLoginsPage page)
-            {
-                _page = page;
-
-                SetBinding(LoginParameterProperty, new Binding("."));
-                Label.SetBinding<VaultListPageModel.Login>(Label.TextProperty, s => s.Name);
-                Detail.SetBinding<VaultListPageModel.Login>(Label.TextProperty, s => s.Username);
-
-                Button.Image = "more";
-                Button.Command = new Command(() => ShowMore());
-                Button.BackgroundColor = Color.Transparent;
-
-                BackgroundColor = Color.White;
-            }
-
-            public VaultListPageModel.Login LoginParameter
-            {
-                get { return GetValue(LoginParameterProperty) as VaultListPageModel.Login; }
-                set { SetValue(LoginParameterProperty, value); }
-            }
-
-            private void ShowMore()
-            {
-                _page.MoreClickedAsync(LoginParameter);
             }
         }
 
