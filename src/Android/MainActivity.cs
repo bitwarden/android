@@ -21,7 +21,6 @@ namespace Bit.Android
     [Activity(Label = "bitwarden",
         Icon = "@drawable/icon",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-        LaunchMode = LaunchMode.SingleTask,
         WindowSoftInputMode = SoftInput.StateHidden)]
     public class MainActivity : FormsAppCompatActivity
     {
@@ -89,7 +88,7 @@ namespace Bit.Android
 
         private void ReturnCredentials(VaultListPageModel.Login login)
         {
-            App.App.WasFromAutofillService = true;
+            App.App.FromAutofillService = true;
             Intent data = new Intent();
             if(login == null)
             {

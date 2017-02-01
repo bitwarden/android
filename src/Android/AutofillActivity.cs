@@ -6,9 +6,9 @@ using Android.Views;
 
 namespace Bit.Android
 {
-    [Activity(Label = "bitwarden",
+    [Activity(Theme = "@style/BitwardenTheme.Splash",
+        Label = "bitwarden",
         Icon = "@drawable/icon",
-        LaunchMode = global::Android.Content.PM.LaunchMode.SingleTask,
         WindowSoftInputMode = SoftInput.StateHidden)]
     public class AutofillActivity : Activity
     {
@@ -69,6 +69,7 @@ namespace Bit.Android
             }
             finally
             {
+                Xamarin.Forms.MessagingCenter.Send(Xamarin.Forms.Application.Current, "SetMainPage");
                 Finish();
             }
         }

@@ -18,7 +18,11 @@ namespace Bit.Android
         private const string SystemUiPackage = "com.android.systemui";
         private const string ChromePackage = "com.android.chrome";
         private const string BrowserPackage = "com.android.browser";
+        private const string BravePackage = "com.brave.browser";
+        private const string OperaPackage = "com.opera.browser";
+        private const string OperaMiniPackage = "com.opera.mini.native";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
+        private const string BitwardenWebsite = "bitwarden.com";
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
@@ -36,31 +40,21 @@ namespace Bit.Android
                 case EventTypes.WindowStateChanged:
                     var cancelNotification = true;
                     var root = RootInActiveWindow;
-                    var isChrome = root == null ? false : root.PackageName == ChromePackage;
-                    var avialablePasswordNodes = GetWindowNodes(root, e, n => AvailablePasswordField(n, isChrome));
+                    var passwordNodes = GetWindowNodes(root, e, n => n.Password);
 
-                    if(avialablePasswordNodes.Any())
+                    if(passwordNodes.Any())
                     {
-                        var uri = string.Concat(App.Constants.AndroidAppProtocol, root.PackageName);
-                        if(isChrome)
+                        var uri = GetUri(root);
+                        if(uri.Contains(BitwardenWebsite))
                         {
-                            var addressNode = root.FindAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar")
-                                .FirstOrDefault();
-                            uri = ExtractUriFromAddressField(uri, addressNode);
-
-                        }
-                        else if(root.PackageName == BrowserPackage)
-                        {
-                            var addressNode = root.FindAccessibilityNodeInfosByViewId("com.android.browser:id/url")
-                                .FirstOrDefault();
-                            uri = ExtractUriFromAddressField(uri, addressNode);
+                            break;
                         }
 
                         if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                         {
                             var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
                             var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
-                            FillCredentials(usernameEditText, avialablePasswordNodes);
+                            FillCredentials(usernameEditText, passwordNodes);
                         }
                         else
                         {
@@ -73,8 +67,7 @@ namespace Bit.Android
 
                     if(cancelNotification)
                     {
-                        var notificationManager = ((NotificationManager)GetSystemService(NotificationService));
-                        notificationManager.Cancel(AutoFillNotificationId);
+                        CancelNotification();
                     }
                     break;
                 default:
@@ -87,7 +80,41 @@ namespace Bit.Android
 
         }
 
-        private string ExtractUriFromAddressField(string uri, AccessibilityNodeInfo addressNode)
+        private void CancelNotification()
+        {
+            var notificationManager = ((NotificationManager)GetSystemService(NotificationService));
+            notificationManager.Cancel(AutoFillNotificationId);
+        }
+
+        private string GetUri(AccessibilityNodeInfo root)
+        {
+            var uri = string.Concat(App.Constants.AndroidAppProtocol, root.PackageName);
+            string addressViewId = null;
+
+            if(root.PackageName == ChromePackage || root.PackageName == BravePackage)
+            {
+                addressViewId = "url_bar";
+            }
+            else if(true || root.PackageName == BrowserPackage)
+            {
+                addressViewId = "url";
+            }
+            else if(root.PackageName == OperaPackage || root.PackageName == OperaMiniPackage)
+            {
+                addressViewId = "url_field";
+            }
+
+            if(!string.IsNullOrWhiteSpace(addressViewId))
+            {
+                var addressNode = root.FindAccessibilityNodeInfosByViewId(
+                    $"{root.PackageName}:id/{addressViewId}").FirstOrDefault();
+                uri = ExtractUri(uri, addressNode);
+            }
+
+            return uri;
+        }
+
+        private string ExtractUri(string uri, AccessibilityNodeInfo addressNode)
         {
             if(addressNode != null)
             {
@@ -123,13 +150,6 @@ namespace Bit.Android
             return false;
         }
 
-        private static bool AvailablePasswordField(AccessibilityNodeInfo n, bool isChrome)
-        {
-            // chrome sends password field values in many conditions when the field is still actually empty
-            // ex. placeholders, nearby label, etc
-            return n.Password && (isChrome || string.IsNullOrWhiteSpace(n.Text));
-        }
-
         private static bool EditText(AccessibilityNodeInfo n)
         {
             return n.ClassName != null && n.ClassName.Contains("EditText");
@@ -145,13 +165,17 @@ namespace Bit.Android
             var builder = new Notification.Builder(this);
             builder.SetSmallIcon(Resource.Drawable.notification_sm)
                    .SetContentTitle("bitwarden Autofill Service")
-                   .SetContentText("Tap this notification to autofill a login from your bitwarden vault.")
-                   .SetTicker("Tap this notification to autofill a login from your bitwarden vault.")
+                   .SetContentText("Tap this notification to autofill a login from your vault.")
+                   .SetTicker("Tap this notification to autofill a login from your vault.")
                    .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
-                   .SetVisibility(NotificationVisibility.Secret)
-                   .SetColor(global::Android.Support.V4.Content.ContextCompat.GetColor(ApplicationContext,
-                        Resource.Color.primary))
                    .SetContentIntent(pendingIntent);
+
+            if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch)
+            {
+                builder.SetVisibility(NotificationVisibility.Secret)
+                    .SetColor(global::Android.Support.V4.Content.ContextCompat.GetColor(ApplicationContext,
+                        Resource.Color.primary));
+            }
 
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
             notificationManager.Notify(AutoFillNotificationId, builder.Build());

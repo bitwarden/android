@@ -19,7 +19,7 @@ namespace Bit.App
 {
     public class App : Application
     {
-        private readonly string _uri;
+        private string _uri;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
         private readonly IUserDialogs _userDialogs;
@@ -31,7 +31,7 @@ namespace Bit.App
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
 
-        public static bool WasFromAutofillService { get; set; } = false;
+        public static bool FromAutofillService { get; set; } = false;
 
         public App(
             string uri,
@@ -61,6 +61,7 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
+            FromAutofillService = !string.IsNullOrWhiteSpace(_uri);
             if(authService.IsAuthenticated && _uri != null)
             {
                 MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
@@ -89,12 +90,16 @@ namespace Bit.App
             {
                 Device.BeginInvokeOnMainThread(() => Logout(args));
             });
+
+            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", async (sender) =>
+            {
+                await SetMainPageFromAutofill();
+            });
         }
 
         protected async override void OnStart()
         {
             // Handle when your app starts
-            ResumeFromAutofill();
             await CheckLockAsync(false);
             _databaseService.CreateTables();
             await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
@@ -102,11 +107,12 @@ namespace Bit.App
             Debug.WriteLine("OnStart");
         }
 
-        protected override void OnSleep()
+        protected async override void OnSleep()
         {
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
+            await SetMainPageFromAutofill(true);
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -123,7 +129,6 @@ namespace Bit.App
 
             // Handle when your app resumes
             Debug.WriteLine("OnResume");
-            ResumeFromAutofill();
 
             if(Device.OS == TargetPlatform.Android)
             {
@@ -137,16 +142,26 @@ namespace Bit.App
             }
         }
 
-        private void ResumeFromAutofill()
+        private async Task SetMainPageFromAutofill(bool skipAlreadyOnCheck = false)
         {
-            if(Device.OS == TargetPlatform.Android && WasFromAutofillService)
+            if(Device.OS != TargetPlatform.Android)
             {
-                WasFromAutofillService = false;
-                MainPage = new MainPage();
+                return;
             }
-            else
+
+            var alreadyOnMainPage = MainPage as MainPage;
+            if(!skipAlreadyOnCheck && alreadyOnMainPage != null)
             {
-                WasFromAutofillService = !string.IsNullOrWhiteSpace(_uri);
+                return;
+            }
+
+            if(FromAutofillService || !string.IsNullOrWhiteSpace(_uri))
+            {
+                // delay some so that we dont see the screen change as autofill closes
+                await Task.Delay(1000);
+                MainPage = new MainPage();
+                _uri = null;
+                FromAutofillService = false;
             }
         }
 
