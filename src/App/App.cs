@@ -14,6 +14,7 @@ using Acr.UserDialogs;
 using XLabs.Ioc;
 using System.Reflection;
 using Bit.App.Resources;
+using System.Threading;
 
 namespace Bit.App
 {
@@ -30,6 +31,7 @@ namespace Bit.App
         private readonly ILockService _lockService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
+        private CancellationTokenSource _setMainPageCancellationTokenSource = null;
 
         public static bool FromAutofillService { get; set; } = false;
 
@@ -91,9 +93,9 @@ namespace Bit.App
                 Device.BeginInvokeOnMainThread(() => Logout(args));
             });
 
-            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", async (sender) =>
+            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
             {
-                await SetMainPageFromAutofill();
+                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource);
             });
         }
 
@@ -112,7 +114,7 @@ namespace Bit.App
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
-            await SetMainPageFromAutofill(true);
+            _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource);
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -142,27 +144,38 @@ namespace Bit.App
             }
         }
 
-        private async Task SetMainPageFromAutofill(bool skipAlreadyOnCheck = false)
+        private CancellationTokenSource SetMainPageFromAutofill(CancellationTokenSource previousCts)
         {
             if(Device.OS != TargetPlatform.Android)
             {
-                return;
+                return null;
             }
 
-            var alreadyOnMainPage = MainPage as MainPage;
-            if(!skipAlreadyOnCheck && alreadyOnMainPage != null)
+            previousCts?.Cancel();
+            if(!FromAutofillService || string.IsNullOrWhiteSpace(_uri))
             {
-                return;
+                return null;
             }
 
-            if(FromAutofillService || !string.IsNullOrWhiteSpace(_uri))
+            var cts = new CancellationTokenSource();
+            Task.Run(async () =>
             {
-                // delay some so that we dont see the screen change as autofill closes
                 await Task.Delay(1000);
-                MainPage = new MainPage();
+                if(cts.Token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    MainPage = new MainPage();
+                });
+
                 _uri = null;
                 FromAutofillService = false;
-            }
+            }, cts.Token);
+
+            return cts;
         }
 
         private async Task IncrementalSyncAsync()

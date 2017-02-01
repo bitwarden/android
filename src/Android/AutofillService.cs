@@ -123,6 +123,18 @@ namespace Bit.Android
                 {
                     uri = string.Concat("http://", uri);
                 }
+                else if(Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
+                {
+                    var parts = uri.Split(new string[] { ". " }, StringSplitOptions.None);
+                    if(parts.Length > 1)
+                    {
+                        var urlPart = parts.FirstOrDefault(p => p.StartsWith("http"));
+                        if(urlPart != null)
+                        {
+                            uri = urlPart.Trim();
+                        }
+                    }
+                }
             }
 
             return uri;

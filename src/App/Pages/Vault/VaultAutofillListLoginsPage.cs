@@ -31,7 +31,7 @@ namespace Bit.App.Pages
         {
             _uri = uriString;
             Uri uri;
-            if(!Uri.TryCreate(uriString, UriKind.RelativeOrAbsolute, out uri) ||
+            if(!Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
                 !DomainName.TryParse(uri.Host, out _domainName))
             {
                 if(uriString != null && uriString.StartsWith(Constants.AndroidAppProtocol))
