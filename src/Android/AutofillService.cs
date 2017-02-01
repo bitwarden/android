@@ -24,6 +24,8 @@ namespace Bit.Android
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "bitwarden.com";
 
+        public static bool Enabled { get; set; } = false;
+
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var eventType = e.EventType;
@@ -78,6 +80,18 @@ namespace Bit.Android
         public override void OnInterrupt()
         {
 
+        }
+
+        protected override void OnServiceConnected()
+        {
+            base.OnServiceConnected();
+            Enabled = true;
+        }
+
+        public override void OnDestroy()
+        {
+            base.OnDestroy();
+            Enabled = false;
         }
 
         private void CancelNotification()
@@ -176,9 +190,9 @@ namespace Bit.Android
 
             var builder = new Notification.Builder(this);
             builder.SetSmallIcon(Resource.Drawable.notification_sm)
-                   .SetContentTitle("bitwarden Autofill Service")
-                   .SetContentText("Tap this notification to autofill a login from your vault.")
-                   .SetTicker("Tap this notification to autofill a login from your vault.")
+                   .SetContentTitle(App.Resources.AppResources.BitwardenAutofillService)
+                   .SetContentText(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
+                   .SetTicker(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
                    .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
                    .SetContentIntent(pendingIntent);
 

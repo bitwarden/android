@@ -10,62 +10,177 @@ namespace Bit.App.Pages
     public class ToolsAutofillServicePage : ExtendedContentPage
     {
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly IAppInfoService _appInfoService;
 
         public ToolsAutofillServicePage()
         {
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _appInfoService = Resolver.Resolve<IAppInfoService>();
 
             Init();
         }
 
+        public StackLayout EnabledStackLayout { get; set; }
+        public StackLayout DisabledStackLayout { get; set; }
+        public ScrollView ScrollView { get; set; }
+
         public void Init()
         {
-            var serviceLabel = new Label
+            var enabledFs = new FormattedString();
+            var statusSpan = new Span { Text = string.Concat(AppResources.Status, " ") };
+            enabledFs.Spans.Add(statusSpan);
+            enabledFs.Spans.Add(new Span
+            {
+                Text = AppResources.Enabled,
+                ForegroundColor = Color.Green,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+            });
+
+            var statusEnabledLabel = new Label
+            {
+                FormattedText = enabledFs,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                TextColor = Color.Black
+            };
+
+            var disabledFs = new FormattedString();
+            disabledFs.Spans.Add(statusSpan);
+            disabledFs.Spans.Add(new Span
+            {
+                Text = AppResources.Disabled,
+                ForegroundColor = Color.Red,
+                FontAttributes = FontAttributes.Bold,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+            });
+
+            var statusDisabledLabel = new Label
+            {
+                FormattedText = disabledFs,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                TextColor = Color.Black
+            };
+
+            var step1Label = new Label
+            {
+                Text = AppResources.BitwardenAutofillServiceStep1,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                TextColor = Color.Black
+            };
+
+            var step1Image = new Image
+            {
+                Source = "accessibility_step1",
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, 20, 0, 0)
+            };
+
+            var step2Label = new Label
+            {
+                Text = AppResources.BitwardenAutofillServiceStep2,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                TextColor = Color.Black
+            };
+
+            var step2Image = new Image
+            {
+                Source = "accessibility_step2",
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, 20, 0, 0)
+            };
+
+            var stepsStackLayout = new StackLayout
+            {
+                Children = { statusDisabledLabel, step1Image, step1Label, step2Image, step2Label },
+                Orientation = StackOrientation.Vertical,
+                Spacing = 10,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            var notificationsLabel = new Label
+            {
+                Text = AppResources.BitwardenAutofillServiceNotification,
+                HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap,
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                TextColor = Color.Black
+            };
+
+            var notificationsStackLayout = new StackLayout
+            {
+                Children = { statusEnabledLabel, notificationsLabel },
+                Orientation = StackOrientation.Vertical,
+                Spacing = 10,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                HorizontalOptions = LayoutOptions.Center
+            };
+
+            DisabledStackLayout = new StackLayout
+            {
+                Children = { BuildServiceLabel(), stepsStackLayout, BuildGoButton() },
+                Orientation = StackOrientation.Vertical,
+                Spacing = 20,
+                Padding = new Thickness(20, 30),
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+
+            EnabledStackLayout = new StackLayout
+            {
+                Children = { BuildServiceLabel(), notificationsStackLayout, BuildGoButton() },
+                Orientation = StackOrientation.Vertical,
+                Spacing = 20,
+                Padding = new Thickness(20, 30),
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+
+            ScrollView = new ScrollView { Content = DisabledStackLayout };
+
+            Title = AppResources.AutofillService;
+            Content = ScrollView;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            ScrollView.Content = _appInfoService.AutofillServiceEnabled ? EnabledStackLayout : DisabledStackLayout;
+        }
+
+        private Label BuildServiceLabel()
+        {
+            return new Label
             {
                 Text = AppResources.AutofillDescription,
                 VerticalOptions = LayoutOptions.Start,
-                HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             };
+        }
 
-            var comingSoonLabel = new Label
+        private ExtendedButton BuildGoButton()
+        {
+            return new ExtendedButton
             {
-                Text = AppResources.ComingSoon,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center,
-                HorizontalTextAlignment = TextAlignment.Center,
-                LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                TextColor = Color.Black
-            };
-
-            var progressButton = new ExtendedButton
-            {
-                Text = AppResources.SeeDevProgress,
+                Text = AppResources.BitwardenAutofillServiceOpenSettings,
                 Command = new Command(() =>
                 {
-                    _googleAnalyticsService.TrackAppEvent("SeeAutofillProgress");
-                    Device.OpenUri(new Uri("https://github.com/bitwarden/mobile/issues/1"));
+                    _googleAnalyticsService.TrackAppEvent("OpenAccessibilitySettings");
+                    MessagingCenter.Send(Application.Current, "Accessibility");
                 }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
                 Style = (Style)Application.Current.Resources["btn-primary"],
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
-
-            var stackLayout = new StackLayout
-            {
-                Children = { serviceLabel, comingSoonLabel, progressButton },
-                Orientation = StackOrientation.Vertical,
-                Spacing = 10,
-                Padding = new Thickness(20, 30),
-                VerticalOptions = LayoutOptions.FillAndExpand
-            };
-
-            Title = AppResources.AutofillService;
-            Content = new ScrollView { Content = stackLayout };
         }
     }
 }

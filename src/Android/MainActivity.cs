@@ -79,6 +79,11 @@ namespace Bit.Android
                 RateApp();
             });
 
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Accessibility", (sender) =>
+            {
+                OpenAccessibilitySettings();
+            });
+
             MessagingCenter.Subscribe<Xamarin.Forms.Application, VaultListPageModel.Login>(
                 Xamarin.Forms.Application.Current, "Autofill", (sender, args) =>
             {
@@ -179,6 +184,12 @@ namespace Bit.Android
 
             intent.AddFlags(flags);
             return intent;
+        }
+
+        private void OpenAccessibilitySettings()
+        {
+            var intent = new Intent(global::Android.Provider.Settings.ActionAccessibilitySettings);
+            StartActivity(intent);
         }
     }
 }

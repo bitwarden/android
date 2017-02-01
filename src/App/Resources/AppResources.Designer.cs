@@ -233,6 +233,51 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to When you see a bitwarden auto-fill notification, you can touch it to launch the auto-fill service..
+        /// </summary>
+        public static string BitwardenAutofillServiceNotification {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap this notification to auto-fill a login from your vault..
+        /// </summary>
+        public static string BitwardenAutofillServiceNotificationContent {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceNotificationContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Accessibility Settings.
+        /// </summary>
+        public static string BitwardenAutofillServiceOpenSettings {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceOpenSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1. On the Android Accessibility Settings screen, touch &quot;bitwarden&quot; under the Services heading..
+        /// </summary>
+        public static string BitwardenAutofillServiceStep1 {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceStep1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. Switch on the toggle and press OK to accept..
+        /// </summary>
+        public static string BitwardenAutofillServiceStep2 {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceStep2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Cancel {
@@ -413,6 +458,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        public static string Disabled {
+            get {
+                return ResourceManager.GetString("Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to delete? This cannot be undone..
         /// </summary>
         public static string DoYouReallyWantToDelete {
@@ -490,6 +544,15 @@ namespace Bit.App.Resources {
         public static string EnableAutomaticSyncing {
             get {
                 return ResourceManager.GetString("EnableAutomaticSyncing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string Enabled {
+            get {
+                return ResourceManager.GetString("Enabled", resourceCulture);
             }
         }
         
@@ -1516,6 +1579,15 @@ namespace Bit.App.Resources {
         public static string Show {
             get {
                 return ResourceManager.GetString("Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Status.
+        /// </summary>
+        public static string Status {
+            get {
+                return ResourceManager.GetString("Status", resourceCulture);
             }
         }
         

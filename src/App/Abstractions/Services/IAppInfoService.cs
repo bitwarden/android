@@ -4,5 +4,6 @@
     {
         string Build { get; }
         string Version { get; }
+        bool AutofillServiceEnabled { get; }
     }
 }
