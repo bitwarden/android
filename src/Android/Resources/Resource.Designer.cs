@@ -3690,6 +3690,9 @@ namespace Bit.Android
 			// aapt resource value: 0x7f080047
 			public const int ApplicationName = 2131230791;
 			
+			// aapt resource value: 0x7f08008f
+			public const int AutoFillServiceDescription = 2131230863;
+			
 			// aapt resource value: 0x7f080046
 			public const int Hello = 2131230790;
 			
