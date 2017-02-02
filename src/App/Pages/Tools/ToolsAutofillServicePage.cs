@@ -51,7 +51,7 @@ namespace Bit.App.Pages
             disabledFs.Spans.Add(new Span
             {
                 Text = AppResources.Disabled,
-                ForegroundColor = Color.Red,
+                ForegroundColor = Color.FromHex("c62929"),
                 FontAttributes = FontAttributes.Bold,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
             });
@@ -70,7 +70,7 @@ namespace Bit.App.Pages
                 Text = AppResources.BitwardenAutofillServiceStep1,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 TextColor = Color.Black
             };
 
@@ -78,7 +78,9 @@ namespace Bit.App.Pages
             {
                 Source = "accessibility_step1",
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, 20, 0, 0)
+                Margin = new Thickness(0, 20, 0, 0),
+                WidthRequest = 300,
+                HeightRequest = 98
             };
 
             var step2Label = new Label
@@ -86,7 +88,7 @@ namespace Bit.App.Pages
                 Text = AppResources.BitwardenAutofillServiceStep2,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 TextColor = Color.Black
             };
 
@@ -94,7 +96,9 @@ namespace Bit.App.Pages
             {
                 Source = "accessibility_step2",
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, 20, 0, 0)
+                Margin = new Thickness(0, 20, 0, 0),
+                WidthRequest = 300,
+                HeightRequest = 67
             };
 
             var stepsStackLayout = new StackLayout
@@ -111,13 +115,31 @@ namespace Bit.App.Pages
                 Text = AppResources.BitwardenAutofillServiceNotification,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 TextColor = Color.Black
+            };
+
+            var tapNotificationImage = new Image
+            {
+                Source = "accessibility_notification",
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, 20, 0, 0),
+                WidthRequest = 300,
+                HeightRequest = 74
+            };
+
+            var tapNotificationIcon = new Image
+            {
+                Source = "accessibility_notification_icon",
+                HorizontalOptions = LayoutOptions.Center,
+                Margin = new Thickness(0, 20, 0, 0),
+                WidthRequest = 300,
+                HeightRequest = 54
             };
 
             var notificationsStackLayout = new StackLayout
             {
-                Children = { statusEnabledLabel, notificationsLabel },
+                Children = { statusEnabledLabel, tapNotificationIcon, tapNotificationImage, notificationsLabel },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 10,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -144,6 +166,11 @@ namespace Bit.App.Pages
 
             ScrollView = new ScrollView { Content = DisabledStackLayout };
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
+            }
+
             Title = AppResources.AutofillService;
             Content = ScrollView;
         }
@@ -162,7 +189,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label))
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label))
             };
         }
 

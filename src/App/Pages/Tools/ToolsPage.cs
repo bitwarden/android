@@ -50,7 +50,7 @@ namespace Bit.App.Pages
                     AppResources.BitwardenAutofillServiceDescription, "upload");
                 autofillServiceCell.Tapped += (object sender, EventArgs e) =>
                 {
-                    Navigation.PushAsync(new ToolsAutofillServicePage());
+                    Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
                 };
                 section.Add(autofillServiceCell);
             }

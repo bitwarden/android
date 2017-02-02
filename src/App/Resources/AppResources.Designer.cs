@@ -233,7 +233,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When you see a bitwarden auto-fill notification, you can touch it to launch the auto-fill service..
+        ///   Looks up a localized string similar to When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service..
         /// </summary>
         public static string BitwardenAutofillServiceNotification {
             get {

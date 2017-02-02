@@ -766,7 +766,7 @@
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can touch it to launch the auto-fill service.</value>
+    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tap this notification to auto-fill a login from your vault.</value>
