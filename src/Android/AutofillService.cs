@@ -55,7 +55,7 @@ namespace Bit.Android
             var eventType = e.EventType;
             var packageName = e.PackageName;
 
-            if(packageName == SystemUiPackage || packageName == BitwardenPackage)
+            if(packageName == SystemUiPackage)
             {
                 return;
             }
@@ -64,6 +64,12 @@ namespace Bit.Android
             {
                 case EventTypes.WindowContentChanged:
                 case EventTypes.WindowStateChanged:
+                    if(packageName == BitwardenPackage)
+                    {
+                        CancelNotification();
+                        break;
+                    }
+
                     var cancelNotification = true;
                     var root = RootInActiveWindow;
                     var passwordNodes = GetWindowNodes(root, e, n => n.Password);

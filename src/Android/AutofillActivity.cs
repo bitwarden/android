@@ -33,6 +33,18 @@ namespace Bit.Android
             base.OnDestroy();
         }
 
+        protected override void OnResume()
+        {
+            base.OnResume();
+            if(!Intent.HasExtra("uri"))
+            {
+                Finish();
+                return;
+            }
+
+            Intent.RemoveExtra("uri");
+        }
+
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
@@ -79,6 +91,7 @@ namespace Bit.Android
             _lastQueriedUri = callingIntent?.GetStringExtra("uri");
             if(_lastQueriedUri == null)
             {
+                Finish();
                 return;
             }
 
