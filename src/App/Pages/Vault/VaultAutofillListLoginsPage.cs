@@ -264,7 +264,7 @@ namespace Bit.App.Pages
 
             private void ClickedItem(object sender, EventArgs e)
             {
-                Application.Current.MainPage = new MainPage();
+                MessagingCenter.Send(Application.Current, "SetMainPageNow");
             }
         }
     }

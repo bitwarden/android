@@ -29,6 +29,11 @@ namespace Bit.Android
         protected override void OnCreate(Bundle bundle)
         {
             var uri = Intent.GetStringExtra("uri");
+            if(Intent.HasExtra("uri"))
+            {
+                Intent.RemoveExtra("uri");
+            }
+
             if(uri != null && !Resolver.IsSet)
             {
                 MainApplication.SetIoc(Application);

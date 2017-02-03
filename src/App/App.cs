@@ -95,7 +95,12 @@ namespace Bit.App
 
             MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
             {
-                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource);
+                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, 1000);
+            });
+
+            MessagingCenter.Subscribe<Application>(Current, "SetMainPageNow", (sender) =>
+            {
+                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, 0);
             });
         }
 
@@ -114,7 +119,7 @@ namespace Bit.App
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
-            _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource);
+            _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, 1000);
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -144,7 +149,7 @@ namespace Bit.App
             }
         }
 
-        private CancellationTokenSource SetMainPageFromAutofill(CancellationTokenSource previousCts)
+        private CancellationTokenSource SetMainPageFromAutofill(CancellationTokenSource previousCts, int delay)
         {
             if(Device.OS != TargetPlatform.Android)
             {
@@ -160,7 +165,7 @@ namespace Bit.App
             var cts = new CancellationTokenSource();
             Task.Run(async () =>
             {
-                await Task.Delay(1000);
+                await Task.Delay(delay);
                 if(cts.Token.IsCancellationRequested)
                 {
                     return;
