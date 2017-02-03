@@ -16,15 +16,39 @@ namespace Bit.Android
     {
         private const int AutoFillNotificationId = 34573;
         private const string SystemUiPackage = "com.android.systemui";
-        private const string ChromePackage = "com.android.chrome";
-        private const string BrowserPackage = "com.android.browser";
-        private const string BravePackage = "com.brave.browser";
-        private const string OperaPackage = "com.opera.browser";
-        private const string OperaMiniPackage = "com.opera.mini.native";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "bitwarden.com";
 
         public static bool Enabled { get; set; } = false;
+        private static Dictionary<string, string[]> BrowserPackages => new Dictionary<string, string[]>
+        {
+            { "com.android.chrome", new string[] { "url_bar" } },
+            { "com.chrome.beta", new string[] { "url_bar" } },
+            { "com.android.browser", new string[] { "url" } },
+            { "com.brave.browser", new string[] { "url_bar" } },
+            { "com.opera.browser", new string[] { "url_field" } },
+            { "com.opera.browser.beta", new string[] { "url_field" } },
+            { "com.opera.mini.native", new string[] { "url_field" } },
+            { "com.chrome.dev", new string[] { "url_bar" } },
+            { "com.chrome.canary", new string[] { "url_bar" } },
+            { "com.google.android.apps.chrome", new string[] { "url_bar" } },
+            { "com.google.android.apps.chrome_dev", new string[] { "url_bar" } },
+            { "org.iron.srware", new string[] { "url_bar" } },
+            { "com.sec.android.app.sbrowser", new string[] { "sbrowser_url_bar" } },
+            { "com.yandex.browser", new string[] { "bro_common_omnibox_host", "bro_common_omnibox_edit_text" } },
+            { "org.mozilla.firefox", new string[] { "url_bar_title" } },
+            { "org.mozilla.firefox_beta", new string[] { "url_bar_title" } },
+            { "com.ghostery.android.ghostery",new string[] {  "search_field" } },
+            { "org.adblockplus.browser", new string[] { "url_bar_title" } },
+            { "com.htc.sense.browser", new string[] { "title" } },
+            { "com.amazon.cloud9", new string[] { "url" } },
+            { "mobi.mgeek.TunnyBrowser", new string[] { "title" } },
+            { "com.nubelacorp.javelin", new string[] { "enterUrl" } },
+            { "com.jerky.browser2", new string[] { "enterUrl" } },
+            { "com.mx.browser", new string[] { "address_editor_with_progress" } },
+            { "com.mx.browser.tablet", new string[] { "address_editor_with_progress"} },
+            { "com.linkbubble.playstore", new string[] { "url_text" }}
+        };
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
@@ -103,26 +127,20 @@ namespace Bit.Android
         private string GetUri(AccessibilityNodeInfo root)
         {
             var uri = string.Concat(App.Constants.AndroidAppProtocol, root.PackageName);
-            string addressViewId = null;
+            if(BrowserPackages.ContainsKey(root.PackageName))
+            {
+                foreach(var addressViewId in BrowserPackages[root.PackageName])
+                {
+                    var addressNode = root.FindAccessibilityNodeInfosByViewId(
+                        $"{root.PackageName}:id/{addressViewId}").FirstOrDefault();
+                    if(addressNode == null)
+                    {
+                        continue;
+                    }
 
-            if(root.PackageName == ChromePackage || root.PackageName == BravePackage)
-            {
-                addressViewId = "url_bar";
-            }
-            else if(true || root.PackageName == BrowserPackage)
-            {
-                addressViewId = "url";
-            }
-            else if(root.PackageName == OperaPackage || root.PackageName == OperaMiniPackage)
-            {
-                addressViewId = "url_field";
-            }
-
-            if(!string.IsNullOrWhiteSpace(addressViewId))
-            {
-                var addressNode = root.FindAccessibilityNodeInfosByViewId(
-                    $"{root.PackageName}:id/{addressViewId}").FirstOrDefault();
-                uri = ExtractUri(uri, addressNode);
+                    uri = ExtractUri(uri, addressNode);
+                    break;
+                }
             }
 
             return uri;
