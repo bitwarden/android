@@ -789,4 +789,7 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
+  <data name="Beta" xml:space="preserve">
+    <value>Beta</value>
+  </data>
 </root>

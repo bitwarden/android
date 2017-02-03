@@ -179,6 +179,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Beta.
+        /// </summary>
+        public static string Beta {
+            get {
+                return ResourceManager.GetString("Beta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to bitwarden.
         /// </summary>
         public static string Bitwarden {

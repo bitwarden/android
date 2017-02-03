@@ -46,7 +46,8 @@ namespace Bit.App.Pages
             }
             else
             {
-                var autofillServiceCell = new ToolsViewCell(AppResources.BitwardenAutofillService,
+                var autofillServiceCell = new ToolsViewCell(
+                    string.Format("{0} ({1})", AppResources.BitwardenAutofillService, AppResources.Beta),
                     AppResources.BitwardenAutofillServiceDescription, "upload");
                 autofillServiceCell.Tapped += (object sender, EventArgs e) =>
                 {
