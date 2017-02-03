@@ -33,8 +33,6 @@ namespace Bit.App
         private readonly ILocalizeService _localizeService;
         private CancellationTokenSource _setMainPageCancellationTokenSource = null;
 
-        public static bool FromAutofillService { get; set; } = false;
-
         public App(
             string uri,
             IAuthService authService,
@@ -63,7 +61,6 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
-            FromAutofillService = !string.IsNullOrWhiteSpace(_uri);
             if(authService.IsAuthenticated && _uri != null)
             {
                 MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
@@ -172,7 +169,6 @@ namespace Bit.App
                 });
 
                 _uri = null;
-                FromAutofillService = false;
             }, cts.Token);
 
             return cts;

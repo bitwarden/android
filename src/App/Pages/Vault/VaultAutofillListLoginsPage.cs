@@ -61,14 +61,6 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
-            {
-                if(success)
-                {
-                    _filterResultsCancellationTokenSource = FetchAndLoadVault();
-                }
-            });
-
             var noDataLabel = new Label
             {
                 Text = string.Format(AppResources.NoLoginsForUri, _name ?? "--"),

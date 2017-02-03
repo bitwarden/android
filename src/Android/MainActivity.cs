@@ -98,7 +98,6 @@ namespace Bit.Android
 
         private void ReturnCredentials(VaultListPageModel.Login login)
         {
-            App.App.FromAutofillService = true;
             Intent data = new Intent();
             if(login == null)
             {
