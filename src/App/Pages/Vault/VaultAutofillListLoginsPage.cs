@@ -18,6 +18,7 @@ namespace Bit.App.Pages
     public class VaultAutofillListLoginsPage : ExtendedContentPage
     {
         private readonly ILoginService _loginService;
+        private readonly IDeviceInfoService _deviceInfoService;
         private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
@@ -44,8 +45,9 @@ namespace Bit.App.Pages
             {
                 _name = _domainName.BaseDomain;
             }
-            
+
             _loginService = Resolver.Resolve<ILoginService>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
 
@@ -91,6 +93,7 @@ namespace Bit.App.Pages
             };
 
             ToolbarItems.Add(new AddLoginToolBarItem(this));
+            ToolbarItems.Add(new CloseToolBarItem(this));
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
@@ -171,6 +174,13 @@ namespace Bit.App.Pages
         private void LoginSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var login = e.SelectedItem as VaultListPageModel.Login;
+
+            if(_uri.StartsWith("http") && _deviceInfoService.Version < 21)
+            {
+                MoreClickedAsync(login);
+                return;
+            }
+
             MessagingCenter.Send(Application.Current, "Autofill", login);
         }
 
@@ -230,11 +240,31 @@ namespace Bit.App.Pages
                 Text = AppResources.Add;
                 Icon = "plus";
                 Clicked += ClickedItem;
+                Priority = 1;
             }
 
             private void ClickedItem(object sender, EventArgs e)
             {
                 _page.AddLoginAsync();
+            }
+        }
+
+        private class CloseToolBarItem : ToolbarItem
+        {
+            private readonly VaultAutofillListLoginsPage _page;
+
+            public CloseToolBarItem(VaultAutofillListLoginsPage page)
+            {
+                _page = page;
+                Text = AppResources.Close;
+                Icon = "close";
+                Clicked += ClickedItem;
+                Priority = 2;
+            }
+
+            private void ClickedItem(object sender, EventArgs e)
+            {
+                Application.Current.MainPage = new MainPage();
             }
         }
     }
