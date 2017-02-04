@@ -332,6 +332,7 @@
     <Compile Include="SplashActivity.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="8bit.keystore.enc" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
