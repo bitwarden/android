@@ -33,6 +33,8 @@ namespace Bit.App
         private readonly ILocalizeService _localizeService;
         private CancellationTokenSource _setMainPageCancellationTokenSource = null;
 
+        public static bool FromAutofillService { get; set; } = false;
+
         public App(
             string uri,
             IAuthService authService,
@@ -61,6 +63,7 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
+            FromAutofillService = !string.IsNullOrWhiteSpace(_uri);
             if(authService.IsAuthenticated && _uri != null)
             {
                 MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
@@ -111,11 +114,12 @@ namespace Bit.App
             Debug.WriteLine("OnStart");
         }
 
-        protected async override void OnSleep()
+        protected override void OnSleep()
         {
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
-            
+
+            _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, 500);
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -153,6 +157,10 @@ namespace Bit.App
             }
 
             previousCts?.Cancel();
+            if(!FromAutofillService || string.IsNullOrWhiteSpace(_uri))
+            {
+                return null;
+            }
 
             var cts = new CancellationTokenSource();
             Task.Run(async () =>
@@ -169,6 +177,7 @@ namespace Bit.App
                 });
 
                 _uri = null;
+                FromAutofillService = false;
             }, cts.Token);
 
             return cts;

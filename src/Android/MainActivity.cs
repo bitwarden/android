@@ -98,6 +98,7 @@ namespace Bit.Android
 
         private void ReturnCredentials(VaultListPageModel.Login login)
         {
+            App.App.FromAutofillService = true;
             Intent data = new Intent();
             if(login == null)
             {
@@ -154,8 +155,12 @@ namespace Bit.Android
 
         protected override void OnResume()
         {
-            Console.WriteLine("A OnResume");
             base.OnResume();
+            Console.WriteLine("A OnResume");
+
+            // workaround for app compat bug
+            // ref https://bugzilla.xamarin.com/show_bug.cgi?id=36907
+            Task.Delay(10).Wait();
         }
 
         public void RateApp()

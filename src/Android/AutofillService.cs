@@ -52,6 +52,8 @@ namespace Bit.Android
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
+            Enabled = true;
+
             var eventType = e.EventType;
             var packageName = e.PackageName;
 
