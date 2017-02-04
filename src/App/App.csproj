@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
+    <Compile Include="Abstractions\Services\ITokenService.cs" />
     <Compile Include="Abstractions\Services\IHttpService.cs" />
     <Compile Include="Abstractions\Services\IDeviceInfoService.cs" />
     <Compile Include="Abstractions\Services\IGoogleAnalyticsService.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="Models\Api\Request\LoginRequest.cs" />
     <Compile Include="Models\Api\Request\PasswordHintRequest.cs" />
     <Compile Include="Models\Api\Request\TokenRequest.cs" />
-    <Compile Include="Models\Api\Request\TokenTwoFactorRequest.cs" />
     <Compile Include="Models\Api\Response\CipherHistoryResponse.cs" />
     <Compile Include="Models\Api\Response\CipherResponse.cs" />
     <Compile Include="Models\Api\Response\ErrorResponse.cs" />
@@ -140,12 +140,12 @@
     <Compile Include="Abstractions\Repositories\ILoginRepository.cs" />
     <Compile Include="Repositories\ApiRepository.cs" />
     <Compile Include="Repositories\AccountsApiRepository.cs" />
+    <Compile Include="Repositories\ConnectApiRepository.cs" />
     <Compile Include="Repositories\BaseApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IFolderApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ILoginApiRepository.cs" />
-    <Compile Include="Repositories\AuthApiRepository.cs" />
-    <Compile Include="Abstractions\Repositories\IAuthApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IConnectApiRepository.cs" />
     <Compile Include="Repositories\DeviceApiRepository.cs" />
     <Compile Include="Repositories\CipherApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ICipherApiRepository.cs" />
@@ -180,6 +180,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\TokenService.cs" />
     <Compile Include="Services\AppIdService.cs" />
     <Compile Include="Abstractions\Services\ILockService.cs" />
     <Compile Include="Services\LockService.cs" />

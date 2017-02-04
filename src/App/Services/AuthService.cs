@@ -9,18 +9,17 @@ namespace Bit.App.Services
 {
     public class AuthService : IAuthService
     {
-        private const string TokenKey = "token";
         private const string EmailKey = "email";
         private const string UserIdKey = "userId";
         private const string PreviousUserIdKey = "previousUserId";
         private const string PinKey = "pin";
 
         private readonly ISecureStorageService _secureStorage;
+        private readonly ITokenService _tokenService;
         private readonly ISettings _settings;
         private readonly ICryptoService _cryptoService;
-        private readonly IAuthApiRepository _authApiRepository;
+        private readonly IConnectApiRepository _connectApiRepository;
 
-        private string _token;
         private string _email;
         private string _userId;
         private string _previousUserId;
@@ -28,48 +27,16 @@ namespace Bit.App.Services
 
         public AuthService(
             ISecureStorageService secureStorage,
+            ITokenService tokenService,
             ISettings settings,
             ICryptoService cryptoService,
-            IAuthApiRepository authApiRepository)
+            IConnectApiRepository connectApiRepository)
         {
             _secureStorage = secureStorage;
+            _tokenService = tokenService;
             _settings = settings;
             _cryptoService = cryptoService;
-            _authApiRepository = authApiRepository;
-        }
-
-        public string Token
-        {
-            get
-            {
-                if(_token != null)
-                {
-                    return _token;
-                }
-
-                var tokenBytes = _secureStorage.Retrieve(TokenKey);
-                if(tokenBytes == null)
-                {
-                    return null;
-                }
-
-                _token = Encoding.UTF8.GetString(tokenBytes, 0, tokenBytes.Length);
-                return _token;
-            }
-            set
-            {
-                if(value != null)
-                {
-                    var tokenBytes = Encoding.UTF8.GetBytes(value);
-                    _secureStorage.Store(TokenKey, tokenBytes);
-                }
-                else
-                {
-                    _secureStorage.Delete(TokenKey);
-                }
-
-                _token = value;
-            }
+            _connectApiRepository = connectApiRepository;
         }
 
         public string UserId
@@ -170,14 +137,8 @@ namespace Bit.App.Services
         {
             get
             {
-                return _cryptoService.Key != null && !string.IsNullOrWhiteSpace(Token) && !string.IsNullOrWhiteSpace(UserId);
-            }
-        }
-        public bool IsAuthenticatedTwoFactor
-        {
-            get
-            {
-                return _cryptoService.Key != null && !string.IsNullOrWhiteSpace(Token) && string.IsNullOrWhiteSpace(UserId);
+                return _cryptoService.Key != null && !string.IsNullOrWhiteSpace(_tokenService.Token) &&
+                    !string.IsNullOrWhiteSpace(UserId);
             }
         }
 
@@ -217,7 +178,9 @@ namespace Bit.App.Services
 
         public void LogOut()
         {
-            Token = null;
+            _tokenService.Token = null;
+            _tokenService.RefreshToken = null;
+            _tokenService.AuthBearer = null;
             UserId = null;
             Email = null;
             _cryptoService.Key = null;
@@ -227,13 +190,7 @@ namespace Bit.App.Services
         public async Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request)
         {
             // TODO: move more logic in here
-            return await _authApiRepository.PostTokenAsync(request);
-        }
-
-        public async Task<ApiResult<TokenResponse>> TokenTwoFactorPostAsync(TokenTwoFactorRequest request)
-        {
-            // TODO: move more logic in here
-            return await _authApiRepository.PostTokenTwoFactorAsync(request);
+            return await _connectApiRepository.PostTokenAsync(request);
         }
     }
 }

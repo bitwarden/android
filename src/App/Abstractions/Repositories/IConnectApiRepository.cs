@@ -3,9 +3,8 @@ using Bit.App.Models.Api;
 
 namespace Bit.App.Abstractions
 {
-    public interface IAuthApiRepository
+    public interface IConnectApiRepository
     {
         Task<ApiResult<TokenResponse>> PostTokenAsync(TokenRequest requestObj);
-        Task<ApiResult<TokenResponse>> PostTokenTwoFactorAsync(TokenTwoFactorRequest requestObj);
     }
 }

@@ -280,12 +280,13 @@ namespace Bit.iOS.Extension
                 .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILoginRepository, LoginRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILoginApiRepository, LoginApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IConnectApiRepository, ConnectApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());

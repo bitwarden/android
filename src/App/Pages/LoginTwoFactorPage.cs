@@ -15,6 +15,7 @@ namespace Bit.App.Pages
     {
         private ICryptoService _cryptoService;
         private IAuthService _authService;
+        private ITokenService _tokenService;
         private IDeviceInfoService _deviceInfoService;
         private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
         {
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
+            _tokenService = Resolver.Resolve<ITokenService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -134,15 +136,16 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var request = new TokenTwoFactorRequest
+            var request = new TokenRequest
             {
-                Code = CodeCell.Entry.Text.Replace(" ", ""),
-                Provider = "Authenticator",
+                // TODO: username and pass from previous page
+                Token = CodeCell.Entry.Text.Replace(" ", ""),
+                Provider = 0,
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 
             _userDialogs.ShowLoading(AppResources.ValidatingCode, MaskType.Black);
-            var response = await _authService.TokenTwoFactorPostAsync(request);
+            var response = await _authService.TokenPostAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
             {
@@ -150,9 +153,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _authService.Token = response.Result.Token;
-            _authService.UserId = response.Result.Profile.Id;
-            _authService.Email = response.Result.Profile.Email;
+            _tokenService.Token = response.Result.AccessToken;
+            _tokenService.RefreshToken = response.Result.RefreshToken;
+            _authService.UserId = _tokenService.TokenUserId;
+            _authService.Email = _tokenService.TokenEmail;
 
             var task = Task.Run(async () => await _syncService.FullSyncAsync());
             Application.Current.MainPage = new MainPage();

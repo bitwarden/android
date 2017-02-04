@@ -17,6 +17,7 @@ namespace Bit.App.Pages
     {
         private ICryptoService _cryptoService;
         private IAuthService _authService;
+        private ITokenService _tokenService;
         private IDeviceInfoService _deviceInfoService;
         private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
@@ -32,6 +33,7 @@ namespace Bit.App.Pages
             _email = email;
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
+            _tokenService = Resolver.Resolve<ITokenService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -196,9 +198,10 @@ namespace Bit.App.Pages
             }
 
             _cryptoService.Key = key;
-            _authService.Token = response.Result.Token;
-            _authService.UserId = response.Result?.Profile?.Id;
-            _authService.Email = response.Result?.Profile?.Email;
+            _tokenService.Token = response.Result.AccessToken;
+            _tokenService.RefreshToken = response.Result.RefreshToken;
+            _authService.UserId = _tokenService.TokenUserId;
+            _authService.Email = _tokenService.TokenEmail;
             _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
             _googleAnalyticsService.RefreshUserId();
             _googleAnalyticsService.TrackAppEvent("LoggedIn");
@@ -208,7 +211,7 @@ namespace Bit.App.Pages
                 _pushNotification.Register();
             }
 
-            if(_authService.IsAuthenticatedTwoFactor)
+            if(false) // TODO: 2FA
             {
                 await Navigation.PushAsync(new LoginTwoFactorPage());
             }
