@@ -55,9 +55,9 @@ namespace Bit.Publisher
                 {
                     Console.WriteLine("ERROR: " + e.Message);
                 }
-            }
 
-            Console.ReadLine();
+                throw;
+            }
         }
 
         private async Task Run()
