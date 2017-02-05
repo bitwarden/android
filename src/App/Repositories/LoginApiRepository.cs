@@ -13,8 +13,9 @@ namespace Bit.App.Repositories
     {
         public LoginApiRepository(
             IConnectivity connectivity,
-            IHttpService httpService)
-            : base(connectivity, httpService)
+            IHttpService httpService,
+            ITokenService tokenService)
+            : base(connectivity, httpService, tokenService)
         { }
 
         protected override string ApiRoute => "sites";

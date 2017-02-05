@@ -11,7 +11,7 @@ namespace Bit.App.Abstractions
         DateTime TokenExpiration { get; }
         bool TokenExpired { get; }
         TimeSpan TokenTimeRemaining { get; }
-        bool TokenNeedseRefresh { get; }
+        bool TokenNeedsRefresh { get; }
         string TokenUserId { get; }
         string TokenEmail { get; }
         string TokenName { get; }

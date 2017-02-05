@@ -17,8 +17,9 @@ namespace Bit.App.Repositories
     {
         public ApiRepository(
             IConnectivity connectivity,
-            IHttpService httpService)
-            : base(connectivity, httpService)
+            IHttpService httpService,
+            ITokenService tokenService)
+            : base(connectivity, httpService, tokenService)
         { }
 
         public virtual async Task<ApiResult<TResponse>> GetByIdAsync(TId id)
@@ -26,6 +27,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<TResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<TResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -62,6 +69,12 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<ListResponse<TResponse>>();
             }
 
+            var tokenStateResponse = await HandleTokenStateAsync<ListResponse<TResponse>>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
+            }
+
             using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage()
@@ -94,6 +107,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<TResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<TResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -130,6 +149,12 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<TResponse>();
             }
 
+            var tokenStateResponse = await HandleTokenStateAsync<TResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
+            }
+
             using(var client = HttpService.Client)
             {
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
@@ -162,6 +187,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)

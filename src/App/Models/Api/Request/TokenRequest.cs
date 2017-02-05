@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Bit.App.Models.Api
 {
@@ -8,6 +9,8 @@ namespace Bit.App.Models.Api
         public string MasterPasswordHash { get; set; }
         public string Token { get; set; }
         public int? Provider { get; set; }
+        [Obsolete]
+        public string OldAuthBearer { get; set; }
         public DeviceRequest Device { get; set; }
 
         public IDictionary<string, string> ToIdentityTokenRequest()
@@ -20,6 +23,11 @@ namespace Bit.App.Models.Api
                 { "scope", "api offline_access" },
                 { "client_id", "mobile" }
             };
+
+            if(OldAuthBearer != null)
+            {
+                dict.Add("OldAuthBearer", OldAuthBearer);
+            }
 
             if(Device != null)
             {

@@ -2,6 +2,7 @@
 using Bit.App.Abstractions;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Services
 {
@@ -67,22 +68,21 @@ namespace Bit.App.Services
             get
             {
                 var decoded = DecodeToken();
-                long exp = 0;
-                if(decoded?.exp != null || !long.TryParse(decoded.exp, out exp))
+                if(decoded?["exp"] == null)
                 {
                     throw new InvalidOperationException("No exp in token.");
                 }
 
-                return _epoc.AddSeconds(Convert.ToDouble(exp));
+                return _epoc.AddSeconds(Convert.ToDouble(decoded["exp"].Value<long>()));
             }
         }
 
         public bool TokenExpired => DateTime.UtcNow < TokenExpiration;
         public TimeSpan TokenTimeRemaining => TokenExpiration - DateTime.UtcNow;
-        public bool TokenNeedseRefresh => TokenTimeRemaining.TotalMinutes < 5;
-        public string TokenUserId => DecodeToken()?.sub;
-        public string TokenEmail => DecodeToken()?.email;
-        public string TokenName => DecodeToken()?.name;
+        public bool TokenNeedsRefresh => TokenTimeRemaining.TotalMinutes < 5;
+        public string TokenUserId => DecodeToken()?["sub"].Value<string>();
+        public string TokenEmail => DecodeToken()?["email"].Value<string>();
+        public string TokenName => DecodeToken()?["name"].Value<string>();
 
         public string RefreshToken
         {
@@ -152,7 +152,7 @@ namespace Bit.App.Services
             }
         }
 
-        public dynamic DecodeToken()
+        public JObject DecodeToken()
         {
             if(_decodedToken != null)
             {
@@ -176,7 +176,7 @@ namespace Bit.App.Services
                 throw new InvalidOperationException($"{nameof(Token)} must have 3 parts");
             }
 
-            _decodedToken = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(decodedBytes, 0, decodedBytes.Length));
+            _decodedToken = JObject.Parse(Encoding.UTF8.GetString(decodedBytes, 0, decodedBytes.Length));
             return _decodedToken;
         }
 

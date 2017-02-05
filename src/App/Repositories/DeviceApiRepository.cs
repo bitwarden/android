@@ -13,8 +13,9 @@ namespace Bit.App.Repositories
     {
         public DeviceApiRepository(
             IConnectivity connectivity,
-            IHttpService httpService)
-            : base(connectivity, httpService)
+            IHttpService httpService,
+            ITokenService tokenService)
+            : base(connectivity, httpService, tokenService)
         { }
 
         protected override string ApiRoute => "devices";
@@ -24,6 +25,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)

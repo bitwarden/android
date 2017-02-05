@@ -14,8 +14,9 @@ namespace Bit.App.Repositories
     {
         public FolderApiRepository(
             IConnectivity connectivity,
-            IHttpService httpService)
-            : base(connectivity, httpService)
+            IHttpService httpService,
+            ITokenService tokenService)
+            : base(connectivity, httpService, tokenService)
         { }
 
         protected override string ApiRoute => "folders";
@@ -25,6 +26,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<ListResponse<FolderResponse>>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<ListResponse<FolderResponse>>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
