@@ -1,5 +1,5 @@
-﻿$rootPath = "%APPVEYOR_BUILD_FOLDER%";
-$newVersionCode = "%APPVEYOR_BUILD_NUMBER%";
+﻿$rootPath = $args[0];
+$newVersionCode = $args[1];
 
 $xml=New-Object XML;
 $xml.Load($rootPath + "src\Android\Properties\AndroidManifest.xml");
