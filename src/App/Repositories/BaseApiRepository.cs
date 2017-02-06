@@ -8,6 +8,7 @@ using Plugin.Connectivity.Abstractions;
 using Bit.App.Abstractions;
 using System.Net;
 using XLabs.Ioc;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Repositories
 {
@@ -191,7 +192,17 @@ namespace Bit.App.Repositories
             if(statusCode >= 400 && statusCode <= 500)
             {
                 var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                var errorResponseModel = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+
+                ErrorResponse errorResponseModel = null;
+                var errorResponse = JObject.Parse(responseContent);
+                if(errorResponse["ErrorModel"] != null && errorResponse["ErrorModel"]["Message"] != null)
+                {
+                    errorResponseModel = errorResponse["ErrorModel"].ToObject<ErrorResponse>();
+                }
+                else if(errorResponse["Message"] != null)
+                {
+                    errorResponseModel = errorResponse.ToObject<ErrorResponse>();
+                }
 
                 if(errorResponseModel != null)
                 {
@@ -210,10 +221,11 @@ namespace Bit.App.Repositories
                         errors.Add(new ApiError { Message = errorResponseModel.Message });
                     }
                 }
-                else
-                {
-                    errors.Add(new ApiError { Message = "An unknown error has occured." });
-                }
+            }
+
+            if(errors.Count == 0)
+            {
+                errors.Add(new ApiError { Message = "An unknown error has occured." });
             }
 
             return errors;
