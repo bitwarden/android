@@ -60,7 +60,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
                     return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<TokenResponse>();
                 }

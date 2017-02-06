@@ -54,7 +54,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<CipherResponse>(responseContent);
                     return ApiResult<CipherResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<CipherResponse>();
                 }
@@ -94,7 +94,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<CipherResponse>>(responseContent);
                     return ApiResult<ListResponse<CipherResponse>>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException e)
+                catch
                 {
                     return HandledWebException<ListResponse<CipherResponse>>();
                 }
@@ -134,7 +134,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<CipherHistoryResponse>(responseContent);
                     return ApiResult<CipherHistoryResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<CipherHistoryResponse>();
                 }

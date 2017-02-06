@@ -55,7 +55,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<TResponse>();
                 }
@@ -95,7 +95,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<TResponse>>(responseContent);
                     return ApiResult<ListResponse<TResponse>>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<ListResponse<TResponse>>();
                 }
@@ -135,7 +135,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<TResponse>();
                 }
@@ -175,7 +175,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<TResponse>();
                 }
@@ -213,7 +213,7 @@ namespace Bit.App.Repositories
 
                     return ApiResult.Success(response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException();
                 }

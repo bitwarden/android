@@ -84,7 +84,7 @@ namespace Bit.App.Repositories
                         TokenService.RefreshToken = tokenResponse.RefreshToken;
                         TokenService.AuthBearer = null;
                     }
-                    catch(WebException)
+                    catch
                     {
                         return webException.Invoke();
                     }
@@ -119,7 +119,7 @@ namespace Bit.App.Repositories
                         TokenService.Token = tokenResponse.AccessToken;
                         TokenService.RefreshToken = tokenResponse.RefreshToken;
                     }
-                    catch(WebException)
+                    catch
                     {
                         return webException.Invoke();
                     }

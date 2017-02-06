@@ -51,7 +51,7 @@ namespace Bit.App.Repositories
 
                     return ApiResult.Success(response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException();
                 }
@@ -84,7 +84,7 @@ namespace Bit.App.Repositories
 
                     return ApiResult.Success(response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException();
                 }

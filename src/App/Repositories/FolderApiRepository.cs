@@ -54,7 +54,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<FolderResponse>>(responseContent);
                     return ApiResult<ListResponse<FolderResponse>>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<ListResponse<FolderResponse>>();
                 }
