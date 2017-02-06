@@ -20,6 +20,8 @@ namespace Bit.App
 {
     public class App : Application
     {
+        private const string LastBuildKey = "LastBuild";
+
         private string _uri;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
@@ -31,6 +33,7 @@ namespace Bit.App
         private readonly ILockService _lockService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
+        private readonly IAppInfoService _appInfoService;
         private CancellationTokenSource _setMainPageCancellationTokenSource = null;
 
         public static bool FromAutofillService { get; set; } = false;
@@ -46,7 +49,8 @@ namespace Bit.App
             ISettings settings,
             ILockService lockService,
             IGoogleAnalyticsService googleAnalyticsService,
-            ILocalizeService localizeService)
+            ILocalizeService localizeService,
+            IAppInfoService appInfoService)
         {
             _uri = uri;
             _databaseService = databaseService;
@@ -59,6 +63,7 @@ namespace Bit.App
             _lockService = lockService;
             _googleAnalyticsService = googleAnalyticsService;
             _localizeService = localizeService;
+            _appInfoService = appInfoService;
 
             SetCulture();
             SetStyles();
@@ -93,14 +98,9 @@ namespace Bit.App
                 Device.BeginInvokeOnMainThread(() => Logout(args));
             });
 
-            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
+            MessagingCenter.Subscribe<Application, int>(Current, "SetMainPage", (sender, ms) =>
             {
-                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, 500);
-            });
-
-            MessagingCenter.Subscribe<Application>(Current, "SetMainPageNow", (sender) =>
-            {
-                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, 0);
+                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, ms);
             });
         }
 
@@ -108,8 +108,18 @@ namespace Bit.App
         {
             // Handle when your app starts
             await CheckLockAsync(false);
-            _databaseService.CreateTables();
-            await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+
+            if(!FromAutofillService)
+            {
+                var lastBuild = _settings.GetValueOrDefault<string>(LastBuildKey);
+                if(lastBuild == null || lastBuild != _appInfoService.Build)
+                {
+                    _settings.AddOrUpdateValue(LastBuildKey, _appInfoService.Build);
+                    _databaseService.CreateTables();
+                }
+
+                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+            }
 
             Debug.WriteLine("OnStart");
         }

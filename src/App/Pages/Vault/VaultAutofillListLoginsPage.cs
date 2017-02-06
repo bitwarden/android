@@ -23,16 +23,15 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly DomainName _domainName;
-        private readonly string _uri;
         private readonly string _name;
         private readonly bool _androidApp = false;
 
         public VaultAutofillListLoginsPage(string uriString)
             : base(true)
         {
-            _uri = uriString;
+            Uri = uriString;
             Uri uri;
-            if(!Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
+            if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
                 !DomainName.TryParse(uri.Host, out _domainName))
             {
                 if(uriString != null && uriString.StartsWith(Constants.AndroidAppProtocol))
@@ -50,14 +49,18 @@ namespace Bit.App.Pages
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
+            GoogleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
+
         public ExtendedObservableCollection<VaultListPageModel.Login> PresentationLogins { get; private set; }
             = new ExtendedObservableCollection<VaultListPageModel.Login>();
         public StackLayout NoDataStackLayout { get; set; }
         public ListView ListView { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
+        private IGoogleAnalyticsService GoogleAnalyticsService { get; set; }
+        private string Uri { get; set; }
 
         private void Init()
         {
@@ -122,6 +125,7 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
+            GoogleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
             MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Login)null);
             return true;
         }
@@ -148,7 +152,7 @@ namespace Bit.App.Pages
                 var logins = await _loginService.GetAllAsync();
                 var filteredLogins = logins
                     .Select(s => new VaultListPageModel.Login(s))
-                    .Where(s => (_androidApp && _domainName == null && s.Uri.Value == _uri) ||
+                    .Where(s => (_androidApp && _domainName == null && s.Uri.Value == Uri) ||
                         (_domainName != null && s.BaseDomain != null && s.BaseDomain == _domainName.BaseDomain))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username);
@@ -167,18 +171,19 @@ namespace Bit.App.Pages
         {
             var login = e.SelectedItem as VaultListPageModel.Login;
 
-            if(_uri.StartsWith("http") && _deviceInfoService.Version < 21)
+            if(Uri.StartsWith("http") && _deviceInfoService.Version < 21)
             {
                 MoreClickedAsync(login);
                 return;
             }
 
+            GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
             MessagingCenter.Send(Application.Current, "Autofill", login);
         }
 
         private async void AddLoginAsync()
         {
-            var page = new VaultAddLoginPage(_uri, _name);
+            var page = new VaultAddLoginPage(Uri, _name, true);
             await Navigation.PushForDeviceAsync(page);
         }
 
@@ -256,7 +261,8 @@ namespace Bit.App.Pages
 
             private void ClickedItem(object sender, EventArgs e)
             {
-                MessagingCenter.Send(Application.Current, "SetMainPageNow");
+                _page.GoogleAnalyticsService.TrackExtensionEvent("Closed", _page.Uri.StartsWith("http") ? "Website" : "App");
+                MessagingCenter.Send(Application.Current, "SetMainPage", 0);
             }
         }
     }

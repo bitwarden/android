@@ -66,7 +66,8 @@ namespace Bit.iOS
                 Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>(),
-                Resolver.Resolve<ILocalizeService>()));
+                Resolver.Resolve<ILocalizeService>(),
+                Resolver.Resolve<IAppInfoService>()));
 
             // Appearance stuff
 

@@ -25,11 +25,13 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
         private readonly string _defaultUri;
         private readonly string _defaultName;
+        private readonly bool _fromAutofill;
 
-        public VaultAddLoginPage(string defaultUri = null, string defaultName = null)
+        public VaultAddLoginPage(string defaultUri = null, string defaultName = null, bool fromAutofill = false)
         {
             _defaultUri = defaultUri;
             _defaultName = defaultName;
+            _fromAutofill = fromAutofill;
 
             _loginService = Resolver.Resolve<ILoginService>();
             _folderService = Resolver.Resolve<IFolderService>();
@@ -163,7 +165,14 @@ namespace Bit.App.Pages
                 {
                     await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast(AppResources.NewLoginCreated);
-                    _googleAnalyticsService.TrackAppEvent("CreatedLogin");
+                    if(_fromAutofill)
+                    {
+                        _googleAnalyticsService.TrackExtensionEvent("CreatedLogin");
+                    }
+                    else
+                    {
+                        _googleAnalyticsService.TrackAppEvent("CreatedLogin");
+                    }
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
@@ -211,7 +220,7 @@ namespace Bit.App.Pages
             {
                 PasswordCell.Entry.Text = password;
                 _userDialogs.Toast(AppResources.PasswordGenerated);
-            });
+            }, _fromAutofill);
             await Navigation.PushForDeviceAsync(page);
         }
 

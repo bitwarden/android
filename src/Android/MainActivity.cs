@@ -77,7 +77,8 @@ namespace Bit.Android
                 Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>(),
-                Resolver.Resolve<ILocalizeService>()));
+                Resolver.Resolve<ILocalizeService>(),
+                Resolver.Resolve<IAppInfoService>()));
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "RateApp", (sender) =>
             {
