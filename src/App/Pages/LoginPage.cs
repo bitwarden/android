@@ -197,6 +197,13 @@ namespace Bit.App.Pages
                 return;
             }
 
+            if(response.Result.TwoFactorProviders != null && response.Result.TwoFactorProviders.Count > 0)
+            {
+                _googleAnalyticsService.TrackAppEvent("LoggedIn To Two-step");
+                await Navigation.PushAsync(new LoginTwoFactorPage(request.Email, request.MasterPasswordHash, key));
+                return;
+            }
+
             _cryptoService.Key = key;
             _tokenService.Token = response.Result.AccessToken;
             _tokenService.RefreshToken = response.Result.RefreshToken;
@@ -211,15 +218,8 @@ namespace Bit.App.Pages
                 _pushNotification.Register();
             }
 
-            if(false) // TODO: 2FA
-            {
-                await Navigation.PushAsync(new LoginTwoFactorPage());
-            }
-            else
-            {
-                var task = Task.Run(async () => await _syncService.FullSyncAsync());
-                Application.Current.MainPage = new MainPage();
-            }
+            var task = Task.Run(async () => await _syncService.FullSyncAsync());
+            Application.Current.MainPage = new MainPage();
         }
     }
 }

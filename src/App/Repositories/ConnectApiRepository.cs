@@ -6,6 +6,8 @@ using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
 using System.Net;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace Bit.App.Repositories
 {
@@ -39,12 +41,22 @@ namespace Bit.App.Repositories
                 try
                 {
                     var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
                     if(!response.IsSuccessStatusCode)
                     {
+                        var errorResponse = JObject.Parse(responseContent);
+                        if(errorResponse["TwoFactorProviders"] != null)
+                        {
+                            return ApiResult<TokenResponse>.Success(new TokenResponse
+                            {
+                                TwoFactorProviders = errorResponse["TwoFactorProviders"].ToObject<List<int>>()
+                            }, response.StatusCode);
+                        }
+
                         return await HandleErrorAsync<TokenResponse>(response).ConfigureAwait(false);
                     }
 
-                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     var responseObj = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
                     return ApiResult<TokenResponse>.Success(responseObj, response.StatusCode);
                 }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Bit.App.Models.Api
 {
@@ -12,5 +13,6 @@ namespace Bit.App.Models.Api
         public string RefreshToken { get; set; }
         [JsonProperty("token_type")]
         public string TokenType { get; set; }
+        public List<int> TwoFactorProviders { get; set; }
     }
 }

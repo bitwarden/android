@@ -8,6 +8,8 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
+using Plugin.Settings.Abstractions;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -20,10 +22,20 @@ namespace Bit.App.Pages
         private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
+        private ISettings _settings;
+        private IGoogleAnalyticsService _googleAnalyticsService;
+        private IPushNotification _pushNotification;
+        private readonly string _email;
+        private readonly string _masterPasswordHash;
+        private readonly byte[] _key;
 
-        public LoginTwoFactorPage()
+        public LoginTwoFactorPage(string email, string masterPasswordHash, byte[] key)
             : base(updateActivity: false)
         {
+            _email = email;
+            _masterPasswordHash = masterPasswordHash;
+            _key = key;
+
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
             _tokenService = Resolver.Resolve<ITokenService>();
@@ -31,6 +43,9 @@ namespace Bit.App.Pages
             _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
+            _settings = Resolver.Resolve<ISettings>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _pushNotification = Resolver.Resolve<IPushNotification>();
 
             Init();
         }
@@ -138,9 +153,10 @@ namespace Bit.App.Pages
 
             var request = new TokenRequest
             {
-                // TODO: username and pass from previous page
+                Email = _email,
+                MasterPasswordHash = _masterPasswordHash,
                 Token = CodeCell.Entry.Text.Replace(" ", ""),
-                Provider = 0,
+                Provider = 0, // Authenticator app (only 1 provider for now, so hard coded)
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 
@@ -153,10 +169,19 @@ namespace Bit.App.Pages
                 return;
             }
 
+            _cryptoService.Key = _key;
             _tokenService.Token = response.Result.AccessToken;
             _tokenService.RefreshToken = response.Result.RefreshToken;
             _authService.UserId = _tokenService.TokenUserId;
             _authService.Email = _tokenService.TokenEmail;
+            _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
+            _googleAnalyticsService.RefreshUserId();
+            _googleAnalyticsService.TrackAppEvent("LoggedIn From Two-step");
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                _pushNotification.Register();
+            }
 
             var task = Task.Run(async () => await _syncService.FullSyncAsync());
             Application.Current.MainPage = new MainPage();
