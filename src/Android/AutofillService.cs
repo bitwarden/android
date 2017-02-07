@@ -73,12 +73,11 @@ namespace Bit.Android
                     }
 
                     var cancelNotification = true;
-                    var root = RootInActiveWindow;
-                    var passwordNodes = GetWindowNodes(root, e, n => n.Password);
+                    var passwordNodes = GetWindowNodes(RootInActiveWindow, e, n => n.Password);
 
                     if(passwordNodes.Any())
                     {
-                        var uri = GetUri(root);
+                        var uri = GetUri(RootInActiveWindow);
                         if(uri.Contains(BitwardenWebsite))
                         {
                             break;
@@ -86,7 +85,7 @@ namespace Bit.Android
 
                         if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                         {
-                            var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
+                            var allEditTexts = GetWindowNodes(RootInActiveWindow, e, n => EditText(n));
                             var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
                             FillCredentials(usernameEditText, passwordNodes);
                         }
