@@ -60,7 +60,7 @@ namespace Bit.App.Repositories
                     var requestMessage = new HttpRequestMessage
                     {
                         Method = HttpMethod.Post,
-                        RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/token")),
+                        RequestUri = new Uri(client.BaseAddress, "connect/token"),
                         Content = new FormUrlEncodedContent(new TokenRequest
                         {
                             Email = "abcdefgh",
@@ -97,7 +97,7 @@ namespace Bit.App.Repositories
                     var requestMessage = new HttpRequestMessage
                     {
                         Method = HttpMethod.Post,
-                        RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/token")),
+                        RequestUri = new Uri(client.BaseAddress, "connect/token"),
                         Content = new FormUrlEncodedContent(new Dictionary<string, string>
                         {
                             { "grant_type", "refresh_token" },
@@ -119,7 +119,7 @@ namespace Bit.App.Repositories
                         TokenService.Token = tokenResponse.AccessToken;
                         TokenService.RefreshToken = tokenResponse.RefreshToken;
                     }
-                    catch
+                    catch(Exception ee)
                     {
                         return webException.Invoke();
                     }

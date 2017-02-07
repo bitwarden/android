@@ -183,7 +183,7 @@ namespace Bit.App.Pages
                 _pushNotification.Register();
             }
 
-            var task = Task.Run(async () => await _syncService.FullSyncAsync());
+            var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
             Application.Current.MainPage = new MainPage();
         }
     }

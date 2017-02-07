@@ -19,6 +19,7 @@ namespace Bit.App
 
         private void Init()
         {
+            //BaseAddress = new Uri("http://192.168.1.3:4000");
             BaseAddress = new Uri("https://api.bitwarden.com");
             DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }

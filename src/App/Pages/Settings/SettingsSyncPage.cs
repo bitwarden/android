@@ -94,7 +94,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Syncing, MaskType.Black);
-            var succeeded = await _syncService.FullSyncAsync();
+            var succeeded = await _syncService.FullSyncAsync(true);
             _userDialogs.HideLoading();
             if(succeeded)
             {

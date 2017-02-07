@@ -81,7 +81,7 @@ namespace Bit.App
             MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
             {
                 await CheckLockAsync(args);
-                await Task.Run(() => IncrementalSyncAsync()).ConfigureAwait(false);
+                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             });
 
             MessagingCenter.Subscribe<Application, bool>(Current, "Lock", (sender, args) =>
@@ -153,6 +153,11 @@ namespace Bit.App
             {
                 lockPinPage.PinControl.Entry.FocusWithDelay();
             }
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+            }
         }
 
         private void SetMainPageFromAutofill()
@@ -166,44 +171,6 @@ namespace Bit.App
             _uri = null;
         }
 
-        private async Task IncrementalSyncAsync()
-        {
-            if(_connectivity.IsConnected)
-            {
-                var attempt = 0;
-                do
-                {
-                    try
-                    {
-                        await _syncService.IncrementalSyncAsync(TimeSpan.FromMinutes(30)).ConfigureAwait(false);
-                        break;
-                    }
-                    catch(WebException)
-                    {
-                        Debug.WriteLine("Failed to incremental sync.");
-                        if(attempt >= 1)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            await Task.Delay(1000);
-                        }
-                        attempt++;
-                    }
-                    catch(Exception e) when(e is TaskCanceledException || e is OperationCanceledException)
-                    {
-                        Debug.WriteLine("Cancellation exception.");
-                        break;
-                    }
-                } while(attempt <= 1);
-            }
-            else
-            {
-                Debug.WriteLine("Not connected.");
-            }
-        }
-
         private async Task FullSyncAsync()
         {
             if(_connectivity.IsConnected)
@@ -213,7 +180,7 @@ namespace Bit.App
                 {
                     try
                     {
-                        await _syncService.FullSyncAsync().ConfigureAwait(false);
+                        await _syncService.FullSyncAsync(TimeSpan.FromMinutes(30)).ConfigureAwait(false);
                         break;
                     }
                     catch(WebException)

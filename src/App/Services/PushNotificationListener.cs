@@ -88,7 +88,7 @@ namespace Bit.App.Services
                     {
                         break;
                     }
-                    _syncService.FullSyncAsync();
+                    _syncService.FullSyncAsync(true);
                     break;
                 default:
                     break;

@@ -15,6 +15,7 @@ namespace Bit.App.Services
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly IFolderApiRepository _folderApiRepository;
         private readonly ILoginApiRepository _loginApiRepository;
+        private readonly IAccountsApiRepository _accountsApiRepository;
         private readonly IFolderRepository _folderRepository;
         private readonly ILoginRepository _loginRepository;
         private readonly IAuthService _authService;
@@ -24,6 +25,7 @@ namespace Bit.App.Services
             ICipherApiRepository cipherApiRepository,
             IFolderApiRepository folderApiRepository,
             ILoginApiRepository loginApiRepository,
+            IAccountsApiRepository accountsApiRepository,
             IFolderRepository folderRepository,
             ILoginRepository loginRepository,
             IAuthService authService,
@@ -32,6 +34,7 @@ namespace Bit.App.Services
             _cipherApiRepository = cipherApiRepository;
             _folderApiRepository = folderApiRepository;
             _loginApiRepository = loginApiRepository;
+            _accountsApiRepository = accountsApiRepository;
             _folderRepository = folderRepository;
             _loginRepository = loginRepository;
             _authService = authService;
@@ -126,10 +129,27 @@ namespace Bit.App.Services
             return true;
         }
 
-        public async Task<bool> FullSyncAsync()
+        public async Task<bool> FullSyncAsync(TimeSpan syncThreshold, bool forceSync = false)
+        {
+            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
+            if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
+            {
+                return false;
+            }
+
+            return await FullSyncAsync(forceSync).ConfigureAwait(false);
+        }
+
+        public async Task<bool> FullSyncAsync(bool forceSync = false)
         {
             if(!_authService.IsAuthenticated)
             {
+                return false;
+            }
+
+            if(!forceSync && !(await NeedsToSyncAsync()))
+            {
+                _settings.AddOrUpdateValue(Constants.LastSync, DateTime.UtcNow);
                 return false;
             }
 
@@ -168,64 +188,22 @@ namespace Bit.App.Services
             return true;
         }
 
-        public async Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold)
+        private async Task<bool> NeedsToSyncAsync()
         {
             DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
-            if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
+            if(!lastSync.HasValue)
             {
-                return false;
+                return true;
             }
 
-            return await IncrementalSyncAsync().ConfigureAwait(false);
-        }
-
-        public async Task<bool> IncrementalSyncAsync()
-        {
-            if(!_authService.IsAuthenticated)
+            var accountRevisionDate = await _accountsApiRepository.GetAccountRevisionDate();
+            if(accountRevisionDate.Succeeded && accountRevisionDate.Result.HasValue &&
+                accountRevisionDate.Result.Value > lastSync)
             {
-                return false;
+                return true;
             }
 
-            var now = DateTime.UtcNow;
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
-            if(lastSync == null)
-            {
-                return await FullSyncAsync().ConfigureAwait(false);
-            }
-
-            SyncStarted();
-
-            var ciphers = await _cipherApiRepository.GetByRevisionDateWithHistoryAsync(lastSync.Value).ConfigureAwait(false);
-            if(!ciphers.Succeeded)
-            {
-                SyncCompleted(false);
-
-                if(Application.Current != null && (ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized))
-                {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
-                }
-
-                return false;
-            }
-
-            var logins = ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Login).ToDictionary(s => s.Id);
-            var folders = ciphers.Result.Revised.Where(c => c.Type == Enums.CipherType.Folder).ToDictionary(f => f.Id);
-
-            var loginTask = SyncLoginsAsync(logins, false);
-            var folderTask = SyncFoldersAsync(folders, false);
-            var deleteTask = DeleteCiphersAsync(ciphers.Result.Deleted);
-
-            await Task.WhenAll(loginTask, folderTask, deleteTask).ConfigureAwait(false);
-            if(folderTask.Exception != null || loginTask.Exception != null || deleteTask.Exception != null)
-            {
-                SyncCompleted(false);
-                return false;
-            }
-
-            _settings.AddOrUpdateValue(Constants.LastSync, now);
-            SyncCompleted(true);
-            return true;
+            return false;
         }
 
         private async Task SyncFoldersAsync(IDictionary<string, CipherResponse> serverFolders, bool deleteMissing)
