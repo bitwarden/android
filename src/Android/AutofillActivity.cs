@@ -51,39 +51,37 @@ namespace Bit.Android
             if(data == null)
             {
                 LastCredentials = null;
-                return;
             }
-
-            try
+            else
             {
-                if(data.GetStringExtra("canceled") != null)
+                try
+                {
+                    if(data.GetStringExtra("canceled") != null)
+                    {
+                        LastCredentials = null;
+                    }
+                    else
+                    {
+                        var uri = data.GetStringExtra("uri");
+                        var username = data.GetStringExtra("username");
+                        var password = data.GetStringExtra("password");
+
+                        LastCredentials = new AutofillCredentials
+                        {
+                            Username = username,
+                            Password = password,
+                            Uri = uri,
+                            LastUri = _lastQueriedUri
+                        };
+                    }
+                }
+                catch
                 {
                     LastCredentials = null;
                 }
-                else
-                {
-                    var uri = data.GetStringExtra("uri");
-                    var username = data.GetStringExtra("username");
-                    var password = data.GetStringExtra("password");
+            }
 
-                    LastCredentials = new AutofillCredentials
-                    {
-                        Username = username,
-                        Password = password,
-                        Uri = uri,
-                        LastUri = _lastQueriedUri
-                    };
-                }
-            }
-            catch
-            {
-                LastCredentials = null;
-            }
-            finally
-            {
-                Xamarin.Forms.MessagingCenter.Send(Xamarin.Forms.Application.Current, "SetMainPage");
-                Finish();
-            }
+            Finish();
         }
 
         private void LaunchMainActivity(Intent callingIntent, int requestCode)

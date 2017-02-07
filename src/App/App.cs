@@ -34,9 +34,6 @@ namespace Bit.App
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
         private readonly IAppInfoService _appInfoService;
-        private CancellationTokenSource _setMainPageCancellationTokenSource = null;
-
-        public static bool FromAutofillService { get; set; } = false;
 
         public App(
             string uri,
@@ -68,7 +65,6 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
-            FromAutofillService = !string.IsNullOrWhiteSpace(_uri);
             if(authService.IsAuthenticated && _uri != null)
             {
                 MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
@@ -98,9 +94,9 @@ namespace Bit.App
                 Device.BeginInvokeOnMainThread(() => Logout(args));
             });
 
-            MessagingCenter.Subscribe<Application, int>(Current, "SetMainPage", (sender, ms) =>
+            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
             {
-                _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, ms);
+                SetMainPageFromAutofill();
             });
         }
 
@@ -109,7 +105,7 @@ namespace Bit.App
             // Handle when your app starts
             await CheckLockAsync(false);
 
-            if(!FromAutofillService)
+            if(string.IsNullOrWhiteSpace(_uri))
             {
                 var lastBuild = _settings.GetValueOrDefault<string>(LastBuildKey);
                 if(lastBuild == null || lastBuild != _appInfoService.Build)
@@ -129,7 +125,7 @@ namespace Bit.App
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
-            _setMainPageCancellationTokenSource = SetMainPageFromAutofill(_setMainPageCancellationTokenSource, 500);
+            SetMainPageFromAutofill();
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -159,38 +155,15 @@ namespace Bit.App
             }
         }
 
-        private CancellationTokenSource SetMainPageFromAutofill(CancellationTokenSource previousCts, int delay)
+        private void SetMainPageFromAutofill()
         {
-            if(Device.OS != TargetPlatform.Android)
+            if(Device.OS != TargetPlatform.Android || string.IsNullOrWhiteSpace(_uri))
             {
-                return null;
+                return;
             }
 
-            previousCts?.Cancel();
-            if(!FromAutofillService || string.IsNullOrWhiteSpace(_uri))
-            {
-                return null;
-            }
-
-            var cts = new CancellationTokenSource();
-            Task.Run(async () =>
-            {
-                await Task.Delay(delay);
-                if(cts.Token.IsCancellationRequested)
-                {
-                    return;
-                }
-
-                Device.BeginInvokeOnMainThread(() =>
-                {
-                    MainPage = new MainPage();
-                });
-
-                _uri = null;
-                FromAutofillService = false;
-            }, cts.Token);
-
-            return cts;
+            MainPage = new MainPage();
+            _uri = null;
         }
 
         private async Task IncrementalSyncAsync()

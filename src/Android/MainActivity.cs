@@ -28,7 +28,7 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
-            var uri = Intent.GetStringExtra("uri");
+            var uri = Intent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory) ? null : Intent.GetStringExtra("uri");
             if(Intent.HasExtra("uri"))
             {
                 Intent.RemoveExtra("uri");
@@ -99,7 +99,6 @@ namespace Bit.Android
 
         private void ReturnCredentials(VaultListPageModel.Login login)
         {
-            App.App.FromAutofillService = true;
             Intent data = new Intent();
             if(login == null)
             {

@@ -262,7 +262,7 @@ namespace Bit.App.Pages
             private void ClickedItem(object sender, EventArgs e)
             {
                 _page.GoogleAnalyticsService.TrackExtensionEvent("Closed", _page.Uri.StartsWith("http") ? "Website" : "App");
-                MessagingCenter.Send(Application.Current, "SetMainPage", 0);
+                MessagingCenter.Send(Application.Current, "SetMainPage");
             }
         }
     }
