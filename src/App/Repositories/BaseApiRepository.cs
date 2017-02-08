@@ -191,17 +191,20 @@ namespace Bit.App.Repositories
             var statusCode = (int)response.StatusCode;
             if(statusCode >= 400 && statusCode <= 500)
             {
-                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-
                 ErrorResponse errorResponseModel = null;
-                var errorResponse = JObject.Parse(responseContent);
-                if(errorResponse["ErrorModel"] != null && errorResponse["ErrorModel"]["Message"] != null)
+
+                var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                if(!string.IsNullOrWhiteSpace(responseContent))
                 {
-                    errorResponseModel = errorResponse["ErrorModel"].ToObject<ErrorResponse>();
-                }
-                else if(errorResponse["Message"] != null)
-                {
-                    errorResponseModel = errorResponse.ToObject<ErrorResponse>();
+                    var errorResponse = JObject.Parse(responseContent);
+                    if(errorResponse["ErrorModel"] != null && errorResponse["ErrorModel"]["Message"] != null)
+                    {
+                        errorResponseModel = errorResponse["ErrorModel"].ToObject<ErrorResponse>();
+                    }
+                    else if(errorResponse["Message"] != null)
+                    {
+                        errorResponseModel = errorResponse.ToObject<ErrorResponse>();
+                    }
                 }
 
                 if(errorResponseModel != null)
