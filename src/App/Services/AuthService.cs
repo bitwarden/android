@@ -137,7 +137,9 @@ namespace Bit.App.Services
         {
             get
             {
-                return _cryptoService.Key != null && !string.IsNullOrWhiteSpace(_tokenService.Token) &&
+                return _cryptoService.Key != null &&
+                    (!string.IsNullOrWhiteSpace(_tokenService.Token) ||
+                        !string.IsNullOrWhiteSpace(_tokenService.AuthBearer)) &&
                     !string.IsNullOrWhiteSpace(UserId);
             }
         }
