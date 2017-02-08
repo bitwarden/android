@@ -203,6 +203,12 @@ namespace Bit.App.Services
                 return true;
             }
 
+            if(Application.Current != null && (accountRevisionDate.StatusCode == System.Net.HttpStatusCode.Forbidden
+                || accountRevisionDate.StatusCode == System.Net.HttpStatusCode.Unauthorized))
+            {
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
+            }
+
             return false;
         }
 
