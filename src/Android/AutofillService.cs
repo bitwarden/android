@@ -53,31 +53,29 @@ namespace Bit.Android
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             Enabled = true;
-
-            var eventType = e.EventType;
-            var packageName = e.PackageName;
-
-            if(packageName == SystemUiPackage)
+            var root = RootInActiveWindow;
+            if(string.IsNullOrWhiteSpace(e.PackageName) || e.PackageName == SystemUiPackage ||
+                root?.PackageName != e.PackageName)
             {
                 return;
             }
 
-            switch(eventType)
+            switch(e.EventType)
             {
                 case EventTypes.WindowContentChanged:
                 case EventTypes.WindowStateChanged:
-                    if(packageName == BitwardenPackage)
+                    var cancelNotification = true;
+
+                    if(e.PackageName == BitwardenPackage)
                     {
                         CancelNotification();
                         break;
                     }
 
-                    var cancelNotification = true;
-                    var passwordNodes = GetWindowNodes(RootInActiveWindow, e, n => n.Password);
-
+                    var passwordNodes = GetWindowNodes(root, e, n => n.Password);
                     if(passwordNodes.Any())
                     {
-                        var uri = GetUri(RootInActiveWindow);
+                        var uri = GetUri(root);
                         if(uri.Contains(BitwardenWebsite))
                         {
                             break;
@@ -85,7 +83,7 @@ namespace Bit.Android
 
                         if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                         {
-                            var allEditTexts = GetWindowNodes(RootInActiveWindow, e, n => EditText(n));
+                            var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
                             var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
                             FillCredentials(usernameEditText, passwordNodes);
                         }
