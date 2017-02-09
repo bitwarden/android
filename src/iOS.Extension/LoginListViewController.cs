@@ -113,17 +113,13 @@ namespace Bit.iOS.Extension
 
             public async Task LoadItemsAsync()
             {
-                _tableItems = new List<LoginViewModel>();
-                if(_context.DomainName != null)
-                {
-                    var loginService = Resolver.Resolve<ILoginService>();
-                    var logins = await loginService.GetAllAsync();
-                    var loginModels = logins.Select(s => new LoginViewModel(s));
-                    _tableItems = loginModels
-                        .Where(s => s.Domain != null && s.Domain.BaseDomain == _context.DomainName.BaseDomain)
-                        .OrderBy(s => s.Name).ThenBy(s => s.Username)
-                        .ToList();
-                }
+                var loginService = Resolver.Resolve<ILoginService>();
+                var logins = await loginService.GetAllAsync(_context.UrlString);
+                var loginModels = logins;
+                _tableItems = logins.Select(s => new LoginViewModel(s))
+                    .OrderBy(s => s.Name)
+                    .ThenBy(s => s.Username)
+                    .ToList();
             }
 
             public IEnumerable<LoginViewModel> TableItems { get; set; }

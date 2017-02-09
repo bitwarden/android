@@ -328,7 +328,7 @@ namespace Bit.iOS.Extension
                 _googleAnalyticsService.TrackExtensionEvent("ProcessItemProvider", type);
 
                 Debug.WriteLine("BW LOG, ProviderType: " + _context.ProviderType);
-                Debug.WriteLine("BW LOG, Url: " + _context.Url);
+                Debug.WriteLine("BW LOG, Url: " + _context.UrlString);
                 Debug.WriteLine("BW LOG, Title: " + _context.LoginTitle);
                 Debug.WriteLine("BW LOG, Username: " + _context.Username);
                 Debug.WriteLine("BW LOG, Password: " + _context.Password);
@@ -359,7 +359,7 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                _context.Url = new Uri(result.ValueForKey(new NSString(Constants.AppExtensionUrlStringKey)) as NSString);
+                _context.UrlString = result.ValueForKey(new NSString(Constants.AppExtensionUrlStringKey)) as NSString;
                 var jsonStr = result.ValueForKey(new NSString(Constants.AppExtensionWebViewPageDetails)) as NSString;
                 _context.Details = DeserializeString<PageDetails>(jsonStr);
             });
@@ -374,7 +374,7 @@ namespace Bit.iOS.Extension
 
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
             });
         }
@@ -387,7 +387,7 @@ namespace Bit.iOS.Extension
                 var url = dict[Constants.AppExtensionUrlStringKey] as NSString;
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
 
                 _context.Details = DeserializeDictionary<PageDetails>(dict[Constants.AppExtensionWebViewPageDetails] as NSDictionary);
@@ -409,7 +409,7 @@ namespace Bit.iOS.Extension
 
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
 
                 _context.LoginTitle = title;
@@ -436,7 +436,7 @@ namespace Bit.iOS.Extension
 
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
 
                 _context.LoginTitle = title;
