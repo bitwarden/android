@@ -108,7 +108,7 @@ namespace Bit.App
             if(string.IsNullOrWhiteSpace(_uri))
             {
                 var lastBuild = _settings.GetValueOrDefault<string>(LastBuildKey);
-                if(lastBuild == null || lastBuild != _appInfoService.Build)
+                if(InDebugMode() || lastBuild == null || lastBuild != _appInfoService.Build)
                 {
                     _settings.AddOrUpdateValue(LastBuildKey, _appInfoService.Build);
                     _databaseService.CreateTables();
@@ -158,6 +158,15 @@ namespace Bit.App
             {
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             }
+        }
+
+        private bool InDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
         }
 
         private void SetMainPageFromAutofill()

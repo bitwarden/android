@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Bit.App.Models.Api.Response
+namespace Bit.App.Models.Api
 {
-    public class DomainsReponse
+    public class DomainsResponse
     {
         public IEnumerable<IEnumerable<string>> EquivalentDomains { get; set; }
         public IEnumerable<GlobalDomains> GlobalEquivalentDomains { get; set; }

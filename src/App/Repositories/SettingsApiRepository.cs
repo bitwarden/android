@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Plugin.Connectivity.Abstractions;
-using Bit.App.Models.Api.Response;
 using Newtonsoft.Json;
 
 namespace Bit.App.Repositories
@@ -20,14 +19,14 @@ namespace Bit.App.Repositories
 
         protected override string ApiRoute => "settings";
 
-        public virtual async Task<ApiResult<DomainsReponse>> GetDomains(bool excluded = false)
+        public virtual async Task<ApiResult<DomainsResponse>> GetDomains(bool excluded = false)
         {
             if(!Connectivity.IsConnected)
             {
-                return HandledNotConnected<DomainsReponse>();
+                return HandledNotConnected<DomainsResponse>();
             }
 
-            var tokenStateResponse = await HandleTokenStateAsync<DomainsReponse>();
+            var tokenStateResponse = await HandleTokenStateAsync<DomainsResponse>();
             if(!tokenStateResponse.Succeeded)
             {
                 return tokenStateResponse;
@@ -47,16 +46,16 @@ namespace Bit.App.Repositories
                     var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     if(!response.IsSuccessStatusCode)
                     {
-                        return await HandleErrorAsync<DomainsReponse>(response).ConfigureAwait(false);
+                        return await HandleErrorAsync<DomainsResponse>(response).ConfigureAwait(false);
                     }
 
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var responseObj = JsonConvert.DeserializeObject<DomainsReponse>(responseContent);
-                    return ApiResult<DomainsReponse>.Success(responseObj, response.StatusCode);
+                    var responseObj = JsonConvert.DeserializeObject<DomainsResponse>(responseContent);
+                    return ApiResult<DomainsResponse>.Success(responseObj, response.StatusCode);
                 }
                 catch
                 {
-                    return HandledWebException<DomainsReponse>();
+                    return HandledWebException<DomainsResponse>();
                 }
             }
         }

@@ -7,6 +7,7 @@ using Plugin.Settings.Abstractions;
 using Bit.App.Models.Api;
 using System.Collections.Generic;
 using Xamarin.Forms;
+using Newtonsoft.Json;
 
 namespace Bit.App.Services
 {
@@ -16,8 +17,10 @@ namespace Bit.App.Services
         private readonly IFolderApiRepository _folderApiRepository;
         private readonly ILoginApiRepository _loginApiRepository;
         private readonly IAccountsApiRepository _accountsApiRepository;
+        private readonly ISettingsApiRepository _settingsApiRepository;
         private readonly IFolderRepository _folderRepository;
         private readonly ILoginRepository _loginRepository;
+        private readonly ISettingsRepository _settingsRepository;
         private readonly IAuthService _authService;
         private readonly ISettings _settings;
 
@@ -26,8 +29,10 @@ namespace Bit.App.Services
             IFolderApiRepository folderApiRepository,
             ILoginApiRepository loginApiRepository,
             IAccountsApiRepository accountsApiRepository,
+            ISettingsApiRepository settingsApiRepository,
             IFolderRepository folderRepository,
             ILoginRepository loginRepository,
+            ISettingsRepository settingsRepository,
             IAuthService authService,
             ISettings settings)
         {
@@ -35,8 +40,10 @@ namespace Bit.App.Services
             _folderApiRepository = folderApiRepository;
             _loginApiRepository = loginApiRepository;
             _accountsApiRepository = accountsApiRepository;
+            _settingsApiRepository = settingsApiRepository;
             _folderRepository = folderRepository;
             _loginRepository = loginRepository;
+            _settingsRepository = settingsRepository;
             _authService = authService;
             _settings = settings;
         }
@@ -157,12 +164,20 @@ namespace Bit.App.Services
 
             var now = DateTime.UtcNow;
             var ciphers = await _cipherApiRepository.GetAsync().ConfigureAwait(false);
-            if(!ciphers.Succeeded)
+            var domains = await _settingsApiRepository.GetDomains(false).ConfigureAwait(false);
+
+            if(!ciphers.Succeeded || !domains.Succeeded)
             {
                 SyncCompleted(false);
+                if(Application.Current == null)
+                {
+                    return false;
+                }
 
-                if(Application.Current != null && (ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized))
+                if(ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+                    ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+                    domains.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+                    domains.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
                     MessagingCenter.Send(Application.Current, "Logout", (string)null);
                 }
@@ -175,9 +190,10 @@ namespace Bit.App.Services
 
             var loginTask = SyncLoginsAsync(logins, true);
             var folderTask = SyncFoldersAsync(folders, true);
-            await Task.WhenAll(loginTask, folderTask).ConfigureAwait(false);
+            var domainsTask = SyncDomainsAsync(domains.Result);
+            await Task.WhenAll(loginTask, folderTask, domainsTask).ConfigureAwait(false);
 
-            if(folderTask.Exception != null || loginTask.Exception != null)
+            if(folderTask.Exception != null || loginTask.Exception != null || domainsTask.Exception != null)
             {
                 SyncCompleted(false);
                 return false;
@@ -292,6 +308,26 @@ namespace Bit.App.Services
             {
                 await _loginRepository.DeleteAsync(login.Value.Id).ConfigureAwait(false);
             }
+        }
+
+        private async Task SyncDomainsAsync(DomainsResponse serverDomains)
+        {
+            var eqDomains = new List<IEnumerable<string>>();
+            if(serverDomains.EquivalentDomains != null)
+            {
+                eqDomains.AddRange(serverDomains.EquivalentDomains);
+            }
+
+            if(serverDomains.GlobalEquivalentDomains != null)
+            {
+                eqDomains.AddRange(serverDomains.GlobalEquivalentDomains.Select(d => d.Domains));
+            }
+
+            await _settingsRepository.UpsertAsync(new SettingsData
+            {
+                Id = _authService.UserId,
+                EquivalentDomains = JsonConvert.SerializeObject(eqDomains)
+            });
         }
 
         private void SyncStarted()

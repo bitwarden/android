@@ -94,7 +94,7 @@
     <Compile Include="Models\Api\Request\TokenRequest.cs" />
     <Compile Include="Models\Api\Response\CipherHistoryResponse.cs" />
     <Compile Include="Models\Api\Response\CipherResponse.cs" />
-    <Compile Include="Models\Api\Response\DomainsReponse.cs" />
+    <Compile Include="Models\Api\Response\DomainsResponse.cs" />
     <Compile Include="Models\Api\Response\ErrorResponse.cs" />
     <Compile Include="Models\Api\Response\FolderResponse.cs" />
     <Compile Include="Models\Api\Response\ListResponse.cs" />
