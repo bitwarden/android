@@ -10,6 +10,7 @@ namespace Bit.App.Abstractions
         Task<Login> GetByIdAsync(string id);
         Task<IEnumerable<Login>> GetAllAsync();
         Task<IEnumerable<Login>> GetAllAsync(bool favorites);
+        Task<IEnumerable<Login>> GetAllAsync(string uriString);
         Task<ApiResult<LoginResponse>> SaveAsync(Login login);
         Task<ApiResult> DeleteAsync(string id);
     }

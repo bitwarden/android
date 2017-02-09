@@ -21,34 +21,35 @@ namespace Bit.App.Pages
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
+        private readonly ISettingsService _settingsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
-        private readonly DomainName _domainName;
         private readonly string _name;
-        private readonly bool _androidApp = false;
 
         public VaultAutofillListLoginsPage(string uriString)
             : base(true)
         {
             Uri = uriString;
+
             Uri uri;
+            DomainName domainName;
             if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
-                !DomainName.TryParse(uri.Host, out _domainName))
+                !DomainName.TryParse(uri.Host, out domainName))
             {
                 if(uriString != null && uriString.StartsWith(Constants.AndroidAppProtocol))
                 {
-                    _androidApp = true;
                     _name = uriString.Substring(Constants.AndroidAppProtocol.Length);
                 }
             }
             else
             {
-                _name = _domainName.BaseDomain;
+                _name = domainName.BaseDomain;
             }
 
             _loginService = Resolver.Resolve<ILoginService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
+            _settingsService = Resolver.Resolve<ISettingsService>();
             GoogleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
@@ -149,17 +150,14 @@ namespace Bit.App.Pages
 
             Task.Run(async () =>
             {
-                var logins = await _loginService.GetAllAsync();
-                var filteredLogins = logins
-                    .Select(s => new VaultListPageModel.Login(s))
-                    .Where(s => (_androidApp && _domainName == null && s.Uri.Value == Uri) ||
-                        (_domainName != null && s.BaseDomain != null && s.BaseDomain == _domainName.BaseDomain))
+                var logins = await _loginService.GetAllAsync(Uri);
+                var sortedLogins = logins.Select(l => new VaultListPageModel.Login(l))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username);
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    PresentationLogins.ResetWithRange(filteredLogins);
+                    PresentationLogins.ResetWithRange(sortedLogins);
                     AdjustContent();
                 });
             }, cts.Token);

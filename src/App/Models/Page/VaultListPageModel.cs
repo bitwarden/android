@@ -26,37 +26,6 @@ namespace Bit.App.Models.Page
             public string Username { get; set; }
             public Lazy<string> Password { get; set; }
             public Lazy<string> Uri { get; set; }
-
-            public string BaseDomain
-            {
-                get
-                {
-                    if(_baseDomain != null)
-                    {
-                        return _baseDomain;
-                    }
-
-                    if(string.IsNullOrWhiteSpace(Uri.Value))
-                    {
-                        return null;
-                    }
-
-                    Uri uri;
-                    if(!System.Uri.TryCreate(Uri.Value, UriKind.Absolute, out uri))
-                    {
-                        return null;
-                    }
-
-                    DomainName domain;
-                    if(!DomainName.TryParse(uri.Host, out domain))
-                    {
-                        return null;
-                    }
-
-                    _baseDomain = domain.BaseDomain;
-                    return _baseDomain;
-                }
-            }
         }
 
         public class Folder : List<Login>
