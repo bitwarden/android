@@ -125,11 +125,11 @@ namespace Bit.App.Services
 
             var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
             // TODO: Turn on whenever ready to support encrypt-then-mac
-            var cryptoKey = provider.CreateSymmetricKey(false ? EncKey : Key);
+            var cryptoKey = provider.CreateSymmetricKey(true ? EncKey : Key);
             var iv = WinRTCrypto.CryptographicBuffer.GenerateRandom(provider.BlockLength);
             var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
             // TODO: Turn on whenever ready to support encrypt-then-mac
-            var mac = false ? ComputeMac(encryptedBytes, iv) : null;
+            var mac = true ? ComputeMac(encryptedBytes, iv) : null;
 
             return new CipherString(Convert.ToBase64String(iv), Convert.ToBase64String(encryptedBytes), mac);
         }
@@ -158,7 +158,7 @@ namespace Bit.App.Services
                 }
 
                 var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-                var cryptoKey = provider.CreateSymmetricKey(encyptedValue.Mac != null ? MacKey : Key);
+                var cryptoKey = provider.CreateSymmetricKey(encyptedValue.Mac != null ? EncKey : Key);
                 var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
                     encyptedValue.InitializationVectorBytes);
                 return Encoding.UTF8.GetString(decryptedBytes, 0, decryptedBytes.Length).TrimEnd('\0');
