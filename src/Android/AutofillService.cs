@@ -187,11 +187,10 @@ namespace Bit.Android
                 return false;
             }
 
-            Uri credsUri, lastUri, currentUri;
-            if(Uri.TryCreate(creds.Uri, UriKind.Absolute, out credsUri) &&
-                Uri.TryCreate(creds.LastUri, UriKind.Absolute, out lastUri) &&
+            Uri lastUri, currentUri;
+            if(Uri.TryCreate(creds.LastUri, UriKind.Absolute, out lastUri) &&
                 Uri.TryCreate(currentUriString, UriKind.Absolute, out currentUri) &&
-                credsUri.Host == currentUri.Host && lastUri.Host == currentUri.Host)
+                lastUri.Host == currentUri.Host)
             {
                 return true;
             }
