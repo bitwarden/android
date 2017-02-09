@@ -222,6 +222,7 @@ namespace Bit.Android
                 .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICipherApiRepository, CipherApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsApiRepository, SettingsApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossSettings.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())

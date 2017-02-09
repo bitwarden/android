@@ -277,6 +277,7 @@ namespace Bit.iOS
                 .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICipherApiRepository, CipherApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsApiRepository, SettingsApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
