@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ISettingsRepository.cs" />
     <Compile Include="Abstractions\Services\ITokenService.cs" />
     <Compile Include="Abstractions\Services\IHttpService.cs" />
     <Compile Include="Abstractions\Services\IDeviceInfoService.cs" />
@@ -101,6 +102,7 @@
     <Compile Include="Models\Api\LoginDataModel.cs" />
     <Compile Include="Models\Cipher.cs" />
     <Compile Include="Models\CipherString.cs" />
+    <Compile Include="Models\Data\SettingsData.cs" />
     <Compile Include="Models\Data\FolderData.cs" />
     <Compile Include="Abstractions\IDataObject.cs" />
     <Compile Include="Models\Data\LoginData.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Repositories\DeviceApiRepository.cs" />
     <Compile Include="Repositories\CipherApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ICipherApiRepository.cs" />
+    <Compile Include="Repositories\SettingsRepository.cs" />
     <Compile Include="Repositories\LoginApiRepository.cs" />
     <Compile Include="Repositories\FolderApiRepository.cs" />
     <Compile Include="Repositories\LoginRepository.cs" />

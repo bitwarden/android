@@ -12,6 +12,7 @@ namespace Bit.App.Abstractions
         Task<IEnumerable<T>> GetAllAsync();
         Task UpdateAsync(T obj);
         Task InsertAsync(T obj);
+        Task UpsertAsync(T obj);
         Task DeleteAsync(TId id);
         Task DeleteAsync(T obj);
     }

@@ -287,6 +287,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<ILoginRepository, LoginRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILoginApiRepository, LoginApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IConnectApiRepository, ConnectApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());

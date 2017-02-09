@@ -18,6 +18,7 @@ namespace Bit.App.Services
         {
             _connection.CreateTable<FolderData>();
             _connection.CreateTable<LoginData>();
+            _connection.CreateTable<SettingsData>();
         }
     }
 }
