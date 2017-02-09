@@ -104,6 +104,11 @@ namespace Bit.App.Pages
                 bugLabel.WidthRequest = stackLayout.Bounds.Width - bugLabel.Bounds.Left * 2;
             };
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+            }
+
             Title = AppResources.HelpAndFeedback;
             Content = new ScrollView { Content = stackLayout };
         }

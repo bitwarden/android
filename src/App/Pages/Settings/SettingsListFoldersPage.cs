@@ -38,6 +38,11 @@ namespace Bit.App.Pages
             listView.ItemSelected += FolderSelected;
             listView.ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this));
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+            }
+
             Title = AppResources.Folders;
             Content = listView;
         }
