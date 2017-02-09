@@ -266,7 +266,7 @@ namespace Bit.iOS
                 .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
-                // Repositories
+                .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

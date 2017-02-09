@@ -38,6 +38,7 @@
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ISettingsRepository.cs" />
+    <Compile Include="Abstractions\Services\ISettingsService.cs" />
     <Compile Include="Abstractions\Services\ITokenService.cs" />
     <Compile Include="Abstractions\Services\IHttpService.cs" />
     <Compile Include="Abstractions\Services\IDeviceInfoService.cs" />
@@ -183,6 +184,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.zh-Hans.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\TokenService.cs" />
     <Compile Include="Services\AppIdService.cs" />
     <Compile Include="Abstractions\Services\ILockService.cs" />
