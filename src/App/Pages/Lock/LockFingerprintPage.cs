@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Controls;
 using Bit.App.Resources;
 using Xamarin.Forms;
@@ -10,19 +9,16 @@ using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
-    public class LockFingerprintPage : ExtendedContentPage
+    public class LockFingerprintPage : BaseLockPage
     {
         private readonly IFingerprint _fingerprint;
-        private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private readonly bool _checkFingerprintImmediately;
 
         public LockFingerprintPage(bool checkFingerprintImmediately)
-            : base(false, false)
         {
             _checkFingerprintImmediately = checkFingerprintImmediately;
             _fingerprint = Resolver.Resolve<IFingerprint>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
 
             Init();
@@ -68,11 +64,6 @@ namespace Bit.App.Pages
             Content = stackLayout;
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -81,16 +72,6 @@ namespace Bit.App.Pages
             {
                 var task = CheckFingerprintAsync();
             }
-        }
-
-        public async Task LogoutAsync()
-        {
-            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
-            {
-                return;
-            }
-
-            MessagingCenter.Send(Application.Current, "Logout", (string)null);
         }
 
         public async Task CheckFingerprintAsync()

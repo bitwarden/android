@@ -120,6 +120,7 @@
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Page\VaultViewLoginPageModel.cs" />
     <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\Lock\BaseLockPage.cs" />
     <Compile Include="Pages\Lock\LockPasswordPage.cs" />
     <Compile Include="Pages\LoginTwoFactorPage.cs" />
     <Compile Include="Pages\PasswordHintPage.cs" />

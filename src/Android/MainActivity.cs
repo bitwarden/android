@@ -31,7 +31,12 @@ namespace Bit.Android
             var uri = Intent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory) ? null : Intent.GetStringExtra("uri");
             if(Intent.HasExtra("uri"))
             {
+                // Clear intent for future. ref: http://stackoverflow.com/a/29947867/1090359
                 Intent.RemoveExtra("uri");
+                Intent.ReplaceExtras(new Bundle());
+                Intent.SetAction(string.Empty);
+                Intent.SetData(null);
+                Intent.SetFlags(0);
             }
 
             if(uri != null && !Resolver.IsSet)
@@ -94,6 +99,11 @@ namespace Bit.Android
                 Xamarin.Forms.Application.Current, "Autofill", (sender, args) =>
             {
                 ReturnCredentials(args);
+            });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "BackgroundApp", (sender) =>
+            {
+                MoveTaskToBack(true);
             });
         }
 
