@@ -294,22 +294,6 @@ namespace Bit.App.Services
             }
         }
 
-        private async Task DeleteCiphersAsync(IEnumerable<string> cipherIds)
-        {
-            var tasks = new List<Task>();
-            foreach(var cipherId in cipherIds)
-            {
-                if(!_authService.IsAuthenticated)
-                {
-                    return;
-                }
-
-                tasks.Add(_loginRepository.DeleteAsync(cipherId));
-                tasks.Add(_folderRepository.DeleteAsync(cipherId));
-            }
-            await Task.WhenAll(tasks).ConfigureAwait(false);
-        }
-
         private void SyncStarted()
         {
             if(Application.Current == null)
