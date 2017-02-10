@@ -792,4 +792,7 @@
   <data name="Beta" xml:space="preserve">
     <value>Beta</value>
   </data>
+  <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+  </data>
 </root>

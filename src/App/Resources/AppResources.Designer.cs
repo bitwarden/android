@@ -233,6 +233,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the &quot;Tools&quot; screen..
+        /// </summary>
+        public static string BitwardenAutofillServiceAlert {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins..
         /// </summary>
         public static string BitwardenAutofillServiceDescription {

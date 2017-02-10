@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ISettings _settings;
+        private readonly IAppInfoService _appInfoService;
         private readonly string _defaultUri;
         private readonly string _defaultName;
         private readonly bool _fromAutofill;
@@ -39,6 +40,7 @@ namespace Bit.App.Pages
             _connectivity = Resolver.Resolve<IConnectivity>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _settings = Resolver.Resolve<ISettings>();
+            _appInfoService = Resolver.Resolve<IAppInfoService>();
 
             Init();
         }
@@ -201,10 +203,19 @@ namespace Bit.App.Pages
                 AlertNoConnection();
             }
 
-            if(Device.OS == TargetPlatform.iOS && !_settings.GetValueOrDefault(AddedLoginAlertKey, false))
+            if(!_fromAutofill && !_settings.GetValueOrDefault(AddedLoginAlertKey, false))
             {
                 _settings.AddOrUpdateValue(AddedLoginAlertKey, true);
-                DisplayAlert(AppResources.BitwardenAppExtension, AppResources.BitwardenAppExtensionAlert, AppResources.Ok);
+                if(Device.OS == TargetPlatform.iOS)
+                {
+                    DisplayAlert(AppResources.BitwardenAppExtension, AppResources.BitwardenAppExtensionAlert,
+                        AppResources.Ok);
+                }
+                else if(Device.OS == TargetPlatform.Android && !_appInfoService.AutofillServiceEnabled)
+                {
+                    DisplayAlert(AppResources.BitwardenAutofillService, AppResources.BitwardenAutofillServiceAlert,
+                        AppResources.Ok);
+                }
             }
         }
 
