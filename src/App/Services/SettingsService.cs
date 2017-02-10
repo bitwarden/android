@@ -27,7 +27,7 @@ namespace Bit.App.Services
             var settings = await _settingsRepository.GetByIdAsync(_authService.UserId);
             if(string.IsNullOrWhiteSpace(settings?.EquivalentDomains))
             {
-                return null;
+                return new List<string[]>();
             }
 
             return JsonConvert.DeserializeObject<IEnumerable<IEnumerable<string>>>(settings.EquivalentDomains);

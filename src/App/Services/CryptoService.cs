@@ -94,7 +94,7 @@ namespace Bit.App.Services
             {
                 if(Key == null)
                 {
-                    throw new InvalidOperationException("Key must be set before asking if it has changed.");
+                    return false;
                 }
 
                 if(PreviousKey == null)
