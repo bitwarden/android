@@ -28,18 +28,23 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
-            var uri = Intent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory) ? null : Intent.GetStringExtra("uri");
-            if(Intent.HasExtra("uri"))
+            string uri = null;
+            if(!Intent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory) && Intent.HasExtra("uri") && Intent.HasExtra("ts"))
             {
-                // Clear intent for future. ref: http://stackoverflow.com/a/29947867/1090359
-                Intent.RemoveExtra("uri");
+                var tsDiff = Java.Lang.JavaSystem.CurrentTimeMillis() - Intent.GetLongExtra("ts", 0);
+                if(tsDiff < 5000)
+                {
+                    uri = Intent.GetStringExtra("uri");
+                }
+
+                // Attempt to clear intent for future
                 Intent.ReplaceExtras(new Bundle());
                 Intent.SetAction(string.Empty);
                 Intent.SetData(null);
                 Intent.SetFlags(0);
             }
 
-            if(uri != null && !Resolver.IsSet)
+            if(!Resolver.IsSet)
             {
                 MainApplication.SetIoc(Application);
             }

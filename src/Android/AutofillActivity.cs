@@ -95,6 +95,7 @@ namespace Bit.Android
 
             var intent = new Intent(this, typeof(MainActivity));
             intent.PutExtra("uri", _lastQueriedUri);
+            intent.PutExtra("ts", Java.Lang.JavaSystem.CurrentTimeMillis());
             StartActivityForResult(intent, requestCode);
         }
     }
