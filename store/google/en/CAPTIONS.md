@@ -16,7 +16,7 @@ Protect your vault with fingerprint, PIN code, or master password
 
 # Screenshot 4
 
-Quick and easy access whenever you need your logins and passwords
+Quickly auto-fill logins from within your web browser and other apps
 
 # Screenshot 5
 

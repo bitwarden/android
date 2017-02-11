@@ -16,7 +16,7 @@ Protéger votre coffre avec une empreinte digitale, un code PIN ou un mot de pas
 
 # Screenshot 4
 
-À n'importe quel moment, accéder à vos identifiants et mots de passe
+Quickly auto-fill logins from within your web browser and other apps
 
 # Screenshot 5
 

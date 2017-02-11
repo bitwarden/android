@@ -16,7 +16,7 @@ Suojaa holvisi sormenjäljellä, PIN-koodilla tai pääsalasanalla
 
 # Screenshot 4
 
-Nopea ja helppo pääsy kirjautumistietoihisi milloin tahansa
+Quickly auto-fill logins from within your web browser and other apps
 
 # Screenshot 5
 
