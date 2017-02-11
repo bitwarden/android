@@ -33,7 +33,7 @@ namespace Bit.App.Models.Data
                 throw new ArgumentException(nameof(cipher.Type));
             }
 
-            var data = cipher.Data.ToObject<SiteDataModel>();
+            var data = cipher.Data.ToObject<LoginDataModel>();
 
             Id = cipher.Id;
             UserId = userId;

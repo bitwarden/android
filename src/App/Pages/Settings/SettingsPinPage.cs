@@ -56,6 +56,11 @@ namespace Bit.App.Pages
             PinControl.Label.GestureRecognizers.Add(tgr);
             instructionLabel.GestureRecognizers.Add(tgr);
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+            }
+
             Title = AppResources.SetPIN;
             Content = stackLayout;
             Content.GestureRecognizers.Add(tgr);

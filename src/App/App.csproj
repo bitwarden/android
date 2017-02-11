@@ -35,8 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Abstractions\Repositories\ISettingsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ISettingsRepository.cs" />
+    <Compile Include="Abstractions\Services\ISettingsService.cs" />
+    <Compile Include="Abstractions\Services\ITokenService.cs" />
     <Compile Include="Abstractions\Services\IHttpService.cs" />
     <Compile Include="Abstractions\Services\IDeviceInfoService.cs" />
     <Compile Include="Abstractions\Services\IGoogleAnalyticsService.cs" />
@@ -47,7 +51,7 @@
     <Compile Include="Abstractions\Services\IKeyDerivationService.cs" />
     <Compile Include="Abstractions\Services\ILogService.cs" />
     <Compile Include="Abstractions\Services\IReflectionService.cs" />
-    <Compile Include="Abstractions\Services\ISiteService.cs" />
+    <Compile Include="Abstractions\Services\ILoginService.cs" />
     <Compile Include="Abstractions\Services\IFolderService.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Abstractions\Services\ISecureStorageService.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
+    <Compile Include="Controls\VaultListViewCell.cs" />
     <Compile Include="Enums\LockType.cs" />
     <Compile Include="Enums\CipherType.cs" />
     <Compile Include="Enums\PushType.cs" />
@@ -84,25 +89,26 @@
     <Compile Include="Models\Api\Request\FolderRequest.cs" />
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
     <Compile Include="Models\Api\Request\RegisterRequest.cs" />
-    <Compile Include="Models\Api\Request\SiteRequest.cs" />
+    <Compile Include="Models\Api\Request\LoginRequest.cs" />
     <Compile Include="Models\Api\Request\PasswordHintRequest.cs" />
     <Compile Include="Models\Api\Request\TokenRequest.cs" />
-    <Compile Include="Models\Api\Request\TokenTwoFactorRequest.cs" />
     <Compile Include="Models\Api\Response\CipherHistoryResponse.cs" />
     <Compile Include="Models\Api\Response\CipherResponse.cs" />
+    <Compile Include="Models\Api\Response\DomainsResponse.cs" />
     <Compile Include="Models\Api\Response\ErrorResponse.cs" />
     <Compile Include="Models\Api\Response\FolderResponse.cs" />
     <Compile Include="Models\Api\Response\ListResponse.cs" />
     <Compile Include="Models\Api\Response\DeviceResponse.cs" />
-    <Compile Include="Models\Api\Response\SiteResponse.cs" />
+    <Compile Include="Models\Api\Response\LoginResponse.cs" />
     <Compile Include="Models\Api\Response\TokenResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileResponse.cs" />
-    <Compile Include="Models\Api\SiteDataModel.cs" />
+    <Compile Include="Models\Api\LoginDataModel.cs" />
     <Compile Include="Models\Cipher.cs" />
     <Compile Include="Models\CipherString.cs" />
+    <Compile Include="Models\Data\SettingsData.cs" />
     <Compile Include="Models\Data\FolderData.cs" />
     <Compile Include="Abstractions\IDataObject.cs" />
-    <Compile Include="Models\Data\SiteData.cs" />
+    <Compile Include="Models\Data\LoginData.cs" />
     <Compile Include="Models\DomainName.cs" />
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\Page\AppExtensionPageModel.cs" />
@@ -111,9 +117,10 @@
     <Compile Include="Models\Page\PasswordGeneratorPageModel.cs" />
     <Compile Include="Models\PlatformCulture.cs" />
     <Compile Include="Models\PushNotification.cs" />
-    <Compile Include="Models\Site.cs" />
-    <Compile Include="Models\Page\VaultViewSitePageModel.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Page\VaultViewLoginPageModel.cs" />
     <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\Lock\BaseLockPage.cs" />
     <Compile Include="Pages\Lock\LockPasswordPage.cs" />
     <Compile Include="Pages\LoginTwoFactorPage.cs" />
     <Compile Include="Pages\PasswordHintPage.cs" />
@@ -134,22 +141,25 @@
     <Compile Include="Pages\Settings\SettingsSyncPage.cs" />
     <Compile Include="Pages\Settings\SettingsPage.cs" />
     <Compile Include="Pages\Settings\SettingsListFoldersPage.cs" />
+    <Compile Include="Pages\Vault\VaultAutofillListLoginsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Abstractions\Repositories\ISiteRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ILoginRepository.cs" />
+    <Compile Include="Repositories\SettingsApiRepository.cs" />
     <Compile Include="Repositories\ApiRepository.cs" />
     <Compile Include="Repositories\AccountsApiRepository.cs" />
+    <Compile Include="Repositories\ConnectApiRepository.cs" />
     <Compile Include="Repositories\BaseApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IFolderApiRepository.cs" />
-    <Compile Include="Abstractions\Repositories\ISiteApiRepository.cs" />
-    <Compile Include="Repositories\AuthApiRepository.cs" />
-    <Compile Include="Abstractions\Repositories\IAuthApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ILoginApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IConnectApiRepository.cs" />
     <Compile Include="Repositories\DeviceApiRepository.cs" />
     <Compile Include="Repositories\CipherApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ICipherApiRepository.cs" />
-    <Compile Include="Repositories\SiteApiRepository.cs" />
+    <Compile Include="Repositories\SettingsRepository.cs" />
+    <Compile Include="Repositories\LoginApiRepository.cs" />
     <Compile Include="Repositories\FolderApiRepository.cs" />
-    <Compile Include="Repositories\SiteRepository.cs" />
+    <Compile Include="Repositories\LoginRepository.cs" />
     <Compile Include="Repositories\FolderRepository.cs" />
     <Compile Include="Abstractions\Repositories\IFolderRepository.cs" />
     <Compile Include="Abstractions\Repositories\IRepository.cs" />
@@ -163,11 +173,28 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.es.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\AppResources.zh.Designer.cs">
+    <Compile Include="Resources\AppResources.fi.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.zh.resx</DependentUpon>
+      <DependentUpon>AppResources.fi.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.fr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.sv.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.sv.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.zh-Hans.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.zh-Hans.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\TokenService.cs" />
     <Compile Include="Services\AppIdService.cs" />
     <Compile Include="Abstractions\Services\ILockService.cs" />
     <Compile Include="Services\LockService.cs" />
@@ -179,16 +206,16 @@
     <Compile Include="Abstractions\Services\ISyncService.cs" />
     <Compile Include="Abstractions\Services\IPasswordGenerationService.cs" />
     <Compile Include="Services\SyncService.cs" />
-    <Compile Include="Services\SiteService.cs" />
+    <Compile Include="Services\LoginService.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Models\Page\VaultListPageModel.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\Settings\SettingsAddFolderPage.cs" />
-    <Compile Include="Pages\Vault\VaultAddSitePage.cs" />
-    <Compile Include="Pages\Vault\VaultViewSitePage.cs" />
-    <Compile Include="Pages\Vault\VaultEditSitePage.cs" />
-    <Compile Include="Pages\Vault\VaultListSitesPage.cs" />
+    <Compile Include="Pages\Vault\VaultAddLoginPage.cs" />
+    <Compile Include="Pages\Vault\VaultViewLoginPage.cs" />
+    <Compile Include="Pages\Vault\VaultEditLoginPage.cs" />
+    <Compile Include="Pages\Vault\VaultListLoginsPage.cs" />
     <Compile Include="Services\PasswordGenerationService.cs" />
     <Compile Include="Utilities\Extentions.cs" />
     <Compile Include="Utilities\ExtendedObservableCollection.cs" />
@@ -204,19 +231,31 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.es.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\AppResources.zh.resx">
+    <EmbeddedResource Include="Resources\AppResources.fi.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.zh.Designer.cs</LastGenOutput>
+      <LastGenOutput>AppResources.fi.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.fr.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.sv.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.zh-Hans.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.zh-Hans.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Acr.UserDialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Acr.UserDialogs.6.3.2\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.dll</HintPath>
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.3\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Acr.UserDialogs.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Acr.UserDialogs.6.3.2\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.Interface.dll</HintPath>
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.3\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.Interface.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HockeySDK, Version=1.0.6103.22141, Culture=neutral, processorArchitecture=MSIL">
@@ -307,15 +346,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.1\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.1\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SQLitePCLRaw.core.1.1.1\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
+      <HintPath>..\..\packages\SQLitePCLRaw.core.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Validation, Version=2.3.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
@@ -323,15 +362,15 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.175\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.180\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.175\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.180\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.175\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.180\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="XLabs.Ioc, Version=2.0.5782.12218, Culture=neutral, processorArchitecture=MSIL">
@@ -349,12 +388,12 @@
     <Compile Include="Services\PushNotificationListener.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\..\packages\Xamarin.Forms.2.3.3.175\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.175\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
+  <Import Project="..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.3.175\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.3.175\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.3.180\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

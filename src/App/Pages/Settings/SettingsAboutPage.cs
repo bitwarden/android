@@ -74,6 +74,11 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+            }
+
             Title = AppResources.About;
             Content = new ScrollView { Content = stackLayout };
         }

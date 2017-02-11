@@ -57,6 +57,11 @@ namespace Bit.App.Pages
                 Padding = new Thickness(15, 0)
             };
 
+            if(Device.OS == TargetPlatform.iOS)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+            }
+
             Title = AppResources.Sync;
             Content = stackLayout;
         }
@@ -94,7 +99,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Syncing, MaskType.Black);
-            var succeeded = await _syncService.FullSyncAsync();
+            var succeeded = await _syncService.FullSyncAsync(true);
             _userDialogs.HideLoading();
             if(succeeded)
             {

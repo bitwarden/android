@@ -25,7 +25,7 @@ namespace Bit.iOS.Extension
         { }
 
         public Context Context { get; set; }
-        public SiteAddViewController Parent { get; set; }
+        public LoginAddViewController Parent { get; set; }
         public UITableViewController OptionsTableViewController { get; set; }
         public SwitchTableViewCell UppercaseCell { get; set; } = new SwitchTableViewCell("A-Z");
         public SwitchTableViewCell LowercaseCell { get; set; } = new SwitchTableViewCell("a-z");
@@ -48,6 +48,9 @@ namespace Bit.iOS.Extension
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
+            NavItem.Title = AppResources.PasswordGenerator;
+            CancelBarButton.Title = AppResources.Cancel;
+            SelectBarButton.Title = AppResources.Select;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;

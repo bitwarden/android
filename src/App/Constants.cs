@@ -2,6 +2,8 @@
 {
     public static class Constants
     {
+        public const string AndroidAppProtocol = "androidapp://";
+
         public const string SettingFingerprintUnlockOn = "setting:fingerprintUnlockOn";
         public const string SettingPinUnlockOn = "setting:pinUnlockOn";
         public const string SettingLockSeconds = "setting:lockSeconds";

@@ -244,12 +244,12 @@ namespace Bit.App.Pages
 
         private void SyncCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SettingsSyncPage());
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new SettingsSyncPage()));
         }
 
         private void AboutCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SettingsAboutPage());
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new SettingsAboutPage()));
         }
 
         private void RateCell_Tapped(object sender, EventArgs e)
@@ -268,7 +268,7 @@ namespace Bit.App.Pages
 
         private void HelpCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SettingsHelpPage());
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new SettingsHelpPage()));
         }
 
         private void LockCell_Tapped(object sender, EventArgs e)
@@ -342,7 +342,7 @@ namespace Bit.App.Pages
                 cell.On = false;
                 var pinPage = new SettingsPinPage();
                 pinPage.OnPinEntered += PinEntered;
-                Navigation.PushAsync(pinPage);
+                Navigation.PushModalAsync(new ExtendedNavigationPage(pinPage));
             }
             else if(!cell.On)
             {
@@ -353,7 +353,8 @@ namespace Bit.App.Pages
         private void PinEntered(object sender, EventArgs args)
         {
             var page = sender as SettingsPinPage;
-            page.Navigation.PopAsync();
+            page.PinControl.Entry.Unfocus();
+            page.Navigation.PopModalAsync();
 
             _authService.PIN = page.Model.PIN;
 
@@ -369,7 +370,7 @@ namespace Bit.App.Pages
 
         private void FoldersCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushAsync(new SettingsListFoldersPage());
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new SettingsListFoldersPage()));
         }
 
         private string GetLockOptionsDetailsText()

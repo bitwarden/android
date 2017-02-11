@@ -14,6 +14,7 @@ using System.Reflection;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using System.Threading.Tasks;
+using Bit.App.Models.Page;
 
 namespace Bit.Android
 {
@@ -27,6 +28,27 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
+            string uri = null;
+            if(!Intent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory) && Intent.HasExtra("uri") && Intent.HasExtra("ts"))
+            {
+                var tsDiff = Java.Lang.JavaSystem.CurrentTimeMillis() - Intent.GetLongExtra("ts", 0);
+                if(tsDiff < 5000)
+                {
+                    uri = Intent.GetStringExtra("uri");
+                }
+
+                // Attempt to clear intent for future
+                Intent.ReplaceExtras(new Bundle());
+                Intent.SetAction(string.Empty);
+                Intent.SetData(null);
+                Intent.SetFlags(0);
+            }
+
+            if(!Resolver.IsSet)
+            {
+                MainApplication.SetIoc(Application);
+            }
+
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
 
@@ -54,8 +76,8 @@ namespace Bit.Android
             typeof(Color).GetProperty("Accent", BindingFlags.Public | BindingFlags.Static)
                 .SetValue(null, Color.FromHex("d2d6de"));
 
-
             LoadApplication(new App.App(
+                uri,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),
@@ -65,12 +87,55 @@ namespace Bit.Android
                 Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>(),
-                Resolver.Resolve<ILocalizeService>()));
+                Resolver.Resolve<ILocalizeService>(),
+                Resolver.Resolve<IAppInfoService>()));
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "RateApp", (sender) =>
             {
                 RateApp();
             });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Accessibility", (sender) =>
+            {
+                OpenAccessibilitySettings();
+            });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, VaultListPageModel.Login>(
+                Xamarin.Forms.Application.Current, "Autofill", (sender, args) =>
+            {
+                ReturnCredentials(args);
+            });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "BackgroundApp", (sender) =>
+            {
+                MoveTaskToBack(true);
+            });
+        }
+
+        private void ReturnCredentials(VaultListPageModel.Login login)
+        {
+            Intent data = new Intent();
+            if(login == null)
+            {
+                data.PutExtra("canceled", "true");
+            }
+            else
+            {
+                data.PutExtra("uri", login.Uri.Value);
+                data.PutExtra("username", login.Username);
+                data.PutExtra("password", login.Password.Value);
+            }
+
+            if(Parent == null)
+            {
+                SetResult(Result.Ok, data);
+            }
+            else
+            {
+                Parent.SetResult(Result.Ok, data);
+            }
+
+            Finish();
         }
 
         protected override void OnPause()
@@ -105,8 +170,12 @@ namespace Bit.Android
 
         protected override void OnResume()
         {
-            Console.WriteLine("A OnResume");
             base.OnResume();
+            Console.WriteLine("A OnResume");
+
+            // workaround for app compat bug
+            // ref https://bugzilla.xamarin.com/show_bug.cgi?id=36907
+            Task.Delay(10).Wait();
         }
 
         public void RateApp()
@@ -139,6 +208,12 @@ namespace Bit.Android
 
             intent.AddFlags(flags);
             return intent;
+        }
+
+        private void OpenAccessibilitySettings()
+        {
+            var intent = new Intent(global::Android.Provider.Settings.ActionAccessibilitySettings);
+            StartActivity(intent);
         }
     }
 }

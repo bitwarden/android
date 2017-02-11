@@ -22,7 +22,13 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 Root = new TableRoot
                 {
-                    new TableSection("Icons")
+                    new TableSection(AppResources.Translations)
+                    {
+                        new CustomViewCell(@"@felixqu - Chinese
+@Primokorn - French
+@King-Tut-Tut - Swedish")
+                    },
+                    new TableSection(AppResources.Icons)
                     {
                         new CustomViewCell(@"Tools by Alex Auda Samora from the Noun Project
 Fingerprint by masterpage.com from the Noun Project")

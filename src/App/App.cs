@@ -14,11 +14,15 @@ using Acr.UserDialogs;
 using XLabs.Ioc;
 using System.Reflection;
 using Bit.App.Resources;
+using System.Threading;
 
 namespace Bit.App
 {
     public class App : Application
     {
+        private const string LastBuildKey = "LastBuild";
+
+        private string _uri;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
         private readonly IUserDialogs _userDialogs;
@@ -29,8 +33,10 @@ namespace Bit.App
         private readonly ILockService _lockService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
+        private readonly IAppInfoService _appInfoService;
 
         public App(
+            string uri,
             IAuthService authService,
             IConnectivity connectivity,
             IUserDialogs userDialogs,
@@ -40,8 +46,10 @@ namespace Bit.App
             ISettings settings,
             ILockService lockService,
             IGoogleAnalyticsService googleAnalyticsService,
-            ILocalizeService localizeService)
+            ILocalizeService localizeService,
+            IAppInfoService appInfoService)
         {
+            _uri = uri;
             _databaseService = databaseService;
             _connectivity = connectivity;
             _userDialogs = userDialogs;
@@ -52,11 +60,16 @@ namespace Bit.App
             _lockService = lockService;
             _googleAnalyticsService = googleAnalyticsService;
             _localizeService = localizeService;
+            _appInfoService = appInfoService;
 
             SetCulture();
             SetStyles();
 
-            if(authService.IsAuthenticated)
+            if(authService.IsAuthenticated && _uri != null)
+            {
+                MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
+            }
+            else if(authService.IsAuthenticated)
             {
                 MainPage = new MainPage();
             }
@@ -68,7 +81,7 @@ namespace Bit.App
             MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
             {
                 await CheckLockAsync(args);
-                await Task.Run(() => IncrementalSyncAsync()).ConfigureAwait(false);
+                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             });
 
             MessagingCenter.Subscribe<Application, bool>(Current, "Lock", (sender, args) =>
@@ -80,14 +93,29 @@ namespace Bit.App
             {
                 Device.BeginInvokeOnMainThread(() => Logout(args));
             });
+
+            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
+            {
+                SetMainPageFromAutofill();
+            });
         }
 
         protected async override void OnStart()
         {
             // Handle when your app starts
             await CheckLockAsync(false);
-            _databaseService.CreateTables();
-            await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+
+            if(string.IsNullOrWhiteSpace(_uri))
+            {
+                var lastBuild = _settings.GetValueOrDefault<string>(LastBuildKey);
+                if(InDebugMode() || lastBuild == null || lastBuild != _appInfoService.Build)
+                {
+                    _settings.AddOrUpdateValue(LastBuildKey, _appInfoService.Build);
+                    _databaseService.CreateTables();
+                }
+
+                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+            }
 
             Debug.WriteLine("OnStart");
         }
@@ -97,6 +125,7 @@ namespace Bit.App
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
+            SetMainPageFromAutofill();
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -124,44 +153,31 @@ namespace Bit.App
             {
                 lockPinPage.PinControl.Entry.FocusWithDelay();
             }
+
+            if(Device.OS == TargetPlatform.Android)
+            {
+                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+            }
         }
 
-        private async Task IncrementalSyncAsync()
+        private bool InDebugMode()
         {
-            if(_connectivity.IsConnected)
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
+        }
+
+        private void SetMainPageFromAutofill()
+        {
+            if(Device.OS != TargetPlatform.Android || string.IsNullOrWhiteSpace(_uri))
             {
-                var attempt = 0;
-                do
-                {
-                    try
-                    {
-                        await _syncService.IncrementalSyncAsync(TimeSpan.FromMinutes(30)).ConfigureAwait(false);
-                        break;
-                    }
-                    catch(WebException)
-                    {
-                        Debug.WriteLine("Failed to incremental sync.");
-                        if(attempt >= 1)
-                        {
-                            break;
-                        }
-                        else
-                        {
-                            await Task.Delay(1000);
-                        }
-                        attempt++;
-                    }
-                    catch(Exception e) when(e is TaskCanceledException || e is OperationCanceledException)
-                    {
-                        Debug.WriteLine("Cancellation exception.");
-                        break;
-                    }
-                } while(attempt <= 1);
+                return;
             }
-            else
-            {
-                Debug.WriteLine("Not connected.");
-            }
+
+            MainPage = new MainPage();
+            _uri = null;
         }
 
         private async Task FullSyncAsync()
@@ -173,7 +189,7 @@ namespace Bit.App
                 {
                     try
                     {
-                        await _syncService.FullSyncAsync().ConfigureAwait(false);
+                        await _syncService.FullSyncAsync(TimeSpan.FromMinutes(30)).ConfigureAwait(false);
                         break;
                     }
                     catch(WebException)

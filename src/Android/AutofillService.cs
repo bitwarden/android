@@ -1,100 +1,104 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Android.AccessibilityServices;
 using Android.App;
 using Android.Content;
-using Android.Graphics;
 using Android.OS;
-using Android.Runtime;
-using Android.Views;
 using Android.Views.Accessibility;
-using Android.Widget;
 
 namespace Bit.Android
 {
-    //[Service(Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Label = "bitwarden")]
-    //[IntentFilter(new string[] { "android.accessibilityservice.AccessibilityService" })]
-    //[MetaData("android.accessibilityservice", Resource = "@xml/accessibilityservice")]
+    [Service(Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Label = "bitwarden")]
+    [IntentFilter(new string[] { "android.accessibilityservice.AccessibilityService" })]
+    [MetaData("android.accessibilityservice", Resource = "@xml/accessibilityservice")]
     public class AutofillService : AccessibilityService
     {
-        private const int autoFillNotificationId = 0;
-        private const string androidAppPrefix = "androidapp://";
+        private const int AutoFillNotificationId = 34573;
+        private const string SystemUiPackage = "com.android.systemui";
+        private const string BitwardenPackage = "com.x8bit.bitwarden";
+        private const string BitwardenWebsite = "bitwarden.com";
+
+        public static bool Enabled { get; set; } = false;
+        private static Dictionary<string, string[]> BrowserPackages => new Dictionary<string, string[]>
+        {
+            { "com.android.chrome", new string[] { "url_bar" } },
+            { "com.chrome.beta", new string[] { "url_bar" } },
+            { "com.android.browser", new string[] { "url" } },
+            { "com.brave.browser", new string[] { "url_bar" } },
+            { "com.opera.browser", new string[] { "url_field" } },
+            { "com.opera.browser.beta", new string[] { "url_field" } },
+            { "com.opera.mini.native", new string[] { "url_field" } },
+            { "com.chrome.dev", new string[] { "url_bar" } },
+            { "com.chrome.canary", new string[] { "url_bar" } },
+            { "com.google.android.apps.chrome", new string[] { "url_bar" } },
+            { "com.google.android.apps.chrome_dev", new string[] { "url_bar" } },
+            { "org.iron.srware", new string[] { "url_bar" } },
+            { "com.sec.android.app.sbrowser", new string[] { "sbrowser_url_bar" } },
+            { "com.yandex.browser", new string[] { "bro_common_omnibox_host", "bro_common_omnibox_edit_text" } },
+            { "org.mozilla.firefox", new string[] { "url_bar_title" } },
+            { "org.mozilla.firefox_beta", new string[] { "url_bar_title" } },
+            { "com.ghostery.android.ghostery",new string[] {  "search_field" } },
+            { "org.adblockplus.browser", new string[] { "url_bar_title" } },
+            { "com.htc.sense.browser", new string[] { "title" } },
+            { "com.amazon.cloud9", new string[] { "url" } },
+            { "mobi.mgeek.TunnyBrowser", new string[] { "title" } },
+            { "com.nubelacorp.javelin", new string[] { "enterUrl" } },
+            { "com.jerky.browser2", new string[] { "enterUrl" } },
+            { "com.mx.browser", new string[] { "address_editor_with_progress" } },
+            { "com.mx.browser.tablet", new string[] { "address_editor_with_progress"} },
+            { "com.linkbubble.playstore", new string[] { "url_text" }}
+        };
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
-            var eventType = e.EventType;
-            var package = e.PackageName;
-            switch(eventType)
+            Enabled = true;
+            var root = RootInActiveWindow;
+            if(string.IsNullOrWhiteSpace(e.PackageName) || e.PackageName == SystemUiPackage ||
+                root?.PackageName != e.PackageName)
             {
-                case EventTypes.ViewTextSelectionChanged:
-                    //if(e.Source.Password && string.IsNullOrWhiteSpace(e.Source.Text))
-                    //{
-                    //    var bundle = new Bundle();
-                    //    bundle.PutCharSequence(AccessibilityNodeInfo.ActionArgumentSetTextCharsequence, "mypassword");
-                    //    e.Source.PerformAction(global::Android.Views.Accessibility.Action.SetText, bundle);
-                    //}
-                    break;
+                return;
+            }
+
+            switch(e.EventType)
+            {
                 case EventTypes.WindowContentChanged:
                 case EventTypes.WindowStateChanged:
-                    if(e.PackageName == "com.android.systemui")
+                    var cancelNotification = true;
+
+                    if(e.PackageName == BitwardenPackage)
                     {
+                        CancelNotification();
                         break;
                     }
-                    var root = RootInActiveWindow;
-                    if((ExistsNodeOrChildren(root, n => n.WindowId == e.WindowId) && !ExistsNodeOrChildren(root, n => (n.ViewIdResourceName != null) && (n.ViewIdResourceName.StartsWith("com.android.systemui")))))
+
+                    var passwordNodes = GetWindowNodes(root, e, n => n.Password);
+                    if(passwordNodes.Any())
                     {
-                        bool cancelNotification = true;
-
-                        var allEditTexts = GetNodeOrChildren(root, n => { return IsEditText(n); });
-
-                        var usernameEdit = allEditTexts.TakeWhile(edit => (edit.Password == false)).LastOrDefault();
-
-                        string searchString = androidAppPrefix + root.PackageName;
-
-                        string url = androidAppPrefix + root.PackageName;
-
-                        if(root.PackageName == "com.android.chrome")
+                        var uri = GetUri(root);
+                        if(uri.Contains(BitwardenWebsite))
                         {
-                            var addressField = root.FindAccessibilityNodeInfosByViewId("com.android.chrome:id/url_bar").FirstOrDefault();
-                            UrlFromAddressField(ref url, addressField);
-
-                        }
-                        else if(root.PackageName == "com.android.browser")
-                        {
-                            var addressField = root.FindAccessibilityNodeInfosByViewId("com.android.browser:id/url").FirstOrDefault();
-                            UrlFromAddressField(ref url, addressField);
+                            break;
                         }
 
-                        var emptyPasswordFields = GetNodeOrChildren(root, n => { return IsPasswordField(n); }).ToList();
-                        if(emptyPasswordFields.Any())
+                        if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                         {
-                            if((AutofillActivity.LastReceivedCredentials != null) && IsSame(AutofillActivity.LastReceivedCredentials.Url, url))
-                            {
-                                //Android.Util.Log.Debug("KP2AAS", "Filling credentials for " + url);
-
-                                FillPassword(url, usernameEdit, emptyPasswordFields);
-                            }
-                            else
-                            {
-                                //Android.Util.Log.Debug("KP2AAS", "Notif for " + url);
-                                if(AutofillActivity.LastReceivedCredentials != null)
-                                {
-                                    //Android.Util.Log.Debug("KP2AAS", LookupCredentialsActivity.LastReceivedCredentials.Url);
-                                    //Android.Util.Log.Debug("KP2AAS", url);
-                                }
-
-                                AskFillPassword(url, usernameEdit, emptyPasswordFields);
-                                cancelNotification = false;
-                            }
-
+                            var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
+                            var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+                            FillCredentials(usernameEditText, passwordNodes);
                         }
-                        if(cancelNotification)
+                        else
                         {
-                            ((NotificationManager)GetSystemService(NotificationService)).Cancel(autoFillNotificationId);
-                            //Android.Util.Log.Debug("KP2AAS", "Cancel notif");
+                            NotifyToAutofill(uri);
+                            cancelNotification = false;
                         }
+
+                        AutofillActivity.LastCredentials = null;
+                    }
+
+                    if(cancelNotification)
+                    {
+                        CancelNotification();
                     }
                     break;
                 default:
@@ -107,120 +111,160 @@ namespace Bit.Android
 
         }
 
-        private static void UrlFromAddressField(ref string url, AccessibilityNodeInfo addressField)
+        protected override void OnServiceConnected()
         {
-            if(addressField != null)
-            {
-                url = addressField.Text;
-                if(!url.Contains("://"))
-                    url = "http://" + url;
-            }
-
+            base.OnServiceConnected();
+            Enabled = true;
         }
 
-        private bool IsSame(string url1, string url2)
+        public override void OnDestroy()
         {
-            if(url1.StartsWith("androidapp://"))
-                return url1 == url2;
-            //return KeePassLib.Utility.UrlUtil.GetHost(url1) == KeePassLib.Utility.UrlUtil.GetHost(url2);
+            base.OnDestroy();
+            Enabled = false;
+        }
+
+        private void CancelNotification()
+        {
+            var notificationManager = ((NotificationManager)GetSystemService(NotificationService));
+            notificationManager.Cancel(AutoFillNotificationId);
+        }
+
+        private string GetUri(AccessibilityNodeInfo root)
+        {
+            var uri = string.Concat(App.Constants.AndroidAppProtocol, root.PackageName);
+            if(BrowserPackages.ContainsKey(root.PackageName))
+            {
+                foreach(var addressViewId in BrowserPackages[root.PackageName])
+                {
+                    var addressNode = root.FindAccessibilityNodeInfosByViewId(
+                        $"{root.PackageName}:id/{addressViewId}").FirstOrDefault();
+                    if(addressNode == null)
+                    {
+                        continue;
+                    }
+
+                    uri = ExtractUri(uri, addressNode);
+                    break;
+                }
+            }
+
+            return uri;
+        }
+
+        private string ExtractUri(string uri, AccessibilityNodeInfo addressNode)
+        {
+            if(addressNode != null)
+            {
+                uri = addressNode.Text;
+                if(!uri.Contains("://"))
+                {
+                    uri = string.Concat("http://", uri);
+                }
+                else if(Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
+                {
+                    var parts = uri.Split(new string[] { ". " }, StringSplitOptions.None);
+                    if(parts.Length > 1)
+                    {
+                        var urlPart = parts.FirstOrDefault(p => p.StartsWith("http"));
+                        if(urlPart != null)
+                        {
+                            uri = urlPart.Trim();
+                        }
+                    }
+                }
+            }
+
+            return uri;
+        }
+
+        /// <summary>
+        /// Check to make sure it is ok to autofill still on the current screen
+        /// </summary>
+        private bool NeedToAutofill(AutofillCredentials creds, string currentUriString)
+        {
+            if(creds == null)
+            {
+                return false;
+            }
+
+            Uri lastUri, currentUri;
+            if(Uri.TryCreate(creds.LastUri, UriKind.Absolute, out lastUri) &&
+                Uri.TryCreate(currentUriString, UriKind.Absolute, out currentUri) &&
+                lastUri.Host == currentUri.Host)
+            {
+                return true;
+            }
+
             return false;
         }
 
-        private static bool IsPasswordField(AccessibilityNodeInfo n)
+        private static bool EditText(AccessibilityNodeInfo n)
         {
-            //if (n.Password) Android.Util.Log.Debug(_logTag, "pwdx with " + (n.Text == null ? "null" : n.Text));
-            var res = n.Password && string.IsNullOrEmpty(n.Text);
-            // if (n.Password) Android.Util.Log.Debug(_logTag, "pwd with " + n.Text + res);
-            return res;
+            return n.ClassName != null && n.ClassName.Contains("EditText");
         }
 
-        private static bool IsEditText(AccessibilityNodeInfo n)
+        private void NotifyToAutofill(string uri)
         {
-            //it seems like n.Editable is not a good check as this is false for some fields which are actually editable, at least in tests with Chrome.
-            return (n.ClassName != null) && (n.ClassName.Contains("EditText"));
-        }
-
-        private void AskFillPassword(string url, AccessibilityNodeInfo usernameEdit, IEnumerable<AccessibilityNodeInfo> passwordFields)
-        {
-            var runSearchIntent = new Intent(this, typeof(AutofillActivity));
-            runSearchIntent.PutExtra("url", url);
-            runSearchIntent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
-            var pending = PendingIntent.GetActivity(this, 0, runSearchIntent, PendingIntentFlags.UpdateCurrent);
-
-            var targetName = url;
-
-            if(url.StartsWith(androidAppPrefix))
-            {
-                var packageName = url.Substring(androidAppPrefix.Length);
-                try
-                {
-                    var appInfo = PackageManager.GetApplicationInfo(packageName, 0);
-                    targetName = (string)(appInfo != null ? PackageManager.GetApplicationLabel(appInfo) : packageName);
-                }
-                catch(Exception e)
-                {
-                    //Android.Util.Log.Debug(_logTag, e.ToString());
-                    targetName = packageName;
-                }
-            }
-            else
-            {
-                //targetName = KeePassLib.Utility.UrlUtil.GetHost(url);
-            }
-
+            var intent = new Intent(this, typeof(AutofillActivity));
+            intent.PutExtra("uri", uri);
+            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
+            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.UpdateCurrent);
 
             var builder = new Notification.Builder(this);
-            //TODO icon
-            //TODO plugin icon
-            builder.SetSmallIcon(Resource.Drawable.icon)
-                   .SetContentText("Content Text")
-                   .SetContentTitle("Content Title")
+            builder.SetSmallIcon(Resource.Drawable.notification_sm)
+                   .SetContentTitle(App.Resources.AppResources.BitwardenAutofillService)
+                   .SetContentText(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
+                   .SetTicker(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
                    .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
-                   .SetTicker("Ticker Text")
-                   .SetVisibility(NotificationVisibility.Secret)
-                   .SetContentIntent(pending);
+                   .SetContentIntent(pendingIntent);
+
+            if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch)
+            {
+                builder.SetVisibility(NotificationVisibility.Secret)
+                    .SetColor(global::Android.Support.V4.Content.ContextCompat.GetColor(ApplicationContext,
+                        Resource.Color.primary));
+            }
+
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-            notificationManager.Notify(autoFillNotificationId, builder.Build());
-
+            notificationManager.Notify(AutoFillNotificationId, builder.Build());
         }
 
-        private void FillPassword(string url, AccessibilityNodeInfo usernameEdit, IEnumerable<AccessibilityNodeInfo> passwordFields)
+        private void FillCredentials(AccessibilityNodeInfo usernameNode, IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
-
-            FillDataInTextField(usernameEdit, AutofillActivity.LastReceivedCredentials.User);
-            foreach(var pwd in passwordFields)
-                FillDataInTextField(pwd, AutofillActivity.LastReceivedCredentials.Password);
-
-            AutofillActivity.LastReceivedCredentials = null;
+            FillEditText(usernameNode, AutofillActivity.LastCredentials.Username);
+            foreach(var n in passwordNodes)
+            {
+                FillEditText(n, AutofillActivity.LastCredentials.Password);
+            }
         }
 
-        private static void FillDataInTextField(AccessibilityNodeInfo edit, string newValue)
+        private static void FillEditText(AccessibilityNodeInfo editTextNode, string value)
         {
-            Bundle b = new Bundle();
-            b.PutString(AccessibilityNodeInfo.ActionArgumentSetTextCharsequence, newValue);
-            edit.PerformAction(global::Android.Views.Accessibility.Action.SetText, b);
+            if(editTextNode == null || value == null)
+            {
+                return;
+            }
+
+            var bundle = new Bundle();
+            bundle.PutString(AccessibilityNodeInfo.ActionArgumentSetTextCharsequence, value);
+            editTextNode.PerformAction(global::Android.Views.Accessibility.Action.SetText, bundle);
         }
 
-        private bool ExistsNodeOrChildren(AccessibilityNodeInfo n, Func<AccessibilityNodeInfo, bool> p)
-        {
-            return GetNodeOrChildren(n, p).Any();
-        }
-
-        private IEnumerable<AccessibilityNodeInfo> GetNodeOrChildren(AccessibilityNodeInfo n, Func<AccessibilityNodeInfo, bool> p)
+        private IEnumerable<AccessibilityNodeInfo> GetWindowNodes(AccessibilityNodeInfo n,
+            AccessibilityEvent e, Func<AccessibilityNodeInfo, bool> p)
         {
             if(n != null)
             {
-
-                if(p(n))
+                if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && p(n))
                 {
                     yield return n;
                 }
 
                 for(int i = 0; i < n.ChildCount; i++)
                 {
-                    foreach(var x in GetNodeOrChildren(n.GetChild(i), p))
+                    foreach(var node in GetWindowNodes(n.GetChild(i), e, p))
                     {
-                        yield return x;
+                        yield return node;
                     }
                 }
             }

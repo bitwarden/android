@@ -17,8 +17,9 @@ namespace Bit.App.Repositories
     {
         public ApiRepository(
             IConnectivity connectivity,
-            IHttpService httpService)
-            : base(connectivity, httpService)
+            IHttpService httpService,
+            ITokenService tokenService)
+            : base(connectivity, httpService, tokenService)
         { }
 
         public virtual async Task<ApiResult<TResponse>> GetByIdAsync(TId id)
@@ -26,6 +27,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<TResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<TResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -48,7 +55,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<TResponse>();
                 }
@@ -60,6 +67,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<ListResponse<TResponse>>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<ListResponse<TResponse>>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -82,7 +95,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<TResponse>>(responseContent);
                     return ApiResult<ListResponse<TResponse>>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<ListResponse<TResponse>>();
                 }
@@ -94,6 +107,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<TResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<TResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -116,7 +135,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<TResponse>();
                 }
@@ -128,6 +147,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<TResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<TResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -150,7 +175,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<TResponse>(responseContent);
                     return ApiResult<TResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<TResponse>();
                 }
@@ -162,6 +187,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -182,7 +213,7 @@ namespace Bit.App.Repositories
 
                     return ApiResult.Success(response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException();
                 }

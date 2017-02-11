@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Bit.App.Models.Api;
+using System;
 
 namespace Bit.App.Abstractions
 {
@@ -7,5 +8,6 @@ namespace Bit.App.Abstractions
     {
         Task<ApiResult> PostRegisterAsync(RegisterRequest requestObj);
         Task<ApiResult> PostPasswordHintAsync(PasswordHintRequest requestObj);
+        Task<ApiResult<DateTime?>> GetAccountRevisionDate();
     }
 }

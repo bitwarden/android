@@ -1,12 +1,12 @@
-# Title
+# Title (max 30 characters)
 
 bitwarden Password Manager
 
-# Short Description
+# Short Description (max 80 characters)
 
 bitwarden is a login and password manager that helps keep you safe while online.
 
-# Full Description
+# Full Description (max 4000 characters)
 
 bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
 

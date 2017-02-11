@@ -10,26 +10,21 @@ namespace Bit.iOS.Extension.Models
 
         public NSExtensionContext ExtContext { get; set; }
         public string ProviderType { get; set; }
-        public Uri Url { get; set; }
-        public DomainName DomainName
+        public Uri Uri
         {
             get
             {
-                if(_domainName != null)
+                Uri uri;
+                if(string.IsNullOrWhiteSpace(UrlString) || !Uri.TryCreate(UrlString, UriKind.Absolute, out uri))
                 {
-                    return _domainName;
+                    return null;
                 }
 
-                DomainName domain;
-                if(Url?.Host != null && DomainName.TryParse(Url?.Host, out domain))
-                {
-                    _domainName = domain;
-                }
-
-                return _domainName;
+                return uri;
             }
         }
-        public string SiteTitle { get; set; }
+        public string UrlString { get; set; }
+        public string LoginTitle { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string OldPassword { get; set; }

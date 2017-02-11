@@ -133,7 +133,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            // TODO: Validate the delete operation. ex. Cannot delete a folder that has sites in it?
+            // TODO: Validate the delete operation. ex. Cannot delete a folder that has logins in it?
 
             if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
             {

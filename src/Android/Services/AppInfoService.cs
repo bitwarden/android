@@ -10,5 +10,7 @@ namespace Bit.Android.Services
 
         public string Build => AndroidApp.Context.ApplicationContext.PackageManager
             .GetPackageInfo(AndroidApp.Context.PackageName, 0).VersionCode.ToString();
+
+        public bool AutofillServiceEnabled => AutofillService.Enabled;
     }
 }

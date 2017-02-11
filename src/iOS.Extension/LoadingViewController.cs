@@ -123,22 +123,22 @@ namespace Bit.iOS.Extension
             var navController = segue.DestinationViewController as UINavigationController;
             if(navController != null)
             {
-                var listSiteController = navController.TopViewController as SiteListViewController;
-                var addSiteController = navController.TopViewController as SiteAddViewController;
+                var listLoginController = navController.TopViewController as LoginListViewController;
+                var addLoginController = navController.TopViewController as LoginAddViewController;
                 var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
                 var pinViewController = navController.TopViewController as LockPinViewController;
                 var passwordViewController = navController.TopViewController as LockPasswordViewController;
                 var setupViewController = navController.TopViewController as SetupViewController;
 
-                if(listSiteController != null)
+                if(listLoginController != null)
                 {
-                    listSiteController.Context = _context;
-                    listSiteController.LoadingController = this;
+                    listLoginController.Context = _context;
+                    listLoginController.LoadingController = this;
                 }
-                else if(addSiteController != null)
+                else if(addLoginController != null)
                 {
-                    addSiteController.Context = _context;
-                    addSiteController.LoadingController = this;
+                    addLoginController.Context = _context;
+                    addLoginController.LoadingController = this;
                 }
                 else if(fingerprintViewController != null)
                 {
@@ -174,12 +174,12 @@ namespace Bit.iOS.Extension
 
         private void ContinueOn()
         {
-            Debug.WriteLine("BW Log, Segue to setup, site add or list.");
+            Debug.WriteLine("BW Log, Segue to setup, login add or list.");
             _settings.AddOrUpdateValue(App.Constants.LastActivityDate, DateTime.UtcNow);
 
             if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
             {
-                PerformSegue("newSiteSegue", this);
+                PerformSegue("newLoginSegue", this);
             }
             else if(_context.ProviderType == Constants.UTTypeAppExtensionSetup)
             {
@@ -187,7 +187,7 @@ namespace Bit.iOS.Extension
             }
             else
             {
-                PerformSegue("siteListSegue", this);
+                PerformSegue("loginListSegue", this);
             }
         }
 
@@ -271,7 +271,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<IKeyDerivationService, CommonCryptoKeyDerivationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILoginService, LoginService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
@@ -280,12 +280,15 @@ namespace Bit.iOS.Extension
                 .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILoginRepository, LoginRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILoginApiRepository, LoginApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IConnectApiRepository, ConnectApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
@@ -325,8 +328,8 @@ namespace Bit.iOS.Extension
                 _googleAnalyticsService.TrackExtensionEvent("ProcessItemProvider", type);
 
                 Debug.WriteLine("BW LOG, ProviderType: " + _context.ProviderType);
-                Debug.WriteLine("BW LOG, Url: " + _context.Url);
-                Debug.WriteLine("BW LOG, Title: " + _context.SiteTitle);
+                Debug.WriteLine("BW LOG, Url: " + _context.UrlString);
+                Debug.WriteLine("BW LOG, Title: " + _context.LoginTitle);
                 Debug.WriteLine("BW LOG, Username: " + _context.Username);
                 Debug.WriteLine("BW LOG, Password: " + _context.Password);
                 Debug.WriteLine("BW LOG, Old Password: " + _context.OldPassword);
@@ -356,7 +359,7 @@ namespace Bit.iOS.Extension
                     return;
                 }
 
-                _context.Url = new Uri(result.ValueForKey(new NSString(Constants.AppExtensionUrlStringKey)) as NSString);
+                _context.UrlString = result.ValueForKey(new NSString(Constants.AppExtensionUrlStringKey)) as NSString;
                 var jsonStr = result.ValueForKey(new NSString(Constants.AppExtensionWebViewPageDetails)) as NSString;
                 _context.Details = DeserializeString<PageDetails>(jsonStr);
             });
@@ -371,7 +374,7 @@ namespace Bit.iOS.Extension
 
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
             });
         }
@@ -384,7 +387,7 @@ namespace Bit.iOS.Extension
                 var url = dict[Constants.AppExtensionUrlStringKey] as NSString;
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
 
                 _context.Details = DeserializeDictionary<PageDetails>(dict[Constants.AppExtensionWebViewPageDetails] as NSDictionary);
@@ -406,10 +409,10 @@ namespace Bit.iOS.Extension
 
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
 
-                _context.SiteTitle = title;
+                _context.LoginTitle = title;
                 _context.Username = username;
                 _context.Password = password;
                 _context.Notes = notes;
@@ -433,10 +436,10 @@ namespace Bit.iOS.Extension
 
                 if(url != null)
                 {
-                    _context.Url = new Uri(url);
+                    _context.UrlString = url;
                 }
 
-                _context.SiteTitle = title;
+                _context.LoginTitle = title;
                 _context.Username = username;
                 _context.Password = password;
                 _context.OldPassword = oldPassword;

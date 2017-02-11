@@ -1,58 +1,102 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Views;
-using Android.Widget;
-using Bit.App.Models;
 
 namespace Bit.Android
 {
-    //[Activity(Label = "Autofill", LaunchMode = global::Android.Content.PM.LaunchMode.SingleInstance, Theme = "@style/android:Theme.Material.Light")]
+    [Activity(Theme = "@style/BitwardenTheme.Splash",
+        Label = "bitwarden",
+        Icon = "@drawable/icon",
+        WindowSoftInputMode = SoftInput.StateHidden)]
     public class AutofillActivity : Activity
     {
+        private string _lastQueriedUri;
+
+        public static AutofillCredentials LastCredentials { get; set; }
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
-            var url = Intent.GetStringExtra("url");
-            _lastQueriedUrl = url;
-            //StartActivityForResult(Kp2aControl.GetQueryEntryIntent(url), 123);
+            LaunchMainActivity(Intent, 932473);
         }
 
-        string _lastQueriedUrl;
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            LaunchMainActivity(intent, 489729);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            if(!Intent.HasExtra("uri"))
+            {
+                Finish();
+                return;
+            }
+
+            Intent.RemoveExtra("uri");
+        }
 
         protected override void OnActivityResult(int requestCode, [GeneratedEnum] Result resultCode, Intent data)
         {
             base.OnActivityResult(requestCode, resultCode, data);
+            if(data == null)
+            {
+                LastCredentials = null;
+            }
+            else
+            {
+                try
+                {
+                    if(data.GetStringExtra("canceled") != null)
+                    {
+                        LastCredentials = null;
+                    }
+                    else
+                    {
+                        var uri = data.GetStringExtra("uri");
+                        var username = data.GetStringExtra("username");
+                        var password = data.GetStringExtra("password");
 
-            try
-            {
-                // TODO: lookup site
-                LastReceivedCredentials = new Credentials { User = "username", Password = "12345678", Url = _lastQueriedUrl };
+                        LastCredentials = new AutofillCredentials
+                        {
+                            Username = username,
+                            Password = password,
+                            Uri = uri,
+                            LastUri = _lastQueriedUri
+                        };
+                    }
+                }
+                catch
+                {
+                    LastCredentials = null;
+                }
             }
-            catch(Exception e)
-            {
-                //Android.Util.Log.Debug("KP2AAS", "Exception while receiving credentials: " + e.ToString());
-            }
-            finally
-            {
-                Finish();
-            }
+
+            Finish();
         }
 
-        public static Credentials LastReceivedCredentials;
-
-        public class Credentials
+        private void LaunchMainActivity(Intent callingIntent, int requestCode)
         {
-            public string User;
-            public string Password;
-            public string Url;
+            _lastQueriedUri = callingIntent?.GetStringExtra("uri");
+            if(_lastQueriedUri == null)
+            {
+                Finish();
+                return;
+            }
+
+            var intent = new Intent(this, typeof(MainActivity));
+            intent.PutExtra("uri", _lastQueriedUri);
+            intent.PutExtra("ts", Java.Lang.JavaSystem.CurrentTimeMillis());
+            StartActivityForResult(intent, requestCode);
         }
     }
 }

@@ -44,7 +44,7 @@ namespace Bit.Android.Services
 
         public void TrackExtensionEvent(string eventName, string label = null)
         {
-            throw new NotSupportedException();
+            TrackEvent("AutofillService", eventName, label);
         }
 
         public void TrackEvent(string category, string eventName, string label = null)

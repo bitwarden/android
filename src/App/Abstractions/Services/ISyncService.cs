@@ -8,9 +8,8 @@ namespace Bit.App.Abstractions
         bool SyncInProgress { get; }
         Task<bool> SyncAsync(string id);
         Task<bool> SyncDeleteFolderAsync(string id, DateTime revisionDate);
-        Task<bool> SyncDeleteSiteAsync(string id);
-        Task<bool> FullSyncAsync();
-        Task<bool> IncrementalSyncAsync(TimeSpan syncThreshold);
-        Task<bool> IncrementalSyncAsync();
+        Task<bool> SyncDeleteLoginAsync(string id);
+        Task<bool> FullSyncAsync(bool forceSync = false);
+        Task<bool> FullSyncAsync(TimeSpan syncThreshold, bool forceSync = false);
     }
 }

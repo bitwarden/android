@@ -11,17 +11,14 @@ using Bit.App.Controls;
 
 namespace Bit.App.Pages
 {
-    public class LockPinPage : ExtendedContentPage
+    public class LockPinPage : BaseLockPage
     {
         private readonly IAuthService _authService;
-        private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
 
         public LockPinPage()
-            : base(false, false)
         {
             _authService = Resolver.Resolve<IAuthService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
 
             Init();
@@ -79,11 +76,6 @@ namespace Bit.App.Pages
             PinControl.Entry.Focus();
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -102,20 +94,10 @@ namespace Bit.App.Pages
             {
                 // TODO: keep track of invalid attempts and logout?
 
-                _userDialogs.Alert(AppResources.InvalidPIN);
+                UserDialogs.Alert(AppResources.InvalidPIN);
                 Model.PIN = string.Empty;
                 PinControl.Entry.Focus();
             }
-        }
-
-        private async Task LogoutAsync()
-        {
-            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
-            {
-                return;
-            }
-
-            MessagingCenter.Send(Application.Current, "Logout", (string)null);
         }
     }
 }

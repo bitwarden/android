@@ -58,18 +58,26 @@ namespace Bit.iOS.Core.Services
             Console.WriteLine("iOS Language:" + iOSLanguage);
             var netLanguage = iOSLanguage;
 
-            //certain languages need to be converted to CultureInfo equivalent
-            switch(iOSLanguage)
+            if(netLanguage.StartsWith("zh"))
             {
-                case "ms-MY": // "Malaysian (Malaysia)" not supported .NET culture
-                case "ms-SG": // "Malaysian (Singapore)" not supported .NET culture
-                    netLanguage = "ms"; // closest supported
-                    break;
-                case "gsw-CH": // "Schwiizertüütsch (Swiss German)" not supported .NET culture
-                    netLanguage = "de-CH"; // closest supported
-                    break;
-                    // add more application-specific cases here (if required)
-                    // ONLY use cultures that have been tested and known to work
+                // simplified chinese used for all for now
+                netLanguage = "zh-Hans";
+            }
+            else
+            {
+                //certain languages need to be converted to CultureInfo equivalent
+                switch(iOSLanguage)
+                {
+                    case "ms-MY": // "Malaysian (Malaysia)" not supported .NET culture
+                    case "ms-SG": // "Malaysian (Singapore)" not supported .NET culture
+                        netLanguage = "ms"; // closest supported
+                        break;
+                    case "gsw-CH": // "Schwiizertüütsch (Swiss German)" not supported .NET culture
+                        netLanguage = "de-CH"; // closest supported
+                        break;
+                        // add more application-specific cases here (if required)
+                        // ONLY use cultures that have been tested and known to work
+                }
             }
 
             Console.WriteLine(".NET Language/Locale:" + netLanguage);
@@ -83,7 +91,6 @@ namespace Bit.iOS.Core.Services
 
             switch(platCulture.LanguageCode)
             {
-                // 
                 case "pt":
                     netLanguage = "pt-PT"; // fallback to Portuguese (Portugal)
                     break;

@@ -98,11 +98,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a Site.
+        ///   Looks up a localized string similar to Add a Login.
         /// </summary>
-        public static string AddASite {
+        public static string AddALogin {
             get {
-                return ResourceManager.GetString("AddASite", resourceCulture);
+                return ResourceManager.GetString("AddALogin", resourceCulture);
             }
         }
         
@@ -116,11 +116,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Site.
+        ///   Looks up a localized string similar to Add Login.
         /// </summary>
-        public static string AddSite {
+        public static string AddLogin {
             get {
-                return ResourceManager.GetString("AddSite", resourceCulture);
+                return ResourceManager.GetString("AddLogin", resourceCulture);
             }
         }
         
@@ -179,6 +179,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Beta.
+        /// </summary>
+        public static string Beta {
+            get {
+                return ResourceManager.GetString("Beta", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to bitwarden.
         /// </summary>
         public static string Bitwarden {
@@ -197,7 +206,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The easiest way to add new sites to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the &quot;Tools&quot; screen..
+        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the &quot;Tools&quot; screen..
         /// </summary>
         public static string BitwardenAppExtensionAlert {
             get {
@@ -224,11 +233,65 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the &quot;Tools&quot; screen..
+        /// </summary>
+        public static string BitwardenAutofillServiceAlert {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins..
         /// </summary>
         public static string BitwardenAutofillServiceDescription {
             get {
                 return ResourceManager.GetString("BitwardenAutofillServiceDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service..
+        /// </summary>
+        public static string BitwardenAutofillServiceNotification {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tap this notification to auto-fill a login from your vault..
+        /// </summary>
+        public static string BitwardenAutofillServiceNotificationContent {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceNotificationContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Accessibility Settings.
+        /// </summary>
+        public static string BitwardenAutofillServiceOpenSettings {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceOpenSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1. On the Android Accessibility Settings screen, touch &quot;bitwarden&quot; under the Services heading..
+        /// </summary>
+        public static string BitwardenAutofillServiceStep1 {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceStep1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. Switch on the toggle and press OK to accept..
+        /// </summary>
+        public static string BitwardenAutofillServiceStep2 {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceStep2", resourceCulture);
             }
         }
         
@@ -413,6 +476,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disabled.
+        /// </summary>
+        public static string Disabled {
+            get {
+                return ResourceManager.GetString("Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to delete? This cannot be undone..
         /// </summary>
         public static string DoYouReallyWantToDelete {
@@ -440,11 +512,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Site.
+        ///   Looks up a localized string similar to Edit Login.
         /// </summary>
-        public static string EditSite {
+        public static string EditLogin {
             get {
-                return ResourceManager.GetString("EditSite", resourceCulture);
+                return ResourceManager.GetString("EditLogin", resourceCulture);
             }
         }
         
@@ -494,6 +566,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enabled.
+        /// </summary>
+        public static string Enabled {
+            get {
+                return ResourceManager.GetString("Enabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter your account email address to receive your master password hint..
         /// </summary>
         public static string EnterEmailForHint {
@@ -526,6 +607,15 @@ namespace Bit.App.Resources {
         public static string ExntesionReenable {
             get {
                 return ResourceManager.GetString("ExntesionReenable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Extension Activated!.
+        /// </summary>
+        public static string ExtensionActivated {
+            get {
+                return ResourceManager.GetString("ExtensionActivated", resourceCulture);
             }
         }
         
@@ -773,6 +863,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icons.
+        /// </summary>
+        public static string Icons {
+            get {
+                return ResourceManager.GetString("Icons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Import Logins.
         /// </summary>
         public static string ImportLogins {
@@ -944,6 +1043,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login has been deleted..
+        /// </summary>
+        public static string LoginDeleted {
+            get {
+                return ResourceManager.GetString("LoginDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login Information.
+        /// </summary>
+        public static string LoginInformation {
+            get {
+                return ResourceManager.GetString("LoginInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Name.
+        /// </summary>
+        public static string LoginNoName {
+            get {
+                return ResourceManager.GetString("LoginNoName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string LogInNoun {
@@ -958,6 +1084,33 @@ namespace Bit.App.Resources {
         public static string LoginOrCreateNewAccount {
             get {
                 return ResourceManager.GetString("LoginOrCreateNewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logins.
+        /// </summary>
+        public static string Logins {
+            get {
+                return ResourceManager.GetString("Logins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logins for {0}.
+        /// </summary>
+        public static string LoginsForUri {
+            get {
+                return ResourceManager.GetString("LoginsForUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login updated..
+        /// </summary>
+        public static string LoginUpdated {
+            get {
+                return ResourceManager.GetString("LoginUpdated", resourceCulture);
             }
         }
         
@@ -1124,11 +1277,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New site created..
+        ///   Looks up a localized string similar to New login created..
         /// </summary>
-        public static string NewSiteCreated {
+        public static string NewLoginCreated {
             get {
-                return ResourceManager.GetString("NewSiteCreated", resourceCulture);
+                return ResourceManager.GetString("NewLoginCreated", resourceCulture);
             }
         }
         
@@ -1151,20 +1304,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no sites in your vault..
+        ///   Looks up a localized string similar to There are no logins in your vault..
         /// </summary>
-        public static string NoSites {
+        public static string NoLogins {
             get {
-                return ResourceManager.GetString("NoSites", resourceCulture);
+                return ResourceManager.GetString("NoLogins", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no sites in your vault for this website. Tap to add one..
+        ///   Looks up a localized string similar to There are no logins in your vault for {0}..
         /// </summary>
-        public static string NoSitesTap {
+        public static string NoLoginsForUri {
             get {
-                return ResourceManager.GetString("NoSitesTap", resourceCulture);
+                return ResourceManager.GetString("NoLoginsForUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no logins in your vault for this website. Tap to add one..
+        /// </summary>
+        public static string NoLoginsTap {
+            get {
+                return ResourceManager.GetString("NoLoginsTap", resourceCulture);
             }
         }
         
@@ -1178,7 +1340,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This site does not have a username or password configured..
+        ///   Looks up a localized string similar to This login does not have a username or password configured..
         /// </summary>
         public static string NoUsernamePasswordConfigured {
             get {
@@ -1295,7 +1457,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select \&quot;Ok\&quot; on the following prompt when asked to enable push notifications..
+        ///   Looks up a localized string similar to bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Ok&quot; on the following prompt when asked to enable push notifications..
         /// </summary>
         public static string PushNotificationAlert {
             get {
@@ -1439,38 +1601,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Site has been deleted..
+        ///   Looks up a localized string similar to Status.
         /// </summary>
-        public static string SiteDeleted {
+        public static string Status {
             get {
-                return ResourceManager.GetString("SiteDeleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Site Information.
-        /// </summary>
-        public static string SiteInformation {
-            get {
-                return ResourceManager.GetString("SiteInformation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No Name.
-        /// </summary>
-        public static string SiteNoName {
-            get {
-                return ResourceManager.GetString("SiteNoName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Site updated..
-        /// </summary>
-        public static string SiteUpdated {
-            get {
-                return ResourceManager.GetString("SiteUpdated", resourceCulture);
+                return ResourceManager.GetString("Status", resourceCulture);
             }
         }
         
@@ -1561,6 +1696,15 @@ namespace Bit.App.Resources {
         public static string TouchID {
             get {
                 return ResourceManager.GetString("TouchID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Translations.
+        /// </summary>
+        public static string Translations {
+            get {
+                return ResourceManager.GetString("Translations", resourceCulture);
             }
         }
         
@@ -1709,11 +1853,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View Site.
+        ///   Looks up a localized string similar to View Login.
         /// </summary>
-        public static string ViewSite {
+        public static string ViewLogin {
             get {
-                return ResourceManager.GetString("ViewSite", resourceCulture);
+                return ResourceManager.GetString("ViewLogin", resourceCulture);
             }
         }
         

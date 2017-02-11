@@ -127,9 +127,15 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Skapa mapp</value>
   </data>
+<<<<<<< HEAD
   <data name="AddSite" xml:space="preserve">
     <value>Lägg till inloggning</value>
     <comment>The title for the add site page.</comment>
+=======
+  <data name="AddLogin" xml:space="preserve">
+    <value>Lägg till inloggning</value>
+    <comment>The title for the add login page.</comment>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>Ett fel har inträffat.</value>
@@ -153,6 +159,7 @@
   </data>
   <data name="CopyPassword" xml:space="preserve">
     <value>Kopiera lösenord</value>
+<<<<<<< HEAD
     <comment>The button text that allows a user to copy the site's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
@@ -161,6 +168,16 @@
   </data>
   <data name="Credits" xml:space="preserve">
     <value>Tillskrivningar</value>
+=======
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>Kopiera användarnamn</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>Credits</value>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -229,7 +246,11 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>(ingen)</value>
+<<<<<<< HEAD
     <comment>Sites that have no folder specified go in this special "catch-all" folder.</comment>
+=======
+    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Mappar</value>
@@ -334,6 +355,7 @@
     <value>Visa</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
+<<<<<<< HEAD
   <data name="SiteDeleted" xml:space="preserve">
     <value>Tog bort inloggning.</value>
     <comment>Confirmation message after successfully deleting a site.</comment>
@@ -341,6 +363,15 @@
   <data name="SiteNoName" xml:space="preserve">
     <value>Inget namn</value>
     <comment>Title text to display when there is no name given for a site.</comment>
+=======
+  <data name="LoginDeleted" xml:space="preserve">
+    <value>Tog bort inloggning.</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="LoginNoName" xml:space="preserve">
+    <value>Inget namn</value>
+    <comment>Title text to display when there is no name given for a login.</comment>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Skicka</value>
@@ -414,7 +445,11 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Ditt nya konto har blivit skapat! Du kan nu logga in.</value>
   </data>
+<<<<<<< HEAD
   <data name="AddASite" xml:space="preserve">
+=======
+  <data name="AddALogin" xml:space="preserve">
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
     <value>Lägg till en inloggning</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
@@ -451,14 +486,23 @@
     <value>Ändra e-postadress</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
+<<<<<<< HEAD
     <value>Du kan ändra din e-postadress på bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
     <comment>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</comment>
+=======
+    <value>Du kan ändra din e-postadress på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+    <comment>You can change your email address on the bitwarden web vault. Do you want to visit the website now?</comment>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Ändra huvudlösenord</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
+<<<<<<< HEAD
     <value>Du kan ändra ditt huvudlösenord på bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
+=======
+    <value>Du kan ändra ditt huvudlösenord på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="Close" xml:space="preserve">
     <value>Stäng</value>
@@ -489,8 +533,13 @@
     <value>Nuvarande session</value>
     <comment>Current Session</comment>
   </data>
+<<<<<<< HEAD
   <data name="EditSite" xml:space="preserve">
     <value>Ändra webbplats</value>
+=======
+  <data name="EditLogin" xml:space="preserve">
+    <value>Ändra inloggning</value>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Aktivera automatisk synkronisering</value>
@@ -517,7 +566,11 @@
     <comment>Enable App Extension</comment>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
+<<<<<<< HEAD
     <value>Inuti Safari hittar du bitwarden genom att trycka på dela-ikonen (hjälp: skrolla till höger på den nedersta raden i dela-menyn).</value>
+=======
+    <value>Inuti Safari hittar du bitwarden genom att trycka på dela-ikonen (scrolla till höger på den nedersta raden i dela-menyn).</value>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
     <comment>Safari is the name of apple's web browser (In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).)</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -525,6 +578,7 @@
     <comment>Get instant access to your passwords!</comment>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
+<<<<<<< HEAD
     <value>Du är redo att logga in!</value>
     <comment>You're ready to log in!</comment>
   </data>
@@ -534,6 +588,17 @@
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Dina inloggningar är nu enkelt tillgängliga från Safari, Chrome och andra appar som stödjs.</value>
+=======
+    <value>Du är nu redo att logga in!</value>
+    <comment>You're ready to log in!</comment>
+  </data>
+  <data name="ExtensionSeeApps" xml:space="preserve">
+    <value>Visa appar som stöds</value>
+    <comment>See Supported Apps</comment>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>Dina inloggningar är nu enkelt tillgängliga från Safari, Chrome och andra appar som stöds.</value>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
     <comment>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</comment>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
@@ -568,8 +633,13 @@
     <comment>Import Logins</comment>
   </data>
   <data name="ImportLoginsConfirmation" xml:space="preserve">
+<<<<<<< HEAD
     <value>Du kan massimportera inloggningar på bitwarden.com webbvalv. Vill du besöka webbsidan nu?</value>
     <comment>You can bulk import logins from the bitwarden.com web vault. Do you want to visit the website now?</comment>
+=======
+    <value>Du kan massimportera inloggningar på bitwardens webbvalv. Vill du besöka webbsidan nu?</value>
+    <comment>You can bulk import logins from the bitwardens web vault. Do you want to visit the website now?</comment>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="ImportLoginsDescription" xml:space="preserve">
     <value>Massimportera snabbt dina inloggningar från en annan lösenordshanterare.</value>
@@ -614,11 +684,19 @@
     <value>Hantera</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+<<<<<<< HEAD
     <value>Bekräftelsen för huvudlösenordet stämde inte överens med huvudlösenordet.</value>
     <comment>Password confirmation is not correct.</comment>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
     <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord eftersom det inte går att hämta lösenordet om du skulle glömma bort det.</value>
+=======
+    <value>Bekräftelsen för huvudlösenordet stämde ej.</value>
+    <comment>Password confirmation is not correct.</comment>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det ej går att hämta lösenordet.</value>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
     <comment>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</comment>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
@@ -651,14 +729,21 @@
   <data name="Never" xml:space="preserve">
     <value>Aldrig</value>
   </data>
+<<<<<<< HEAD
   <data name="NewSiteCreated" xml:space="preserve">
     <value>Ny inlogging skapad.</value>
     <comment>New site created.</comment>
+=======
+  <data name="NewLoginCreated" xml:space="preserve">
+    <value>Ny inlogging skapad.</value>
+    <comment>New login created.</comment>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Det finns inga favoriter i ditt valv.</value>
     <comment>There are no favorites in your vault.</comment>
   </data>
+<<<<<<< HEAD
   <data name="NoSites" xml:space="preserve">
     <value>Det finns inga inloggningar i ditt valv.</value>
     <comment>There are no sites in your vault.</comment>
@@ -670,6 +755,19 @@
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Den här inloggningen har inte ett användarnamn eller lösenord inskrivet.</value>
     <comment>This site does not have a username or password configured.</comment>
+=======
+  <data name="NoLogins" xml:space="preserve">
+    <value>Det finns inga inloggningar i ditt valv.</value>
+    <comment>There are no logins in your vault.</comment>
+  </data>
+  <data name="NoLoginsTap" xml:space="preserve">
+    <value>Det finns inga inloggningar i ditt valv för den här webbplatsen. Tryck för att skapa en.</value>
+    <comment>There are no logins in your vault for this website. Tap to add one.</comment>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>Den här inloggningen har inte ett användarnamn eller lösenord inskrivet.</value>
+    <comment>This login does not have a username or password configured.</comment>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, fattar!</value>
@@ -753,11 +851,19 @@
     <value>Skriv in en fyrsiffrig PIN-kod som du låser upp appen med.</value>
     <comment>Enter a 4 digit PIN code to unlock the app with.</comment>
   </data>
+<<<<<<< HEAD
   <data name="SiteInformation" xml:space="preserve">
     <value>Inloggningsinformation</value>
     <comment>Site Information</comment>
   </data>
   <data name="SiteUpdated" xml:space="preserve">
+=======
+  <data name="LoginInformation" xml:space="preserve">
+    <value>Inloggningsinformation</value>
+    <comment>Login Information</comment>
+  </data>
+  <data name="LoginUpdated" xml:space="preserve">
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
     <value>Inloggning uppdaterad.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
@@ -804,7 +910,11 @@
     <value>Verifieringskod</value>
     <comment>Verification Code</comment>
   </data>
+<<<<<<< HEAD
   <data name="ViewSite" xml:space="preserve">
+=======
+  <data name="ViewLogin" xml:space="preserve">
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c
     <value>Visa inloggning</value>
   </data>
   <data name="WebVault" xml:space="preserve">
@@ -817,4 +927,21 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Förlorat autentiseringsapp?</value>
   </data>
+<<<<<<< HEAD
 </root>
+=======
+  <data name="Logins" xml:space="preserve">
+    <value>Inloggningar</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>Tillägg aktiverat!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>Ikoner</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>Översättningar</value>
+  </data>
+</root>
+>>>>>>> b84ad39133b76d7b0487b461ea1c11aea5e2104c

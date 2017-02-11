@@ -10,11 +10,11 @@ namespace Bit.App
     {
         public TokenHttpRequestMessage()
         {
-            var authService = Resolver.Resolve<IAuthService>();
+            var tokenService = Resolver.Resolve<ITokenService>();
             var appIdService = Resolver.Resolve<IAppIdService>();
-            if(!string.IsNullOrWhiteSpace(authService.Token))
+            if(!string.IsNullOrWhiteSpace(tokenService.Token))
             {
-                Headers.Add("Authorization", $"Bearer {authService.Token}");
+                Headers.Add("Authorization", $"Bearer2 {tokenService.Token}");
             }
             if(!string.IsNullOrWhiteSpace(appIdService.AppId))
             {

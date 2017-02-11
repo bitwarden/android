@@ -56,6 +56,7 @@ namespace Bit.iOS
             manager.DisableMetricsManager = manager.DisableFeedbackManager = manager.DisableUpdateManager = true;
 
             LoadApplication(new App.App(
+                null,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),
@@ -65,7 +66,8 @@ namespace Bit.iOS
                 Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>(),
-                Resolver.Resolve<ILocalizeService>()));
+                Resolver.Resolve<ILocalizeService>(),
+                Resolver.Resolve<IAppInfoService>()));
 
             // Appearance stuff
 
@@ -249,7 +251,7 @@ namespace Bit.iOS
                 .RegisterType<IKeyDerivationService, CommonCryptoKeyDerivationService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteService, SiteService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILoginService, LoginService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IPushNotificationListener, PushNotificationListener>(new ContainerControlledLifetimeManager())
@@ -263,16 +265,19 @@ namespace Bit.iOS
                 .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
-                // Repositories
+                .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteRepository, SiteRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISiteApiRepository, SiteApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthApiRepository, AuthApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILoginRepository, LoginRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ILoginApiRepository, LoginApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IConnectApiRepository, ConnectApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ICipherApiRepository, CipherApiRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<ISettingsApiRepository, SettingsApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())

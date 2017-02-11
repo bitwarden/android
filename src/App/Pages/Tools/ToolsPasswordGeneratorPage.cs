@@ -18,8 +18,9 @@ namespace Bit.App.Pages
         private readonly IClipboardService _clipboardService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly Action<string> _passwordValueAction;
+        private readonly bool _fromAutofill;
 
-        public ToolsPasswordGeneratorPage(Action<string> passwordValueAction = null)
+        public ToolsPasswordGeneratorPage(Action<string> passwordValueAction = null, bool fromAutofill = false)
         {
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _passwordGenerationService = Resolver.Resolve<IPasswordGenerationService>();
@@ -27,6 +28,7 @@ namespace Bit.App.Pages
             _clipboardService = Resolver.Resolve<IClipboardService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _passwordValueAction = passwordValueAction;
+            _fromAutofill = fromAutofill;
 
             Init();
         }
@@ -111,7 +113,15 @@ namespace Bit.App.Pages
             {
                 var selectToolBarItem = new ToolbarItem(AppResources.Select, null, async () =>
                 {
-                    _googleAnalyticsService.TrackAppEvent("SelectedGeneratedPassword");
+                    if(_fromAutofill)
+                    {
+                        _googleAnalyticsService.TrackExtensionEvent("SelectedGeneratedPassword");
+                    }
+                    else
+                    {
+                        _googleAnalyticsService.TrackAppEvent("SelectedGeneratedPassword");
+                    }
+
                     _passwordValueAction(Password.Text);
                     await Navigation.PopForDeviceAsync();
                 }, ToolbarItemOrder.Default, 0);
@@ -132,7 +142,14 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _googleAnalyticsService.TrackAppEvent("GeneratedPassword");
+            if(_fromAutofill)
+            {
+                _googleAnalyticsService.TrackExtensionEvent("GeneratedPassword");
+            }
+            else
+            {
+                _googleAnalyticsService.TrackAppEvent("GeneratedPassword");
+            }
             Model.Password = _passwordGenerationService.GeneratePassword();
             Model.Length = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10).ToString();
         }
@@ -140,7 +157,14 @@ namespace Bit.App.Pages
         private void RegenerateCell_Tapped(object sender, EventArgs e)
         {
             Model.Password = _passwordGenerationService.GeneratePassword();
-            _googleAnalyticsService.TrackAppEvent("RegeneratedPassword");
+            if(_fromAutofill)
+            {
+                _googleAnalyticsService.TrackExtensionEvent("RegeneratedPassword");
+            }
+            else
+            {
+                _googleAnalyticsService.TrackAppEvent("RegeneratedPassword");
+            }
         }
 
         private void CopyCell_Tapped(object sender, EventArgs e)
@@ -155,7 +179,14 @@ namespace Bit.App.Pages
 
         private void CopyPassword()
         {
-            _googleAnalyticsService.TrackAppEvent("CopiedGeneratedPassword");
+            if(_fromAutofill)
+            {
+                _googleAnalyticsService.TrackExtensionEvent("CopiedGeneratedPassword");
+            }
+            else
+            {
+                _googleAnalyticsService.TrackAppEvent("CopiedGeneratedPassword");
+            }
             _clipboardService.CopyToClipboard(Password.Text);
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }

@@ -6,16 +6,18 @@ namespace Bit.App.Models.Page
 {
     public class VaultListPageModel
     {
-        public class Site
+        public class Login
         {
-            public Site(Models.Site site)
+            private string _baseDomain;
+
+            public Login(Models.Login login)
             {
-                Id = site.Id;
-                FolderId = site.FolderId;
-                Name = site.Name?.Decrypt();
-                Username = site.Username?.Decrypt() ?? " ";
-                Password = new Lazy<string>(() => site.Password?.Decrypt());
-                Uri = new Lazy<string>(() => site.Uri?.Decrypt());
+                Id = login.Id;
+                FolderId = login.FolderId;
+                Name = login.Name?.Decrypt();
+                Username = login.Username?.Decrypt() ?? " ";
+                Password = new Lazy<string>(() => login.Password?.Decrypt());
+                Uri = new Lazy<string>(() => login.Uri?.Decrypt());
             }
 
             public string Id { get; set; }
@@ -26,7 +28,7 @@ namespace Bit.App.Models.Page
             public Lazy<string> Uri { get; set; }
         }
 
-        public class Folder : List<Site>
+        public class Folder : List<Login>
         {
             public Folder(Models.Folder folder)
             {
@@ -34,9 +36,9 @@ namespace Bit.App.Models.Page
                 Name = folder.Name?.Decrypt();
             }
 
-            public Folder(List<Site> sites)
+            public Folder(List<Login> logins)
             {
-                AddRange(sites);
+                AddRange(logins);
             }
 
             public string Id { get; set; }

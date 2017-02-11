@@ -8,6 +8,8 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
+using Plugin.Settings.Abstractions;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -15,20 +17,35 @@ namespace Bit.App.Pages
     {
         private ICryptoService _cryptoService;
         private IAuthService _authService;
+        private ITokenService _tokenService;
         private IDeviceInfoService _deviceInfoService;
         private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
+        private ISettings _settings;
+        private IGoogleAnalyticsService _googleAnalyticsService;
+        private IPushNotification _pushNotification;
+        private readonly string _email;
+        private readonly string _masterPasswordHash;
+        private readonly byte[] _key;
 
-        public LoginTwoFactorPage()
+        public LoginTwoFactorPage(string email, string masterPasswordHash, byte[] key)
             : base(updateActivity: false)
         {
+            _email = email;
+            _masterPasswordHash = masterPasswordHash;
+            _key = key;
+
             _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
+            _tokenService = Resolver.Resolve<ITokenService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
+            _settings = Resolver.Resolve<ISettings>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _pushNotification = Resolver.Resolve<IPushNotification>();
 
             Init();
         }
@@ -134,15 +151,17 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var request = new TokenTwoFactorRequest
+            var request = new TokenRequest
             {
-                Code = CodeCell.Entry.Text.Replace(" ", ""),
-                Provider = "Authenticator",
+                Email = _email,
+                MasterPasswordHash = _masterPasswordHash,
+                Token = CodeCell.Entry.Text.Replace(" ", ""),
+                Provider = 0, // Authenticator app (only 1 provider for now, so hard coded)
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 
             _userDialogs.ShowLoading(AppResources.ValidatingCode, MaskType.Black);
-            var response = await _authService.TokenTwoFactorPostAsync(request);
+            var response = await _authService.TokenPostAsync(request);
             _userDialogs.HideLoading();
             if(!response.Succeeded)
             {
@@ -150,11 +169,21 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _authService.Token = response.Result.Token;
-            _authService.UserId = response.Result.Profile.Id;
-            _authService.Email = response.Result.Profile.Email;
+            _cryptoService.Key = _key;
+            _tokenService.Token = response.Result.AccessToken;
+            _tokenService.RefreshToken = response.Result.RefreshToken;
+            _authService.UserId = _tokenService.TokenUserId;
+            _authService.Email = _tokenService.TokenEmail;
+            _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
+            _googleAnalyticsService.RefreshUserId();
+            _googleAnalyticsService.TrackAppEvent("LoggedIn From Two-step");
 
-            var task = Task.Run(async () => await _syncService.FullSyncAsync());
+            if(Device.OS == TargetPlatform.Android)
+            {
+                _pushNotification.Register();
+            }
+
+            var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
             Application.Current.MainPage = new MainPage();
         }
     }

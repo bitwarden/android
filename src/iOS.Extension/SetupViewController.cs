@@ -31,7 +31,11 @@ namespace Bit.iOS.Extension
 {AppResources.ExtensionSetup2}";
             DescriptionLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
             DescriptionLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
+
+            ActivatedLabel.Text = AppResources.ExtensionActivated;
             ActivatedLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize * 1.3f);
+
+            BackButton.Title = AppResources.Back;
             base.ViewDidLoad();
         }
 

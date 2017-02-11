@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
-using System.Net;
 
 namespace Bit.App.Repositories
 {
@@ -14,8 +12,9 @@ namespace Bit.App.Repositories
     {
         public CipherApiRepository(
             IConnectivity connectivity,
-            IHttpService httpService)
-            : base(connectivity, httpService)
+            IHttpService httpService,
+            ITokenService tokenService)
+            : base(connectivity, httpService, tokenService)
         { }
 
         protected override string ApiRoute => "ciphers";
@@ -25,6 +24,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<CipherResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<CipherResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -47,7 +52,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<CipherResponse>(responseContent);
                     return ApiResult<CipherResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<CipherResponse>();
                 }
@@ -59,6 +64,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<ListResponse<CipherResponse>>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<ListResponse<CipherResponse>>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -81,7 +92,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<ListResponse<CipherResponse>>(responseContent);
                     return ApiResult<ListResponse<CipherResponse>>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException e)
+                catch
                 {
                     return HandledWebException<ListResponse<CipherResponse>>();
                 }
@@ -93,6 +104,12 @@ namespace Bit.App.Repositories
             if(!Connectivity.IsConnected)
             {
                 return HandledNotConnected<CipherHistoryResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<CipherHistoryResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
             }
 
             using(var client = HttpService.Client)
@@ -115,7 +132,7 @@ namespace Bit.App.Repositories
                     var responseObj = JsonConvert.DeserializeObject<CipherHistoryResponse>(responseContent);
                     return ApiResult<CipherHistoryResponse>.Success(responseObj, response.StatusCode);
                 }
-                catch(WebException)
+                catch
                 {
                     return HandledWebException<CipherHistoryResponse>();
                 }

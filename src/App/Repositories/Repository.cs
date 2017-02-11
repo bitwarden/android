@@ -39,6 +39,11 @@ namespace Bit.App.Repositories
             Connection.Update(obj);
             return Task.FromResult(0);
         }
+        public virtual Task UpsertAsync(T obj)
+        {
+            Connection.InsertOrReplace(obj);
+            return Task.FromResult(0);
+        }
 
         public virtual async Task DeleteAsync(T obj)
         {

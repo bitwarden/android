@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Xamarin.Forms;
@@ -11,19 +10,16 @@ using Plugin.Settings.Abstractions;
 
 namespace Bit.App.Pages
 {
-    public class LockPasswordPage : ExtendedContentPage
+    public class LockPasswordPage : BaseLockPage
     {
         private readonly IAuthService _authService;
         private readonly ISettings _settings;
-        private readonly IUserDialogs _userDialogs;
         private readonly ICryptoService _cryptoService;
 
         public LockPasswordPage()
-            : base(false, false)
         {
             _authService = Resolver.Resolve<IAuthService>();
             _settings = Resolver.Resolve<ISettings>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _cryptoService = Resolver.Resolve<ICryptoService>();
 
             Init();
@@ -100,11 +96,6 @@ namespace Bit.App.Pages
             var task = CheckPasswordAsync();
         }
 
-        protected override bool OnBackButtonPressed()
-        {
-            return true;
-        }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -130,20 +121,10 @@ namespace Bit.App.Pages
             {
                 // TODO: keep track of invalid attempts and logout?
 
-                _userDialogs.Alert(AppResources.InvalidMasterPassword);
+                UserDialogs.Alert(AppResources.InvalidMasterPassword);
                 PasswordCell.Entry.Text = string.Empty;
                 PasswordCell.Entry.Focus();
             }
-        }
-
-        private async Task LogoutAsync()
-        {
-            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
-            {
-                return;
-            }
-
-            MessagingCenter.Send(Application.Current, "Logout", (string)null);
         }
     }
 }
