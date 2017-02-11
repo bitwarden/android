@@ -4,7 +4,7 @@ bitwarden lösenordshanterare
 
 # Short Description
 
-bitwarden är en inloggings- och lösenordshanterare som hjälper dig att vara säker online.
+bitwarden är en lösenordshanterare som hjälper dig att vara säker online.
 
 # Full Description
 
