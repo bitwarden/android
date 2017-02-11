@@ -75,6 +75,11 @@ namespace Bit.App.Repositories
                         var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                         if(!response.IsSuccessStatusCode)
                         {
+                            if(response.StatusCode == HttpStatusCode.BadRequest)
+                            {
+                                response.StatusCode = HttpStatusCode.Unauthorized;
+                            }
+
                             return await error.Invoke(response).ConfigureAwait(false);
                         }
 
@@ -111,6 +116,11 @@ namespace Bit.App.Repositories
                         var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                         if(!response.IsSuccessStatusCode)
                         {
+                            if(response.StatusCode == HttpStatusCode.BadRequest)
+                            {
+                                response.StatusCode = HttpStatusCode.Unauthorized;
+                            }
+
                             return await error.Invoke(response).ConfigureAwait(false);
                         }
 
@@ -119,7 +129,7 @@ namespace Bit.App.Repositories
                         TokenService.Token = tokenResponse.AccessToken;
                         TokenService.RefreshToken = tokenResponse.RefreshToken;
                     }
-                    catch(Exception ee)
+                    catch
                     {
                         return webException.Invoke();
                     }
