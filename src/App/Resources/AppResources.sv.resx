@@ -830,4 +830,42 @@
   <data name="Translations" xml:space="preserve">
     <value>Översättningar</value>
   </data>
+  <data name="LoginsForUri" xml:space="preserve">
+    <value>Inloggningar för {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoLoginsForUri" xml:space="preserve">
+    <value>Det finns inga inloggningar i ditt valv för {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
+    <value>När du ser en bitwarden-notifikation för automatisk ifyllnad så kan du trycka på den för att öppna tjänsten.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Tryck här för att automatiskt fylla i en inloggning från ditt valv.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
+    <value>Öppna tillgänglighetsinställningar</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. I Androids tillgänglighetsinställningar trycker du på "bitwarden" under tjänster.</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. Växla till på-läget och tryck på OK för att acceptera.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Avstängd</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Aktiverad</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Beta" xml:space="preserve">
+    <value>Beta</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
+    <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är från bitwardens hjälpmedelsservice för automatisk ifyllnad. Lär dig mer om hur man använder bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till "Verktyg"-skärmen.</value>
+  </data>
 </root>

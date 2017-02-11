@@ -16,7 +16,7 @@ Skydda ditt valv med fingeravtryck, PIN-kod eller huvudlösenord
 
 # Screenshot 4
 
-Quickly auto-fill logins from within your web browser and other apps
+Fyll automatiskt i dina inloggningar från din webbläsare och andra appar
 
 # Screenshot 5
 
