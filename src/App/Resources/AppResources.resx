@@ -810,4 +810,10 @@
   <data name="PossibleMatchingLogins" xml:space="preserve">
     <value>Possible Matching Logins</value>
   </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>You are searching for an auto-fill login for "{0}".</value>
+  </data>
 </root>

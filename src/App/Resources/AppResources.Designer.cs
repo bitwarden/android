@@ -305,6 +305,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You are searching for an auto-fill login for &quot;{0}&quot;..
+        /// </summary>
+        public static string BitwardenAutofillServiceSearch {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceSearch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 1. On the Android Accessibility Settings screen, touch &quot;bitwarden&quot; under the Services heading..
         /// </summary>
         public static string BitwardenAutofillServiceStep1 {
@@ -1570,6 +1579,15 @@ namespace Bit.App.Resources {
         public static string Saving {
             get {
                 return ResourceManager.GetString("Saving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string Search {
+            get {
+                return ResourceManager.GetString("Search", resourceCulture);
             }
         }
         

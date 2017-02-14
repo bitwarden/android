@@ -19,7 +19,6 @@ namespace Bit.App.Pages
     {
         private readonly ILoginService _loginService;
         private readonly IDeviceInfoService _deviceInfoService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IClipboardService _clipboardService;
         private readonly ISettingsService _settingsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
@@ -47,20 +46,21 @@ namespace Bit.App.Pages
 
             _loginService = Resolver.Resolve<ILoginService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IClipboardService>();
             _settingsService = Resolver.Resolve<ISettingsService>();
+            UserDialogs = Resolver.Resolve<IUserDialogs>();
             GoogleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
 
-        public ExtendedObservableCollection<VaultListPageModel.AutofillGrouping> PresentationLogins { get; private set; }
+        public ExtendedObservableCollection<VaultListPageModel.AutofillGrouping> PresentationLoginsGroup { get; private set; }
             = new ExtendedObservableCollection<VaultListPageModel.AutofillGrouping>();
         public StackLayout NoDataStackLayout { get; set; }
         public ListView ListView { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
         private IGoogleAnalyticsService GoogleAnalyticsService { get; set; }
+        private IUserDialogs UserDialogs { get; set; }
         private string Uri { get; set; }
 
         private void Init()
@@ -89,12 +89,12 @@ namespace Bit.App.Pages
             };
 
             ToolbarItems.Add(new AddLoginToolBarItem(this));
-            ToolbarItems.Add(new CloseToolBarItem(this));
+            ToolbarItems.Add(new SearchToolBarItem(this));
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
-                ItemsSource = PresentationLogins,
+                ItemsSource = PresentationLoginsGroup,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new HeaderViewCell()),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
@@ -135,7 +135,7 @@ namespace Bit.App.Pages
 
         private void AdjustContent()
         {
-            if(PresentationLogins.Count > 0)
+            if(PresentationLoginsGroup.Count > 0)
             {
                 Content = ListView;
             }
@@ -178,7 +178,7 @@ namespace Bit.App.Pages
                 {
                     if(autofillGroupings.Any())
                     {
-                        PresentationLogins.ResetWithRange(autofillGroupings);
+                        PresentationLoginsGroup.ResetWithRange(autofillGroupings);
                     }
 
                     AdjustContent();
@@ -205,7 +205,7 @@ namespace Bit.App.Pages
                 bool doAutofill = true;
                 if(login.Fuzzy)
                 {
-                    doAutofill = await _userDialogs.ConfirmAsync(
+                    doAutofill = await UserDialogs.ConfirmAsync(
                         string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name),
                         okText: AppResources.Yes, cancelText: AppResources.No);
                 }
@@ -263,7 +263,7 @@ namespace Bit.App.Pages
         private void Copy(string copyText, string alertLabel)
         {
             _clipboardService.CopyToClipboard(copyText);
-            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+            UserDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private class AddLoginToolBarItem : ToolbarItem
@@ -276,7 +276,7 @@ namespace Bit.App.Pages
                 Text = AppResources.Add;
                 Icon = "plus";
                 Clicked += ClickedItem;
-                Priority = 1;
+                Priority = 2;
             }
 
             private void ClickedItem(object sender, EventArgs e)
@@ -285,17 +285,17 @@ namespace Bit.App.Pages
             }
         }
 
-        private class CloseToolBarItem : ToolbarItem
+        private class SearchToolBarItem : ToolbarItem
         {
             private readonly VaultAutofillListLoginsPage _page;
 
-            public CloseToolBarItem(VaultAutofillListLoginsPage page)
+            public SearchToolBarItem(VaultAutofillListLoginsPage page)
             {
                 _page = page;
-                Text = AppResources.Close;
-                Icon = "close";
+                Text = AppResources.Search;
+                Icon = "search";
                 Clicked += ClickedItem;
-                Priority = 2;
+                Priority = 1;
             }
 
             private void ClickedItem(object sender, EventArgs e)
@@ -303,6 +303,8 @@ namespace Bit.App.Pages
                 _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch",
                     _page.Uri.StartsWith("http") ? "Website" : "App");
                 Application.Current.MainPage = new MainPage(_page.Uri);
+                _page.UserDialogs.Toast(string.Format(AppResources.BitwardenAutofillServiceSearch, _page._name),
+                    TimeSpan.FromSeconds(5));
             }
         }
 
