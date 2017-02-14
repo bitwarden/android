@@ -28,6 +28,7 @@ namespace Bit.App.Pages
         private readonly IPushNotification _pushNotification;
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly ISettings _settings;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly bool _favorites;
         private bool _loadExistingData;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
@@ -45,6 +46,7 @@ namespace Bit.App.Pages
             _pushNotification = Resolver.Resolve<IPushNotification>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _settings = Resolver.Resolve<ISettings>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             var cryptoService = Resolver.Resolve<ICryptoService>();
             _loadExistingData = !_settings.GetValueOrDefault(Constants.FirstVaultLoad, true) || !cryptoService.KeyChanged;
@@ -272,7 +274,7 @@ namespace Bit.App.Pages
                 return false;
             }
 
-            //GoogleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
+            _googleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
             MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Login)null);
             return true;
         }
@@ -378,12 +380,16 @@ namespace Bit.App.Pages
         private async void LoginSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var login = e.SelectedItem as VaultListPageModel.Login;
+            if(login == null)
+            {
+                return;
+            }
 
             string selection = null;
             if(!string.IsNullOrWhiteSpace(Uri))
             {
-                selection = await DisplayActionSheet("Auto-fill or view?", AppResources.Cancel, null,
-                    "Autofill", AppResources.View);
+                selection = await DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
+                    AppResources.Autofill, AppResources.View);
             }
 
             if(selection == AppResources.View || string.IsNullOrWhiteSpace(Uri))
@@ -391,17 +397,20 @@ namespace Bit.App.Pages
                 var page = new VaultViewLoginPage(login.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
-            else if(selection == "Autofill")
+            else if(selection == AppResources.Autofill)
             {
                 if(Uri.StartsWith("http") && _deviceInfoService.Version < 21)
                 {
                     MoreClickedAsync(login);
-                    return;
                 }
-
-                //GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
-                MessagingCenter.Send(Application.Current, "Autofill", login);
+                else
+                {
+                    _googleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
+                    MessagingCenter.Send(Application.Current, "Autofill", login);
+                }
             }
+
+            ((ListView)sender).SelectedItem = null;
         }
 
         private async void MoreClickedAsync(VaultListPageModel.Login login)

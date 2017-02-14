@@ -8,8 +8,6 @@ namespace Bit.App.Models.Page
     {
         public class Login
         {
-            private string _baseDomain;
-
             public Login(Models.Login login)
             {
                 Id = login.Id;
@@ -26,6 +24,17 @@ namespace Bit.App.Models.Page
             public string Username { get; set; }
             public Lazy<string> Password { get; set; }
             public Lazy<string> Uri { get; set; }
+        }
+
+        public class AutofillLogin : Login
+        {
+            public AutofillLogin(Models.Login login, bool fuzzy = false)
+                : base(login)
+            {
+                Fuzzy = fuzzy;
+            }
+
+            public bool Fuzzy { get; set; }
         }
 
         public class Folder : List<Login>
@@ -45,9 +54,9 @@ namespace Bit.App.Models.Page
             public string Name { get; set; } = AppResources.FolderNone;
         }
 
-        public class AutofillGrouping : List<Login>
+        public class AutofillGrouping : List<AutofillLogin>
         {
-            public AutofillGrouping(List<Login> logins, string name)
+            public AutofillGrouping(List<AutofillLogin> logins, string name)
             {
                 AddRange(logins);
                 Name = name;

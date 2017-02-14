@@ -70,7 +70,7 @@ namespace Bit.App.Services
             {
                 if(domainName == null)
                 {
-                    androidApp = uriString.StartsWith(Constants.AndroidAppProtocol);
+                    androidApp = UriIsAndroidApp(uriString);
                 }
             }
 
@@ -79,16 +79,7 @@ namespace Bit.App.Services
                 return null;
             }
 
-            string androidAppWebUriString = null;
-            if(androidApp)
-            {
-                var androidUriParts = uriString.Replace(Constants.AndroidAppProtocol, string.Empty).Split('.');
-                if(androidUriParts.Length >= 2)
-                {
-                    androidAppWebUriString = string.Join(".", androidUriParts[1], androidUriParts[0]);
-                }
-            }
-
+            var androidAppWebUriString = WebUriFromAndroidAppUri(uriString);
             var eqDomains = (await _settingsService.GetEquivalentDomainsAsync()).Select(d => d.ToArray());
             var matchingDomains = new List<string>();
             var matchingFuzzyDomains = new List<string>();
@@ -146,6 +137,11 @@ namespace Bit.App.Services
                     continue;
                 }
                 else if(androidApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
+                {
+                    matchingFuzzyLogins.Add(new Login(login));
+                    continue;
+                }
+                else if(!androidApp && Array.IndexOf(matchingDomainsArray, WebUriFromAndroidAppUri(loginUriString)) >= 0)
                 {
                     matchingFuzzyLogins.Add(new Login(login));
                     continue;
@@ -222,6 +218,27 @@ namespace Bit.App.Services
             }
 
             return response;
+        }
+
+        private string WebUriFromAndroidAppUri(string androidAppUriString)
+        {
+            if(!UriIsAndroidApp(androidAppUriString))
+            {
+                return null;
+            }
+
+            var androidUriParts = androidAppUriString.Replace(Constants.AndroidAppProtocol, string.Empty).Split('.');
+            if(androidUriParts.Length >= 2)
+            {
+                return string.Join(".", androidUriParts[1], androidUriParts[0]);
+            }
+
+            return null;
+        }
+
+        private bool UriIsAndroidApp(string uriString)
+        {
+            return uriString.StartsWith(Constants.AndroidAppProtocol);
         }
     }
 }

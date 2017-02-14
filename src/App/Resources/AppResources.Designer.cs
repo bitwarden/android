@@ -143,11 +143,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-fill.
+        /// </summary>
+        public static string Autofill {
+            get {
+                return ResourceManager.GetString("Autofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins across apps and the web..
         /// </summary>
         public static string AutofillDescription {
             get {
                 return ResourceManager.GetString("AutofillDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to auto-fill or view this login?.
+        /// </summary>
+        public static string AutofillOrView {
+            get {
+                return ResourceManager.GetString("AutofillOrView", resourceCulture);
             }
         }
         
@@ -247,6 +265,15 @@ namespace Bit.App.Resources {
         public static string BitwardenAutofillServiceDescription {
             get {
                 return ResourceManager.GetString("BitwardenAutofillServiceDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to auto-fill this login? It is not a complete match for &quot;{0}&quot;..
+        /// </summary>
+        public static string BitwardenAutofillServiceMatchConfirm {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceMatchConfirm", resourceCulture);
             }
         }
         
@@ -1205,6 +1232,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Matching Logins.
+        /// </summary>
+        public static string MatchingLogins {
+            get {
+                return ResourceManager.GetString("MatchingLogins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimum Numbers.
         /// </summary>
         public static string MinNumbers {
@@ -1453,6 +1489,15 @@ namespace Bit.App.Resources {
         public static string PasswordOverrideAlert {
             get {
                 return ResourceManager.GetString("PasswordOverrideAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Possible Matching Logins.
+        /// </summary>
+        public static string PossibleMatchingLogins {
+            get {
+                return ResourceManager.GetString("PossibleMatchingLogins", resourceCulture);
             }
         }
         

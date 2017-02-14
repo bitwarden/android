@@ -152,25 +152,35 @@ namespace Bit.App.Pages
 
             Task.Run(async () =>
             {
+                var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>();
                 var logins = await _loginService.GetAllAsync(Uri);
-                var normalLogins = logins.Item1.Select(l => new VaultListPageModel.Login(l))
-                    .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Username)
-                    .ToList();
-                var fuzzyLogins = logins.Item2.Select(l => new VaultListPageModel.Login(l))
-                    .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Username)
-                    .ToList();
 
-                var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>
+                var normalLogins = logins?.Item1.Select(l => new VaultListPageModel.AutofillLogin(l, false))
+                    .OrderBy(s => s.Name)
+                    .ThenBy(s => s.Username)
+                    .ToList();
+                if(normalLogins?.Any() ?? false)
                 {
-                    new VaultListPageModel.AutofillGrouping(normalLogins, "Matching"),
-                    new VaultListPageModel.AutofillGrouping(fuzzyLogins, "Possible Matches")
-                };
+                    autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins, AppResources.MatchingLogins));
+                }
+
+                var fuzzyLogins = logins?.Item2.Select(l => new VaultListPageModel.AutofillLogin(l, true))
+                    .OrderBy(s => s.Name)
+                    .ThenBy(s => s.Username)
+                    .ToList();
+                if(fuzzyLogins?.Any() ?? false)
+                {
+                    autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(fuzzyLogins,
+                        AppResources.PossibleMatchingLogins));
+                }
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    PresentationLogins.ResetWithRange(autofillGroupings);
+                    if(autofillGroupings.Any())
+                    {
+                        PresentationLogins.ResetWithRange(autofillGroupings);
+                    }
+
                     AdjustContent();
                 });
             }, cts.Token);
@@ -178,18 +188,36 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private void LoginSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void LoginSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var login = e.SelectedItem as VaultListPageModel.Login;
+            var login = e.SelectedItem as VaultListPageModel.AutofillLogin;
+            if(login == null)
+            {
+                return;
+            }
 
             if(Uri.StartsWith("http") && _deviceInfoService.Version < 21)
             {
                 MoreClickedAsync(login);
-                return;
+            }
+            else
+            {
+                bool doAutofill = true;
+                if(login.Fuzzy)
+                {
+                    doAutofill = await _userDialogs.ConfirmAsync(
+                        string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name),
+                        okText: AppResources.Yes, cancelText: AppResources.No);
+                }
+
+                if(doAutofill)
+                {
+                    GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
+                    MessagingCenter.Send(Application.Current, "Autofill", login as VaultListPageModel.Login);
+                }
             }
 
-            GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
-            MessagingCenter.Send(Application.Current, "Autofill", login);
+            ((ListView)sender).SelectedItem = null;
         }
 
         private async void AddLoginAsync()
@@ -272,7 +300,8 @@ namespace Bit.App.Pages
 
             private void ClickedItem(object sender, EventArgs e)
             {
-                _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch", _page.Uri.StartsWith("http") ? "Website" : "App");
+                _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch",
+                    _page.Uri.StartsWith("http") ? "Website" : "App");
                 Application.Current.MainPage = new MainPage(_page.Uri);
             }
         }
