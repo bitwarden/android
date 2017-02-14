@@ -7,13 +7,13 @@ namespace Bit.App.Pages
 {
     public class MainPage : ExtendedTabbedPage
     {
-        public MainPage()
+        public MainPage(string uri = null)
         {
             TintColor = Color.FromHex("3c8dbc");
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
-            var favoritesNavigation = new ExtendedNavigationPage(new VaultListLoginsPage(true));
-            var vaultNavigation = new ExtendedNavigationPage(new VaultListLoginsPage(false));
+            var favoritesNavigation = new ExtendedNavigationPage(new VaultListLoginsPage(true, uri));
+            var vaultNavigation = new ExtendedNavigationPage(new VaultListLoginsPage(false, uri));
             var toolsNavigation = new ExtendedNavigationPage(new ToolsPage());
 
             favoritesNavigation.Title = AppResources.Favorites;

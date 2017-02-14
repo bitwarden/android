@@ -93,11 +93,6 @@ namespace Bit.App
             {
                 Device.BeginInvokeOnMainThread(() => Logout(args));
             });
-
-            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
-            {
-                SetMainPageFromAutofill();
-            });
         }
 
         protected async override void OnStart()
@@ -125,7 +120,12 @@ namespace Bit.App
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
-            SetMainPageFromAutofill();
+            if(Device.OS == TargetPlatform.Android && !string.IsNullOrWhiteSpace(_uri))
+            {
+                MainPage = new MainPage();
+                _uri = null;
+            }
+            
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -167,17 +167,6 @@ namespace Bit.App
 #else
             return false;
 #endif
-        }
-
-        private void SetMainPageFromAutofill()
-        {
-            if(Device.OS != TargetPlatform.Android || string.IsNullOrWhiteSpace(_uri))
-            {
-                return;
-            }
-
-            MainPage = new MainPage();
-            _uri = null;
         }
 
         private async Task FullSyncAsync()

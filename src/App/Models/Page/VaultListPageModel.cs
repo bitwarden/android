@@ -44,5 +44,16 @@ namespace Bit.App.Models.Page
             public string Id { get; set; }
             public string Name { get; set; } = AppResources.FolderNone;
         }
+
+        public class AutofillGrouping : List<Login>
+        {
+            public AutofillGrouping(List<Login> logins, string name)
+            {
+                AddRange(logins);
+                Name = name;
+            }
+
+            public string Name { get; set; }
+        }
     }
 }

@@ -55,11 +55,11 @@ namespace Bit.App.Services
             return logins;
         }
 
-        public async Task<IEnumerable<Login>> GetAllAsync(string uriString)
+        public async Task<Tuple<IEnumerable<Login>, IEnumerable<Login>>> GetAllAsync(string uriString)
         {
             if(string.IsNullOrWhiteSpace(uriString))
             {
-                return new List<Login>();
+                return null;
             }
 
             Uri uri = null;
@@ -74,24 +74,58 @@ namespace Bit.App.Services
                 }
             }
 
-
             if(!androidApp && domainName == null)
             {
-                return new List<Login>();
+                return null;
+            }
+
+            string androidAppWebUriString = null;
+            if(androidApp)
+            {
+                var androidUriParts = uriString.Replace(Constants.AndroidAppProtocol, string.Empty).Split('.');
+                if(androidUriParts.Length >= 2)
+                {
+                    androidAppWebUriString = string.Join(".", androidUriParts[1], androidUriParts[0]);
+                }
             }
 
             var eqDomains = (await _settingsService.GetEquivalentDomainsAsync()).Select(d => d.ToArray());
-            var matchingDomains = eqDomains
-                .Where(d => (androidApp && Array.IndexOf(d, uriString) >= 0) ||
-                    (!androidApp && Array.IndexOf(d, domainName.BaseDomain) >= 0))
-                .SelectMany(d => d).ToList();
+            var matchingDomains = new List<string>();
+            var matchingFuzzyDomains = new List<string>();
+            foreach(var eqDomain in eqDomains)
+            {
+                if(androidApp)
+                {
+                    if(Array.IndexOf(eqDomain, uriString) >= 0)
+                    {
+                        matchingDomains.AddRange(eqDomain.Select(d => d).ToList());
+                    }
+
+                    if(androidAppWebUriString != null && Array.IndexOf(eqDomain, androidAppWebUriString) >= 0)
+                    {
+                        matchingFuzzyDomains.AddRange(eqDomain.Select(d => d).ToList());
+                    }
+                }
+                else if(Array.IndexOf(eqDomain, domainName.BaseDomain) >= 0)
+                {
+                    matchingDomains.AddRange(eqDomain.Select(d => d).ToList());
+                }
+            }
+
             if(!matchingDomains.Any())
             {
                 matchingDomains.Add(androidApp ? uriString : domainName.BaseDomain);
             }
 
+            if(androidApp && androidAppWebUriString != null && !matchingFuzzyDomains.Any())
+            {
+                matchingFuzzyDomains.Add(androidAppWebUriString);
+            }
+
             var matchingDomainsArray = matchingDomains.ToArray();
+            var matchingFuzzyDomainsArray = matchingFuzzyDomains.ToArray();
             var matchingLogins = new List<Login>();
+            var matchingFuzzyLogins = new List<Login>();
             var logins = await _loginRepository.GetAllByUserIdAsync(_authService.UserId);
             foreach(var login in logins)
             {
@@ -106,9 +140,14 @@ namespace Bit.App.Services
                     continue;
                 }
 
-                if(androidApp && Array.IndexOf(matchingDomainsArray, loginUriString) >= 0)
+                if(Array.IndexOf(matchingDomainsArray, loginUriString) >= 0)
                 {
                     matchingLogins.Add(new Login(login));
+                    continue;
+                }
+                else if(androidApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
+                {
+                    matchingFuzzyLogins.Add(new Login(login));
                     continue;
                 }
 
@@ -124,9 +163,13 @@ namespace Bit.App.Services
                 {
                     matchingLogins.Add(new Login(login));
                 }
+                else if(androidApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName.BaseDomain) >= 0)
+                {
+                    matchingFuzzyLogins.Add(new Login(login));
+                }
             }
 
-            return matchingLogins;
+            return new Tuple<IEnumerable<Login>, IEnumerable<Login>>(matchingLogins, matchingFuzzyLogins);
         }
 
         public async Task<ApiResult<LoginResponse>> SaveAsync(Login login)

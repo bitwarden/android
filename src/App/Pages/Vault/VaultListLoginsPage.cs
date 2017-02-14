@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         private bool _loadExistingData;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
 
-        public VaultListLoginsPage(bool favorites)
+        public VaultListLoginsPage(bool favorites, string uri = null)
             : base(true)
         {
             _favorites = favorites;
@@ -49,6 +49,8 @@ namespace Bit.App.Pages
             var cryptoService = Resolver.Resolve<ICryptoService>();
             _loadExistingData = !_settings.GetValueOrDefault(Constants.FirstVaultLoad, true) || !cryptoService.KeyChanged;
 
+            Uri = uri;
+
             Init();
         }
 
@@ -61,6 +63,7 @@ namespace Bit.App.Pages
         public StackLayout NoDataStackLayout { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
+        public string Uri { get; set; }
 
         private void Init()
         {
@@ -262,6 +265,18 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if(string.IsNullOrWhiteSpace(Uri))
+            {
+                return false;
+            }
+
+            //GoogleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
+            MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Login)null);
+            return true;
+        }
+
         private void AdjustContent()
         {
             if(PresentationFolders.Count > 0 || !string.IsNullOrWhiteSpace(Search.Text))
@@ -363,8 +378,30 @@ namespace Bit.App.Pages
         private async void LoginSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var login = e.SelectedItem as VaultListPageModel.Login;
-            var page = new VaultViewLoginPage(login.Id);
-            await Navigation.PushForDeviceAsync(page);
+
+            string selection = null;
+            if(!string.IsNullOrWhiteSpace(Uri))
+            {
+                selection = await DisplayActionSheet("Auto-fill or view?", AppResources.Cancel, null,
+                    "Autofill", AppResources.View);
+            }
+
+            if(selection == AppResources.View || string.IsNullOrWhiteSpace(Uri))
+            {
+                var page = new VaultViewLoginPage(login.Id);
+                await Navigation.PushForDeviceAsync(page);
+            }
+            else if(selection == "Autofill")
+            {
+                if(Uri.StartsWith("http") && _deviceInfoService.Version < 21)
+                {
+                    MoreClickedAsync(login);
+                    return;
+                }
+
+                //GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
+                MessagingCenter.Send(Application.Current, "Autofill", login);
+            }
         }
 
         private async void MoreClickedAsync(VaultListPageModel.Login login)
@@ -418,7 +455,7 @@ namespace Bit.App.Pages
 
         private async void AddLogin()
         {
-            var page = new VaultAddLoginPage();
+            var page = new VaultAddLoginPage(Uri);
             await Navigation.PushForDeviceAsync(page);
         }
 

@@ -55,8 +55,8 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<VaultListPageModel.Login> PresentationLogins { get; private set; }
-            = new ExtendedObservableCollection<VaultListPageModel.Login>();
+        public ExtendedObservableCollection<VaultListPageModel.AutofillGrouping> PresentationLogins { get; private set; }
+            = new ExtendedObservableCollection<VaultListPageModel.AutofillGrouping>();
         public StackLayout NoDataStackLayout { get; set; }
         public ListView ListView { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
@@ -93,8 +93,10 @@ namespace Bit.App.Pages
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
+                IsGroupingEnabled = true,
                 ItemsSource = PresentationLogins,
                 HasUnevenRows = true,
+                GroupHeaderTemplate = new DataTemplate(() => new HeaderViewCell()),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
                     (VaultListPageModel.Login l) => MoreClickedAsync(l)))
             };
@@ -151,13 +153,24 @@ namespace Bit.App.Pages
             Task.Run(async () =>
             {
                 var logins = await _loginService.GetAllAsync(Uri);
-                var sortedLogins = logins.Select(l => new VaultListPageModel.Login(l))
+                var normalLogins = logins.Item1.Select(l => new VaultListPageModel.Login(l))
                     .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Username);
+                    .ThenBy(s => s.Username)
+                    .ToList();
+                var fuzzyLogins = logins.Item2.Select(l => new VaultListPageModel.Login(l))
+                    .OrderBy(s => s.Name)
+                    .ThenBy(s => s.Username)
+                    .ToList();
+
+                var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>
+                {
+                    new VaultListPageModel.AutofillGrouping(normalLogins, "Matching"),
+                    new VaultListPageModel.AutofillGrouping(fuzzyLogins, "Possible Matches")
+                };
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    PresentationLogins.ResetWithRange(sortedLogins);
+                    PresentationLogins.ResetWithRange(autofillGroupings);
                     AdjustContent();
                 });
             }, cts.Token);
@@ -259,8 +272,32 @@ namespace Bit.App.Pages
 
             private void ClickedItem(object sender, EventArgs e)
             {
-                _page.GoogleAnalyticsService.TrackExtensionEvent("Closed", _page.Uri.StartsWith("http") ? "Website" : "App");
-                MessagingCenter.Send(Application.Current, "SetMainPage");
+                _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch", _page.Uri.StartsWith("http") ? "Website" : "App");
+                Application.Current.MainPage = new MainPage(_page.Uri);
+            }
+        }
+
+        private class HeaderViewCell : ExtendedViewCell
+        {
+            public HeaderViewCell()
+            {
+                var label = new Label
+                {
+                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
+                    Style = (Style)Application.Current.Resources["text-muted"],
+                    VerticalTextAlignment = TextAlignment.Center
+                };
+
+                label.SetBinding<VaultListPageModel.AutofillGrouping>(Label.TextProperty, s => s.Name);
+
+                var grid = new ContentView
+                {
+                    Padding = new Thickness(16, 8, 0, 8),
+                    Content = label
+                };
+
+                View = grid;
+                BackgroundColor = Color.FromHex("efeff4");
             }
         }
     }

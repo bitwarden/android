@@ -115,11 +115,10 @@ namespace Bit.iOS.Extension
             {
                 var loginService = Resolver.Resolve<ILoginService>();
                 var logins = await loginService.GetAllAsync(_context.UrlString);
-                var loginModels = logins;
-                _tableItems = logins.Select(s => new LoginViewModel(s))
+                _tableItems = logins?.Item1.Select(s => new LoginViewModel(s))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username)
-                    .ToList();
+                    .ToList() ?? new List<LoginViewModel>();
             }
 
             public IEnumerable<LoginViewModel> TableItems { get; set; }
