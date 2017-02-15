@@ -135,6 +135,7 @@ namespace Bit.Android
                 Parent.SetResult(Result.Ok, data);
             }
 
+            MessagingCenter.Send(Xamarin.Forms.Application.Current, "SetMainPage");
             Finish();
         }
 

@@ -39,6 +39,7 @@
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ISettingsRepository.cs" />
+    <Compile Include="Abstractions\Services\IMemoryService.cs" />
     <Compile Include="Abstractions\Services\ISettingsService.cs" />
     <Compile Include="Abstractions\Services\ITokenService.cs" />
     <Compile Include="Abstractions\Services\IHttpService.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Controls\ExtendedButton.cs" />
     <Compile Include="Controls\ExtendedNavigationPage.cs" />
     <Compile Include="Controls\ExtendedContentPage.cs" />
+    <Compile Include="Controls\MemoryContentView.cs" />
     <Compile Include="Controls\StepperCell.cs" />
     <Compile Include="Controls\ExtendedTableView.cs" />
     <Compile Include="Controls\ExtendedPicker.cs" />

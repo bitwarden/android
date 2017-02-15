@@ -117,7 +117,7 @@ namespace Bit.App.Pages
 
             ResultsStackLayout = new StackLayout
             {
-                Children = { Search, ListView },
+                Children = { new MemoryContentView(), Search, ListView },
                 Spacing = 0
             };
 

@@ -153,7 +153,7 @@ namespace Bit.Android
 
         private string ExtractUri(string uri, AccessibilityNodeInfo addressNode)
         {
-            if(addressNode != null)
+            if(addressNode?.Text != null)
             {
                 uri = addressNode.Text;
                 if(!uri.Contains("://"))

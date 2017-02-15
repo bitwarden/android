@@ -14,7 +14,6 @@ using Acr.UserDialogs;
 using XLabs.Ioc;
 using System.Reflection;
 using Bit.App.Resources;
-using System.Threading;
 
 namespace Bit.App
 {
@@ -23,6 +22,7 @@ namespace Bit.App
         private const string LastBuildKey = "LastBuild";
 
         private string _uri;
+        private DateTime _lastMainPageSet = DateTime.MinValue;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
         private readonly IUserDialogs _userDialogs;
@@ -80,7 +80,7 @@ namespace Bit.App
 
             MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
             {
-                await CheckLockAsync(args);
+                Device.BeginInvokeOnMainThread(async () => await CheckLockAsync(args));
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             });
 
@@ -91,7 +91,12 @@ namespace Bit.App
 
             MessagingCenter.Subscribe<Application, string>(Current, "Logout", (sender, args) =>
             {
-                Device.BeginInvokeOnMainThread(() => Logout(args));
+                Logout(args);
+            });
+
+            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
+            {
+                SetMainPageFromAutofill();
             });
         }
 
@@ -120,12 +125,8 @@ namespace Bit.App
             // Handle when your app sleeps
             Debug.WriteLine("OnSleep");
 
-            if(Device.OS == TargetPlatform.Android && !string.IsNullOrWhiteSpace(_uri))
-            {
-                MainPage = new MainPage();
-                _uri = null;
-            }
-            
+            SetMainPageFromAutofill();
+
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
@@ -157,6 +158,22 @@ namespace Bit.App
             if(Device.OS == TargetPlatform.Android)
             {
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+            }
+        }
+
+        private void SetMainPageFromAutofill()
+        {
+            if(Device.OS == TargetPlatform.Android && !string.IsNullOrWhiteSpace(_uri))
+            {
+                var now = DateTime.UtcNow;
+                if((now - _lastMainPageSet).Seconds <= 1)
+                {
+                    return;
+                }
+
+                _lastMainPageSet = now;
+                Device.BeginInvokeOnMainThread(() => MainPage = new MainPage());
+                _uri = null;
             }
         }
 
@@ -214,7 +231,8 @@ namespace Bit.App
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
             _googleAnalyticsService.RefreshUserId();
 
-            Current.MainPage = new ExtendedNavigationPage(new HomePage());
+
+            Device.BeginInvokeOnMainThread(() => Current.MainPage = new ExtendedNavigationPage(new HomePage()));
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {
                 _userDialogs.Toast(logoutMessage);
@@ -235,7 +253,6 @@ namespace Bit.App
             }
 
             var lockType = _lockService.GetLockType(forceLock);
-            var currentPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as ExtendedNavigationPage;
             switch(lockType)
             {
                 case Enums.LockType.Fingerprint:
