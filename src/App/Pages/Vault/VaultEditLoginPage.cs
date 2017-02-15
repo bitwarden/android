@@ -33,6 +33,13 @@ namespace Bit.App.Pages
         }
 
         public FormEntryCell PasswordCell { get; private set; }
+        public FormEntryCell UsernameCell { get; private set; }
+        public FormEntryCell UriCell { get; private set; }
+        public FormEntryCell NameCell { get; private set; }
+        public FormEditorCell NotesCell { get; private set; }
+        public FormPickerCell FolderCell { get; private set; }
+        public ExtendedTextCell GenerateCell { get; private set; }
+        public ExtendedTextCell DeleteCell { get; private set; }
 
         private void Init()
         {
@@ -43,34 +50,32 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var notesCell = new FormEditorCell(height: 90);
-            notesCell.Editor.Text = login.Notes?.Decrypt();
+            NotesCell = new FormEditorCell(height: 90);
+            NotesCell.Editor.Text = login.Notes?.Decrypt();
 
-            PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: notesCell.Editor,
+            PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: NotesCell.Editor,
                 useButton: true);
             PasswordCell.Entry.Text = login.Password?.Decrypt();
             PasswordCell.Button.Image = "eye";
-            PasswordCell.Button.Clicked += PasswordButton_Clicked;
             PasswordCell.Entry.DisableAutocapitalize = true;
             PasswordCell.Entry.Autocorrect = false;
             PasswordCell.Entry.FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
-            var usernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
-            usernameCell.Entry.Text = login.Username?.Decrypt();
-            usernameCell.Entry.DisableAutocapitalize = true;
-            usernameCell.Entry.Autocorrect = false;
+            UsernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
+            UsernameCell.Entry.Text = login.Username?.Decrypt();
+            UsernameCell.Entry.DisableAutocapitalize = true;
+            UsernameCell.Entry.Autocorrect = false;
 
-            var uriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: usernameCell.Entry);
-            uriCell.Entry.Text = login.Uri?.Decrypt();
-            var nameCell = new FormEntryCell(AppResources.Name, nextElement: uriCell.Entry);
-            nameCell.Entry.Text = login.Name?.Decrypt();
+            UriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: UsernameCell.Entry);
+            UriCell.Entry.Text = login.Uri?.Decrypt();
+            NameCell = new FormEntryCell(AppResources.Name, nextElement: UriCell.Entry);
+            NameCell.Entry.Text = login.Name?.Decrypt();
 
-            var generateCell = new ExtendedTextCell
+            GenerateCell = new ExtendedTextCell
             {
                 Text = AppResources.GeneratePassword,
                 ShowDisclousure = true
             };
-            generateCell.Tapped += GenerateCell_Tapped; ;
 
             var folderOptions = new List<string> { AppResources.FolderNone };
             var folders = _folderService.GetAllAsync().GetAwaiter().GetResult()
@@ -87,8 +92,8 @@ namespace Bit.App.Pages
 
                 folderOptions.Add(folder.Name.Decrypt());
             }
-            var folderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
-            folderCell.Picker.SelectedIndex = selectedIndex;
+            FolderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
+            FolderCell.Picker.SelectedIndex = selectedIndex;
 
             var favoriteCell = new ExtendedSwitchCell
             {
@@ -96,8 +101,7 @@ namespace Bit.App.Pages
                 On = login.Favorite
             };
 
-            var deleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
-            deleteCell.Tapped += DeleteCell_Tapped;
+            DeleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
 
             var table = new ExtendedTableView
             {
@@ -108,24 +112,24 @@ namespace Bit.App.Pages
                 {
                     new TableSection(AppResources.LoginInformation)
                     {
-                        nameCell,
-                        uriCell,
-                        usernameCell,
+                        NameCell,
+                        UriCell,
+                        UsernameCell,
                         PasswordCell,
-                        generateCell
+                        GenerateCell
                     },
                     new TableSection
                     {
-                        folderCell,
+                        FolderCell,
                         favoriteCell
                     },
                     new TableSection(AppResources.Notes)
                     {
-                        notesCell
+                        NotesCell
                     },
                     new TableSection
                     {
-                        deleteCell
+                        DeleteCell
                     }
                 }
             };
@@ -148,23 +152,23 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
+                if(string.IsNullOrWhiteSpace(NameCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                         AppResources.Name), AppResources.Ok);
                     return;
                 }
 
-                login.Uri = uriCell.Entry.Text?.Encrypt();
-                login.Name = nameCell.Entry.Text?.Encrypt();
-                login.Username = usernameCell.Entry.Text?.Encrypt();
+                login.Uri = UriCell.Entry.Text?.Encrypt();
+                login.Name = NameCell.Entry.Text?.Encrypt();
+                login.Username = UsernameCell.Entry.Text?.Encrypt();
                 login.Password = PasswordCell.Entry.Text?.Encrypt();
-                login.Notes = notesCell.Editor.Text?.Encrypt();
+                login.Notes = NotesCell.Editor.Text?.Encrypt();
                 login.Favorite = favoriteCell.On;
 
-                if(folderCell.Picker.SelectedIndex > 0)
+                if(FolderCell.Picker.SelectedIndex > 0)
                 {
-                    login.FolderId = folders.ElementAt(folderCell.Picker.SelectedIndex - 1).Id;
+                    login.FolderId = folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
                 }
                 else
                 {
@@ -208,6 +212,30 @@ namespace Bit.App.Pages
             {
                 AlertNoConnection();
             }
+
+            PasswordCell.InitEvents();
+            UsernameCell.InitEvents();
+            UriCell.InitEvents();
+            NameCell.InitEvents();
+            NotesCell.InitEvents();
+            FolderCell.InitEvents();
+            PasswordCell.Button.Clicked += PasswordButton_Clicked;
+            GenerateCell.Tapped += GenerateCell_Tapped;
+            DeleteCell.Tapped += DeleteCell_Tapped;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            PasswordCell.Dispose();
+            UsernameCell.Dispose();
+            UriCell.Dispose();
+            NameCell.Dispose();
+            NotesCell.Dispose();
+            FolderCell.Dispose();
+            PasswordCell.Button.Clicked -= PasswordButton_Clicked;
+            GenerateCell.Tapped -= GenerateCell_Tapped;
+            DeleteCell.Tapped -= DeleteCell_Tapped;
         }
 
         private void PasswordButton_Clicked(object sender, EventArgs e)

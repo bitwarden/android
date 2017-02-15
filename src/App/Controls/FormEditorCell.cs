@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class FormEditorCell : ExtendedViewCell
+    public class FormEditorCell : ExtendedViewCell, IDisposable
     {
         public FormEditorCell(Keyboard entryKeyboard = null, double? height = null)
         {
@@ -26,7 +26,6 @@ namespace Bit.App.Controls
 
             stackLayout.Children.Add(Editor);
 
-            Tapped += FormEditorCell_Tapped;
             Editor.AdjustMarginsForDevice();
             stackLayout.AdjustPaddingForDevice();
 
@@ -38,6 +37,16 @@ namespace Bit.App.Controls
         private void FormEditorCell_Tapped(object sender, EventArgs e)
         {
             Editor.Focus();
+        }
+
+        public void InitEvents()
+        {
+            Tapped += FormEditorCell_Tapped;
+        }
+
+        public void Dispose()
+        {
+            Tapped -= FormEditorCell_Tapped;
         }
     }
 }

@@ -74,7 +74,6 @@ namespace Bit.App.Pages
             }
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
-            PasswordCell.Entry.Completed += Entry_Completed;
 
             var table = new ExtendedTableView
             {
@@ -136,6 +135,10 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            PasswordCell.InitEvents();
+            EmailCell.InitEvents();
+
+            PasswordCell.Entry.Completed += Entry_Completed;
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
 
             if(string.IsNullOrWhiteSpace(_email))
@@ -149,6 +152,14 @@ namespace Bit.App.Pages
                     EmailCell.Entry.FocusWithDelay();
                 }
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            PasswordCell.Dispose();
+            EmailCell.Dispose();
+            PasswordCell.Entry.Completed -= Entry_Completed;
         }
 
         private async void Entry_Completed(object sender, EventArgs e)

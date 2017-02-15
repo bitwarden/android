@@ -34,8 +34,6 @@ namespace Bit.App.Controls
                 Value = value
             };
 
-            Stepper.ValueChanged += Stepper_ValueChanged;
-
             var stackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
@@ -56,13 +54,23 @@ namespace Bit.App.Controls
             View = stackLayout;
         }
 
+        public Label Label { get; private set; }
+        public Label StepperValueLabel { get; private set; }
+        public Stepper Stepper { get; private set; }
+
         private void Stepper_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             StepperValueLabel.Text = e.NewValue.ToString();
         }
 
-        public Label Label { get; private set; }
-        public Label StepperValueLabel { get; private set; }
-        public Stepper Stepper { get; private set; }
+        public void InitEvents()
+        {
+            Stepper.ValueChanged += Stepper_ValueChanged;
+        }
+
+        public void Dispose()
+        {
+            Stepper.ValueChanged -= Stepper_ValueChanged;
+        }
     }
 }

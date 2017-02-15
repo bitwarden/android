@@ -38,7 +38,6 @@ namespace Bit.App.Pages
                 useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
-            PasswordCell.Entry.Completed += Entry_Completed;
 
             var table = new ExtendedTableView
             {
@@ -99,7 +98,16 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            PasswordCell.InitEvents();
             PasswordCell.Entry.FocusWithDelay();
+            PasswordCell.Entry.Completed += Entry_Completed;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            PasswordCell.Dispose();
+            PasswordCell.Entry.Completed -= Entry_Completed;
         }
 
         protected async Task CheckPasswordAsync()

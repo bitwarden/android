@@ -38,7 +38,6 @@ namespace Bit.App.Pages
                 useLabelAsPlaceholder: true, imageSource: "envelope", containerPadding: padding);
 
             EmailCell.Entry.ReturnType = Enums.ReturnType.Go;
-            EmailCell.Entry.Completed += Entry_Completed;
 
             var table = new ExtendedTableView
             {
@@ -93,7 +92,16 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            EmailCell.InitEvents();
+            EmailCell.Entry.Completed += Entry_Completed;
             EmailCell.Entry.FocusWithDelay();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            EmailCell.Dispose();
+            EmailCell.Entry.Completed -= Entry_Completed;
         }
 
         private async void Entry_Completed(object sender, EventArgs e)

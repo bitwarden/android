@@ -29,6 +29,9 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public FormEntryCell NameCell { get; set; }
+        public ExtendedTextCell DeleteCell { get; set; }
+
         private void Init()
         {
             var folder = _folderService.GetByIdAsync(_folderId).GetAwaiter().GetResult();
@@ -38,11 +41,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var nameCell = new FormEntryCell(AppResources.Name);
-            nameCell.Entry.Text = folder.Name.Decrypt();
+            NameCell = new FormEntryCell(AppResources.Name);
+            NameCell.Entry.Text = folder.Name.Decrypt();
 
-            var deleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
-            deleteCell.Tapped += DeleteCell_Tapped;
+            DeleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
 
             var mainTable = new ExtendedTableView
             {
@@ -54,11 +56,11 @@ namespace Bit.App.Pages
                 {
                     new TableSection
                     {
-                        nameCell
+                        NameCell
                     },
                     new TableSection
                     {
-                        deleteCell
+                        DeleteCell
                     }
                 }
             };
@@ -77,14 +79,14 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
+                if(string.IsNullOrWhiteSpace(NameCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                         AppResources.Name), AppResources.Ok);
                     return;
                 }
 
-                folder.Name = nameCell.Entry.Text.Encrypt();
+                folder.Name = NameCell.Entry.Text.Encrypt();
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveResult = await _folderService.SaveAsync(folder);
@@ -119,10 +121,20 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            NameCell.InitEvents();
+            DeleteCell.Tapped += DeleteCell_Tapped;
+
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            NameCell.Dispose();
+            DeleteCell.Tapped -= DeleteCell_Tapped;
         }
 
         private async void DeleteCell_Tapped(object sender, EventArgs e)

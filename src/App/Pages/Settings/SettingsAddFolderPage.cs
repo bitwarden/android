@@ -28,9 +28,11 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public FormEntryCell NameCell { get; set; }
+
         private void Init()
         {
-            var nameCell = new FormEntryCell(AppResources.Name);
+            NameCell = new FormEntryCell(AppResources.Name);
 
             var table = new ExtendedTableView
             {
@@ -41,7 +43,7 @@ namespace Bit.App.Pages
                 {
                     new TableSection()
                     {
-                        nameCell
+                        NameCell
                     }
                 }
             };
@@ -60,7 +62,7 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                if(string.IsNullOrWhiteSpace(nameCell.Entry.Text))
+                if(string.IsNullOrWhiteSpace(NameCell.Entry.Text))
                 {
                     await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                         AppResources.Name), AppResources.Ok);
@@ -69,7 +71,7 @@ namespace Bit.App.Pages
 
                 var folder = new Folder
                 {
-                    Name = nameCell.Entry.Text.Encrypt()
+                    Name = NameCell.Entry.Text.Encrypt()
                 };
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
@@ -105,10 +107,17 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            NameCell.InitEvents();
             if(!_connectivity.IsConnected)
             {
                 AlertNoConnection();
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            NameCell.Dispose();
         }
 
         private void AlertNoConnection()

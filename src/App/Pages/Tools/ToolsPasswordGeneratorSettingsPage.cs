@@ -53,7 +53,6 @@ namespace Bit.App.Pages
                 Text = "!@#$%^&*",
                 On = _settings.GetValueOrDefault(Constants.PasswordGeneratorSpecial, true)
             };
-            SpecialCell.OnChanged += SpecialCell_OnChanged;
 
             NumbersCell = new ExtendedSwitchCell
             {
@@ -67,7 +66,6 @@ namespace Bit.App.Pages
                 Text = AppResources.AvoidAmbiguousCharacters,
                 On = !_settings.GetValueOrDefault(Constants.PasswordGeneratorAmbiguous, false)
             };
-            AvoidAmbiguousCell.OnChanged += AvoidAmbiguousCell_OnChanged; ;
 
             NumbersMinCell = new StepperCell(AppResources.MinNumbers, 
                 _settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1), 0, 5, 1);
@@ -111,8 +109,19 @@ namespace Bit.App.Pages
             Content = table;
         }
 
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            SpecialCell.OnChanged += SpecialCell_OnChanged;
+            AvoidAmbiguousCell.OnChanged += AvoidAmbiguousCell_OnChanged;
+        }
+
         protected override void OnDisappearing()
         {
+            base.OnDisappearing();
+            SpecialCell.OnChanged -= SpecialCell_OnChanged;
+            AvoidAmbiguousCell.OnChanged -= AvoidAmbiguousCell_OnChanged;
+
             _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinNumbers, 
                 Convert.ToInt32(NumbersMinCell.Stepper.Value));
 

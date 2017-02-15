@@ -5,8 +5,11 @@ using XLabs.Ioc;
 
 namespace Bit.App.Controls
 {
-    public class FormEntryCell : ExtendedViewCell
+    public class FormEntryCell : ExtendedViewCell, IDisposable
     {
+        private VisualElement _nextElement;
+        private TapGestureRecognizer _tgr;
+
         public FormEntryCell(
             string labelText,
             Keyboard entryKeyboard = null,
@@ -17,6 +20,8 @@ namespace Bit.App.Controls
             Thickness? containerPadding = null,
             bool useButton = false)
         {
+            _nextElement = nextElement;
+
             if(!useLabelAsPlaceholder)
             {
                 Label = new Label
@@ -47,7 +52,6 @@ namespace Bit.App.Controls
             if(nextElement != null)
             {
                 Entry.ReturnType = Enums.ReturnType.Next;
-                Entry.Completed += (object sender, EventArgs e) => { nextElement.Focus(); };
             }
 
             var imageStackLayout = new StackLayout
@@ -61,8 +65,7 @@ namespace Bit.App.Controls
 
             if(imageSource != null)
             {
-                var tgr = new TapGestureRecognizer();
-                tgr.Tapped += Tgr_Tapped;
+                _tgr = new TapGestureRecognizer();
 
                 var theImage = new Image
                 {
@@ -70,7 +73,7 @@ namespace Bit.App.Controls
                     HorizontalOptions = LayoutOptions.Start,
                     VerticalOptions = LayoutOptions.Center
                 };
-                theImage.GestureRecognizers.Add(tgr);
+                theImage.GestureRecognizers.Add(_tgr);
 
                 imageStackLayout.Children.Add(theImage);
             }
@@ -126,14 +129,27 @@ namespace Bit.App.Controls
                 }
             }
 
-            Tapped += FormEntryCell_Tapped;
-
             View = imageStackLayout;
         }
 
         public Label Label { get; private set; }
         public ExtendedEntry Entry { get; private set; }
         public ExtendedButton Button { get; private set; }
+
+        public void InitEvents()
+        {
+            if(_nextElement != null)
+            {
+                Entry.Completed += Entry_Completed;
+            }
+
+            if(_tgr != null)
+            {
+                _tgr.Tapped += Tgr_Tapped;
+            }
+            
+            Tapped += FormEntryCell_Tapped;
+        }
 
         private void Tgr_Tapped(object sender, EventArgs e)
         {
@@ -143,6 +159,22 @@ namespace Bit.App.Controls
         private void FormEntryCell_Tapped(object sender, EventArgs e)
         {
             Entry.Focus();
+        }
+
+        private void Entry_Completed(object sender, EventArgs e)
+        {
+            _nextElement?.Focus();
+        }
+
+        public void Dispose()
+        {
+            if(_tgr != null)
+            {
+                _tgr.Tapped -= Tgr_Tapped;
+            }
+
+            Tapped -= FormEntryCell_Tapped;
+            Entry.Completed -= Entry_Completed;
         }
     }
 }

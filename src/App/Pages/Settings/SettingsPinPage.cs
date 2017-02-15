@@ -40,7 +40,6 @@ namespace Bit.App.Pages
             };
 
             PinControl = new PinControl();
-            PinControl.OnPinEntered += PinEntered;
             PinControl.Label.SetBinding<PinPageModel>(Label.TextProperty, s => s.LabelText);
             PinControl.Entry.SetBinding<PinPageModel>(Entry.TextProperty, s => s.PIN);
 
@@ -75,7 +74,16 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            PinControl.OnPinEntered += PinEntered;
+            PinControl.InitEvents();
             PinControl.Entry.FocusWithDelay();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            PinControl.Dispose();
+            PinControl.OnPinEntered -= PinEntered;
         }
 
         protected void PinEntered(object sender, EventArgs args)

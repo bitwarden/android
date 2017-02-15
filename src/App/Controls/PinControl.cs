@@ -22,13 +22,15 @@ namespace Bit.App.Controls
                 MaxLength = 4,
                 Margin = new Thickness(0, int.MaxValue, 0, 0)
             };
-            Entry.TextChanged += Entry_TextChanged;
 
             if(Device.OS == TargetPlatform.Android)
             {
                 Label.TextColor = Color.Black;
             }
         }
+
+        public Label Label { get; set; }
+        public ExtendedEntry Entry { get; set; }
 
         private void Entry_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -38,7 +40,14 @@ namespace Bit.App.Controls
             }
         }
 
-        public Label Label { get; set; }
-        public ExtendedEntry Entry { get; set; }
+        public void InitEvents()
+        {
+            Entry.TextChanged += Entry_TextChanged;
+        }
+
+        public void Dispose()
+        {
+            Entry.TextChanged -= Entry_TextChanged;
+        }
     }
 }

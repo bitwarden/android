@@ -64,7 +64,6 @@ namespace Bit.App.Pages
 
             CodeCell.Entry.Keyboard = Keyboard.Numeric;
             CodeCell.Entry.ReturnType = Enums.ReturnType.Go;
-            CodeCell.Entry.Completed += Entry_Completed;
 
             var table = new ExtendedTableView
             {
@@ -129,7 +128,16 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            CodeCell.InitEvents();
             CodeCell.Entry.FocusWithDelay();
+            CodeCell.Entry.Completed += Entry_Completed;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            CodeCell.Dispose();
+            CodeCell.Entry.Completed -= Entry_Completed;
         }
 
         private void Lost2FAApp()

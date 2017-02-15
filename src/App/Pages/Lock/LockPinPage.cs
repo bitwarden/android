@@ -15,6 +15,7 @@ namespace Bit.App.Pages
     {
         private readonly IAuthService _authService;
         private readonly ISettings _settings;
+        private TapGestureRecognizer _tgr;
 
         public LockPinPage()
         {
@@ -39,7 +40,6 @@ namespace Bit.App.Pages
             };
 
             PinControl = new PinControl();
-            PinControl.OnPinEntered += PinEntered;
             PinControl.Label.SetBinding<PinPageModel>(Label.TextProperty, s => s.LabelText);
             PinControl.Entry.SetBinding<PinPageModel>(Entry.TextProperty, s => s.PIN);
 
@@ -60,14 +60,13 @@ namespace Bit.App.Pages
                 Children = { PinControl.Label, instructionLabel, logoutButton, PinControl.Entry }
             };
 
-            var tgr = new TapGestureRecognizer();
-            tgr.Tapped += Tgr_Tapped;
-            PinControl.Label.GestureRecognizers.Add(tgr);
-            instructionLabel.GestureRecognizers.Add(tgr);
+            _tgr = new TapGestureRecognizer();
+            PinControl.Label.GestureRecognizers.Add(_tgr);
+            instructionLabel.GestureRecognizers.Add(_tgr);
 
             Title = AppResources.VerifyPIN;
             Content = stackLayout;
-            Content.GestureRecognizers.Add(tgr);
+            Content.GestureRecognizers.Add(_tgr);
             BindingContext = Model;
         }
 
@@ -79,7 +78,18 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            _tgr.Tapped += Tgr_Tapped;
+            PinControl.OnPinEntered += PinEntered;
+            PinControl.InitEvents();
             PinControl.Entry.FocusWithDelay();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _tgr.Tapped -= Tgr_Tapped;
+            PinControl.OnPinEntered -= PinEntered;
+            PinControl.Dispose();
         }
 
         protected void PinEntered(object sender, EventArgs args)

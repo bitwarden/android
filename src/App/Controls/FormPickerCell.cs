@@ -1,5 +1,4 @@
 ﻿using System;
-using Bit.App.Resources;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -42,8 +41,6 @@ namespace Bit.App.Controls
             Picker.AdjustMarginsForDevice();
             stackLayout.AdjustPaddingForDevice();
 
-            Tapped += FormPickerCell_Tapped;
-
             View = stackLayout;
         }
 
@@ -53,6 +50,16 @@ namespace Bit.App.Controls
         private void FormPickerCell_Tapped(object sender, EventArgs e)
         {
             Picker.Focus();
+        }
+
+        public void InitEvents()
+        {
+            Tapped += FormPickerCell_Tapped;
+        }
+
+        public void Dispose()
+        {
+            Tapped -= FormPickerCell_Tapped;
         }
     }
 }

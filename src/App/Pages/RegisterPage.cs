@@ -58,7 +58,6 @@ namespace Bit.App.Pages
                 containerPadding: padding);
 
             PasswordHintCell.Entry.ReturnType = Enums.ReturnType.Done;
-            PasswordHintCell.Entry.Completed += Entry_Completed;
 
             var table = new FormTableView
             {
@@ -144,7 +143,21 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
+            EmailCell.InitEvents();
+            PasswordCell.InitEvents();
+            PasswordHintCell.InitEvents();
+            ConfirmPasswordCell.InitEvents();
+            PasswordHintCell.Entry.Completed += Entry_Completed;
             EmailCell.Entry.FocusWithDelay();
+        }
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            EmailCell.Dispose();
+            PasswordCell.Dispose();
+            PasswordHintCell.Dispose();
+            ConfirmPasswordCell.Dispose();
+            PasswordHintCell.Entry.Completed -= Entry_Completed;
         }
 
         private async void Entry_Completed(object sender, EventArgs e)
