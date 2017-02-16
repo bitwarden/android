@@ -426,6 +426,7 @@
     <Reference Include="XLabs.Ioc.Unity, Version=2.0.5782.12230, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\packages\XLabs.IoC.Unity.2.0.5782\lib\portable-net45+netcore45+wp8+MonoAndroid1+MonoTouch1\XLabs.Ioc.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
