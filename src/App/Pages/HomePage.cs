@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
 using Bit.App.Controls;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
@@ -30,11 +31,13 @@ namespace Bit.App.Pages
         {
             MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
 
-            var logo = new Image
+            var logo = new CachedImage
             {
                 Source = "logo",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                WidthRequest = 282,
+                HeightRequest = 44
             };
 
             var message = new Label

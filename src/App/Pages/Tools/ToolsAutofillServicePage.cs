@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
@@ -74,7 +75,7 @@ namespace Bit.App.Pages
                 TextColor = Color.Black
             };
 
-            var step1Image = new Image
+            var step1Image = new CachedImage
             {
                 Source = "accessibility_step1",
                 HorizontalOptions = LayoutOptions.Center,
@@ -92,7 +93,7 @@ namespace Bit.App.Pages
                 TextColor = Color.Black
             };
 
-            var step2Image = new Image
+            var step2Image = new CachedImage
             {
                 Source = "accessibility_step2",
                 HorizontalOptions = LayoutOptions.Center,
@@ -119,7 +120,7 @@ namespace Bit.App.Pages
                 TextColor = Color.Black
             };
 
-            var tapNotificationImage = new Image
+            var tapNotificationImage = new CachedImage
             {
                 Source = "accessibility_notification",
                 HorizontalOptions = LayoutOptions.Center,
@@ -128,7 +129,7 @@ namespace Bit.App.Pages
                 HeightRequest = 74
             };
 
-            var tapNotificationIcon = new Image
+            var tapNotificationIcon = new CachedImage
             {
                 Source = "accessibility_notification_icon",
                 HorizontalOptions = LayoutOptions.Center,

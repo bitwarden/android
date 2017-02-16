@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Bit.App.Abstractions;
 using XLabs.Ioc;
 using Bit.App.Resources;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
@@ -19,10 +20,12 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            var logo = new Image
+            var logo = new CachedImage
             {
                 Source = "logo",
-                HorizontalOptions = LayoutOptions.Center
+                HorizontalOptions = LayoutOptions.Center,
+                WidthRequest = 282,
+                HeightRequest = 44
             };
 
             var versionLabel = new Label

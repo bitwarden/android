@@ -6,6 +6,7 @@ using Bit.App.Controls;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
@@ -127,9 +128,11 @@ namespace Bit.App.Pages
                     Text = detailText
                 };
 
-                var image = new Image
+                var image = new CachedImage
                 {
-                    Source = imageSource
+                    Source = imageSource,
+                    WidthRequest = 44,
+                    HeightRequest = 44
                 };
 
                 var grid = new Grid

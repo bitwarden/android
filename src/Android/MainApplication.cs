@@ -20,6 +20,7 @@ using XLabs.Ioc.Unity;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
 using Xamarin.Android.Net;
+using FFImageLoading.Forms.Droid;
 
 namespace Bit.Android
 {
@@ -232,6 +233,7 @@ namespace Bit.Android
 
             CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>(), "962181367620");
             container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());
+            CachedImageRenderer.Init();
 
             Resolver.SetResolver(new UnityResolver(container));
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);

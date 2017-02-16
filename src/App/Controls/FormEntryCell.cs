@@ -1,4 +1,5 @@
 ﻿using Bit.App.Abstractions;
+using FFImageLoading.Forms;
 using System;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -67,11 +68,13 @@ namespace Bit.App.Controls
             {
                 _tgr = new TapGestureRecognizer();
 
-                var theImage = new Image
+                var theImage = new CachedImage
                 {
                     Source = imageSource,
                     HorizontalOptions = LayoutOptions.Start,
-                    VerticalOptions = LayoutOptions.Center
+                    VerticalOptions = LayoutOptions.Center,
+                    WidthRequest = 18,
+                    HeightRequest = 18
                 };
                 theImage.GestureRecognizers.Add(_tgr);
 

@@ -25,6 +25,7 @@ using Bit.App.Pages;
 using HockeyApp.iOS;
 using Bit.iOS.Core;
 using Google.Analytics;
+using FFImageLoading.Forms.Touch;
 
 namespace Bit.iOS
 {
@@ -288,6 +289,7 @@ namespace Bit.iOS
 
             CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>());
             container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());
+            CachedImageRenderer.Init();
 
             Resolver.SetResolver(new UnityResolver(container));
         }

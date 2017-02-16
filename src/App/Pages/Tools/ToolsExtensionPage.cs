@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
@@ -52,12 +53,14 @@ namespace Bit.App.Pages
                 LineBreakMode = LineBreakMode.WordWrap
             };
 
-            var notStartedImage = new Image
+            var notStartedImage = new CachedImage
             {
                 Source = "ext-more",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, -10, 0, 0)
+                Margin = new Thickness(0, -10, 0, 0),
+                WidthRequest = 290,
+                HeightRequest = 252
             };
 
             var notStartedButton = new ExtendedButton
@@ -101,12 +104,14 @@ namespace Bit.App.Pages
                 LineBreakMode = LineBreakMode.WordWrap
             };
 
-            var notActivatedImage = new Image
+            var notActivatedImage = new CachedImage
             {
                 Source = "ext-act",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, -10, 0, 0)
+                Margin = new Thickness(0, -10, 0, 0),
+                WidthRequest = 290,
+                HeightRequest = 252
             };
 
             var notActivatedButton = new ExtendedButton
@@ -151,12 +156,14 @@ namespace Bit.App.Pages
                 Margin = new Thickness(0, 10, 0, 0)
             };
 
-            var activatedImage = new Image
+            var activatedImage = new CachedImage
             {
                 Source = "ext-use",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, -10, 0, 0)
+                Margin = new Thickness(0, -10, 0, 0),
+                WidthRequest = 290,
+                HeightRequest = 252
             };
 
             var activatedButton = new ExtendedButton

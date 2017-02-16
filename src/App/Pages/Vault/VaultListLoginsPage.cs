@@ -14,6 +14,7 @@ using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using System.Collections.Generic;
 using System.Threading;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
@@ -490,7 +491,7 @@ namespace Bit.App.Pages
         {
             public VaultListHeaderViewCell(VaultListLoginsPage page)
             {
-                var image = new Image
+                var image = new CachedImage
                 {
                     Source = "folder",
                     WidthRequest = 18,
