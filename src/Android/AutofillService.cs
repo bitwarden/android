@@ -60,7 +60,7 @@ namespace Bit.Android
             {
                 return;
             }
-            
+
             switch(e.EventType)
             {
                 case EventTypes.WindowContentChanged:
@@ -77,13 +77,8 @@ namespace Bit.Android
                     if(passwordNodes.Any())
                     {
                         var uri = GetUri(root);
-                        if(uri != null)
+                        if(uri != null && !uri.Contains(BitwardenWebsite))
                         {
-                            if(uri.Contains(BitwardenWebsite))
-                            {
-                                break;
-                            }
-
                             if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                             {
                                 var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
@@ -252,18 +247,18 @@ namespace Bit.Android
         }
 
         private IEnumerable<AccessibilityNodeInfo> GetWindowNodes(AccessibilityNodeInfo n,
-            AccessibilityEvent e, Func<AccessibilityNodeInfo, bool> p)
+            AccessibilityEvent e, Func<AccessibilityNodeInfo, bool> condition)
         {
             if(n != null)
             {
-                if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && p(n))
+                if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
                 {
                     yield return n;
                 }
 
                 for(int i = 0; i < n.ChildCount; i++)
                 {
-                    foreach(var node in GetWindowNodes(n.GetChild(i), e, p))
+                    foreach(var node in GetWindowNodes(n.GetChild(i), e, condition))
                     {
                         yield return node;
                     }

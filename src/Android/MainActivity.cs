@@ -28,22 +28,7 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
-            string uri = null;
-            if(!Intent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory) && Intent.HasExtra("uri") && Intent.HasExtra("ts"))
-            {
-                var tsDiff = Java.Lang.JavaSystem.CurrentTimeMillis() - Intent.GetLongExtra("ts", 0);
-                if(tsDiff < 5000)
-                {
-                    uri = Intent.GetStringExtra("uri");
-                }
-
-                // Attempt to clear intent for future
-                Intent.ReplaceExtras(new Bundle());
-                Intent.SetAction(string.Empty);
-                Intent.SetData(null);
-                Intent.SetFlags(0);
-            }
-
+            var uri = Intent.GetStringExtra("uri");
             if(!Resolver.IsSet)
             {
                 MainApplication.SetIoc(Application);
@@ -134,8 +119,7 @@ namespace Bit.Android
             {
                 Parent.SetResult(Result.Ok, data);
             }
-
-            MessagingCenter.Send(Xamarin.Forms.Application.Current, "SetMainPage");
+            
             Finish();
         }
 

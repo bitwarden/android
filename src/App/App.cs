@@ -22,7 +22,6 @@ namespace Bit.App
         private const string LastBuildKey = "LastBuild";
 
         private string _uri;
-        private DateTime _lastMainPageSet = DateTime.MinValue;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
         private readonly IUserDialogs _userDialogs;
@@ -93,11 +92,6 @@ namespace Bit.App
             {
                 Logout(args);
             });
-
-            MessagingCenter.Subscribe<Application>(Current, "SetMainPage", (sender) =>
-            {
-                SetMainPageFromAutofill();
-            });
         }
 
         protected async override void OnStart()
@@ -165,15 +159,14 @@ namespace Bit.App
         {
             if(Device.OS == TargetPlatform.Android && !string.IsNullOrWhiteSpace(_uri))
             {
-                var now = DateTime.UtcNow;
-                if((now - _lastMainPageSet).Seconds <= 1)
+                Task.Run(() =>
                 {
-                    return;
-                }
-
-                _lastMainPageSet = now;
-                Device.BeginInvokeOnMainThread(() => MainPage = new MainPage());
-                _uri = null;
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Current.MainPage = new MainPage();
+                        _uri = null;
+                    });
+                });
             }
         }
 
