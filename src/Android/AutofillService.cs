@@ -48,7 +48,8 @@ namespace Bit.Android
             new Browser("com.jerky.browser2", "enterUrl"),
             new Browser("com.mx.browser", "address_editor_with_progress"),
             new Browser("com.mx.browser.tablet", "address_editor_with_progress"),
-            new Browser("com.linkbubble.playstore", "url_text")
+            new Browser("com.linkbubble.playstore", "url_text"),
+            new Browser("com.ksmobile.cb", "address_bar_edit_text")
         }.ToDictionary(n => n.PackageName);
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
@@ -60,6 +61,11 @@ namespace Bit.Android
             {
                 return;
             }
+
+            /*
+            var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null)
+                .Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+            */
 
             switch(e.EventType)
             {
