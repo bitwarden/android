@@ -35,6 +35,9 @@ namespace Bit.App.Pages
         public FormEntryCell PasswordCell { get; set; }
         public FormEntryCell ConfirmPasswordCell { get; set; }
         public FormEntryCell PasswordHintCell { get; set; }
+        public StackLayout StackLayout { get; set; }
+        public Label PasswordLabel { get; set; }
+        public Label HintLabel { get; set; }
 
         private void Init()
         {
@@ -71,7 +74,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            var passwordLabel = new Label
+            PasswordLabel = new Label
             {
                 Text = AppResources.MasterPasswordDescription,
                 LineBreakMode = LineBreakMode.WordWrap,
@@ -93,7 +96,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            var hintLabel = new Label
+            HintLabel = new Label
             {
                 Text = AppResources.MasterPasswordHintDescription,
                 LineBreakMode = LineBreakMode.WordWrap,
@@ -102,21 +105,15 @@ namespace Bit.App.Pages
                 Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
             };
 
-            var layout = new StackLayout
+            StackLayout = new StackLayout
             {
-                Children = { table, passwordLabel, table2, hintLabel },
+                Children = { table, PasswordLabel, table2, HintLabel },
                 Spacing = 0
-            };
-
-            layout.LayoutChanged += (sender, args) =>
-            {
-                passwordLabel.WidthRequest = layout.Bounds.Width - passwordLabel.Bounds.Left * 2;
-                hintLabel.WidthRequest = layout.Bounds.Width - hintLabel.Bounds.Left * 2;
             };
 
             var scrollView = new ScrollView
             {
-                Content = layout
+                Content = StackLayout
             };
 
             var loginToolbarItem = new ToolbarItem(AppResources.Submit, null, async () =>
@@ -148,6 +145,7 @@ namespace Bit.App.Pages
             PasswordHintCell.InitEvents();
             ConfirmPasswordCell.InitEvents();
             PasswordHintCell.Entry.Completed += Entry_Completed;
+            StackLayout.LayoutChanged += Layout_LayoutChanged;
             EmailCell.Entry.FocusWithDelay();
         }
         protected override void OnDisappearing()
@@ -158,6 +156,13 @@ namespace Bit.App.Pages
             PasswordHintCell.Dispose();
             ConfirmPasswordCell.Dispose();
             PasswordHintCell.Entry.Completed -= Entry_Completed;
+            StackLayout.LayoutChanged -= Layout_LayoutChanged;
+        }
+
+        private void Layout_LayoutChanged(object sender, EventArgs e)
+        {
+            PasswordLabel.WidthRequest = StackLayout.Bounds.Width - PasswordLabel.Bounds.Left * 2;
+            HintLabel.WidthRequest = StackLayout.Bounds.Width - HintLabel.Bounds.Left * 2;
         }
 
         private async void Entry_Completed(object sender, EventArgs e)

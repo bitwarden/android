@@ -66,6 +66,7 @@ namespace Bit.App.Pages
         public StackLayout NoDataStackLayout { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
+        private AddLoginToolBarItem AddLoginItem { get; set; }
         public string Uri { get; set; }
 
         private void Init()
@@ -80,7 +81,8 @@ namespace Bit.App.Pages
 
             if(!_favorites)
             {
-                ToolbarItems.Add(new AddLoginToolBarItem(this));
+                AddLoginItem = new AddLoginToolBarItem(this);
+                ToolbarItems.Add(AddLoginItem);
             }
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
@@ -98,16 +100,12 @@ namespace Bit.App.Pages
                 ListView.RowHeight = -1;
             }
 
-            ListView.ItemSelected += LoginSelected;
-
             Search = new SearchBar
             {
                 Placeholder = AppResources.SearchVault,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
                 CancelButtonColor = Color.FromHex("3c8dbc")
             };
-            Search.TextChanged += SearchBar_TextChanged;
-            Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
             // Bug with searchbar on android 7, ref https://bugzilla.xamarin.com/show_bug.cgi?id=43975
             if(Device.OS == TargetPlatform.Android && _deviceInfoService.Version >= 24)
             {
@@ -231,6 +229,11 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            ListView.ItemSelected += LoginSelected;
+            Search.TextChanged += SearchBar_TextChanged;
+            Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
+            AddLoginItem?.InitEvents();
+
             if(_loadExistingData)
             {
                 _filterResultsCancellationTokenSource = FetchAndLoadVault();
@@ -266,6 +269,15 @@ namespace Bit.App.Pages
                     registerAction();
                 }
             }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ListView.ItemSelected -= LoginSelected;
+            Search.TextChanged -= SearchBar_TextChanged;
+            Search.SearchButtonPressed -= SearchBar_SearchButtonPressed;
+            AddLoginItem.Dispose();
         }
 
         protected override bool OnBackButtonPressed()
@@ -469,21 +481,16 @@ namespace Bit.App.Pages
             await Navigation.PushForDeviceAsync(page);
         }
 
-        private class AddLoginToolBarItem : ToolbarItem
+        private class AddLoginToolBarItem : ExtendedToolbarItem
         {
             private readonly VaultListLoginsPage _page;
 
             public AddLoginToolBarItem(VaultListLoginsPage page)
+                : base(() => page.AddLogin())
             {
                 _page = page;
                 Text = AppResources.Add;
                 Icon = "plus";
-                Clicked += ClickedItem;
-            }
-
-            private void ClickedItem(object sender, EventArgs e)
-            {
-                _page.AddLogin();
             }
         }
 

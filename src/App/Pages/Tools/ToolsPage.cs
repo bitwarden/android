@@ -23,42 +23,37 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public ToolsViewCell GeneratorCell { get; set; }
+        public ToolsViewCell WebCell { get; set; }
+        public ToolsViewCell ImportCell { get; set; }
+        public ToolsViewCell ExtensionCell { get; set; }
+        public ToolsViewCell AutofillCell { get; set; }
+
         public void Init()
         {
-            var generatorCell = new ToolsViewCell(AppResources.PasswordGenerator, AppResources.PasswordGeneratorDescription,
+            GeneratorCell = new ToolsViewCell(AppResources.PasswordGenerator, AppResources.PasswordGeneratorDescription,
                 "refresh");
-            generatorCell.Tapped += GeneratorCell_Tapped;
-            var webCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe");
-            webCell.Tapped += WebCell_Tapped;
-            var importCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup");
-            importCell.Tapped += ImportCell_Tapped;
+            WebCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe");
+            ImportCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup");
 
-            var section = new TableSection { generatorCell };
+            var section = new TableSection { GeneratorCell };
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                var extensionCell = new ToolsViewCell(AppResources.BitwardenAppExtension,
+                ExtensionCell = new ToolsViewCell(AppResources.BitwardenAppExtension,
                     AppResources.BitwardenAppExtensionDescription, "upload");
-                extensionCell.Tapped += (object sender, EventArgs e) =>
-                {
-                    Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
-                };
-                section.Add(extensionCell);
+                section.Add(ExtensionCell);
             }
             else
             {
-                var autofillServiceCell = new ToolsViewCell(
+                AutofillCell = new ToolsViewCell(
                     string.Format("{0} ({1})", AppResources.BitwardenAutofillService, AppResources.Beta),
                     AppResources.BitwardenAutofillServiceDescription, "upload");
-                autofillServiceCell.Tapped += (object sender, EventArgs e) =>
-                {
-                    Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
-                };
-                section.Add(autofillServiceCell);
+                section.Add(AutofillCell);
             }
 
-            section.Add(webCell);
-            section.Add(importCell);
+            section.Add(WebCell);
+            section.Add(ImportCell);
 
             var table = new ExtendedTableView
             {
@@ -79,6 +74,37 @@ namespace Bit.App.Pages
 
             Title = AppResources.Tools;
             Content = table;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            GeneratorCell.Tapped += GeneratorCell_Tapped;
+            WebCell.Tapped += WebCell_Tapped;
+            ImportCell.Tapped += ImportCell_Tapped;
+            ExtensionCell.Tapped += ExtensionCell_Tapped;
+            AutofillCell.Tapped += AutofillCell_Tapped;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            GeneratorCell.Tapped -= GeneratorCell_Tapped;
+            WebCell.Tapped -= WebCell_Tapped;
+            ImportCell.Tapped -= ImportCell_Tapped;
+            ExtensionCell.Tapped -= ExtensionCell_Tapped;
+            AutofillCell.Tapped -= AutofillCell_Tapped;
+
+        }
+
+        private void AutofillCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
+        }
+
+        private void ExtensionCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
         }
 
         private async void GeneratorCell_Tapped(object sender, EventArgs e)

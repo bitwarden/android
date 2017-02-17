@@ -6,6 +6,7 @@ using Bit.App.Models.Page;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using System.Threading.Tasks;
 
 namespace Bit.App.Pages
 {
@@ -33,10 +34,12 @@ namespace Bit.App.Pages
         public LabeledValueCell UsernameCell { get; set; }
         public LabeledValueCell PasswordCell { get; set; }
         public LabeledValueCell UriCell { get; set; }
+        private EditLoginToolBarItem EditItem { get; set; }
 
         private void Init()
         {
-            ToolbarItems.Add(new EditLoginToolBarItem(this, _loginId));
+            EditItem = new EditLoginToolBarItem(this, _loginId);
+            ToolbarItems.Add(EditItem);
             if(Device.OS == TargetPlatform.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this));
@@ -121,6 +124,8 @@ namespace Bit.App.Pages
 
         protected async override void OnAppearing()
         {
+            EditItem.InitEvents();
+
             var login = await _loginService.GetByIdAsync(_loginId);
             if(login == null)
             {
@@ -169,13 +174,18 @@ namespace Bit.App.Pages
             base.OnAppearing();
         }
 
+        protected override void OnDisappearing()
+        {
+            EditItem.Dispose();
+        }
+
         private void Copy(string copyText, string alertLabel)
         {
             _clipboardService.CopyToClipboard(copyText);
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
-        private class EditLoginToolBarItem : ToolbarItem
+        private class EditLoginToolBarItem : ExtendedToolbarItem
         {
             private readonly VaultViewLoginPage _page;
             private readonly string _loginId;
@@ -185,10 +195,10 @@ namespace Bit.App.Pages
                 _page = page;
                 _loginId = loginId;
                 Text = AppResources.Edit;
-                Clicked += ClickedItem;
+                ClickAction = async () => await ClickedItem();
             }
 
-            private async void ClickedItem(object sender, EventArgs e)
+            private async Task ClickedItem()
             {
                 var page = new VaultEditLoginPage(_loginId);
                 await _page.Navigation.PushForDeviceAsync(page);

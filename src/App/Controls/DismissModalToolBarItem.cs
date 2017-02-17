@@ -4,14 +4,13 @@ using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class DismissModalToolBarItem : ToolbarItem, IDisposable
+    public class DismissModalToolBarItem : ExtendedToolbarItem, IDisposable
     {
         private readonly ContentPage _page;
-        private readonly Action _cancelClickedAction;
 
         public DismissModalToolBarItem(ContentPage page, string text = null, Action cancelClickedAction = null)
+            : base(cancelClickedAction)
         {
-            _cancelClickedAction = cancelClickedAction;
             _page = page;
             // TODO: init and dispose events from pages
             InitEvents();
@@ -19,20 +18,10 @@ namespace Bit.App.Controls
             Priority = -1;
         }
 
-        private async void ClickedItem(object sender, EventArgs e)
+        protected async override void ClickedItem(object sender, EventArgs e)
         {
-            _cancelClickedAction?.Invoke();
+            base.ClickedItem(sender, e);
             await _page.Navigation.PopModalAsync();
-        }
-
-        public void InitEvents()
-        {
-            Clicked += ClickedItem;
-        }
-
-        public void Dispose()
-        {
-            Clicked -= ClickedItem;
         }
     }
 }

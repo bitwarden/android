@@ -59,6 +59,8 @@ namespace Bit.App.Pages
         public StackLayout NoDataStackLayout { get; set; }
         public ListView ListView { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
+        private SearchToolBarItem SearchItem { get; set; }
+        private AddLoginToolBarItem AddLoginItem { get; set; }
         private IGoogleAnalyticsService GoogleAnalyticsService { get; set; }
         private IUserDialogs UserDialogs { get; set; }
         private string Uri { get; set; }
@@ -88,8 +90,10 @@ namespace Bit.App.Pages
                 Spacing = 20
             };
 
-            ToolbarItems.Add(new AddLoginToolBarItem(this));
-            ToolbarItems.Add(new SearchToolBarItem(this));
+            AddLoginItem = new AddLoginToolBarItem(this);
+            ToolbarItems.Add(AddLoginItem);
+            SearchItem = new SearchToolBarItem(this);
+            ToolbarItems.Add(SearchItem);
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
@@ -106,8 +110,6 @@ namespace Bit.App.Pages
                 ListView.RowHeight = -1;
             }
 
-            ListView.ItemSelected += LoginSelected;
-
             Title = string.Format(AppResources.LoginsForUri, _name ?? "--");
 
             LoadingIndicator = new ActivityIndicator
@@ -123,7 +125,18 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            ListView.ItemSelected += LoginSelected;
+            AddLoginItem.InitEvents();
+            SearchItem.InitEvents();
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ListView.ItemSelected -= LoginSelected;
+            AddLoginItem.Dispose();
+            SearchItem.Dispose();
         }
 
         protected override bool OnBackButtonPressed()
@@ -266,26 +279,18 @@ namespace Bit.App.Pages
             UserDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
-        private class AddLoginToolBarItem : ToolbarItem
+        private class AddLoginToolBarItem : ExtendedToolbarItem
         {
-            private readonly VaultAutofillListLoginsPage _page;
-
             public AddLoginToolBarItem(VaultAutofillListLoginsPage page)
+                : base(() => page.AddLoginAsync())
             {
-                _page = page;
                 Text = AppResources.Add;
                 Icon = "plus";
-                Clicked += ClickedItem;
                 Priority = 2;
-            }
-
-            private void ClickedItem(object sender, EventArgs e)
-            {
-                _page.AddLoginAsync();
             }
         }
 
-        private class SearchToolBarItem : ToolbarItem
+        private class SearchToolBarItem : ExtendedToolbarItem
         {
             private readonly VaultAutofillListLoginsPage _page;
 
@@ -294,11 +299,11 @@ namespace Bit.App.Pages
                 _page = page;
                 Text = AppResources.Search;
                 Icon = "search";
-                Clicked += ClickedItem;
                 Priority = 1;
+                ClickAction = () => DoClick();
             }
 
-            private void ClickedItem(object sender, EventArgs e)
+            private void DoClick()
             {
                 _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch",
                     _page.Uri.StartsWith("http") ? "Website" : "App");
