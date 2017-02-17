@@ -58,8 +58,8 @@ namespace Bit.Android
 
             RegisterActivityLifecycleCallbacks(this);
             AppContext = ApplicationContext;
-            //StartPushService();
-            //HandlePushReregistration();
+            StartPushService();
+            HandlePushReregistration();
         }
 
         private void HandlePushReregistration()

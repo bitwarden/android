@@ -3,6 +3,6 @@
     android:description="@string/AutoFillServiceDescription"
     android:accessibilityEventTypes="typeWindowStateChanged|typeWindowContentChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
-    android:accessibilityFlags="flagDefault"
+    android:accessibilityFlags="flagReportViewIds"
     android:notificationTimeout="100"
     android:canRetrieveWindowContent="true"/>

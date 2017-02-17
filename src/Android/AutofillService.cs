@@ -20,35 +20,36 @@ namespace Bit.Android
         private const string BitwardenWebsite = "bitwarden.com";
 
         public static bool Enabled { get; set; } = false;
-        private static Dictionary<string, string[]> BrowserPackages => new Dictionary<string, string[]>
+        private static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
-            { "com.android.chrome", new string[] { "url_bar" } },
-            { "com.chrome.beta", new string[] { "url_bar" } },
-            { "com.android.browser", new string[] { "url" } },
-            { "com.brave.browser", new string[] { "url_bar" } },
-            { "com.opera.browser", new string[] { "url_field" } },
-            { "com.opera.browser.beta", new string[] { "url_field" } },
-            { "com.opera.mini.native", new string[] { "url_field" } },
-            { "com.chrome.dev", new string[] { "url_bar" } },
-            { "com.chrome.canary", new string[] { "url_bar" } },
-            { "com.google.android.apps.chrome", new string[] { "url_bar" } },
-            { "com.google.android.apps.chrome_dev", new string[] { "url_bar" } },
-            { "org.iron.srware", new string[] { "url_bar" } },
-            { "com.sec.android.app.sbrowser", new string[] { "sbrowser_url_bar" } },
-            { "com.yandex.browser", new string[] { "bro_common_omnibox_host", "bro_common_omnibox_edit_text" } },
-            { "org.mozilla.firefox", new string[] { "url_bar_title" } },
-            { "org.mozilla.firefox_beta", new string[] { "url_bar_title" } },
-            { "com.ghostery.android.ghostery",new string[] {  "search_field" } },
-            { "org.adblockplus.browser", new string[] { "url_bar_title" } },
-            { "com.htc.sense.browser", new string[] { "title" } },
-            { "com.amazon.cloud9", new string[] { "url" } },
-            { "mobi.mgeek.TunnyBrowser", new string[] { "title" } },
-            { "com.nubelacorp.javelin", new string[] { "enterUrl" } },
-            { "com.jerky.browser2", new string[] { "enterUrl" } },
-            { "com.mx.browser", new string[] { "address_editor_with_progress" } },
-            { "com.mx.browser.tablet", new string[] { "address_editor_with_progress"} },
-            { "com.linkbubble.playstore", new string[] { "url_text" }}
-        };
+            new Browser("com.android.chrome", "url_bar"),
+            new Browser("com.chrome.beta", "url_bar"),
+            new Browser("com.android.browser", "url"),
+            new Browser("com.brave.browser", "url_bar"),
+            new Browser("com.opera.browser", "url_field"),
+            new Browser("com.opera.browser.beta", "url_field"),
+            new Browser("com.opera.mini.native", "url_field"),
+            new Browser("com.chrome.dev", "url_bar"),
+            new Browser("com.chrome.canary", "url_bar"),
+            new Browser("com.google.android.apps.chrome", "url_bar"),
+            new Browser("com.google.android.apps.chrome_dev", "url_bar"),
+            new Browser("org.iron.srware", "url_bar"),
+            new Browser("com.sec.android.app.sbrowser", "sbrowser_url_bar"),
+            new Browser("com.yandex.browser", "bro_omnibar_address_title_text",
+                (s) => s.Split(' ').FirstOrDefault()),
+            new Browser("org.mozilla.firefox", "url_bar_title"),
+            new Browser("org.mozilla.firefox_beta", "url_bar_title"),
+            new Browser("com.ghostery.android.ghostery", "search_field"),
+            new Browser("org.adblockplus.browser", "url_bar_title"),
+            new Browser("com.htc.sense.browser", "title"),
+            new Browser("com.amazon.cloud9", "url"),
+            new Browser("mobi.mgeek.TunnyBrowser", "title"),
+            new Browser("com.nubelacorp.javelin", "enterUrl"),
+            new Browser("com.jerky.browser2", "enterUrl"),
+            new Browser("com.mx.browser", "address_editor_with_progress"),
+            new Browser("com.mx.browser.tablet", "address_editor_with_progress"),
+            new Browser("com.linkbubble.playstore", "url_text")
+        }.ToDictionary(n => n.PackageName);
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
@@ -59,7 +60,7 @@ namespace Bit.Android
             {
                 return;
             }
-
+            
             switch(e.EventType)
             {
                 case EventTypes.WindowContentChanged:
@@ -76,21 +77,24 @@ namespace Bit.Android
                     if(passwordNodes.Any())
                     {
                         var uri = GetUri(root);
-                        if(uri.Contains(BitwardenWebsite))
+                        if(uri != null)
                         {
-                            break;
-                        }
+                            if(uri.Contains(BitwardenWebsite))
+                            {
+                                break;
+                            }
 
-                        if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
-                        {
-                            var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
-                            var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
-                            FillCredentials(usernameEditText, passwordNodes);
-                        }
-                        else
-                        {
-                            NotifyToAutofill(uri);
-                            cancelNotification = false;
+                            if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
+                            {
+                                var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
+                                var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+                                FillCredentials(usernameEditText, passwordNodes);
+                            }
+                            else
+                            {
+                                NotifyToAutofill(uri);
+                                cancelNotification = false;
+                            }
                         }
 
                         AutofillActivity.LastCredentials = null;
@@ -132,43 +136,40 @@ namespace Bit.Android
         private string GetUri(AccessibilityNodeInfo root)
         {
             var uri = string.Concat(App.Constants.AndroidAppProtocol, root.PackageName);
-            if(BrowserPackages.ContainsKey(root.PackageName))
+            if(SupportedBrowsers.ContainsKey(root.PackageName))
             {
-                foreach(var addressViewId in BrowserPackages[root.PackageName])
+                var addressNode = root.FindAccessibilityNodeInfosByViewId(
+                    $"{root.PackageName}:id/{SupportedBrowsers[root.PackageName].UriViewId}").FirstOrDefault();
+                if(addressNode != null)
                 {
-                    var addressNode = root.FindAccessibilityNodeInfosByViewId(
-                        $"{root.PackageName}:id/{addressViewId}").FirstOrDefault();
-                    if(addressNode == null)
-                    {
-                        continue;
-                    }
-
-                    uri = ExtractUri(uri, addressNode);
-                    break;
+                    uri = ExtractUri(uri, addressNode, SupportedBrowsers[root.PackageName]);
                 }
             }
 
             return uri;
         }
 
-        private string ExtractUri(string uri, AccessibilityNodeInfo addressNode)
+        private string ExtractUri(string uri, AccessibilityNodeInfo addressNode, Browser browser)
         {
             if(addressNode?.Text != null)
             {
-                uri = addressNode.Text;
-                if(!uri.Contains("://"))
+                uri = browser.GetUriFunction(addressNode.Text);
+                if(uri != null && uri.Contains("."))
                 {
-                    uri = string.Concat("http://", uri);
-                }
-                else if(Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
-                {
-                    var parts = uri.Split(new string[] { ". " }, StringSplitOptions.None);
-                    if(parts.Length > 1)
+                    if(!uri.Contains("://"))
                     {
-                        var urlPart = parts.FirstOrDefault(p => p.StartsWith("http"));
-                        if(urlPart != null)
+                        uri = string.Concat("http://", uri);
+                    }
+                    else if(Build.VERSION.SdkInt <= BuildVersionCodes.KitkatWatch)
+                    {
+                        var parts = uri.Split(new string[] { ". " }, StringSplitOptions.None);
+                        if(parts.Length > 1)
                         {
-                            uri = urlPart.Trim();
+                            var urlPart = parts.FirstOrDefault(p => p.StartsWith("http"));
+                            if(urlPart != null)
+                            {
+                                uri = urlPart.Trim();
+                            }
                         }
                     }
                 }
@@ -268,6 +269,25 @@ namespace Bit.Android
                     }
                 }
             }
+        }
+
+        public class Browser
+        {
+            public Browser(string packageName, string uriViewId)
+            {
+                PackageName = packageName;
+                UriViewId = uriViewId;
+            }
+
+            public Browser(string packageName, string uriViewId, Func<string, string> getUriFunction)
+                : this(packageName, uriViewId)
+            {
+                GetUriFunction = getUriFunction;
+            }
+
+            public string PackageName { get; set; }
+            public string UriViewId { get; set; }
+            public Func<string, string> GetUriFunction { get; set; } = (s) => s;
         }
     }
 }
