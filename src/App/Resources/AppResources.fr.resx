@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>A propos</value>
+    <value>À propos</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Ajouter</value>
@@ -128,7 +128,7 @@
     <value>Ajouter dossier</value>
   </data>
   <data name="AddLogin" xml:space="preserve">
-    <value>Ajouter site</value>
+    <value>Ajouter identifiant</value>
     <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -209,7 +209,7 @@
     <value>Ouvrir un ticket dans notre dépôt Github.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Utiliser votre empreinte pour contrôle.</value>
+    <value>Utiliser votre empreinte pour vous identifier.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Dossier</value>
@@ -323,7 +323,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="LoginDeleted" xml:space="preserve">
-    <value>Le site a été supprimé.</value>
+    <value>L'identifiant a été supprimé.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="LoginNoName" xml:space="preserve">
@@ -468,7 +468,7 @@
     <value>Session actuelle</value>
   </data>
   <data name="EditLogin" xml:space="preserve">
-    <value>Modifier Site</value>
+    <value>Modifier Identifiant</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Activer la synchronisation automatique</value>
@@ -517,7 +517,7 @@
     <value>Favori</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Empreintre</value>
+    <value>Empreinte</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>Générer un mot de passe</value>
@@ -541,7 +541,7 @@
     <value>Longueur</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Verrouiler</value>
+    <value>Verrouiller</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 minutes</value>
@@ -566,7 +566,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Identifiez-vous pour créez un nouveau compte pour accéder à votre coffre sécurisé.</value>
+    <value>Identifiez-vous ou créez un nouveau compte pour accéder à votre coffre sécurisé.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Gérer</value>
@@ -604,19 +604,19 @@
     <value>Jamais</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
-    <value>Nouveau site créé.</value>
+    <value>Nouvel identifiant créé.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Aucun favori dans votre coffre.</value>
   </data>
   <data name="NoLogins" xml:space="preserve">
-    <value>Aucun site dans votre coffre.</value>
+    <value>Aucun identifiant dans votre coffre.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
-    <value>Aucun site dans votre coffre pour ce site web. Appuyez pour en ajouter un.</value>
+    <value>Aucun identifiant dans votre coffre pour ce site web. Appuyez pour en ajouter un.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Ce site n'a ni nom d'utilisateur ni mot de passe de configuré.</value>
+    <value>Cet identifiant n'a ni nom d'utilisateur ni mot de passe de configuré.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, compris !</value>
@@ -647,20 +647,20 @@
     <value>Nous nous avons envoyé un e-mail avec l'indice de votre mot de passe.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Êtes-vous sûr(e) d'écraser le mot de passe existant ?</value>
+    <value>Êtes-vous sûr(e) de vouloir écraser le mot de passe existant ?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden conserve automatiquement votre coffre synchronisé en utilisant des notifications push. Pour la meilleure expérience possible, veuillez choisir "Ok" sur la boîte de dialoque suivante (activation des notifications push).</value>
+    <value>bitwarden conserve automatiquement votre coffre synchronisé en utilisant des notifications push. Pour la meilleure expérience possible, veuillez choisir "Ok" sur la boîte de dialogue suivante (activation des notifications push).</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
     <value>Noter l'application</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Merci de nous aider en postant un commentaire positif !</value>
+    <value>Merci de nous aider en rédigeant un commentaire positif !</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Les notes des magasins d'applications sont réinitialisées à chaque nouvelle version de bitwarden. Merci de nous aider en postant un commentaire positif !</value>
+    <value>Les notes des magasins d'applications sont réinitialisées à chaque nouvelle version de bitwarden. Merci de nous aider en rédigeant un commentaire positif !</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regénérer un mot de passe</value>
@@ -690,7 +690,7 @@
     <value>Informations sur le site</value>
   </data>
   <data name="LoginUpdated" xml:space="preserve">
-    <value>Site mis à jour.</value>
+    <value>Identifiant mis à jour.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Soumission...</value>
@@ -720,7 +720,7 @@
     <value>L'authentification à double facteurs rend votre compte plus sécurisé en vous demandant la saisie d'un code de sécurité à chaque identification depuis l'application d'authentification. L'identification à double facteurs peut être activée dans le coffre web sur bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Déverrouiler avec {0}</value>
+    <value>Déverrouiller avec {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Déverrouiller avec un code PIN</value>
@@ -745,7 +745,7 @@
     <value>Application d'authentification perdue ?</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Sites</value>
+    <value>Identifiants</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -756,5 +756,64 @@
   </data>
   <data name="Translations" xml:space="preserve">
     <value>Traductions</value>
+  </data>
+<data name="LoginsForUri" xml:space="preserve">
+    <value>Identifiants pour {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoLoginsForUri" xml:space="preserve">
+    <value>Il n'y a aucun identifiant dans votre coffre pour {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
+    <value>Lorsque vous voyez une notification de remplissage automatique de la part de bitwarden, vous pouvez la toucher pour démarrer le service de remplissage automatique.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Touchez cette notification pour remplir automatiquement vos informations de connexion à partir de votre coffre.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
+    <value>Dans vos paramètres Android, allez dans «Accessibilité»</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. Dans les paramètres d'accessibilité d'Android, sélectionnez «bitwarden» dans la section «Services».</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. Activez l'interrupteur et appuyez sur OK pour accepter.</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Désactivé</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Activé</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>État</value>
+  </data>
+  <data name="Beta" xml:space="preserve">
+    <value>Bêta</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
+    <value>L'option de remplissage automatique est la façon la plus simple d'ajouter de nouveaux identifiants à votre coffre. Apprenez-en plus sur l'option de remplissage automatique de bitwarden en vous rendant dans le menu «Outils».</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>Remplissage automatique</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>Voulez vous remplir automatiquement ou voir cet identifiant?</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir remplir automatiquement cet identifiant? Il ne correspond pas complètement à «{0}».</value>
+  </data>
+  <data name="MatchingLogins" xml:space="preserve">
+    <value>Identifiants correspondants</value>
+  </data>
+  <data name="PossibleMatchingLogins" xml:space="preserve">
+    <value>Identifiants pouvant correspondre</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>Vous recherchez un identifiant pour remplir automatiquement "{0}".</value>
   </data>
 </root>
