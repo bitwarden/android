@@ -309,7 +309,7 @@ namespace Bit.App.Pages
                     _page.Uri.StartsWith("http") ? "Website" : "App");
                 Application.Current.MainPage = new MainPage(_page.Uri);
                 _page.UserDialogs.Toast(string.Format(AppResources.BitwardenAutofillServiceSearch, _page._name),
-                    TimeSpan.FromSeconds(5));
+                    TimeSpan.FromSeconds(10));
             }
         }
 
