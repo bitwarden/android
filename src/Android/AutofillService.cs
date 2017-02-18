@@ -78,7 +78,7 @@ namespace Bit.Android
                     }
 
                     var passwordNodes = GetWindowNodes(root, e, n => n.Password);
-                    if(passwordNodes.Any())
+                    if(passwordNodes.Count > 0)
                     {
                         var uri = GetUri(root);
                         if(uri != null && !uri.Contains(BitwardenWebsite))
@@ -238,24 +238,28 @@ namespace Bit.Android
             editTextNode.PerformAction(global::Android.Views.Accessibility.Action.SetText, bundle);
         }
 
-        private IEnumerable<AccessibilityNodeInfo> GetWindowNodes(AccessibilityNodeInfo n,
-            AccessibilityEvent e, Func<AccessibilityNodeInfo, bool> condition)
+        private List<AccessibilityNodeInfo> GetWindowNodes(AccessibilityNodeInfo n,
+            AccessibilityEvent e, Func<AccessibilityNodeInfo, bool> condition, List<AccessibilityNodeInfo> nodes = null)
         {
+            if(nodes == null)
+            {
+                nodes = new List<AccessibilityNodeInfo>();
+            }
+
             if(n != null)
             {
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
                 {
-                    yield return n;
+                    nodes.Add(n);
                 }
 
                 for(int i = 0; i < n.ChildCount; i++)
                 {
-                    foreach(var node in GetWindowNodes(n.GetChild(i), e, condition))
-                    {
-                        yield return node;
-                    }
+                    nodes.AddRange(GetWindowNodes(n.GetChild(i), e, condition, nodes));
                 }
             }
+
+            return nodes;
         }
 
         public class Browser
