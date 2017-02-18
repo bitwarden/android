@@ -253,9 +253,9 @@ namespace Bit.Android
                     nodes.Add(n);
                 }
 
-                for(int i = 0; i < n.ChildCount; i++)
+                for(var i = 0; i < n.ChildCount; i++)
                 {
-                    nodes.AddRange(GetWindowNodes(n.GetChild(i), e, condition, nodes));
+                    GetWindowNodes(n.GetChild(i), e, condition, nodes);
                 }
             }
 
