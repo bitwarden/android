@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Bit.Android.Controls;
 using Bit.App.Controls;
 using Xamarin.Forms;

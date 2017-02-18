@@ -25,18 +25,21 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<SettingsFolderPageModel> Folders { get; private set; } = new ExtendedObservableCollection<SettingsFolderPageModel>();
+        public ExtendedObservableCollection<SettingsFolderPageModel> Folders { get; private set; }
+            = new ExtendedObservableCollection<SettingsFolderPageModel>();
+        public ListView ListView { get; set; }
+        private AddFolderToolBarItem AddItem { get; set; }
 
         private void Init()
         {
-            ToolbarItems.Add(new AddFolderToolBarItem(this));
+            AddItem = new AddFolderToolBarItem(this);
+            ToolbarItems.Add(AddItem);
 
-            var listView = new ListView
+            ListView = new ListView
             {
-                ItemsSource = Folders
+                ItemsSource = Folders,
+                ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this))
             };
-            listView.ItemSelected += FolderSelected;
-            listView.ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this));
 
             if(Device.OS == TargetPlatform.iOS)
             {
@@ -44,13 +47,22 @@ namespace Bit.App.Pages
             }
 
             Title = AppResources.Folders;
-            Content = listView;
+            Content = ListView;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            ListView.ItemSelected += FolderSelected;
+            AddItem.InitEvents();
             LoadFoldersAsync().Wait();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ListView.ItemSelected -= FolderSelected;
+            AddItem.Dispose();
         }
 
         private async Task LoadFoldersAsync()
@@ -67,7 +79,7 @@ namespace Bit.App.Pages
             await Navigation.PushForDeviceAsync(page);
         }
 
-        private class AddFolderToolBarItem : ToolbarItem
+        private class AddFolderToolBarItem : ExtendedToolbarItem
         {
             private readonly SettingsListFoldersPage _page;
 
@@ -76,10 +88,10 @@ namespace Bit.App.Pages
                 _page = page;
                 Text = AppResources.Add;
                 Icon = "plus";
-                Clicked += ClickedItem;
+                ClickAction = () => ClickedItem();
             }
 
-            private async void ClickedItem(object sender, EventArgs e)
+            private async void ClickedItem()
             {
                 var page = new SettingsAddFolderPage();
                 await _page.Navigation.PushForDeviceAsync(page);

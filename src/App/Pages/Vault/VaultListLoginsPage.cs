@@ -277,7 +277,7 @@ namespace Bit.App.Pages
             ListView.ItemSelected -= LoginSelected;
             Search.TextChanged -= SearchBar_TextChanged;
             Search.SearchButtonPressed -= SearchBar_SearchButtonPressed;
-            AddLoginItem.Dispose();
+            AddLoginItem?.Dispose();
         }
 
         protected override bool OnBackButtonPressed()

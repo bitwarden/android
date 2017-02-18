@@ -82,8 +82,14 @@ namespace Bit.App.Pages
             GeneratorCell.Tapped += GeneratorCell_Tapped;
             WebCell.Tapped += WebCell_Tapped;
             ImportCell.Tapped += ImportCell_Tapped;
-            ExtensionCell.Tapped += ExtensionCell_Tapped;
-            AutofillCell.Tapped += AutofillCell_Tapped;
+            if(ExtensionCell != null)
+            {
+                ExtensionCell.Tapped += ExtensionCell_Tapped;
+            }
+            if(AutofillCell != null)
+            {
+                AutofillCell.Tapped += AutofillCell_Tapped;
+            }
         }
 
         protected override void OnDisappearing()
@@ -92,8 +98,14 @@ namespace Bit.App.Pages
             GeneratorCell.Tapped -= GeneratorCell_Tapped;
             WebCell.Tapped -= WebCell_Tapped;
             ImportCell.Tapped -= ImportCell_Tapped;
-            ExtensionCell.Tapped -= ExtensionCell_Tapped;
-            AutofillCell.Tapped -= AutofillCell_Tapped;
+            if(ExtensionCell != null)
+            {
+                ExtensionCell.Tapped -= ExtensionCell_Tapped;
+            }
+            if(AutofillCell != null)
+            {
+                AutofillCell.Tapped -= AutofillCell_Tapped;
+            }
 
         }
 

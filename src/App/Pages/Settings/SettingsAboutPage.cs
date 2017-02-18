@@ -18,6 +18,8 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public ExtendedTextCell CreditsCell { get; set; }
+
         public void Init()
         {
             var logo = new CachedImage
@@ -43,12 +45,11 @@ namespace Bit.App.Pages
                 Padding = new Thickness(0, 40, 0, 0)
             };
 
-            var creditsCell = new ExtendedTextCell
+            CreditsCell = new ExtendedTextCell
             {
                 Text = AppResources.Credits,
                 ShowDisclousure = true
             };
-            creditsCell.Tapped += RateCell_Tapped;
 
             var table = new ExtendedTableView
             {
@@ -60,7 +61,7 @@ namespace Bit.App.Pages
                 {
                     new TableSection
                     {
-                        creditsCell
+                        CreditsCell
                     }
                 }
             };
@@ -89,6 +90,18 @@ namespace Bit.App.Pages
         private void RateCell_Tapped(object sender, EventArgs e)
         {
             Navigation.PushAsync(new SettingsCreditsPage());
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            CreditsCell.Tapped += RateCell_Tapped;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            CreditsCell.Tapped -= RateCell_Tapped;
         }
     }
 }

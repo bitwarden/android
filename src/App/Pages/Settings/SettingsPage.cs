@@ -37,6 +37,17 @@ namespace Bit.App.Pages
         private ExtendedSwitchCell PinCell { get; set; }
         private ExtendedSwitchCell FingerprintCell { get; set; }
         private ExtendedTextCell LockOptionsCell { get; set; }
+        private ExtendedTextCell TwoStepCell { get; set; }
+        private ExtendedTextCell ChangeMasterPasswordCell { get; set; }
+        private ExtendedTextCell ChangeEmailCell { get; set; }
+        private ExtendedTextCell FoldersCell { get; set; }
+        private ExtendedTextCell SyncCell { get; set; }
+        private ExtendedTextCell LockCell { get; set; }
+        private ExtendedTextCell LogOutCell { get; set; }
+        private ExtendedTextCell AboutCell { get; set; }
+        private ExtendedTextCell HelpCell { get; set; }
+        private ExtendedTextCell RateCell { get; set; }
+        private LongDetailViewCell RateCellLong { get; set; }
         private ExtendedTableView Table { get; set; }
 
         private void Init()
@@ -46,7 +57,6 @@ namespace Bit.App.Pages
                 Text = AppResources.UnlockWithPIN,
                 On = _settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false)
             };
-            PinCell.OnChanged += PinCell_Changed;
 
             LockOptionsCell = new ExtendedTextCell
             {
@@ -54,20 +64,18 @@ namespace Bit.App.Pages
                 Detail = GetLockOptionsDetailsText(),
                 ShowDisclousure = true
             };
-            LockOptionsCell.Tapped += LockOptionsCell_Tapped;
 
-            var twoStepCell = new ExtendedTextCell
+            TwoStepCell = new ExtendedTextCell
             {
                 Text = AppResources.TwoStepLogin,
                 ShowDisclousure = true
             };
-            twoStepCell.Tapped += TwoStepCell_Tapped; ;
 
             var securitySecion = new TableSection(AppResources.Security)
             {
                 LockOptionsCell,
                 PinCell,
-                twoStepCell
+                TwoStepCell
             };
 
             if(_fingerprint.IsAvailable)
@@ -80,87 +88,76 @@ namespace Bit.App.Pages
                     On = _settings.GetValueOrDefault(Constants.SettingFingerprintUnlockOn, false),
                     IsEnabled = _fingerprint.IsAvailable
                 };
-                FingerprintCell.OnChanged += FingerprintCell_Changed;
                 securitySecion.Insert(1, FingerprintCell);
             }
 
-            var changeMasterPasswordCell = new ExtendedTextCell
+            ChangeMasterPasswordCell = new ExtendedTextCell
             {
                 Text = AppResources.ChangeMasterPassword,
                 ShowDisclousure = true
             };
-            changeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
 
-            var changeEmailCell = new ExtendedTextCell
+            ChangeEmailCell = new ExtendedTextCell
             {
                 Text = AppResources.ChangeEmail,
                 ShowDisclousure = true
             };
-            changeEmailCell.Tapped += ChangeEmailCell_Tapped;
 
-            var foldersCell = new ExtendedTextCell
+            FoldersCell = new ExtendedTextCell
             {
                 Text = AppResources.Folders,
                 ShowDisclousure = true
             };
-            foldersCell.Tapped += FoldersCell_Tapped;
 
-            var syncCell = new ExtendedTextCell
+            SyncCell = new ExtendedTextCell
             {
                 Text = AppResources.Sync,
                 ShowDisclousure = true
             };
-            syncCell.Tapped += SyncCell_Tapped;
 
-            var lockCell = new ExtendedTextCell
+            LockCell = new ExtendedTextCell
             {
                 Text = AppResources.Lock
             };
-            lockCell.Tapped += LockCell_Tapped;
 
-            var logOutCell = new ExtendedTextCell
+            LogOutCell = new ExtendedTextCell
             {
                 Text = AppResources.LogOut
             };
-            logOutCell.Tapped += LogOutCell_Tapped;
 
-            var aboutCell = new ExtendedTextCell
+            AboutCell = new ExtendedTextCell
             {
                 Text = AppResources.About,
                 ShowDisclousure = true
             };
-            aboutCell.Tapped += AboutCell_Tapped;
 
-            var helpCell = new ExtendedTextCell
+            HelpCell = new ExtendedTextCell
             {
                 Text = AppResources.HelpAndFeedback,
                 ShowDisclousure = true
             };
-            helpCell.Tapped += HelpCell_Tapped;
 
             var otherSection = new TableSection(AppResources.Other)
             {
-                aboutCell,
-                helpCell
+                AboutCell,
+                HelpCell
             };
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                var rateCell = new LongDetailViewCell(AppResources.RateTheApp, AppResources.RateTheAppDescriptionAppStore);
-                rateCell.Tapped += RateCell_Tapped;
-                otherSection.Add(rateCell);
+                RateCellLong = new LongDetailViewCell(AppResources.RateTheApp, AppResources.RateTheAppDescriptionAppStore);
+                otherSection.Add(RateCellLong);
             }
             else
             {
-                var rateCell = new ExtendedTextCell
+                RateCell = new ExtendedTextCell
                 {
                     Text = AppResources.RateTheApp,
                     Detail = AppResources.RateTheAppDescription,
                     ShowDisclousure = true,
                     DetailLineBreakMode = LineBreakMode.WordWrap
                 };
-                rateCell.Tapped += RateCell_Tapped;
-                otherSection.Add(rateCell);
+                otherSection.Add(RateCell);
             }
 
             Table = new CustomTable
@@ -170,18 +167,18 @@ namespace Bit.App.Pages
                     securitySecion,
                     new TableSection(AppResources.Account)
                     {
-                        changeMasterPasswordCell,
-                        changeEmailCell
+                        ChangeMasterPasswordCell,
+                        ChangeEmailCell
                     },
                     new TableSection(AppResources.Manage)
                     {
-                        foldersCell,
-                        syncCell
+                        FoldersCell,
+                        SyncCell
                     },
                     new TableSection(AppResources.CurrentSession)
                     {
-                        lockCell,
-                        logOutCell
+                        LockCell,
+                        LogOutCell
                     },
                     otherSection
                 }
@@ -189,6 +186,72 @@ namespace Bit.App.Pages
 
             Title = AppResources.Settings;
             Content = Table;
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+
+            PinCell.OnChanged += PinCell_Changed;
+            LockOptionsCell.Tapped += LockOptionsCell_Tapped;
+            TwoStepCell.Tapped += TwoStepCell_Tapped;
+            ChangeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
+
+            if(FingerprintCell != null)
+            {
+                FingerprintCell.OnChanged += FingerprintCell_Changed;
+            }
+
+            ChangeEmailCell.Tapped += ChangeEmailCell_Tapped;
+            FoldersCell.Tapped += FoldersCell_Tapped;
+            SyncCell.Tapped += SyncCell_Tapped;
+            LockCell.Tapped += LockCell_Tapped;
+            LogOutCell.Tapped += LogOutCell_Tapped;
+            AboutCell.Tapped += AboutCell_Tapped;
+            HelpCell.Tapped += HelpCell_Tapped;
+
+            if(RateCellLong != null)
+            {
+                RateCellLong.Tapped += RateCell_Tapped;
+            }
+
+            if(RateCell != null)
+            {
+                RateCell.Tapped += RateCell_Tapped;
+            }
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+
+            PinCell.OnChanged -= PinCell_Changed;
+            LockOptionsCell.Tapped -= LockOptionsCell_Tapped;
+            TwoStepCell.Tapped -= TwoStepCell_Tapped;
+            ChangeMasterPasswordCell.Tapped -= ChangeMasterPasswordCell_Tapped;
+
+            if(FingerprintCell != null)
+            {
+                FingerprintCell.OnChanged -= FingerprintCell_Changed;
+            }
+
+            ChangeEmailCell.Tapped -= ChangeEmailCell_Tapped;
+            FoldersCell.Tapped -= FoldersCell_Tapped;
+            SyncCell.Tapped -= SyncCell_Tapped;
+            LockCell.Tapped -= LockCell_Tapped;
+            LogOutCell.Tapped -= LogOutCell_Tapped;
+            AboutCell.Tapped -= AboutCell_Tapped;
+            HelpCell.Tapped -= HelpCell_Tapped;
+
+            if(RateCellLong != null)
+            {
+                RateCellLong.Tapped -= RateCell_Tapped;
+            }
+
+            if(RateCell != null)
+            {
+                RateCell.Tapped -= RateCell_Tapped;
+            }
         }
 
         private async void TwoStepCell_Tapped(object sender, EventArgs e)
@@ -340,8 +403,7 @@ namespace Bit.App.Pages
             if(cell.On && !_settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false))
             {
                 cell.On = false;
-                var pinPage = new SettingsPinPage();
-                pinPage.OnPinEntered += PinEntered;
+                var pinPage = new SettingsPinPage((page) => PinEntered(page));
                 Navigation.PushModalAsync(new ExtendedNavigationPage(pinPage));
             }
             else if(!cell.On)
@@ -350,9 +412,8 @@ namespace Bit.App.Pages
             }
         }
 
-        private void PinEntered(object sender, EventArgs args)
+        private void PinEntered(SettingsPinPage page)
         {
-            var page = sender as SettingsPinPage;
             page.PinControl.Entry.Unfocus();
             page.Navigation.PopModalAsync();
 

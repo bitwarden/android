@@ -18,14 +18,21 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public ExtendedTextCell EmailCell { get; set; }
+        public ExtendedTextCell WebsiteCell { get; set; }
+        public ExtendedTextCell BugCell { get; set; }
+        public StackLayout StackLayout { get; set; }
+        private CustomLabel EmailLabel { get; set; }
+        private CustomLabel WebsiteLabel { get; set; }
+        private CustomLabel BugLabel { get; set; }
+
         public void Init()
         {
-            var emailCell = new ExtendedTextCell
+            EmailCell = new ExtendedTextCell
             {
                 Text = AppResources.EmailUs,
                 ShowDisclousure = true
             };
-            emailCell.Tapped += EmailCell_Tapped;
 
             var emailTable = new CustomTableView
             {
@@ -33,22 +40,21 @@ namespace Bit.App.Pages
                 {
                     new TableSection
                     {
-                        emailCell
+                        EmailCell
                     }
                 }
             };
 
-            var emailLabel = new CustomLabel(this)
+            EmailLabel = new CustomLabel(this)
             {
                 Text = AppResources.EmailUsDescription
             };
 
-            var websiteCell = new ExtendedTextCell
+            WebsiteCell = new ExtendedTextCell
             {
                 Text = AppResources.VisitOurWebsite,
                 ShowDisclousure = true
             };
-            websiteCell.Tapped += WebsiteCell_Tapped;
 
             var websiteTable = new CustomTableView
             {
@@ -57,22 +63,21 @@ namespace Bit.App.Pages
                 {
                     new TableSection
                     {
-                        websiteCell
+                        WebsiteCell
                     }
                 }
             };
 
-            var websiteLabel = new CustomLabel(this)
+            WebsiteLabel = new CustomLabel(this)
             {
                 Text = AppResources.VisitOurWebsiteDescription
             };
 
-            var bugCell = new ExtendedTextCell
+            BugCell = new ExtendedTextCell
             {
                 Text = AppResources.FileBugReport,
                 ShowDisclousure = true
             };
-            bugCell.Tapped += BugCell_Tapped;
 
             var bugTable = new CustomTableView
             {
@@ -81,27 +86,20 @@ namespace Bit.App.Pages
                 {
                     new TableSection
                     {
-                        bugCell
+                        BugCell
                     }
                 }
             };
 
-            var bugLabel = new CustomLabel(this)
+            BugLabel = new CustomLabel(this)
             {
                 Text = AppResources.FileBugReportDescription
             };
 
-            var stackLayout = new StackLayout
+            StackLayout = new StackLayout
             {
-                Children = { emailTable, emailLabel, websiteTable, websiteLabel, bugTable, bugLabel },
+                Children = { emailTable, EmailLabel, websiteTable, WebsiteLabel, bugTable, BugLabel },
                 Spacing = 0
-            };
-
-            stackLayout.LayoutChanged += (sender, args) =>
-            {
-                websiteLabel.WidthRequest = stackLayout.Bounds.Width - websiteLabel.Bounds.Left * 2;
-                emailLabel.WidthRequest = stackLayout.Bounds.Width - emailLabel.Bounds.Left * 2;
-                bugLabel.WidthRequest = stackLayout.Bounds.Width - bugLabel.Bounds.Left * 2;
             };
 
             if(Device.OS == TargetPlatform.iOS)
@@ -110,7 +108,32 @@ namespace Bit.App.Pages
             }
 
             Title = AppResources.HelpAndFeedback;
-            Content = new ScrollView { Content = stackLayout };
+            Content = new ScrollView { Content = StackLayout };
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            EmailCell.Tapped += EmailCell_Tapped;
+            WebsiteCell.Tapped += WebsiteCell_Tapped;
+            BugCell.Tapped += BugCell_Tapped;
+            StackLayout.LayoutChanged += StackLayout_LayoutChanged;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            EmailCell.Tapped -= EmailCell_Tapped;
+            WebsiteCell.Tapped -= WebsiteCell_Tapped;
+            BugCell.Tapped -= BugCell_Tapped;
+            StackLayout.LayoutChanged -= StackLayout_LayoutChanged;
+        }
+
+        private void StackLayout_LayoutChanged(object sender, EventArgs e)
+        {
+            WebsiteLabel.WidthRequest = StackLayout.Bounds.Width - WebsiteLabel.Bounds.Left * 2;
+            EmailLabel.WidthRequest = StackLayout.Bounds.Width - EmailLabel.Bounds.Left * 2;
+            BugLabel.WidthRequest = StackLayout.Bounds.Width - BugLabel.Bounds.Left * 2;
         }
 
         private void EmailCell_Tapped(object sender, EventArgs e)

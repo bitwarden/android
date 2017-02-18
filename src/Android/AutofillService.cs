@@ -154,10 +154,10 @@ namespace Bit.Android
         {
             if(addressNode?.Text != null)
             {
-                uri = browser.GetUriFunction(addressNode.Text);
+                uri = browser.GetUriFunction(addressNode.Text).Trim();
                 if(uri != null && uri.Contains("."))
                 {
-                    if(!uri.Contains("://"))
+                    if(!uri.Contains("://") && !uri.Contains(" "))
                     {
                         uri = string.Concat("http://", uri);
                     }

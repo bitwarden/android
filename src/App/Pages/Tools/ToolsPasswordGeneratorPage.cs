@@ -36,6 +36,10 @@ namespace Bit.App.Pages
         public PasswordGeneratorPageModel Model { get; private set; } = new PasswordGeneratorPageModel();
         public Label Password { get; private set; }
         public SliderViewCell SliderCell { get; private set; }
+        public TapGestureRecognizer Tgr { get; set; }
+        public ExtendedTextCell SettingsCell { get; set; }
+        public ExtendedTextCell RegenerateCell { get; set; }
+        public ExtendedTextCell CopyCell { get; set; }
 
         public void Init()
         {
@@ -49,20 +53,16 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start
             };
 
-            var tgr = new TapGestureRecognizer();
-            tgr.Tapped += Tgr_Tapped;
-            Password.GestureRecognizers.Add(tgr);
+            Tgr = new TapGestureRecognizer();
+            Password.GestureRecognizers.Add(Tgr);
             Password.SetBinding<PasswordGeneratorPageModel>(Label.TextProperty, m => m.Password);
 
             SliderCell = new SliderViewCell(this, _passwordGenerationService, _settings);
-            var settingsCell = new ExtendedTextCell { Text = AppResources.MoreSettings, ShowDisclousure = true };
-            settingsCell.Tapped += SettingsCell_Tapped;
+            SettingsCell = new ExtendedTextCell { Text = AppResources.MoreSettings, ShowDisclousure = true };
 
             var buttonColor = Color.FromHex("3c8dbc");
-            var regenerateCell = new ExtendedTextCell { Text = AppResources.RegeneratePassword, TextColor = buttonColor };
-            regenerateCell.Tapped += RegenerateCell_Tapped; ;
-            var copyCell = new ExtendedTextCell { Text = AppResources.CopyPassword, TextColor = buttonColor };
-            copyCell.Tapped += CopyCell_Tapped;
+            RegenerateCell = new ExtendedTextCell { Text = AppResources.RegeneratePassword, TextColor = buttonColor };
+            CopyCell = new ExtendedTextCell { Text = AppResources.CopyPassword, TextColor = buttonColor };
 
             var table = new ExtendedTableView
             {
@@ -75,13 +75,13 @@ namespace Bit.App.Pages
                 {
                     new TableSection
                     {
-                        regenerateCell,
-                        copyCell
+                        RegenerateCell,
+                        CopyCell
                     },
                     new TableSection(AppResources.Options)
                     {
                         SliderCell,
-                        settingsCell
+                        SettingsCell
                     }
                 }
             };
@@ -142,6 +142,12 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            Tgr.Tapped += Tgr_Tapped;
+            RegenerateCell.Tapped += RegenerateCell_Tapped;
+            SettingsCell.Tapped += SettingsCell_Tapped;
+            CopyCell.Tapped += CopyCell_Tapped;
+            SliderCell.InitEvents();
+
             if(_fromAutofill)
             {
                 _googleAnalyticsService.TrackExtensionEvent("GeneratedPassword");
@@ -152,6 +158,16 @@ namespace Bit.App.Pages
             }
             Model.Password = _passwordGenerationService.GeneratePassword();
             Model.Length = _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10).ToString();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            Tgr.Tapped -= Tgr_Tapped;
+            RegenerateCell.Tapped -= RegenerateCell_Tapped;
+            SettingsCell.Tapped -= SettingsCell_Tapped;
+            CopyCell.Tapped -= CopyCell_Tapped;
+            SliderCell.Dispose();
         }
 
         private void RegenerateCell_Tapped(object sender, EventArgs e)
@@ -192,7 +208,7 @@ namespace Bit.App.Pages
         }
 
         // TODO: move to standalone reusable control
-        public class SliderViewCell : ExtendedViewCell
+        public class SliderViewCell : ExtendedViewCell, IDisposable
         {
             private readonly ToolsPasswordGeneratorPage _page;
             private readonly IPasswordGenerationService _passwordGenerationService;
@@ -234,8 +250,6 @@ namespace Bit.App.Pages
 
                 Value.SetBinding<PasswordGeneratorPageModel>(Label.TextProperty, m => m.Length);
 
-                LengthSlider.ValueChanged += Slider_ValueChanged;
-
                 var stackLayout = new StackLayout
                 {
                     Orientation = StackOrientation.Horizontal,
@@ -262,6 +276,16 @@ namespace Bit.App.Pages
                 _settings.AddOrUpdateValue(Constants.PasswordGeneratorLength, length);
                 _page.Model.Length = length.ToString();
                 _page.Model.Password = _passwordGenerationService.GeneratePassword();
+            }
+
+            public void InitEvents()
+            {
+                LengthSlider.ValueChanged += Slider_ValueChanged;
+            }
+
+            public void Dispose()
+            {
+                LengthSlider.ValueChanged -= Slider_ValueChanged;
             }
         }
     }

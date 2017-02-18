@@ -15,9 +15,11 @@ namespace Bit.App.Pages
     {
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
+        private Action<SettingsPinPage> _pinEnteredAction;
 
-        public SettingsPinPage()
+        public SettingsPinPage(Action<SettingsPinPage> pinEnteredAction)
         {
+            _pinEnteredAction = pinEnteredAction;
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
 
@@ -26,7 +28,7 @@ namespace Bit.App.Pages
 
         public PinPageModel Model { get; set; } = new PinPageModel();
         public PinControl PinControl { get; set; }
-        public EventHandler OnPinEntered;
+        public TapGestureRecognizer Tgr { get; set; }
 
         public void Init()
         {
@@ -50,10 +52,9 @@ namespace Bit.App.Pages
                 Children = { PinControl.Label, instructionLabel, PinControl.Entry }
             };
 
-            var tgr = new TapGestureRecognizer();
-            tgr.Tapped += Tgr_Tapped;
-            PinControl.Label.GestureRecognizers.Add(tgr);
-            instructionLabel.GestureRecognizers.Add(tgr);
+            Tgr = new TapGestureRecognizer();
+            PinControl.Label.GestureRecognizers.Add(Tgr);
+            instructionLabel.GestureRecognizers.Add(Tgr);
 
             if(Device.OS == TargetPlatform.iOS)
             {
@@ -62,18 +63,14 @@ namespace Bit.App.Pages
 
             Title = AppResources.SetPIN;
             Content = stackLayout;
-            Content.GestureRecognizers.Add(tgr);
+            Content.GestureRecognizers.Add(Tgr);
             BindingContext = Model;
-        }
-
-        private void Tgr_Tapped(object sender, EventArgs e)
-        {
-            PinControl.Entry.Focus();
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            Tgr.Tapped += Tgr_Tapped;
             PinControl.OnPinEntered += PinEntered;
             PinControl.InitEvents();
             PinControl.Entry.FocusWithDelay();
@@ -83,12 +80,18 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             PinControl.Dispose();
+            Tgr.Tapped -= Tgr_Tapped;
             PinControl.OnPinEntered -= PinEntered;
         }
 
         protected void PinEntered(object sender, EventArgs args)
         {
-            OnPinEntered.Invoke(this, null);
+            _pinEnteredAction?.Invoke(this);
+        }
+
+        private void Tgr_Tapped(object sender, EventArgs e)
+        {
+            PinControl.Entry.Focus();
         }
     }
 }

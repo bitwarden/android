@@ -18,13 +18,15 @@ namespace Bit.Android.Controls
     {
         private bool _isPassword;
         private bool _toggledPassword;
+        private bool _isDisposed;
+        private ExtendedEntry _view;
 
         protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
         {
             base.OnElementChanged(e);
 
-            var view = (ExtendedEntry)Element;
-            _isPassword = view.IsPassword;
+            _view = (ExtendedEntry)Element;
+            _isPassword = _view.IsPassword;
 
             if(Control != null)
             {
@@ -36,69 +38,74 @@ namespace Bit.Android.Controls
                 }
             }
 
-            SetBorder(view);
-            SetMaxLength(view);
-            SetReturnType(view);
+            SetBorder(_view);
+            SetMaxLength(_view);
+            SetReturnType(_view);
 
             // Editor Action is called when the return button is pressed
-            Control.EditorAction += (object sender, TextView.EditorActionEventArgs args) =>
-            {
-                if(view.ReturnType != ReturnType.Next)
-                {
-                    view.Unfocus();
-                }
+            Control.EditorAction += Control_EditorAction;
 
-                // Call all the methods attached to base_entry event handler Completed
-                view.InvokeCompleted();
-            };
-
-            if(view.DisableAutocapitalize)
+            if(_view.DisableAutocapitalize)
             {
                 Control.SetRawInputType(Control.InputType |= InputTypes.TextVariationEmailAddress);
             }
 
-            if(view.Autocorrect.HasValue)
+            if(_view.Autocorrect.HasValue)
             {
                 Control.SetRawInputType(Control.InputType |= InputTypes.TextFlagNoSuggestions);
             }
 
-            view.ToggleIsPassword += (object sender, EventArgs args) =>
-            {
-                var cursorStart = Control.SelectionStart;
-                var cursorEnd = Control.SelectionEnd;
+            _view.ToggleIsPassword += ToggleIsPassword;
 
-                Control.TransformationMethod = _isPassword ? null : new PasswordTransformationMethod();
-
-                // set focus
-                Control.RequestFocus();
-
-                if(_toggledPassword)
-                {
-                    // restore cursor position
-                    Control.SetSelection(cursorStart, cursorEnd);
-                }
-                else
-                {
-                    // set cursor to end
-                    Control.SetSelection(Control.Text.Length);
-                }
-
-                // show keyboard
-                var app = XLabs.Ioc.Resolver.Resolve<global::Android.App.Application>();
-                var inputMethodManager =
-                    app.GetSystemService(global::Android.Content.Context.InputMethodService) as InputMethodManager;
-                inputMethodManager.ShowSoftInput(Control, ShowFlags.Forced);
-                inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
-
-                _isPassword = view.IsPasswordFromToggled = !_isPassword;
-                _toggledPassword = true;
-            };
-
-            if(view.FontFamily == "monospace")
+            if(_view.FontFamily == "monospace")
             {
                 Control.Typeface = Typeface.Monospace;
             }
         }
+
+        private void ToggleIsPassword(object sender, EventArgs e)
+        {
+            var cursorStart = Control.SelectionStart;
+            var cursorEnd = Control.SelectionEnd;
+
+            Control.TransformationMethod = _isPassword ? null : new PasswordTransformationMethod();
+
+            // set focus
+            Control.RequestFocus();
+
+            if(_toggledPassword)
+            {
+                // restore cursor position
+                Control.SetSelection(cursorStart, cursorEnd);
+            }
+            else
+            {
+                // set cursor to end
+                Control.SetSelection(Control.Text.Length);
+            }
+
+            // show keyboard
+            var app = XLabs.Ioc.Resolver.Resolve<global::Android.App.Application>();
+            var inputMethodManager =
+                app.GetSystemService(global::Android.Content.Context.InputMethodService) as InputMethodManager;
+            inputMethodManager.ShowSoftInput(Control, ShowFlags.Forced);
+            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
+
+            _isPassword = _view.IsPasswordFromToggled = !_isPassword;
+            _toggledPassword = true;
+        }
+
+        private void Control_EditorAction(object sender, TextView.EditorActionEventArgs e)
+        {
+            if(_view.ReturnType != ReturnType.Next)
+            {
+                _view.Unfocus();
+            }
+
+            // Call all the methods attached to base_entry event handler Completed
+            _view.InvokeCompleted();
+        }
+
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var view = (ExtendedEntry)Element;
@@ -122,6 +129,23 @@ namespace Bit.Android.Controls
             {
                 Control.Typeface = Typeface.Monospace;
             }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if(_isDisposed)
+            {
+                return;
+            }
+
+            _isDisposed = true;
+            if(disposing && Control != null)
+            {
+                _view.ToggleIsPassword -= ToggleIsPassword;
+                Control.EditorAction -= Control_EditorAction;
+            }
+
+            base.Dispose(disposing);
         }
 
         private void SetReturnType(ExtendedEntry view)

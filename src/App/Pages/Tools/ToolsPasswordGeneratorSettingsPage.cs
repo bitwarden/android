@@ -39,14 +39,12 @@ namespace Bit.App.Pages
                 Text = "A-Z",
                 On = _settings.GetValueOrDefault(Constants.PasswordGeneratorUppercase, true)
             };
-            UppercaseCell.OnChanged += UppercaseCell_OnChanged;
 
             LowercaseCell = new ExtendedSwitchCell
             {
                 Text = "a-z",
                 On = _settings.GetValueOrDefault(Constants.PasswordGeneratorLowercase, true)
             };
-            LowercaseCell.OnChanged += LowercaseCell_OnChanged;
 
             SpecialCell = new ExtendedSwitchCell
             {
@@ -59,7 +57,6 @@ namespace Bit.App.Pages
                 Text = "0-9",
                 On = _settings.GetValueOrDefault(Constants.PasswordGeneratorNumbers, true)
             };
-            NumbersCell.OnChanged += NumbersCell_OnChanged;
 
             AvoidAmbiguousCell = new ExtendedSwitchCell
             {
@@ -114,6 +111,11 @@ namespace Bit.App.Pages
             base.OnAppearing();
             SpecialCell.OnChanged += SpecialCell_OnChanged;
             AvoidAmbiguousCell.OnChanged += AvoidAmbiguousCell_OnChanged;
+            UppercaseCell.OnChanged += UppercaseCell_OnChanged;
+            LowercaseCell.OnChanged += LowercaseCell_OnChanged;
+            NumbersCell.OnChanged += NumbersCell_OnChanged;
+            NumbersMinCell.InitEvents();
+            SpecialMinCell.InitEvents();
         }
 
         protected override void OnDisappearing()
@@ -121,6 +123,11 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             SpecialCell.OnChanged -= SpecialCell_OnChanged;
             AvoidAmbiguousCell.OnChanged -= AvoidAmbiguousCell_OnChanged;
+            UppercaseCell.OnChanged -= UppercaseCell_OnChanged;
+            LowercaseCell.OnChanged -= LowercaseCell_OnChanged;
+            NumbersCell.OnChanged -= NumbersCell_OnChanged;
+            NumbersMinCell.Dispose();
+            SpecialMinCell.Dispose();
 
             _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinNumbers, 
                 Convert.ToInt32(NumbersMinCell.Stepper.Value));
