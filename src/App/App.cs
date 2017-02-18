@@ -221,20 +221,18 @@ namespace Bit.App
         {
             _authService.LogOut();
 
+            var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
+            var appIdService = Resolver.Resolve<IAppIdService>();
+            await Task.Run(() => deviceApiRepository.PutClearTokenAsync(appIdService.AppId)).ConfigureAwait(false);
+
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
             _googleAnalyticsService.RefreshUserId();
-
 
             Device.BeginInvokeOnMainThread(() => Current.MainPage = new ExtendedNavigationPage(new HomePage()));
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {
                 _userDialogs.Toast(logoutMessage);
             }
-
-            var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
-            var appIdService = Resolver.Resolve<IAppIdService>();
-            _settings.Remove(Constants.PushLastRegistrationDate);
-            await Task.Run(() => deviceApiRepository.PutClearTokenAsync(appIdService.AppId)).ConfigureAwait(false);
         }
 
         private async Task CheckLockAsync(bool forceLock)
@@ -246,6 +244,12 @@ namespace Bit.App
             }
 
             var lockType = _lockService.GetLockType(forceLock);
+            if(lockType == Enums.LockType.None)
+            {
+                return;
+            }
+
+            _settings.AddOrUpdateValue(Constants.Locked, true);
             switch(lockType)
             {
                 case Enums.LockType.Fingerprint:

@@ -187,6 +187,8 @@ namespace Bit.App.Services
             Email = null;
             _cryptoService.Key = null;
             _settings.Remove(Constants.FirstVaultLoad);
+            _settings.Remove(Constants.PushLastRegistrationDate);
+            _settings.Remove(Constants.Locked);
         }
 
         public async Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request)
