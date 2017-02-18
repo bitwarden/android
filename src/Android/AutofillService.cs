@@ -19,7 +19,6 @@ namespace Bit.Android
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "bitwarden.com";
 
-        public static bool Enabled { get; set; } = false;
         private static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
             new Browser("com.android.chrome", "url_bar"),
@@ -54,7 +53,6 @@ namespace Bit.Android
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
-            Enabled = true;
             var root = RootInActiveWindow;
             if(string.IsNullOrWhiteSpace(e.PackageName) || e.PackageName == SystemUiPackage ||
                 root?.PackageName != e.PackageName)
@@ -114,18 +112,6 @@ namespace Bit.Android
         public override void OnInterrupt()
         {
 
-        }
-
-        protected override void OnServiceConnected()
-        {
-            base.OnServiceConnected();
-            Enabled = true;
-        }
-
-        public override void OnDestroy()
-        {
-            base.OnDestroy();
-            Enabled = false;
         }
 
         private void CancelNotification()
