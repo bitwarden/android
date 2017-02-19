@@ -51,6 +51,9 @@ namespace Bit.Android
             new Browser("com.ksmobile.cb", "address_bar_edit_text")
         }.ToDictionary(n => n.PackageName);
 
+        private long _lastGc = 0;
+        private int _eventCounter = 0;
+
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var root = RootInActiveWindow;
@@ -88,7 +91,9 @@ namespace Bit.Android
                                 var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
                                 var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
                                 FillCredentials(usernameEditText, passwordNodes);
+
                                 allEditTexts = null;
+                                usernameEditText = null;
                             }
                             else
                             {
@@ -111,7 +116,16 @@ namespace Bit.Android
             }
 
             root = null;
-            GC.Collect(0);
+
+            // Do some manual GCing
+            _eventCounter++;
+            var now = Java.Lang.JavaSystem.CurrentTimeMillis();
+            if((now - _lastGc) > 60000 && _eventCounter >= 20)
+            {
+                GC.Collect(0);
+                _lastGc = now;
+                _eventCounter = 0;
+            }
         }
 
         public override void OnInterrupt()
