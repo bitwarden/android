@@ -88,6 +88,7 @@ namespace Bit.Android
                                 var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
                                 var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
                                 FillCredentials(usernameEditText, passwordNodes);
+                                allEditTexts = null;
                             }
                             else
                             {
@@ -99,6 +100,7 @@ namespace Bit.Android
                         AutofillActivity.LastCredentials = null;
                     }
 
+                    passwordNodes = null;
                     if(cancelNotification)
                     {
                         CancelNotification();
@@ -107,6 +109,9 @@ namespace Bit.Android
                 default:
                     break;
             }
+
+            root = null;
+            GC.Collect(0);
         }
 
         public override void OnInterrupt()
