@@ -51,9 +51,6 @@ namespace Bit.Android
             new Browser("com.ksmobile.cb", "address_bar_edit_text")
         }.ToDictionary(n => n.PackageName);
 
-        private long _lastGc = 0;
-        private int _eventCounter = 0;
-
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var root = RootInActiveWindow;
@@ -64,10 +61,13 @@ namespace Bit.Android
             }
 
             /*
-            var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null)
-                .Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+            var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
+            var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+            testNodes.Dispose();
+            testNodes = null;
             */
 
+            var notificationManager = ((NotificationManager)GetSystemService(NotificationService));
             switch(e.EventType)
             {
                 case EventTypes.WindowContentChanged:
@@ -76,11 +76,11 @@ namespace Bit.Android
 
                     if(e.PackageName == BitwardenPackage)
                     {
-                        CancelNotification();
+                        notificationManager.Cancel(AutoFillNotificationId);
                         break;
                     }
 
-                    var passwordNodes = GetWindowNodes(root, e, n => n.Password);
+                    var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
                     if(passwordNodes.Count > 0)
                     {
                         var uri = GetUri(root);
@@ -88,16 +88,18 @@ namespace Bit.Android
                         {
                             if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                             {
-                                var allEditTexts = GetWindowNodes(root, e, n => EditText(n));
+                                var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
                                 var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
                                 FillCredentials(usernameEditText, passwordNodes);
 
+                                allEditTexts.Dispose();
                                 allEditTexts = null;
+                                usernameEditText.Dispose();
                                 usernameEditText = null;
                             }
                             else
                             {
-                                NotifyToAutofill(uri);
+                                NotifyToAutofill(uri, notificationManager);
                                 cancelNotification = false;
                             }
                         }
@@ -105,38 +107,28 @@ namespace Bit.Android
                         AutofillActivity.LastCredentials = null;
                     }
 
+                    passwordNodes.Dispose();
                     passwordNodes = null;
+
                     if(cancelNotification)
                     {
-                        CancelNotification();
+                        notificationManager.Cancel(AutoFillNotificationId);
                     }
                     break;
                 default:
                     break;
             }
 
+            notificationManager.Dispose();
+            notificationManager = null;
+            root.Dispose();
             root = null;
-
-            // Do some manual GCing
-            _eventCounter++;
-            var now = Java.Lang.JavaSystem.CurrentTimeMillis();
-            if((now - _lastGc) > 60000 && _eventCounter >= 20)
-            {
-                GC.Collect(0);
-                _lastGc = now;
-                _eventCounter = 0;
-            }
+            e.Dispose();
         }
 
         public override void OnInterrupt()
         {
 
-        }
-
-        private void CancelNotification()
-        {
-            var notificationManager = ((NotificationManager)GetSystemService(NotificationService));
-            notificationManager.Cancel(AutoFillNotificationId);
         }
 
         private string GetUri(AccessibilityNodeInfo root)
@@ -149,6 +141,8 @@ namespace Bit.Android
                 if(addressNode != null)
                 {
                     uri = ExtractUri(uri, addressNode, SupportedBrowsers[root.PackageName]);
+                    addressNode.Dispose();
+                    addressNode = null;
                 }
             }
 
@@ -210,7 +204,7 @@ namespace Bit.Android
             return n.ClassName != null && n.ClassName.Contains("EditText");
         }
 
-        private void NotifyToAutofill(string uri)
+        private void NotifyToAutofill(string uri, NotificationManager notificationManager)
         {
             var intent = new Intent(this, typeof(AutofillActivity));
             intent.PutExtra("uri", uri);
@@ -232,8 +226,10 @@ namespace Bit.Android
                         Resource.Color.primary));
             }
 
-            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
             notificationManager.Notify(AutoFillNotificationId, builder.Build());
+
+            builder.Dispose();
+            builder = null;
         }
 
         private void FillCredentials(AccessibilityNodeInfo usernameNode, IEnumerable<AccessibilityNodeInfo> passwordNodes)
@@ -257,24 +253,31 @@ namespace Bit.Android
             editTextNode.PerformAction(global::Android.Views.Accessibility.Action.SetText, bundle);
         }
 
-        private List<AccessibilityNodeInfo> GetWindowNodes(AccessibilityNodeInfo n,
-            AccessibilityEvent e, Func<AccessibilityNodeInfo, bool> condition, List<AccessibilityNodeInfo> nodes = null)
+        private NodeList GetWindowNodes(AccessibilityNodeInfo n, AccessibilityEvent e,
+            Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null)
         {
             if(nodes == null)
             {
-                nodes = new List<AccessibilityNodeInfo>();
+                nodes = new NodeList();
             }
 
             if(n != null)
             {
+                var dispose = disposeIfUnused;
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
                 {
+                    dispose = false;
                     nodes.Add(n);
                 }
 
                 for(var i = 0; i < n.ChildCount; i++)
                 {
-                    GetWindowNodes(n.GetChild(i), e, condition, nodes);
+                    GetWindowNodes(n.GetChild(i), e, condition, true, nodes);
+                }
+
+                if(dispose)
+                {
+                    n.Dispose();
                 }
             }
 
@@ -298,6 +301,17 @@ namespace Bit.Android
             public string PackageName { get; set; }
             public string UriViewId { get; set; }
             public Func<string, string> GetUriFunction { get; set; } = (s) => s;
+        }
+
+        public class NodeList : List<AccessibilityNodeInfo>, IDisposable
+        {
+            public void Dispose()
+            {
+                foreach(var item in this)
+                {
+                    item.Dispose();
+                }
+            }
         }
     }
 }
