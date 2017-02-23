@@ -65,6 +65,7 @@ namespace Bit.Android
             var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
             testNodes.Dispose();
             testNodes = null;
+            testNodesData = null;
             */
 
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
