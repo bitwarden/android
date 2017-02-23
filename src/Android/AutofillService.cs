@@ -54,8 +54,8 @@ namespace Bit.Android
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var root = RootInActiveWindow;
-            if(string.IsNullOrWhiteSpace(e.PackageName) || e.PackageName == SystemUiPackage ||
-                root?.PackageName != e.PackageName)
+            if(e == null || root == null || string.IsNullOrWhiteSpace(e.PackageName) ||
+                e.PackageName == SystemUiPackage || root.PackageName != e.PackageName)
             {
                 return;
             }
@@ -67,7 +67,7 @@ namespace Bit.Android
             testNodes = null;
             */
 
-            var notificationManager = ((NotificationManager)GetSystemService(NotificationService));
+            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
             switch(e.EventType)
             {
                 case EventTypes.WindowContentChanged:
@@ -76,7 +76,7 @@ namespace Bit.Android
 
                     if(e.PackageName == BitwardenPackage)
                     {
-                        notificationManager.Cancel(AutoFillNotificationId);
+                        notificationManager?.Cancel(AutoFillNotificationId);
                         break;
                     }
 
@@ -112,14 +112,14 @@ namespace Bit.Android
 
                     if(cancelNotification)
                     {
-                        notificationManager.Cancel(AutoFillNotificationId);
+                        notificationManager?.Cancel(AutoFillNotificationId);
                     }
                     break;
                 default:
                     break;
             }
 
-            notificationManager.Dispose();
+            notificationManager?.Dispose();
             notificationManager = null;
             root.Dispose();
             root = null;
@@ -201,11 +201,16 @@ namespace Bit.Android
 
         private static bool EditText(AccessibilityNodeInfo n)
         {
-            return n.ClassName != null && n.ClassName.Contains("EditText");
+            return n?.ClassName?.Contains("EditText") ?? false;
         }
 
         private void NotifyToAutofill(string uri, NotificationManager notificationManager)
         {
+            if(notificationManager == null || string.IsNullOrWhiteSpace(uri))
+            {
+                return;
+            }
+
             var intent = new Intent(this, typeof(AutofillActivity));
             intent.PutExtra("uri", uri);
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
@@ -234,10 +239,10 @@ namespace Bit.Android
 
         private void FillCredentials(AccessibilityNodeInfo usernameNode, IEnumerable<AccessibilityNodeInfo> passwordNodes)
         {
-            FillEditText(usernameNode, AutofillActivity.LastCredentials.Username);
+            FillEditText(usernameNode, AutofillActivity.LastCredentials?.Username);
             foreach(var n in passwordNodes)
             {
-                FillEditText(n, AutofillActivity.LastCredentials.Password);
+                FillEditText(n, AutofillActivity.LastCredentials?.Password);
             }
         }
 
