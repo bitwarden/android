@@ -64,8 +64,6 @@ namespace Bit.Android
             var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
             var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
             testNodes.Dispose();
-            testNodes = null;
-            testNodesData = null;
             */
 
             var notificationManager = (NotificationManager)GetSystemService(NotificationService);
@@ -94,9 +92,9 @@ namespace Bit.Android
                                 FillCredentials(usernameEditText, passwordNodes);
 
                                 allEditTexts.Dispose();
-                                allEditTexts = null;
+                                //allEditTexts = null;
                                 usernameEditText.Dispose();
-                                usernameEditText = null;
+                                //usernameEditText = null;
                             }
                             else
                             {
@@ -109,7 +107,7 @@ namespace Bit.Android
                     }
 
                     passwordNodes.Dispose();
-                    passwordNodes = null;
+                    //passwordNodes = null;
 
                     if(cancelNotification)
                     {
@@ -121,9 +119,9 @@ namespace Bit.Android
             }
 
             notificationManager?.Dispose();
-            notificationManager = null;
+            //notificationManager = null;
             root.Dispose();
-            root = null;
+            //root = null;
             e.Dispose();
         }
 
@@ -143,7 +141,7 @@ namespace Bit.Android
                 {
                     uri = ExtractUri(uri, addressNode, SupportedBrowsers[root.PackageName]);
                     addressNode.Dispose();
-                    addressNode = null;
+                    //addressNode = null;
                 }
             }
 
@@ -235,7 +233,7 @@ namespace Bit.Android
             notificationManager.Notify(AutoFillNotificationId, builder.Build());
 
             builder.Dispose();
-            builder = null;
+            //builder = null;
         }
 
         private void FillCredentials(AccessibilityNodeInfo usernameNode, IEnumerable<AccessibilityNodeInfo> passwordNodes)
