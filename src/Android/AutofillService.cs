@@ -53,76 +53,76 @@ namespace Bit.Android
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
-            var root = RootInActiveWindow;
-            if(e == null || root == null || string.IsNullOrWhiteSpace(e.PackageName) ||
-                e.PackageName == SystemUiPackage || root.PackageName != e.PackageName)
+            try
             {
-                return;
-            }
+                var root = RootInActiveWindow;
+                if(e == null || root == null || string.IsNullOrWhiteSpace(e.PackageName) ||
+                    e.PackageName == SystemUiPackage || root.PackageName != e.PackageName)
+                {
+                    return;
+                }
 
-            /*
-            var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
-            var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
-            testNodes.Dispose();
-            */
+                /*
+                var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
+                var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+                testNodes.Dispose();
+                */
 
-            var notificationManager = (NotificationManager)GetSystemService(NotificationService);
-            switch(e.EventType)
-            {
-                case EventTypes.WindowContentChanged:
-                case EventTypes.WindowStateChanged:
-                    var cancelNotification = true;
+                var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+                switch(e.EventType)
+                {
+                    case EventTypes.WindowContentChanged:
+                    case EventTypes.WindowStateChanged:
+                        var cancelNotification = true;
 
-                    if(e.PackageName == BitwardenPackage)
-                    {
-                        notificationManager?.Cancel(AutoFillNotificationId);
-                        break;
-                    }
-
-                    var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
-                    if(passwordNodes.Count > 0)
-                    {
-                        var uri = GetUri(root);
-                        if(uri != null && !uri.Contains(BitwardenWebsite))
+                        if(e.PackageName == BitwardenPackage)
                         {
-                            if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
-                            {
-                                var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-                                var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
-                                FillCredentials(usernameEditText, passwordNodes);
-
-                                allEditTexts.Dispose();
-                                //allEditTexts = null;
-                                usernameEditText.Dispose();
-                                //usernameEditText = null;
-                            }
-                            else
-                            {
-                                NotifyToAutofill(uri, notificationManager);
-                                cancelNotification = false;
-                            }
+                            notificationManager?.Cancel(AutoFillNotificationId);
+                            break;
                         }
 
-                        AutofillActivity.LastCredentials = null;
-                    }
+                        var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
+                        if(passwordNodes.Count > 0)
+                        {
+                            var uri = GetUri(root);
+                            if(uri != null && !uri.Contains(BitwardenWebsite))
+                            {
+                                if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
+                                {
+                                    var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+                                    var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+                                    FillCredentials(usernameEditText, passwordNodes);
 
-                    passwordNodes.Dispose();
-                    //passwordNodes = null;
+                                    allEditTexts.Dispose();
+                                    usernameEditText.Dispose();
+                                }
+                                else
+                                {
+                                    NotifyToAutofill(uri, notificationManager);
+                                    cancelNotification = false;
+                                }
+                            }
 
-                    if(cancelNotification)
-                    {
-                        notificationManager?.Cancel(AutoFillNotificationId);
-                    }
-                    break;
-                default:
-                    break;
+                            AutofillActivity.LastCredentials = null;
+                        }
+
+                        passwordNodes.Dispose();
+
+                        if(cancelNotification)
+                        {
+                            notificationManager?.Cancel(AutoFillNotificationId);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+                notificationManager?.Dispose();
+                root.Dispose();
+                e.Dispose();
             }
-
-            notificationManager?.Dispose();
-            //notificationManager = null;
-            root.Dispose();
-            //root = null;
-            e.Dispose();
+            // Some unknown condition is causing NullReferenceException's in production. Suppress it for now.
+            catch(NullReferenceException) { }
         }
 
         public override void OnInterrupt()
@@ -141,7 +141,6 @@ namespace Bit.Android
                 {
                     uri = ExtractUri(uri, addressNode, SupportedBrowsers[root.PackageName]);
                     addressNode.Dispose();
-                    //addressNode = null;
                 }
             }
 
@@ -233,7 +232,6 @@ namespace Bit.Android
             notificationManager.Notify(AutoFillNotificationId, builder.Build());
 
             builder.Dispose();
-            //builder = null;
         }
 
         private void FillCredentials(AccessibilityNodeInfo usernameNode, IEnumerable<AccessibilityNodeInfo> passwordNodes)

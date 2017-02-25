@@ -213,29 +213,49 @@ namespace Bit.App.Pages
                 AlertNoConnection();
             }
 
-            PasswordCell.InitEvents();
-            UsernameCell.InitEvents();
-            UriCell.InitEvents();
-            NameCell.InitEvents();
-            NotesCell.InitEvents();
-            FolderCell.InitEvents();
-            PasswordCell.Button.Clicked += PasswordButton_Clicked;
-            GenerateCell.Tapped += GenerateCell_Tapped;
-            DeleteCell.Tapped += DeleteCell_Tapped;
+            PasswordCell?.InitEvents();
+            UsernameCell?.InitEvents();
+            UriCell?.InitEvents();
+            NameCell?.InitEvents();
+            NotesCell?.InitEvents();
+            FolderCell?.InitEvents();
+
+            if(PasswordCell?.Button != null)
+            {
+                PasswordCell.Button.Clicked += PasswordButton_Clicked;
+            }
+            if(GenerateCell != null)
+            {
+                GenerateCell.Tapped += GenerateCell_Tapped;
+            }
+            if(DeleteCell != null)
+            {
+                DeleteCell.Tapped += DeleteCell_Tapped;
+            }
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            PasswordCell.Dispose();
-            UsernameCell.Dispose();
-            UriCell.Dispose();
-            NameCell.Dispose();
-            NotesCell.Dispose();
-            FolderCell.Dispose();
-            PasswordCell.Button.Clicked -= PasswordButton_Clicked;
-            GenerateCell.Tapped -= GenerateCell_Tapped;
-            DeleteCell.Tapped -= DeleteCell_Tapped;
+            PasswordCell?.Dispose();
+            UsernameCell?.Dispose();
+            UriCell?.Dispose();
+            NameCell?.Dispose();
+            NotesCell?.Dispose();
+            FolderCell?.Dispose();
+
+            if(PasswordCell?.Button != null)
+            {
+                PasswordCell.Button.Clicked -= PasswordButton_Clicked;
+            }
+            if(GenerateCell != null)
+            {
+                GenerateCell.Tapped -= GenerateCell_Tapped;
+            }
+            if(DeleteCell != null)
+            {
+                DeleteCell.Tapped -= DeleteCell_Tapped;
+            }
         }
 
         private void PasswordButton_Clicked(object sender, EventArgs e)
