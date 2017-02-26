@@ -126,26 +126,19 @@ namespace Bit.App.Models.Page
                     return _uriHost;
                 }
 
-                try
-                {
-                    var host = new Uri(Uri).Host;
-
-                    DomainName domain;
-                    if(DomainName.TryParse(host, out domain))
-                    {
-                        _uriHost = domain.BaseDomain;
-                    }
-                    else
-                    {
-                        _uriHost = host;
-                    }
-
-                    return _uriHost;
-                }
-                catch
+                Uri uri;
+                if(!System.Uri.TryCreate(Uri, UriKind.Absolute, out uri))
                 {
                     return Uri;
                 }
+
+                DomainName domain;
+                if(DomainName.TryParse(uri.Host, out domain))
+                {
+                    return domain.BaseDomain;
+                }
+
+                return uri.Host;
             }
         }
 
