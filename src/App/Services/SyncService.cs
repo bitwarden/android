@@ -73,35 +73,27 @@ namespace Bit.App.Services
                 return false;
             }
 
-            switch(cipher.Result.Type)
+            try
             {
-                case Enums.CipherType.Folder:
-                    var folderData = new FolderData(cipher.Result, _authService.UserId);
-                    var existingLocalFolder = _folderRepository.GetByIdAsync(id);
-                    if(existingLocalFolder == null)
-                    {
-                        await _folderRepository.InsertAsync(folderData).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await _folderRepository.UpdateAsync(folderData).ConfigureAwait(false);
-                    }
-                    break;
-                case Enums.CipherType.Login:
-                    var loginData = new LoginData(cipher.Result, _authService.UserId);
-                    var existingLocalLogin = _loginRepository.GetByIdAsync(id);
-                    if(existingLocalLogin == null)
-                    {
-                        await _loginRepository.InsertAsync(loginData).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await _loginRepository.UpdateAsync(loginData).ConfigureAwait(false);
-                    }
-                    break;
-                default:
-                    SyncCompleted(false);
-                    return false;
+                switch(cipher.Result.Type)
+                {
+                    case Enums.CipherType.Folder:
+                        var folderData = new FolderData(cipher.Result, _authService.UserId);
+                        await _folderRepository.UpsertAsync(folderData).ConfigureAwait(false);
+                        break;
+                    case Enums.CipherType.Login:
+                        var loginData = new LoginData(cipher.Result, _authService.UserId);
+                        await _loginRepository.UpsertAsync(loginData).ConfigureAwait(false);
+                        break;
+                    default:
+                        SyncCompleted(false);
+                        return false;
+                }
+            }
+            catch(SQLite.SQLiteException)
+            {
+                SyncCompleted(false);
+                return false;
             }
 
             SyncCompleted(true);
@@ -117,9 +109,17 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            await _folderRepository.DeleteWithLoginUpdateAsync(id, revisionDate).ConfigureAwait(false);
-            SyncCompleted(true);
-            return true;
+            try
+            {
+                await _folderRepository.DeleteWithLoginUpdateAsync(id, revisionDate).ConfigureAwait(false);
+                SyncCompleted(true);
+                return true;
+            }
+            catch(SQLite.SQLiteException)
+            {
+                SyncCompleted(false);
+                return false;
+            }
         }
 
         public async Task<bool> SyncDeleteLoginAsync(string id)
@@ -131,9 +131,17 @@ namespace Bit.App.Services
 
             SyncStarted();
 
-            await _loginRepository.DeleteAsync(id).ConfigureAwait(false);
-            SyncCompleted(true);
-            return true;
+            try
+            {
+                await _loginRepository.DeleteAsync(id).ConfigureAwait(false);
+                SyncCompleted(true);
+                return true;
+            }
+            catch(SQLite.SQLiteException)
+            {
+                SyncCompleted(false);
+                return false;
+            }
         }
 
         public async Task<bool> FullSyncAsync(TimeSpan syncThreshold, bool forceSync = false)
@@ -188,8 +196,8 @@ namespace Bit.App.Services
             var logins = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Login).ToDictionary(s => s.Id);
             var folders = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Folder).ToDictionary(f => f.Id);
 
-            var loginTask = SyncLoginsAsync(logins, true);
-            var folderTask = SyncFoldersAsync(folders, true);
+            var loginTask = SyncLoginsAsync(logins);
+            var folderTask = SyncFoldersAsync(folders);
             var domainsTask = SyncDomainsAsync(domains.Result);
             await Task.WhenAll(loginTask, folderTask, domainsTask).ConfigureAwait(false);
 
@@ -228,7 +236,7 @@ namespace Bit.App.Services
             return false;
         }
 
-        private async Task SyncFoldersAsync(IDictionary<string, CipherResponse> serverFolders, bool deleteMissing)
+        private async Task SyncFoldersAsync(IDictionary<string, CipherResponse> serverFolders)
         {
             if(!_authService.IsAuthenticated)
             {
@@ -245,31 +253,25 @@ namespace Bit.App.Services
                     return;
                 }
 
-                var existingLocalFolder = localFolders.ContainsKey(serverFolder.Key) ? localFolders[serverFolder.Key] : null;
-                if(existingLocalFolder == null)
+                try
                 {
                     var data = new FolderData(serverFolder.Value, _authService.UserId);
-                    await _folderRepository.InsertAsync(data).ConfigureAwait(false);
+                    await _folderRepository.UpsertAsync(data).ConfigureAwait(false);
                 }
-                else if(existingLocalFolder.RevisionDateTime != serverFolder.Value.RevisionDate)
-                {
-                    var data = new FolderData(serverFolder.Value, _authService.UserId);
-                    await _folderRepository.UpdateAsync(data).ConfigureAwait(false);
-                }
-            }
-
-            if(!deleteMissing)
-            {
-                return;
+                catch(SQLite.SQLiteException) { }
             }
 
             foreach(var folder in localFolders.Where(localFolder => !serverFolders.ContainsKey(localFolder.Key)))
             {
-                await _folderRepository.DeleteAsync(folder.Value.Id).ConfigureAwait(false);
+                try
+                {
+                    await _folderRepository.DeleteAsync(folder.Value.Id).ConfigureAwait(false);
+                }
+                catch(SQLite.SQLiteException) { }
             }
         }
 
-        private async Task SyncLoginsAsync(IDictionary<string, CipherResponse> serverLogins, bool deleteMissing)
+        private async Task SyncLoginsAsync(IDictionary<string, CipherResponse> serverLogins)
         {
             if(!_authService.IsAuthenticated)
             {
@@ -286,27 +288,21 @@ namespace Bit.App.Services
                     return;
                 }
 
-                var existingLocalLogin = localLogins.ContainsKey(serverLogin.Key) ? localLogins[serverLogin.Key] : null;
-                if(existingLocalLogin == null)
+                try
                 {
                     var data = new LoginData(serverLogin.Value, _authService.UserId);
-                    await _loginRepository.InsertAsync(data).ConfigureAwait(false);
+                    await _loginRepository.UpsertAsync(data).ConfigureAwait(false);
                 }
-                else if(existingLocalLogin.RevisionDateTime != serverLogin.Value.RevisionDate)
-                {
-                    var data = new LoginData(serverLogin.Value, _authService.UserId);
-                    await _loginRepository.UpdateAsync(data).ConfigureAwait(false);
-                }
-            }
-
-            if(!deleteMissing)
-            {
-                return;
+                catch(SQLite.SQLiteException) { }
             }
 
             foreach(var login in localLogins.Where(localLogin => !serverLogins.ContainsKey(localLogin.Key)))
             {
-                await _loginRepository.DeleteAsync(login.Value.Id).ConfigureAwait(false);
+                try
+                {
+                    await _loginRepository.DeleteAsync(login.Value.Id).ConfigureAwait(false);
+                }
+                catch(SQLite.SQLiteException) { }
             }
         }
 
@@ -323,11 +319,15 @@ namespace Bit.App.Services
                 eqDomains.AddRange(serverDomains.GlobalEquivalentDomains.Select(d => d.Domains));
             }
 
-            await _settingsRepository.UpsertAsync(new SettingsData
+            try
             {
-                Id = _authService.UserId,
-                EquivalentDomains = JsonConvert.SerializeObject(eqDomains)
-            });
+                await _settingsRepository.UpsertAsync(new SettingsData
+                {
+                    Id = _authService.UserId,
+                    EquivalentDomains = JsonConvert.SerializeObject(eqDomains)
+                });
+            }
+            catch(SQLite.SQLiteException) { }
         }
 
         private void SyncStarted()
