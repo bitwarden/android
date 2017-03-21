@@ -1,4 +1,4 @@
-[![appveyor build](https://ci.appveyor.com/api/projects/status/github/bitwarden/mobile?branch=master&svg=true)] (https://ci.appveyor.com/project/bitwarden/mobile)
+[![appveyor build](https://ci.appveyor.com/api/projects/status/github/bitwarden/mobile?branch=master&svg=true)](https://ci.appveyor.com/project/bitwarden/mobile)
 [![Join the chat at https://gitter.im/bitwarden/Lobby](https://badges.gitter.im/bitwarden/Lobby.svg)](https://gitter.im/bitwarden/Lobby)
 
 # bitwarden mobile
