@@ -1430,6 +1430,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Opt-out of Google Analytics.
+        /// </summary>
+        public static string OptOutOfGA {
+            get {
+                return ResourceManager.GetString("OptOutOfGA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Other.
         /// </summary>
         public static string Other {

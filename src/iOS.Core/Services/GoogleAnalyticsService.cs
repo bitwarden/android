@@ -78,5 +78,10 @@ namespace Bit.iOS.Core.Services
                 _setUserId = false;
             }
         }
+
+        public void SetAppOptOut(bool optOut)
+        {
+            Gai.SharedInstance.OptOut = optOut;
+        }
     }
 }

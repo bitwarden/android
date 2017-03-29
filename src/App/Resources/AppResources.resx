@@ -302,6 +302,9 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
+  <data name="OptOutOfGA" xml:space="preserve">
+    <value>Opt-out of Google Analytics</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
     <comment>Label for a password.</comment>

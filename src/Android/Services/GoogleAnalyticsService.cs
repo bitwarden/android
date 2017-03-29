@@ -92,5 +92,10 @@ namespace Bit.Android.Services
             _instance.DispatchLocalHits();
             completionHandler?.Invoke();
         }
+
+        public void SetAppOptOut(bool optOut)
+        {
+            _instance.AppOptOut = optOut;
+        }
     }
 }

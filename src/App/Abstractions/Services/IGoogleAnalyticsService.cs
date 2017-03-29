@@ -11,5 +11,6 @@ namespace Bit.App.Abstractions
         void TrackEvent(string category, string eventName, string label = null);
         void TrackException(string message, bool fatal);
         void Dispatch(Action completionHandler = null);
+        void SetAppOptOut(bool optOut);
     }
 }
