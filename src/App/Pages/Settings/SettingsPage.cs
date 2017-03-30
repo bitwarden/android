@@ -106,7 +106,7 @@ namespace Bit.App.Pages
 
             AnalyticsCell = new ExtendedSwitchCell
             {
-                Text = AppResources.OptOutOfGA,
+                Text = AppResources.DisableGA,
                 On = _settings.GetValueOrDefault(Constants.SettingGAOptOut, false)
             };
 
@@ -146,8 +146,8 @@ namespace Bit.App.Pages
 
             var otherSection = new TableSection(AppResources.Other)
             {
-                AboutCell,
                 AnalyticsCell,
+                AboutCell,
                 HelpCell
             };
 
