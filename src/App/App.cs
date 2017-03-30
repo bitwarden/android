@@ -64,10 +64,7 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
-            var gaOptOut = _settings.GetValueOrDefault(Constants.SettingGAOptOut, false);
-            _googleAnalyticsService.SetAppOptOut(gaOptOut);
-
-            if (authService.IsAuthenticated && _uri != null)
+            if(authService.IsAuthenticated && _uri != null)
             {
                 MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
             }

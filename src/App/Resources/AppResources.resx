@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="OptOutOfGA" xml:space="preserve">
-    <value>Opt-out of Google Analytics</value>
+    <value>Disable Google Analytics</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>

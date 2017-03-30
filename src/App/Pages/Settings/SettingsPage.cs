@@ -147,6 +147,7 @@ namespace Bit.App.Pages
             var otherSection = new TableSection(AppResources.Other)
             {
                 AboutCell,
+                AnalyticsCell,
                 HelpCell
             };
 
@@ -175,8 +176,7 @@ namespace Bit.App.Pages
                     new TableSection(AppResources.Account)
                     {
                         ChangeMasterPasswordCell,
-                        ChangeEmailCell,
-                        AnalyticsCell
+                        ChangeEmailCell
                     },
                     new TableSection(AppResources.Manage)
                     {

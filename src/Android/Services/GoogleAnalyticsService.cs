@@ -1,5 +1,7 @@
 ﻿using System;
+using Bit.App;
 using Bit.App.Abstractions;
+using Plugin.Settings.Abstractions;
 using Android.Gms.Analytics;
 using Android.Content;
 
@@ -17,7 +19,8 @@ namespace Bit.Android.Services
         public GoogleAnalyticsService(
             Context appContext,
             IAppIdService appIdService,
-            IAuthService authService)
+            IAuthService authService,
+            ISettings settings)
         {
             _authService = authService;
 
@@ -29,6 +32,9 @@ namespace Bit.Android.Services
             _tracker.EnableAdvertisingIdCollection(true);
             _tracker.EnableAutoActivityTracking(true);
             _tracker.SetClientId(appIdService.AnonymousAppId);
+
+            var gaOptOut = settings.GetValueOrDefault(Constants.SettingGAOptOut, false);
+            SetAppOptOut(gaOptOut);
         }
 
         public void RefreshUserId()

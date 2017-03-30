@@ -7,7 +7,7 @@
         public const string SettingFingerprintUnlockOn = "setting:fingerprintUnlockOn";
         public const string SettingPinUnlockOn = "setting:pinUnlockOn";
         public const string SettingLockSeconds = "setting:lockSeconds";
-        public const string SettingGAOptOut = "setting:googleanalytics";
+        public const string SettingGAOptOut = "setting:googleAnalyticsOptOut";
 
         public const string PasswordGeneratorLength = "pwGenerator:length";
         public const string PasswordGeneratorUppercase = "pwGenerator:uppercase";

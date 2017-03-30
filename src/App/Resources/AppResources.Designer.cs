@@ -1430,7 +1430,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opt-out of Google Analytics.
+        ///   Looks up a localized string similar to Disable Google Analytics.
         /// </summary>
         public static string OptOutOfGA {
             get {
