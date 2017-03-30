@@ -521,6 +521,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable Google Analytics.
+        /// </summary>
+        public static string DisableGA {
+            get {
+                return ResourceManager.GetString("DisableGA", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to delete? This cannot be undone..
         /// </summary>
         public static string DoYouReallyWantToDelete {

@@ -40,6 +40,7 @@ namespace Bit.App.Pages
         private ExtendedTextCell TwoStepCell { get; set; }
         private ExtendedTextCell ChangeMasterPasswordCell { get; set; }
         private ExtendedTextCell ChangeEmailCell { get; set; }
+        private ExtendedSwitchCell AnalyticsCell { get; set; }
         private ExtendedTextCell FoldersCell { get; set; }
         private ExtendedTextCell SyncCell { get; set; }
         private ExtendedTextCell LockCell { get; set; }
@@ -103,6 +104,12 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
+            AnalyticsCell = new ExtendedSwitchCell
+            {
+                Text = AppResources.DisableGA,
+                On = _settings.GetValueOrDefault(Constants.SettingGAOptOut, false)
+            };
+
             FoldersCell = new ExtendedTextCell
             {
                 Text = AppResources.Folders,
@@ -139,6 +146,7 @@ namespace Bit.App.Pages
 
             var otherSection = new TableSection(AppResources.Other)
             {
+                AnalyticsCell,
                 AboutCell,
                 HelpCell
             };
@@ -193,6 +201,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
 
             PinCell.OnChanged += PinCell_Changed;
+            AnalyticsCell.OnChanged += AnalyticsCell_Changed;
             LockOptionsCell.Tapped += LockOptionsCell_Tapped;
             TwoStepCell.Tapped += TwoStepCell_Tapped;
             ChangeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
@@ -226,6 +235,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
 
             PinCell.OnChanged -= PinCell_Changed;
+            AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
             LockOptionsCell.Tapped -= LockOptionsCell_Tapped;
             TwoStepCell.Tapped -= TwoStepCell_Tapped;
             ChangeMasterPasswordCell.Tapped -= ChangeMasterPasswordCell_Tapped;
@@ -409,6 +419,18 @@ namespace Bit.App.Pages
             {
                 _settings.AddOrUpdateValue(Constants.SettingPinUnlockOn, false);
             }
+        }
+
+        private void AnalyticsCell_Changed(object sender, ToggledEventArgs e)
+        {
+            var cell = sender as ExtendedSwitchCell;
+            if (cell == null)
+            {
+                return;
+            }
+
+            _settings.AddOrUpdateValue(Constants.SettingGAOptOut, cell.On);
+            _googleAnalyticsService.SetAppOptOut(cell.On);
         }
 
         private void PinEntered(SettingsPinPage page)

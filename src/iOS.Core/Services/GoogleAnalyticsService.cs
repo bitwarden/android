@@ -1,6 +1,7 @@
 ﻿using System;
 using Bit.App.Abstractions;
 using Google.Analytics;
+using Plugin.Settings.Abstractions;
 
 namespace Bit.iOS.Core.Services
 {
@@ -12,7 +13,8 @@ namespace Bit.iOS.Core.Services
 
         public GoogleAnalyticsService(
             IAppIdService appIdService,
-            IAuthService authService)
+            IAuthService authService,
+            ISettings settings)
         {
             _authService = authService;
 
@@ -21,6 +23,9 @@ namespace Bit.iOS.Core.Services
             _tracker = Gai.SharedInstance.GetTracker("UA-81915606-1");
             _tracker.SetAllowIdfaCollection(true);
             _tracker.Set(GaiConstants.ClientId, appIdService.AnonymousAppId);
+
+            var gaOptOut = settings.GetValueOrDefault(App.Constants.SettingGAOptOut, false);
+            SetAppOptOut(gaOptOut);
         }
 
         public void RefreshUserId()
@@ -77,6 +82,11 @@ namespace Bit.iOS.Core.Services
                 _tracker.Set(GaiConstants.UserId, _authService.UserId);
                 _setUserId = false;
             }
+        }
+
+        public void SetAppOptOut(bool optOut)
+        {
+            Gai.SharedInstance.OptOut = optOut;
         }
     }
 }
