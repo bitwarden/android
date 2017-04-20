@@ -7,6 +7,7 @@ using PCLCrypto;
 using System.Linq;
 using Bit.App.Enums;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Bit.App.Services
 {
@@ -15,7 +16,7 @@ namespace Bit.App.Services
         private const string KeyKey = "key";
         private const string PreviousKeyKey = "previousKey";
         private const string PrivateKeyKey = "privateKey";
-        private const string OrgKeyKeyPrefix = "orgKey:";
+        private const string OrgKeysKey = "orgKeys";
         private const int InitializationVectorSize = 16;
 
         private readonly ISecureStorageService _secureStorage;
@@ -23,7 +24,7 @@ namespace Bit.App.Services
         private CryptoKey _key;
         private CryptoKey _legacyEtmKey;
         private CryptoKey _previousKey;
-        private IDictionary<Guid, CryptoKey> _orgKeys = new Dictionary<Guid, CryptoKey>();
+        private IDictionary<Guid, CryptoKey> _orgKeys;
         private byte[] _privateKey;
 
         public CryptoService(
@@ -111,12 +112,64 @@ namespace Bit.App.Services
 
                 return _privateKey;
             }
-            private set
+            set
             {
                 if(value != null)
                 {
                     _secureStorage.Store(PrivateKeyKey, value);
                     _privateKey = value;
+                }
+                else
+                {
+                    _secureStorage.Delete(PrivateKeyKey);
+                    _privateKey = null;
+                }
+            }
+        }
+
+        public IDictionary<Guid, CryptoKey> OrgKeys
+        {
+            get
+            {
+                if(_orgKeys == null && _secureStorage.Contains(OrgKeysKey))
+                {
+                    var orgKeysDictBytes = _secureStorage.Retrieve(OrgKeysKey);
+                    if(orgKeysDictBytes != null)
+                    {
+                        var orgKeysDictJson = Encoding.UTF8.GetString(orgKeysDictBytes, 0, orgKeysDictBytes.Length);
+                        if(!string.IsNullOrWhiteSpace(orgKeysDictJson))
+                        {
+                            _orgKeys = new Dictionary<Guid, CryptoKey>();
+                            var orgKeysDict = JsonConvert.DeserializeObject<IDictionary<Guid, byte[]>>(orgKeysDictJson);
+                            foreach(var item in orgKeysDict)
+                            {
+                                _orgKeys.Add(item.Key, new CryptoKey(item.Value));
+                            }
+                        }
+                    }
+                }
+
+                return _orgKeys;
+            }
+            set
+            {
+                if(value != null && value.Any())
+                {
+                    var dict = new Dictionary<Guid, byte[]>();
+                    foreach(var item in value)
+                    {
+                        dict.Add(item.Key, item.Value.Key);
+                    }
+
+                    var dictJson = JsonConvert.SerializeObject(dict);
+                    var dictBytes = Encoding.UTF8.GetBytes(dictJson);
+                    _secureStorage.Store(OrgKeysKey, dictBytes);
+                    _orgKeys = value;
+                }
+                else
+                {
+                    _secureStorage.Delete(OrgKeysKey);
+                    _orgKeys = null;
                 }
             }
         }
@@ -129,30 +182,58 @@ namespace Bit.App.Services
 
         public CryptoKey GetOrgKey(Guid orgId)
         {
-            if(!_orgKeys.ContainsKey(orgId))
+            if(OrgKeys == null || !OrgKeys.ContainsKey(orgId))
             {
-                var key = string.Concat(OrgKeyKeyPrefix, orgId);
-                if(!_secureStorage.Contains(key))
-                {
-                    return null;
-                }
-
-                _orgKeys[orgId] = new CryptoKey(_secureStorage.Retrieve(key));
+                return null;
             }
 
-            return _orgKeys[orgId];
+            return OrgKeys[orgId];
         }
 
-        public void AddOrgKey(Guid orgId, CipherString encOrgKey, byte[] privateKey)
+        public void ClearOrgKey(Guid orgId)
+        {
+            var localOrgKeys = OrgKeys;
+            if(localOrgKeys == null || !localOrgKeys.ContainsKey(orgId))
+            {
+                return;
+            }
+
+            localOrgKeys.Remove(orgId);
+            // invoke setter
+            OrgKeys = localOrgKeys;
+        }
+
+        public void ClearKeys()
+        {
+            OrgKeys = null;
+            Key = null;
+            PrivateKey = null;
+        }
+
+        public CryptoKey AddOrgKey(Guid orgId, CipherString encOrgKey, byte[] privateKey)
         {
             try
             {
+                var localOrgKeys = OrgKeys;
                 var decBytes = RsaDecryptToBytes(encOrgKey, privateKey);
-                _orgKeys[orgId] = new CryptoKey(decBytes);
+                var key = new CryptoKey(decBytes);
+                if(localOrgKeys.ContainsKey(orgId))
+                {
+                    localOrgKeys[orgId] = key;
+                }
+                else
+                {
+                    localOrgKeys.Add(orgId, key);
+                }
+
+                // invoke setter
+                OrgKeys = localOrgKeys;
+                return key;
             }
             catch
             {
                 Debug.WriteLine("Cannot set org key. Decryption failed.");
+                return null;
             }
         }
 
