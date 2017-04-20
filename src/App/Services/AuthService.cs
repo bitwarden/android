@@ -193,7 +193,7 @@ namespace Bit.App.Services
             _tokenService.AuthBearer = null;
             UserId = null;
             Email = null;
-            _cryptoService.Key = null;
+            _cryptoService.ClearKeys();
             _settings.Remove(Constants.FirstVaultLoad);
             _settings.Remove(Constants.PushLastRegistrationDate);
             _settings.Remove(Constants.Locked);
