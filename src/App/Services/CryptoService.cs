@@ -39,9 +39,13 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_key == null)
+                if(_key == null && _secureStorage.Contains(KeyKey))
                 {
-                    _key = new CryptoKey(_secureStorage.Retrieve(KeyKey));
+                    var keyBytes = _secureStorage.Retrieve(KeyKey);
+                    if(keyBytes != null)
+                    {
+                        _key = new CryptoKey(keyBytes);
+                    }
                 }
 
                 return _key;
@@ -66,9 +70,13 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_previousKey == null)
+                if(_previousKey == null && _secureStorage.Contains(PreviousKeyKey))
                 {
-                    _previousKey = new CryptoKey(_secureStorage.Retrieve(PreviousKeyKey));
+                    var keyBytes = _secureStorage.Retrieve(PreviousKeyKey);
+                    if(keyBytes != null)
+                    {
+                        _previousKey = new CryptoKey(keyBytes);
+                    }
                 }
 
                 return _previousKey;
@@ -105,7 +113,7 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_privateKey == null)
+                if(_privateKey == null && _secureStorage.Contains(PrivateKeyKey))
                 {
                     _privateKey = _secureStorage.Retrieve(PrivateKeyKey);
                 }
