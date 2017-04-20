@@ -34,6 +34,7 @@ namespace Bit.App.Pages
         public LabeledValueCell UsernameCell { get; set; }
         public LabeledValueCell PasswordCell { get; set; }
         public LabeledValueCell UriCell { get; set; }
+        public LabeledValueCell NotesCell { get; set; }
         private EditLoginToolBarItem EditItem { get; set; }
 
         private void Init()
@@ -76,9 +77,9 @@ namespace Bit.App.Pages
             UriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(Model.Uri)));
 
             // Notes
-            var notesCell = new LabeledValueCell();
-            notesCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Notes);
-            notesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
+            NotesCell = new LabeledValueCell();
+            NotesCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Notes);
+            NotesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             LoginInformationSection = new TableSection(AppResources.LoginInformation)
             {
@@ -87,7 +88,7 @@ namespace Bit.App.Pages
 
             NotesSection = new TableSection(AppResources.Notes)
             {
-                notesCell
+                NotesCell
             };
 
             Table = new ExtendedTableView
@@ -124,6 +125,7 @@ namespace Bit.App.Pages
 
         protected async override void OnAppearing()
         {
+            NotesCell.Tapped += NotesCell_Tapped;
             EditItem.InitEvents();
 
             var login = await _loginService.GetByIdAsync(_loginId);
@@ -176,7 +178,13 @@ namespace Bit.App.Pages
 
         protected override void OnDisappearing()
         {
+            NotesCell.Tapped -= NotesCell_Tapped;
             EditItem.Dispose();
+        }
+
+        private void NotesCell_Tapped(object sender, EventArgs e)
+        {
+            Copy(Model.Notes, AppResources.Notes);
         }
 
         private void Copy(string copyText, string alertLabel)
