@@ -159,11 +159,11 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                login.Uri = UriCell.Entry.Text?.Encrypt();
-                login.Name = NameCell.Entry.Text?.Encrypt();
-                login.Username = UsernameCell.Entry.Text?.Encrypt();
-                login.Password = PasswordCell.Entry.Text?.Encrypt();
-                login.Notes = NotesCell.Editor.Text?.Encrypt();
+                login.Uri = UriCell.Entry.Text?.Encrypt(login.OrganizationId);
+                login.Name = NameCell.Entry.Text?.Encrypt(login.OrganizationId);
+                login.Username = UsernameCell.Entry.Text?.Encrypt(login.OrganizationId);
+                login.Password = PasswordCell.Entry.Text?.Encrypt(login.OrganizationId);
+                login.Notes = NotesCell.Editor.Text?.Encrypt(login.OrganizationId);
                 login.Favorite = favoriteCell.On;
 
                 if(FolderCell.Picker.SelectedIndex > 0)

@@ -10,7 +10,7 @@ namespace Bit.App
 {
     public static class Extentions
     {
-        public static CipherString Encrypt(this string s)
+        public static CipherString Encrypt(this string s, string orgId = null)
         {
             if(s == null)
             {
@@ -18,6 +18,12 @@ namespace Bit.App
             }
 
             var cryptoService = Resolver.Resolve<ICryptoService>();
+
+            if(!string.IsNullOrWhiteSpace(orgId))
+            {
+                return cryptoService.Encrypt(s, cryptoService.GetOrgKey(orgId));
+            }
+
             return cryptoService.Encrypt(s);
         }
 
