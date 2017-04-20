@@ -26,12 +26,13 @@ namespace Bit.App.Test
         {
             var storageService = Substitute.For<ISecureStorageService>();
             var keyService = Substitute.For<IKeyDerivationService>();
+            storageService.Contains("key").Returns(true);
             storageService.Retrieve("key").Returns(
                 Convert.FromBase64String("QpSYI5k0bLQXEygUEHn4wMII3ERatuWDFBszk7JAhbQ="));
 
             var service = new CryptoService(storageService, keyService);
-            var encryptedHi = service.Encrypt(value);
-            return service.Decrypt(encryptedHi);
+            var encryptedValue = service.Encrypt(value);
+            return service.Decrypt(encryptedValue);
         }
     }
 }
