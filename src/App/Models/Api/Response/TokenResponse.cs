@@ -14,5 +14,6 @@ namespace Bit.App.Models.Api
         [JsonProperty("token_type")]
         public string TokenType { get; set; }
         public List<int> TwoFactorProviders { get; set; }
+        public string PrivateKey { get; set; }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.App.Models.Api;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -15,11 +13,7 @@ namespace Bit.App.Pages
 {
     public class LoginPage : ExtendedContentPage
     {
-        private ICryptoService _cryptoService;
         private IAuthService _authService;
-        private ITokenService _tokenService;
-        private IDeviceInfoService _deviceInfoService;
-        private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
         private ISettings _settings;
@@ -31,11 +25,7 @@ namespace Bit.App.Pages
             : base(updateActivity: false)
         {
             _email = email;
-            _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
-            _tokenService = Resolver.Resolve<ITokenService>();
-            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
             _settings = Resolver.Resolve<ISettings>();
@@ -188,39 +178,22 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var normalizedEmail = EmailCell.Entry.Text.ToLower();
-
-            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail);
-
-            var request = new TokenRequest
-            {
-                Email = normalizedEmail,
-                MasterPasswordHash = _cryptoService.HashPasswordBase64(key, PasswordCell.Entry.Text),
-                Device = new DeviceRequest(_appIdService, _deviceInfoService)
-            };
-
             _userDialogs.ShowLoading(AppResources.LoggingIn, MaskType.Black);
-            var response = await _authService.TokenPostAsync(request);
+            var result = await _authService.TokenPostAsync(EmailCell.Entry.Text, PasswordCell.Entry.Text);
             _userDialogs.HideLoading();
-            if(!response.Succeeded)
+            if(!result.Success)
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.FirstOrDefault()?.Message, AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, result.ErrorMessage, AppResources.Ok);
                 return;
             }
 
-            if(response.Result.TwoFactorProviders != null && response.Result.TwoFactorProviders.Count > 0)
+            if(result.TwoFactorRequired)
             {
                 _googleAnalyticsService.TrackAppEvent("LoggedIn To Two-step");
-                await Navigation.PushAsync(new LoginTwoFactorPage(request.Email, request.MasterPasswordHash, key));
+                await Navigation.PushAsync(new LoginTwoFactorPage(EmailCell.Entry.Text, result.MasterPasswordHash, result.Key));
                 return;
             }
 
-            _cryptoService.Key = key;
-            _tokenService.Token = response.Result.AccessToken;
-            _tokenService.RefreshToken = response.Result.RefreshToken;
-            _authService.UserId = _tokenService.TokenUserId;
-            _authService.Email = _tokenService.TokenEmail;
-            _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
             _googleAnalyticsService.TrackAppEvent("LoggedIn");
 
             if(Device.OS == TargetPlatform.Android)

@@ -77,7 +77,8 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, ApiRoute),
+                    RequestUri = new Uri(client.BaseAddress,
+                        string.Format("{0}?includeFolders=false&includeShared=true", ApiRoute)),
                 };
 
                 try
@@ -95,46 +96,6 @@ namespace Bit.App.Repositories
                 catch
                 {
                     return HandledWebException<ListResponse<CipherResponse>>();
-                }
-            }
-        }
-
-        public virtual async Task<ApiResult<CipherHistoryResponse>> GetByRevisionDateWithHistoryAsync(DateTime since)
-        {
-            if(!Connectivity.IsConnected)
-            {
-                return HandledNotConnected<CipherHistoryResponse>();
-            }
-
-            var tokenStateResponse = await HandleTokenStateAsync<CipherHistoryResponse>();
-            if(!tokenStateResponse.Succeeded)
-            {
-                return tokenStateResponse;
-            }
-
-            using(var client = HttpService.Client)
-            {
-                var requestMessage = new TokenHttpRequestMessage()
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/history", "?since=", since)),
-                };
-
-                try
-                {
-                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
-                    if(!response.IsSuccessStatusCode)
-                    {
-                        return await HandleErrorAsync<CipherHistoryResponse>(response).ConfigureAwait(false);
-                    }
-
-                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var responseObj = JsonConvert.DeserializeObject<CipherHistoryResponse>(responseContent);
-                    return ApiResult<CipherHistoryResponse>.Success(responseObj, response.StatusCode);
-                }
-                catch
-                {
-                    return HandledWebException<CipherHistoryResponse>();
                 }
             }
         }

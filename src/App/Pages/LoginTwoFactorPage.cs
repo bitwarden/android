@@ -1,28 +1,20 @@
 ﻿using System;
-using System.Linq;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.App.Models.Api;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
-using Plugin.Settings.Abstractions;
 using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App.Pages
 {
     public class LoginTwoFactorPage : ExtendedContentPage
     {
-        private ICryptoService _cryptoService;
         private IAuthService _authService;
-        private ITokenService _tokenService;
-        private IDeviceInfoService _deviceInfoService;
-        private IAppIdService _appIdService;
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
-        private ISettings _settings;
         private IGoogleAnalyticsService _googleAnalyticsService;
         private IPushNotification _pushNotification;
         private readonly string _email;
@@ -36,14 +28,9 @@ namespace Bit.App.Pages
             _masterPasswordHash = masterPasswordHash;
             _key = key;
 
-            _cryptoService = Resolver.Resolve<ICryptoService>();
             _authService = Resolver.Resolve<IAuthService>();
-            _tokenService = Resolver.Resolve<ITokenService>();
-            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _appIdService = Resolver.Resolve<IAppIdService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
-            _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
 
@@ -117,7 +104,7 @@ namespace Bit.App.Pages
 
             var continueToolbarItem = new ToolbarItem(AppResources.Continue, null, async () =>
             {
-                await LogIn();
+                await LogInAsync();
             }, ToolbarItemOrder.Default, 0);
 
             ToolbarItems.Add(continueToolbarItem);
@@ -147,10 +134,10 @@ namespace Bit.App.Pages
 
         private async void Entry_Completed(object sender, EventArgs e)
         {
-            await LogIn();
+            await LogInAsync();
         }
 
-        private async Task LogIn()
+        private async Task LogInAsync()
         {
             if(string.IsNullOrWhiteSpace(CodeCell.Entry.Text))
             {
@@ -159,30 +146,15 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var request = new TokenRequest
-            {
-                Email = _email,
-                MasterPasswordHash = _masterPasswordHash,
-                Token = CodeCell.Entry.Text.Replace(" ", ""),
-                Provider = 0, // Authenticator app (only 1 provider for now, so hard coded)
-                Device = new DeviceRequest(_appIdService, _deviceInfoService)
-            };
-
             _userDialogs.ShowLoading(AppResources.ValidatingCode, MaskType.Black);
-            var response = await _authService.TokenPostAsync(request);
+            var response = await _authService.TokenPostTwoFactorAsync(CodeCell.Entry.Text, _email, _masterPasswordHash, _key);
             _userDialogs.HideLoading();
-            if(!response.Succeeded)
+            if(!response.Success)
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.FirstOrDefault()?.Message, AppResources.Ok);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, response.ErrorMessage, AppResources.Ok);
                 return;
             }
 
-            _cryptoService.Key = _key;
-            _tokenService.Token = response.Result.AccessToken;
-            _tokenService.RefreshToken = response.Result.RefreshToken;
-            _authService.UserId = _tokenService.TokenUserId;
-            _authService.Email = _tokenService.TokenEmail;
-            _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
             _googleAnalyticsService.TrackAppEvent("LoggedIn From Two-step");
 
             if(Device.OS == TargetPlatform.Android)

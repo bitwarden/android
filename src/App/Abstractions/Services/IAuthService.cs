@@ -1,6 +1,5 @@
-﻿using System.Threading.Tasks;
-using Bit.App.Models.Api;
-using System;
+﻿using Bit.App.Models;
+using System.Threading.Tasks;
 
 namespace Bit.App.Abstractions
 {
@@ -14,6 +13,7 @@ namespace Bit.App.Abstractions
         string PIN { get; set; }
 
         void LogOut();
-        Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request);
+        Task<FullLoginResult> TokenPostAsync(string email, string masterPassword);
+        Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash, byte[] key);
     }
 }

@@ -8,6 +8,5 @@ namespace Bit.App.Abstractions
     {
         Task<ApiResult<CipherResponse>> GetByIdAsync(string id);
         Task<ApiResult<ListResponse<CipherResponse>>> GetAsync();
-        Task<ApiResult<CipherHistoryResponse>> GetByRevisionDateWithHistoryAsync(DateTime since);
     }
 }

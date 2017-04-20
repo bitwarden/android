@@ -4,6 +4,10 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Plugin.Settings.Abstractions;
+using Bit.App.Models;
+using System.Linq;
+using Xamarin.Forms;
+using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App.Services
 {
@@ -19,6 +23,8 @@ namespace Bit.App.Services
         private readonly ISettings _settings;
         private readonly ICryptoService _cryptoService;
         private readonly IConnectApiRepository _connectApiRepository;
+        private readonly IAppIdService _appIdService;
+        private readonly IDeviceInfoService _deviceInfoService;
 
         private string _email;
         private string _userId;
@@ -30,13 +36,17 @@ namespace Bit.App.Services
             ITokenService tokenService,
             ISettings settings,
             ICryptoService cryptoService,
-            IConnectApiRepository connectApiRepository)
+            IConnectApiRepository connectApiRepository,
+            IAppIdService appIdService,
+            IDeviceInfoService deviceInfoService)
         {
             _secureStorage = secureStorage;
             _tokenService = tokenService;
             _settings = settings;
             _cryptoService = cryptoService;
             _connectApiRepository = connectApiRepository;
+            _appIdService = appIdService;
+            _deviceInfoService = deviceInfoService;
         }
 
         public string UserId
@@ -191,10 +201,76 @@ namespace Bit.App.Services
             _settings.Remove(Constants.Locked);
         }
 
-        public async Task<ApiResult<TokenResponse>> TokenPostAsync(TokenRequest request)
+        public async Task<FullLoginResult> TokenPostAsync(string email, string masterPassword)
         {
-            // TODO: move more logic in here
-            return await _connectApiRepository.PostTokenAsync(request);
+            var result = new FullLoginResult();
+
+            var normalizedEmail = email.Trim().ToLower();
+            var key = _cryptoService.MakeKeyFromPassword(masterPassword, normalizedEmail);
+
+            var request = new TokenRequest
+            {
+                Email = normalizedEmail,
+                MasterPasswordHash = _cryptoService.HashPasswordBase64(key, masterPassword),
+                Device = new DeviceRequest(_appIdService, _deviceInfoService)
+            };
+
+            var response = await _connectApiRepository.PostTokenAsync(request);
+            if(!response.Succeeded)
+            {
+                result.Success = false;
+                result.ErrorMessage = response.Errors.FirstOrDefault()?.Message;
+                return result;
+            }
+
+            result.Success = true;
+            if(response.Result.TwoFactorProviders != null && response.Result.TwoFactorProviders.Count > 0)
+            {
+                result.Key = key;
+                result.MasterPasswordHash = request.MasterPasswordHash;
+                result.TwoFactorRequired = true;
+                return result;
+            }
+
+            ProcessLoginSuccess(key, response.Result);
+            return result;
+        }
+
+        public async Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash,
+            byte[] key)
+        {
+            var result = new LoginResult();
+
+            var request = new TokenRequest
+            {
+                Email = email.Trim().ToLower(),
+                MasterPasswordHash = masterPasswordHash,
+                Token = token.Trim().Replace(" ", ""),
+                Provider = 0, // Authenticator app (only 1 provider for now, so hard coded)
+                Device = new DeviceRequest(_appIdService, _deviceInfoService)
+            };
+
+            var response = await _connectApiRepository.PostTokenAsync(request);
+            if(!response.Succeeded)
+            {
+                result.Success = false;
+                result.ErrorMessage = response.Errors.FirstOrDefault()?.Message;
+                return result;
+            }
+
+            result.Success = true;
+            ProcessLoginSuccess(key, response.Result);
+            return result;
+        }
+
+        private void ProcessLoginSuccess(byte[] key, TokenResponse response)
+        {
+            _cryptoService.Key = key;
+            _tokenService.Token = response.AccessToken;
+            _tokenService.RefreshToken = response.RefreshToken;
+            UserId = _tokenService.TokenUserId;
+            Email = _tokenService.TokenEmail;
+            _settings.AddOrUpdateValue(Constants.LastLoginEmail, Email);
         }
     }
 }

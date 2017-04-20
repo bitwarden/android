@@ -114,6 +114,7 @@
     <Compile Include="Models\Data\LoginData.cs" />
     <Compile Include="Models\DomainName.cs" />
     <Compile Include="Models\Folder.cs" />
+    <Compile Include="Models\LoginResult.cs" />
     <Compile Include="Models\Page\AppExtensionPageModel.cs" />
     <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
     <Compile Include="Models\Page\PinPageModel.cs" />
