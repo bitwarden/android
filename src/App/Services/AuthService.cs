@@ -6,8 +6,6 @@ using Bit.App.Models.Api;
 using Plugin.Settings.Abstractions;
 using Bit.App.Models;
 using System.Linq;
-using Xamarin.Forms;
-using PushNotification.Plugin.Abstractions;
 
 namespace Bit.App.Services
 {
@@ -237,7 +235,7 @@ namespace Bit.App.Services
         }
 
         public async Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash,
-            byte[] key)
+            CryptoKey key)
         {
             var result = new LoginResult();
 
@@ -263,7 +261,7 @@ namespace Bit.App.Services
             return result;
         }
 
-        private void ProcessLoginSuccess(byte[] key, TokenResponse response)
+        private void ProcessLoginSuccess(CryptoKey key, TokenResponse response)
         {
             _cryptoService.Key = key;
             _tokenService.Token = response.AccessToken;

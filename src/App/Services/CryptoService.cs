@@ -5,7 +5,6 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using PCLCrypto;
 using System.Linq;
-using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
@@ -17,8 +16,9 @@ namespace Bit.App.Services
 
         private readonly ISecureStorageService _secureStorage;
         private readonly IKeyDerivationService _keyDerivationService;
-        private byte[] _key;
-        private byte[] _previousKey;
+        private CryptoKey _key;
+        private CryptoKey _legacyEtmKey;
+        private CryptoKey _previousKey;
 
         public CryptoService(
             ISecureStorageService secureStorage,
@@ -28,13 +28,13 @@ namespace Bit.App.Services
             _keyDerivationService = keyDerivationService;
         }
 
-        public byte[] Key
+        public CryptoKey Key
         {
             get
             {
                 if(_key == null)
                 {
-                    _key = _secureStorage.Retrieve(KeyKey);
+                    _key = new CryptoKey(_secureStorage.Retrieve(KeyKey));
                 }
 
                 return _key;
@@ -43,37 +43,25 @@ namespace Bit.App.Services
             {
                 if(value != null)
                 {
-                    _secureStorage.Store(KeyKey, value);
+                    _secureStorage.Store(KeyKey, value.Key);
                 }
                 else
                 {
                     PreviousKey = _key;
                     _secureStorage.Delete(KeyKey);
                     _key = null;
+                    _legacyEtmKey = null;
                 }
             }
         }
 
-        public string Base64Key
-        {
-            get
-            {
-                if(Key == null)
-                {
-                    return null;
-                }
-
-                return Convert.ToBase64String(Key);
-            }
-        }
-
-        public byte[] PreviousKey
+        public CryptoKey PreviousKey
         {
             get
             {
                 if(_previousKey == null)
                 {
-                    _previousKey = _secureStorage.Retrieve(PreviousKeyKey);
+                    _previousKey = new CryptoKey(_secureStorage.Retrieve(PreviousKeyKey));
                 }
 
                 return _previousKey;
@@ -82,7 +70,7 @@ namespace Bit.App.Services
             {
                 if(value != null)
                 {
-                    _secureStorage.Store(PreviousKeyKey, value);
+                    _secureStorage.Store(PreviousKeyKey, value.Key);
                     _previousKey = value;
                 }
             }
@@ -102,18 +90,20 @@ namespace Bit.App.Services
                     return Key != null;
                 }
 
-                return !PreviousKey.SequenceEqual(Key);
+                return !PreviousKey.Key.SequenceEqual(Key.Key);
             }
         }
 
-        public byte[] EncKey => Key?.Take(16).ToArray();
-        public byte[] MacKey => Key?.Skip(16).Take(16).ToArray();
-
-        public CipherString Encrypt(string plaintextValue)
+        public CipherString Encrypt(string plaintextValue, CryptoKey key = null)
         {
-            if(Key == null)
+            if(key == null)
             {
-                throw new ArgumentNullException(nameof(Key));
+                key = Key;
+            }
+
+            if(key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
             }
 
             if(plaintextValue == null)
@@ -124,23 +114,26 @@ namespace Bit.App.Services
             var plaintextBytes = Encoding.UTF8.GetBytes(plaintextValue);
 
             var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-            // TODO: Turn on whenever ready to support encrypt-then-mac
-            var cryptoKey = provider.CreateSymmetricKey(true ? EncKey : Key);
+            var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
             var iv = WinRTCrypto.CryptographicBuffer.GenerateRandom(provider.BlockLength);
             var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
-            // TODO: Turn on whenever ready to support encrypt-then-mac
-            var mac = true ? ComputeMac(encryptedBytes, iv) : null;
+            var mac = key.MacKey != null ? ComputeMac(encryptedBytes, iv, key.MacKey) : null;
 
-            return new CipherString(Convert.ToBase64String(iv), Convert.ToBase64String(encryptedBytes), mac);
+            return new CipherString(key.EncryptionType, Convert.ToBase64String(iv), Convert.ToBase64String(encryptedBytes), mac);
         }
 
-        public string Decrypt(CipherString encyptedValue)
+        public string Decrypt(CipherString encyptedValue, CryptoKey key = null)
         {
             try
             {
-                if(Key == null)
+                if(key == null)
                 {
-                    throw new ArgumentNullException(nameof(Key));
+                    key = Key;
+                }
+
+                if(key == null)
+                {
+                    throw new ArgumentNullException(nameof(key));
                 }
 
                 if(encyptedValue == null)
@@ -148,9 +141,27 @@ namespace Bit.App.Services
                     throw new ArgumentNullException(nameof(encyptedValue));
                 }
 
-                if(encyptedValue.Mac != null)
+                if(encyptedValue.EncryptionType == Enums.EncryptionType.AesCbc128_HmacSha256_B64 &&
+                    key.EncryptionType == Enums.EncryptionType.AesCbc256_B64)
                 {
-                    var computedMac = ComputeMac(encyptedValue.CipherTextBytes, encyptedValue.InitializationVectorBytes);
+                    // Old encrypt-then-mac scheme, swap out the key
+                    if(_legacyEtmKey == null)
+                    {
+                        _legacyEtmKey = new CryptoKey(key.Key, Enums.EncryptionType.AesCbc128_HmacSha256_B64);
+                    }
+
+                    key = _legacyEtmKey;
+                }
+
+                if(encyptedValue.EncryptionType != key.EncryptionType)
+                {
+                    throw new ArgumentException("encType unavailable.");
+                }
+
+                if(key.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
+                {
+                    var computedMac = ComputeMac(encyptedValue.CipherTextBytes,
+                        encyptedValue.InitializationVectorBytes, key.MacKey);
                     if(computedMac != encyptedValue.Mac)
                     {
                         throw new InvalidOperationException("MAC failed.");
@@ -158,7 +169,7 @@ namespace Bit.App.Services
                 }
 
                 var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-                var cryptoKey = provider.CreateSymmetricKey(encyptedValue.Mac != null ? EncKey : Key);
+                var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
                 var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
                     encyptedValue.InitializationVectorBytes);
                 return Encoding.UTF8.GetString(decryptedBytes, 0, decryptedBytes.Length).TrimEnd('\0');
@@ -170,11 +181,11 @@ namespace Bit.App.Services
             }
         }
 
-        private string ComputeMac(byte[] ctBytes, byte[] ivBytes)
+        private string ComputeMac(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
         {
-            if(MacKey == null)
+            if(macKey == null)
             {
-                throw new ArgumentNullException(nameof(MacKey));
+                throw new ArgumentNullException(nameof(macKey));
             }
 
             if(ctBytes == null)
@@ -188,13 +199,13 @@ namespace Bit.App.Services
             }
 
             var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
-            var hasher = algorithm.CreateHash(MacKey);
+            var hasher = algorithm.CreateHash(macKey);
             hasher.Append(ivBytes.Concat(ctBytes).ToArray());
             var mac = hasher.GetValueAndReset();
             return Convert.ToBase64String(mac);
         }
 
-        public byte[] MakeKeyFromPassword(string password, string salt)
+        public CryptoKey MakeKeyFromPassword(string password, string salt)
         {
             if(password == null)
             {
@@ -209,17 +220,17 @@ namespace Bit.App.Services
             var passwordBytes = Encoding.UTF8.GetBytes(password);
             var saltBytes = Encoding.UTF8.GetBytes(salt);
 
-            var key = _keyDerivationService.DeriveKey(passwordBytes, saltBytes, 5000);
-            return key;
+            var keyBytes = _keyDerivationService.DeriveKey(passwordBytes, saltBytes, 5000);
+            return new CryptoKey(keyBytes);
         }
 
         public string MakeKeyFromPasswordBase64(string password, string salt)
         {
             var key = MakeKeyFromPassword(password, salt);
-            return Convert.ToBase64String(key);
+            return Convert.ToBase64String(key.Key);
         }
 
-        public byte[] HashPassword(byte[] key, string password)
+        public byte[] HashPassword(CryptoKey key, string password)
         {
             if(key == null)
             {
@@ -232,11 +243,11 @@ namespace Bit.App.Services
             }
 
             var passwordBytes = Encoding.UTF8.GetBytes(password);
-            var hash = _keyDerivationService.DeriveKey(key, passwordBytes, 1);
+            var hash = _keyDerivationService.DeriveKey(key.Key, passwordBytes, 1);
             return hash;
         }
 
-        public string HashPasswordBase64(byte[] key, string password)
+        public string HashPasswordBase64(CryptoKey key, string password)
         {
             var hash = HashPassword(key, password);
             return Convert.ToBase64String(hash);

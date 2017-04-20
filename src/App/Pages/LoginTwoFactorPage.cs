@@ -7,6 +7,7 @@ using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
 using PushNotification.Plugin.Abstractions;
+using Bit.App.Models;
 
 namespace Bit.App.Pages
 {
@@ -19,9 +20,9 @@ namespace Bit.App.Pages
         private IPushNotification _pushNotification;
         private readonly string _email;
         private readonly string _masterPasswordHash;
-        private readonly byte[] _key;
+        private readonly CryptoKey _key;
 
-        public LoginTwoFactorPage(string email, string masterPasswordHash, byte[] key)
+        public LoginTwoFactorPage(string email, string masterPasswordHash, CryptoKey key)
             : base(updateActivity: false)
         {
             _email = email;

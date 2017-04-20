@@ -4,16 +4,15 @@ namespace Bit.App.Abstractions
 {
     public interface ICryptoService
     {
-        string Base64Key { get; }
-        byte[] Key { get; set; }
-        byte[] PreviousKey { get; }
+        CryptoKey Key { get; set; }
+        CryptoKey PreviousKey { get; }
         bool KeyChanged { get; }
 
-        string Decrypt(CipherString encyptedValue);
-        CipherString Encrypt(string plaintextValue);
-        byte[] MakeKeyFromPassword(string password, string salt);
+        string Decrypt(CipherString encyptedValue, CryptoKey key = null);
+        CipherString Encrypt(string plaintextValue, CryptoKey key = null);
+        CryptoKey MakeKeyFromPassword(string password, string salt);
         string MakeKeyFromPasswordBase64(string password, string salt);
-        byte[] HashPassword(byte[] key, string password);
-        string HashPasswordBase64(byte[] key, string password);
+        byte[] HashPassword(CryptoKey key, string password);
+        string HashPasswordBase64(CryptoKey key, string password);
     }
 }

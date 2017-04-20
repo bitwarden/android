@@ -120,7 +120,7 @@ namespace Bit.App.Pages
             }
 
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, _authService.Email);
-            if(key.SequenceEqual(_cryptoService.Key))
+            if(key.Key.SequenceEqual(_cryptoService.Key.Key))
             {
                 _settings.AddOrUpdateValue(Constants.Locked, false);
                 await Navigation.PopModalAsync();

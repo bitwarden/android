@@ -14,6 +14,6 @@ namespace Bit.App.Abstractions
 
         void LogOut();
         Task<FullLoginResult> TokenPostAsync(string email, string masterPassword);
-        Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash, byte[] key);
+        Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash, CryptoKey key);
     }
 }

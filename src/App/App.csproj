@@ -80,6 +80,7 @@
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
     <Compile Include="Controls\VaultListViewCell.cs" />
+    <Compile Include="Enums\EncryptionType.cs" />
     <Compile Include="Enums\LockType.cs" />
     <Compile Include="Enums\CipherType.cs" />
     <Compile Include="Enums\PushType.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="Models\Api\LoginDataModel.cs" />
     <Compile Include="Models\Cipher.cs" />
     <Compile Include="Models\CipherString.cs" />
+    <Compile Include="Models\CryptoKey.cs" />
     <Compile Include="Models\Data\SettingsData.cs" />
     <Compile Include="Models\Data\FolderData.cs" />
     <Compile Include="Abstractions\IDataObject.cs" />
