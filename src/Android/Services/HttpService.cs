@@ -7,6 +7,6 @@ namespace Bit.Android.Services
 {
     public class HttpService : IHttpService
     {
-        public ApiHttpClient Client => new ApiHttpClient(new CustomAndroidClientHandler());
+        public ApiHttpClient Client => new ApiHttpClient(new AndroidClientHandler());
     }
 }

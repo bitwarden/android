@@ -316,7 +316,6 @@
     <Compile Include="Controls\ExtendedButtonRenderer.cs" />
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
-    <Compile Include="CustomAndroidClientHandler.cs" />
     <Compile Include="HockeyAppCrashManagerListener.cs" />
     <Compile Include="AutofillService.cs" />
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />
