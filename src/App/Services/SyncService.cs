@@ -50,7 +50,7 @@ namespace Bit.App.Services
 
         public bool SyncInProgress { get; private set; }
 
-        public async Task<bool> SyncAsync(string id)
+        public async Task<bool> SyncCipherAsync(string id)
         {
             if(!_authService.IsAuthenticated)
             {
@@ -77,10 +77,6 @@ namespace Bit.App.Services
             {
                 switch(cipher.Result.Type)
                 {
-                    case Enums.CipherType.Folder:
-                        var folderData = new FolderData(cipher.Result, _authService.UserId);
-                        await _folderRepository.UpsertAsync(folderData).ConfigureAwait(false);
-                        break;
                     case Enums.CipherType.Login:
                         var loginData = new LoginData(cipher.Result, _authService.UserId);
                         await _loginRepository.UpsertAsync(loginData).ConfigureAwait(false);
@@ -172,6 +168,7 @@ namespace Bit.App.Services
 
             var now = DateTime.UtcNow;
             var ciphers = await _cipherApiRepository.GetAsync().ConfigureAwait(false);
+            var folders = await _folderApiRepository.GetAsync().ConfigureAwait(false);
             var domains = await _settingsApiRepository.GetDomains(false).ConfigureAwait(false);
 
             if(!ciphers.Succeeded || !domains.Succeeded)
@@ -193,11 +190,11 @@ namespace Bit.App.Services
                 return false;
             }
 
-            var logins = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Login).ToDictionary(s => s.Id);
-            var folders = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Folder).ToDictionary(f => f.Id);
+            var loginsDict = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Login).ToDictionary(s => s.Id);
+            var foldersDict = folders.Result.Data.ToDictionary(f => f.Id);
 
-            var loginTask = SyncLoginsAsync(logins);
-            var folderTask = SyncFoldersAsync(folders);
+            var loginTask = SyncLoginsAsync(loginsDict);
+            var folderTask = SyncFoldersAsync(foldersDict);
             var domainsTask = SyncDomainsAsync(domains.Result);
             await Task.WhenAll(loginTask, folderTask, domainsTask).ConfigureAwait(false);
 
@@ -236,7 +233,7 @@ namespace Bit.App.Services
             return false;
         }
 
-        private async Task SyncFoldersAsync(IDictionary<string, CipherResponse> serverFolders)
+        private async Task SyncFoldersAsync(IDictionary<string, FolderResponse> serverFolders)
         {
             if(!_authService.IsAuthenticated)
             {

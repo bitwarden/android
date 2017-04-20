@@ -26,21 +26,6 @@ namespace Bit.App.Models.Data
             RevisionDateTime = folder.RevisionDate;
         }
 
-        public FolderData(CipherResponse cipher, string userId)
-        {
-            if(cipher.Type != Enums.CipherType.Folder)
-            {
-                throw new ArgumentException(nameof(cipher.Type));
-            }
-
-            var data = cipher.Data.ToObject<LoginDataModel>();
-
-            Id = cipher.Id;
-            UserId = userId;
-            Name = data.Name;
-            RevisionDateTime = cipher.RevisionDate;
-        }
-
         [PrimaryKey]
         public string Id { get; set; }
         [Indexed]

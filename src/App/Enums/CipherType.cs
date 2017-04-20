@@ -2,7 +2,8 @@
 {
     public enum CipherType : short
     {
-        Folder = 0,
+        // Folder deprecated
+        //Folder = 0,
         Login = 1
     }
 }

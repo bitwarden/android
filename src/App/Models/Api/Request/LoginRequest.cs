@@ -4,6 +4,7 @@
     {
         public LoginRequest(Login login)
         {
+            OrganizationId = login.OrganizationId;
             FolderId = login.FolderId;
             Name = login.Name?.EncryptedString;
             Uri = login.Uri?.EncryptedString;
@@ -13,6 +14,7 @@
             Favorite = login.Favorite;
         }
 
+        public string OrganizationId { get; set; }
         public string FolderId { get; set; }
         public string Name { get; set; }
         public string Uri { get; set; }

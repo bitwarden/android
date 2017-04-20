@@ -11,6 +11,8 @@ namespace Bit.App.Models
         public Login(LoginData data)
         {
             Id = data.Id;
+            UserId = data.UserId;
+            OrganizationId = data.OrganizationId;
             FolderId = data.FolderId;
             Name = data.Name != null ? new CipherString(data.Name) : null;
             Uri = data.Uri != null ? new CipherString(data.Uri) : null;
@@ -23,6 +25,8 @@ namespace Bit.App.Models
         public Login(LoginResponse response)
         {
             Id = response.Id;
+            UserId = response.UserId;
+            OrganizationId = response.OrganizationId;
             FolderId = response.FolderId;
             Name = response.Name != null ? new CipherString(response.Name) : null;
             Uri = response.Uri != null ? new CipherString(response.Uri) : null;
@@ -32,6 +36,8 @@ namespace Bit.App.Models
             Favorite = response.Favorite;
         }
 
+        public string UserId { get; set; }
+        public string OrganizationId { get; set; }
         public string FolderId { get; set; }
         public CipherString Uri { get; set; }
         public CipherString Username { get; set; }

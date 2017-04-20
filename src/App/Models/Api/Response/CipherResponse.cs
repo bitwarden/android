@@ -8,6 +8,8 @@ namespace Bit.App.Models.Api
     {
         public string Id { get; set; }
         public string FolderId { get; set; }
+        public string UserId { get; set; }
+        public string OrganizationId { get; set; }
         public CipherType Type { get; set; }
         public bool Favorite { get; set; }
         public JObject Data { get; set; }

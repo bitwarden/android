@@ -16,6 +16,7 @@ namespace Bit.App.Models.Data
             Id = login.Id;
             FolderId = login.FolderId;
             UserId = userId;
+            OrganizationId = login.OrganizationId;
             Name = login.Name?.EncryptedString;
             Uri = login.Uri?.EncryptedString;
             Username = login.Username?.EncryptedString;
@@ -29,6 +30,7 @@ namespace Bit.App.Models.Data
             Id = login.Id;
             FolderId = login.FolderId;
             UserId = userId;
+            OrganizationId = login.OrganizationId;
             Name = login.Name;
             Uri = login.Uri;
             Username = login.Username;
@@ -50,6 +52,7 @@ namespace Bit.App.Models.Data
             Id = cipher.Id;
             FolderId = cipher.FolderId;
             UserId = userId;
+            OrganizationId = cipher.OrganizationId;
             Name = data.Name;
             Uri = data.Uri;
             Username = data.Username;
@@ -64,6 +67,7 @@ namespace Bit.App.Models.Data
         public string FolderId { get; set; }
         [Indexed]
         public string UserId { get; set; }
+        public string OrganizationId { get; set; }
         public string Name { get; set; }
         public string Uri { get; set; }
         public string Username { get; set; }
