@@ -97,7 +97,7 @@ namespace Bit.App.Models
         public string InitializationVector { get; private set; }
         public string CipherText { get; private set; }
         public string Mac { get; private set; }
-        public byte[] InitializationVectorBytes => InitializationVector == null ?
+        public byte[] InitializationVectorBytes => string.IsNullOrWhiteSpace(InitializationVector) ?
             null : Convert.FromBase64String(InitializationVector);
         public byte[] CipherTextBytes => Convert.FromBase64String(CipherText);
         public byte[] MacBytes => Mac == null ? null : Convert.FromBase64String(Mac);
