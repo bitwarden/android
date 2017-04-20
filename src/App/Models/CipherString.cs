@@ -11,7 +11,7 @@ namespace Bit.App.Models
 
         public CipherString(string encryptedString)
         {
-            if(string.IsNullOrWhiteSpace(encryptedString) || !encryptedString.Contains("|"))
+            if(string.IsNullOrWhiteSpace(encryptedString))
             {
                 throw new ArgumentException(nameof(encryptedString));
             }

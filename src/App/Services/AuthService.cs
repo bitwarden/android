@@ -263,6 +263,11 @@ namespace Bit.App.Services
 
         private void ProcessLoginSuccess(CryptoKey key, TokenResponse response)
         {
+            if(response.PrivateKey != null)
+            {
+                _cryptoService.SetPrivateKey(new CipherString(response.PrivateKey), key);
+            }
+
             _cryptoService.Key = key;
             _tokenService.Token = response.AccessToken;
             _tokenService.RefreshToken = response.RefreshToken;

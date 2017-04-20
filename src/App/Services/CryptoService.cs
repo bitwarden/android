@@ -112,7 +112,7 @@ namespace Bit.App.Services
 
                 return _privateKey;
             }
-            set
+            private set
             {
                 if(value != null)
                 {

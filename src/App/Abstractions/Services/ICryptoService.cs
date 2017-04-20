@@ -9,7 +9,7 @@ namespace Bit.App.Abstractions
         CryptoKey Key { get; set; }
         CryptoKey PreviousKey { get; }
         bool KeyChanged { get; }
-        byte[] PrivateKey { get; set; }
+        byte[] PrivateKey { get; }
         IDictionary<Guid, CryptoKey> OrgKeys { get; set; }
 
         void SetPrivateKey(CipherString privateKeyEnc, CryptoKey key);
