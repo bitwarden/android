@@ -39,9 +39,6 @@ namespace Bit.Android
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
-            // NOTE: This is just here to stop the linker from removing AndroidClientHandler references
-            var handler = new AndroidClientHandler();
-
             if(!Resolver.IsSet)
             {
                 SetIoc(this);

@@ -757,9 +757,6 @@
     <AndroidResource Include="Resources\drawable\icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidEnvironment Include="EnvironmentVariables.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\notification_sm.png" />
   </ItemGroup>
   <ItemGroup>
