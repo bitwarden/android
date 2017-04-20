@@ -226,7 +226,6 @@ namespace Bit.App
             await Task.Run(() => deviceApiRepository.PutClearTokenAsync(appIdService.AppId)).ConfigureAwait(false);
 
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
-            _googleAnalyticsService.RefreshUserId();
 
             Device.BeginInvokeOnMainThread(() => Current.MainPage = new ExtendedNavigationPage(new HomePage()));
             if(!string.IsNullOrWhiteSpace(logoutMessage))

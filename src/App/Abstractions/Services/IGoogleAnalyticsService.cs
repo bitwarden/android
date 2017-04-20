@@ -4,7 +4,6 @@ namespace Bit.App.Abstractions
 {
     public interface IGoogleAnalyticsService
     {
-        void RefreshUserId();
         void TrackPage(string pageName);
         void TrackAppEvent(string eventName, string label = null);
         void TrackExtensionEvent(string eventName, string label = null);

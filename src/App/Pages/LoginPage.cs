@@ -221,7 +221,6 @@ namespace Bit.App.Pages
             _authService.UserId = _tokenService.TokenUserId;
             _authService.Email = _tokenService.TokenEmail;
             _settings.AddOrUpdateValue(Constants.LastLoginEmail, _authService.Email);
-            _googleAnalyticsService.RefreshUserId();
             _googleAnalyticsService.TrackAppEvent("LoggedIn");
 
             if(Device.OS == TargetPlatform.Android)

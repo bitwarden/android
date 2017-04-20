@@ -107,7 +107,7 @@ namespace Bit.App.Pages
             AnalyticsCell = new ExtendedSwitchCell
             {
                 Text = AppResources.DisableGA,
-                On = _settings.GetValueOrDefault(Constants.SettingGAOptOut, false)
+                On = _settings.GetValueOrDefault(Constants.SettingGaOptOut, false)
             };
 
             FoldersCell = new ExtendedTextCell
@@ -429,7 +429,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _settings.AddOrUpdateValue(Constants.SettingGAOptOut, cell.On);
+            _settings.AddOrUpdateValue(Constants.SettingGaOptOut, cell.On);
             _googleAnalyticsService.SetAppOptOut(cell.On);
         }
 

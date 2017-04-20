@@ -9,7 +9,6 @@ namespace Bit.iOS.Core.Services
     {
         private readonly ITracker _tracker;
         private readonly IAuthService _authService;
-        private bool _setUserId = true;
 
         public GoogleAnalyticsService(
             IAppIdService appIdService,
@@ -24,14 +23,8 @@ namespace Bit.iOS.Core.Services
             _tracker.SetAllowIdfaCollection(true);
             _tracker.Set(GaiConstants.ClientId, appIdService.AnonymousAppId);
 
-            var gaOptOut = settings.GetValueOrDefault(App.Constants.SettingGAOptOut, false);
+            var gaOptOut = settings.GetValueOrDefault(App.Constants.SettingGaOptOut, false);
             SetAppOptOut(gaOptOut);
-        }
-
-        public void RefreshUserId()
-        {
-            _tracker.Set(GaiConstants.UserId, null);
-            _setUserId = true;
         }
 
         public void TrackAppEvent(string eventName, string label = null)
@@ -46,7 +39,6 @@ namespace Bit.iOS.Core.Services
 
         public void TrackEvent(string category, string eventName, string label = null)
         {
-            SetUserId();
             var dict = DictionaryBuilder.CreateEvent(category, eventName, label, null).Build();
             _tracker.Send(dict);
             Gai.SharedInstance.Dispatch();
@@ -54,14 +46,12 @@ namespace Bit.iOS.Core.Services
 
         public void TrackException(string message, bool fatal)
         {
-            SetUserId();
             var dict = DictionaryBuilder.CreateException(message, fatal).Build();
             _tracker.Send(dict);
         }
 
         public void TrackPage(string pageName)
         {
-            SetUserId();
             _tracker.Set(GaiConstants.ScreenName, pageName);
             var dict = DictionaryBuilder.CreateScreenView().Build();
             _tracker.Send(dict);
@@ -73,15 +63,6 @@ namespace Bit.iOS.Core.Services
             {
                 completionHandler?.Invoke();
             });
-        }
-
-        private void SetUserId()
-        {
-            if(_setUserId && _authService.IsAuthenticated)
-            {
-                _tracker.Set(GaiConstants.UserId, _authService.UserId);
-                _setUserId = false;
-            }
         }
 
         public void SetAppOptOut(bool optOut)
