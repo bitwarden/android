@@ -19,7 +19,8 @@ namespace Bit.App.Models
             var headerPieces = encryptedString.Split('.');
             string[] encPieces;
 
-            if(headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out EncryptionType encType))
+            EncryptionType encType;
+            if(headerPieces.Length == 2 && Enum.TryParse(headerPieces[0], out encType))
             {
                 EncryptionType = encType;
                 encPieces = headerPieces[1].Split('|');
