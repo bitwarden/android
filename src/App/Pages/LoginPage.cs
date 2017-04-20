@@ -72,10 +72,11 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 EnableSelection = true,
                 NoFooter = true,
+                //NoHeader = true,
                 VerticalOptions = LayoutOptions.Start,
                 Root = new TableRoot
                 {
-                    new TableSection()
+                    new TableSection(" ")
                     {
                         EmailCell,
                         PasswordCell

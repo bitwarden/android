@@ -38,7 +38,7 @@ namespace Bit.App.Pages
             {
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         EmailCell
                     }
@@ -61,7 +61,7 @@ namespace Bit.App.Pages
                 NoHeader = true,
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         WebsiteCell
                     }
@@ -84,7 +84,7 @@ namespace Bit.App.Pages
                 NoHeader = true,
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         BugCell
                     }

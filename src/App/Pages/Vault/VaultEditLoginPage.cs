@@ -118,7 +118,7 @@ namespace Bit.App.Pages
                         PasswordCell,
                         GenerateCell
                     },
-                    new TableSection
+                    new TableSection(" ")
                     {
                         FolderCell,
                         favoriteCell
@@ -127,7 +127,7 @@ namespace Bit.App.Pages
                     {
                         NotesCell
                     },
-                    new TableSection
+                    new TableSection(" ")
                     {
                         DeleteCell
                     }

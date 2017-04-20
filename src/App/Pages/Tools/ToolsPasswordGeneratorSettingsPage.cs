@@ -77,19 +77,19 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         UppercaseCell,
                         LowercaseCell,
                         NumbersCell,
                         SpecialCell
                     },
-                    new TableSection
+                    new TableSection(" ")
                     {
                         NumbersMinCell,
                         SpecialMinCell
                     },
-                    new TableSection
+                    new TableSection(" ")
                     {
                         AvoidAmbiguousCell
                     }

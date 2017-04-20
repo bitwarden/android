@@ -36,7 +36,7 @@ namespace Bit.App.Pages
             WebCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe");
             ImportCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup");
 
-            var section = new TableSection { GeneratorCell };
+            var section = new TableSection(" ") { GeneratorCell };
 
             if(Device.OS == TargetPlatform.iOS)
             {

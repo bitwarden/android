@@ -111,7 +111,7 @@ namespace Bit.App.Pages
                         PasswordCell,
                         GenerateCell
                     },
-                    new TableSection
+                    new TableSection(" ")
                     {
                         FolderCell,
                         favoriteCell

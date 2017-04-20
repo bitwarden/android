@@ -41,7 +41,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection()
+                    new TableSection(" ")
                     {
                         NameCell
                     }

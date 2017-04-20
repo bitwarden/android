@@ -54,11 +54,11 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start,
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         NameCell
                     },
-                    new TableSection
+                    new TableSection(" ")
                     {
                         DeleteCell
                     }

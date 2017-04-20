@@ -73,7 +73,7 @@ namespace Bit.App.Pages
                 NoHeader = true,
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         RegenerateCell,
                         CopyCell

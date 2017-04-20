@@ -66,7 +66,7 @@ namespace Bit.App.Pages
             {
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         EmailCell,
                         PasswordCell
@@ -88,7 +88,7 @@ namespace Bit.App.Pages
                 NoHeader = true,
                 Root = new TableRoot
                 {
-                    new TableSection
+                    new TableSection(" ")
                     {
                         ConfirmPasswordCell,
                         PasswordHintCell
