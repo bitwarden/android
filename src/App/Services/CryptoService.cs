@@ -5,6 +5,8 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using PCLCrypto;
 using System.Linq;
+using Bit.App.Enums;
+using System.Collections.Generic;
 
 namespace Bit.App.Services
 {
@@ -12,6 +14,8 @@ namespace Bit.App.Services
     {
         private const string KeyKey = "key";
         private const string PreviousKeyKey = "previousKey";
+        private const string PrivateKeyKey = "privateKey";
+        private const string OrgKeyKeyPrefix = "orgKey:";
         private const int InitializationVectorSize = 16;
 
         private readonly ISecureStorageService _secureStorage;
@@ -19,6 +23,8 @@ namespace Bit.App.Services
         private CryptoKey _key;
         private CryptoKey _legacyEtmKey;
         private CryptoKey _previousKey;
+        private IDictionary<Guid, CryptoKey> _orgKeys = new Dictionary<Guid, CryptoKey>();
+        private byte[] _privateKey;
 
         public CryptoService(
             ISecureStorageService secureStorage,
@@ -94,6 +100,62 @@ namespace Bit.App.Services
             }
         }
 
+        public byte[] PrivateKey
+        {
+            get
+            {
+                if(_privateKey == null)
+                {
+                    _privateKey = _secureStorage.Retrieve(PrivateKeyKey);
+                }
+
+                return _privateKey;
+            }
+            private set
+            {
+                if(value != null)
+                {
+                    _secureStorage.Store(PrivateKeyKey, value);
+                    _privateKey = value;
+                }
+            }
+        }
+
+        public void SetPrivateKey(CipherString privateKeyEnc, CryptoKey key)
+        {
+            var bytes = DecryptToBytes(privateKeyEnc, key);
+            PrivateKey = bytes;
+        }
+
+        public CryptoKey GetOrgKey(Guid orgId)
+        {
+            if(!_orgKeys.ContainsKey(orgId))
+            {
+                var key = string.Concat(OrgKeyKeyPrefix, orgId);
+                if(!_secureStorage.Contains(key))
+                {
+                    return null;
+                }
+
+                _orgKeys[orgId] = new CryptoKey(_secureStorage.Retrieve(key));
+            }
+
+            return _orgKeys[orgId];
+        }
+
+        public void AddOrgKey(Guid orgId, CipherString encOrgKey, byte[] privateKey)
+        {
+            try
+            {
+                var decBytes = RsaDecryptToBytes(encOrgKey, privateKey);
+                _orgKeys[orgId] = new CryptoKey(decBytes);
+            }
+            catch
+            {
+                Debug.WriteLine("Cannot set org key. Decryption failed.");
+            }
+        }
+
         public CipherString Encrypt(string plaintextValue, CryptoKey key = null)
         {
             if(key == null)
@@ -126,59 +188,88 @@ namespace Bit.App.Services
         {
             try
             {
-                if(key == null)
-                {
-                    key = Key;
-                }
-
-                if(key == null)
-                {
-                    throw new ArgumentNullException(nameof(key));
-                }
-
-                if(encyptedValue == null)
-                {
-                    throw new ArgumentNullException(nameof(encyptedValue));
-                }
-
-                if(encyptedValue.EncryptionType == Enums.EncryptionType.AesCbc128_HmacSha256_B64 &&
-                    key.EncryptionType == Enums.EncryptionType.AesCbc256_B64)
-                {
-                    // Old encrypt-then-mac scheme, swap out the key
-                    if(_legacyEtmKey == null)
-                    {
-                        _legacyEtmKey = new CryptoKey(key.Key, Enums.EncryptionType.AesCbc128_HmacSha256_B64);
-                    }
-
-                    key = _legacyEtmKey;
-                }
-
-                if(encyptedValue.EncryptionType != key.EncryptionType)
-                {
-                    throw new ArgumentException("encType unavailable.");
-                }
-
-                if(key.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
-                {
-                    var computedMac = ComputeMac(encyptedValue.CipherTextBytes,
-                        encyptedValue.InitializationVectorBytes, key.MacKey);
-                    if(computedMac != encyptedValue.Mac)
-                    {
-                        throw new InvalidOperationException("MAC failed.");
-                    }
-                }
-
-                var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
-                var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
-                var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
-                    encyptedValue.InitializationVectorBytes);
-                return Encoding.UTF8.GetString(decryptedBytes, 0, decryptedBytes.Length).TrimEnd('\0');
+                var bytes = DecryptToBytes(encyptedValue, key);
+                return Encoding.UTF8.GetString(bytes, 0, bytes.Length).TrimEnd('\0');
             }
             catch(Exception e)
             {
                 Debug.WriteLine("Could not decrypt '{0}'. {1}", encyptedValue, e.Message);
                 return "[error: cannot decrypt]";
             }
+        }
+
+        public byte[] DecryptToBytes(CipherString encyptedValue, CryptoKey key = null)
+        {
+            if(key == null)
+            {
+                key = Key;
+            }
+
+            if(key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if(encyptedValue == null)
+            {
+                throw new ArgumentNullException(nameof(encyptedValue));
+            }
+
+            if(encyptedValue.EncryptionType == Enums.EncryptionType.AesCbc128_HmacSha256_B64 &&
+                key.EncryptionType == Enums.EncryptionType.AesCbc256_B64)
+            {
+                // Old encrypt-then-mac scheme, swap out the key
+                if(_legacyEtmKey == null)
+                {
+                    _legacyEtmKey = new CryptoKey(key.Key, Enums.EncryptionType.AesCbc128_HmacSha256_B64);
+                }
+
+                key = _legacyEtmKey;
+            }
+
+            if(encyptedValue.EncryptionType != key.EncryptionType)
+            {
+                throw new ArgumentException("encType unavailable.");
+            }
+
+            if(key.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
+            {
+                var computedMac = ComputeMac(encyptedValue.CipherTextBytes,
+                    encyptedValue.InitializationVectorBytes, key.MacKey);
+                if(computedMac != encyptedValue.Mac)
+                {
+                    throw new InvalidOperationException("MAC failed.");
+                }
+            }
+
+            var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
+            var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
+            var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
+                encyptedValue.InitializationVectorBytes);
+            return decryptedBytes;
+        }
+
+        public byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey)
+        {
+            if(privateKey == null)
+            {
+                privateKey = PrivateKey;
+            }
+
+            if(privateKey == null)
+            {
+                throw new ArgumentNullException(nameof(privateKey));
+            }
+
+            if(encyptedValue.EncryptionType != EncryptionType.RsaOaep_Sha256_B64)
+            {
+                throw new ArgumentException("encType unavailable.");
+            }
+
+            var provider = WinRTCrypto.AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha256);
+            var cryptoKey = provider.ImportKeyPair(privateKey, CryptographicPrivateKeyBlobType.Pkcs8RawPrivateKeyInfo);
+            var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes);
+            return decryptedBytes;
         }
 
         private string ComputeMac(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
