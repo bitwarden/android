@@ -81,8 +81,10 @@
     <Compile Include="Controls\PinControl.cs" />
     <Compile Include="Controls\VaultListViewCell.cs" />
     <Compile Include="Enums\EncryptionType.cs" />
+    <Compile Include="Enums\OrganizationUserType.cs" />
     <Compile Include="Enums\LockType.cs" />
     <Compile Include="Enums\CipherType.cs" />
+    <Compile Include="Enums\OrganizationUserStatusType.cs" />
     <Compile Include="Enums\PushType.cs" />
     <Compile Include="Enums\ReturnType.cs" />
     <Compile Include="Abstractions\Services\ILocalizeService.cs" />
@@ -104,6 +106,7 @@
     <Compile Include="Models\Api\Response\ListResponse.cs" />
     <Compile Include="Models\Api\Response\DeviceResponse.cs" />
     <Compile Include="Models\Api\Response\LoginResponse.cs" />
+    <Compile Include="Models\Api\Response\ProfileOrganizationResponse.cs" />
     <Compile Include="Models\Api\Response\TokenResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileResponse.cs" />
     <Compile Include="Models\Api\LoginDataModel.cs" />

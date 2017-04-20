@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Plugin.Connectivity.Abstractions;
+using Newtonsoft.Json;
 
 namespace Bit.App.Repositories
 {
@@ -84,7 +85,7 @@ namespace Bit.App.Repositories
             }
         }
 
-        public virtual async Task<ApiResult<DateTime?>> GetAccountRevisionDate()
+        public virtual async Task<ApiResult<DateTime?>> GetAccountRevisionDateAsync()
         {
             if(!Connectivity.IsConnected)
             {
@@ -129,6 +130,46 @@ namespace Bit.App.Repositories
                 catch
                 {
                     return HandledWebException<DateTime?>();
+                }
+            }
+        }
+
+        public virtual async Task<ApiResult<ProfileResponse>> GetProfileAsync()
+        {
+            if(!Connectivity.IsConnected)
+            {
+                return HandledNotConnected<ProfileResponse>();
+            }
+
+            var tokenStateResponse = await HandleTokenStateAsync<ProfileResponse>();
+            if(!tokenStateResponse.Succeeded)
+            {
+                return tokenStateResponse;
+            }
+
+            using(var client = HttpService.Client)
+            {
+                var requestMessage = new TokenHttpRequestMessage()
+                {
+                    Method = HttpMethod.Get,
+                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/profile")),
+                };
+
+                try
+                {
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return await HandleErrorAsync<ProfileResponse>(response).ConfigureAwait(false);
+                    }
+
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var responseObj = JsonConvert.DeserializeObject<ProfileResponse>(responseContent);
+                    return ApiResult<ProfileResponse>.Success(responseObj, response.StatusCode);
+                }
+                catch
+                {
+                    return HandledWebException<ProfileResponse>();
                 }
             }
         }

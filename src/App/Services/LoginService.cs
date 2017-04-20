@@ -125,7 +125,7 @@ namespace Bit.App.Services
                     continue;
                 }
 
-                var loginUriString = new CipherString(login.Uri).Decrypt();
+                var loginUriString = new CipherString(login.Uri).Decrypt(login.OrganizationId);
                 if(string.IsNullOrWhiteSpace(loginUriString))
                 {
                     continue;

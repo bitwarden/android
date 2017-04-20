@@ -8,6 +8,7 @@ namespace Bit.App.Abstractions
     {
         Task<ApiResult> PostRegisterAsync(RegisterRequest requestObj);
         Task<ApiResult> PostPasswordHintAsync(PasswordHintRequest requestObj);
-        Task<ApiResult<DateTime?>> GetAccountRevisionDate();
+        Task<ApiResult<DateTime?>> GetAccountRevisionDateAsync();
+        Task<ApiResult<ProfileResponse>> GetProfileAsync();
     }
 }

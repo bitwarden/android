@@ -102,12 +102,19 @@ namespace Bit.App.Models
         public byte[] CipherTextBytes => Convert.FromBase64String(CipherText);
         public byte[] MacBytes => Mac == null ? null : Convert.FromBase64String(Mac);
 
-        public string Decrypt()
+        public string Decrypt(string orgId = null)
         {
             if(_decryptedValue == null)
             {
                 var cryptoService = Resolver.Resolve<ICryptoService>();
-                _decryptedValue = cryptoService.Decrypt(this);
+                if(!string.IsNullOrWhiteSpace(orgId))
+                {
+                    _decryptedValue = cryptoService.Decrypt(this, cryptoService.GetOrgKey(orgId));
+                }
+                else
+                {
+                    _decryptedValue = cryptoService.Decrypt(this);
+                }
             }
 
             return _decryptedValue;

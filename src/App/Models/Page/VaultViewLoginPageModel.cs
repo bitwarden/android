@@ -171,11 +171,11 @@ namespace Bit.App.Models.Page
 
         public void Update(Login login)
         {
-            Name = login.Name?.Decrypt();
-            Username = login.Username?.Decrypt();
-            Password = login.Password?.Decrypt();
-            Uri = login.Uri?.Decrypt();
-            Notes = login.Notes?.Decrypt();
+            Name = login.Name?.Decrypt(login.OrganizationId);
+            Username = login.Username?.Decrypt(login.OrganizationId);
+            Password = login.Password?.Decrypt(login.OrganizationId);
+            Uri = login.Uri?.Decrypt(login.OrganizationId);
+            Notes = login.Notes?.Decrypt(login.OrganizationId);
         }
     }
 }

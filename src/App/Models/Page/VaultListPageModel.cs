@@ -12,10 +12,10 @@ namespace Bit.App.Models.Page
             {
                 Id = login.Id;
                 FolderId = login.FolderId;
-                Name = login.Name?.Decrypt();
-                Username = login.Username?.Decrypt() ?? " ";
-                Password = new Lazy<string>(() => login.Password?.Decrypt());
-                Uri = new Lazy<string>(() => login.Uri?.Decrypt());
+                Name = login.Name?.Decrypt(login.OrganizationId);
+                Username = login.Username?.Decrypt(login.OrganizationId) ?? " ";
+                Password = new Lazy<string>(() => login.Password?.Decrypt(login.OrganizationId));
+                Uri = new Lazy<string>(() => login.Uri?.Decrypt(login.OrganizationId));
             }
 
             public string Id { get; set; }

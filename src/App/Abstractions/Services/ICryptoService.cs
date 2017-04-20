@@ -10,14 +10,16 @@ namespace Bit.App.Abstractions
         CryptoKey PreviousKey { get; }
         bool KeyChanged { get; }
         byte[] PrivateKey { get; }
-        IDictionary<Guid, CryptoKey> OrgKeys { get; set; }
+        IDictionary<string, CryptoKey> OrgKeys { get; set; }
 
         void SetPrivateKey(CipherString privateKeyEnc, CryptoKey key);
-        CryptoKey GetOrgKey(Guid orgId);
-        void ClearOrgKey(Guid orgId);
+        CryptoKey GetOrgKey(string orgId);
+        void ClearOrgKey(string orgId);
         void ClearKeys();
-        CryptoKey AddOrgKey(Guid orgId, CipherString encOrgKey, byte[] privateKey);
+        CryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey);
         string Decrypt(CipherString encyptedValue, CryptoKey key = null);
+        byte[] DecryptToBytes(CipherString encyptedValue, CryptoKey key = null);
+        byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey);
         CipherString Encrypt(string plaintextValue, CryptoKey key = null);
         CryptoKey MakeKeyFromPassword(string password, string salt);
         string MakeKeyFromPasswordBase64(string password, string salt);

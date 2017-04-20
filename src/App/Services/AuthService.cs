@@ -6,6 +6,8 @@ using Bit.App.Models.Api;
 using Plugin.Settings.Abstractions;
 using Bit.App.Models;
 using System.Linq;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Bit.App.Services
 {
@@ -21,6 +23,7 @@ namespace Bit.App.Services
         private readonly ISettings _settings;
         private readonly ICryptoService _cryptoService;
         private readonly IConnectApiRepository _connectApiRepository;
+        private readonly IAccountsApiRepository _accountsApiRepository;
         private readonly IAppIdService _appIdService;
         private readonly IDeviceInfoService _deviceInfoService;
 
@@ -35,6 +38,7 @@ namespace Bit.App.Services
             ISettings settings,
             ICryptoService cryptoService,
             IConnectApiRepository connectApiRepository,
+            IAccountsApiRepository accountsApiRepository,
             IAppIdService appIdService,
             IDeviceInfoService deviceInfoService)
         {
@@ -43,6 +47,7 @@ namespace Bit.App.Services
             _settings = settings;
             _cryptoService = cryptoService;
             _connectApiRepository = connectApiRepository;
+            _accountsApiRepository = accountsApiRepository;
             _appIdService = appIdService;
             _deviceInfoService = deviceInfoService;
         }
@@ -230,7 +235,7 @@ namespace Bit.App.Services
                 return result;
             }
 
-            ProcessLoginSuccess(key, response.Result);
+            await ProcessLoginSuccessAsync(key, response.Result);
             return result;
         }
 
@@ -257,11 +262,11 @@ namespace Bit.App.Services
             }
 
             result.Success = true;
-            ProcessLoginSuccess(key, response.Result);
+            await ProcessLoginSuccessAsync(key, response.Result);
             return result;
         }
 
-        private void ProcessLoginSuccess(CryptoKey key, TokenResponse response)
+        private async Task ProcessLoginSuccessAsync(CryptoKey key, TokenResponse response)
         {
             if(response.PrivateKey != null)
             {
@@ -274,6 +279,30 @@ namespace Bit.App.Services
             UserId = _tokenService.TokenUserId;
             Email = _tokenService.TokenEmail;
             _settings.AddOrUpdateValue(Constants.LastLoginEmail, Email);
+
+            if(response.PrivateKey != null)
+            {
+                var profile = await _accountsApiRepository.GetProfileAsync();
+                var orgKeysDict = new Dictionary<string, CryptoKey>();
+
+                if(profile.Succeeded && (profile.Result.Organizations?.Any() ?? false))
+                {
+                    foreach(var org in profile.Result.Organizations)
+                    {
+                        try
+                        {
+                            var decBytes = _cryptoService.RsaDecryptToBytes(new CipherString(org.Key), null);
+                            orgKeysDict.Add(org.Id, new CryptoKey(decBytes));
+                        }
+                        catch
+                        {
+                            Debug.WriteLine($"Cannot set org key {org.Id}. Decryption failed.");
+                        }
+                    }
+                }
+
+                _cryptoService.OrgKeys = orgKeysDict;
+            }
         }
     }
 }

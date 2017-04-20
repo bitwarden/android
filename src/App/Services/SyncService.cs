@@ -217,7 +217,7 @@ namespace Bit.App.Services
                 return true;
             }
 
-            var accountRevisionDate = await _accountsApiRepository.GetAccountRevisionDate();
+            var accountRevisionDate = await _accountsApiRepository.GetAccountRevisionDateAsync();
             if(accountRevisionDate.Succeeded && accountRevisionDate.Result.HasValue &&
                 accountRevisionDate.Result.Value > lastSync)
             {

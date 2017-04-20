@@ -51,25 +51,25 @@ namespace Bit.App.Pages
             }
 
             NotesCell = new FormEditorCell(height: 90);
-            NotesCell.Editor.Text = login.Notes?.Decrypt();
+            NotesCell.Editor.Text = login.Notes?.Decrypt(login.OrganizationId);
 
             PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: NotesCell.Editor,
                 useButton: true);
-            PasswordCell.Entry.Text = login.Password?.Decrypt();
+            PasswordCell.Entry.Text = login.Password?.Decrypt(login.OrganizationId);
             PasswordCell.Button.Image = "eye";
             PasswordCell.Entry.DisableAutocapitalize = true;
             PasswordCell.Entry.Autocorrect = false;
             PasswordCell.Entry.FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             UsernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
-            UsernameCell.Entry.Text = login.Username?.Decrypt();
+            UsernameCell.Entry.Text = login.Username?.Decrypt(login.OrganizationId);
             UsernameCell.Entry.DisableAutocapitalize = true;
             UsernameCell.Entry.Autocorrect = false;
 
             UriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: UsernameCell.Entry);
-            UriCell.Entry.Text = login.Uri?.Decrypt();
+            UriCell.Entry.Text = login.Uri?.Decrypt(login.OrganizationId);
             NameCell = new FormEntryCell(AppResources.Name, nextElement: UriCell.Entry);
-            NameCell.Entry.Text = login.Name?.Decrypt();
+            NameCell.Entry.Text = login.Name?.Decrypt(login.OrganizationId);
 
             GenerateCell = new ExtendedTextCell
             {

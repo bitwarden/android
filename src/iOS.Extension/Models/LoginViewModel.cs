@@ -7,10 +7,10 @@ namespace Bit.iOS.Extension.Models
         public LoginViewModel(Login login)
         {
             Id = login.Id;
-            Name = login.Name?.Decrypt();
-            Username = login.Username?.Decrypt();
-            Password = login.Password?.Decrypt();
-            Uri = login.Uri?.Decrypt();
+            Name = login.Name?.Decrypt(login.OrganizationId);
+            Username = login.Username?.Decrypt(login.OrganizationId);
+            Password = login.Password?.Decrypt(login.OrganizationId);
+            Uri = login.Uri?.Decrypt(login.OrganizationId);
         }
 
         public string Id { get; set; }

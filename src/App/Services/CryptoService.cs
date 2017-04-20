@@ -24,7 +24,7 @@ namespace Bit.App.Services
         private CryptoKey _key;
         private CryptoKey _legacyEtmKey;
         private CryptoKey _previousKey;
-        private IDictionary<Guid, CryptoKey> _orgKeys;
+        private IDictionary<string, CryptoKey> _orgKeys;
         private byte[] _privateKey;
 
         public CryptoService(
@@ -127,7 +127,7 @@ namespace Bit.App.Services
             }
         }
 
-        public IDictionary<Guid, CryptoKey> OrgKeys
+        public IDictionary<string, CryptoKey> OrgKeys
         {
             get
             {
@@ -139,8 +139,8 @@ namespace Bit.App.Services
                         var orgKeysDictJson = Encoding.UTF8.GetString(orgKeysDictBytes, 0, orgKeysDictBytes.Length);
                         if(!string.IsNullOrWhiteSpace(orgKeysDictJson))
                         {
-                            _orgKeys = new Dictionary<Guid, CryptoKey>();
-                            var orgKeysDict = JsonConvert.DeserializeObject<IDictionary<Guid, byte[]>>(orgKeysDictJson);
+                            _orgKeys = new Dictionary<string, CryptoKey>();
+                            var orgKeysDict = JsonConvert.DeserializeObject<IDictionary<string, byte[]>>(orgKeysDictJson);
                             foreach(var item in orgKeysDict)
                             {
                                 _orgKeys.Add(item.Key, new CryptoKey(item.Value));
@@ -155,7 +155,7 @@ namespace Bit.App.Services
             {
                 if(value != null && value.Any())
                 {
-                    var dict = new Dictionary<Guid, byte[]>();
+                    var dict = new Dictionary<string, byte[]>();
                     foreach(var item in value)
                     {
                         dict.Add(item.Key, item.Value.Key);
@@ -180,7 +180,7 @@ namespace Bit.App.Services
             PrivateKey = bytes;
         }
 
-        public CryptoKey GetOrgKey(Guid orgId)
+        public CryptoKey GetOrgKey(string orgId)
         {
             if(OrgKeys == null || !OrgKeys.ContainsKey(orgId))
             {
@@ -190,7 +190,7 @@ namespace Bit.App.Services
             return OrgKeys[orgId];
         }
 
-        public void ClearOrgKey(Guid orgId)
+        public void ClearOrgKey(string orgId)
         {
             var localOrgKeys = OrgKeys;
             if(localOrgKeys == null || !localOrgKeys.ContainsKey(orgId))
@@ -210,7 +210,7 @@ namespace Bit.App.Services
             PrivateKey = null;
         }
 
-        public CryptoKey AddOrgKey(Guid orgId, CipherString encOrgKey, byte[] privateKey)
+        public CryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey)
         {
             try
             {
