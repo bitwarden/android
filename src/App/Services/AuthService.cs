@@ -191,6 +191,11 @@ namespace Bit.App.Services
             }
         }
 
+        public bool BelongsToOrganization(string orgId)
+        {
+            return !string.IsNullOrWhiteSpace(orgId) && (_cryptoService.OrgKeys?.ContainsKey(orgId) ?? false);
+        }
+
         public void LogOut()
         {
             _tokenService.Token = null;

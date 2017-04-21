@@ -96,6 +96,44 @@ namespace Bit.App.Services
             return true;
         }
 
+        public async Task<bool> SyncFolderAsync(string id)
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return false;
+            }
+
+            SyncStarted();
+
+            var folder = await _folderApiRepository.GetByIdAsync(id).ConfigureAwait(false);
+            if(!folder.Succeeded)
+            {
+                SyncCompleted(false);
+
+                if(Application.Current != null && (folder.StatusCode == System.Net.HttpStatusCode.Forbidden
+                    || folder.StatusCode == System.Net.HttpStatusCode.Unauthorized))
+                {
+                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                }
+
+                return false;
+            }
+
+            try
+            {
+                var folderData = new FolderData(folder.Result, _authService.UserId);
+                await _folderRepository.UpsertAsync(folderData).ConfigureAwait(false);
+            }
+            catch(SQLite.SQLiteException)
+            {
+                SyncCompleted(false);
+                return false;
+            }
+
+            SyncCompleted(true);
+            return true;
+        }
+
         public async Task<bool> SyncDeleteFolderAsync(string id, DateTime revisionDate)
         {
             if(!_authService.IsAuthenticated)
@@ -138,6 +176,35 @@ namespace Bit.App.Services
                 SyncCompleted(false);
                 return false;
             }
+        }
+
+        public async Task<bool> SyncSettingsAsync()
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return false;
+            }
+
+            SyncStarted();
+
+            var domains = await _settingsApiRepository.GetDomains(false).ConfigureAwait(false);
+            if(!domains.Succeeded)
+            {
+                SyncCompleted(false);
+
+                if(Application.Current != null && (domains.StatusCode == System.Net.HttpStatusCode.Forbidden
+                    || domains.StatusCode == System.Net.HttpStatusCode.Unauthorized))
+                {
+                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                }
+
+                return false;
+            }
+
+            await SyncDomainsAsync(domains.Result);
+
+            SyncCompleted(true);
+            return true;
         }
 
         public async Task<bool> FullSyncAsync(TimeSpan syncThreshold, bool forceSync = false)

@@ -12,6 +12,7 @@ namespace Bit.App.Abstractions
         string Email { get; set; }
         string PIN { get; set; }
 
+        bool BelongsToOrganization(string orgId);
         void LogOut();
         Task<FullLoginResult> TokenPostAsync(string email, string masterPassword);
         Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash, CryptoKey key);

@@ -59,15 +59,28 @@ namespace Bit.App.Services
             {
                 case Enums.PushType.SyncCipherUpdate:
                 case Enums.PushType.SyncCipherCreate:
-                    var createUpdateMessage = values.ToObject<SyncCipherPushNotification>();
-                    if(createUpdateMessage.UserId != _authService.UserId)
+                    var cipherCreateUpdateMessage = values.ToObject<SyncCipherPushNotification>();
+                    if(cipherCreateUpdateMessage.UserId != null && cipherCreateUpdateMessage.UserId != _authService.UserId)
                     {
                         break;
                     }
-                    _syncService.SyncCipherAsync(createUpdateMessage.Id);
+                    else if(!_authService.BelongsToOrganization(cipherCreateUpdateMessage.OrganizationId))
+                    {
+                        break;
+                    }
+                    _syncService.SyncCipherAsync(cipherCreateUpdateMessage.Id);
+                    break;
+                case Enums.PushType.SyncFolderUpdate:
+                case Enums.PushType.SyncFolderCreate:
+                    var folderCreateUpdateMessage = values.ToObject<SyncFolderPushNotification>();
+                    if(folderCreateUpdateMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
+                    _syncService.SyncFolderAsync(folderCreateUpdateMessage.Id);
                     break;
                 case Enums.PushType.SyncFolderDelete:
-                    var folderDeleteMessage = values.ToObject<SyncCipherPushNotification>();
+                    var folderDeleteMessage = values.ToObject<SyncFolderPushNotification>();
                     if(folderDeleteMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -76,19 +89,32 @@ namespace Bit.App.Services
                     break;
                 case Enums.PushType.SyncLoginDelete:
                     var loginDeleteMessage = values.ToObject<SyncCipherPushNotification>();
-                    if(loginDeleteMessage.UserId != _authService.UserId)
+                    if(loginDeleteMessage.UserId != null && loginDeleteMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
+                    else if(!_authService.BelongsToOrganization(loginDeleteMessage.OrganizationId))
                     {
                         break;
                     }
                     _syncService.SyncDeleteLoginAsync(loginDeleteMessage.Id);
                     break;
                 case Enums.PushType.SyncCiphers:
-                    var cipherMessage = values.ToObject<SyncCiphersPushNotification>();
+                case Enums.PushType.SyncVault:
+                    var cipherMessage = values.ToObject<SyncUserPushNotification>();
                     if(cipherMessage.UserId != _authService.UserId)
                     {
                         break;
                     }
                     _syncService.FullSyncAsync(true);
+                    break;
+                case Enums.PushType.SyncSettings:
+                    var domainMessage = values.ToObject<SyncUserPushNotification>();
+                    if(domainMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
+                    _syncService.SyncSettingsAsync();
                     break;
                 default:
                     break;

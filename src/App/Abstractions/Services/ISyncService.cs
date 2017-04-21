@@ -7,8 +7,10 @@ namespace Bit.App.Abstractions
     {
         bool SyncInProgress { get; }
         Task<bool> SyncCipherAsync(string id);
+        Task<bool> SyncFolderAsync(string id);
         Task<bool> SyncDeleteFolderAsync(string id, DateTime revisionDate);
         Task<bool> SyncDeleteLoginAsync(string id);
+        Task<bool> SyncSettingsAsync();
         Task<bool> FullSyncAsync(bool forceSync = false);
         Task<bool> FullSyncAsync(TimeSpan syncThreshold, bool forceSync = false);
     }

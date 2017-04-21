@@ -8,19 +8,24 @@ namespace Bit.App.Models
         public PushType Type { get; set; }
     }
 
-    public abstract class SyncPushNotification : PushNotification
-    {
-        public string UserId { get; set; }
-    }
-
-    public class SyncCipherPushNotification : SyncPushNotification
+    public class SyncCipherPushNotification : PushNotification
     {
         public string Id { get; set; }
+        public string UserId { get; set; }
+        public string OrganizationId { get; set; }
         public DateTime RevisionDate { get; set; }
     }
 
-    public class SyncCiphersPushNotification : SyncPushNotification
+    public class SyncFolderPushNotification : PushNotification
     {
+        public string Id { get; set; }
+        public string UserId { get; set; }
+        public DateTime RevisionDate { get; set; }
+    }
+
+    public class SyncUserPushNotification : PushNotification
+    {
+        public string UserId { get; set; }
         public DateTime Date { get; set; }
     }
 }
