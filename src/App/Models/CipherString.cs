@@ -55,7 +55,8 @@ namespace Bit.App.Models
                     CipherText = encPieces[1];
                     Mac = encPieces[2];
                     break;
-                case EncryptionType.RsaOaep_Sha256_B64:
+                case EncryptionType.Rsa2048_OaepSha256_B64:
+                case EncryptionType.Rsa2048_OaepSha1_B64:
                     if(encPieces.Length != 1)
                     {
                         throw new ArgumentException("Malformed encPieces.");

@@ -350,12 +350,19 @@ namespace Bit.App.Services
                 throw new ArgumentNullException(nameof(privateKey));
             }
 
-            if(encyptedValue.EncryptionType != EncryptionType.RsaOaep_Sha256_B64)
+            IAsymmetricKeyAlgorithmProvider provider = null;
+            switch(encyptedValue.EncryptionType)
             {
-                throw new ArgumentException("encType unavailable.");
+                case EncryptionType.Rsa2048_OaepSha256_B64:
+                    provider = WinRTCrypto.AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha256);
+                    break;
+                case EncryptionType.Rsa2048_OaepSha1_B64:
+                    provider = WinRTCrypto.AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha1);
+                    break;
+                default:
+                    throw new ArgumentException("EncryptionType unavailable.");
             }
 
-            var provider = WinRTCrypto.AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha256);
             var cryptoKey = provider.ImportKeyPair(privateKey, CryptographicPrivateKeyBlobType.Pkcs8RawPrivateKeyInfo);
             var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes);
             return decryptedBytes;
