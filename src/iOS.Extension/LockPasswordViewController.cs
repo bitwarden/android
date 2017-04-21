@@ -86,7 +86,7 @@ namespace Bit.iOS.Extension
             }
 
             var key = _cryptoService.MakeKeyFromPassword(MasterPasswordCell.TextField.Text, _authService.Email);
-            if(key.SequenceEqual(_cryptoService.Key))
+            if(key.Key.SequenceEqual(_cryptoService.Key.Key))
             {
                 _settings.AddOrUpdateValue(Constants.Locked, false);
                 MasterPasswordCell.TextField.ResignFirstResponder();
