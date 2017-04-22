@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace Bit.App.Models
 {
-    public class CryptoKey
+    public class SymmetricCryptoKey
     {
-        public CryptoKey(byte[] rawBytes, EncryptionType? encType = null)
+        public SymmetricCryptoKey(byte[] rawBytes, EncryptionType? encType = null)
         {
             if(rawBytes == null || rawBytes.Length == 0)
             {

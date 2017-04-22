@@ -9,7 +9,7 @@
     public class FullLoginResult : LoginResult
     {
         public bool TwoFactorRequired { get; set; }
-        public CryptoKey Key { get; set; }
+        public SymmetricCryptoKey Key { get; set; }
         public string MasterPasswordHash { get; set; }
     }
 }

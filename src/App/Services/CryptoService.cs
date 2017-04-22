@@ -21,10 +21,10 @@ namespace Bit.App.Services
 
         private readonly ISecureStorageService _secureStorage;
         private readonly IKeyDerivationService _keyDerivationService;
-        private CryptoKey _key;
-        private CryptoKey _legacyEtmKey;
-        private CryptoKey _previousKey;
-        private IDictionary<string, CryptoKey> _orgKeys;
+        private SymmetricCryptoKey _key;
+        private SymmetricCryptoKey _legacyEtmKey;
+        private SymmetricCryptoKey _previousKey;
+        private IDictionary<string, SymmetricCryptoKey> _orgKeys;
         private byte[] _privateKey;
 
         public CryptoService(
@@ -35,7 +35,7 @@ namespace Bit.App.Services
             _keyDerivationService = keyDerivationService;
         }
 
-        public CryptoKey Key
+        public SymmetricCryptoKey Key
         {
             get
             {
@@ -44,7 +44,7 @@ namespace Bit.App.Services
                     var keyBytes = _secureStorage.Retrieve(KeyKey);
                     if(keyBytes != null)
                     {
-                        _key = new CryptoKey(keyBytes);
+                        _key = new SymmetricCryptoKey(keyBytes);
                     }
                 }
 
@@ -66,7 +66,7 @@ namespace Bit.App.Services
             }
         }
 
-        public CryptoKey PreviousKey
+        public SymmetricCryptoKey PreviousKey
         {
             get
             {
@@ -75,7 +75,7 @@ namespace Bit.App.Services
                     var keyBytes = _secureStorage.Retrieve(PreviousKeyKey);
                     if(keyBytes != null)
                     {
-                        _previousKey = new CryptoKey(keyBytes);
+                        _previousKey = new SymmetricCryptoKey(keyBytes);
                     }
                 }
 
@@ -135,7 +135,7 @@ namespace Bit.App.Services
             }
         }
 
-        public IDictionary<string, CryptoKey> OrgKeys
+        public IDictionary<string, SymmetricCryptoKey> OrgKeys
         {
             get
             {
@@ -147,11 +147,11 @@ namespace Bit.App.Services
                         var orgKeysDictJson = Encoding.UTF8.GetString(orgKeysDictBytes, 0, orgKeysDictBytes.Length);
                         if(!string.IsNullOrWhiteSpace(orgKeysDictJson))
                         {
-                            _orgKeys = new Dictionary<string, CryptoKey>();
+                            _orgKeys = new Dictionary<string, SymmetricCryptoKey>();
                             var orgKeysDict = JsonConvert.DeserializeObject<IDictionary<string, byte[]>>(orgKeysDictJson);
                             foreach(var item in orgKeysDict)
                             {
-                                _orgKeys.Add(item.Key, new CryptoKey(item.Value));
+                                _orgKeys.Add(item.Key, new SymmetricCryptoKey(item.Value));
                             }
                         }
                     }
@@ -182,13 +182,13 @@ namespace Bit.App.Services
             }
         }
 
-        public void SetPrivateKey(CipherString privateKeyEnc, CryptoKey key)
+        public void SetPrivateKey(CipherString privateKeyEnc, SymmetricCryptoKey key)
         {
             var bytes = DecryptToBytes(privateKeyEnc, key);
             PrivateKey = bytes;
         }
 
-        public CryptoKey GetOrgKey(string orgId)
+        public SymmetricCryptoKey GetOrgKey(string orgId)
         {
             if(OrgKeys == null || !OrgKeys.ContainsKey(orgId))
             {
@@ -218,13 +218,13 @@ namespace Bit.App.Services
             PrivateKey = null;
         }
 
-        public CryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey)
+        public SymmetricCryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey)
         {
             try
             {
                 var localOrgKeys = OrgKeys;
                 var decBytes = RsaDecryptToBytes(encOrgKey, privateKey);
-                var key = new CryptoKey(decBytes);
+                var key = new SymmetricCryptoKey(decBytes);
                 if(localOrgKeys.ContainsKey(orgId))
                 {
                     localOrgKeys[orgId] = key;
@@ -245,7 +245,7 @@ namespace Bit.App.Services
             }
         }
 
-        public CipherString Encrypt(string plaintextValue, CryptoKey key = null)
+        public CipherString Encrypt(string plaintextValue, SymmetricCryptoKey key = null)
         {
             if(key == null)
             {
@@ -270,10 +270,11 @@ namespace Bit.App.Services
             var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
             var mac = key.MacKey != null ? ComputeMac(encryptedBytes, iv, key.MacKey) : null;
 
-            return new CipherString(key.EncryptionType, Convert.ToBase64String(iv), Convert.ToBase64String(encryptedBytes), mac);
+            return new CipherString(key.EncryptionType, Convert.ToBase64String(iv), 
+                Convert.ToBase64String(encryptedBytes), mac);
         }
 
-        public string Decrypt(CipherString encyptedValue, CryptoKey key = null)
+        public string Decrypt(CipherString encyptedValue, SymmetricCryptoKey key = null)
         {
             try
             {
@@ -287,7 +288,7 @@ namespace Bit.App.Services
             }
         }
 
-        public byte[] DecryptToBytes(CipherString encyptedValue, CryptoKey key = null)
+        public byte[] DecryptToBytes(CipherString encyptedValue, SymmetricCryptoKey key = null)
         {
             if(key == null)
             {
@@ -310,7 +311,7 @@ namespace Bit.App.Services
                 // Old encrypt-then-mac scheme, swap out the key
                 if(_legacyEtmKey == null)
                 {
-                    _legacyEtmKey = new CryptoKey(key.Key, Enums.EncryptionType.AesCbc128_HmacSha256_B64);
+                    _legacyEtmKey = new SymmetricCryptoKey(key.Key, Enums.EncryptionType.AesCbc128_HmacSha256_B64);
                 }
 
                 key = _legacyEtmKey;
@@ -392,7 +393,7 @@ namespace Bit.App.Services
             return Convert.ToBase64String(mac);
         }
 
-        public CryptoKey MakeKeyFromPassword(string password, string salt)
+        public SymmetricCryptoKey MakeKeyFromPassword(string password, string salt)
         {
             if(password == null)
             {
@@ -408,7 +409,7 @@ namespace Bit.App.Services
             var saltBytes = Encoding.UTF8.GetBytes(salt);
 
             var keyBytes = _keyDerivationService.DeriveKey(passwordBytes, saltBytes, 5000);
-            return new CryptoKey(keyBytes);
+            return new SymmetricCryptoKey(keyBytes);
         }
 
         public string MakeKeyFromPasswordBase64(string password, string salt)
@@ -417,7 +418,7 @@ namespace Bit.App.Services
             return Convert.ToBase64String(key.Key);
         }
 
-        public byte[] HashPassword(CryptoKey key, string password)
+        public byte[] HashPassword(SymmetricCryptoKey key, string password)
         {
             if(key == null)
             {
@@ -434,7 +435,7 @@ namespace Bit.App.Services
             return hash;
         }
 
-        public string HashPasswordBase64(CryptoKey key, string password)
+        public string HashPasswordBase64(SymmetricCryptoKey key, string password)
         {
             var hash = HashPassword(key, password);
             return Convert.ToBase64String(hash);

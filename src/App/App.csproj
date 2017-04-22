@@ -112,7 +112,7 @@
     <Compile Include="Models\Api\LoginDataModel.cs" />
     <Compile Include="Models\Cipher.cs" />
     <Compile Include="Models\CipherString.cs" />
-    <Compile Include="Models\CryptoKey.cs" />
+    <Compile Include="Models\SymmetricCryptoKey.cs" />
     <Compile Include="Models\Data\SettingsData.cs" />
     <Compile Include="Models\Data\FolderData.cs" />
     <Compile Include="Abstractions\IDataObject.cs" />

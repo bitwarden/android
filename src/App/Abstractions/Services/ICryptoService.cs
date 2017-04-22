@@ -6,24 +6,24 @@ namespace Bit.App.Abstractions
 {
     public interface ICryptoService
     {
-        CryptoKey Key { get; set; }
-        CryptoKey PreviousKey { get; }
+        SymmetricCryptoKey Key { get; set; }
+        SymmetricCryptoKey PreviousKey { get; }
         bool KeyChanged { get; }
         byte[] PrivateKey { get; }
-        IDictionary<string, CryptoKey> OrgKeys { get; set; }
+        IDictionary<string, SymmetricCryptoKey> OrgKeys { get; set; }
 
-        void SetPrivateKey(CipherString privateKeyEnc, CryptoKey key);
-        CryptoKey GetOrgKey(string orgId);
+        void SetPrivateKey(CipherString privateKeyEnc, SymmetricCryptoKey key);
+        SymmetricCryptoKey GetOrgKey(string orgId);
         void ClearOrgKey(string orgId);
         void ClearKeys();
-        CryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey);
-        string Decrypt(CipherString encyptedValue, CryptoKey key = null);
-        byte[] DecryptToBytes(CipherString encyptedValue, CryptoKey key = null);
+        SymmetricCryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey);
+        string Decrypt(CipherString encyptedValue, SymmetricCryptoKey key = null);
+        byte[] DecryptToBytes(CipherString encyptedValue, SymmetricCryptoKey key = null);
         byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey);
-        CipherString Encrypt(string plaintextValue, CryptoKey key = null);
-        CryptoKey MakeKeyFromPassword(string password, string salt);
+        CipherString Encrypt(string plaintextValue, SymmetricCryptoKey key = null);
+        SymmetricCryptoKey MakeKeyFromPassword(string password, string salt);
         string MakeKeyFromPasswordBase64(string password, string salt);
-        byte[] HashPassword(CryptoKey key, string password);
-        string HashPasswordBase64(CryptoKey key, string password);
+        byte[] HashPassword(SymmetricCryptoKey key, string password);
+        string HashPasswordBase64(SymmetricCryptoKey key, string password);
     }
 }

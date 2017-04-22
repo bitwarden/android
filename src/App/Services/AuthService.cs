@@ -245,7 +245,7 @@ namespace Bit.App.Services
         }
 
         public async Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash,
-            CryptoKey key)
+            SymmetricCryptoKey key)
         {
             var result = new LoginResult();
 
@@ -271,7 +271,7 @@ namespace Bit.App.Services
             return result;
         }
 
-        private async Task ProcessLoginSuccessAsync(CryptoKey key, TokenResponse response)
+        private async Task ProcessLoginSuccessAsync(SymmetricCryptoKey key, TokenResponse response)
         {
             if(response.PrivateKey != null)
             {
@@ -288,7 +288,7 @@ namespace Bit.App.Services
             if(response.PrivateKey != null)
             {
                 var profile = await _accountsApiRepository.GetProfileAsync();
-                var orgKeysDict = new Dictionary<string, CryptoKey>();
+                var orgKeysDict = new Dictionary<string, SymmetricCryptoKey>();
 
                 if(profile.Succeeded && (profile.Result.Organizations?.Any() ?? false))
                 {
@@ -297,7 +297,7 @@ namespace Bit.App.Services
                         try
                         {
                             var decBytes = _cryptoService.RsaDecryptToBytes(new CipherString(org.Key), null);
-                            orgKeysDict.Add(org.Id, new CryptoKey(decBytes));
+                            orgKeysDict.Add(org.Id, new SymmetricCryptoKey(decBytes));
                         }
                         catch
                         {

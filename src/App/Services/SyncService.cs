@@ -391,7 +391,7 @@ namespace Bit.App.Services
 
         private void SyncOrgKeys(ProfileResponse profile)
         {
-            var orgKeysDict = new Dictionary<string, CryptoKey>();
+            var orgKeysDict = new Dictionary<string, SymmetricCryptoKey>();
 
             if(profile.Organizations != null)
             {
@@ -400,7 +400,7 @@ namespace Bit.App.Services
                     try
                     {
                         var decBytes = _cryptoService.RsaDecryptToBytes(new CipherString(org.Key), null);
-                        orgKeysDict.Add(org.Id, new CryptoKey(decBytes));
+                        orgKeysDict.Add(org.Id, new SymmetricCryptoKey(decBytes));
                     }
                     catch
                     {

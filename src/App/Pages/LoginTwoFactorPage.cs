@@ -20,9 +20,9 @@ namespace Bit.App.Pages
         private IPushNotification _pushNotification;
         private readonly string _email;
         private readonly string _masterPasswordHash;
-        private readonly CryptoKey _key;
+        private readonly SymmetricCryptoKey _key;
 
-        public LoginTwoFactorPage(string email, string masterPasswordHash, CryptoKey key)
+        public LoginTwoFactorPage(string email, string masterPasswordHash, SymmetricCryptoKey key)
             : base(updateActivity: false)
         {
             _email = email;
