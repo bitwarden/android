@@ -60,11 +60,13 @@ namespace Bit.App.Services
                 case Enums.PushType.SyncCipherUpdate:
                 case Enums.PushType.SyncCipherCreate:
                     var cipherCreateUpdateMessage = values.ToObject<SyncCipherPushNotification>();
-                    if(cipherCreateUpdateMessage.UserId != null && cipherCreateUpdateMessage.UserId != _authService.UserId)
+                    if(cipherCreateUpdateMessage.OrganizationId == null &&
+                        cipherCreateUpdateMessage.UserId != _authService.UserId)
                     {
                         break;
                     }
-                    else if(!_authService.BelongsToOrganization(cipherCreateUpdateMessage.OrganizationId))
+                    else if(cipherCreateUpdateMessage.OrganizationId != null &&
+                        !_authService.BelongsToOrganization(cipherCreateUpdateMessage.OrganizationId))
                     {
                         break;
                     }
@@ -89,11 +91,13 @@ namespace Bit.App.Services
                     break;
                 case Enums.PushType.SyncLoginDelete:
                     var loginDeleteMessage = values.ToObject<SyncCipherPushNotification>();
-                    if(loginDeleteMessage.UserId != null && loginDeleteMessage.UserId != _authService.UserId)
+                    if(loginDeleteMessage.OrganizationId == null &&
+                        loginDeleteMessage.UserId != _authService.UserId)
                     {
                         break;
                     }
-                    else if(!_authService.BelongsToOrganization(loginDeleteMessage.OrganizationId))
+                    else if(loginDeleteMessage.OrganizationId != null &&
+                        !_authService.BelongsToOrganization(loginDeleteMessage.OrganizationId))
                     {
                         break;
                     }
@@ -115,6 +119,14 @@ namespace Bit.App.Services
                         break;
                     }
                     _syncService.SyncSettingsAsync();
+                    break;
+                case Enums.PushType.SyncOrgKeys:
+                    var orgKeysMessage = values.ToObject<SyncUserPushNotification>();
+                    if(orgKeysMessage.UserId != _authService.UserId)
+                    {
+                        break;
+                    }
+                    _syncService.SyncProfileAsync();
                     break;
                 default:
                     break;

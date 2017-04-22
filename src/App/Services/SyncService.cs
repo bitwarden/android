@@ -8,6 +8,8 @@ using Bit.App.Models.Api;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using Newtonsoft.Json;
+using Bit.App.Models;
+using System.Diagnostics;
 
 namespace Bit.App.Services
 {
@@ -22,6 +24,7 @@ namespace Bit.App.Services
         private readonly ILoginRepository _loginRepository;
         private readonly ISettingsRepository _settingsRepository;
         private readonly IAuthService _authService;
+        private readonly ICryptoService _cryptoService;
         private readonly ISettings _settings;
 
         public SyncService(
@@ -34,6 +37,7 @@ namespace Bit.App.Services
             ILoginRepository loginRepository,
             ISettingsRepository settingsRepository,
             IAuthService authService,
+            ICryptoService cryptoService,
             ISettings settings)
         {
             _cipherApiRepository = cipherApiRepository;
@@ -45,6 +49,7 @@ namespace Bit.App.Services
             _loginRepository = loginRepository;
             _settingsRepository = settingsRepository;
             _authService = authService;
+            _cryptoService = cryptoService;
             _settings = settings;
         }
 
@@ -60,16 +65,8 @@ namespace Bit.App.Services
             SyncStarted();
 
             var cipher = await _cipherApiRepository.GetByIdAsync(id).ConfigureAwait(false);
-            if(!cipher.Succeeded)
+            if(!CheckSuccess(cipher))
             {
-                SyncCompleted(false);
-
-                if(Application.Current != null && (cipher.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || cipher.StatusCode == System.Net.HttpStatusCode.Unauthorized))
-                {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
-                }
-
                 return false;
             }
 
@@ -106,16 +103,8 @@ namespace Bit.App.Services
             SyncStarted();
 
             var folder = await _folderApiRepository.GetByIdAsync(id).ConfigureAwait(false);
-            if(!folder.Succeeded)
+            if(!CheckSuccess(folder))
             {
-                SyncCompleted(false);
-
-                if(Application.Current != null && (folder.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || folder.StatusCode == System.Net.HttpStatusCode.Unauthorized))
-                {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
-                }
-
                 return false;
             }
 
@@ -188,20 +177,32 @@ namespace Bit.App.Services
             SyncStarted();
 
             var domains = await _settingsApiRepository.GetDomains(false).ConfigureAwait(false);
-            if(!domains.Succeeded)
+            if(!CheckSuccess(domains))
             {
-                SyncCompleted(false);
-
-                if(Application.Current != null && (domains.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || domains.StatusCode == System.Net.HttpStatusCode.Unauthorized))
-                {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
-                }
-
                 return false;
             }
 
             await SyncDomainsAsync(domains.Result);
+
+            SyncCompleted(true);
+            return true;
+        }
+        public async Task<bool> SyncProfileAsync()
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return false;
+            }
+
+            SyncStarted();
+
+            var profile = await _accountsApiRepository.GetProfileAsync().ConfigureAwait(false);
+            if(!CheckSuccess(profile))
+            {
+                return false;
+            }
+
+            SyncOrgKeys(profile.Result);
 
             SyncCompleted(true);
             return true;
@@ -234,26 +235,19 @@ namespace Bit.App.Services
             SyncStarted();
 
             var now = DateTime.UtcNow;
+
+            // Just check profile first to make sure we'll have a success with the API
+            var profile = await _accountsApiRepository.GetProfileAsync().ConfigureAwait(false);
+            if(!CheckSuccess(profile))
+            {
+                return false;
+            }
+
             var ciphers = await _cipherApiRepository.GetAsync().ConfigureAwait(false);
             var folders = await _folderApiRepository.GetAsync().ConfigureAwait(false);
             var domains = await _settingsApiRepository.GetDomains(false).ConfigureAwait(false);
-
-            if(!ciphers.Succeeded || !domains.Succeeded)
+            if(!CheckSuccess(ciphers) || !CheckSuccess(folders) || !CheckSuccess(domains))
             {
-                SyncCompleted(false);
-                if(Application.Current == null)
-                {
-                    return false;
-                }
-
-                if(ciphers.StatusCode == System.Net.HttpStatusCode.Forbidden ||
-                    ciphers.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
-                    domains.StatusCode == System.Net.HttpStatusCode.Forbidden ||
-                    domains.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
-                }
-
                 return false;
             }
 
@@ -263,6 +257,7 @@ namespace Bit.App.Services
             var loginTask = SyncLoginsAsync(loginsDict);
             var folderTask = SyncFoldersAsync(foldersDict);
             var domainsTask = SyncDomainsAsync(domains.Result);
+            SyncOrgKeys(profile.Result);
             await Task.WhenAll(loginTask, folderTask, domainsTask).ConfigureAwait(false);
 
             if(folderTask.Exception != null || loginTask.Exception != null || domainsTask.Exception != null)
@@ -394,6 +389,29 @@ namespace Bit.App.Services
             catch(SQLite.SQLiteException) { }
         }
 
+        private void SyncOrgKeys(ProfileResponse profile)
+        {
+            var orgKeysDict = new Dictionary<string, CryptoKey>();
+
+            if(profile.Organizations != null)
+            {
+                foreach(var org in profile.Organizations)
+                {
+                    try
+                    {
+                        var decBytes = _cryptoService.RsaDecryptToBytes(new CipherString(org.Key), null);
+                        orgKeysDict.Add(org.Id, new CryptoKey(decBytes));
+                    }
+                    catch
+                    {
+                        Debug.WriteLine($"Cannot set org key {org.Id}. Decryption failed.");
+                    }
+                }
+            }
+
+            _cryptoService.OrgKeys = orgKeysDict;
+        }
+
         private void SyncStarted()
         {
             if(Application.Current == null)
@@ -414,6 +432,24 @@ namespace Bit.App.Services
 
             SyncInProgress = false;
             MessagingCenter.Send(Application.Current, "SyncCompleted", successfully);
+        }
+
+        private bool CheckSuccess<T>(ApiResult<T> result)
+        {
+            if(!result.Succeeded)
+            {
+                SyncCompleted(false);
+
+                if(Application.Current != null && (result.StatusCode == System.Net.HttpStatusCode.Forbidden
+                    || result.StatusCode == System.Net.HttpStatusCode.Unauthorized))
+                {
+                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                }
+
+                return false;
+            }
+
+            return true;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Bit.App.Abstractions
         Task<bool> SyncDeleteFolderAsync(string id, DateTime revisionDate);
         Task<bool> SyncDeleteLoginAsync(string id);
         Task<bool> SyncSettingsAsync();
+        Task<bool> SyncProfileAsync();
         Task<bool> FullSyncAsync(bool forceSync = false);
         Task<bool> FullSyncAsync(TimeSpan syncThreshold, bool forceSync = false);
     }
