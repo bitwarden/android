@@ -521,7 +521,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disable Google Analytics.
+        ///   Looks up a localized string similar to Disable Analytics.
         /// </summary>
         public static string DisableGA {
             get {
