@@ -2742,8 +2742,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0200e4
 			public const int notification_sm = 2130837732;
 			
-			// aapt resource value: 0x7f0200f1
-			public const int notification_template_icon_bg = 2130837745;
+			// aapt resource value: 0x7f0200f2
+			public const int notification_template_icon_bg = 2130837746;
 			
 			// aapt resource value: 0x7f0200e5
 			public const int plus = 2130837733;
@@ -2761,25 +2761,28 @@ namespace Bit.Android
 			public const int search = 2130837737;
 			
 			// aapt resource value: 0x7f0200ea
-			public const int splash_screen = 2130837738;
+			public const int share = 2130837738;
 			
 			// aapt resource value: 0x7f0200eb
-			public const int star = 2130837739;
+			public const int splash_screen = 2130837739;
 			
 			// aapt resource value: 0x7f0200ec
-			public const int star_selected = 2130837740;
+			public const int star = 2130837740;
 			
 			// aapt resource value: 0x7f0200ed
-			public const int tools = 2130837741;
+			public const int star_selected = 2130837741;
 			
 			// aapt resource value: 0x7f0200ee
-			public const int tools_selected = 2130837742;
+			public const int tools = 2130837742;
 			
 			// aapt resource value: 0x7f0200ef
-			public const int upload = 2130837743;
+			public const int tools_selected = 2130837743;
 			
 			// aapt resource value: 0x7f0200f0
-			public const int user = 2130837744;
+			public const int upload = 2130837744;
+			
+			// aapt resource value: 0x7f0200f1
+			public const int user = 2130837745;
 			
 			static Drawable()
 			{
