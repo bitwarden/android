@@ -26,7 +26,7 @@ namespace Bit.Android.Services
             _instance.SetLocalDispatchPeriod(10);
 
             _tracker = _instance.NewTracker("UA-81915606-2");
-            _tracker.EnableExceptionReporting(true);
+            _tracker.EnableExceptionReporting(false);
             _tracker.EnableAdvertisingIdCollection(true);
             _tracker.EnableAutoActivityTracking(true);
             _tracker.SetClientId(appIdService.AnonymousAppId);
