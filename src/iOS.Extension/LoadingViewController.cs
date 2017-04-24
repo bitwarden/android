@@ -309,7 +309,8 @@ namespace Bit.iOS.Extension
             localizeService.SetLocale(ci);
         }
 
-        private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> action)
+        private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> dictAction,
+            Action<NSString> stringAction = null)
         {
             if(!itemProvider.HasItemConformingTo(type))
             {
@@ -324,8 +325,21 @@ namespace Bit.iOS.Extension
                 }
 
                 _context.ProviderType = type;
+
                 var dict = list as NSDictionary;
-                action(dict);
+                var str = list as NSString;
+                if(dict != null && dictAction != null)
+                {
+                    dictAction(dict);
+                }
+                else if(str != null && stringAction != null)
+                {
+                    stringAction(str);
+                }
+                else
+                {
+                    throw new Exception("Cannot parse list for action.");
+                }
 
                 _googleAnalyticsService.TrackExtensionEvent("ProcessItemProvider", type);
 
@@ -393,6 +407,12 @@ namespace Bit.iOS.Extension
                 }
 
                 _context.Details = DeserializeDictionary<PageDetails>(dict[Constants.AppExtensionWebViewPageDetails] as NSDictionary);
+            }, (urlString) =>
+            {
+                if(urlString != null)
+                {
+                    _context.UrlString = urlString;
+                }
             });
         }
 
