@@ -282,6 +282,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
@@ -289,6 +290,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<ILoginApiRepository, LoginApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IConnectApiRepository, ConnectApiRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
                 // Other
                 .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
                 .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
