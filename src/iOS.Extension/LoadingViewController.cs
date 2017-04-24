@@ -310,7 +310,7 @@ namespace Bit.iOS.Extension
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> dictAction,
-            Action<NSString> stringAction = null)
+            Action<NSUrl> urlAction = null)
         {
             if(!itemProvider.HasItemConformingTo(type))
             {
@@ -327,14 +327,14 @@ namespace Bit.iOS.Extension
                 _context.ProviderType = type;
 
                 var dict = list as NSDictionary;
-                var str = list as NSString;
+                var url = list as NSUrl;
                 if(dict != null && dictAction != null)
                 {
                     dictAction(dict);
                 }
-                else if(str != null && stringAction != null)
+                else if(url != null && urlAction != null)
                 {
-                    stringAction(str);
+                    urlAction(url);
                 }
                 else
                 {
@@ -407,11 +407,11 @@ namespace Bit.iOS.Extension
                 }
 
                 _context.Details = DeserializeDictionary<PageDetails>(dict[Constants.AppExtensionWebViewPageDetails] as NSDictionary);
-            }, (urlString) =>
+            }, (url) =>
             {
-                if(urlString != null)
+                if(url != null)
                 {
-                    _context.UrlString = urlString;
+                    _context.UrlString = url.AbsoluteString;
                 }
             });
         }
