@@ -275,7 +275,7 @@ namespace Bit.App.Services
         {
             if(response.PrivateKey != null)
             {
-                _cryptoService.SetPrivateKey(new CipherString(response.PrivateKey), key);
+                _cryptoService.SetPrivateKey(new CipherString(response.PrivateKey));
             }
 
             _cryptoService.Key = key;
@@ -288,25 +288,10 @@ namespace Bit.App.Services
             if(response.PrivateKey != null)
             {
                 var profile = await _accountsApiRepository.GetProfileAsync();
-                var orgKeysDict = new Dictionary<string, SymmetricCryptoKey>();
-
-                if(profile.Succeeded && (profile.Result.Organizations?.Any() ?? false))
+                if(profile.Succeeded)
                 {
-                    foreach(var org in profile.Result.Organizations)
-                    {
-                        try
-                        {
-                            var decBytes = _cryptoService.RsaDecryptToBytes(new CipherString(org.Key), null);
-                            orgKeysDict.Add(org.Id, new SymmetricCryptoKey(decBytes));
-                        }
-                        catch
-                        {
-                            Debug.WriteLine($"Cannot set org key {org.Id}. Decryption failed.");
-                        }
-                    }
+                    _cryptoService.SetOrgKeys(profile.Result);
                 }
-
-                _cryptoService.OrgKeys = orgKeysDict;
             }
         }
     }

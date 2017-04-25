@@ -1,4 +1,5 @@
 ﻿using Bit.App.Models;
+using Bit.App.Models.Api;
 using System;
 using System.Collections.Generic;
 
@@ -10,13 +11,13 @@ namespace Bit.App.Abstractions
         SymmetricCryptoKey PreviousKey { get; }
         bool KeyChanged { get; }
         byte[] PrivateKey { get; }
-        IDictionary<string, SymmetricCryptoKey> OrgKeys { get; set; }
+        IDictionary<string, SymmetricCryptoKey> OrgKeys { get; }
 
-        void SetPrivateKey(CipherString privateKeyEnc, SymmetricCryptoKey key);
+        void SetPrivateKey(CipherString privateKeyEnc);
+        void SetOrgKeys(ProfileResponse profile);
+        void SetOrgKeys(Dictionary<string, string> orgKeysEncDict);
         SymmetricCryptoKey GetOrgKey(string orgId);
-        void ClearOrgKey(string orgId);
         void ClearKeys();
-        SymmetricCryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey);
         string Decrypt(CipherString encyptedValue, SymmetricCryptoKey key = null);
         byte[] DecryptToBytes(CipherString encyptedValue, SymmetricCryptoKey key = null);
         byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey);

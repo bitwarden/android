@@ -107,6 +107,7 @@
     <Compile Include="Models\Api\Response\DeviceResponse.cs" />
     <Compile Include="Models\Api\Response\LoginResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileOrganizationResponse.cs" />
+    <Compile Include="Models\Api\Response\KeysResponse.cs" />
     <Compile Include="Models\Api\Response\TokenResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileResponse.cs" />
     <Compile Include="Models\Api\LoginDataModel.cs" />

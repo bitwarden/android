@@ -8,6 +8,8 @@ using System.Linq;
 using Bit.App.Enums;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Plugin.Settings.Abstractions;
+using Bit.App.Models.Api;
 
 namespace Bit.App.Services
 {
@@ -15,10 +17,11 @@ namespace Bit.App.Services
     {
         private const string KeyKey = "key";
         private const string PreviousKeyKey = "previousKey";
-        private const string PrivateKeyKey = "privateKey";
-        private const string OrgKeysKey = "orgKeys";
+        private const string PrivateKeyKey = "encPrivateKey";
+        private const string OrgKeysKey = "encOrgKeys";
         private const int InitializationVectorSize = 16;
 
+        private readonly ISettings _settings;
         private readonly ISecureStorageService _secureStorage;
         private readonly IKeyDerivationService _keyDerivationService;
         private SymmetricCryptoKey _key;
@@ -28,9 +31,11 @@ namespace Bit.App.Services
         private byte[] _privateKey;
 
         public CryptoService(
+            ISettings settings,
             ISecureStorageService secureStorage,
             IKeyDerivationService keyDerivationService)
         {
+            _settings = settings;
             _secureStorage = secureStorage;
             _keyDerivationService = keyDerivationService;
         }
@@ -113,25 +118,22 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_privateKey == null && _secureStorage.Contains(PrivateKeyKey))
+                if(_privateKey == null && _settings.Contains(PrivateKeyKey))
                 {
-                    _privateKey = _secureStorage.Retrieve(PrivateKeyKey);
+                    var encPrivateKey = _settings.GetValueOrDefault<string>(PrivateKeyKey);
+                    var encPrivateKeyCs = new CipherString(encPrivateKey);
+                    try
+                    {
+                        _privateKey = DecryptToBytes(encPrivateKeyCs);
+                    }
+                    catch
+                    {
+                        _privateKey = null;
+                        Debug.WriteLine($"Cannot set private key. Decryption failed.");
+                    }
                 }
 
                 return _privateKey;
-            }
-            private set
-            {
-                if(value != null)
-                {
-                    _secureStorage.Store(PrivateKeyKey, value);
-                    _privateKey = value;
-                }
-                else
-                {
-                    _secureStorage.Delete(PrivateKeyKey);
-                    _privateKey = null;
-                }
             }
         }
 
@@ -139,19 +141,24 @@ namespace Bit.App.Services
         {
             get
             {
-                if(_orgKeys == null && _secureStorage.Contains(OrgKeysKey))
+                if((!_orgKeys?.Any() ?? true) && _settings.Contains(OrgKeysKey))
                 {
-                    var orgKeysDictBytes = _secureStorage.Retrieve(OrgKeysKey);
-                    if(orgKeysDictBytes != null)
+                    var orgKeysEncDictJson = _settings.GetValueOrDefault<string>(OrgKeysKey);
+                    if(!string.IsNullOrWhiteSpace(orgKeysEncDictJson))
                     {
-                        var orgKeysDictJson = Encoding.UTF8.GetString(orgKeysDictBytes, 0, orgKeysDictBytes.Length);
-                        if(!string.IsNullOrWhiteSpace(orgKeysDictJson))
+                        _orgKeys = new Dictionary<string, SymmetricCryptoKey>();
+                        var orgKeysDict = JsonConvert.DeserializeObject<IDictionary<string, string>>(orgKeysEncDictJson);
+                        foreach(var item in orgKeysDict)
                         {
-                            _orgKeys = new Dictionary<string, SymmetricCryptoKey>();
-                            var orgKeysDict = JsonConvert.DeserializeObject<IDictionary<string, byte[]>>(orgKeysDictJson);
-                            foreach(var item in orgKeysDict)
+                            try
                             {
-                                _orgKeys.Add(item.Key, new SymmetricCryptoKey(item.Value));
+                                var orgKeyCs = new CipherString(item.Value);
+                                var decOrgKeyBytes = RsaDecryptToBytes(orgKeyCs, PrivateKey);
+                                _orgKeys.Add(item.Key, new SymmetricCryptoKey(decOrgKeyBytes));
+                            }
+                            catch
+                            {
+                                Debug.WriteLine($"Cannot set org key {item.Key}. Decryption failed.");
                             }
                         }
                     }
@@ -159,33 +166,56 @@ namespace Bit.App.Services
 
                 return _orgKeys;
             }
-            set
-            {
-                if(value != null && value.Any())
-                {
-                    var dict = new Dictionary<string, byte[]>();
-                    foreach(var item in value)
-                    {
-                        dict.Add(item.Key, item.Value.Key);
-                    }
+        }
 
-                    var dictJson = JsonConvert.SerializeObject(dict);
-                    var dictBytes = Encoding.UTF8.GetBytes(dictJson);
-                    _secureStorage.Store(OrgKeysKey, dictBytes);
-                    _orgKeys = value;
-                }
-                else
-                {
-                    _secureStorage.Delete(OrgKeysKey);
-                    _orgKeys = null;
-                }
+        public void SetPrivateKey(CipherString privateKeyEnc)
+        {
+            if(privateKeyEnc != null)
+            {
+                _settings.AddOrUpdateValue(PrivateKeyKey, privateKeyEnc.EncryptedString);
+            }
+            else if(_settings.Contains(PrivateKeyKey))
+            {
+                _settings.Remove(PrivateKeyKey);
+                _privateKey = null;
+            }
+            else
+            {
+                _privateKey = null;
             }
         }
 
-        public void SetPrivateKey(CipherString privateKeyEnc, SymmetricCryptoKey key)
+        public void SetOrgKeys(ProfileResponse profile)
         {
-            var bytes = DecryptToBytes(privateKeyEnc, key);
-            PrivateKey = bytes;
+            var orgKeysEncDict = new Dictionary<string, string>();
+
+            if(profile?.Organizations?.Any() ?? false)
+            {
+                foreach(var org in profile.Organizations)
+                {
+                    orgKeysEncDict.Add(org.Id, org.Key);
+                }
+            }
+
+            SetOrgKeys(orgKeysEncDict);
+        }
+
+        public void SetOrgKeys(Dictionary<string, string> orgKeysEncDict)
+        {
+            if(orgKeysEncDict?.Any() ?? false)
+            {
+                var dictJson = JsonConvert.SerializeObject(orgKeysEncDict);
+                _settings.AddOrUpdateValue(OrgKeysKey, dictJson);
+            }
+            else if(_settings.Contains(OrgKeysKey))
+            {
+                _settings.Remove(OrgKeysKey);
+                _orgKeys = null;
+            }
+            else
+            {
+                _orgKeys = null;
+            }
         }
 
         public SymmetricCryptoKey GetOrgKey(string orgId)
@@ -198,51 +228,11 @@ namespace Bit.App.Services
             return OrgKeys[orgId];
         }
 
-        public void ClearOrgKey(string orgId)
-        {
-            var localOrgKeys = OrgKeys;
-            if(localOrgKeys == null || !localOrgKeys.ContainsKey(orgId))
-            {
-                return;
-            }
-
-            localOrgKeys.Remove(orgId);
-            // invoke setter
-            OrgKeys = localOrgKeys;
-        }
-
         public void ClearKeys()
         {
-            OrgKeys = null;
+            SetOrgKeys((Dictionary<string, string>)null);
             Key = null;
-            PrivateKey = null;
-        }
-
-        public SymmetricCryptoKey AddOrgKey(string orgId, CipherString encOrgKey, byte[] privateKey)
-        {
-            try
-            {
-                var localOrgKeys = OrgKeys;
-                var decBytes = RsaDecryptToBytes(encOrgKey, privateKey);
-                var key = new SymmetricCryptoKey(decBytes);
-                if(localOrgKeys.ContainsKey(orgId))
-                {
-                    localOrgKeys[orgId] = key;
-                }
-                else
-                {
-                    localOrgKeys.Add(orgId, key);
-                }
-
-                // invoke setter
-                OrgKeys = localOrgKeys;
-                return key;
-            }
-            catch
-            {
-                Debug.WriteLine("Cannot set org key. Decryption failed.");
-                return null;
-            }
+            SetPrivateKey(null);
         }
 
         public CipherString Encrypt(string plaintextValue, SymmetricCryptoKey key = null)
@@ -270,7 +260,7 @@ namespace Bit.App.Services
             var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
             var mac = key.MacKey != null ? ComputeMac(encryptedBytes, iv, key.MacKey) : null;
 
-            return new CipherString(key.EncryptionType, Convert.ToBase64String(iv), 
+            return new CipherString(key.EncryptionType, Convert.ToBase64String(iv),
                 Convert.ToBase64String(encryptedBytes), mac);
         }
 

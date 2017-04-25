@@ -187,6 +187,7 @@ namespace Bit.App.Services
             SyncCompleted(true);
             return true;
         }
+
         public async Task<bool> SyncProfileAsync()
         {
             if(!_authService.IsAuthenticated)
@@ -202,7 +203,7 @@ namespace Bit.App.Services
                 return false;
             }
 
-            SyncOrgKeys(profile.Result);
+            await SyncOrgKeysAsync(profile.Result);
 
             SyncCompleted(true);
             return true;
@@ -257,10 +258,11 @@ namespace Bit.App.Services
             var loginTask = SyncLoginsAsync(loginsDict);
             var folderTask = SyncFoldersAsync(foldersDict);
             var domainsTask = SyncDomainsAsync(domains.Result);
-            SyncOrgKeys(profile.Result);
-            await Task.WhenAll(loginTask, folderTask, domainsTask).ConfigureAwait(false);
+            var orgKeysTask = SyncOrgKeysAsync(profile.Result);
+            await Task.WhenAll(loginTask, folderTask, domainsTask, orgKeysTask).ConfigureAwait(false);
 
-            if(folderTask.Exception != null || loginTask.Exception != null || domainsTask.Exception != null)
+            if(folderTask.Exception != null || loginTask.Exception != null || domainsTask.Exception != null ||
+                orgKeysTask.Exception != null)
             {
                 SyncCompleted(false);
                 return false;
@@ -389,27 +391,23 @@ namespace Bit.App.Services
             catch(SQLite.SQLiteException) { }
         }
 
-        private void SyncOrgKeys(ProfileResponse profile)
+        private async Task SyncOrgKeysAsync(ProfileResponse profile)
         {
-            var orgKeysDict = new Dictionary<string, SymmetricCryptoKey>();
-
-            if(profile.Organizations != null)
+            if(_cryptoService.PrivateKey == null)
             {
-                foreach(var org in profile.Organizations)
+                var keys = await _accountsApiRepository.GetKeys();
+                if(!CheckSuccess(keys))
                 {
-                    try
-                    {
-                        var decBytes = _cryptoService.RsaDecryptToBytes(new CipherString(org.Key), null);
-                        orgKeysDict.Add(org.Id, new SymmetricCryptoKey(decBytes));
-                    }
-                    catch
-                    {
-                        Debug.WriteLine($"Cannot set org key {org.Id}. Decryption failed.");
-                    }
+                    return;
+                }
+
+                if(!string.IsNullOrWhiteSpace(keys.Result.PrivateKey))
+                {
+                    _cryptoService.SetPrivateKey(new CipherString(keys.Result.PrivateKey));
                 }
             }
 
-            _cryptoService.OrgKeys = orgKeysDict;
+            _cryptoService.SetOrgKeys(profile);
         }
 
         private void SyncStarted()
