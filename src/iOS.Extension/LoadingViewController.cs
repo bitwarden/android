@@ -327,13 +327,13 @@ namespace Bit.iOS.Extension
                 _context.ProviderType = type;
 
                 var dict = list as NSDictionary;
-                var url = list as NSUrl;
                 if(dict != null && dictAction != null)
                 {
                     dictAction(dict);
                 }
-                else if(url != null && urlAction != null)
+                else if(list is NSUrl && urlAction != null)
                 {
+                    var url = list as NSUrl;
                     urlAction(url);
                 }
                 else
