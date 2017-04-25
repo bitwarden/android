@@ -702,6 +702,15 @@
   <ItemGroup>
     <BundleResource Include="Resources\share.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\share_tools.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\share_tools%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\share_tools%403x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

@@ -25,6 +25,7 @@ namespace Bit.App.Pages
 
         public ToolsViewCell GeneratorCell { get; set; }
         public ToolsViewCell WebCell { get; set; }
+        public ToolsViewCell ShareCell { get; set; }
         public ToolsViewCell ImportCell { get; set; }
         public ToolsViewCell ExtensionCell { get; set; }
         public ToolsViewCell AutofillCell { get; set; }
@@ -34,6 +35,7 @@ namespace Bit.App.Pages
             GeneratorCell = new ToolsViewCell(AppResources.PasswordGenerator, AppResources.PasswordGeneratorDescription,
                 "refresh");
             WebCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe");
+            ShareCell = new ToolsViewCell(AppResources.ShareVault, AppResources.ShareVaultDescription, "share_tools");
             ImportCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup");
 
             var section = new TableSection(" ") { GeneratorCell };
@@ -53,6 +55,7 @@ namespace Bit.App.Pages
             }
 
             section.Add(WebCell);
+            section.Add(ShareCell);
             section.Add(ImportCell);
 
             var table = new ExtendedTableView
@@ -81,6 +84,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
             GeneratorCell.Tapped += GeneratorCell_Tapped;
             WebCell.Tapped += WebCell_Tapped;
+            ShareCell.Tapped += ShareCell_Tapped;
             ImportCell.Tapped += ImportCell_Tapped;
             if(ExtensionCell != null)
             {
@@ -97,6 +101,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             GeneratorCell.Tapped -= GeneratorCell_Tapped;
             WebCell.Tapped -= WebCell_Tapped;
+            ShareCell.Tapped -= ShareCell_Tapped;
             ImportCell.Tapped -= ImportCell_Tapped;
             if(ExtensionCell != null)
             {
@@ -128,6 +133,12 @@ namespace Bit.App.Pages
         {
             _googleAnalyticsService.TrackAppEvent("OpenedTool", "Web");
             Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+        }
+
+        private void ShareCell_Tapped(object sender, EventArgs e)
+        {
+            _googleAnalyticsService.TrackAppEvent("OpenedTool", "Share");
+            Device.OpenUri(new Uri("https://vault.bitwarden.com/#/?org=free"));
         }
 
         private async void ImportCell_Tapped(object sender, EventArgs e)

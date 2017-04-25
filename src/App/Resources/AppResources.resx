@@ -819,4 +819,10 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>You are searching for an auto-fill login for "{0}".</value>
   </data>
+  <data name="ShareVault" xml:space="preserve">
+    <value>Share Your Vault</value>
+  </data>
+  <data name="ShareVaultDescription" xml:space="preserve">
+    <value>Create an organization to securely share your logins with other users.</value>
+  </data>
 </root>

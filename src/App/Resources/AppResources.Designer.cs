@@ -1664,6 +1664,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Share Your Vault.
+        /// </summary>
+        public static string ShareVault {
+            get {
+                return ResourceManager.GetString("ShareVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create an organization to securely share your logins with other users..
+        /// </summary>
+        public static string ShareVaultDescription {
+            get {
+                return ResourceManager.GetString("ShareVaultDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string Show {
