@@ -393,7 +393,7 @@ namespace Bit.App.Services
 
         private async Task SyncOrgKeysAsync(ProfileResponse profile)
         {
-            if(_cryptoService.PrivateKey == null)
+            if(_cryptoService.PrivateKey == null && (profile.Organizations?.Any() ?? false))
             {
                 var keys = await _accountsApiRepository.GetKeys();
                 if(!CheckSuccess(keys))
