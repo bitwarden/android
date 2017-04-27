@@ -258,7 +258,7 @@ namespace Bit.App.Services
             var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
             var iv = WinRTCrypto.CryptographicBuffer.GenerateRandom(provider.BlockLength);
             var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
-            var mac = key.MacKey != null ? ComputeMac(encryptedBytes, iv, key.MacKey) : null;
+            var mac = key.MacKey != null ? ComputeMacBase64(encryptedBytes, iv, key.MacKey) : null;
 
             return new CipherString(key.EncryptionType, Convert.ToBase64String(iv),
                 Convert.ToBase64String(encryptedBytes), mac);
@@ -314,9 +314,9 @@ namespace Bit.App.Services
 
             if(key.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
             {
-                var computedMac = ComputeMac(encyptedValue.CipherTextBytes,
+                var computedMacBytes = ComputeMac(encyptedValue.CipherTextBytes,
                     encyptedValue.InitializationVectorBytes, key.MacKey);
-                if(computedMac != encyptedValue.Mac)
+                if(!MacsEqual(key.MacKey, computedMacBytes, encyptedValue.MacBytes))
                 {
                     throw new InvalidOperationException("MAC failed.");
                 }
@@ -359,7 +359,13 @@ namespace Bit.App.Services
             return decryptedBytes;
         }
 
-        private string ComputeMac(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
+        private string ComputeMacBase64(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
+        {
+            var mac = ComputeMac(ctBytes, ivBytes, macKey);
+            return Convert.ToBase64String(mac);
+        }
+
+        private byte[] ComputeMac(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
         {
             if(macKey == null)
             {
@@ -380,7 +386,36 @@ namespace Bit.App.Services
             var hasher = algorithm.CreateHash(macKey);
             hasher.Append(ivBytes.Concat(ctBytes).ToArray());
             var mac = hasher.GetValueAndReset();
-            return Convert.ToBase64String(mac);
+            return mac;
+        }
+
+        // Safely compare two MACs in a way that protects against timing attacks (Double HMAC Verification).
+        // ref: https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2011/february/double-hmac-verification/
+        private bool MacsEqual(byte[] macKey, byte[] mac1, byte[] mac2)
+        {
+            var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
+            var hasher = algorithm.CreateHash(macKey);
+
+            hasher.Append(mac1);
+            mac1 = hasher.GetValueAndReset();
+
+            hasher.Append(mac2);
+            mac2 = hasher.GetValueAndReset();
+
+            if(mac1.Length != mac2.Length)
+            {
+                return false;
+            }
+
+            for(int i = 0; i < mac2.Length; i++)
+            {
+                if(mac1[i] != mac2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public SymmetricCryptoKey MakeKeyFromPassword(string password, string salt)
