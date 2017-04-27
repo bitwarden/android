@@ -228,7 +228,7 @@
     <comment>Folder deleted.</comment>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>(ingen)</value>
+    <value>Ingen mapp</value>
     <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">

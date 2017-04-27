@@ -222,7 +222,7 @@
     <value>Dossier supprimé.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>(aucun)</value>
+    <value>Pas de dossier</value>
     <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -757,7 +757,7 @@
   <data name="Translations" xml:space="preserve">
     <value>Traductions</value>
   </data>
-<data name="LoginsForUri" xml:space="preserve">
+  <data name="LoginsForUri" xml:space="preserve">
     <value>Identifiants pour {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>

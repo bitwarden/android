@@ -836,7 +836,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (none).
+        ///   Looks up a localized string similar to No Folder.
         /// </summary>
         public static string FolderNone {
             get {
