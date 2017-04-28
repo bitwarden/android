@@ -2,18 +2,17 @@ using System;
 using Bit.iOS.Extension.Models;
 using UIKit;
 using XLabs.Ioc;
-using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
 using System.Threading.Tasks;
-using Bit.App;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
+using Bit.App.Abstractions;
 
 namespace Bit.iOS.Extension
 {
     public partial class LockFingerprintViewController : ExtendedUIViewController
     {
-        private ISettings _settings;
+        private IAppSettingsService _appSettingsService;
         private IFingerprint _fingerprint;
 
         public LockFingerprintViewController(IntPtr handle) : base(handle)
@@ -31,7 +30,7 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
-            _settings = Resolver.Resolve<ISettings>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
 
             NavItem.Title = AppResources.VerifyFingerprint;
@@ -74,7 +73,7 @@ namespace Bit.iOS.Extension
             var result = await _fingerprint.AuthenticateAsync(AppResources.FingerprintDirection);
             if(result.Authenticated)
             {
-                _settings.AddOrUpdateValue(Constants.Locked, false);
+                _appSettingsService.Locked = false;
                 LoadingController.DismissLockAndContinue();
             }
         }

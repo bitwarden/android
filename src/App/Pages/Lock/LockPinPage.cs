@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
-using Plugin.Settings.Abstractions;
 using Bit.App.Models.Page;
 using Bit.App.Controls;
 
@@ -14,13 +11,13 @@ namespace Bit.App.Pages
     public class LockPinPage : BaseLockPage
     {
         private readonly IAuthService _authService;
-        private readonly ISettings _settings;
+        private readonly IAppSettingsService _appSettingsService;
         private TapGestureRecognizer _tgr;
 
         public LockPinPage()
         {
             _authService = Resolver.Resolve<IAuthService>();
-            _settings = Resolver.Resolve<ISettings>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
 
             Init();
         }
@@ -96,7 +93,7 @@ namespace Bit.App.Pages
         {
             if(Model.PIN == _authService.PIN)
             {
-                _settings.AddOrUpdateValue(Constants.Locked, false);
+                _appSettingsService.Locked = false;
                 PinControl.Entry.Unfocus();
                 Navigation.PopModalAsync();
             }

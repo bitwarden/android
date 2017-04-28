@@ -2,21 +2,19 @@ using System;
 using Bit.iOS.Extension.Models;
 using UIKit;
 using XLabs.Ioc;
-using Plugin.Settings.Abstractions;
 using Foundation;
 using Bit.iOS.Core.Views;
 using Bit.App.Resources;
 using Bit.iOS.Core.Utilities;
 using Bit.App.Abstractions;
 using System.Linq;
-using Bit.App;
 using Bit.iOS.Core.Controllers;
 
 namespace Bit.iOS.Extension
 {
     public partial class LockPasswordViewController : ExtendedUITableViewController
     {
-        private ISettings _settings;
+        private IAppSettingsService _appSettingsService;
         private IAuthService _authService;
         private ICryptoService _cryptoService;
 
@@ -37,7 +35,7 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
-            _settings = Resolver.Resolve<ISettings>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _authService = Resolver.Resolve<IAuthService>();
             _cryptoService = Resolver.Resolve<ICryptoService>();
 
@@ -88,7 +86,7 @@ namespace Bit.iOS.Extension
             var key = _cryptoService.MakeKeyFromPassword(MasterPasswordCell.TextField.Text, _authService.Email);
             if(key.Key.SequenceEqual(_cryptoService.Key.Key))
             {
-                _settings.AddOrUpdateValue(Constants.Locked, false);
+                _appSettingsService.Locked = false;
                 MasterPasswordCell.TextField.ResignFirstResponder();
                 LoadingController.DismissLockAndContinue();
             }

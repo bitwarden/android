@@ -14,7 +14,7 @@ namespace Bit.iOS.Extension
 {
     public partial class LockPinViewController : ExtendedUIViewController
     {
-        private ISettings _settings;
+        private IAppSettingsService _appSettingsService;
         private IAuthService _authService;
 
         public LockPinViewController(IntPtr handle) : base(handle)
@@ -32,7 +32,7 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
-            _settings = Resolver.Resolve<ISettings>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _authService = Resolver.Resolve<IAuthService>();
 
             NavItem.Title = AppResources.VerifyPIN;
@@ -68,7 +68,7 @@ namespace Bit.iOS.Extension
                 if(PinTextField.Text == _authService.PIN)
                 {
                     Debug.WriteLine("BW Log, Start Dismiss PIN controller.");
-                    _settings.AddOrUpdateValue(Constants.Locked, false);
+                    _appSettingsService.Locked = false;
                     PinTextField.ResignFirstResponder();
                     LoadingController.DismissLockAndContinue();
                 }
