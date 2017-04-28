@@ -152,7 +152,6 @@ namespace Bit.App.Pages
                 return;
             }
 
-
             _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
             var deleteTask = await _folderService.DeleteAsync(_folderId);
             _userDialogs.HideLoading();

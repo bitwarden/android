@@ -30,7 +30,7 @@ namespace Bit.iOS.Extension
         private readonly JsonSerializerSettings _jsonSettings =
             new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private IGoogleAnalyticsService _googleAnalyticsService;
-        private ISettings _settings;
+        private ILockService _lockService;
 
         public LoadingViewController(IntPtr handle) : base(handle)
         { }
@@ -44,7 +44,7 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
-            _settings = Resolver.Resolve<ISettings>();
+            _lockService = Resolver.Resolve<ILockService>();
 
             if(!_setupHockeyApp)
             {
@@ -175,7 +175,7 @@ namespace Bit.iOS.Extension
         private void ContinueOn()
         {
             Debug.WriteLine("BW Log, Segue to setup, login add or list.");
-            _settings.AddOrUpdateValue(App.Constants.LastActivityDate, DateTime.UtcNow);
+            _lockService.UpdateLastActivity();
 
             if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
             {
@@ -240,7 +240,7 @@ namespace Bit.iOS.Extension
 
             if(itemData != null)
             {
-                _settings.AddOrUpdateValue(App.Constants.LastActivityDate, DateTime.UtcNow);
+                _lockService.UpdateLastActivity();
                 _googleAnalyticsService.TrackExtensionEvent("AutoFilled", _context.ProviderType);
             }
             else
@@ -283,6 +283,7 @@ namespace Bit.iOS.Extension
                 .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAppSettingsService, AppSettingsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

@@ -33,6 +33,7 @@ namespace Bit.App
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
         private readonly IAppInfoService _appInfoService;
+        private readonly IAppSettingsService _appSettingsService;
 
         public App(
             string uri,
@@ -46,7 +47,8 @@ namespace Bit.App
             ILockService lockService,
             IGoogleAnalyticsService googleAnalyticsService,
             ILocalizeService localizeService,
-            IAppInfoService appInfoService)
+            IAppInfoService appInfoService,
+            IAppSettingsService appSettingsService)
         {
             _uri = uri;
             _databaseService = databaseService;
@@ -60,6 +62,7 @@ namespace Bit.App
             _googleAnalyticsService = googleAnalyticsService;
             _localizeService = localizeService;
             _appInfoService = appInfoService;
+            _appSettingsService = appSettingsService;
 
             SetCulture();
             SetStyles();
@@ -123,7 +126,7 @@ namespace Bit.App
 
             if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
             {
-                _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
+                _lockService.UpdateLastActivity();
             }
         }
 
@@ -248,7 +251,7 @@ namespace Bit.App
                 return;
             }
 
-            _settings.AddOrUpdateValue(Constants.Locked, true);
+            _appSettingsService.Locked = true;
             switch(lockType)
             {
                 case Enums.LockType.Fingerprint:

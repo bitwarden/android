@@ -6,6 +6,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
+using Bit.App.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -13,6 +14,7 @@ namespace Bit.App.Pages
     {
         private readonly IFingerprint _fingerprint;
         private readonly ISettings _settings;
+        private readonly IAppSettingsService _appSettings;
         private readonly bool _checkFingerprintImmediately;
 
         public LockFingerprintPage(bool checkFingerprintImmediately)
@@ -20,6 +22,7 @@ namespace Bit.App.Pages
             _checkFingerprintImmediately = checkFingerprintImmediately;
             _fingerprint = Resolver.Resolve<IFingerprint>();
             _settings = Resolver.Resolve<ISettings>();
+            _appSettings = Resolver.Resolve<IAppSettingsService>();
 
             Init();
         }
@@ -79,7 +82,7 @@ namespace Bit.App.Pages
             var result = await _fingerprint.AuthenticateAsync(AppResources.FingerprintDirection);
             if(result.Authenticated)
             {
-                _settings.AddOrUpdateValue(Constants.Locked, false);
+                _appSettings.Locked = false;
                 await Navigation.PopModalAsync();
             }
             else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)

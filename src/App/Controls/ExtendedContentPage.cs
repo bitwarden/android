@@ -10,7 +10,7 @@ namespace Bit.App.Controls
     {
         private ISyncService _syncService;
         private IGoogleAnalyticsService _googleAnalyticsService;
-        private ISettings _settings;
+        private ILockService _lockService;
         private bool _syncIndicator;
         private bool _updateActivity;
 
@@ -20,7 +20,7 @@ namespace Bit.App.Controls
             _updateActivity = updateActivity;
             _syncService = Resolver.Resolve<ISyncService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
-            _settings = Resolver.Resolve<ISettings>();
+            _lockService = Resolver.Resolve<ILockService>();
 
             BackgroundColor = Color.FromHex("efeff4");
 
@@ -45,11 +45,6 @@ namespace Bit.App.Controls
                 IsBusy = _syncService.SyncInProgress;
             }
 
-            if(_updateActivity)
-            {
-                _settings.AddOrUpdateValue(Constants.LastActivityDate, DateTime.UtcNow);
-            }
-
             _googleAnalyticsService.TrackPage(GetType().Name);
             base.OnAppearing();
         }
@@ -59,6 +54,11 @@ namespace Bit.App.Controls
             if(_syncIndicator)
             {
                 IsBusy = false;
+            }
+
+            if(_updateActivity)
+            {
+                _lockService.UpdateLastActivity();
             }
 
             base.OnDisappearing();

@@ -211,6 +211,7 @@ namespace Bit.Android
                 .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
                 .RegisterType<IMemoryService, MemoryService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAppSettingsService, AppSettingsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())

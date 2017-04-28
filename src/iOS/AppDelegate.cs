@@ -33,6 +33,7 @@ namespace Bit.iOS
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
         private GaiCompletionHandler _dispatchHandler = null;
+        private ILockService _lockService;
 
         public ISettings Settings { get; set; }
 
@@ -45,6 +46,7 @@ namespace Bit.iOS
                 SetIoc();
             }
 
+            _lockService = Resolver.Resolve<ILockService>();
             var appIdService = Resolver.Resolve<IAppIdService>();
             var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
                 appIdService, Resolver.Resolve<IAuthService>());
@@ -65,10 +67,11 @@ namespace Bit.iOS
                 Resolver.Resolve<ISyncService>(),
                 Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>(),
-                Resolver.Resolve<ILockService>(),
+                _lockService,
                 Resolver.Resolve<IGoogleAnalyticsService>(),
                 Resolver.Resolve<ILocalizeService>(),
-                Resolver.Resolve<IAppInfoService>()));
+                Resolver.Resolve<IAppInfoService>(),
+                Resolver.Resolve<IAppSettingsService>()));
 
             // Appearance stuff
 
@@ -143,7 +146,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
 
             // Log the date/time we last backgrounded
-            Settings.AddOrUpdateValue(App.Constants.LastActivityDate, DateTime.UtcNow);
+            _lockService.UpdateLastActivity();
 
             // Dispatch Google Analytics
             SendGoogleAnalyticsHitsInBackground();
@@ -268,6 +271,7 @@ namespace Bit.iOS
                 .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
                 .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
+                .RegisterType<IAppSettingsService, AppSettingsService>(new ContainerControlledLifetimeManager())
                 // Repositories
                 .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
                 .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
