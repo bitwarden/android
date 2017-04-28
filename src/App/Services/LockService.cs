@@ -55,7 +55,7 @@ namespace Bit.App.Services
 
                 // Has it been longer than lockSeconds since the last time the app was used?
                 var now = DateTime.UtcNow;
-                if((now - _appSettings.LastActivity).TotalSeconds < lockSeconds)
+                if(now > _appSettings.LastActivity && (now - _appSettings.LastActivity).TotalSeconds < lockSeconds)
                 {
                     return LockType.None;
                 }
