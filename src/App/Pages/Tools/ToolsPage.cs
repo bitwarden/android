@@ -48,8 +48,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                AutofillCell = new ToolsViewCell(
-                    string.Format("{0} ({1})", AppResources.BitwardenAutofillService, AppResources.Beta),
+                AutofillCell = new ToolsViewCell(AppResources.BitwardenAutofillService,
                     AppResources.BitwardenAutofillServiceDescription, "upload");
                 section.Add(AutofillCell);
             }
