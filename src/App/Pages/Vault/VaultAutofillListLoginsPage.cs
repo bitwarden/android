@@ -31,13 +31,14 @@ namespace Bit.App.Pages
 
             Uri uri;
             DomainName domainName;
-            if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
+            if(uriString?.StartsWith(Constants.AndroidAppProtocol) ?? false)
+            {
+                _name = uriString.Substring(Constants.AndroidAppProtocol.Length);
+            }
+            else if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
                 !DomainName.TryParse(uri.Host, out domainName))
             {
-                if(uriString != null && uriString.StartsWith(Constants.AndroidAppProtocol))
-                {
-                    _name = uriString.Substring(Constants.AndroidAppProtocol.Length);
-                }
+                _name = "--";
             }
             else
             {
