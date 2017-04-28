@@ -64,17 +64,10 @@ namespace Bit.App.Services
 
             Uri uri = null;
             DomainName domainName = null;
-            var androidApp = false;
+            var androidApp = UriIsAndroidApp(uriString);
 
-            if(!Uri.TryCreate(uriString, UriKind.Absolute, out uri) || !DomainName.TryParse(uri.Host, out domainName))
-            {
-                if(domainName == null)
-                {
-                    androidApp = UriIsAndroidApp(uriString);
-                }
-            }
-
-            if(!androidApp && domainName == null)
+            if(!androidApp &&
+                (!Uri.TryCreate(uriString, UriKind.Absolute, out uri) || !DomainName.TryParse(uri.Host, out domainName)))
             {
                 return null;
             }
@@ -91,8 +84,7 @@ namespace Bit.App.Services
                     {
                         matchingDomains.AddRange(eqDomain.Select(d => d).ToList());
                     }
-
-                    if(androidAppWebUriString != null && Array.IndexOf(eqDomain, androidAppWebUriString) >= 0)
+                    else if(androidAppWebUriString != null && Array.IndexOf(eqDomain, androidAppWebUriString) >= 0)
                     {
                         matchingFuzzyDomains.AddRange(eqDomain.Select(d => d).ToList());
                     }
@@ -108,7 +100,8 @@ namespace Bit.App.Services
                 matchingDomains.Add(androidApp ? uriString : domainName.BaseDomain);
             }
 
-            if(androidApp && androidAppWebUriString != null && !matchingFuzzyDomains.Any())
+            if(androidApp && androidAppWebUriString != null &&
+                !matchingFuzzyDomains.Any() && !matchingDomains.Contains(androidAppWebUriString))
             {
                 matchingFuzzyDomains.Add(androidAppWebUriString);
             }
