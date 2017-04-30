@@ -63,9 +63,11 @@ namespace Bit.Android
                     return;
                 }
 
+                /*
                 var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
                 var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
                 testNodes.Dispose();
+                */
 
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 switch(e.EventType)
