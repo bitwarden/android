@@ -50,7 +50,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            NotesCell = new FormEditorCell(height: 90);
+            NotesCell = new FormEditorCell(height: 180);
             NotesCell.Editor.Text = login.Notes?.Decrypt(login.OrganizationId);
 
             PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: NotesCell.Editor,

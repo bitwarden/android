@@ -55,7 +55,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            NotesCell = new FormEditorCell(height: 90);
+            NotesCell = new FormEditorCell(height: 180);
             PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: NotesCell.Editor,
                 useButton: true);
             PasswordCell.Button.Image = "eye";
@@ -230,6 +230,8 @@ namespace Bit.App.Pages
                         AppResources.Ok);
                 }
             }
+
+            NameCell.Entry.FocusWithDelay();
         }
 
         protected override void OnDisappearing()
