@@ -113,7 +113,7 @@ namespace Bit.iOS.Extension.Models
         [JsonProperty(PropertyName = "properties")]
         public object Properties { get; set; } = new object();
         [JsonProperty(PropertyName = "options")]
-        public object Options { get; set; } = new object();
+        public object Options { get; set; } = new { animate = false };
         [JsonProperty(PropertyName = "metadata")]
         public object MetaData { get; set; } = new object();
 
