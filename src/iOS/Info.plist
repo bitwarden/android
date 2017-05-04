@@ -28,7 +28,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden</string>
 	<key>CFBundleVersion</key>
-	<string>12</string>
+	<string>13</string>
 	<key>CFBundleIconFiles</key>
 	<array>
 		<string>Icon-72@2x.png</string>
