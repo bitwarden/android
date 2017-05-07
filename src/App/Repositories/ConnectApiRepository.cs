@@ -29,7 +29,7 @@ namespace Bit.App.Repositories
                 return HandledNotConnected<TokenResponse>();
             }
 
-            using(var client = HttpService.Client)
+            using(var client = HttpService.IdentityClient)
             {
                 var requestMessage = new HttpRequestMessage
                 {

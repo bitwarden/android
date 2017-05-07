@@ -12,9 +12,23 @@ namespace Bit.App
         {
             var tokenService = Resolver.Resolve<ITokenService>();
             var appIdService = Resolver.Resolve<IAppIdService>();
+
             if(!string.IsNullOrWhiteSpace(tokenService.Token))
             {
-                Headers.Add("Authorization", $"Bearer2 {tokenService.Token}");
+                var httpService = Resolver.Resolve<IHttpService>();
+
+                var bearerString = "Bearer";
+                var tokenIssuer = tokenService.TokenIssuer;
+                if(tokenIssuer == httpService.ApiClient.BaseAddress.OriginalString)
+                {
+                    bearerString = string.Concat(bearerString, "2");
+                }
+                else if(tokenIssuer == httpService.IdentityClient.BaseAddress.OriginalString)
+                {
+                    bearerString = string.Concat(bearerString, "3");
+                }
+
+                Headers.Add("Authorization", $"{bearerString} {tokenService.Token}");
             }
             if(!string.IsNullOrWhiteSpace(appIdService.AppId))
             {

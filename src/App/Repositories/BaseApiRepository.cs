@@ -55,7 +55,7 @@ namespace Bit.App.Repositories
                 var deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
                 var appIdService = Resolver.Resolve<IAppIdService>();
 
-                using(var client = HttpService.Client)
+                using(var client = HttpService.IdentityClient)
                 {
                     var requestMessage = new HttpRequestMessage
                     {
@@ -97,7 +97,7 @@ namespace Bit.App.Repositories
             }
             else if(TokenService.TokenNeedsRefresh && !string.IsNullOrWhiteSpace(TokenService.RefreshToken))
             {
-                using(var client = HttpService.Client)
+                using(var client = HttpService.IdentityClient)
                 {
                     var requestMessage = new HttpRequestMessage
                     {

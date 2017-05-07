@@ -1,7 +1,6 @@
 ﻿using System;
 using Bit.App.Abstractions;
 using System.Text;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Services
@@ -74,6 +73,20 @@ namespace Bit.App.Services
                 }
 
                 return _epoc.AddSeconds(Convert.ToDouble(decoded["exp"].Value<long>()));
+            }
+        }
+
+        public string TokenIssuer
+        {
+            get
+            {
+                var decoded = DecodeToken();
+                if(decoded?["iss"] == null)
+                {
+                    throw new InvalidOperationException("No issuer in token.");
+                }
+
+                return decoded?["iss"].Value<string>();
             }
         }
 

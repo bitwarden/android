@@ -229,6 +229,7 @@
     <Compile Include="Pages\Vault\VaultEditLoginPage.cs" />
     <Compile Include="Pages\Vault\VaultListLoginsPage.cs" />
     <Compile Include="Services\PasswordGenerationService.cs" />
+    <Compile Include="Utilities\IdentityHttpClient.cs" />
     <Compile Include="Utilities\Extentions.cs" />
     <Compile Include="Utilities\ExtendedObservableCollection.cs" />
     <Compile Include="Utilities\ApiHttpClient.cs" />

@@ -9,6 +9,7 @@ namespace Bit.App.Abstractions
         [Obsolete("Old auth scheme")]
         string AuthBearer { get; set; }
         DateTime TokenExpiration { get; }
+        string TokenIssuer { get; }
         bool TokenExpired { get; }
         TimeSpan TokenTimeRemaining { get; }
         bool TokenNeedsRefresh { get; }

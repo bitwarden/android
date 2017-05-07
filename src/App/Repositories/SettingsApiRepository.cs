@@ -32,7 +32,7 @@ namespace Bit.App.Repositories
                 return tokenStateResponse;
             }
 
-            using(var client = HttpService.Client)
+            using(var client = HttpService.ApiClient)
             {
                 var requestMessage = new TokenHttpRequestMessage()
                 {

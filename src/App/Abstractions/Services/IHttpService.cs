@@ -2,6 +2,7 @@
 {
     public interface IHttpService
     {
-        ApiHttpClient Client { get; }
+        ApiHttpClient ApiClient { get; }
+        IdentityHttpClient IdentityClient { get; }
     }
 }
