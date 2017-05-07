@@ -22,7 +22,7 @@ namespace Bit.App
             //BaseAddress = new Uri("http://169.254.80.80:33656"); // Desktop from VS Android Emulator
             //BaseAddress = new Uri("http://192.168.1.8:33656"); // Desktop
             //BaseAddress = new Uri("https://identity-api.bitwarden.com"); // Preview
-            BaseAddress = new Uri("https://api.bitwarden.com"); // Production
+            BaseAddress = new Uri("https://identity.bitwarden.com"); // Production
             DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }
