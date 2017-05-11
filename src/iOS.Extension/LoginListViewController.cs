@@ -101,7 +101,7 @@ namespace Bit.iOS.Extension
         {
             private const string CellIdentifier = "TableCell";
 
-            private IEnumerable<LoginViewModel> _tableItems;
+            private IEnumerable<LoginViewModel> _tableItems = new List<LoginViewModel>();
             private Context _context;
             private LoginListViewController _controller;
 
