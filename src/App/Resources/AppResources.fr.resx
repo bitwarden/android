@@ -816,4 +816,10 @@
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Vous recherchez un identifiant pour remplir automatiquement "{0}".</value>
   </data>
+  <data name="ShareVault" xml:space="preserve">
+    <value>Partager votre coffre</value>
+  </data>
+  <data name="ShareVaultDescription" xml:space="preserve">
+    <value>Créez une organisation pour partager de manière sécurisée vos identifiants avec d\'autres utilisateurs.</value>
+  </data>
 </root>
