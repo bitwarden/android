@@ -69,6 +69,7 @@
 	</dict>
 	<key>CFBundleLocalizations</key>
 	<array>
+		<string>en</string>
 		<string>es</string>
 		<string>zh-Hans</string>
 		<string>sv</string>
