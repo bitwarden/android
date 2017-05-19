@@ -314,6 +314,9 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
+  <data name="DisableGA" xml:space="preserve">
+    <value>Stäng av Analytics</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Lösenord</value>
     <comment>Label for a password.</comment>
