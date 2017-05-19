@@ -7,6 +7,8 @@
 
 The bitwarden mobile application is written in C# with Xamarin Android, Xamarin iOS, and Xamarin Forms.
 
+<img src="https://i.imgur.com/Ty8wkSO.png" alt="" width="300" height="533" /> <img src="https://i.imgur.com/BYb4gVc.png" alt="" width="300" height="533" />
+
 # Build/Run
 
 **Requirements**
