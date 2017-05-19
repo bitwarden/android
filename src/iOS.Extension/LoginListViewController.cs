@@ -115,7 +115,7 @@ namespace Bit.iOS.Extension
             {
                 var loginService = Resolver.Resolve<ILoginService>();
                 var logins = await loginService.GetAllAsync(_context.UrlString);
-                _tableItems = logins?.Item1.Select(s => new LoginViewModel(s))
+                _tableItems = logins?.Item1?.Select(s => new LoginViewModel(s))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username)
                     .ToList() ?? new List<LoginViewModel>();
@@ -125,12 +125,12 @@ namespace Bit.iOS.Extension
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                return _tableItems.Count() == 0 ? 1 : _tableItems.Count();
+                return _tableItems == null || _tableItems.Count() == 0 ? 1 : _tableItems.Count();
             }
 
             public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
             {
-                if(_tableItems.Count() == 0)
+                if(_tableItems == null || _tableItems.Count() == 0)
                 {
                     var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
                     noDataCell.TextLabel.Text = AppResources.NoLoginsTap;
@@ -154,7 +154,7 @@ namespace Bit.iOS.Extension
 
             public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
             {
-                if(_tableItems.Count() == 0 || cell == null)
+                if(_tableItems == null || _tableItems.Count() == 0 || cell == null)
                 {
                     return;
                 }
@@ -169,7 +169,7 @@ namespace Bit.iOS.Extension
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
 
-                if(_tableItems.Count() == 0)
+                if(_tableItems == null || _tableItems.Count() == 0)
                 {
                     _controller.PerformSegue("loginAddSegue", this);
                     return;
