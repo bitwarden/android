@@ -304,7 +304,10 @@ namespace Bit.App.Services
                 return;
             }
 
-            var localFolders = (await _folderRepository.GetAllByUserIdAsync(_authService.UserId).ConfigureAwait(false))
+            var localFolders = (await _folderRepository.GetAllByUserIdAsync(_authService.UserId)
+                .ConfigureAwait(false))
+                .GroupBy(f => f.Id)
+                .Select(f => f.First())
                 .ToDictionary(f => f.Id);
 
             foreach(var serverFolder in serverFolders)
@@ -339,7 +342,10 @@ namespace Bit.App.Services
                 return;
             }
 
-            var localLogins = (await _loginRepository.GetAllByUserIdAsync(_authService.UserId).ConfigureAwait(false))
+            var localLogins = (await _loginRepository.GetAllByUserIdAsync(_authService.UserId)
+                .ConfigureAwait(false))
+                .GroupBy(s => s.Id)
+                .Select(s => s.First())
                 .ToDictionary(s => s.Id);
 
             foreach(var serverLogin in serverLogins)

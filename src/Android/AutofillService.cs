@@ -122,8 +122,8 @@ namespace Bit.Android
                 root.Dispose();
                 e.Dispose();
             }
-            // Some unknown condition is causing NullReferenceException's in production. Suppress it for now.
-            catch(NullReferenceException) { }
+            // Suppress exceptions so that service doesn't crash
+            catch { }
         }
 
         public override void OnInterrupt()

@@ -15,13 +15,13 @@ namespace Bit.App.Repositories
 
         public Task<IEnumerable<LoginData>> GetAllByUserIdAsync(string userId)
         {
-            var logins = Connection.Table<LoginData>().Where(f => f.UserId == userId).Cast<LoginData>();
+            var logins = Connection.Table<LoginData>().Where(l => l.UserId == userId).Cast<LoginData>();
             return Task.FromResult(logins);
         }
 
         public Task<IEnumerable<LoginData>> GetAllByUserIdAsync(string userId, bool favorite)
         {
-            var logins = Connection.Table<LoginData>().Where(f => f.UserId == userId && f.Favorite == favorite)
+            var logins = Connection.Table<LoginData>().Where(l => l.UserId == userId && l.Favorite == favorite)
                 .Cast<LoginData>();
             return Task.FromResult(logins);
         }
