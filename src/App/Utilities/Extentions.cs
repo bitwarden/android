@@ -106,5 +106,16 @@ namespace Bit.App
                 }
             }
         }
+
+        public static bool LastActionWasRecent(this DateTime? lastAction, int milliseconds = 1000)
+        {
+            if(lastAction.HasValue && (DateTime.UtcNow - lastAction.Value).TotalMilliseconds < milliseconds)
+            {
+                System.Diagnostics.Debug.WriteLine("Last action occurred recently.");
+                return true;
+            }
+            
+            return false;
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace Bit.App.Pages
         private readonly IAuthService _authService;
         private readonly IAppSettingsService _appSettingsService;
         private TapGestureRecognizer _tgr;
+        private DateTime? _lastAction;
 
         public LockPinPage()
         {
@@ -91,6 +92,12 @@ namespace Bit.App.Pages
 
         protected void PinEntered(object sender, EventArgs args)
         {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
             if(Model.PIN == _authService.PIN)
             {
                 _appSettingsService.Locked = false;

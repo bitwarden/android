@@ -14,6 +14,7 @@ namespace Bit.App.Pages
         private readonly IAuthService _authService;
         private readonly IAppSettingsService _appSettingsService;
         private readonly ICryptoService _cryptoService;
+        private DateTime? _lastAction;
 
         public LockPasswordPage()
         {
@@ -111,6 +112,12 @@ namespace Bit.App.Pages
 
         protected async Task CheckPasswordAsync()
         {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
             if(string.IsNullOrWhiteSpace(PasswordCell.Entry.Text))
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,

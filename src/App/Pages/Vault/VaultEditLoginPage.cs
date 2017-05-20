@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private DateTime? _lastAction;
 
         public VaultEditLoginPage(string loginId)
         {
@@ -146,6 +147,12 @@ namespace Bit.App.Pages
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
+                if(_lastAction.LastActionWasRecent())
+                {
+                    return;
+                }
+                _lastAction = DateTime.UtcNow;
+
                 if(!_connectivity.IsConnected)
                 {
                     AlertNoConnection();

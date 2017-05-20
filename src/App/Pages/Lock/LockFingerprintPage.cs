@@ -16,6 +16,7 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
         private readonly IAppSettingsService _appSettings;
         private readonly bool _checkFingerprintImmediately;
+        private DateTime? _lastAction;
 
         public LockFingerprintPage(bool checkFingerprintImmediately)
         {
@@ -79,6 +80,12 @@ namespace Bit.App.Pages
 
         public async Task CheckFingerprintAsync()
         {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
             var result = await _fingerprint.AuthenticateAsync(AppResources.FingerprintDirection);
             if(result.Authenticated)
             {

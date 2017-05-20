@@ -16,6 +16,7 @@ namespace Bit.App.Pages
         private readonly IAuthService _authService;
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
+        private DateTime? _lastAction;
 
         public HomePage()
             : base(updateActivity: false)
@@ -92,11 +93,23 @@ namespace Bit.App.Pages
 
         public async Task LoginAsync()
         {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
             await Navigation.PushForDeviceAsync(new LoginPage());
         }
 
         public async Task RegisterAsync()
         {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
             await Navigation.PushForDeviceAsync(new RegisterPage(this));
         }
 

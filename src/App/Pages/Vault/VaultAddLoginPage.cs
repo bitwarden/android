@@ -27,6 +27,7 @@ namespace Bit.App.Pages
         private readonly string _defaultUri;
         private readonly string _defaultName;
         private readonly bool _fromAutofill;
+        private DateTime? _lastAction;
 
         public VaultAddLoginPage(string defaultUri = null, string defaultName = null, bool fromAutofill = false)
         {
@@ -135,6 +136,12 @@ namespace Bit.App.Pages
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
+                if(_lastAction.LastActionWasRecent())
+                {
+                    return;
+                }
+                _lastAction = DateTime.UtcNow;
+
                 if(!_connectivity.IsConnected)
                 {
                     AlertNoConnection();
