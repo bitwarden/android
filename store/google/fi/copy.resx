@@ -148,7 +148,7 @@ bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoid
     <value>Suojaa holvisi sormenjäljellä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Täydennä automaattisesti kentät selaimessasi tai muissa sovelluksissa</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synkronoi ja hallitse holviasi eri laitteilla
