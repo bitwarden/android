@@ -752,7 +752,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>扩展激活 ！</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>图标</value>
@@ -761,27 +761,27 @@
     <value>译者</value>
   </data>
   <data name="LoginsForUri" xml:space="preserve">
-    <value>Logins for {0}</value>
+    <value>登录 {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoLoginsForUri" xml:space="preserve">
-    <value>There are no logins in your vault for {0}.</value>
+    <value>您的密码库里没有 {0} 的登录信息。</value>
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>当你看到一个 bitwarden 自动填充通知时，您可以利用它来启动自动填充服务。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill a login from your vault.</value>
+    <value>点击此通知，以便从您的密码库自动登录。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
     <value>打开辅助功能设置</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. 在 Android 的辅助功能设置屏幕上，触摸服务项下的 "bitwarden" 的标题。</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. 切换开关，然后按确定接受。</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>禁用</value>
@@ -805,7 +805,7 @@
     <value>你想要自动填充还是查看此登录信息？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>确定要自动填充此登录？并不完全匹配 "{0}" 。</value>
+    <value>确定要自动登录？并不完全匹配 "{0}" 。</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
     <value>匹配的登录信息</value>
@@ -817,7 +817,7 @@
     <value>搜索</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>你正在为 "{0}" 寻找一个自动填充登录。</value>
+    <value>你正在为 "{0}" 寻找一个自动登录。</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>分享你的密码库</value>
