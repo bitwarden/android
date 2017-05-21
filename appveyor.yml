@@ -14,4 +14,4 @@ artifacts:
   - path: com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk
 branches:
   except:
-  - l10n_master
+    - l10n_master
