@@ -118,43 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Free Password Manager</value>
+    <value>bitwarden – Ilmainen salasananhallintapalvelu</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden on helpoin ja turvallisin tapa säilöä käyttäjänimesi ja salasanasi, kätevästi synkronoituna kaikille laitteillesi.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Salasanavarkaudet ovat vakava ongelma. Käyttämäsi verkkosivustot ja sovellukset ovat hyökkäyksen kohteena päivittäin. Tietoturvavuotoja tapahtuu ja salasanoja varastetaan. Jos käytät samoja salasanoja eri sivustoilla ja sovelluksissa, voivat hakkerit mahdollisesti päästä helposti käsiksi sähköpostiisi, pankkiisi tai muihin tärkeisiin tileihin.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Tietoturvaekspertit suosittelevat uniikkien, satunnaisesti luotujen salasanojen käyttämistä kaikilla tileilläsi. Mutta kuinka hallitset kaikkia noita salasanoja? bitwarden tekee salasanojen luomisesta, säilömisestä ja käyttämisestä helppoa.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoidaan kaikille laitteillesi. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset käsiksi niihin. Edes bitwardenin kehittäjätiimi ei voisi lukea tietojasi, vaikka haluaisi. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2- ja SHA-256-menetelmillä.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>– Synkronoi käyttäjätunnukset ja salasanat kaikkien selaintesi ja laitteidesi kesken
+– Täytä kirjautumiskentät automaattisesti verkossa ja sovelluksissa
+– Luo automaattisesti vahvoja ja turvallisia salasanoja kirjautumiskohteillesi</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Turvallinen ja ilmainen salasananhallintapalvelu kaikille laitteillesi</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Hallitse kirjautumistietojasi turvallisesta holvista</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Luo automaattiseti vahvoja, satunnaisia ja turvallisia salasanoja</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Suojaa holvisi sormenjäljellä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Täydennä automaattisesti kentät selaimessasi tai muissa sovelluksissa</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Synkronoi ja hallitse holviasi eri laitteilla
 
-- Phone
-- Tablet
-- Desktop
-- Web</value>
+- Puhelin
+- Tabletti
+- Tietokone
+- Verkko</value>
   </data>
 </root>
