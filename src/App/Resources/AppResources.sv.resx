@@ -59,46 +59,46 @@
             : using a System.ComponentModel.TypeConverter
             : and then encoded with base64 encoding.
     -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
           <xsd:element name="metadata">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
               </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
             <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="data">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
             <xsd:complexType>
               <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
             </xsd:complexType>
           </xsd:element>
         </xsd:choice>
@@ -173,7 +173,7 @@
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
     <value>Är du säker på att du vill ta bort? Det här går inte att ångra.</value>
-    <comment>Confirmation alert message when deleting something. (Do you really want to delete? This cannot be undone.)</comment>
+    <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
     <value>Ändra</value>
@@ -194,11 +194,9 @@
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>Mejla oss direkt för att få hjälp eller för att lämna återkoppling.</value>
-    <comment>Email us directly to get help or leave feedback.</comment>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Skriv in din PIN-kod.</value>
-    <comment>Enter your PIN code.</comment>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Favoriter</value>
@@ -209,11 +207,9 @@
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
     <value>Öppna ett problemärende på vårt GitHub-arkiv.</value>
-    <comment>Open an issue at our GitHub repository.</comment>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
     <value>Använd ditt fingeravtryck för att verifiera.</value>
-    <comment>Use your fingerprint to verify.</comment>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Mapp</value>
@@ -221,11 +217,9 @@
   </data>
   <data name="FolderCreated" xml:space="preserve">
     <value>Ny mapp skapad.</value>
-    <comment>New folder created.</comment>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
     <value>Mapp borttagen.</value>
-    <comment>Folder deleted.</comment>
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Ingen mapp</value>
@@ -233,11 +227,9 @@
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Mappar</value>
-    <comment>Folders</comment>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
     <value>Mapp uppdaterad.</value>
-    <comment>Folder updated.</comment>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Gå till webbplats</value>
@@ -245,7 +237,6 @@
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
     <value>Hjälp och återkoppling</value>
-    <comment>Help and Feedback</comment>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Göm</value>
@@ -253,19 +244,17 @@
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
     <value>Var god anslut till internet innan du fortsätter.</value>
-    <comment>Description message for the alert when internet connection is required to continue. (Please connect to the internet before continuing.)</comment>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
     <value>Internetanslutning krävs</value>
-    <comment>Title for the alert when internet connection is required to continue. (Internet Connection Required)</comment>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
     <value>Ogiltigt huvudlösenord. Försök igen.</value>
-    <comment>Invalid Master Password. Try again.</comment>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Ogiltig PIN-kod. Försök igen.</value>
-    <comment>Invalid PIN. Try again.</comment>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>Öppna</value>
@@ -285,7 +274,6 @@
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
     <value>Är du säker på att du vill logga ut?</value>
-    <comment>Are you sure you want to log out?</comment>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Huvudlösenord</value>
@@ -365,7 +353,6 @@
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
     <value>Använd fingeravtryck för att låsa upp</value>
-    <comment>Use Fingerprint to Unlock</comment>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Användarnamn</value>
@@ -373,19 +360,17 @@
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
     <value>{0}-fältet krävs.</value>
-    <comment>Validation message for when a form field is left blank and is required to be entered. (The {0} field is required.)</comment>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
     <value>{0} har kopierats.</value>
-    <comment>Confirmation message after suceessfully copying a value to the clipboard. ({0} has been copied.)</comment>
+    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
     <value>Verifiera fingeravtryck</value>
-    <comment>Verify Fingerprint</comment>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
     <value>Verifiera huvudlösenord</value>
-    <comment>Verify Master Password</comment>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Verifiera PIN-kod</value>
@@ -398,11 +383,9 @@
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Besök vår webbplats</value>
-    <comment>Visit Our Website</comment>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
     <value>Besök vår webbplats för att få hjälp, nyheter, mejla oss och/eller lära er mer om hur man använder bitwarden.</value>
-    <comment>Visit our website to get help, news, email us, and/or learn more about how to use bitwarden.</comment>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webbsida</value>
@@ -440,22 +423,18 @@
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Använd bitwarden i Safari och andra applikationer för att automatiskt fylla i din inloggningsinformation.</value>
-    <comment>Use bitwarden in Safari and other apps to auto-fill your logins.</comment>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>bitwardens hjälpmedelsservice för automatisk ifyllnad</value>
-    <comment>bitwarden Auto-fill Service</comment>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Använd bitwardens hjälpmedelsservice för att automatiskt fylla i din inloggningsinformation.</value>
-    <comment>Use the bitwarden accessibility service to auto-fill your logins.</comment>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Ändra e-postadress</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>Du kan ändra din e-postadress på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
-    <comment>You can change your email address on the bitwarden web vault. Do you want to visit the website now?</comment>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Ändra huvudlösenord</value>
@@ -490,96 +469,76 @@
   </data>
   <data name="CurrentSession" xml:space="preserve">
     <value>Nuvarande session</value>
-    <comment>Current Session</comment>
   </data>
   <data name="EditLogin" xml:space="preserve">
     <value>Ändra inloggning</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Aktivera automatisk synkronisering</value>
-    <comment>Enable Automatic Syncing</comment>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Skriv in ditt kontos e-postadress för att hämta din huvudlösenordsledtråd.</value>
-    <comment>Enter your account email address to receive your master password hint.</comment>
   </data>
   <data name="EnterVerificationCode" xml:space="preserve">
     <value>Skriv in din tvåstegsverifieringskod.</value>
-    <comment>Enter your two-step verification code.</comment>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Återaktivera apptillägg</value>
-    <comment>Re-enable App Extension</comment>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Nästan färdigt!</value>
-    <comment>Almost done!</comment>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
     <value>Aktivera apptillägg</value>
-    <comment>Enable App Extension</comment>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>Inuti Safari hittar du bitwarden genom att trycka på dela-ikonen (scrolla till höger på den nedersta raden i dela-menyn).</value>
-    <comment>Safari is the name of apple's web browser (In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).)</comment>
+    <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
     <value>Få omedelbar åtkomst till dina lösenord!</value>
-    <comment>Get instant access to your passwords!</comment>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Du är nu redo att logga in!</value>
-    <comment>You're ready to log in!</comment>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
     <value>Visa appar som stöds</value>
-    <comment>See Supported Apps</comment>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Dina inloggningar är nu enkelt tillgängliga från Safari, Chrome och andra appar som stöds.</value>
-    <comment>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</comment>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>Inuti Safari och Chrome hittar du bitwarden genom att trycka på dela-ikonen (hjälp: skrolla till höger på den nedersta raden i dela-menyn).</value>
-    <comment>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</comment>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
     <value>Tryck på bitwarden-ikonen i menyn för att öppna tillägget.</value>
-    <comment>Tap the bitwarden icon in the menu to launch the extension.</comment>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
     <value>För att starta bitwarden i Safari och andra appar, tryck på "mer"-ikonen i den nedersta raden på menyn.</value>
-    <comment>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</comment>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>Fingeravtryck</value>
-    <comment>Fingerprint</comment>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>Skapa lösenord</value>
-    <comment>Generate Password</comment>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Hämta huvudlösenordsledtråd</value>
-    <comment>Get your master password hint</comment>
   </data>
   <data name="ImportLogins" xml:space="preserve">
     <value>Importera inloggningar</value>
-    <comment>Import Logins</comment>
   </data>
   <data name="ImportLoginsConfirmation" xml:space="preserve">
     <value>Du kan massimportera inloggningar på bitwardens webbvalv. Vill du besöka webbsidan nu?</value>
-    <comment>You can bulk import logins from the bitwardens web vault. Do you want to visit the website now?</comment>
   </data>
   <data name="ImportLoginsDescription" xml:space="preserve">
     <value>Massimportera snabbt dina inloggningar från en annan lösenordshanterare.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Senaste synkning:</value>
-    <comment>Last Sync:</comment>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Längd</value>
@@ -611,30 +570,24 @@
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
     <value>Logga in eller skapa ett nytt konto för att komma åt dina lösenord.</value>
-    <comment>Log in or create a new account to access your secure vault.</comment>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Hantera</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
     <value>Bekräftelsen för huvudlösenordet stämde ej.</value>
-    <comment>Password confirmation is not correct.</comment>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
     <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det ej går att hämta lösenordet.</value>
-    <comment>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</comment>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Huvudlösenordsledtråd (frivillig)</value>
-    <comment>Master Password Hint (optional)</comment>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>En huvudlösenordsledtråd kan hjälpa dig att komma ihåg ditt huvudlösenord om du glömmer bort det.</value>
-    <comment>A master password hint can help you remember your password if you forget it.</comment>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
     <value>Huvudlösenordet måste vara minst 8 tecken långt.</value>
-    <comment>Master password must be at least 8 characters long.</comment>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minst antal nummer</value>
@@ -649,30 +602,24 @@
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
     <value>Du måste logga in i bitwarden-appen innan du kan använda tillägget.</value>
-    <comment>You must log into the main bitwarden app before you can use the extension.</comment>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Aldrig</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
     <value>Ny inlogging skapad.</value>
-    <comment>New login created.</comment>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Det finns inga favoriter i ditt valv.</value>
-    <comment>There are no favorites in your vault.</comment>
   </data>
   <data name="NoLogins" xml:space="preserve">
     <value>Det finns inga inloggningar i ditt valv.</value>
-    <comment>There are no logins in your vault.</comment>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
     <value>Det finns inga inloggningar i ditt valv för den här webbplatsen. Tryck för att skapa en.</value>
-    <comment>There are no logins in your vault for this website. Tap to add one.</comment>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Den här inloggningen har inte ett användarnamn eller lösenord inskrivet.</value>
-    <comment>This login does not have a username or password configured.</comment>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, fattar!</value>
@@ -680,7 +627,6 @@
   </data>
   <data name="OptionDefaults" xml:space="preserve">
     <value>Standardinställningar ställs in genom bitwarden-appens lösenordsgenerator-verktyg.</value>
-    <comment>Option defaults are set from the main bitwarden app's password generator tool.</comment>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Alternativ</value>
@@ -690,50 +636,40 @@
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
     <value>Lösenord skapat.</value>
-    <comment>Password generated.</comment>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Lösenordsgenerator</value>
-    <comment>Password Generator</comment>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
     <value>Skapa starka och unika lösenord automatiskt för dina inloggningar.</value>
-    <comment>Automatically generate strong, unique passwords for your logins.</comment>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Lösenordsledtråd</value>
-    <comment>Password Hint</comment>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
     <value>Vi har skickat ett mejl till dig med din huvudlösenordsledtråd.</value>
-    <comment>We've sent you an email with your master password hint.</comment>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Är du säker på att du vill skriva över det nuvarande lösenordet?</value>
-    <comment>Are you sure you want to overwrite the current password?</comment>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-notiser. För den bästa möjliga upplevelsen var god välj \"Ok\" på förfrågan om du vill aktivera push-notiser.</value>
-    <comment>Push notifications for apple products (bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select \"Ok\" on the following prompt when asked to enable push notifications.)</comment>
+    <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
     <value>Betygsätt appen</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Överväg gärna att hjälpa oss genom att ge oss en bra recension!</value>
-    <comment>Please consider helping us out with a good review!</comment>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
     <value>App Store-betyg återställs för varje ny version av bitwarden. Överväg gärna att hjälpa oss genom att ge oss en bra recension!</value>
-    <comment>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</comment>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Skapa nytt lösenord</value>
-    <comment>Regenerate Password</comment>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Skriv in huvudlösenordet igen</value>
-    <comment>Re-type Master Password</comment>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Sök i valvet</value>
@@ -743,22 +679,18 @@
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
     <value>Se utvecklingsframsteg</value>
-    <comment>See Development Progress</comment>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Välj</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
     <value>Ställ in PIN-kod</value>
-    <comment>Set PIN</comment>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
     <value>Skriv in en fyrsiffrig PIN-kod som du låser upp appen med.</value>
-    <comment>Enter a 4 digit PIN code to unlock the app with.</comment>
   </data>
   <data name="LoginInformation" xml:space="preserve">
     <value>Inloggningsinformation</value>
-    <comment>Login Information</comment>
   </data>
   <data name="LoginUpdated" xml:space="preserve">
     <value>Inloggning uppdaterad.</value>
@@ -789,15 +721,12 @@
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
     <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva en verifieringskod från en autentiseringsapp på din mobila enhet när du loggar in. Tvåstegsverifiering kan aktiveras på bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
-    <comment>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</comment>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås upp med {0}</value>
-    <comment>Unlock with {0}</comment>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Lås upp med PIN-kod</value>
-    <comment>Unlock with PIN Code</comment>
   </data>
   <data name="ValidatingCode" xml:space="preserve">
     <value>Validerar kod...</value>
@@ -805,14 +734,12 @@
   </data>
   <data name="VerificationCode" xml:space="preserve">
     <value>Verifieringskod</value>
-    <comment>Verification Code</comment>
   </data>
   <data name="ViewLogin" xml:space="preserve">
     <value>Visa inloggning</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden webbvalv</value>
-    <comment>bitwarden Web Vault</comment>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
     <value>Hantera dina inloggningar från valfri webbläsare med bitwardens webbvalv.</value>
