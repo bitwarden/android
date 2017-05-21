@@ -148,7 +148,7 @@ bitwarden 将您的登录信息保存在加密的密码库，可以在您的所�
     <value>采用指纹、PIN 码、或者主密码保护您的密码库</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>从您的 web 浏览器和其他应用内快速自动登录</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>同步后可以从多台设备访问密码库
