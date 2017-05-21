@@ -1,0 +1,21 @@
+files:
+  - source: /src/App/Resources/AppResources.resx
+    translation: /src/App/Resources/AppResources.%two_letters_code%.resx
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh-Hans
+  - source: /store/amazon/en/copy.resx
+    translation: /store/amazon/%two_letters_code%/copy.resx
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh-Hans
+  - source: /store/apple/en/copy.resx
+    translation: /store/apple/%two_letters_code%/copy.resx
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh-Hans
+  - source: /store/google/en/copy.resx
+    translation: /store/google/%two_letters_code%/copy.resx
+    languages_mapping:
+      two_letters_code:
+        zh-CN: zh-Hans
