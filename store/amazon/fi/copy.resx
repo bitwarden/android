@@ -130,31 +130,31 @@ Tietoturvaekspertit suosittelevat uniikkien, satunnaisesti luotujen salasanojen 
 bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoidaan kaikille laitteillesi. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset käsiksi niihin. Edes bitwardenin kehittäjätiimi ei voisi lukea tietojasi, vaikka haluaisi. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2- ja SHA-256-menetelmillä.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>– Synkronoi käyttäjätunnukset ja salasanat kaikkien selaintesi ja laitteidesi kesken
+– Täytä kirjautumiskentät automaattisesti verkossa ja sovelluksissa
+– Luo automaattisesti vahvoja ja turvallisia salasanoja kirjautumiskohteillesi</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Turvallinen ja ilmainen salasananhallintapalvelu kaikille laitteillesi</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Hallitse kirjautumistietojasi turvallisesta holvista</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Luo automaattiseti vahvoja, satunnaisia ja turvallisia salasanoja</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Suojaa holvisi sormenjäljellä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Täydennä automaattisesti kentät selaimessasi tai muissa sovelluksissa</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Synkronoi ja hallitse holviasi eri laitteilla
 
-- Phone
-- Tablet
-- Desktop
-- Web</value>
+- Puhelin
+- Tabletti
+- Tietokone
+- Verkko</value>
   </data>
 </root>
