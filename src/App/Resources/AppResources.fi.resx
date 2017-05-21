@@ -802,27 +802,27 @@
     <value>Täytä automaattisesti</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this login?</value>
+    <value>Haluatko täyttää tällä kohteella vai näyttää sen tiedot?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+    <value>Haluatko varmasti täyttää tällä kohteella? Se ei täsmää täysin osoitteeseen "{0}".</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
-    <value>Matching Logins</value>
+    <value>Täsmäävät kohteet</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Possible Matching Logins</value>
+    <value>Mahdollisesti täsmäävät kohteet</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Hae</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill login for "{0}".</value>
+    <value>Etsitään täytettäviä kohteita osoitteelle "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>Jaa holvisi</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your logins with other users.</value>
+    <value>Luo organisaatio jakaaksesi kirjautumistiedot turvallisesti muiden käyttäjien kanssa.</value>
   </data>
 </root>
