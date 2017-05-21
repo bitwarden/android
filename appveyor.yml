@@ -12,3 +12,6 @@ on_success:
   - IF DEFINED play_dec_secret store\google\Publisher\bin\Debug\Publisher.exe %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk alpha
 artifacts:
   - path: com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk
+branches:
+  except:
+  - l10n_master
