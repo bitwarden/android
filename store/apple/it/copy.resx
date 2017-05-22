@@ -133,18 +133,18 @@ bitwarden salva tutti i tuoi login in una cassaforte criptata che si sincronizza
     <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager,password manager gratis,password manager gratuito</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Gestisci tutte le tue password ed i tuoi login da una cassaforte sicura</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Genera automaticamente password complesse, casuali e sicure</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Proteggi la tua cassaforte con Touch ID, codice PIN o password principale</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Auto-completamento login da Safari, Chrome e centinaia di altre app</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>Sincronizza e accedi alla tua cassaforte da più dispositivi</value>
   </data>
 </root>
