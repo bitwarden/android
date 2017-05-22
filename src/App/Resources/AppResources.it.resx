@@ -799,22 +799,22 @@
     <value>Il modo più semplice per aggiungere nuovi login al tuo vault è dal servizio di completamento automatico bitwarden. Trova altre informazioni sull'utilizzo del servizio di auto-completamnto accedendo alla schermata "Strumenti".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>Auto-completamento</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this login?</value>
+    <value>Vuoi auto-completare o vedere questo login?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+    <value>Sei sicuro di voler completare automaticamente questo login? Non si tratta di una corrispondenza completa per "{0}".</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
-    <value>Matching Logins</value>
+    <value>Logins Corrispondenti</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Possible Matching Logins</value>
+    <value>Possibili Logins Corrispondenti</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Cerca</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>Stai cercando un login di riempimento automatico per "{0}".</value>
