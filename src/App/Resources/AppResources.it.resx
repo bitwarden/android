@@ -607,196 +607,196 @@
     <value>Mai</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
-    <value>New login created.</value>
+    <value>Nuovo login creato.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>Non ci sono preferiti nella tua cassaforte.</value>
   </data>
   <data name="NoLogins" xml:space="preserve">
-    <value>There are no logins in your vault.</value>
+    <value>Non ci sono login nella tua cassaforte.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
-    <value>There are no logins in your vault for this website. Tap to add one.</value>
+    <value>Non ci sono login nella tua cassaforte per questo sito Web. Tocca per aggiungerne uno.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>Questo login non dispone di un nome utente o password configurata.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>Ok, ho capito!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>Le impostazioni predefinite delle opzioni vengono impostate dal generatore di password dell'app principale bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>Opzioni</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>Altro</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>Password generata.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password Generator</value>
+    <value>Generatore di Password</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automatically generate strong, unique passwords for your logins.</value>
+    <value>Genera automaticamente password complesse e uniche per i tuoi login.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password Hint</value>
+    <value>Indizio Password</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>Ti abbiamo inviato una email col tuo indizio per la password principale.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>Sei sicuro di voler sovrascrivere la password corrente?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>bitwarden mantiene la tua cassaforte automaticamente sincronizzati utilizzando le notifiche push. Per la migliore esperienza possibile, si prega di selezionare "Ok" sul menu seguente quando viene richiesto di abilitare le notifiche push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>Valuta l'applicazione</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>Per favore prendi in considerazione l'idea di lasciarci una buona recensione!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>I voti dell'App Store vengono reimpostati con ogni nuova versione di bitwarden. Aiutaci con una buona recensione!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Rigenera Password</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>Ri-digita la Password Principale</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>Cerca nella cassaforte</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>Sicurezza</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
+    <value>Vedi i progressi di sviluppo</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Seleziona</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Set PIN</value>
+    <value>Imposta PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>Immetti un codice PIN a 4 cifre con cui sbloccare l'applicazione.</value>
   </data>
   <data name="LoginInformation" xml:space="preserve">
-    <value>Login Information</value>
+    <value>Informazioni di Login</value>
   </data>
   <data name="LoginUpdated" xml:space="preserve">
-    <value>Login updated.</value>
+    <value>Login aggiornato.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Invio in corso...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>Sincronizzazione in corso...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Syncing complete.</value>
+    <value>Sincronizzazione completata.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Syncing failed.</value>
+    <value>Sincronizzazione fallita.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>Sincronizza Ora La Tua Cassaforte</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Two-step Login</value>
+    <value>Verifica in due passaggi</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>L'autenticazione in due passaggi rende il tuo account più sicuro richiedendo di inserire un codice di sicurezza da una app di autenticazione ogni volta che fai il log in. La verifica in due passaggi può esserer attivata sulla cassaforte online di bitwarden.com. Vuoi visitare ora il sito?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Unlock with {0}</value>
+    <value>Sblocca con {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Unlock with PIN Code</value>
+    <value>Sblocca con codice PIN</value>
   </data>
   <data name="ValidatingCode" xml:space="preserve">
-    <value>Validating code...</value>
+    <value>Verifica codice...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification Code</value>
+    <value>Codice di Verifica</value>
   </data>
   <data name="ViewLogin" xml:space="preserve">
-    <value>View Login</value>
+    <value>Vedi Login</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden Web Vault</value>
+    <value>Cassaforte Web bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Manage your logins from any web browser with the bitwarden web vault.</value>
+    <value>Gestisci i tuoi login da qualunque browser con la cassaforte web bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Lost authenticator app?</value>
+    <value>Perso l'app di autenticazione?</value>
   </data>
   <data name="Logins" xml:space="preserve">
     <value>Logins</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>Estensione attivata!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Icons</value>
+    <value>Icone</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Translations</value>
+    <value>Traduzioni</value>
   </data>
   <data name="LoginsForUri" xml:space="preserve">
-    <value>Logins for {0}</value>
+    <value>Logins per {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoLoginsForUri" xml:space="preserve">
-    <value>There are no logins in your vault for {0}.</value>
+    <value>Non ci sono logins nella tua cassaforte per {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>Quando vedi una notifica di compilazione automatica di bitwarden, puoi toccarla per avviare il servizio di compilazione automatica.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill a login from your vault.</value>
+    <value>Tocca questa notifica per auto-completare un login dal tuo vault.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Apri le impostazioni di accessibilità</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. Nella schermata impostazioni di accessibilità di Android, tocca "bitwarden".</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Attiva l'interruttore e premi OK per accettare.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
+    <value>Disattivo</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Attivo</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Stato</value>
   </data>
   <data name="Beta" xml:space="preserve">
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>Il modo più semplice per aggiungere nuovi login al tuo vault è dal servizio di completamento automatico bitwarden. Trova altre informazioni sull'utilizzo del servizio di auto-completamnto accedendo alla schermata "Strumenti".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-fill</value>
@@ -817,12 +817,12 @@
     <value>Search</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill login for "{0}".</value>
+    <value>Stai cercando un login di riempimento automatico per "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>Condividi La Tua Cassaforte</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your logins with other users.</value>
+    <value>Crea un'organizzazione per condividere in sicurezza i tuoi login con gli altri utenti.</value>
   </data>
 </root>
