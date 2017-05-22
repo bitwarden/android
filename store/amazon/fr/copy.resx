@@ -121,40 +121,40 @@
     <value>Gestionnaire de mots de passe gratuit bitwarden</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden est le moyen le plus facile et sécurisé de stocker tous vos identifiants et mots de passe tout en les synchronisant facilement entre tous vos appareils.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Le vol de mot de passe est un problème sérieux. Les sites web et les applications que vous utilisez sont attaqués tous les jours. Des failles de sécurité apparaissent et vos mots de passe sont volés. Quand vous réutilisez les mêmes mots de passe sur divers sites web et applications, des hackers peuvent facilement accéder à vos e-mails, vos comptes bancaires et à d'autres informations importantes.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Les experts en sécurité recommandent l'utilisation de mots de passe différents et générés aléatoirement pour chaque compte que vous créez. Mais comment allez-vous gérer tous ces mots de passe ? bitwarden facilite la création, le stockage et l'accès de vos mots de passe.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden stocke tous vos identifiants dans un coffre chiffré qui est synchronisé entre tous vos appareils. Puisqu'il est entièrement chiffré avant même qu'il ne parte de votre appareil, vous êtes la seule personne à avoir accès à vos données. Pas même l'équipe de bitwarden ne peut lire vos données, même si nous le voulions. Vos données sont scellées par un chiffrement AES-256 bit, un salage et hachage ainsi que par un PBKDF2 SHA-256.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>- Synchronisez vos identifiants et mots de passe sur tous vos navigateurs et appareils
+- Remplissez automatiquement vos identifiants sur le web et sur d'autres applications
+- Générez automatiquement des mots de passe forts et sécurisés pour vos identifiants</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Un gestionnaire de mots de passe gratuit et sécurisé pour tous vos appareils</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Gérer tous vos identifiants et mots de passe depuis un coffre sécurisé</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Générer automatiquement des mots de passe forts, aléatoires et sécurisés</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Protéger votre coffre avec une empreinte digitale, un code PIN ou un mot de passe maître</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Autocomplétion rapide des identifiants depuis votre navigateur web et d'autres applications</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Synchroniser et accéder à votre coffre depuis divers appareils
 
-- Phone
-- Tablet
-- Desktop
+- Téléphone
+- Tablette
+- Ordinateur
 - Web</value>
   </data>
 </root>
