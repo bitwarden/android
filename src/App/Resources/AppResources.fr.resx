@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Désactiver les Analyses Google</value>
+    <value>Désactiver les Analyses</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
