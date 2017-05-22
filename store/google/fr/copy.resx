@@ -148,7 +148,7 @@ bitwarden stocke tous les identifiants dans un coffre chiffré qui est synchroni
     <value>Protéger votre coffre avec une empreinte digitale, un code PIN ou un mot de passe maître</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Autocomplétion rapide des identifiants depuis votre navigateur web et d'autres applications</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synchroniser et accéder à votre coffre depuis divers appareils
