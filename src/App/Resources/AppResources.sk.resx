@@ -431,7 +431,7 @@
     <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Change Email</value>
+    <value>Zmeniť email</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
@@ -492,11 +492,11 @@
     <value>Enable App Extension</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>V Safari nájdete bitwarden použitím ikony zdieľania (tip: posúvajte doprava v spodnom riadku menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>Získajte okamžitý prístup k vašim heslám!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Ste pripravený prihlásiť sa!</value>
