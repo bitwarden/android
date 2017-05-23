@@ -499,7 +499,7 @@
     <value>Get instant access to your passwords!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>Ste pripravený prihlásiť sa!</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
     <value>See Supported Apps</value>
@@ -784,10 +784,10 @@
     <value>2. Switch on the toggle and press OK to accept.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
+    <value>Vypnuté</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Zapnuté</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>Stav</value>
@@ -808,7 +808,7 @@
     <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
-    <value>Matching Logins</value>
+    <value>Zodpovedajúce prihlásenia</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
     <value>Možné zodpovedajúce prihlásenia</value>
