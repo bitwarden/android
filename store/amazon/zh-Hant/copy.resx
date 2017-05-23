@@ -121,7 +121,7 @@
     <value>bitwarden - 免費密碼管理器</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden 簡單易用，可以安全地儲存你所有的帳戶名稱和密碼，并在多部裝置之間同步。
+    <value>bitwarden 簡單易用，可以安全地儲存你所有的帳戶名稱和密碼，並在多部裝置之間同步。
 
 帳戶被盜是個嚴重的問題，你用的網頁和應用程式每天都遭受攻擊。安全漏洞時有發生，你的密碼就會被盜。當你在不同網頁和程式重用同一個密碼，黑客就可以一舉獲得你的電郵，甚至銀行戶口或其他重要服務。
 
@@ -138,7 +138,7 @@ bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至�
     <value>安全、免費、跨平台的密碼管理器</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>一個安全的密碼庫裏管理密碼</value>
+    <value>在一個安全的密碼庫裏管理密碼</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>自動生成隨機、安全的強密碼</value>
