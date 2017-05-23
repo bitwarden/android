@@ -130,7 +130,7 @@
 bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至你所有的裝置上。由於資料發送前已經徹底加密，因此只有你可以存取這些資料，甚至連 bitwarden 的成員都無法讀取你的資料。所有資料均使用 AES-256 加密、加鹽雜湊加密以及 PBKDF2 SHA-256 函式加密。</value>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
+    <value>bitwarden, bit warden, 8 bit, 密碼, 登入, 免費密碼管理器, 密碼管理器, 登入管理器</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>在一個安全的密碼庫裏管理密碼</value>
