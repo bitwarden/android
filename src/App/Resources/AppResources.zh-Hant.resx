@@ -820,9 +820,9 @@
     <value>你正在搜尋用於"{0}"的登入資料。</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>分享你的密碼庫</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your logins with other users.</value>
+    <value>新增組織以安全地分享你的帳戶資料。</value>
   </data>
 </root>
