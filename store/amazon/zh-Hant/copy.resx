@@ -130,9 +130,9 @@
 bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至你所有的裝置上。由於資料發送前已經徹底加密，因此只有你可以存取這些資料，甚至連 bitwarden 的成員都無法讀取你的資料。所有資料均使用 AES-256 加密、加鹽雜湊加密以及 PBKDF2 SHA-256 函式加密。</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>-在你的瀏覽器和裝置間同步登入帳戶和密碼
+-在網頁和應用程式自動登入
+-為你的帳戶自動生成隨機、安全的強密碼</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>安全、免費、跨平台的密碼管理器</value>
@@ -144,7 +144,7 @@ bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至�
     <value>自動生成隨機、安全的強密碼</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>用指紋、PIN碼或主密碼保護你的密碼庫</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>幫你在網頁自動填寫帳戶和密碼</value>
