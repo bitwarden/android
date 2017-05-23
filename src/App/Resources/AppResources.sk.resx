@@ -363,14 +363,14 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} has been copied.</value>
+    <value>{0} bolo skopírované.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify Fingerprint</value>
+    <value>Overenie odtlačku prsta</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verify Master Password</value>
+    <value>Overenie hlavného hesla</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Overiť PIN</value>
@@ -407,13 +407,13 @@
     <value>Rozšírenie aplikácie</value>
   </data>
   <data name="AutofillDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie v aplikáciach a na webe.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>Služba automatického vypĺňania</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Avoid Ambiguous Characters</value>
+    <value>Vyhnúť sa dvojvýznamovým znakom</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>bitwarden App Extension</value>
@@ -578,27 +578,27 @@
     <value>Password confirmation is not correct.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
+    <value>Hlavné heslo je heslo, ktoré použijete na prístup k svojmu trezoru. Je veľmi dôležité, aby ste svoje hlavné heslo nezabudli. Neexistuje možnosť, ako heslo obnoviť v prípade, že ho zabudnete.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Master Password Hint (optional)</value>
+    <value>Nápoveda k hlavnému heslo (voliteľné)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>A master password hint can help you remember your password if you forget it.</value>
+    <value>Nápoveda k hlavnému heslu vám môže pomôcť spomenúť si na heslo, ak ho zabudnete.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Master password must be at least 8 characters long.</value>
+    <value>Hlavné heslo musí obsahovať aspoň 8 znakov.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum Numbers</value>
+    <value>Minimum číslic</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum Special</value>
+    <value>Minimum špeciálnych</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>More Settings</value>
+    <value>Ďalšie nastavenia</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
     <value>You must log into the main bitwarden app before you can use the extension.</value>
@@ -657,25 +657,25 @@
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>Ohodnotiť aplikáciu</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>Prosíme, zvážte pomôcť nám dobrým hodnotením!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
     <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Vygenerovať nové heslo</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>Znovu zadajte hlavné heslo</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>Prehľadávať trezor</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>Zabezpečenie</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
     <value>See Development Progress</value>
@@ -799,7 +799,7 @@
     <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>Automatické dopĺňanie</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Do you want to auto-fill or view this login?</value>
@@ -811,18 +811,18 @@
     <value>Matching Logins</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Possible Matching Logins</value>
+    <value>Možné zodpovedajúce prihlásenia</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Hladať</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill login for "{0}".</value>
+    <value>Hľadáte automaticky vypľňané prihlásenie pre "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>Zdieľať trezor</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your logins with other users.</value>
+    <value>Vytvorte organizáciu pre bezpečné zdieľanie vašich prihlasovacích údajov s inými používateľmi.</value>
   </data>
 </root>
