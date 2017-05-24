@@ -449,29 +449,29 @@
     <value>Coming Soon!</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Continuar</value>
   </data>
   <data name="Copied" xml:space="preserve">
-    <value>Copied!</value>
+    <value>Copiado!</value>
   </data>
   <data name="CopiedPassword" xml:space="preserve">
-    <value>Copied password!</value>
+    <value>Palavra-passe copiada!</value>
   </data>
   <data name="CopiedUsername" xml:space="preserve">
-    <value>Copied username!</value>
+    <value>Nome de utilizador copiado!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Create Account</value>
+    <value>Criar conta</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Creating account...</value>
+    <value>A criar conta...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="CurrentSession" xml:space="preserve">
-    <value>Current Session</value>
+    <value>Sessão atual</value>
   </data>
   <data name="EditLogin" xml:space="preserve">
-    <value>Edit Login</value>
+    <value>Editar credencial</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Enable Automatic Syncing</value>
@@ -486,7 +486,7 @@
     <value>Re-enable App Extension</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Almost done!</value>
+    <value>Quase feito!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
     <value>Enable App Extension</value>
@@ -604,10 +604,10 @@
     <value>You must log into the main bitwarden app before you can use the extension.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Never</value>
+    <value>Nunca</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
-    <value>New login created.</value>
+    <value>Nova credencial criada.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>There are no favorites in your vault.</value>
@@ -622,29 +622,29 @@
     <value>This login does not have a username or password configured.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>Ok, entendi!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
     <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>Opções</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>Outros</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>Palavra-passe gerada.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password Generator</value>
+    <value>Gerador de palavras-passe</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
     <value>Automatically generate strong, unique passwords for your logins.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password Hint</value>
+    <value>Dica de palavra-passe</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
     <value>We've sent you an email with your master password hint.</value>
@@ -675,71 +675,71 @@
     <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>Segurança</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
     <value>See Development Progress</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Selecionar</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Set PIN</value>
+    <value>Definir PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
     <value>Enter a 4 digit PIN code to unlock the app with.</value>
   </data>
   <data name="LoginInformation" xml:space="preserve">
-    <value>Login Information</value>
+    <value>Informação de início de sessão</value>
   </data>
   <data name="LoginUpdated" xml:space="preserve">
-    <value>Login updated.</value>
+    <value>Credencial atualizada.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>A submeter...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>A sincronizar...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Syncing complete.</value>
+    <value>Sincronização completada.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Syncing failed.</value>
+    <value>Sincronização falhada.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>Sincronizar cofre agora</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Two-step Login</value>
+    <value>Início de sessão de dois passos</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>O início de sessão de dois passos torna a sua conta mais segura ao requerer que digite um código de segurança de uma aplicação de autenticação quando iniciar sessão. O início de sessão de dois passos pode ser ativado no cofre web bitwarden.com. Pretende visitar o website agora?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Unlock with {0}</value>
+    <value>Destrancar com {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Unlock with PIN Code</value>
+    <value>Destrancar com código PIN</value>
   </data>
   <data name="ValidatingCode" xml:space="preserve">
-    <value>Validating code...</value>
+    <value>A validar código...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification Code</value>
+    <value>Código de verificação</value>
   </data>
   <data name="ViewLogin" xml:space="preserve">
-    <value>View Login</value>
+    <value>Ver credencial</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden Web Vault</value>
+    <value>Cofre web bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
     <value>Manage your logins from any web browser with the bitwarden web vault.</value>
@@ -748,17 +748,17 @@
     <value>Lost authenticator app?</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Credenciais</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>Extensão ativada!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Icons</value>
+    <value>Ícones</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Translations</value>
+    <value>Traduções</value>
   </data>
   <data name="LoginsForUri" xml:space="preserve">
     <value>Logins for {0}</value>
