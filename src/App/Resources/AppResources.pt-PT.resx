@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Do you really want to delete? This cannot be undone.</value>
+    <value>Pretende mesmo eliminar? Isto não pode ser desfeito.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -243,15 +243,15 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Please connect to the internet before continuing.</value>
+    <value>Por favor ligue-se à internet antes de continuar.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet Connection Required</value>
+    <value>Ligação à internet requerida</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Invalid Master Password. Try again.</value>
+    <value>Palavra-passe mestra inválida. Tente novamente.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>PIN inválido. Tente novamente.</value>
@@ -410,7 +410,7 @@
     <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>Serviço de auto-preenchimento</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evitar caracteres ambíguos</value>
@@ -425,7 +425,7 @@
     <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden Auto-fill Service</value>
+    <value>Serviço de auto-preenchimento bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
@@ -474,13 +474,13 @@
     <value>Editar credencial</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable Automatic Syncing</value>
+    <value>Ativar sincronização automática</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Enter your account email address to receive your master password hint.</value>
+    <value>Digite o endereço de email da sua conta para receber a dica da sua palavra-passe mestra.</value>
   </data>
   <data name="EnterVerificationCode" xml:space="preserve">
-    <value>Enter your two-step verification code.</value>
+    <value>Digite o seu código de verificação de dois passos.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Re-enable App Extension</value>
@@ -496,13 +496,13 @@
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>Obtenha acesso instantâneo às suas palavras-passe!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>Está pronto para iniciar sessão!</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>See Supported Apps</value>
+    <value>Ver aplicações suportadas</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
@@ -517,77 +517,77 @@
     <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorite</value>
+    <value>Favorito</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingerprint</value>
+    <value>Impressão digital</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Generate Password</value>
+    <value>Gerar palavra-passe</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Get your master password hint</value>
+    <value>Obter dica da palavra-passe mestra</value>
   </data>
   <data name="ImportLogins" xml:space="preserve">
-    <value>Import Logins</value>
+    <value>Importar credenciais</value>
   </data>
   <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>You can bulk import logins from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Pode importar em massa as suas credenciais a partir do cofre web bitwarden.com. Pretende visitar o website agora?</value>
   </data>
   <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Quickly bulk import your logins from other password management apps.</value>
+    <value>Importe rapidamente em massa as suas credenciais de outras aplicações de gestão de palavras-passe.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Last Sync:</value>
+    <value>Última sincronização:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Length</value>
+    <value>Comprimento</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lock</value>
+    <value>Bloquear</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 minutos</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 hora</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 minuto</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 horas</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Imediatamente</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Lock Options</value>
+    <value>Opções de bloqueio</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Logging in...</value>
+    <value>A iniciar sessão...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Log in or create a new account to access your secure vault.</value>
+    <value>Inicie sessão ou crie uma nova conta para aceder ao seu cofre seguro.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Gerir</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Password confirmation is not correct.</value>
+    <value>A confirmação da palavra-passe não está correta.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
+    <value>A palavra-passe mestra é a palavra-passe que utiliza para aceder ao seu cofre. É muito importante que não se esqueça da sua palavra-passe mestra. Não existe maneira de recuperar a palavra-passe no caso de a esquecer.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Master Password Hint (optional)</value>
+    <value>Dica da palavra-passe mestra (opcional)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>A master password hint can help you remember your password if you forget it.</value>
+    <value>Uma dica da palavra-passe mestra pode ajudar a lembrar-se da sua palavra-passe se a esquecer.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Master password must be at least 8 characters long.</value>
+    <value>A palavra-passe mestra tem de ter pelo menos 8 caracteres.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Números mínimos</value>
@@ -610,10 +610,10 @@
     <value>Nova credencial criada.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>Não existem favoritos no seu cofre.</value>
   </data>
   <data name="NoLogins" xml:space="preserve">
-    <value>There are no logins in your vault.</value>
+    <value>Não existem credenciais no seu cofre.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
     <value>There are no logins in your vault for this website. Tap to add one.</value>
@@ -657,7 +657,7 @@
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>Avalie a aplicação</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Por favor considere ajudar-nos com uma boa análise!</value>
@@ -687,7 +687,7 @@
     <value>Definir PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>Digite um código PIN de 4 dígitos para desbloquear a aplicação.</value>
   </data>
   <data name="LoginInformation" xml:space="preserve">
     <value>Informação de início de sessão</value>
@@ -772,7 +772,7 @@
     <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill a login from your vault.</value>
+    <value>Toque nesta notificação para auto-preencher uma credencial do seu cofre.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
     <value>Abrir definições de acessibilidade</value>
@@ -802,22 +802,22 @@
     <value>Auto-preencher</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this login?</value>
+    <value>Pretende auto-preencher ou ver esta credencial?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+    <value>Tem a certeza de que pretende auto-preencher esta credencial? Não é uma correspondência completa para "{0}".</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
-    <value>Matching Logins</value>
+    <value>Credenciais correspondentes</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Possible Matching Logins</value>
+    <value>Possíveis credenciais correspondentes</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Pesquisar</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill login for "{0}".</value>
+    <value>Está a pesquisar por uma credencial de auto-preenchimento para "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Partilhe o seu cofre</value>
