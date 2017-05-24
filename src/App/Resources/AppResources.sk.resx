@@ -626,7 +626,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>Predvolené možnosti sa nastavujú v nástroji na generovanie hesla v hlavnej bitwarden aplikácií.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Možnosti</value>
@@ -678,7 +678,7 @@
     <value>Zabezpečenie</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
+    <value>Pozrieť postup vývoja</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Vybrať</value>
@@ -729,11 +729,11 @@
     <value>Odomknúť s PIN kódom</value>
   </data>
   <data name="ValidatingCode" xml:space="preserve">
-    <value>Validating code...</value>
+    <value>Overovanie kódu...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification Code</value>
+    <value>Overovací kód</value>
   </data>
   <data name="ViewLogin" xml:space="preserve">
     <value>Zobraziť prihlásenie</value>
@@ -761,27 +761,27 @@
     <value>Preklady</value>
   </data>
   <data name="LoginsForUri" xml:space="preserve">
-    <value>Logins for {0}</value>
+    <value>Prihlasovacie údaje pre {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoLoginsForUri" xml:space="preserve">
-    <value>There are no logins in your vault for {0}.</value>
+    <value>Vo vašom trezore nie sú žiadne prihlasovacie údaje pre {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>Keď uvidíte notifikáciu automatického vypĺňania bitwarden, môžete na ňu klepnúť pre spustenie služby automatického vypĺňania.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill a login from your vault.</value>
+    <value>Ťuknite na túto notifikáciu pre automatické vyplnenie prihlasovacích údajov z vášho trezora.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Otvoriť nastavenia zjednodušenia prístupu</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. Otvorte obrazovku Uľahčenia prístupu, klepnite na "bitwarden" pod nadpisom Služby.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Zapnite a stlačte OK pre potvrdenie.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Vypnuté</value>
