@@ -505,16 +505,16 @@
     <value>Zobraziť podporované aplikácie</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
+    <value>Vaše prihlasovacie údaje sú teraz ľahko prístupné zo Safari, Chrome a ďalších podporovaných aplikácií.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>V Safari a Chrome nájdete bitwarden použitím ikony zdieľania (tip: posúvajte doprava v spodnom riadku menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the bitwarden icon in the menu to launch the extension.</value>
+    <value>Klepnite na ikonu bitwarden v menu na spustenie rozšírenia.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>Pre zapnutie bitwardenu v Safari a iných aplikáciach, klepnite na ikonu "viac" v spodnom riadku menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Obľúbené</value>
@@ -575,7 +575,7 @@
     <value>Spravovať</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Password confirmation is not correct.</value>
+    <value>Potvrdenie hesla nie je správne.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
     <value>Hlavné heslo je heslo, ktoré použijete na prístup k svojmu trezoru. Je veľmi dôležité, aby ste svoje hlavné heslo nezabudli. Neexistuje možnosť, ako heslo obnoviť v prípade, že ho zabudnete.</value>
@@ -601,25 +601,25 @@
     <value>Ďalšie nastavenia</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main bitwarden app before you can use the extension.</value>
+    <value>Pred použitím rozšírenia sa najskôr musíte prihlásiť v hlavnej bitwarden aplikácií.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nikdy</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
-    <value>New login created.</value>
+    <value>Nové prihlasovacie údaje vytvorené.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>Vo vašom trezore nie sú žiadné obľúbené.</value>
   </data>
   <data name="NoLogins" xml:space="preserve">
-    <value>There are no logins in your vault.</value>
+    <value>Vo vašom trezore nie sú žiadne prihlasovacie údaje.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
-    <value>There are no logins in your vault for this website. Tap to add one.</value>
+    <value>Pre túto stránku nemáte žiadne prihlásovacie údaje. Klepnite pre pridanie.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>Toto prihlásenie nemá nakonfigurované používateľské meno alebo heslo.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, rozumiem!</value>
@@ -653,7 +653,7 @@
     <value>Naozaj chcete prepísať aktuálne heslo?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>bitwarden udržuje váš trezor automaticky synchronizovaný použitím push notifikácií. Pre čo najlepší priebeh, prosím potvrďte nasledujúcu výzvu pre zapnutie push notifikácií.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -663,7 +663,7 @@
     <value>Prosíme, zvážte pomôcť nám dobrým hodnotením!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>Hodnotenia v App Store sú resetované pri každej novej verzii bitwarden. Prosíme, zvážte pomôcť nám dobrým hodnotením!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Vygenerovať nové heslo</value>
