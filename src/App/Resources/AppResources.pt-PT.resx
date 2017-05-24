@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>About</value>
+    <value>Acerca</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>Adicionar</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Add Folder</value>
+    <value>Adicionar pasta</value>
   </data>
   <data name="AddLogin" xml:space="preserve">
-    <value>Add Login</value>
+    <value>Adicionar credencial</value>
     <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>An error has occurred.</value>
+    <value>Ocorreu um erro.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
