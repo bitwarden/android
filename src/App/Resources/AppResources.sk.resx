@@ -419,28 +419,28 @@
     <value>bitwarden rozšírenie aplikácie</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
+    <value>Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z bitwarden rozšírenia aplikácie. Ďalšie informácie o používaní bitwarden rozšírenia aplikácie získate prechodom do obrazovky Nástrojov.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>Použiť bitwarden v Safari a iných aplikáciach pre automatické vypĺňanie prihlasovacích údajov.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden Auto-fill Service</value>
+    <value>Služba automatického vypĺňania bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Zmeniť email</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Svoju emailovú adresu môžete zmeniť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Change Master Password</value>
+    <value>Zmeniť hlavné heslo</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Svoje hlavné heslo môžete zmeniť na webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Zavrieť</value>
@@ -477,19 +477,19 @@
     <value>Zapnúť automatickú synchronizáciu</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Enter your account email address to receive your master password hint.</value>
+    <value>Zadajte emailovú adresu na zaslanie nápovedy pre vaše hlavné heslo.</value>
   </data>
   <data name="EnterVerificationCode" xml:space="preserve">
-    <value>Enter your two-step verification code.</value>
+    <value>Zadajte dvojstupňový overovací kód.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>Znovu zapnúť rozšírenie aplikácie</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Takmer hotovo!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>Zapnúť rozšírenie aplikácie</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>V Safari nájdete bitwarden použitím ikony zdieľania (tip: posúvajte doprava v spodnom riadku menu).</value>
@@ -502,7 +502,7 @@
     <value>Ste pripravený prihlásiť sa!</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>See Supported Apps</value>
+    <value>Zobraziť podporované aplikácie</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
