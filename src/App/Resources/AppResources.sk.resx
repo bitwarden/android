@@ -416,7 +416,7 @@
     <value>Vyhnúť sa dvojvýznamovým znakom</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden App Extension</value>
+    <value>bitwarden rozšírenie aplikácie</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
