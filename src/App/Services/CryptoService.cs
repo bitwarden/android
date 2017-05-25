@@ -65,9 +65,10 @@ namespace Bit.App.Services
                 {
                     PreviousKey = _key;
                     _secureStorage.Delete(KeyKey);
-                    _key = null;
-                    _legacyEtmKey = null;
                 }
+
+                _key = value;
+                _legacyEtmKey = null;
             }
         }
 
