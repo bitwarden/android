@@ -82,6 +82,36 @@ namespace Bit.Android
                             break;
                         }
 
+                        var uri = GetUri(root);
+                        if(uri != null && !uri.Contains(BitwardenWebsite))
+                        {
+                            var needToFill = NeedToAutofill(AutofillActivity.LastCredentials, uri);
+                            if(needToFill)
+                            {
+                                var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
+                                needToFill = passwordNodes.Any();
+                                if(needToFill)
+                                {
+                                    var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+                                    var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+                                    FillCredentials(usernameEditText, passwordNodes);
+
+                                    allEditTexts.Dispose();
+                                    usernameEditText.Dispose();
+                                    passwordNodes.Dispose();
+                                }
+                            }
+                            
+                            if(!needToFill)
+                            {
+                                NotifyToAutofill(uri, notificationManager);
+                                cancelNotification = false;
+                            }
+                        }
+
+                        AutofillActivity.LastCredentials = null;
+
+                        /*
                         var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
                         if(passwordNodes.Count > 0)
                         {
@@ -108,6 +138,8 @@ namespace Bit.Android
                         }
 
                         passwordNodes.Dispose();
+                        */
+
 
                         if(cancelNotification)
                         {

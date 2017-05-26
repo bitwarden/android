@@ -12,7 +12,6 @@ namespace Bit.Android.Services
         private readonly GoogleAnalytics _instance;
         private readonly IAuthService _authService;
         private readonly Tracker _tracker;
-        private bool _setUserId = true;
 
         public GoogleAnalyticsService(
             Context appContext,
