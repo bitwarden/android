@@ -118,43 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Free Password Manager</value>
+    <value>bitwarden - Bezplatný správca hesiel</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden je najjednoduchší a najbezpečnejší spôsob, ako skladovať všetky vaše prihlasovacie údaje a heslá a zároveň ich mať pohodlne synchronizované medzi všetkými vašimi zariadeniami.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Krádež hesla je vážny problém. Stránky a aplikácie, ktoré použiváte, sú pod útokom každý deň. Vykystujú sa narušenia bezpečnosti a kradnú sa heslá. Ak používate to isté heslo medzi viacerými aplikáciami a stránkami, hackeri sa môžu ľahko dostať k vášmu emailu, banke a do iných dôležitých účtov.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Bezpečnostní experti odporúčajú používať rozdielne, náhodne vygenerované heslo pre každý účet, ktorý vytvoríte. Ale ako spravovať všetky tieto heslá? bitwarden vám uľahčí vytvárať, uskladniť a pristupovať k vašim heslám.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden skladuje všetky vaše prihlasovacie údaje v zašifrovanom trezore, ktorý sa synchronizuje medzi všetkými vašimi zariadeniami. Keďže sú plne zašifrované ešte predtým, ako opustia vaše zariadenie, iba vy máte prístup k svojim dátam. Ani tím bitwarden nevie prečítať vaše dáta, aj keby chceli. Vaše dáta su zapečatené AES-256 bitovým šifrovaním a PBKDF2 SHA-256.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>- Synchronizujte vaše prihlasovacie údaje naprieč všetkými prehliadačmi a zariadeniami
+- Vypĺňajte prihlasovacie údaje na stránkach a v aplikáciach automaticky
+- Automaticky generujte silné a bezpečné heslá pre vaše prihlásenia</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Bezpečný a bezplatný správca hesiel pre všetky vaše zariadenia</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Spravujte všetky vaše prihlasovacie mená a heslá z bezpečného trezoru</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Automaticky generujte silné, náhodné a bezpečné heslá</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Chráňte váš trezor odtlačkom prsta, PIN kódom, alebo hlavným heslom</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Rýchlo automaticky vyplňte prihlasovacie údaje vo vašom prehliadači a iných aplikáciách</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Synchronizácia a prístup k vášmu trezoru z viacerých zariadení
 
-- Phone
+- Telefón
 - Tablet
-- Desktop
+- Počítač
 - Web</value>
   </data>
 </root>
