@@ -796,16 +796,16 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z bitwarden služby automatického vypĺňania. Ďalšie informácie o používaní bitwarden automatického vypĺňania získate prechodom do obrazovky Nástrojov.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatické dopĺňanie</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this login?</value>
+    <value>Chcete automaticky vyplniť alebo zobraziť toto prihlásenie?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+    <value>Naozaj chcete automaticky vyplniť toto prihlásenie? Nie je to úplná zhoda pre {0}.</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
     <value>Zodpovedajúce prihlásenia</value>
