@@ -130,7 +130,7 @@ namespace Bit.App.Pages
 
         private void Lost2FAApp()
         {
-            Device.OpenUri(new Uri("https://vault.bitwarden.com/#/recover"));
+            Device.OpenUri(new Uri("https://help.bitwarden.com/article/lost-two-step-device/"));
         }
 
         private async void Entry_Completed(object sender, EventArgs e)
