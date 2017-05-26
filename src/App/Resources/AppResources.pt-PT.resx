@@ -352,7 +352,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Use Fingerprint to Unlock</value>
+    <value>Utilizar impressão digital para desbloquear</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Nome de utilizador</value>
@@ -404,10 +404,10 @@
     <value>Adicionar credencial</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App Extension</value>
+    <value>Extensão da aplicação</value>
   </data>
   <data name="AutofillDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Utilize o serviço de acessibilidade para auto-preencher as suas credencias entre aplicações e a web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Serviço de auto-preenchimento</value>
@@ -416,19 +416,19 @@
     <value>Evitar caracteres ambíguos</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden App Extension</value>
+    <value>Extensão da aplicação bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
+    <value>A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir da extensão da aplicação bitwarden. Saiba mais acerca de como utilizar a extensão da aplicação bitwarden ao navegar para o ecrã de "Ferramentas".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>Utilize o bitwarden no Safari e outras aplicações para auto-preencher as suas credenciais.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Serviço de auto-preenchimento bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Utilize o serviço de acessibilidade para auto-preencher as suas credencias.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Alterar email</value>
@@ -483,16 +483,16 @@
     <value>Digite o seu código de verificação de dois passos.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>Reativar extensão da aplicação</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Quase feito!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>Ativar extensão da aplicação</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>No Safari, encontre o bitwarden utilizando o ícone de partilha (dica: role para a direita na linha de fundo do menu de partilha).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -505,16 +505,16 @@
     <value>Ver aplicações suportadas</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
+    <value>As suas credenciais estão agora facilmente acessíveis a partir do Safari, Chrome, e outras aplicações suportadas.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>No Safari e Chrome, encontre o bitwarden utilizando o ícone de partilha (dica: role para a direita na linha de fundo do menu de partilha).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the bitwarden icon in the menu to launch the extension.</value>
+    <value>Toque no ícone do bitwarden no menu para iniciar a extensão.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>Para ligar o bitwarden no Safaria e outras aplicações, toque no ícone "mais" na linha de fundo do menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorito</value>
@@ -601,7 +601,7 @@
     <value>Mais definições</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main bitwarden app before you can use the extension.</value>
+    <value>Tem de iniciar sessão na aplicação bitwarden principal antes de poder utilizar a extensão.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nunca</value>
@@ -616,17 +616,17 @@
     <value>Não existem credenciais no seu cofre.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
-    <value>There are no logins in your vault for this website. Tap to add one.</value>
+    <value>Não existem credenciais no seu cofre para este website. Toque para adicionar uma.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>Esta credencial não tem um nome de utilizador ou palavra passe configurados.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, entendi!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>Predefinições de opções são definidas a partir da ferramenta de geração de palavras-passe da aplicação principal bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opções</value>
@@ -641,19 +641,19 @@
     <value>Gerador de palavras-passe</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automatically generate strong, unique passwords for your logins.</value>
+    <value>Gera automaticamente palavras-passe fortes e únicas para as suas credenciais.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Dica de palavra-passe</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>Enviámos-lhe um email com a dica da sua palavra-passe mestra.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>Tem a certeza de que pretende sobreescrever a palavra-passe atual?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>O bitwarden mantém o seu cofre sincronizado automaticamente utilizando notificações push. Para a melhor experiência possível, por favor selecione "Ok" na seguinte solicitação quando solicitado a ativar notificações push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -663,7 +663,7 @@
     <value>Por favor considere ajudar-nos com uma boa análise!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>As avaliações da App Store são repostas a cada versão do bitwarden. Por favor considere ajudar-nos com uma boa análise!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerar palavra-passe</value>
@@ -678,7 +678,7 @@
     <value>Segurança</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
+    <value>Ver progresso do desenvolvimento</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Selecionar</value>
@@ -769,7 +769,7 @@
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>Quando vê uma notificação de auto-preenchimento do bitwarden, pode toca na mesma para iniciar o serviço de auto-preenchimento.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Toque nesta notificação para auto-preencher uma credencial do seu cofre.</value>
@@ -778,10 +778,10 @@
     <value>Abrir definições de acessibilidade</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. No ecrã de Definições de Acessibilidade do Android, toque em "bitwarden" debaixo do cabeçalho Serviços.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Ligue o interruptor e pressione OK para aceitar. </value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Desativado</value>
@@ -796,7 +796,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir do serviço de auto-preenchimento bitwarden. Saiba mais acerca do serviço de auto-preenchimento bitwarden ao navegar para o ecrã de "Ferramentas".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-preencher</value>
