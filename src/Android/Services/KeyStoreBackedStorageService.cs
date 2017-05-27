@@ -24,7 +24,7 @@ namespace Bit.Android.Services
         private const string SettingsFormat = "ksSecured:{0}";
         private const string RsaMode = "RSA/ECB/PKCS1Padding";
         private const string AesMode = "AES/GCM/NoPadding";
-        private const string EncryptedKey = "ksSecuredAesKey";
+        private const string AesKey = "ksSecured:aesKeyForService";
 
         private readonly ISettings _settings;
         private readonly KeyStore _keyStore;
@@ -131,21 +131,21 @@ namespace Bit.Android.Services
                 return;
             }
 
-            if(_settings.Contains(EncryptedKey))
+            if(_settings.Contains(AesKey))
             {
                 return;
             }
 
             var key = RandomBytes(16);
             var encKey = RsaEncrypt(key);
-            _settings.AddOrUpdateValue(EncryptedKey, Convert.ToBase64String(encKey));
+            _settings.AddOrUpdateValue(AesKey, Convert.ToBase64String(encKey));
         }
 
         private IKey GetAesKey()
         {
             if(_oldAndroid)
             {
-                var encKey = _settings.GetValueOrDefault<string>(EncryptedKey);
+                var encKey = _settings.GetValueOrDefault<string>(AesKey);
                 var encKeyBytes = Convert.FromBase64String(encKey);
                 var key = RsaDecrypt(encKeyBytes);
                 return new SecretKeySpec(key, "AES");
