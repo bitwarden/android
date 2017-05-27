@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Free Password Manager</value>
+    <value>bitwarden gestor de contraseñas gratuito</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden es la manera más fácil y segura de guardar todos usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas informáticos pueden acceder facilmente tu correo electrónico, cuenta bancaria y otras cuentas importantes.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Expertos de seguridad recomiendan utilizar contraseñas diferentes y aleatorias para cada cuenta que crees. Pero, ¿como gestionas todas esas contraseñas? bitwarden hace fácil crear, guardar y acceder a tus contraseñas.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden guarda todos tus usuarios es una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu data está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
     <value>- Sync your logins and passwords across all your browsers and devices
