@@ -8,11 +8,11 @@ using Android.Security;
 using Javax.Security.Auth.X500;
 using Java.Math;
 using Android.Security.Keystore;
-using Android.Icu.Util;
 using Android.App;
 using Plugin.Settings.Abstractions;
 using Javax.Crypto.Spec;
 using System.Collections.Generic;
+using Java.Util;
 
 namespace Bit.Android.Services
 {
