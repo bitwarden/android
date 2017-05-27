@@ -1,14 +1,20 @@
 ﻿using System;
 using Bit.App.Enums;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Models
 {
-    public class PushNotification
+    public class PushNotificationData
     {
         public PushType Type { get; set; }
     }
 
-    public class SyncCipherPushNotification : PushNotification
+    public class PushNotificationDataPayload : PushNotificationData
+    {
+        public string Payload { get; set; }
+    }
+
+    public class SyncCipherPushNotification
     {
         public string Id { get; set; }
         public string UserId { get; set; }
@@ -16,14 +22,14 @@ namespace Bit.App.Models
         public DateTime RevisionDate { get; set; }
     }
 
-    public class SyncFolderPushNotification : PushNotification
+    public class SyncFolderPushNotification
     {
         public string Id { get; set; }
         public string UserId { get; set; }
         public DateTime RevisionDate { get; set; }
     }
 
-    public class SyncUserPushNotification : PushNotification
+    public class SyncUserPushNotification
     {
         public string UserId { get; set; }
         public DateTime Date { get; set; }

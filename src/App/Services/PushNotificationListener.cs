@@ -33,33 +33,38 @@ namespace Bit.App.Services
             _settings = settings;
         }
 
-        public void OnMessage(JObject values, DeviceType deviceType)
+        public void OnMessage(JObject value, DeviceType deviceType)
         {
-            if(values == null)
+            if(value == null)
             {
                 return;
             }
 
             _showNotification = false;
-            Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(values));
+            Debug.WriteLine("Message Arrived: {0}", JsonConvert.SerializeObject(value));
 
             if(!_authService.IsAuthenticated)
             {
                 return;
             }
 
-            JToken token;
-            if(!values.TryGetValue("type", StringComparison.OrdinalIgnoreCase, out token) || token == null)
+            JToken dataToken;
+            if(!value.TryGetValue("data", StringComparison.OrdinalIgnoreCase, out dataToken) || dataToken == null)
             {
                 return;
             }
 
-            var type = (Enums.PushType)token.ToObject<short>();
-            switch(type)
+            var data = dataToken.ToObject<PushNotificationDataPayload>();
+            if(data?.Payload == null)
+            {
+                return;
+            }
+
+            switch(data.Type)
             {
                 case Enums.PushType.SyncCipherUpdate:
                 case Enums.PushType.SyncCipherCreate:
-                    var cipherCreateUpdateMessage = values.ToObject<SyncCipherPushNotification>();
+                    var cipherCreateUpdateMessage = JsonConvert.DeserializeObject<SyncCipherPushNotification>(data.Payload);
                     if(cipherCreateUpdateMessage.OrganizationId == null &&
                         cipherCreateUpdateMessage.UserId != _authService.UserId)
                     {
@@ -74,7 +79,7 @@ namespace Bit.App.Services
                     break;
                 case Enums.PushType.SyncFolderUpdate:
                 case Enums.PushType.SyncFolderCreate:
-                    var folderCreateUpdateMessage = values.ToObject<SyncFolderPushNotification>();
+                    var folderCreateUpdateMessage = JsonConvert.DeserializeObject<SyncFolderPushNotification>(data.Payload);
                     if(folderCreateUpdateMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -82,7 +87,7 @@ namespace Bit.App.Services
                     _syncService.SyncFolderAsync(folderCreateUpdateMessage.Id);
                     break;
                 case Enums.PushType.SyncFolderDelete:
-                    var folderDeleteMessage = values.ToObject<SyncFolderPushNotification>();
+                    var folderDeleteMessage = JsonConvert.DeserializeObject<SyncFolderPushNotification>(data.Payload);
                     if(folderDeleteMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -90,7 +95,7 @@ namespace Bit.App.Services
                     _syncService.SyncDeleteFolderAsync(folderDeleteMessage.Id, folderDeleteMessage.RevisionDate);
                     break;
                 case Enums.PushType.SyncLoginDelete:
-                    var loginDeleteMessage = values.ToObject<SyncCipherPushNotification>();
+                    var loginDeleteMessage = JsonConvert.DeserializeObject<SyncCipherPushNotification>(data.Payload);
                     if(loginDeleteMessage.OrganizationId == null &&
                         loginDeleteMessage.UserId != _authService.UserId)
                     {
@@ -105,7 +110,7 @@ namespace Bit.App.Services
                     break;
                 case Enums.PushType.SyncCiphers:
                 case Enums.PushType.SyncVault:
-                    var cipherMessage = values.ToObject<SyncUserPushNotification>();
+                    var cipherMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
                     if(cipherMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -113,7 +118,7 @@ namespace Bit.App.Services
                     _syncService.FullSyncAsync(true);
                     break;
                 case Enums.PushType.SyncSettings:
-                    var domainMessage = values.ToObject<SyncUserPushNotification>();
+                    var domainMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
                     if(domainMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -121,7 +126,7 @@ namespace Bit.App.Services
                     _syncService.SyncSettingsAsync();
                     break;
                 case Enums.PushType.SyncOrgKeys:
-                    var orgKeysMessage = values.ToObject<SyncUserPushNotification>();
+                    var orgKeysMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
                     if(orgKeysMessage.UserId != _authService.UserId)
                     {
                         break;
