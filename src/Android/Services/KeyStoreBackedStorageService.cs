@@ -29,9 +29,12 @@ namespace Bit.Android.Services
         private readonly ISettings _settings;
         private readonly KeyStore _keyStore;
         private readonly bool _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
+        private readonly KeyStoreStorageService _oldKeyStorageService;
 
         public KeyStoreBackedStorageService(ISettings settings)
         {
+            _oldKeyStorageService = new KeyStoreStorageService();
+
             _settings = settings;
 
             _keyStore = KeyStore.GetInstance(AndroidKeyStore);
@@ -48,22 +51,24 @@ namespace Bit.Android.Services
 
         public void Delete(string key)
         {
+            CleanupOldKeyStore(key);
             _settings.Remove(string.Format(SettingsFormat, key));
         }
 
         public byte[] Retrieve(string key)
         {
-            var cipherString = _settings.GetValueOrDefault<string>(string.Format(SettingsFormat, key));
-            if(cipherString == null)
+            if(!_settings.Contains(key))
             {
-                return null;
+                return TryGetAndMigrateFromOldKeyStore(key);
             }
 
+            var cipherString = _settings.GetValueOrDefault<string>(string.Format(SettingsFormat, key));
             return AesDecrypt(cipherString);
         }
 
         public void Store(string key, byte[] dataBytes)
         {
+            CleanupOldKeyStore(key);
             if(dataBytes == null)
             {
                 _settings.Remove(key);
@@ -217,6 +222,27 @@ namespace Bit.Android.Services
             }
 
             return bytes;
+        }
+
+        private byte[] TryGetAndMigrateFromOldKeyStore(string key)
+        {
+            if(_oldKeyStorageService.Contains(key))
+            {
+                var value = _oldKeyStorageService.Retrieve(key);
+                Store(key, value);
+                _oldKeyStorageService.Delete(key);
+                return value;
+            }
+
+            return null;
+        }
+
+        private void CleanupOldKeyStore(string key)
+        {
+            if(_oldKeyStorageService.Contains(key))
+            {
+                _oldKeyStorageService.Delete(key);
+            }
         }
     }
 }
