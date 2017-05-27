@@ -33,8 +33,7 @@ namespace Bit.Android.Services
 
         public KeyStoreBackedStorageService(ISettings settings)
         {
-            _oldKeyStorageService = new KeyStoreStorageService();
-
+            _oldKeyStorageService = new KeyStoreStorageService(new char[] { });
             _settings = settings;
 
             _keyStore = KeyStore.GetInstance(AndroidKeyStore);
@@ -46,7 +45,7 @@ namespace Bit.Android.Services
 
         public bool Contains(string key)
         {
-            return _settings.Contains(string.Format(SettingsFormat, key));
+            return _settings.Contains(string.Format(SettingsFormat, key)) || _oldKeyStorageService.Contains(key);
         }
 
         public void Delete(string key)
@@ -57,26 +56,28 @@ namespace Bit.Android.Services
 
         public byte[] Retrieve(string key)
         {
-            if(!_settings.Contains(key))
+            var formattedKey = string.Format(SettingsFormat, key);
+            if(!_settings.Contains(formattedKey))
             {
                 return TryGetAndMigrateFromOldKeyStore(key);
             }
 
-            var cipherString = _settings.GetValueOrDefault<string>(string.Format(SettingsFormat, key));
+            var cipherString = _settings.GetValueOrDefault<string>(formattedKey);
             return AesDecrypt(cipherString);
         }
 
         public void Store(string key, byte[] dataBytes)
         {
+            var formattedKey = string.Format(SettingsFormat, key);
             CleanupOldKeyStore(key);
             if(dataBytes == null)
             {
-                _settings.Remove(key);
+                _settings.Remove(formattedKey);
                 return;
             }
 
             var cipherString = AesEncrypt(dataBytes);
-            _settings.AddOrUpdateValue(key, cipherString);
+            _settings.AddOrUpdateValue(formattedKey, cipherString);
         }
 
         private byte[] RandomBytes(int length)
@@ -160,10 +161,11 @@ namespace Bit.Android.Services
         private string AesEncrypt(byte[] input)
         {
             var cipher = Cipher.GetInstance(AesMode);
-            var ivBytes = RandomBytes(12);
-            var spec = new GCMParameterSpec(128, ivBytes);
-            cipher.Init(CipherMode.EncryptMode, GetAesKey(), spec);
+            //var ivBytes = RandomBytes(12);
+            //var spec = new GCMParameterSpec(128, ivBytes);
+            cipher.Init(CipherMode.EncryptMode, GetAesKey());
             var encBytes = cipher.DoFinal(input);
+            var ivBytes = cipher.GetIV();
             return $"{Convert.ToBase64String(ivBytes)}|{Convert.ToBase64String(encBytes)}";
         }
 
