@@ -123,8 +123,8 @@ namespace Bit.App.Pages
 
             if(Device.OS == TargetPlatform.iOS)
             {
-                table.RowHeight = table2.RowHeight = table2.RowHeight = -1;
-                table.EstimatedRowHeight = table2.EstimatedRowHeight = table2.EstimatedRowHeight = 70;
+                table.RowHeight = table2.RowHeight = -1;
+                table.EstimatedRowHeight = table2.EstimatedRowHeight = 70;
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel, () =>
                 {
                     MessagingCenter.Send(Application.Current, "ShowStatusBar", false);

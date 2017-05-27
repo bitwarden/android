@@ -40,7 +40,6 @@ namespace Bit.App.Pages
         private ExtendedTextCell TwoStepCell { get; set; }
         private ExtendedTextCell ChangeMasterPasswordCell { get; set; }
         private ExtendedTextCell ChangeEmailCell { get; set; }
-        private ExtendedSwitchCell AnalyticsCell { get; set; }
         private ExtendedTextCell FoldersCell { get; set; }
         private ExtendedTextCell SyncCell { get; set; }
         private ExtendedTextCell LockCell { get; set; }
@@ -48,6 +47,7 @@ namespace Bit.App.Pages
         private ExtendedTextCell AboutCell { get; set; }
         private ExtendedTextCell HelpCell { get; set; }
         private ExtendedTextCell RateCell { get; set; }
+        private ExtendedTextCell FeaturesCell { get; set; }
         private LongDetailViewCell RateCellLong { get; set; }
         private ExtendedTableView Table { get; set; }
 
@@ -104,12 +104,6 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
-            AnalyticsCell = new ExtendedSwitchCell
-            {
-                Text = AppResources.DisableGA,
-                On = _settings.GetValueOrDefault(Constants.SettingGaOptOut, false)
-            };
-
             FoldersCell = new ExtendedTextCell
             {
                 Text = AppResources.Folders,
@@ -144,9 +138,15 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
+            FeaturesCell = new ExtendedTextCell
+            {
+                Text = AppResources.Features,
+                ShowDisclousure = true
+            };
+
             var otherSection = new TableSection(AppResources.Other)
             {
-                AnalyticsCell,
+                FeaturesCell,
                 AboutCell,
                 HelpCell
             };
@@ -201,7 +201,6 @@ namespace Bit.App.Pages
             base.OnAppearing();
 
             PinCell.OnChanged += PinCell_Changed;
-            AnalyticsCell.OnChanged += AnalyticsCell_Changed;
             LockOptionsCell.Tapped += LockOptionsCell_Tapped;
             TwoStepCell.Tapped += TwoStepCell_Tapped;
             ChangeMasterPasswordCell.Tapped += ChangeMasterPasswordCell_Tapped;
@@ -216,8 +215,9 @@ namespace Bit.App.Pages
             SyncCell.Tapped += SyncCell_Tapped;
             LockCell.Tapped += LockCell_Tapped;
             LogOutCell.Tapped += LogOutCell_Tapped;
-            AboutCell.Tapped += AboutCell_Tapped;
+            AboutCell.Tapped += AboutCell_Tapped;   
             HelpCell.Tapped += HelpCell_Tapped;
+            FeaturesCell.Tapped += FeaturesCell_Tapped;
 
             if(RateCellLong != null)
             {
@@ -235,7 +235,6 @@ namespace Bit.App.Pages
             base.OnDisappearing();
 
             PinCell.OnChanged -= PinCell_Changed;
-            AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
             LockOptionsCell.Tapped -= LockOptionsCell_Tapped;
             TwoStepCell.Tapped -= TwoStepCell_Tapped;
             ChangeMasterPasswordCell.Tapped -= ChangeMasterPasswordCell_Tapped;
@@ -252,6 +251,7 @@ namespace Bit.App.Pages
             LogOutCell.Tapped -= LogOutCell_Tapped;
             AboutCell.Tapped -= AboutCell_Tapped;
             HelpCell.Tapped -= HelpCell_Tapped;
+            FeaturesCell.Tapped -= FeaturesCell_Tapped;
 
             if(RateCellLong != null)
             {
@@ -421,18 +421,6 @@ namespace Bit.App.Pages
             }
         }
 
-        private void AnalyticsCell_Changed(object sender, ToggledEventArgs e)
-        {
-            var cell = sender as ExtendedSwitchCell;
-            if (cell == null)
-            {
-                return;
-            }
-
-            _settings.AddOrUpdateValue(Constants.SettingGaOptOut, cell.On);
-            _googleAnalyticsService.SetAppOptOut(cell.On);
-        }
-
         private void PinEntered(SettingsPinPage page)
         {
             page.PinControl.Entry.Unfocus();
@@ -448,6 +436,11 @@ namespace Bit.App.Pages
             {
                 FingerprintCell.On = false;
             }
+        }
+
+        private void FeaturesCell_Tapped(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new SettingsFeaturesPage()));
         }
 
         private void FoldersCell_Tapped(object sender, EventArgs e)

@@ -530,6 +530,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous..
+        /// </summary>
+        public static string DisbaleGADescription {
+            get {
+                return ResourceManager.GetString("DisbaleGADescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to delete? This cannot be undone..
         /// </summary>
         public static string DoYouReallyWantToDelete {
@@ -769,6 +778,15 @@ namespace Bit.App.Resources {
         public static string Favorites {
             get {
                 return ResourceManager.GetString("Favorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Features.
+        /// </summary>
+        public static string Features {
+            get {
+                return ResourceManager.GetString("Features", resourceCulture);
             }
         }
         

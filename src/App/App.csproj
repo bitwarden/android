@@ -138,6 +138,7 @@
     <Compile Include="Pages\RegisterPage.cs" />
     <Compile Include="Pages\Settings\SettingsCreditsPage.cs" />
     <Compile Include="Pages\Settings\SettingsHelpPage.cs" />
+    <Compile Include="Pages\Settings\SettingsFeaturesPage.cs" />
     <Compile Include="Pages\Settings\SettingsPinPage.cs" />
     <Compile Include="Pages\Lock\LockPinPage.cs" />
     <Compile Include="Pages\MainPage.cs" />
