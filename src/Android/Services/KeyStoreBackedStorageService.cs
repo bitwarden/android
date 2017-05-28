@@ -102,12 +102,11 @@ namespace Bit.Android.Services
                 end.Add(CalendarField.Year, 30);
 
                 var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
-                var spec = new KeyPairGeneratorSpec.Builder(Application.Context)
-                    .SetAlias(KeyAlias)
-                    .SetSubject(new X500Principal($"CN={KeyAlias}"))
-                    .SetSerialNumber(BigInteger.Ten)
-                    .SetStartDate(start.Time)
-                    .SetEndDate(end.Time)
+                var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
+                    .SetCertificateSubject(new X500Principal($"CN={KeyAlias}"))
+                    .SetCertificateSerialNumber(BigInteger.Ten)
+                    .SetKeyValidityStart(start.Time)
+                    .SetKeyValidityEnd(end.Time)
                     .Build();
 
                 gen.Initialize(spec);
@@ -117,7 +116,8 @@ namespace Bit.Android.Services
             {
                 var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, AndroidKeyStore);
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
-                    .SetBlockModes(KeyProperties.BlockModeGcm).SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
+                    .SetBlockModes(KeyProperties.BlockModeGcm)
+                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
                     .Build();
 
                 gen.Init(spec);
@@ -153,16 +153,18 @@ namespace Bit.Android.Services
             }
             else
             {
-                var entry = _keyStore.GetEntry(KeyAlias, null) as KeyStore.SecretKeyEntry;
-                return entry.SecretKey;
+                return _keyStore.GetKey(KeyAlias, null);
             }
+        }
+
+        private KeyStore.PrivateKeyEntry GetRsaKeyEntry()
+        {
+            return _keyStore.GetEntry(KeyAlias, null) as KeyStore.PrivateKeyEntry;
         }
 
         private string AesEncrypt(byte[] input)
         {
             var cipher = Cipher.GetInstance(AesMode);
-            //var ivBytes = RandomBytes(12);
-            //var spec = new GCMParameterSpec(128, ivBytes);
             cipher.Init(CipherMode.EncryptMode, GetAesKey());
             var encBytes = cipher.DoFinal(input);
             var ivBytes = cipher.GetIV();
@@ -184,7 +186,7 @@ namespace Bit.Android.Services
 
         private byte[] RsaEncrypt(byte[] input)
         {
-            var entry = _keyStore.GetEntry(KeyAlias, null) as KeyStore.PrivateKeyEntry;
+            var entry = GetRsaKeyEntry();
             var inputCipher = Cipher.GetInstance(RsaMode, AndroidOpenSSL);
             inputCipher.Init(CipherMode.EncryptMode, entry.Certificate.PublicKey);
 
@@ -200,7 +202,7 @@ namespace Bit.Android.Services
 
         private byte[] RsaDecrypt(byte[] encInput)
         {
-            var entry = _keyStore.GetEntry(KeyAlias, null) as KeyStore.PrivateKeyEntry;
+            var entry = GetRsaKeyEntry();
             var outputCipher = Cipher.GetInstance(RsaMode, AndroidOpenSSL);
             outputCipher.Init(CipherMode.DecryptMode, entry.PrivateKey);
 
