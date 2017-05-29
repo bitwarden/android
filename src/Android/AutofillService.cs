@@ -32,6 +32,7 @@ namespace Bit.Android
             new Browser("com.chrome.canary", "url_bar"),
             new Browser("com.google.android.apps.chrome", "url_bar"),
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
+            new Browser("org.codeaurora.swe.browser", "url_bar"),
             new Browser("org.iron.srware", "url_bar"),
             new Browser("com.sec.android.app.sbrowser", "sbrowser_url_bar"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
@@ -101,7 +102,7 @@ namespace Bit.Android
                                     passwordNodes.Dispose();
                                 }
                             }
-                            
+
                             if(!needToFill)
                             {
                                 NotifyToAutofill(uri, notificationManager);
@@ -260,6 +261,11 @@ namespace Bit.Android
                 builder.SetVisibility(NotificationVisibility.Secret)
                     .SetColor(global::Android.Support.V4.Content.ContextCompat.GetColor(ApplicationContext,
                         Resource.Color.primary));
+            }
+
+            if(Build.VERSION.SdkInt <= BuildVersionCodes.N)
+            {
+                builder.SetPriority(-1);
             }
 
             notificationManager.Notify(AutoFillNotificationId, builder.Build());
