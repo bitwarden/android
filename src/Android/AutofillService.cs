@@ -6,6 +6,8 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Views.Accessibility;
+using Bit.App.Abstractions;
+using XLabs.Ioc;
 
 namespace Bit.Android
 {
@@ -53,6 +55,14 @@ namespace Bit.Android
             new Browser("com.ksmobile.cb", "address_bar_edit_text")
         }.ToDictionary(n => n.PackageName);
 
+        private readonly IAppSettingsService _appSettings;
+        private long _lastNotification = 0;
+
+        public AutofillService()
+        {
+            _appSettings = Resolver.Resolve<IAppSettingsService>();
+        }
+
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             try
@@ -71,64 +81,68 @@ namespace Bit.Android
                 */
 
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
+                var cancelNotification = true;
+
                 switch(e.EventType)
                 {
-                    case EventTypes.WindowContentChanged:
-                    case EventTypes.WindowStateChanged:
-                        var cancelNotification = true;
-
-                        if(e.PackageName == BitwardenPackage)
+                    case EventTypes.ViewFocused:
+                        if(!e.Source.Password || !_appSettings.AutofillPasswordField)
                         {
-                            notificationManager?.Cancel(AutoFillNotificationId);
                             break;
                         }
 
-                        var uri = GetUri(root);
-                        if(uri != null && !uri.Contains(BitwardenWebsite))
+                        if(e.PackageName == BitwardenPackage)
                         {
-                            var needToFill = NeedToAutofill(AutofillActivity.LastCredentials, uri);
-                            if(needToFill)
-                            {
-                                var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
-                                needToFill = passwordNodes.Any();
-                                if(needToFill)
-                                {
-                                    var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-                                    var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
-                                    FillCredentials(usernameEditText, passwordNodes);
-
-                                    allEditTexts.Dispose();
-                                    usernameEditText.Dispose();
-                                    passwordNodes.Dispose();
-                                }
-                            }
-
-                            if(!needToFill)
-                            {
-                                NotifyToAutofill(uri, notificationManager);
-                                cancelNotification = false;
-                            }
+                            CancelNotification(notificationManager);
+                            break;
                         }
 
-                        AutofillActivity.LastCredentials = null;
+                        if(ScanAndAutofill(root, e, notificationManager, cancelNotification))
+                        {
+                            CancelNotification(notificationManager);
+                        }
+                        break;
+                    case EventTypes.WindowContentChanged:
+                    case EventTypes.WindowStateChanged:
+                        if(_appSettings.AutofillPasswordField && e.Source.Password)
+                        {
+                            break;
+                        }
+                        else if(_appSettings.AutofillPasswordField)
+                        {
+                            CancelNotification(notificationManager);
+                            break;
+                        }
 
-                        /*
-                        var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
-                        if(passwordNodes.Count > 0)
+                        if(e.PackageName == BitwardenPackage)
+                        {
+                            CancelNotification(notificationManager);
+                            break;
+                        }
+
+                        if(_appSettings.AutofillPersistNotification)
                         {
                             var uri = GetUri(root);
                             if(uri != null && !uri.Contains(BitwardenWebsite))
                             {
-                                if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
+                                var needToFill = NeedToAutofill(AutofillActivity.LastCredentials, uri);
+                                if(needToFill)
                                 {
-                                    var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
-                                    var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
-                                    FillCredentials(usernameEditText, passwordNodes);
+                                    var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
+                                    needToFill = passwordNodes.Any();
+                                    if(needToFill)
+                                    {
+                                        var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+                                        var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+                                        FillCredentials(usernameEditText, passwordNodes);
 
-                                    allEditTexts.Dispose();
-                                    usernameEditText.Dispose();
+                                        allEditTexts.Dispose();
+                                        usernameEditText.Dispose();
+                                        passwordNodes.Dispose();
+                                    }
                                 }
-                                else
+
+                                if(!needToFill)
                                 {
                                     NotifyToAutofill(uri, notificationManager);
                                     cancelNotification = false;
@@ -137,14 +151,14 @@ namespace Bit.Android
 
                             AutofillActivity.LastCredentials = null;
                         }
-
-                        passwordNodes.Dispose();
-                        */
-
+                        else
+                        {
+                            cancelNotification = ScanAndAutofill(root, e, notificationManager, cancelNotification);
+                        }
 
                         if(cancelNotification)
                         {
-                            notificationManager?.Cancel(AutoFillNotificationId);
+                            CancelNotification(notificationManager);
                         }
                         break;
                     default:
@@ -162,6 +176,48 @@ namespace Bit.Android
         public override void OnInterrupt()
         {
 
+        }
+
+        public bool ScanAndAutofill(AccessibilityNodeInfo root, AccessibilityEvent e,
+            NotificationManager notificationManager, bool cancelNotification)
+        {
+            var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
+            if(passwordNodes.Count > 0)
+            {
+                var uri = GetUri(root);
+                if(uri != null && !uri.Contains(BitwardenWebsite))
+                {
+                    if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
+                    {
+                        var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
+                        var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
+                        FillCredentials(usernameEditText, passwordNodes);
+
+                        allEditTexts.Dispose();
+                        usernameEditText.Dispose();
+                    }
+                    else
+                    {
+                        NotifyToAutofill(uri, notificationManager);
+                        cancelNotification = false;
+                    }
+                }
+
+                AutofillActivity.LastCredentials = null;
+            }
+
+            passwordNodes.Dispose();
+            return cancelNotification;
+        }
+
+        public void CancelNotification(NotificationManager notificationManager)
+        {
+            if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastNotification < 250)
+            {
+                return;
+            }
+
+            notificationManager?.Cancel(AutoFillNotificationId);
         }
 
         private string GetUri(AccessibilityNodeInfo root)
@@ -243,6 +299,7 @@ namespace Bit.Android
                 return;
             }
 
+            var now = Java.Lang.JavaSystem.CurrentTimeMillis();
             var intent = new Intent(this, typeof(AutofillActivity));
             intent.PutExtra("uri", uri);
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
@@ -253,7 +310,7 @@ namespace Bit.Android
                    .SetContentTitle(App.Resources.AppResources.BitwardenAutofillService)
                    .SetContentText(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
                    .SetTicker(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
-                   .SetWhen(Java.Lang.JavaSystem.CurrentTimeMillis())
+                   .SetWhen(now)
                    .SetContentIntent(pendingIntent);
 
             if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch)
@@ -263,11 +320,12 @@ namespace Bit.Android
                         Resource.Color.primary));
             }
 
-            if(Build.VERSION.SdkInt <= BuildVersionCodes.N)
+            if(Build.VERSION.SdkInt <= BuildVersionCodes.N && _appSettings.AutofillPersistNotification)
             {
                 builder.SetPriority(-1);
             }
 
+            _lastNotification = now;
             notificationManager.Notify(AutoFillNotificationId, builder.Build());
 
             builder.Dispose();

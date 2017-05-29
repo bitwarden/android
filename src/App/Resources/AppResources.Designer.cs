@@ -152,6 +152,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Always Scan.
+        /// </summary>
+        public static string AutofillAlways {
+            get {
+                return ResourceManager.GetString("AutofillAlways", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting..
+        /// </summary>
+        public static string AutofillAlwaysDescription {
+            get {
+                return ResourceManager.GetString("AutofillAlwaysDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins across apps and the web..
         /// </summary>
         public static string AutofillDescription {
@@ -166,6 +184,42 @@ namespace Bit.App.Resources {
         public static string AutofillOrView {
             get {
                 return ResourceManager.GetString("AutofillOrView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan When Password Field Focused.
+        /// </summary>
+        public static string AutofillPasswordField {
+            get {
+                return ResourceManager.GetString("AutofillPasswordField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life..
+        /// </summary>
+        public static string AutofillPasswordFieldDescription {
+            get {
+                return ResourceManager.GetString("AutofillPasswordFieldDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Persist Notification.
+        /// </summary>
+        public static string AutofillPersistNotification {
+            get {
+                return ResourceManager.GetString("AutofillPersistNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life..
+        /// </summary>
+        public static string AutofillPersistNotificationDescription {
+            get {
+                return ResourceManager.GetString("AutofillPersistNotificationDescription", resourceCulture);
             }
         }
         

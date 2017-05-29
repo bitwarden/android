@@ -37,5 +37,29 @@ namespace Bit.App.Services
                 _settings.AddOrUpdateValue(Constants.LastActivityDate, value);
             }
         }
+
+        public bool AutofillPersistNotification
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.AutofillPersistNotification, false);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.AutofillPersistNotification, value);
+            }
+        }
+
+        public bool AutofillPasswordField
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.AutofillPasswordField, false);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.AutofillPasswordField, value);
+            }
+        }
     }
 }
