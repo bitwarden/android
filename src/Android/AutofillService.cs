@@ -108,7 +108,7 @@ namespace Bit.Android
                         {
                             break;
                         }
-                        else if(_appSettings.AutofillPasswordField)
+                        else if(_appSettings.AutofillPasswordField && AutofillActivity.LastCredentials == null)
                         {
                             CancelNotification(notificationManager);
                             break;
@@ -202,10 +202,9 @@ namespace Bit.Android
                         cancelNotification = false;
                     }
                 }
-
-                AutofillActivity.LastCredentials = null;
             }
 
+            AutofillActivity.LastCredentials = null;
             passwordNodes.Dispose();
             return cancelNotification;
         }
