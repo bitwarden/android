@@ -121,8 +121,13 @@ namespace Bit.Android
                             if(uri != _lastNotificationUri)
                             {
                                 CancelNotification(notificationManager);
-                                break;
                             }
+                            else if(uri.StartsWith(App.Constants.AndroidAppProtocol))
+                            {
+                                CancelNotification(notificationManager, 60000);
+                            }
+
+                            break;
                         }
 
                         if(e.PackageName == BitwardenPackage)
@@ -220,9 +225,9 @@ namespace Bit.Android
             return cancelNotification;
         }
 
-        public void CancelNotification(NotificationManager notificationManager)
+        public void CancelNotification(NotificationManager notificationManager, long limit = 250)
         {
-            if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastNotificationTime < 250)
+            if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastNotificationTime < limit)
             {
                 return;
             }
