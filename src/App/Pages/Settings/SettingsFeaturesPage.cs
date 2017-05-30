@@ -177,9 +177,13 @@ namespace Bit.App.Pages
 
             AnalyticsCell.OnChanged += AnalyticsCell_Changed;
             StackLayout.LayoutChanged += Layout_LayoutChanged;
-            AutofillAlwaysCell.OnChanged += AutofillAlwaysCell_OnChanged;
-            AutofillPasswordFieldCell.OnChanged += AutofillPasswordFieldCell_OnChanged;
-            AutofillPersistNotificationCell.OnChanged += AutofillPersistNotificationCell_OnChanged;
+
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                AutofillAlwaysCell.OnChanged += AutofillAlwaysCell_OnChanged;
+                AutofillPasswordFieldCell.OnChanged += AutofillPasswordFieldCell_OnChanged;
+                AutofillPersistNotificationCell.OnChanged += AutofillPersistNotificationCell_OnChanged;
+            }
         }
 
         protected override void OnDisappearing()
@@ -188,9 +192,13 @@ namespace Bit.App.Pages
 
             AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
             StackLayout.LayoutChanged -= Layout_LayoutChanged;
-            AutofillAlwaysCell.OnChanged -= AutofillAlwaysCell_OnChanged;
-            AutofillPasswordFieldCell.OnChanged -= AutofillPasswordFieldCell_OnChanged;
-            AutofillPersistNotificationCell.OnChanged -= AutofillPersistNotificationCell_OnChanged;
+
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                AutofillAlwaysCell.OnChanged -= AutofillAlwaysCell_OnChanged;
+                AutofillPasswordFieldCell.OnChanged -= AutofillPasswordFieldCell_OnChanged;
+                AutofillPersistNotificationCell.OnChanged -= AutofillPersistNotificationCell_OnChanged;
+            }
         }
 
         private void Layout_LayoutChanged(object sender, EventArgs e)
@@ -217,7 +225,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            
+
             if(cell.On)
             {
                 AutofillPasswordFieldCell.On = false;
