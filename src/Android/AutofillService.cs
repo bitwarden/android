@@ -56,7 +56,8 @@ namespace Bit.Android
         }.ToDictionary(n => n.PackageName);
 
         private readonly IAppSettingsService _appSettings;
-        private long _lastNotification = 0;
+        private long _lastNotificationTime = 0;
+        private string _lastNotificationUri = null;
 
         public AutofillService()
         {
@@ -110,8 +111,18 @@ namespace Bit.Android
                         }
                         else if(_appSettings.AutofillPasswordField && AutofillActivity.LastCredentials == null)
                         {
-                            CancelNotification(notificationManager);
-                            break;
+                            if(string.IsNullOrWhiteSpace(_lastNotificationUri))
+                            {
+                                CancelNotification(notificationManager);
+                                break;
+                            }
+
+                            var uri = GetUri(root);
+                            if(uri != _lastNotificationUri)
+                            {
+                                CancelNotification(notificationManager);
+                                break;
+                            }
                         }
 
                         if(e.PackageName == BitwardenPackage)
@@ -138,8 +149,8 @@ namespace Bit.Android
 
                                         allEditTexts.Dispose();
                                         usernameEditText.Dispose();
-                                        passwordNodes.Dispose();
                                     }
+                                    passwordNodes.Dispose();
                                 }
 
                                 if(!needToFill)
@@ -211,11 +222,12 @@ namespace Bit.Android
 
         public void CancelNotification(NotificationManager notificationManager)
         {
-            if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastNotification < 250)
+            if(Java.Lang.JavaSystem.CurrentTimeMillis() - _lastNotificationTime < 250)
             {
                 return;
             }
 
+            _lastNotificationUri = null;
             notificationManager?.Cancel(AutoFillNotificationId);
         }
 
@@ -324,7 +336,8 @@ namespace Bit.Android
                 builder.SetPriority(-1);
             }
 
-            _lastNotification = now;
+            _lastNotificationTime = now;
+            _lastNotificationUri = uri;
             notificationManager.Notify(AutoFillNotificationId, builder.Build());
 
             builder.Dispose();
