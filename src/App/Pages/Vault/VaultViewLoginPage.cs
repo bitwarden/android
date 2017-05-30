@@ -62,7 +62,7 @@ namespace Bit.App.Pages
                 button2Text: AppResources.Copy);
             PasswordCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.MaskedPassword));
             PasswordCell.Value.SetBinding(Label.FontSizeProperty, nameof(VaultViewLoginPageModel.PasswordFontSize));
-            PasswordCell.Value.SetBinding(Button.ImageProperty, nameof(VaultViewLoginPageModel.ShowHideImage));
+            PasswordCell.Button1.SetBinding(Button.ImageProperty, nameof(VaultViewLoginPageModel.ShowHideImage));
             if(Device.RuntimePlatform == Device.iOS)
             {
                 PasswordCell.Button1.Margin = new Thickness(10, 0);
