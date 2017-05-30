@@ -274,7 +274,7 @@ namespace Bit.App.Pages
             }
 
             _googleAnalyticsService.TrackAppEvent("OpenedSetting", "TwoStep");
-            Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+            Device.OpenUri(new Uri("https://help.bitwarden.com/article/setup-two-step-login/"));
         }
 
         private async void LockOptionsCell_Tapped(object sender, EventArgs e)
@@ -370,7 +370,7 @@ namespace Bit.App.Pages
             }
 
             _googleAnalyticsService.TrackAppEvent("OpenedSetting", "ChangePassword");
-            Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+            Device.OpenUri(new Uri("https://help.bitwarden.com/article/change-your-master-password/"));
         }
 
         private async void ChangeEmailCell_Tapped(object sender, EventArgs e)
@@ -382,7 +382,7 @@ namespace Bit.App.Pages
             }
 
             _googleAnalyticsService.TrackAppEvent("OpenedSetting", "ChangeEmail");
-            Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+            Device.OpenUri(new Uri("https://help.bitwarden.com/article/change-your-email/"));
         }
 
         private void FingerprintCell_Changed(object sender, EventArgs e)

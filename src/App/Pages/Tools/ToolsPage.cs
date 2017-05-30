@@ -149,7 +149,7 @@ namespace Bit.App.Pages
             }
 
             _googleAnalyticsService.TrackAppEvent("OpenedTool", "Import");
-            Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+            Device.OpenUri(new Uri("https://help.bitwarden.com/article/import-data/"));
         }
 
         public class ToolsViewCell : ExtendedViewCell
