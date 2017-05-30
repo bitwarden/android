@@ -338,7 +338,7 @@ namespace Bit.Android
 
             if(/*Build.VERSION.SdkInt <= BuildVersionCodes.N && */_appSettings.AutofillPersistNotification)
             {
-                builder.SetPriority(-1);
+                builder.SetPriority(-2);
             }
 
             _lastNotificationTime = now;
