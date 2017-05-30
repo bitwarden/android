@@ -319,7 +319,7 @@ namespace Bit.Android
                         Resource.Color.primary));
             }
 
-            if(/*Build.VERSION.SdkInt <= BuildVersionCodes.N && */_appSettings.AutofillPersistNotification)
+            if(Build.VERSION.SdkInt <= BuildVersionCodes.N && _appSettings.AutofillPersistNotification)
             {
                 builder.SetPriority(-1);
             }
