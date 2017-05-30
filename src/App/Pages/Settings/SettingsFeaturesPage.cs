@@ -165,6 +165,7 @@ namespace Bit.App.Pages
             {
                 analyticsTable.RowHeight = -1;
                 analyticsTable.EstimatedRowHeight = 70;
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
 
             Title = AppResources.Features;
