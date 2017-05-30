@@ -42,8 +42,8 @@ namespace Bit.App.Pages
             };
 
             PinControl = new PinControl();
-            PinControl.Label.SetBinding<PinPageModel>(Label.TextProperty, s => s.LabelText);
-            PinControl.Entry.SetBinding<PinPageModel>(Entry.TextProperty, s => s.PIN);
+            PinControl.Label.SetBinding(Label.TextProperty, nameof(PinPageModel.LabelText));
+            PinControl.Entry.SetBinding(Entry.TextProperty, nameof(PinPageModel.PIN));
 
             var stackLayout = new StackLayout
             {
@@ -56,7 +56,7 @@ namespace Bit.App.Pages
             PinControl.Label.GestureRecognizers.Add(Tgr);
             instructionLabel.GestureRecognizers.Add(Tgr);
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

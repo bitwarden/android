@@ -7,7 +7,7 @@ namespace Bit.App.Controls
     {
         public ExtendedTextCell()
         {
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 TextColor = Color.Black;
             }

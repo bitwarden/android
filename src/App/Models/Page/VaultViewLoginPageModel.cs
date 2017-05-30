@@ -13,7 +13,6 @@ namespace Bit.App.Models.Page
         private string _uri;
         private string _notes;
         private bool _revealPassword;
-        private string _uriHost;
 
         public VaultViewLoginPageModel() { }
 
@@ -44,7 +43,7 @@ namespace Bit.App.Models.Page
         {
             get
             {
-                if(Device.OS == TargetPlatform.Android)
+                if(Device.RuntimePlatform == Device.Android)
                 {
                     var length = Username?.Length ?? 0;
 
@@ -79,7 +78,7 @@ namespace Bit.App.Models.Page
         {
             get
             {
-                if(Device.OS == TargetPlatform.Android)
+                if(Device.RuntimePlatform == Device.Android)
                 {
                     var length = Password?.Length ?? 0;
 
@@ -119,11 +118,6 @@ namespace Bit.App.Models.Page
                 if(!ShowUri)
                 {
                     return null;
-                }
-
-                if(_uriHost != null)
-                {
-                    return _uriHost;
                 }
 
                 Uri uri;

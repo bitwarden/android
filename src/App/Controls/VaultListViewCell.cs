@@ -12,9 +12,9 @@ namespace Bit.App.Controls
         public VaultListViewCell(Action<VaultListPageModel.Login> moreClickedAction)
         {
             SetBinding(LoginParameterProperty, new Binding("."));
-            Label.SetBinding<VaultListPageModel.Login>(Label.TextProperty, l => l.Name);
-            Detail.SetBinding<VaultListPageModel.Login>(Label.TextProperty, l => l.Username);
-            LabelIcon.SetBinding<VaultListPageModel.Login>(VisualElement.IsVisibleProperty, l => l.Shared);
+            Label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Login.Name));
+            Detail.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Login.Username));
+            LabelIcon.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Login.Shared));
 
             Button.Image = "more";
             Button.Command = new Command(() => moreClickedAction?.Invoke(LoginParameter));

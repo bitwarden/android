@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -41,44 +42,44 @@ namespace Bit.App.Pages
         {
             EditItem = new EditLoginToolBarItem(this, _loginId);
             ToolbarItems.Add(EditItem);
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this));
             }
 
             // Name
             var nameCell = new LabeledValueCell(AppResources.Name);
-            nameCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Name);
+            nameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Name));
 
             // Username
             UsernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
-            UsernameCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Username);
-            UsernameCell.Value.SetBinding<VaultViewLoginPageModel>(Label.FontSizeProperty, s => s.UsernameFontSize);
+            UsernameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Username));
+            UsernameCell.Value.SetBinding(Label.FontSizeProperty, nameof(VaultViewLoginPageModel.UsernameFontSize));
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
 
             // Password
             PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty,
                 button2Text: AppResources.Copy);
-            PasswordCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.MaskedPassword);
-            PasswordCell.Value.SetBinding<VaultViewLoginPageModel>(Label.FontSizeProperty, s => s.PasswordFontSize);
-            PasswordCell.Button1.SetBinding<VaultViewLoginPageModel>(Button.ImageProperty, s => s.ShowHideImage);
-            if(Device.OS == TargetPlatform.iOS)
+            PasswordCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.MaskedPassword));
+            PasswordCell.Value.SetBinding(Label.FontSizeProperty, nameof(VaultViewLoginPageModel.PasswordFontSize));
+            PasswordCell.Value.SetBinding(Button.ImageProperty, nameof(VaultViewLoginPageModel.ShowHideImage));
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 PasswordCell.Button1.Margin = new Thickness(10, 0);
             }
             PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
             PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
-            PasswordCell.Value.FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            PasswordCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             // URI
             UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
-            UriCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.UriHost);
-            UriCell.Button1.SetBinding<VaultViewLoginPageModel>(IsVisibleProperty, s => s.ShowLaunch);
+            UriCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.UriHost));
+            UriCell.Value.SetBinding(IsVisibleProperty, nameof(VaultViewLoginPageModel.ShowLaunch));
             UriCell.Button1.Command = new Command(() => Device.OpenUri(new Uri(Model.Uri)));
 
             // Notes
             NotesCell = new LabeledValueCell();
-            NotesCell.Value.SetBinding<VaultViewLoginPageModel>(Label.TextProperty, s => s.Notes);
+            NotesCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Notes));
             NotesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             LoginInformationSection = new TableSection(AppResources.LoginInformation)
@@ -104,12 +105,12 @@ namespace Bit.App.Pages
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 Table.RowHeight = -1;
                 Table.EstimatedRowHeight = 70;
             }
-            else if(Device.OS == TargetPlatform.Android)
+            else if(Device.RuntimePlatform == Device.Android)
             {
                 // NOTE: This is going to cause problems with i18n strings since various languages have difference string sizes
                 PasswordCell.Button1.WidthRequest = 40;

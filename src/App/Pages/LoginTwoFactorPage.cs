@@ -8,6 +8,7 @@ using Acr.UserDialogs;
 using System.Threading.Tasks;
 using PushNotification.Plugin.Abstractions;
 using Bit.App.Models;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -42,7 +43,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var padding = Device.OnPlatform(
+            var padding = Helpers.OnPlatform(
                 iOS: new Thickness(15, 20),
                 Android: new Thickness(15, 8),
                 WinPhone: new Thickness(15, 20));
@@ -97,7 +98,7 @@ namespace Bit.App.Pages
 
             var scrollView = new ScrollView { Content = layout };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
@@ -158,7 +159,7 @@ namespace Bit.App.Pages
 
             _googleAnalyticsService.TrackAppEvent("LoggedIn From Two-step");
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 _pushNotification.Register();
             }

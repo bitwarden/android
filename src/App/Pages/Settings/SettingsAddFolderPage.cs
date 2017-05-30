@@ -49,7 +49,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
@@ -105,7 +105,7 @@ namespace Bit.App.Pages
             Title = AppResources.AddFolder;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

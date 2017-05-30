@@ -167,7 +167,7 @@ namespace Bit.App.Pages
 
             ScrollView = new ScrollView { Content = DisabledStackLayout };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }

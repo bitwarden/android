@@ -122,10 +122,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\values\styles.xml" />
+    <AndroidResource Include="Resources\xml\accessibilityservice.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\xml\accessibilityservice.xml" />
+    <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -20,7 +20,7 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 MessagingCenter.Send(Application.Current, "BackgroundApp");
             }

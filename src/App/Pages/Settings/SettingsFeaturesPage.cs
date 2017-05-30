@@ -78,7 +78,7 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 AutofillAlwaysCell = new ExtendedSwitchCell
                 {
@@ -161,7 +161,7 @@ namespace Bit.App.Pages
                 Content = StackLayout
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 analyticsTable.RowHeight = -1;
                 analyticsTable.EstimatedRowHeight = 70;

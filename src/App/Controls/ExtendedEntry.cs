@@ -8,7 +8,7 @@ namespace Bit.App.Controls
     {
         public ExtendedEntry()
         {
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 PlaceholderColor = Color.FromHex("c7c7cd");
             }

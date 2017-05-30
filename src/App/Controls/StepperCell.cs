@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Bit.App.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
@@ -39,13 +40,13 @@ namespace Bit.App.Controls
                 Orientation = StackOrientation.Horizontal,
                 Children = { Label, StepperValueLabel, Stepper },
                 Spacing = 15,
-                Padding = Device.OnPlatform(
+                Padding = Helpers.OnPlatform(
                     iOS: new Thickness(15, 8),
                     Android: new Thickness(15, 2),
                     WinPhone: new Thickness(15, 8))
             };
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 Label.TextColor = Color.Black;
             }

@@ -12,7 +12,7 @@ namespace Bit.App.Models.Api
         {
             Identifier = appIdService.AppId;
             Name = deviceInfoService.Model;
-            Type = Device.OS == TargetPlatform.Android ? DeviceType.Android : DeviceType.iOS;
+            Type = Device.RuntimePlatform == Device.Android ? DeviceType.Android : DeviceType.iOS;
         }
 
         public DeviceType Type { get; set; }

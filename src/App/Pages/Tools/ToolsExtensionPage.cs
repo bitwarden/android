@@ -81,7 +81,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            notStartedStackLayout.SetBinding<AppExtensionPageModel>(IsVisibleProperty, m => m.NotStarted);
+            notStartedStackLayout.SetBinding(IsVisibleProperty, nameof(AppExtensionPageModel.NotStarted));
 
             // Not Activated 
 
@@ -132,7 +132,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            notActivatedStackLayout.SetBinding<AppExtensionPageModel>(IsVisibleProperty, m => m.StartedAndNotActivated);
+            notActivatedStackLayout.SetBinding(IsVisibleProperty, nameof(AppExtensionPageModel.StartedAndNotActivated));
 
             // Activated 
 
@@ -197,7 +197,7 @@ namespace Bit.App.Pages
                 Children = { activatedLabel, activatedSublabel, activatedImage, activatedButton, activatedButtonReenable }
             };
 
-            activatedStackLayout.SetBinding<AppExtensionPageModel>(IsVisibleProperty, m => m.StartedAndActivated);
+            activatedStackLayout.SetBinding(IsVisibleProperty, nameof(AppExtensionPageModel.StartedAndActivated));
 
             var stackLayout = new StackLayout
             {
@@ -205,7 +205,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }

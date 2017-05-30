@@ -102,7 +102,7 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
@@ -165,7 +165,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start;
                 NoFooter = true;
 
-                if(Device.OS == TargetPlatform.iOS)
+                if(Device.RuntimePlatform == Device.iOS)
                 {
                     RowHeight = -1;
                     EstimatedRowHeight = 44;

@@ -66,7 +66,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 44;
@@ -78,7 +78,7 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

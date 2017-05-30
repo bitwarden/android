@@ -106,7 +106,7 @@ namespace Bit.App.Pages
                     (VaultListPageModel.Login l) => MoreClickedAsync(l)))
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ListView.RowHeight = -1;
             }
@@ -325,7 +325,7 @@ namespace Bit.App.Pages
                     VerticalTextAlignment = TextAlignment.Center
                 };
 
-                label.SetBinding<VaultListPageModel.AutofillGrouping>(Label.TextProperty, s => s.Name);
+                label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.AutofillGrouping.Name));
 
                 var grid = new ContentView
                 {

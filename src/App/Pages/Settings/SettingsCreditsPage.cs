@@ -2,6 +2,7 @@
 using Bit.App.Controls;
 using Xamarin.Forms;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -37,7 +38,7 @@ Fingerprint by masterpage.com from the Noun Project")
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 100;
@@ -61,14 +62,14 @@ Fingerprint by masterpage.com from the Noun Project")
                 var layout = new StackLayout
                 {
                     Children = { label },
-                    Padding = Device.OnPlatform(
+                    Padding = Helpers.OnPlatform(
                         iOS: new Thickness(15, 20),
                         Android: new Thickness(16, 20),
                         WinPhone: new Thickness(15, 20)),
                     BackgroundColor = Color.White
                 };
 
-                if(Device.OS == TargetPlatform.Android)
+                if(Device.RuntimePlatform == Device.Android)
                 {
                     label.TextColor = Color.Black;
                 }

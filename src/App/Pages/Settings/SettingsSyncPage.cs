@@ -57,7 +57,7 @@ namespace Bit.App.Pages
                 Padding = new Thickness(15, 0)
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

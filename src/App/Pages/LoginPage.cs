@@ -8,6 +8,7 @@ using Acr.UserDialogs;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
 using PushNotification.Plugin.Abstractions;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -42,7 +43,7 @@ namespace Bit.App.Pages
         {
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
 
-            var padding = Device.OnPlatform(
+            var padding = Helpers.OnPlatform(
                 iOS: new Thickness(15, 20),
                 Android: new Thickness(15, 8),
                 WinPhone: new Thickness(15, 20));
@@ -97,12 +98,12 @@ namespace Bit.App.Pages
             var layout = new StackLayout
             {
                 Children = { table, forgotPasswordButton },
-                Spacing = Device.OnPlatform(iOS: 0, Android: 10, WinPhone: 0)
+                Spacing = Helpers.OnPlatform(iOS: 0, Android: 10, WinPhone: 0)
             };
 
             var scrollView = new ScrollView { Content = layout };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
@@ -197,7 +198,7 @@ namespace Bit.App.Pages
 
             _googleAnalyticsService.TrackAppEvent("LoggedIn");
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 _pushNotification.Register();
             }

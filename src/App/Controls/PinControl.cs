@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Utilities;
+using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -13,7 +14,7 @@ namespace Bit.App.Controls
             {
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = 35,
-                FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier")
+                FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier")
             };
 
             Entry = new ExtendedEntry
@@ -23,7 +24,7 @@ namespace Bit.App.Controls
                 Margin = new Thickness(0, int.MaxValue, 0, 0)
             };
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 Label.TextColor = Color.Black;
             }

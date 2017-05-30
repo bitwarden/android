@@ -124,7 +124,7 @@ namespace Bit.App
 
             SetMainPageFromAutofill();
 
-            if(Device.OS == TargetPlatform.Android && !TopPageIsLock())
+            if(Device.RuntimePlatform == Device.Android && !TopPageIsLock())
             {
                 _lockService.UpdateLastActivity();
             }
@@ -141,7 +141,7 @@ namespace Bit.App
             // Handle when your app resumes
             Debug.WriteLine("OnResume");
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 await CheckLockAsync(false);
             }
@@ -152,7 +152,7 @@ namespace Bit.App
                 lockPinPage.PinControl.Entry.FocusWithDelay();
             }
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             }
@@ -160,7 +160,7 @@ namespace Bit.App
 
         private void SetMainPageFromAutofill()
         {
-            if(Device.OS == TargetPlatform.Android && !string.IsNullOrWhiteSpace(_uri))
+            if(Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_uri))
             {
                 Task.Run(() =>
                 {
@@ -386,7 +386,7 @@ namespace Bit.App
             Debug.WriteLine("====================================");
 
             // This lookup NOT required for Windows platforms - the Culture will be automatically set
-            if(Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
             {
                 var ci = _localizeService.GetCurrentCultureInfo();
                 AppResources.Culture = ci;

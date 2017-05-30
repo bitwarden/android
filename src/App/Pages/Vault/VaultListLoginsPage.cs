@@ -95,7 +95,7 @@ namespace Bit.App.Pages
                     (VaultListPageModel.Login l) => MoreClickedAsync(l)))
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ListView.RowHeight = -1;
             }
@@ -107,7 +107,7 @@ namespace Bit.App.Pages
                 CancelButtonColor = Color.FromHex("3c8dbc")
             };
             // Bug with searchbar on android 7, ref https://bugzilla.xamarin.com/show_bug.cgi?id=43975
-            if(Device.OS == TargetPlatform.Android && _deviceInfoService.Version >= 24)
+            if(Device.RuntimePlatform == Device.Android && _deviceInfoService.Version >= 24)
             {
                 Search.HeightRequest = 50;
             }
@@ -239,7 +239,7 @@ namespace Bit.App.Pages
                 _filterResultsCancellationTokenSource = FetchAndLoadVault();
             }
 
-            if(_connectivity.IsConnected && Device.OS == TargetPlatform.iOS && !_favorites)
+            if(_connectivity.IsConnected && Device.RuntimePlatform == Device.iOS && !_favorites)
             {
                 var pushPromptShow = _settings.GetValueOrDefault(Constants.PushInitialPromptShown, false);
                 Action registerAction = () =>
@@ -512,7 +512,7 @@ namespace Bit.App.Pages
                     VerticalTextAlignment = TextAlignment.Center
                 };
 
-                label.SetBinding<VaultListPageModel.Folder>(Label.TextProperty, s => s.Name);
+                label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Folder.Name));
 
                 var grid = new Grid
                 {

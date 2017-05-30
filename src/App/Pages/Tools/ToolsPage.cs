@@ -40,7 +40,7 @@ namespace Bit.App.Pages
 
             var section = new TableSection(" ") { GeneratorCell };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ExtensionCell = new ToolsViewCell(AppResources.BitwardenAppExtension,
                     AppResources.BitwardenAppExtensionDescription, "upload");
@@ -68,7 +68,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 100;
@@ -163,7 +163,7 @@ namespace Bit.App.Pages
                     Text = labelText
                 };
 
-                if(Device.OS == TargetPlatform.Android)
+                if(Device.RuntimePlatform == Device.Android)
                 {
                     label.TextColor = Color.Black;
                 }

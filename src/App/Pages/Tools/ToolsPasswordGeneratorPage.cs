@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Plugin.Settings.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -48,14 +49,14 @@ namespace Bit.App.Pages
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 Margin = new Thickness(15, 40, 15, 40),
                 HorizontalTextAlignment = TextAlignment.Center,
-                FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier"),
+                FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier"),
                 LineBreakMode = LineBreakMode.TailTruncation,
                 VerticalOptions = LayoutOptions.Start
             };
 
             Tgr = new TapGestureRecognizer();
             Password.GestureRecognizers.Add(Tgr);
-            Password.SetBinding<PasswordGeneratorPageModel>(Label.TextProperty, m => m.Password);
+            Password.SetBinding(Label.TextProperty, nameof(PasswordGeneratorPageModel.Password));
 
             SliderCell = new SliderViewCell(this, _passwordGenerationService, _settings);
             SettingsCell = new ExtendedTextCell { Text = AppResources.MoreSettings, ShowDisclousure = true };
@@ -86,7 +87,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 44;
@@ -248,21 +249,21 @@ namespace Bit.App.Pages
                     Style = (Style)Application.Current.Resources["text-muted"]
                 };
 
-                Value.SetBinding<PasswordGeneratorPageModel>(Label.TextProperty, m => m.Length);
+                Value.SetBinding(Label.TextProperty, nameof(PasswordGeneratorPageModel.Length));
 
                 var stackLayout = new StackLayout
                 {
                     Orientation = StackOrientation.Horizontal,
                     Spacing = 15,
                     Children = { label, LengthSlider, Value },
-                    Padding = Device.OnPlatform(
+                    Padding = Helpers.OnPlatform(
                         iOS: new Thickness(15, 8),
                         Android: new Thickness(16, 10),
                         WinPhone: new Thickness(15, 8))
                 };
 
                 stackLayout.AdjustPaddingForDevice();
-                if(Device.OS == TargetPlatform.Android)
+                if(Device.RuntimePlatform == Device.Android)
                 {
                     label.TextColor = Color.Black;
                 }

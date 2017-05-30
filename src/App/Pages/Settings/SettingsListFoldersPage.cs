@@ -41,7 +41,7 @@ namespace Bit.App.Pages
                 ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this))
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
@@ -102,7 +102,7 @@ namespace Bit.App.Pages
         {
             public SettingsFolderListViewCell(SettingsListFoldersPage page)
             {
-                this.SetBinding<SettingsFolderPageModel>(TextProperty, s => s.Name);
+                this.SetBinding(TextProperty, nameof(SettingsFolderPageModel.Name));
             }
         }
     }

@@ -87,7 +87,7 @@ namespace Bit.App.Controls
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
                 if(useLabelAsPlaceholder)
@@ -125,7 +125,7 @@ namespace Bit.App.Controls
                 Button = new ExtendedButton();
                 imageStackLayout.Children.Add(Button);
 
-                if(Device.OS == TargetPlatform.Android)
+                if(Device.RuntimePlatform == Device.Android)
                 {
                     Button.Padding = new Thickness(0);
                     Button.BackgroundColor = Color.Transparent;

@@ -51,7 +51,7 @@ namespace Bit.App.Controls
             Grid.SetColumnSpan(Detail, 2);
             Grid.SetRowSpan(Button, 2);
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 Label.TextColor = Color.Black;
             }

@@ -8,6 +8,7 @@ using Bit.App.Resources;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -60,7 +61,7 @@ namespace Bit.App.Pages
             PasswordCell.Button.Image = "eye";
             PasswordCell.Entry.DisableAutocapitalize = true;
             PasswordCell.Entry.Autocorrect = false;
-            PasswordCell.Entry.FontFamily = Device.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            PasswordCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
 
             UsernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
             UsernameCell.Entry.Text = login.Username?.Decrypt(login.OrganizationId);
@@ -135,12 +136,12 @@ namespace Bit.App.Pages
                 }
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
             }
-            else if(Device.OS == TargetPlatform.Android)
+            else if(Device.RuntimePlatform == Device.Android)
             {
                 PasswordCell.Button.WidthRequest = 40;
             }
@@ -206,7 +207,7 @@ namespace Bit.App.Pages
             Title = AppResources.EditLogin;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

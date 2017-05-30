@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -43,7 +44,7 @@ namespace Bit.App.Pages
         {
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
 
-            var padding = Device.OnPlatform(
+            var padding = Helpers.OnPlatform(
                 iOS: new Thickness(15, 20),
                 Android: new Thickness(15, 8),
                 WinPhone: new Thickness(15, 20));
@@ -121,7 +122,7 @@ namespace Bit.App.Pages
                 await Register();
             }, ToolbarItemOrder.Default, 0);
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 table.RowHeight = table2.RowHeight = -1;
                 table.EstimatedRowHeight = table2.EstimatedRowHeight = 70;

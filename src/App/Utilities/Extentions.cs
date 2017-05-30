@@ -39,7 +39,7 @@ namespace Bit.App
 
         public static void FocusWithDelay(this Entry entry, int delay = 1000)
         {
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 Task.Run(async () =>
                 {
@@ -65,7 +65,7 @@ namespace Bit.App
 
         public static void AdjustMarginsForDevice(this View view)
         {
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
                 if(deviceInfo.Version < 21)
@@ -85,7 +85,7 @@ namespace Bit.App
 
         public static void AdjustPaddingForDevice(this Layout view)
         {
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
                 if(deviceInfo.Scale == 1) // mdpi
@@ -114,7 +114,7 @@ namespace Bit.App
                 System.Diagnostics.Debug.WriteLine("Last action occurred recently.");
                 return true;
             }
-            
+
             return false;
         }
     }

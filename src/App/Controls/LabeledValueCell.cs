@@ -41,7 +41,7 @@ namespace Bit.App.Controls
                 LineBreakMode = LineBreakMode.TailTruncation
             };
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 Value.TextColor = Color.Black;
             }
@@ -82,7 +82,7 @@ namespace Bit.App.Controls
                 buttonStackLayout.Children.Add(Button2);
             }
 
-            if(Device.OS == TargetPlatform.Android)
+            if(Device.RuntimePlatform == Device.Android)
             {
                 buttonStackLayout.Spacing = 5;
 

@@ -8,6 +8,7 @@ using Acr.UserDialogs;
 using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
 using PushNotification.Plugin.Abstractions;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -81,7 +82,7 @@ namespace Bit.App.Pages
 
             if(_fingerprint.IsAvailable)
             {
-                var fingerprintName = Device.OnPlatform(iOS: AppResources.TouchID, Android: AppResources.Fingerprint,
+                var fingerprintName = Helpers.OnPlatform(iOS: AppResources.TouchID, Android: AppResources.Fingerprint,
                     WinPhone: AppResources.Fingerprint);
                 FingerprintCell = new ExtendedSwitchCell
                 {
@@ -151,7 +152,7 @@ namespace Bit.App.Pages
                 HelpCell
             };
 
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 RateCellLong = new LongDetailViewCell(AppResources.RateTheApp, AppResources.RateTheAppDescriptionAppStore);
                 otherSection.Add(RateCellLong);
@@ -328,12 +329,12 @@ namespace Bit.App.Pages
         private void RateCell_Tapped(object sender, EventArgs e)
         {
             _googleAnalyticsService.TrackAppEvent("OpenedSetting", "RateApp");
-            if(Device.OS == TargetPlatform.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 Device.OpenUri(new Uri($"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews" +
                     "?id=1137397744&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
             }
-            else if(Device.OS == TargetPlatform.Android)
+            else if(Device.RuntimePlatform == Device.Android)
             {
                 MessagingCenter.Send(Application.Current, "RateApp");
             }
@@ -484,7 +485,7 @@ namespace Bit.App.Pages
                 Intent = TableIntent.Settings;
                 HasUnevenRows = true;
 
-                if(Device.OS == TargetPlatform.iOS)
+                if(Device.RuntimePlatform == Device.iOS)
                 {
                     RowHeight = -1;
                     EstimatedRowHeight = 44;
