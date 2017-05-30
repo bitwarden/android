@@ -191,6 +191,7 @@
     <MtouchFloat32>False</MtouchFloat32>
     <OutputPath>bin\iPhoneSimulator\Ad-Hoc</OutputPath>
     <MtouchExtraArgs>--linkskip=Microsoft.Practices.Unity --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhoneSimulator'">
     <MtouchSdkVersion>9.3</MtouchSdkVersion>
