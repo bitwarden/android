@@ -124,7 +124,7 @@ namespace Bit.Android
                             }
                             else if(uri.StartsWith(App.Constants.AndroidAppProtocol))
                             {
-                                CancelNotification(notificationManager, 60000);
+                                CancelNotification(notificationManager, 30000);
                             }
 
                             break;
