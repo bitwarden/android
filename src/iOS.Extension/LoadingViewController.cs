@@ -6,10 +6,8 @@ using Bit.App.Repositories;
 using Bit.App.Services;
 using Bit.iOS.Core.Services;
 using Foundation;
-using Microsoft.Practices.Unity;
 using UIKit;
 using XLabs.Ioc;
-using XLabs.Ioc.Unity;
 using Bit.iOS.Core;
 using Newtonsoft.Json;
 using Bit.iOS.Extension.Models;
@@ -20,6 +18,8 @@ using Plugin.Fingerprint;
 using Bit.iOS.Core.Utilities;
 using Bit.App.Resources;
 using Bit.iOS.Core.Controllers;
+using SimpleInjector;
+using XLabs.Ioc.SimpleInjectorContainer;
 
 namespace Bit.iOS.Extension
 {
@@ -260,46 +260,47 @@ namespace Bit.iOS.Extension
 
         private void SetIoc()
         {
-            var container = new UnityContainer();
+            var container = new Container();
 
-            container
-                // Services
-                .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IKeyDerivationService, CommonCryptoKeyDerivationService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILoginService, LoginService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAppSettingsService, AppSettingsService>(new ContainerControlledLifetimeManager())
-                // Repositories
-                .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILoginRepository, LoginRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILoginApiRepository, LoginApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IConnectApiRepository, ConnectApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
-                // Other
-                .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-                .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+            // Services
+            container.RegisterSingleton<IDatabaseService, DatabaseService>();
+            container.RegisterSingleton<ISqlService, SqlService>();
+            container.RegisterSingleton<ISecureStorageService, KeyChainStorageService>();
+            container.RegisterSingleton<ICryptoService, CryptoService>();
+            container.RegisterSingleton<IKeyDerivationService, CommonCryptoKeyDerivationService>();
+            container.RegisterSingleton<IAuthService, AuthService>();
+            container.RegisterSingleton<IFolderService, FolderService>();
+            container.RegisterSingleton<ILoginService, LoginService>();
+            container.RegisterSingleton<ISyncService, SyncService>();
+            container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
+            container.RegisterSingleton<IAppIdService, AppIdService>();
+            container.RegisterSingleton<ILockService, LockService>();
+            container.RegisterSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();
+            container.RegisterSingleton<ILocalizeService, LocalizeService>();
+            container.RegisterSingleton<ILogService, LogService>();
+            container.RegisterSingleton<IHttpService, HttpService>();
+            container.RegisterSingleton<ITokenService, TokenService>();
+            container.RegisterSingleton<ISettingsService, SettingsService>();
+            container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
+            container.RegisterSingleton<IAppSettingsService, AppSettingsService>();
 
-            ISettings settings = new Settings("group.com.8bit.bitwarden");
-            container.RegisterInstance(settings, new ContainerControlledLifetimeManager());
+            // Repositories
+            container.RegisterSingleton<IFolderRepository, FolderRepository>();
+            container.RegisterSingleton<IFolderApiRepository, FolderApiRepository>();
+            container.RegisterSingleton<ILoginRepository, LoginRepository>();
+            container.RegisterSingleton<ILoginApiRepository, LoginApiRepository>();
+            container.RegisterSingleton<IConnectApiRepository, ConnectApiRepository>();
+            container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
+            container.RegisterSingleton<IAccountsApiRepository, AccountsApiRepository>();
 
-            Resolver.ResetResolver(new UnityResolver(container));
+            // Other
+            container.RegisterSingleton(CrossConnectivity.Current);
+            container.RegisterSingleton(CrossFingerprint.Current);
+
+            var settings = new Settings("group.com.8bit.bitwarden");
+            container.RegisterSingleton<ISettings>(settings);
+
+            Resolver.ResetResolver(new SimpleInjectorResolver(container));
         }
 
         private void SetCulture()

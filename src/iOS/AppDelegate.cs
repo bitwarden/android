@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using XLabs.Ioc;
-using XLabs.Ioc.Unity;
 
 using Foundation;
 using UIKit;
 using Bit.App.Abstractions;
 using Bit.App.Services;
-using Microsoft.Practices.Unity;
 using Bit.iOS.Services;
 using Plugin.Connectivity;
 using Acr.UserDialogs;
@@ -26,6 +24,8 @@ using HockeyApp.iOS;
 using Bit.iOS.Core;
 using Google.Analytics;
 using FFImageLoading.Forms.Touch;
+using SimpleInjector;
+using XLabs.Ioc.SimpleInjectorContainer;
 
 namespace Bit.iOS
 {
@@ -244,58 +244,61 @@ namespace Bit.iOS
 
         private void SetIoc()
         {
-            var container = new UnityContainer();
+            var container = new Container();
 
-            container
-                // Services
-                .RegisterType<IDatabaseService, DatabaseService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISqlService, SqlService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISecureStorageService, KeyChainStorageService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ICryptoService, CryptoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IKeyDerivationService, CommonCryptoKeyDerivationService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAuthService, AuthService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IFolderService, FolderService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILoginService, LoginService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISyncService, SyncService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IClipboardService, ClipboardService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IPushNotificationListener, PushNotificationListener>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAppIdService, AppIdService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IPasswordGenerationService, PasswordGenerationService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IReflectionService, ReflectionService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILockService, LockService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAppInfoService, AppInfoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IGoogleAnalyticsService, GoogleAnalyticsService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IDeviceInfoService, DeviceInfoService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILocalizeService, LocalizeService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILogService, LogService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IHttpService, HttpService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ITokenService, TokenService>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISettingsService, SettingsService>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAppSettingsService, AppSettingsService>(new ContainerControlledLifetimeManager())
-                // Repositories
-                .RegisterType<IFolderRepository, FolderRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IFolderApiRepository, FolderApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILoginRepository, LoginRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ILoginApiRepository, LoginApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IConnectApiRepository, ConnectApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IDeviceApiRepository, DeviceApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<IAccountsApiRepository, AccountsApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ICipherApiRepository, CipherApiRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISettingsRepository, SettingsRepository>(new ContainerControlledLifetimeManager())
-                .RegisterType<ISettingsApiRepository, SettingsApiRepository>(new ContainerControlledLifetimeManager())
-                // Other
-                .RegisterInstance(CrossConnectivity.Current, new ContainerControlledLifetimeManager())
-                .RegisterInstance(UserDialogs.Instance, new ContainerControlledLifetimeManager())
-                .RegisterInstance(CrossFingerprint.Current, new ContainerControlledLifetimeManager());
+            // Services
+            container.RegisterSingleton<IDatabaseService, DatabaseService>();
+            container.RegisterSingleton<ISqlService, SqlService>();
+            container.RegisterSingleton<ISecureStorageService, KeyChainStorageService>();
+            container.RegisterSingleton<ICryptoService, CryptoService>();
+            container.RegisterSingleton<IKeyDerivationService, CommonCryptoKeyDerivationService>();
+            container.RegisterSingleton<IAuthService, AuthService>();
+            container.RegisterSingleton<IFolderService, FolderService>();
+            container.RegisterSingleton<ILoginService, LoginService>();
+            container.RegisterSingleton<ISyncService, SyncService>();
+            container.RegisterSingleton<IClipboardService, ClipboardService>();
+            container.RegisterSingleton<IAppIdService, AppIdService>();
+            container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
+            container.RegisterSingleton<IReflectionService, ReflectionService>();
+            container.RegisterSingleton<ILockService, LockService>();
+            container.RegisterSingleton<IAppInfoService, AppInfoService>();
+            container.RegisterSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();
+            container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
+            container.RegisterSingleton<ILocalizeService, LocalizeService>();
+            container.RegisterSingleton<ILogService, LogService>();
+            container.RegisterSingleton<IHttpService, HttpService>();
+            container.RegisterSingleton<ITokenService, TokenService>();
+            container.RegisterSingleton<ISettingsService, SettingsService>();
+            container.RegisterSingleton<IAppSettingsService, AppSettingsService>();
+
+            // Repositories
+            container.RegisterSingleton<IFolderRepository, FolderRepository>();
+            container.RegisterSingleton<IFolderApiRepository, FolderApiRepository>();
+            container.RegisterSingleton<ILoginRepository, LoginRepository>();
+            container.RegisterSingleton<ILoginApiRepository, LoginApiRepository>();
+            container.RegisterSingleton<IConnectApiRepository, ConnectApiRepository>();
+            container.RegisterSingleton<IDeviceApiRepository, DeviceApiRepository>();
+            container.RegisterSingleton<IAccountsApiRepository, AccountsApiRepository>();
+            container.RegisterSingleton<ICipherApiRepository, CipherApiRepository>();
+            container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
+            container.RegisterSingleton<ISettingsApiRepository, SettingsApiRepository>();
+
+            // Other
+            container.RegisterSingleton(CrossConnectivity.Current);
+            container.RegisterSingleton(UserDialogs.Instance);
+            container.RegisterSingleton(CrossFingerprint.Current);
 
             Settings = new Settings("group.com.8bit.bitwarden");
-            container.RegisterInstance(Settings, new ContainerControlledLifetimeManager());
+            container.RegisterSingleton(Settings);
 
-            CrossPushNotification.Initialize(container.Resolve<IPushNotificationListener>());
-            container.RegisterInstance(CrossPushNotification.Current, new ContainerControlledLifetimeManager());
+            // Push
+            var pushListener = new PushNotificationListener();
+            container.RegisterSingleton<IPushNotificationListener>(pushListener);
+            CrossPushNotification.Initialize(pushListener);
+            container.RegisterSingleton(CrossPushNotification.Current);
             CachedImageRenderer.Init();
 
-            Resolver.SetResolver(new UnityResolver(container));
+            Resolver.SetResolver(new SimpleInjectorResolver(container));
         }
 
         /// <summary>
