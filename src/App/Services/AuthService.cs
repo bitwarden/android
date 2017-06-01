@@ -202,7 +202,7 @@ namespace Bit.App.Services
             UserId = null;
             Email = null;
             _cryptoService.ClearKeys();
-            _settings.Remove(Constants.FirstVaultLoad);
+            _settings.Remove(Constants.SecurityStamp);
             _settings.Remove(Constants.PushLastRegistrationDate);
             _settings.Remove(Constants.Locked);
         }

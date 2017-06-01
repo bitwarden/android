@@ -8,5 +8,6 @@ namespace Bit.App.Abstractions
         DateTime LastActivity { get; set; }
         bool AutofillPersistNotification { get; set; }
         bool AutofillPasswordField { get; set; }
+        string SecurityStamp { get; set; }
     }
 }

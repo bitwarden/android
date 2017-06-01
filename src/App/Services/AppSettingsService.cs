@@ -61,5 +61,17 @@ namespace Bit.App.Services
                 _settings.AddOrUpdateValue(Constants.AutofillPasswordField, value);
             }
         }
+
+        public string SecurityStamp
+        {
+            get
+            {
+                return _settings.GetValueOrDefault<string>(Constants.SecurityStamp);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.SecurityStamp, value);
+            }
+        }
     }
 }

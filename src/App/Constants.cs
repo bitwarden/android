@@ -26,7 +26,7 @@
         public const string ExtensionStarted = "extension:started";
         public const string ExtensionActivated = "extension:activated";
 
-        public const string FirstVaultLoad = "other:firstVaultLoad";
+        public const string SecurityStamp = "other:securityStamp";
         public const string LastActivityDate = "other:lastActivityDate";
         public const string Locked = "other:locked";
         public const string LastLoginEmail = "other:lastLoginEmail";

@@ -25,6 +25,7 @@ namespace Bit.App.Services
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
         private readonly ISettings _settings;
+        private readonly IAppSettingsService _appSettingsService;
 
         public SyncService(
             ICipherApiRepository cipherApiRepository,
@@ -37,7 +38,8 @@ namespace Bit.App.Services
             ISettingsRepository settingsRepository,
             IAuthService authService,
             ICryptoService cryptoService,
-            ISettings settings)
+            ISettings settings,
+            IAppSettingsService appSettingsService)
         {
             _cipherApiRepository = cipherApiRepository;
             _folderApiRepository = folderApiRepository;
@@ -50,6 +52,7 @@ namespace Bit.App.Services
             _authService = authService;
             _cryptoService = cryptoService;
             _settings = settings;
+            _appSettingsService = appSettingsService;
         }
 
         public bool SyncInProgress { get; private set; }
@@ -197,7 +200,8 @@ namespace Bit.App.Services
             SyncStarted();
 
             var profile = await _accountsApiRepository.GetProfileAsync().ConfigureAwait(false);
-            if(!CheckSuccess(profile))
+            if(!CheckSuccess(profile, !string.IsNullOrWhiteSpace(_appSettingsService.SecurityStamp) &&
+                _appSettingsService.SecurityStamp != profile.Result.SecurityStamp))
             {
                 return false;
             }
@@ -238,7 +242,8 @@ namespace Bit.App.Services
 
             // Just check profile first to make sure we'll have a success with the API
             var profile = await _accountsApiRepository.GetProfileAsync().ConfigureAwait(false);
-            if(!CheckSuccess(profile))
+            if(!CheckSuccess(profile, !string.IsNullOrWhiteSpace(_appSettingsService.SecurityStamp) &&
+                _appSettingsService.SecurityStamp != profile.Result.SecurityStamp))
             {
                 return false;
             }
@@ -408,6 +413,11 @@ namespace Bit.App.Services
                 _cryptoService.SetPrivateKey(new CipherString(profile.PrivateKey));
             }
 
+            if(!string.IsNullOrWhiteSpace(profile.SecurityStamp))
+            {
+                _appSettingsService.SecurityStamp = profile.SecurityStamp;
+            }
+
             _cryptoService.SetOrgKeys(profile);
             return Task.FromResult(0);
         }
@@ -434,14 +444,15 @@ namespace Bit.App.Services
             MessagingCenter.Send(Application.Current, "SyncCompleted", successfully);
         }
 
-        private bool CheckSuccess<T>(ApiResult<T> result)
+        private bool CheckSuccess<T>(ApiResult<T> result, bool logout = false)
         {
-            if(!result.Succeeded)
+            if(!result.Succeeded || logout)
             {
                 SyncCompleted(false);
 
-                if(Application.Current != null && (result.StatusCode == System.Net.HttpStatusCode.Forbidden
-                    || result.StatusCode == System.Net.HttpStatusCode.Unauthorized))
+                if(Application.Current != null && (logout ||
+                    result.StatusCode == System.Net.HttpStatusCode.Forbidden ||
+                    result.StatusCode == System.Net.HttpStatusCode.Unauthorized))
                 {
                     MessagingCenter.Send(Application.Current, "Logout", (string)null);
                 }

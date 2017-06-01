@@ -12,6 +12,7 @@ namespace Bit.App.Models.Api
         public bool TwoFactorEnabled { get; set; }
         public string Key { get; set; }
         public string PrivateKey { get; set; }
+        public string SecurityStamp { get; set; }
         public IEnumerable<ProfileOrganizationResponseModel> Organizations { get; set; }
     }
 }
