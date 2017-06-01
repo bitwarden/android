@@ -1,40 +1,500 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>netstandard1.6</TargetFramework>
-    <PackageTargetFallback>portable-net45+win8+wpa81+wp8</PackageTargetFallback>
-    <DebugType>full</DebugType>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B490C5DA-639E-4994-ABD2-54222B8A348E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Bit.App</RootNamespace>
+    <AssemblyName>BitwardenApp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile111</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
-      <PackageReference Include="Acr.UserDialogs" Version="6.3.10" />
-      <PackageReference Include="HockeySDK.Xamarin" Version="4.1.2" />
-      <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-      <PackageReference Include="PCLCrypto" Version="2.0.147" />
-      <PackageReference Include="Plugin.Fingerprint" Version="1.2.0" />
-      <PackageReference Include="Splat" Version="1.6.2" />
-      <PackageReference Include="sqlite-net-pcl" Version="1.2.1" />
-      <PackageReference Include="System.Net.Requests" Version="4.3.0" />
-      <PackageReference Include="Unity" Version="3.5.1405-prerelease" />
-      <PackageReference Include="Xam.Plugin.Connectivity" Version="2.3.0" />
-      <PackageReference Include="Xam.Plugin.PushNotification" Version="1.2.4" />
-      <PackageReference Include="Xam.Plugins.Settings" Version="2.5.4" />
-      <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.2.9" />
-      <PackageReference Include="Xamarin.Forms" Version="2.3.4.231" />
-      <PackageReference Include="XLabs.IoC" Version="2.0.5782" />
+    <Compile Include="Abstractions\Repositories\ISettingsApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ISettingsRepository.cs" />
+    <Compile Include="Abstractions\Services\IAppSettingsService.cs" />
+    <Compile Include="Abstractions\Services\IMemoryService.cs" />
+    <Compile Include="Abstractions\Services\ISettingsService.cs" />
+    <Compile Include="Abstractions\Services\ITokenService.cs" />
+    <Compile Include="Abstractions\Services\IHttpService.cs" />
+    <Compile Include="Abstractions\Services\IDeviceInfoService.cs" />
+    <Compile Include="Abstractions\Services\IGoogleAnalyticsService.cs" />
+    <Compile Include="Abstractions\Services\IAppInfoService.cs" />
+    <Compile Include="Abstractions\Services\IAppIdService.cs" />
+    <Compile Include="Abstractions\Services\IAuthService.cs" />
+    <Compile Include="Abstractions\Services\IClipboardService.cs" />
+    <Compile Include="Abstractions\Services\IKeyDerivationService.cs" />
+    <Compile Include="Abstractions\Services\ILogService.cs" />
+    <Compile Include="Abstractions\Services\IReflectionService.cs" />
+    <Compile Include="Abstractions\Services\ILoginService.cs" />
+    <Compile Include="Abstractions\Services\IFolderService.cs" />
+    <Compile Include="App.cs" />
+    <Compile Include="Abstractions\Services\ISecureStorageService.cs" />
+    <Compile Include="Abstractions\Services\ISqlService.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controls\ExtendedToolbarItem.cs" />
+    <Compile Include="Controls\DismissModalToolBarItem.cs" />
+    <Compile Include="Controls\ExtendedEditor.cs" />
+    <Compile Include="Controls\ExtendedButton.cs" />
+    <Compile Include="Controls\ExtendedNavigationPage.cs" />
+    <Compile Include="Controls\ExtendedContentPage.cs" />
+    <Compile Include="Controls\MemoryContentView.cs" />
+    <Compile Include="Controls\StepperCell.cs" />
+    <Compile Include="Controls\ExtendedTableView.cs" />
+    <Compile Include="Controls\ExtendedPicker.cs" />
+    <Compile Include="Controls\ExtendedEntry.cs" />
+    <Compile Include="Controls\ExtendedTabbedPage.cs" />
+    <Compile Include="Controls\ExtendedSwitchCell.cs" />
+    <Compile Include="Controls\ExtendedViewCell.cs" />
+    <Compile Include="Controls\FormEditorCell.cs" />
+    <Compile Include="Controls\ExtendedTextCell.cs" />
+    <Compile Include="Controls\LabeledDetailCell.cs" />
+    <Compile Include="Controls\LabeledValueCell.cs" />
+    <Compile Include="Controls\FormPickerCell.cs" />
+    <Compile Include="Controls\FormEntryCell.cs" />
+    <Compile Include="Controls\PinControl.cs" />
+    <Compile Include="Controls\VaultListViewCell.cs" />
+    <Compile Include="Enums\EncryptionType.cs" />
+    <Compile Include="Enums\OrganizationUserType.cs" />
+    <Compile Include="Enums\LockType.cs" />
+    <Compile Include="Enums\CipherType.cs" />
+    <Compile Include="Enums\OrganizationUserStatusType.cs" />
+    <Compile Include="Enums\PushType.cs" />
+    <Compile Include="Enums\ReturnType.cs" />
+    <Compile Include="Abstractions\Services\ILocalizeService.cs" />
+    <Compile Include="Models\Api\ApiError.cs" />
+    <Compile Include="Models\Api\ApiResult.cs" />
+    <Compile Include="Models\Api\FolderDataModel.cs" />
+    <Compile Include="Models\Api\Request\DeviceTokenRequest.cs" />
+    <Compile Include="Models\Api\Request\FolderRequest.cs" />
+    <Compile Include="Models\Api\Request\DeviceRequest.cs" />
+    <Compile Include="Models\Api\Request\RegisterRequest.cs" />
+    <Compile Include="Models\Api\Request\LoginRequest.cs" />
+    <Compile Include="Models\Api\Request\PasswordHintRequest.cs" />
+    <Compile Include="Models\Api\Request\TokenRequest.cs" />
+    <Compile Include="Models\Api\Response\CipherHistoryResponse.cs" />
+    <Compile Include="Models\Api\Response\CipherResponse.cs" />
+    <Compile Include="Models\Api\Response\DomainsResponse.cs" />
+    <Compile Include="Models\Api\Response\ErrorResponse.cs" />
+    <Compile Include="Models\Api\Response\FolderResponse.cs" />
+    <Compile Include="Models\Api\Response\ListResponse.cs" />
+    <Compile Include="Models\Api\Response\DeviceResponse.cs" />
+    <Compile Include="Models\Api\Response\LoginResponse.cs" />
+    <Compile Include="Models\Api\Response\ProfileOrganizationResponse.cs" />
+    <Compile Include="Models\Api\Response\KeysResponse.cs" />
+    <Compile Include="Models\Api\Response\TokenResponse.cs" />
+    <Compile Include="Models\Api\Response\ProfileResponse.cs" />
+    <Compile Include="Models\Api\LoginDataModel.cs" />
+    <Compile Include="Models\Cipher.cs" />
+    <Compile Include="Models\CipherString.cs" />
+    <Compile Include="Models\SymmetricCryptoKey.cs" />
+    <Compile Include="Models\Data\SettingsData.cs" />
+    <Compile Include="Models\Data\FolderData.cs" />
+    <Compile Include="Abstractions\IDataObject.cs" />
+    <Compile Include="Models\Data\LoginData.cs" />
+    <Compile Include="Models\DomainName.cs" />
+    <Compile Include="Models\Folder.cs" />
+    <Compile Include="Models\LoginResult.cs" />
+    <Compile Include="Models\Page\AppExtensionPageModel.cs" />
+    <Compile Include="Models\Page\SettingsFolderPageModel.cs" />
+    <Compile Include="Models\Page\PinPageModel.cs" />
+    <Compile Include="Models\Page\PasswordGeneratorPageModel.cs" />
+    <Compile Include="Models\PlatformCulture.cs" />
+    <Compile Include="Models\PushNotification.cs" />
+    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Page\VaultViewLoginPageModel.cs" />
+    <Compile Include="Pages\HomePage.cs" />
+    <Compile Include="Pages\Lock\BaseLockPage.cs" />
+    <Compile Include="Pages\Lock\LockPasswordPage.cs" />
+    <Compile Include="Pages\LoginTwoFactorPage.cs" />
+    <Compile Include="Pages\PasswordHintPage.cs" />
+    <Compile Include="Pages\RegisterPage.cs" />
+    <Compile Include="Pages\Settings\SettingsCreditsPage.cs" />
+    <Compile Include="Pages\Settings\SettingsHelpPage.cs" />
+    <Compile Include="Pages\Settings\SettingsFeaturesPage.cs" />
+    <Compile Include="Pages\Settings\SettingsPinPage.cs" />
+    <Compile Include="Pages\Lock\LockPinPage.cs" />
+    <Compile Include="Pages\MainPage.cs" />
+    <Compile Include="Pages\Settings\SettingsEditFolderPage.cs" />
+    <Compile Include="Pages\Lock\LockFingerprintPage.cs" />
+    <Compile Include="Pages\Settings\SettingsAboutPage.cs" />
+    <Compile Include="Pages\Tools\ToolsAutofillServicePage.cs" />
+    <Compile Include="Pages\Tools\ToolsExtensionPage.cs" />
+    <Compile Include="Pages\Tools\ToolsPasswordGeneratorSettingsPage.cs" />
+    <Compile Include="Pages\Tools\ToolsPasswordGeneratorPage.cs" />
+    <Compile Include="Pages\Tools\ToolsPage.cs" />
+    <Compile Include="Pages\Settings\SettingsSyncPage.cs" />
+    <Compile Include="Pages\Settings\SettingsPage.cs" />
+    <Compile Include="Pages\Settings\SettingsListFoldersPage.cs" />
+    <Compile Include="Pages\Vault\VaultAutofillListLoginsPage.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Abstractions\Repositories\ILoginRepository.cs" />
+    <Compile Include="Repositories\SettingsApiRepository.cs" />
+    <Compile Include="Repositories\ApiRepository.cs" />
+    <Compile Include="Repositories\AccountsApiRepository.cs" />
+    <Compile Include="Repositories\ConnectApiRepository.cs" />
+    <Compile Include="Repositories\BaseApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IFolderApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ILoginApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IConnectApiRepository.cs" />
+    <Compile Include="Repositories\DeviceApiRepository.cs" />
+    <Compile Include="Repositories\CipherApiRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ICipherApiRepository.cs" />
+    <Compile Include="Repositories\SettingsRepository.cs" />
+    <Compile Include="Repositories\LoginApiRepository.cs" />
+    <Compile Include="Repositories\FolderApiRepository.cs" />
+    <Compile Include="Repositories\LoginRepository.cs" />
+    <Compile Include="Repositories\FolderRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IFolderRepository.cs" />
+    <Compile Include="Abstractions\Repositories\IRepository.cs" />
+    <Compile Include="Resources\AppResources.cs.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.es.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.es.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.fi.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.fi.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.fr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.fr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.hi.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.hi.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.id.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.id.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.ja.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.ja.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.pt-BR.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.pt-BR.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.pt-PT.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.pt-PT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.ru.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.ru.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.sk.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.sk.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.sv.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.sv.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.zh-Hans.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.zh-Hans.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.zh-Hant.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.zh-Hant.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Services\AppSettingsService.cs" />
+    <Compile Include="Services\SettingsService.cs" />
+    <Compile Include="Services\TokenService.cs" />
+    <Compile Include="Services\AppIdService.cs" />
+    <Compile Include="Abstractions\Services\ILockService.cs" />
+    <Compile Include="Services\LockService.cs" />
+    <Compile Include="Services\DatabaseService.cs" />
+    <Compile Include="Services\FolderService.cs" />
+    <Compile Include="Repositories\Repository.cs" />
+    <Compile Include="Abstractions\Services\ICryptoService.cs" />
+    <Compile Include="Abstractions\Services\IDatabaseService.cs" />
+    <Compile Include="Abstractions\Services\ISyncService.cs" />
+    <Compile Include="Abstractions\Services\IPasswordGenerationService.cs" />
+    <Compile Include="Services\SyncService.cs" />
+    <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\AuthService.cs" />
+    <Compile Include="Services\CryptoService.cs" />
+    <Compile Include="Models\Page\VaultListPageModel.cs" />
+    <Compile Include="Pages\LoginPage.cs" />
+    <Compile Include="Pages\Settings\SettingsAddFolderPage.cs" />
+    <Compile Include="Pages\Vault\VaultAddLoginPage.cs" />
+    <Compile Include="Pages\Vault\VaultViewLoginPage.cs" />
+    <Compile Include="Pages\Vault\VaultEditLoginPage.cs" />
+    <Compile Include="Pages\Vault\VaultListLoginsPage.cs" />
+    <Compile Include="Services\PasswordGenerationService.cs" />
+    <Compile Include="Utilities\Helpers.cs" />
+    <Compile Include="Utilities\IdentityHttpClient.cs" />
+    <Compile Include="Utilities\Extentions.cs" />
+    <Compile Include="Utilities\ExtendedObservableCollection.cs" />
+    <Compile Include="Utilities\ApiHttpClient.cs" />
+    <Compile Include="Utilities\TokenHttpRequestMessage.cs" />
   </ItemGroup>
-  
   <ItemGroup>
-    <!-- https://bugzilla.xamarin.com/show_bug.cgi?id=55591 -->
-    <None Remove="**\*.xaml" />
-
-    <Compile Update="**\*.xaml.cs" DependentUpon="%(Filename)" />
-    <EmbeddedResource Include="**\*.xaml" SubType="Designer" Generator="MSBuild:UpdateDesignTimeXaml" />
+    <None Include="app.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <EmbeddedResource Include="Resources\AppResources.cs.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.es.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.fi.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.fi.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.fr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.fr.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.hi.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.hi.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.id.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.id.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.ja.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.ja.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.pt-BR.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.pt-BR.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.pt-PT.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.pt-PT.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.sk.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.sk.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.sv.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.zh-Hans.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.zh-Hans.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.zh-Hant.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.zh-Hant.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
-
   <ItemGroup>
-    <EmbeddedResource Update="AppResources.resx" Generator="ResXFileCodeGenerator" LastGenOutput="AppResources.Designer.cs" />
-    <EmbeddedResource Update="AppResources.en-US.resx" Generator="ResXFileCodeGenerator" LastGenOutput="AppResources.en-US.Designer.cs" />
+    <Reference Include="Acr.UserDialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.10\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="Acr.UserDialogs.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.10\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.FFImageLoading.2.2.9\lib\portable-net45+win8+wpa81+wp8\FFImageLoading.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading.Forms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.FFImageLoading.Forms.2.2.9\lib\portable-net45+win8+wpa81+wp8\FFImageLoading.Forms.dll</HintPath>
+    </Reference>
+    <Reference Include="FFImageLoading.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.FFImageLoading.2.2.9\lib\portable-net45+win8+wpa81+wp8\FFImageLoading.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="HockeySDK, Version=1.0.6288.33979, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\HockeySDK.Xamarin.4.1.2\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\HockeySDK.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation, Version=1.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=3.5.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Unity.3.5.1405-prerelease\lib\portable-net45+wp80+win8+wpa81+MonoAndroid10+MonoTouch10\Microsoft.Practices.Unity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Mono.Android">
+      <HintPath>..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\MonoAndroid\v6.0\Mono.Android.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLCrypto, Version=2.0.0.0, Culture=neutral, PublicKeyToken=d4421c8a4786956c, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PCLCrypto.2.0.147\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\PCLCrypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.BCrypt, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PInvoke.BCrypt.0.3.152\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\PInvoke.BCrypt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.Kernel32, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PInvoke.Kernel32.0.3.152\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\PInvoke.Kernel32.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.NCrypt, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PInvoke.NCrypt.0.3.152\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\PInvoke.NCrypt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PInvoke.Windows.Core, Version=0.3.0.0, Culture=neutral, PublicKeyToken=9e300f9f87f04a7a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PInvoke.Windows.Core.0.3.152\lib\portable-net45+win+wpa81+MonoAndroid10+xamarinios10+MonoTouch10\PInvoke.Windows.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Connectivity, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.3.0\lib\portable-net45+wp80+win8+wpa81\Plugin.Connectivity.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Connectivity.Abstractions, Version=2.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.3.0\lib\portable-net45+wp80+win8+wpa81\Plugin.Connectivity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Fingerprint, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Fingerprint.1.2.0\lib\portable-net45+win8+wpa81+wp8\Plugin.Fingerprint.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Fingerprint.Abstractions, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Fingerprint.1.2.0\lib\portable-net45+win8+wpa81+wp8\Plugin.Fingerprint.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Settings, Version=2.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugins.Settings.2.5.4\lib\portable-net45+wp80+win8+wpa81\Plugin.Settings.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Settings.Abstractions, Version=2.5.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugins.Settings.2.5.4\lib\portable-net45+wp80+win8+wpa81\Plugin.Settings.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="PushNotification.Plugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.PushNotification.1.2.4\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\PushNotification.Plugin.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PushNotification.Plugin.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.PushNotification.1.2.4\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\PushNotification.Plugin.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Splat.1.6.2\lib\Portable-net45+win+wpa81+wp80\Splat.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLite-net, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\sqlite-net-pcl.1.2.1\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLite-net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCL.batteries, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCL.bundle_green.0.9.3\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCL.batteries.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCL.raw, Version=0.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCL.raw.0.9.3\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCL.raw.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_green, Version=1.0.0.0, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_green.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.batteries_v2, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8226ea5df37bcae9, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.batteries_v2.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SQLitePCLRaw.core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SQLitePCLRaw.core.1.1.2\lib\portable-net45+netcore45+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\SQLitePCLRaw.core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Validation, Version=2.3.0.0, Culture=neutral, PublicKeyToken=2fc06f0d701809a7, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Validation.2.3.7\lib\portable-net45+win+wpa81+wp80+MonoAndroid10+xamarinios10+MonoTouch10\Validation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.4.231\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.4.231\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.4.231\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>
+    </Reference>
+    <Reference Include="XLabs.Ioc, Version=2.0.5782.12218, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\XLabs.IoC.2.0.5782\lib\portable-net45+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1+Xamarin.iOS10\XLabs.Ioc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
-  
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AppResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Services\PushNotificationListener.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="..\..\packages\Xamarin.Forms.2.3.4.231\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.4.231\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.4.231\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.4.231\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
