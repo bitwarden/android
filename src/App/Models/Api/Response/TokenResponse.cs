@@ -15,5 +15,6 @@ namespace Bit.App.Models.Api
         public string TokenType { get; set; }
         public List<int> TwoFactorProviders { get; set; }
         public string PrivateKey { get; set; }
+        public string Key { get; set; }
     }
 }

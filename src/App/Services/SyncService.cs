@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using Newtonsoft.Json;
 using Bit.App.Models;
-using System.Diagnostics;
 
 namespace Bit.App.Services
 {
@@ -203,7 +202,7 @@ namespace Bit.App.Services
                 return false;
             }
 
-            await SyncOrgKeysAsync(profile.Result);
+            await SyncProfileKeysAsync(profile.Result);
 
             SyncCompleted(true);
             return true;
@@ -258,11 +257,11 @@ namespace Bit.App.Services
             var loginTask = SyncLoginsAsync(loginsDict);
             var folderTask = SyncFoldersAsync(foldersDict);
             var domainsTask = SyncDomainsAsync(domains.Result);
-            var orgKeysTask = SyncOrgKeysAsync(profile.Result);
-            await Task.WhenAll(loginTask, folderTask, domainsTask, orgKeysTask).ConfigureAwait(false);
+            var profileTask = SyncProfileKeysAsync(profile.Result);
+            await Task.WhenAll(loginTask, folderTask, domainsTask, profileTask).ConfigureAwait(false);
 
             if(folderTask.Exception != null || loginTask.Exception != null || domainsTask.Exception != null ||
-                orgKeysTask.Exception != null)
+                profileTask.Exception != null)
             {
                 SyncCompleted(false);
                 return false;
@@ -397,23 +396,20 @@ namespace Bit.App.Services
             catch(SQLite.SQLiteException) { }
         }
 
-        private async Task SyncOrgKeysAsync(ProfileResponse profile)
+        private Task SyncProfileKeysAsync(ProfileResponse profile)
         {
-            if(_cryptoService.PrivateKey == null && (profile.Organizations?.Any() ?? false))
+            if(!string.IsNullOrWhiteSpace(profile.Key))
             {
-                var keys = await _accountsApiRepository.GetKeys();
-                if(!CheckSuccess(keys))
-                {
-                    return;
-                }
+                _cryptoService.SetEncKey(new CipherString(profile.Key));
+            }
 
-                if(!string.IsNullOrWhiteSpace(keys.Result.PrivateKey))
-                {
-                    _cryptoService.SetPrivateKey(new CipherString(keys.Result.PrivateKey));
-                }
+            if(!string.IsNullOrWhiteSpace(profile.PrivateKey))
+            {
+                _cryptoService.SetPrivateKey(new CipherString(profile.PrivateKey));
             }
 
             _cryptoService.SetOrgKeys(profile);
+            return Task.FromResult(0);
         }
 
         private void SyncStarted()

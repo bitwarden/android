@@ -10,6 +10,8 @@ namespace Bit.App.Models.Api
         public string MasterPasswordHint { get; set; }
         public string Culture { get; set; }
         public bool TwoFactorEnabled { get; set; }
+        public string Key { get; set; }
+        public string PrivateKey { get; set; }
         public IEnumerable<ProfileOrganizationResponseModel> Organizations { get; set; }
     }
 }

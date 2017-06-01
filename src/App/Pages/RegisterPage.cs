@@ -203,12 +203,14 @@ namespace Bit.App.Pages
 
             var normalizedEmail = EmailCell.Entry.Text.ToLower();
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail);
+            var encKey = _cryptoService.MakeEncKey(key);
             var request = new RegisterRequest
             {
                 Email = normalizedEmail,
                 MasterPasswordHash = _cryptoService.HashPasswordBase64(key, PasswordCell.Entry.Text),
                 MasterPasswordHint = !string.IsNullOrWhiteSpace(PasswordHintCell.Entry.Text)
-                    ? PasswordHintCell.Entry.Text : null
+                    ? PasswordHintCell.Entry.Text : null,
+                Key = encKey.EncryptedString
             };
 
             _userDialogs.ShowLoading(AppResources.CreatingAccount, MaskType.Black);

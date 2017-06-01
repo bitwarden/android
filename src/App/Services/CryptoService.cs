@@ -16,8 +16,8 @@ namespace Bit.App.Services
     public class CryptoService : ICryptoService
     {
         private const string KeyKey = "key";
-        private const string PreviousKeyKey = "previousKey";
         private const string PrivateKeyKey = "encPrivateKey";
+        private const string EncKeyKey = "encKey";
         private const string OrgKeysKey = "encOrgKeys";
         private const int InitializationVectorSize = 16;
 
@@ -25,6 +25,7 @@ namespace Bit.App.Services
         private readonly ISecureStorageService _secureStorage;
         private readonly IKeyDerivationService _keyDerivationService;
         private SymmetricCryptoKey _key;
+        private SymmetricCryptoKey _encKey;
         private SymmetricCryptoKey _legacyEtmKey;
         private SymmetricCryptoKey _previousKey;
         private IDictionary<string, SymmetricCryptoKey> _orgKeys;
@@ -63,7 +64,6 @@ namespace Bit.App.Services
                 }
                 else
                 {
-                    PreviousKey = _key;
                     _secureStorage.Delete(KeyKey);
                 }
 
@@ -72,46 +72,27 @@ namespace Bit.App.Services
             }
         }
 
-        public SymmetricCryptoKey PreviousKey
+        public SymmetricCryptoKey EncKey
         {
             get
             {
-                if(_previousKey == null && _secureStorage.Contains(PreviousKeyKey))
+                if(_encKey == null && _settings.Contains(EncKeyKey))
                 {
-                    var keyBytes = _secureStorage.Retrieve(PreviousKeyKey);
-                    if(keyBytes != null)
+                    var encKey = _settings.GetValueOrDefault<string>(EncKeyKey);
+                    var encKeyCs = new CipherString(encKey);
+                    try
                     {
-                        _previousKey = new SymmetricCryptoKey(keyBytes);
+                        var decBytes = DecryptToBytes(encKeyCs, Key);
+                        _encKey = new SymmetricCryptoKey(decBytes);
+                    }
+                    catch
+                    {
+                        _encKey = null;
+                        Debug.WriteLine($"Cannot set enc key. Decryption failed.");
                     }
                 }
 
-                return _previousKey;
-            }
-            private set
-            {
-                if(value != null)
-                {
-                    _secureStorage.Store(PreviousKeyKey, value.Key);
-                    _previousKey = value;
-                }
-            }
-        }
-
-        public bool KeyChanged
-        {
-            get
-            {
-                if(Key == null)
-                {
-                    return false;
-                }
-
-                if(PreviousKey == null)
-                {
-                    return Key != null;
-                }
-
-                return !PreviousKey.Key.SequenceEqual(Key.Key);
+                return _encKey;
             }
         }
 
@@ -169,6 +150,20 @@ namespace Bit.App.Services
             }
         }
 
+        public void SetEncKey(CipherString encKeyEnc)
+        {
+            if(encKeyEnc != null)
+            {
+                _settings.AddOrUpdateValue(EncKeyKey, encKeyEnc.EncryptedString);
+            }
+            else if(_settings.Contains(EncKeyKey))
+            {
+                _settings.Remove(EncKeyKey);
+            }
+
+            _encKey = null;
+        }
+
         public void SetPrivateKey(CipherString privateKeyEnc)
         {
             if(privateKeyEnc != null)
@@ -178,12 +173,9 @@ namespace Bit.App.Services
             else if(_settings.Contains(PrivateKeyKey))
             {
                 _settings.Remove(PrivateKeyKey);
-                _privateKey = null;
             }
-            else
-            {
-                _privateKey = null;
-            }
+
+            _privateKey = null;
         }
 
         public void SetOrgKeys(ProfileResponse profile)
@@ -234,13 +226,25 @@ namespace Bit.App.Services
             SetOrgKeys((Dictionary<string, string>)null);
             Key = null;
             SetPrivateKey(null);
+            SetEncKey(null);
         }
 
         public CipherString Encrypt(string plaintextValue, SymmetricCryptoKey key = null)
         {
+            if(plaintextValue == null)
+            {
+                throw new ArgumentNullException(nameof(plaintextValue));
+            }
+
+            var plaintextBytes = Encoding.UTF8.GetBytes(plaintextValue);
+            return Encrypt(plaintextBytes, key);
+        }
+
+        public CipherString Encrypt(byte[] plainBytes, SymmetricCryptoKey key = null)
+        {
             if(key == null)
             {
-                key = Key;
+                key = EncKey ?? Key;
             }
 
             if(key == null)
@@ -248,17 +252,15 @@ namespace Bit.App.Services
                 throw new ArgumentNullException(nameof(key));
             }
 
-            if(plaintextValue == null)
+            if(plainBytes == null)
             {
-                throw new ArgumentNullException(nameof(plaintextValue));
+                throw new ArgumentNullException(nameof(plainBytes));
             }
-
-            var plaintextBytes = Encoding.UTF8.GetBytes(plaintextValue);
 
             var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
             var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
             var iv = WinRTCrypto.CryptographicBuffer.GenerateRandom(provider.BlockLength);
-            var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plaintextBytes, iv);
+            var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plainBytes, iv);
             var mac = key.MacKey != null ? ComputeMacBase64(encryptedBytes, iv, key.MacKey) : null;
 
             return new CipherString(key.EncryptionType, Convert.ToBase64String(iv),
@@ -283,7 +285,7 @@ namespace Bit.App.Services
         {
             if(key == null)
             {
-                key = Key;
+                key = EncKey ?? Key;
             }
 
             if(key == null)
@@ -448,7 +450,7 @@ namespace Bit.App.Services
         {
             if(key == null)
             {
-                throw new ArgumentNullException(nameof(Key));
+                throw new ArgumentNullException(nameof(key));
             }
 
             if(password == null)
@@ -465,6 +467,12 @@ namespace Bit.App.Services
         {
             var hash = HashPassword(key, password);
             return Convert.ToBase64String(hash);
+        }
+
+        public CipherString MakeEncKey(SymmetricCryptoKey key)
+        {
+            var bytes = WinRTCrypto.CryptographicBuffer.GenerateRandom(512 / 8);
+            return Encrypt(bytes, key);
         }
     }
 }

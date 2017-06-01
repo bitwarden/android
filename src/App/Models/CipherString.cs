@@ -83,16 +83,11 @@ namespace Bit.App.Models
             }
 
             EncryptionType = encryptionType;
-            EncryptedString = string.Format("{0}|{1}", initializationVector, cipherText);
+            EncryptedString = string.Format("{0}.{1}|{2}", (byte)EncryptionType, initializationVector, cipherText);
 
             if(!string.IsNullOrWhiteSpace(mac))
             {
                 EncryptedString = string.Format("{0}|{1}", EncryptedString, mac);
-            }
-
-            if(EncryptionType != EncryptionType.AesCbc256_B64)
-            {
-                EncryptedString = string.Format("{0}.{1}", (byte)EncryptionType, EncryptedString);
             }
 
             CipherText = cipherText;

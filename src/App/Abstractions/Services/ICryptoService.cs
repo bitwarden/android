@@ -8,11 +8,10 @@ namespace Bit.App.Abstractions
     public interface ICryptoService
     {
         SymmetricCryptoKey Key { get; set; }
-        SymmetricCryptoKey PreviousKey { get; }
-        bool KeyChanged { get; }
+        SymmetricCryptoKey EncKey { get; }
         byte[] PrivateKey { get; }
         IDictionary<string, SymmetricCryptoKey> OrgKeys { get; }
-
+        void SetEncKey(CipherString encKeyEnc);
         void SetPrivateKey(CipherString privateKeyEnc);
         void SetOrgKeys(ProfileResponse profile);
         void SetOrgKeys(Dictionary<string, string> orgKeysEncDict);
@@ -26,5 +25,6 @@ namespace Bit.App.Abstractions
         string MakeKeyFromPasswordBase64(string password, string salt);
         byte[] HashPassword(SymmetricCryptoKey key, string password);
         string HashPasswordBase64(SymmetricCryptoKey key, string password);
+        CipherString MakeEncKey(SymmetricCryptoKey key);
     }
 }

@@ -31,7 +31,6 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly bool _favorites;
-        private bool _loadExistingData;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
 
         public VaultListLoginsPage(bool favorites, string uri = null)
@@ -50,7 +49,6 @@ namespace Bit.App.Pages
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             var cryptoService = Resolver.Resolve<ICryptoService>();
-            _loadExistingData = !_settings.GetValueOrDefault(Constants.FirstVaultLoad, true) || !cryptoService.KeyChanged;
 
             Uri = uri;
 
@@ -234,10 +232,7 @@ namespace Bit.App.Pages
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
             AddLoginItem?.InitEvents();
 
-            if(_loadExistingData)
-            {
-                _filterResultsCancellationTokenSource = FetchAndLoadVault();
-            }
+            _filterResultsCancellationTokenSource = FetchAndLoadVault();
 
             if(_connectivity.IsConnected && Device.RuntimePlatform == Device.iOS && !_favorites)
             {
@@ -307,9 +302,6 @@ namespace Bit.App.Pages
         private CancellationTokenSource FetchAndLoadVault()
         {
             var cts = new CancellationTokenSource();
-            _settings.AddOrUpdateValue(Constants.FirstVaultLoad, false);
-            _loadExistingData = true;
-
             if(PresentationFolders.Count > 0 && _syncService.SyncInProgress)
             {
                 return cts;

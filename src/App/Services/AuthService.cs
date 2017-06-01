@@ -6,8 +6,6 @@ using Bit.App.Models.Api;
 using Plugin.Settings.Abstractions;
 using Bit.App.Models;
 using System.Linq;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Bit.App.Services
 {
@@ -273,6 +271,11 @@ namespace Bit.App.Services
 
         private async Task ProcessLoginSuccessAsync(SymmetricCryptoKey key, TokenResponse response)
         {
+            if(response.Key != null)
+            {
+                _cryptoService.SetEncKey(new CipherString(response.PrivateKey));
+            }
+
             if(response.PrivateKey != null)
             {
                 _cryptoService.SetPrivateKey(new CipherString(response.PrivateKey));
