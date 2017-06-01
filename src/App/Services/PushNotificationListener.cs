@@ -7,34 +7,40 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Plugin.Settings.Abstractions;
 using System;
+using XLabs.Ioc;
 
 namespace Bit.App.Services
 {
     public class PushNotificationListener : IPushNotificationListener
     {
         private bool _showNotification;
-        private readonly ISyncService _syncService;
-        private readonly IDeviceApiRepository _deviceApiRepository;
-        private readonly IAuthService _authService;
-        private readonly IAppIdService _appIdService;
-        private readonly ISettings _settings;
+        private bool _resolved;
+        private ISyncService _syncService;
+        private IDeviceApiRepository _deviceApiRepository;
+        private IAuthService _authService;
+        private IAppIdService _appIdService;
+        private ISettings _settings;
 
-        public PushNotificationListener(
-            ISyncService syncService,
-            IDeviceApiRepository deviceApiRepository,
-            IAuthService authService,
-            IAppIdService appIdService,
-            ISettings settings)
+        private void Resolve()
         {
-            _syncService = syncService;
-            _deviceApiRepository = deviceApiRepository;
-            _authService = authService;
-            _appIdService = appIdService;
-            _settings = settings;
+            if(_resolved)
+            {
+                return;
+            }
+
+            _syncService = Resolver.Resolve<ISyncService>();
+            _deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
+            _authService = Resolver.Resolve<IAuthService>();
+            _appIdService = Resolver.Resolve<IAppIdService>();
+            _settings = Resolver.Resolve<ISettings>();
+
+            _resolved = true;
         }
 
         public void OnMessage(JObject value, DeviceType deviceType)
         {
+            Resolve();
+
             if(value == null)
             {
                 return;
@@ -140,6 +146,8 @@ namespace Bit.App.Services
 
         public async void OnRegistered(string token, DeviceType deviceType)
         {
+            Resolve();
+
             Debug.WriteLine(string.Format("Push Notification - Device Registered - Token : {0}", token));
 
             if(!_authService.IsAuthenticated)
