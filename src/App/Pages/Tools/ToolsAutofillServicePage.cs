@@ -167,18 +167,19 @@ namespace Bit.App.Pages
 
             ScrollView = new ScrollView { Content = DisabledStackLayout };
 
-            if(Device.RuntimePlatform == Device.iOS)
+            UpdateEnabled();
+            Device.StartTimer(new TimeSpan(0, 0, 3), () =>
             {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
-            }
+                UpdateEnabled();
+                return true;
+            });
 
             Title = AppResources.AutofillService;
             Content = ScrollView;
         }
 
-        protected override void OnAppearing()
+        private void UpdateEnabled()
         {
-            base.OnAppearing();
             ScrollView.Content = _appInfoService.AutofillServiceEnabled ? EnabledStackLayout : DisabledStackLayout;
         }
 
