@@ -210,6 +210,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.id.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.it.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.it.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.ja.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -239,6 +244,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.sv.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.th.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.th.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\AppResources.zh-Hans.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -311,6 +321,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.id.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.it.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.it.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.ja.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.ja.Designer.cs</LastGenOutput>
@@ -334,6 +348,10 @@
     <EmbeddedResource Include="Resources\AppResources.sv.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.sv.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.th.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.th.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.zh-Hans.resx">
       <Generator>ResXFileCodeGenerator</Generator>

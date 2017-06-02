@@ -30,6 +30,8 @@ namespace Bit.Android.Test
 			global::PCLCrypto.Resource.String.Hello = global::Bit.Android.Test.Resource.String.Hello;
 			global::Plugin.Fingerprint.Resource.Drawable.fingerprint_white = global::Bit.Android.Test.Resource.Drawable.fingerprint_white;
 			global::Plugin.Fingerprint.Resource.Id.fingerprint_btnCancel = global::Bit.Android.Test.Resource.Id.fingerprint_btnCancel;
+			global::Plugin.Fingerprint.Resource.Id.fingerprint_btnFallback = global::Bit.Android.Test.Resource.Id.fingerprint_btnFallback;
+			global::Plugin.Fingerprint.Resource.Id.fingerprint_imgFingerprint = global::Bit.Android.Test.Resource.Id.fingerprint_imgFingerprint;
 			global::Plugin.Fingerprint.Resource.Id.fingerprint_txtReason = global::Bit.Android.Test.Resource.Id.fingerprint_txtReason;
 			global::Plugin.Fingerprint.Resource.Layout.FingerprintDialog = global::Bit.Android.Test.Resource.Layout.FingerprintDialog;
 			global::Xamarin.Android.NUnitLite.Resource.Id.OptionHostName = global::Bit.Android.Test.Resource.Id.OptionHostName;
@@ -2000,62 +2002,62 @@ namespace Bit.Android.Test
 		public partial class Id
 		{
 			
-			// aapt resource value: 0x7f0800a4
-			public const int OptionHostName = 2131230884;
-			
-			// aapt resource value: 0x7f0800a5
-			public const int OptionPort = 2131230885;
-			
-			// aapt resource value: 0x7f0800a3
-			public const int OptionRemoteServer = 2131230883;
-			
-			// aapt resource value: 0x7f0800b3
-			public const int OptionsButton = 2131230899;
-			
-			// aapt resource value: 0x7f0800ae
-			public const int ResultFullName = 2131230894;
-			
-			// aapt resource value: 0x7f0800b0
-			public const int ResultMessage = 2131230896;
-			
-			// aapt resource value: 0x7f0800af
-			public const int ResultResultState = 2131230895;
-			
-			// aapt resource value: 0x7f0800ad
-			public const int ResultRunSingleMethodTest = 2131230893;
-			
-			// aapt resource value: 0x7f0800b1
-			public const int ResultStackTrace = 2131230897;
-			
-			// aapt resource value: 0x7f0800a9
-			public const int ResultsFailed = 2131230889;
-			
 			// aapt resource value: 0x7f0800a6
-			public const int ResultsId = 2131230886;
-			
-			// aapt resource value: 0x7f0800aa
-			public const int ResultsIgnored = 2131230890;
-			
-			// aapt resource value: 0x7f0800ab
-			public const int ResultsInconclusive = 2131230891;
-			
-			// aapt resource value: 0x7f0800ac
-			public const int ResultsMessage = 2131230892;
-			
-			// aapt resource value: 0x7f0800a8
-			public const int ResultsPassed = 2131230888;
+			public const int OptionHostName = 2131230886;
 			
 			// aapt resource value: 0x7f0800a7
-			public const int ResultsResult = 2131230887;
+			public const int OptionPort = 2131230887;
+			
+			// aapt resource value: 0x7f0800a5
+			public const int OptionRemoteServer = 2131230885;
+			
+			// aapt resource value: 0x7f0800b5
+			public const int OptionsButton = 2131230901;
+			
+			// aapt resource value: 0x7f0800b0
+			public const int ResultFullName = 2131230896;
 			
 			// aapt resource value: 0x7f0800b2
-			public const int RunTestsButton = 2131230898;
+			public const int ResultMessage = 2131230898;
+			
+			// aapt resource value: 0x7f0800b1
+			public const int ResultResultState = 2131230897;
+			
+			// aapt resource value: 0x7f0800af
+			public const int ResultRunSingleMethodTest = 2131230895;
+			
+			// aapt resource value: 0x7f0800b3
+			public const int ResultStackTrace = 2131230899;
+			
+			// aapt resource value: 0x7f0800ab
+			public const int ResultsFailed = 2131230891;
+			
+			// aapt resource value: 0x7f0800a8
+			public const int ResultsId = 2131230888;
+			
+			// aapt resource value: 0x7f0800ac
+			public const int ResultsIgnored = 2131230892;
+			
+			// aapt resource value: 0x7f0800ad
+			public const int ResultsInconclusive = 2131230893;
+			
+			// aapt resource value: 0x7f0800ae
+			public const int ResultsMessage = 2131230894;
+			
+			// aapt resource value: 0x7f0800aa
+			public const int ResultsPassed = 2131230890;
+			
+			// aapt resource value: 0x7f0800a9
+			public const int ResultsResult = 2131230889;
 			
 			// aapt resource value: 0x7f0800b4
-			public const int TestSuiteListView = 2131230900;
+			public const int RunTestsButton = 2131230900;
 			
-			// aapt resource value: 0x7f080096
-			public const int action0 = 2131230870;
+			// aapt resource value: 0x7f0800b6
+			public const int TestSuiteListView = 2131230902;
+			
+			// aapt resource value: 0x7f080098
+			public const int action0 = 2131230872;
 			
 			// aapt resource value: 0x7f08005c
 			public const int action_bar = 2131230812;
@@ -2081,8 +2083,8 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f08005d
 			public const int action_context_bar = 2131230813;
 			
-			// aapt resource value: 0x7f08009a
-			public const int action_divider = 2131230874;
+			// aapt resource value: 0x7f08009c
+			public const int action_divider = 2131230876;
 			
 			// aapt resource value: 0x7f080004
 			public const int action_menu_divider = 2131230724;
@@ -2123,26 +2125,26 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f080046
 			public const int buttonPanel = 2131230790;
 			
-			// aapt resource value: 0x7f080083
-			public const int button_add_response = 2131230851;
+			// aapt resource value: 0x7f080085
+			public const int button_add_response = 2131230853;
 			
-			// aapt resource value: 0x7f08007e
-			public const int button_attachment = 2131230846;
+			// aapt resource value: 0x7f080080
+			public const int button_attachment = 2131230848;
 			
-			// aapt resource value: 0x7f080088
-			public const int button_login = 2131230856;
+			// aapt resource value: 0x7f08008a
+			public const int button_login = 2131230858;
 			
-			// aapt resource value: 0x7f080084
-			public const int button_refresh = 2131230852;
+			// aapt resource value: 0x7f080086
+			public const int button_refresh = 2131230854;
 			
-			// aapt resource value: 0x7f08007f
-			public const int button_send = 2131230847;
+			// aapt resource value: 0x7f080081
+			public const int button_send = 2131230849;
 			
-			// aapt resource value: 0x7f08008c
-			public const int button_update = 2131230860;
+			// aapt resource value: 0x7f08008e
+			public const int button_update = 2131230862;
 			
-			// aapt resource value: 0x7f080097
-			public const int cancel_action = 2131230871;
+			// aapt resource value: 0x7f080099
+			public const int cancel_action = 2131230873;
 			
 			// aapt resource value: 0x7f080016
 			public const int center = 2131230742;
@@ -2156,8 +2158,8 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f080054
 			public const int checkbox = 2131230804;
 			
-			// aapt resource value: 0x7f08009d
-			public const int chronometer = 2131230877;
+			// aapt resource value: 0x7f08009f
+			public const int chronometer = 2131230879;
 			
 			// aapt resource value: 0x7f08001f
 			public const int clip_horizontal = 2131230751;
@@ -2207,8 +2209,8 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f080019
 			public const int end = 2131230745;
 			
-			// aapt resource value: 0x7f0800a2
-			public const int end_padder = 2131230882;
+			// aapt resource value: 0x7f0800a4
+			public const int end_padder = 2131230884;
 			
 			// aapt resource value: 0x7f08000e
 			public const int enterAlways = 2131230734;
@@ -2234,11 +2236,17 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f08001a
 			public const int fill_vertical = 2131230746;
 			
-			// aapt resource value: 0x7f080075
-			public const int fingerprint_btnCancel = 2131230837;
+			// aapt resource value: 0x7f080076
+			public const int fingerprint_btnCancel = 2131230838;
+			
+			// aapt resource value: 0x7f080077
+			public const int fingerprint_btnFallback = 2131230839;
 			
 			// aapt resource value: 0x7f080074
-			public const int fingerprint_txtReason = 2131230836;
+			public const int fingerprint_imgFingerprint = 2131230836;
+			
+			// aapt resource value: 0x7f080075
+			public const int fingerprint_txtReason = 2131230837;
 			
 			// aapt resource value: 0x7f080025
 			public const int @fixed = 2131230757;
@@ -2258,80 +2266,80 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f080041
 			public const int image = 2131230785;
 			
-			// aapt resource value: 0x7f0800a1
-			public const int info = 2131230881;
-			
-			// aapt resource value: 0x7f08007a
-			public const int input_email = 2131230842;
+			// aapt resource value: 0x7f0800a3
+			public const int info = 2131230883;
 			
 			// aapt resource value: 0x7f08007c
-			public const int input_message = 2131230844;
+			public const int input_email = 2131230844;
 			
-			// aapt resource value: 0x7f080079
-			public const int input_name = 2131230841;
-			
-			// aapt resource value: 0x7f080087
-			public const int input_password = 2131230855;
+			// aapt resource value: 0x7f08007e
+			public const int input_message = 2131230846;
 			
 			// aapt resource value: 0x7f08007b
-			public const int input_subject = 2131230843;
+			public const int input_name = 2131230843;
+			
+			// aapt resource value: 0x7f080089
+			public const int input_password = 2131230857;
+			
+			// aapt resource value: 0x7f08007d
+			public const int input_subject = 2131230845;
 			
 			// aapt resource value: 0x7f080000
 			public const int item_touch_helper_previous_elevation = 2131230720;
 			
-			// aapt resource value: 0x7f08008e
-			public const int label_author = 2131230862;
-			
-			// aapt resource value: 0x7f08008f
-			public const int label_date = 2131230863;
-			
-			// aapt resource value: 0x7f080081
-			public const int label_last_updated = 2131230849;
-			
-			// aapt resource value: 0x7f080076
-			public const int label_message = 2131230838;
-			
 			// aapt resource value: 0x7f080090
-			public const int label_text = 2131230864;
+			public const int label_author = 2131230864;
 			
-			// aapt resource value: 0x7f08008a
-			public const int label_title = 2131230858;
+			// aapt resource value: 0x7f080091
+			public const int label_date = 2131230865;
 			
-			// aapt resource value: 0x7f08008b
-			public const int label_version = 2131230859;
+			// aapt resource value: 0x7f080083
+			public const int label_last_updated = 2131230851;
+			
+			// aapt resource value: 0x7f080078
+			public const int label_message = 2131230840;
+			
+			// aapt resource value: 0x7f080092
+			public const int label_text = 2131230866;
+			
+			// aapt resource value: 0x7f08008c
+			public const int label_title = 2131230860;
+			
+			// aapt resource value: 0x7f08008d
+			public const int label_version = 2131230861;
 			
 			// aapt resource value: 0x7f08001b
 			public const int left = 2131230747;
 			
-			// aapt resource value: 0x7f08009b
-			public const int line1 = 2131230875;
+			// aapt resource value: 0x7f08009d
+			public const int line1 = 2131230877;
 			
-			// aapt resource value: 0x7f08009f
-			public const int line3 = 2131230879;
+			// aapt resource value: 0x7f0800a1
+			public const int line3 = 2131230881;
 			
 			// aapt resource value: 0x7f080027
 			public const int listMode = 2131230759;
 			
-			// aapt resource value: 0x7f080091
-			public const int list_attachments = 2131230865;
+			// aapt resource value: 0x7f080093
+			public const int list_attachments = 2131230867;
 			
-			// aapt resource value: 0x7f080085
-			public const int list_feedback_messages = 2131230853;
+			// aapt resource value: 0x7f080087
+			public const int list_feedback_messages = 2131230855;
 			
 			// aapt resource value: 0x7f080043
 			public const int list_item = 2131230787;
 			
+			// aapt resource value: 0x7f080096
+			public const int loadingImage = 2131230870;
+			
 			// aapt resource value: 0x7f080094
-			public const int loadingImage = 2131230868;
+			public const int loadingProgressBar = 2131230868;
 			
-			// aapt resource value: 0x7f080092
-			public const int loadingProgressBar = 2131230866;
+			// aapt resource value: 0x7f080097
+			public const int loadingProgressWheel = 2131230871;
 			
-			// aapt resource value: 0x7f080095
-			public const int loadingProgressWheel = 2131230869;
-			
-			// aapt resource value: 0x7f080099
-			public const int media_actions = 2131230873;
+			// aapt resource value: 0x7f08009b
+			public const int media_actions = 2131230875;
 			
 			// aapt resource value: 0x7f080036
 			public const int middle = 2131230774;
@@ -2465,8 +2473,8 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f08001d
 			public const int start = 2131230749;
 			
-			// aapt resource value: 0x7f080098
-			public const int status_bar_latest_event_content = 2131230872;
+			// aapt resource value: 0x7f08009a
+			public const int status_bar_latest_event_content = 2131230874;
 			
 			// aapt resource value: 0x7f080067
 			public const int submit_area = 2131230823;
@@ -2474,23 +2482,23 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f080028
 			public const int tabMode = 2131230760;
 			
-			// aapt resource value: 0x7f0800a0
-			public const int text = 2131230880;
+			// aapt resource value: 0x7f0800a2
+			public const int text = 2131230882;
 			
-			// aapt resource value: 0x7f08009e
-			public const int text2 = 2131230878;
+			// aapt resource value: 0x7f0800a0
+			public const int text2 = 2131230880;
 			
 			// aapt resource value: 0x7f08004f
 			public const int textSpacerNoButtons = 2131230799;
 			
-			// aapt resource value: 0x7f080093
-			public const int textViewStatus = 2131230867;
+			// aapt resource value: 0x7f080095
+			public const int textViewStatus = 2131230869;
 			
-			// aapt resource value: 0x7f080086
-			public const int text_headline = 2131230854;
+			// aapt resource value: 0x7f080088
+			public const int text_headline = 2131230856;
 			
-			// aapt resource value: 0x7f08009c
-			public const int time = 2131230876;
+			// aapt resource value: 0x7f08009e
+			public const int time = 2131230878;
 			
 			// aapt resource value: 0x7f080045
 			public const int title = 2131230789;
@@ -2513,14 +2521,14 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f08002e
 			public const int useLogo = 2131230766;
 			
-			// aapt resource value: 0x7f080089
-			public const int view_header = 2131230857;
+			// aapt resource value: 0x7f08008b
+			public const int view_header = 2131230859;
 			
 			// aapt resource value: 0x7f080001
 			public const int view_offset_helper = 2131230721;
 			
-			// aapt resource value: 0x7f08008d
-			public const int web_update_details = 2131230861;
+			// aapt resource value: 0x7f08008f
+			public const int web_update_details = 2131230863;
 			
 			// aapt resource value: 0x7f08003b
 			public const int withText = 2131230779;
@@ -2528,20 +2536,20 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f08002f
 			public const int wrap_content = 2131230767;
 			
-			// aapt resource value: 0x7f08007d
-			public const int wrapper_attachments = 2131230845;
+			// aapt resource value: 0x7f08007f
+			public const int wrapper_attachments = 2131230847;
 			
-			// aapt resource value: 0x7f080078
-			public const int wrapper_feedback = 2131230840;
+			// aapt resource value: 0x7f08007a
+			public const int wrapper_feedback = 2131230842;
 			
-			// aapt resource value: 0x7f080077
-			public const int wrapper_feedback_scroll = 2131230839;
-			
-			// aapt resource value: 0x7f080080
-			public const int wrapper_messages = 2131230848;
+			// aapt resource value: 0x7f080079
+			public const int wrapper_feedback_scroll = 2131230841;
 			
 			// aapt resource value: 0x7f080082
-			public const int wrapper_messages_buttons = 2131230850;
+			public const int wrapper_messages = 2131230850;
+			
+			// aapt resource value: 0x7f080084
+			public const int wrapper_messages_buttons = 2131230852;
 			
 			static Id()
 			{
