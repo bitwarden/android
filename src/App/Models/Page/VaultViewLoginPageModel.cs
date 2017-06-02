@@ -109,7 +109,25 @@ namespace Bit.App.Models.Page
             }
         }
         public bool ShowUri => !string.IsNullOrWhiteSpace(Uri);
-        public bool ShowLaunch => Uri.StartsWith("http://") || Uri.StartsWith("https://");
+
+        public bool ShowLaunch
+        {
+            get
+            {
+                if(!ShowUri)
+                {
+                    return false;
+                }
+
+                Uri uri;
+                if(!System.Uri.TryCreate(Uri, UriKind.Absolute, out uri))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
 
         public string UriHost
         {
