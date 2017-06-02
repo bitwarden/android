@@ -70,7 +70,13 @@ namespace Bit.iOS.Extension
 
         public async Task CheckFingerprintAsync()
         {
-            var result = await _fingerprint.AuthenticateAsync(AppResources.FingerprintDirection);
+            var fingerprintRequest = new AuthenticationRequestConfiguration(AppResources.FingerprintDirection)
+            {
+                AllowAlternativeAuthentication = true,
+                CancelTitle = AppResources.Cancel,
+                FallbackTitle = AppResources.LogOut
+            };
+            var result = await _fingerprint.AuthenticateAsync(fingerprintRequest);
             if(result.Authenticated)
             {
                 _appSettingsService.Locked = false;
