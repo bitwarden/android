@@ -52,7 +52,7 @@ namespace Bit.App.Pages
         private LongDetailViewCell RateCellLong { get; set; }
         private ExtendedTableView Table { get; set; }
 
-        private void Init()
+        private async void Init()
         {
             PinCell = new ExtendedSwitchCell
             {
@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                 TwoStepCell
             };
 
-            if(_fingerprint.IsAvailable)
+            if((await _fingerprint.GetAvailabilityAsync()) == FingerprintAvailability.Available)
             {
                 var fingerprintName = Helpers.OnPlatform(iOS: AppResources.TouchID, Android: AppResources.Fingerprint,
                     WinPhone: AppResources.Fingerprint);
@@ -88,7 +88,7 @@ namespace Bit.App.Pages
                 {
                     Text = string.Format(AppResources.UnlockWith, fingerprintName),
                     On = _settings.GetValueOrDefault(Constants.SettingFingerprintUnlockOn, false),
-                    IsEnabled = _fingerprint.IsAvailable
+                    IsEnabled = true
                 };
                 securitySecion.Insert(1, FingerprintCell);
             }

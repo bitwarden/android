@@ -13,22 +13,14 @@ namespace Bit.App.Pages
 {
     public class SettingsFeaturesPage : ExtendedContentPage
     {
-        private readonly IAuthService _authService;
-        private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private readonly IAppSettingsService _appSettings;
-        private readonly IFingerprint _fingerprint;
-        private readonly IPushNotification _pushNotification;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public SettingsFeaturesPage()
         {
-            _authService = Resolver.Resolve<IAuthService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
             _appSettings = Resolver.Resolve<IAppSettingsService>();
-            _fingerprint = Resolver.Resolve<IFingerprint>();
-            _pushNotification = Resolver.Resolve<IPushNotification>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();

@@ -3,6 +3,7 @@ using Bit.App.Abstractions;
 using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
 using Bit.App.Enums;
+using System.Threading.Tasks;
 
 namespace Bit.App.Services
 {
@@ -35,7 +36,7 @@ namespace Bit.App.Services
             _appSettings.LastActivity = activityDate.GetValueOrDefault(DateTime.UtcNow);
         }
 
-        public LockType GetLockType(bool forceLock)
+        public async Task<LockType> GetLockTypeAsync(bool forceLock)
         {
             // Only lock if they are logged in
             if(!_authService.IsAuthenticated)
@@ -64,7 +65,8 @@ namespace Bit.App.Services
             // What method are we using to unlock?
             var fingerprintUnlock = _settings.GetValueOrDefault(Constants.SettingFingerprintUnlockOn, false);
             var pinUnlock = _settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false);
-            if(fingerprintUnlock && _fingerprint.IsAvailable)
+            var fingerprintAvailability = await _fingerprint.GetAvailabilityAsync();
+            if(fingerprintUnlock && fingerprintAvailability == FingerprintAvailability.Available)
             {
                 return LockType.Fingerprint;
             }

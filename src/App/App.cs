@@ -4,7 +4,6 @@ using Bit.App.Abstractions;
 using Bit.App.Pages;
 using Xamarin.Forms;
 using System.Diagnostics;
-using Plugin.Fingerprint.Abstractions;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
 using Bit.App.Controls;
@@ -27,7 +26,6 @@ namespace Bit.App
         private readonly IUserDialogs _userDialogs;
         private readonly ISyncService _syncService;
         private readonly IAuthService _authService;
-        private readonly IFingerprint _fingerprint;
         private readonly ISettings _settings;
         private readonly ILockService _lockService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
@@ -42,7 +40,6 @@ namespace Bit.App
             IUserDialogs userDialogs,
             IDatabaseService databaseService,
             ISyncService syncService,
-            IFingerprint fingerprint,
             ISettings settings,
             ILockService lockService,
             IGoogleAnalyticsService googleAnalyticsService,
@@ -56,7 +53,6 @@ namespace Bit.App
             _userDialogs = userDialogs;
             _syncService = syncService;
             _authService = authService;
-            _fingerprint = fingerprint;
             _settings = settings;
             _lockService = lockService;
             _googleAnalyticsService = googleAnalyticsService;
@@ -245,7 +241,7 @@ namespace Bit.App
                 return;
             }
 
-            var lockType = _lockService.GetLockType(forceLock);
+            var lockType = await _lockService.GetLockTypeAsync(forceLock);
             if(lockType == Enums.LockType.None)
             {
                 return;

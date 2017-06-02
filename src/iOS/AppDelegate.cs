@@ -12,7 +12,6 @@ using Plugin.Connectivity;
 using Acr.UserDialogs;
 using Bit.App.Repositories;
 using Plugin.Fingerprint;
-using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
 using System.Diagnostics;
 using Xamarin.Forms;
@@ -65,7 +64,6 @@ namespace Bit.iOS
                 Resolver.Resolve<IUserDialogs>(),
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>(),
-                Resolver.Resolve<IFingerprint>(),
                 Resolver.Resolve<ISettings>(),
                 _lockService,
                 Resolver.Resolve<IGoogleAnalyticsService>(),

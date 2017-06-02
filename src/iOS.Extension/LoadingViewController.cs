@@ -100,7 +100,7 @@ namespace Bit.iOS.Extension
             }
 
             var lockService = Resolver.Resolve<ILockService>();
-            var lockType = lockService.GetLockType(false);
+            var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
             switch(lockType)
             {
                 case App.Enums.LockType.Fingerprint:
