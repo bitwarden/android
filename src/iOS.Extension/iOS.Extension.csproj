@@ -38,9 +38,8 @@
     <MtouchFloat32>False</MtouchFloat32>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
-    <MtouchExtraArgs>
-    </MtouchExtraArgs>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -63,9 +62,9 @@
     <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchFloat32>False</MtouchFloat32>
-    <MtouchExtraArgs>--linkskip=Microsoft.Practices.Unity --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -121,7 +120,8 @@
     <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=Microsoft.Practices.Unity --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
     <DebugType>none</DebugType>
@@ -146,7 +146,8 @@
     <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=Microsoft.Practices.Unity --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
     <DebugType>none</DebugType>
@@ -170,7 +171,7 @@
     <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
-    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=Microsoft.Practices.Unity --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
     <MtouchSdkVersion>10.2</MtouchSdkVersion>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -189,10 +190,10 @@
     <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchFloat32>False</MtouchFloat32>
     <OutputPath>bin\iPhoneSimulator\Ad-Hoc</OutputPath>
-    <MtouchExtraArgs>--linkskip=Microsoft.Practices.Unity --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhoneSimulator'">
@@ -209,10 +210,10 @@
     <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
-    <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchFloat32>False</MtouchFloat32>
     <OutputPath>bin\iPhoneSimulator\AppStore</OutputPath>
-    <MtouchExtraArgs>--linkskip=Microsoft.Practices.Unity --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="LockPasswordViewController.cs" />

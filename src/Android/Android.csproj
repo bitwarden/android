@@ -19,6 +19,7 @@
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
     <TargetFrameworkVersion>v7.1</TargetFrameworkVersion>
     <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
+    <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <AndroidStoreUncompressedFileExtensions />
     <MandroidI18n />
     <JavaMaximumHeapSize />
@@ -36,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
     <AndroidUseSharedRuntime>True</AndroidUseSharedRuntime>
     <AndroidLinkMode>None</AndroidLinkMode>
-    <AndroidLinkSkip>PushNotification.Plugin;PushNotification.Plugin.Abstractions;Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;Microsoft.Practices.Unity;SQLite-net;Xamarin.Android.Net</AndroidLinkSkip>
+    <AndroidLinkSkip>PushNotification.Plugin;PushNotification.Plugin.Abstractions;Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;SQLite-net;Xamarin.Android.Net</AndroidLinkSkip>
     <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
     <BundleAssemblies>False</BundleAssemblies>
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
@@ -67,7 +68,7 @@
     <EnableProguard>False</EnableProguard>
     <DebugSymbols>False</DebugSymbols>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
-    <AndroidLinkSkip>PushNotification.Plugin;PushNotification.Plugin.Abstractions;Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;Microsoft.Practices.Unity;SQLite-net;Xamarin.Android.Net</AndroidLinkSkip>
+    <AndroidLinkSkip>PushNotification.Plugin;PushNotification.Plugin.Abstractions;Xamarin.GooglePlayServices.Base;Xamarin.GooglePlayServices.Basement;Xamarin.GooglePlayServices.Measurement;Xamarin.GooglePlayServices.Gcm;BitwardenAndroid;BitwardenApp;SQLite-net;Xamarin.Android.Net</AndroidLinkSkip>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
   </PropertyGroup>
   <ItemGroup>
