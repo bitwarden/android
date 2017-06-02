@@ -825,4 +825,28 @@
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Créez une organisation pour partager de manière sécurisée vos identifiants avec d\'autres utilisateurs.</value>
   </data>
+  <data name="DisbaleGADescription" xml:space="preserve">
+    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+  </data>
+  <data name="Features" xml:space="preserve">
+    <value>Features</value>
+  </data>
+  <data name="AutofillPasswordField" xml:space="preserve">
+    <value>Scan When Password Field Focused</value>
+  </data>
+  <data name="AutofillPasswordFieldDescription" xml:space="preserve">
+    <value>Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life.</value>
+  </data>
+  <data name="AutofillPersistNotification" xml:space="preserve">
+    <value>Persist Notification</value>
+  </data>
+  <data name="AutofillPersistNotificationDescription" xml:space="preserve">
+    <value>Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life.</value>
+  </data>
+  <data name="AutofillAlways" xml:space="preserve">
+    <value>Always Scan</value>
+  </data>
+  <data name="AutofillAlwaysDescription" xml:space="preserve">
+    <value>Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting.</value>
+  </data>
 </root>
