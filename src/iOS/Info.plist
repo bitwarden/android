@@ -88,7 +88,12 @@
 		<string>en</string>
 		<string>es</string>
 		<string>zh-Hans</string>
+		<string>zh-Hant</string>
+		<string>pt-PT</string>
+		<string>pt-BR</string>
 		<string>sv</string>
+		<string>sk</string>
+		<string>it</string>
 		<string>fi</string>
 		<string>fr</string>
 	</array>

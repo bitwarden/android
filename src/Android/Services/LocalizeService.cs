@@ -52,10 +52,21 @@ namespace Bit.Android.Services
             Console.WriteLine("Android Language:" + androidLanguage);
             var netLanguage = androidLanguage;
 
-            if(netLanguage.StartsWith("zh"))
+            if(androidLanguage.StartsWith("zh"))
             {
-                // simplified chinese used for all for now
-                netLanguage = "zh-Hans";
+                if(androidLanguage.Contains("Hant"))
+                {
+                    netLanguage = "zh-Hant";
+                }
+                else
+                {
+                    netLanguage = "zh-Hans";
+                }
+            }
+            else if(androidLanguage.StartsWith("pt"))
+            {
+                // only Portuguese Europe for now
+                netLanguage = "pt-PT";
             }
             else
             {
