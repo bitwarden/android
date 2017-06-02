@@ -273,7 +273,7 @@ namespace Bit.App.Services
         {
             if(response.Key != null)
             {
-                _cryptoService.SetEncKey(new CipherString(response.PrivateKey));
+                _cryptoService.SetEncKey(new CipherString(response.Key));
             }
 
             if(response.PrivateKey != null)
