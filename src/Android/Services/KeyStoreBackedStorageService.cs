@@ -102,11 +102,12 @@ namespace Bit.Android.Services
                 end.Add(CalendarField.Year, 30);
 
                 var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
-                var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Encrypt | KeyStorePurpose.Decrypt)
-                    .SetCertificateSubject(new X500Principal($"CN={KeyAlias}"))
-                    .SetCertificateSerialNumber(BigInteger.Ten)
-                    .SetKeyValidityStart(start.Time)
-                    .SetKeyValidityEnd(end.Time)
+                var spec = new KeyPairGeneratorSpec.Builder(Application.Context)
+                    .SetAlias(KeyAlias)
+                    .SetSubject(new X500Principal($"CN={KeyAlias}"))
+                    .SetSerialNumber(BigInteger.Ten)
+                    .SetStartDate(start.Time)
+                    .SetEndDate(end.Time)
                     .Build();
 
                 gen.Initialize(spec);
