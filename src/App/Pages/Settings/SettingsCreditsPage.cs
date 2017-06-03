@@ -25,8 +25,12 @@ namespace Bit.App.Pages
                 {
                     new TableSection(AppResources.Translations)
                     {
-                        new CustomViewCell(@"@felixqu - Chinese
+                        new CustomViewCell(@"@felixqu - Chinese Simplified
+@thomassth - Chinese Traditional
 @Primokorn, @maxlandry - French
+@bestHippos - Italian
+@SW1FT - Portuguese
+@majod - Slovak
 @King-Tut-Tut - Swedish
 @Igetin - Finnish")
                     },
