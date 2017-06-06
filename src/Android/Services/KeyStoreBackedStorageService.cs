@@ -10,7 +10,6 @@ using Java.Math;
 using Android.Security.Keystore;
 using Android.App;
 using Plugin.Settings.Abstractions;
-using System.Collections.Generic;
 using Java.Util;
 
 namespace Bit.Android.Services
@@ -18,19 +17,21 @@ namespace Bit.Android.Services
     public class KeyStoreBackedStorageService : ISecureStorageService
     {
         private const string AndroidKeyStore = "AndroidKeyStore";
-        private const string AndroidOpenSSL = "AndroidOpenSSL";
         private const string KeyAlias = "bitwardenKey";
         private const string SettingsFormat = "ksSecured:{0}";
-        private const string RsaMode = "RSA/ECB/PKCS1Padding";
         private const string AesKey = "ksSecured:aesKeyForService";
 
+        private readonly string _rsaMode;
+        private readonly bool _oldAndroid;
         private readonly ISettings _settings;
         private readonly KeyStore _keyStore;
-        private readonly bool _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
         private readonly ISecureStorageService _oldKeyStorageService;
 
         public KeyStoreBackedStorageService(ISettings settings)
         {
+            _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
+            _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
+
             _oldKeyStorageService = new KeyStoreStorageService(new char[] { });
             _settings = settings;
 
@@ -118,6 +119,7 @@ namespace Bit.Android.Services
                 return;
             }
 
+            var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
             var start = Calendar.Instance;
             var end = Calendar.Instance;
             end.Add(CalendarField.Year, 30);
@@ -125,7 +127,6 @@ namespace Bit.Android.Services
 
             if(_oldAndroid)
             {
-                var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
                 var spec = new KeyPairGeneratorSpec.Builder(Application.Context)
                     .SetAlias(KeyAlias)
                     .SetSubject(subject)
@@ -135,21 +136,22 @@ namespace Bit.Android.Services
                     .Build();
 
                 gen.Initialize(spec);
-                gen.GenerateKeyPair();
             }
             else
             {
-                var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
                     .SetCertificateSubject(subject)
                     .SetCertificateSerialNumber(BigInteger.Ten)
                     .SetKeyValidityStart(start.Time)
                     .SetKeyValidityEnd(end.Time)
+                    .SetDigests(KeyProperties.DigestSha256)
+                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingRsaOaep)
                     .Build();
 
-                gen.Init(spec);
-                gen.GenerateKey();
+                gen.Initialize(spec);
             }
+
+            gen.GenerateKeyPair();
         }
 
         private KeyStore.PrivateKeyEntry GetRsaKeyEntry()
@@ -192,48 +194,26 @@ namespace Bit.Android.Services
             }
         }
 
-        private byte[] RsaEncrypt(byte[] input)
+        private byte[] RsaEncrypt(byte[] data)
         {
-            var entry = GetRsaKeyEntry();
-            var inputCipher = Cipher.GetInstance(RsaMode, AndroidOpenSSL);
-            inputCipher.Init(CipherMode.EncryptMode, entry.Certificate.PublicKey);
-
-            var outputStream = new MemoryStream();
-            var cipherStream = new CipherOutputStream(outputStream, inputCipher);
-            cipherStream.Write(input);
-            cipherStream.Close();
-
-            var vals = outputStream.ToArray();
-            outputStream.Close();
-            return vals;
+            using(var entry = GetRsaKeyEntry())
+            using(var cipher = Cipher.GetInstance(_rsaMode))
+            {
+                cipher.Init(CipherMode.EncryptMode, entry.Certificate.PublicKey);
+                var cipherText = cipher.DoFinal(data);
+                return cipherText;
+            }
         }
 
-        private byte[] RsaDecrypt(byte[] encInput)
+        private byte[] RsaDecrypt(byte[] encData)
         {
-            var entry = GetRsaKeyEntry();
-            var outputCipher = Cipher.GetInstance(RsaMode, AndroidOpenSSL);
-            outputCipher.Init(CipherMode.DecryptMode, entry.PrivateKey);
-
-            var inputStream = new MemoryStream(encInput);
-            var cipherStream = new CipherInputStream(inputStream, outputCipher);
-
-            var values = new List<byte>();
-            int nextByte;
-            while((nextByte = cipherStream.Read()) != -1)
+            using(var entry = GetRsaKeyEntry())
+            using(var cipher = Cipher.GetInstance(_rsaMode))
             {
-                values.Add((byte)nextByte);
+                cipher.Init(CipherMode.DecryptMode, entry.PrivateKey);
+                var plainText = cipher.DoFinal(encData);
+                return plainText;
             }
-
-            inputStream.Close();
-            cipherStream.Close();
-
-            var bytes = new byte[values.Count];
-            for(var i = 0; i < bytes.Length; i++)
-            {
-                bytes[i] = values[i];
-            }
-
-            return bytes;
         }
 
         private byte[] TryGetAndMigrateFromOldKeyStore(string key)
