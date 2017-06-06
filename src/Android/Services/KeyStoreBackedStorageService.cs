@@ -10,7 +10,6 @@ using Java.Math;
 using Android.Security.Keystore;
 using Android.App;
 using Plugin.Settings.Abstractions;
-using Javax.Crypto.Spec;
 using System.Collections.Generic;
 using Java.Util;
 
@@ -23,13 +22,12 @@ namespace Bit.Android.Services
         private const string KeyAlias = "bitwardenKey";
         private const string SettingsFormat = "ksSecured:{0}";
         private const string RsaMode = "RSA/ECB/PKCS1Padding";
-        private const string AesMode = "AES/GCM/NoPadding";
         private const string AesKey = "ksSecured:aesKeyForService";
 
         private readonly ISettings _settings;
         private readonly KeyStore _keyStore;
         private readonly bool _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
-        private readonly KeyStoreStorageService _oldKeyStorageService;
+        private readonly ISecureStorageService _oldKeyStorageService;
 
         public KeyStoreBackedStorageService(ISettings settings)
         {
@@ -39,7 +37,7 @@ namespace Bit.Android.Services
             _keyStore = KeyStore.GetInstance(AndroidKeyStore);
             _keyStore.Load(null);
 
-            GenerateKeys();
+            GenerateRsaKey();
             GenerateAesKey();
         }
 
@@ -62,8 +60,28 @@ namespace Bit.Android.Services
                 return TryGetAndMigrateFromOldKeyStore(key);
             }
 
-            var cipherString = _settings.GetValueOrDefault<string>(formattedKey);
-            return AesDecrypt(cipherString);
+            var cs = _settings.GetValueOrDefault<string>(formattedKey);
+            if(string.IsNullOrWhiteSpace(cs))
+            {
+                return null;
+            }
+
+            var aesKey = GetAesKey();
+            if(aesKey == null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKey);
+            }
+            catch
+            {
+                Console.WriteLine("Failed to decrypt from secure storage.");
+                _settings.Remove(formattedKey);
+                return null;
+            }
         }
 
         public void Store(string key, byte[] dataBytes)
@@ -76,35 +94,41 @@ namespace Bit.Android.Services
                 return;
             }
 
-            var cipherString = AesEncrypt(dataBytes);
-            _settings.AddOrUpdateValue(formattedKey, cipherString);
+            var aesKey = GetAesKey();
+            if(aesKey == null)
+            {
+                return;
+            }
+
+            try
+            {
+                var cipherString = App.Utilities.Crypto.AesCbcEncrypt(dataBytes, aesKey);
+                _settings.AddOrUpdateValue(formattedKey, cipherString.EncryptedString);
+            }
+            catch
+            {
+                Console.WriteLine("Failed to encrypt to secure storage.");
+            }
         }
 
-        private byte[] RandomBytes(int length)
-        {
-            var key = new byte[length];
-            var secureRandom = new SecureRandom();
-            secureRandom.NextBytes(key);
-            return key;
-        }
-
-        private void GenerateKeys()
+        private void GenerateRsaKey()
         {
             if(_keyStore.ContainsAlias(KeyAlias))
             {
                 return;
             }
 
+            var start = Calendar.Instance;
+            var end = Calendar.Instance;
+            end.Add(CalendarField.Year, 30);
+            var subject = new X500Principal($"CN={KeyAlias}");
+
             if(_oldAndroid)
             {
-                var start = Calendar.Instance;
-                var end = Calendar.Instance;
-                end.Add(CalendarField.Year, 30);
-
                 var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
                 var spec = new KeyPairGeneratorSpec.Builder(Application.Context)
                     .SetAlias(KeyAlias)
-                    .SetSubject(new X500Principal($"CN={KeyAlias}"))
+                    .SetSubject(subject)
                     .SetSerialNumber(BigInteger.Ten)
                     .SetStartDate(start.Time)
                     .SetEndDate(end.Time)
@@ -115,46 +139,16 @@ namespace Bit.Android.Services
             }
             else
             {
-                var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, AndroidKeyStore);
+                var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
-                    .SetBlockModes(KeyProperties.BlockModeGcm)
-                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
+                    .SetCertificateSubject(subject)
+                    .SetCertificateSerialNumber(BigInteger.Ten)
+                    .SetKeyValidityStart(start.Time)
+                    .SetKeyValidityEnd(end.Time)
                     .Build();
 
                 gen.Init(spec);
                 gen.GenerateKey();
-            }
-        }
-
-        private void GenerateAesKey()
-        {
-            if(!_oldAndroid)
-            {
-                return;
-            }
-
-            if(_settings.Contains(AesKey))
-            {
-                return;
-            }
-
-            var key = RandomBytes(16);
-            var encKey = RsaEncrypt(key);
-            _settings.AddOrUpdateValue(AesKey, Convert.ToBase64String(encKey));
-        }
-
-        private IKey GetAesKey()
-        {
-            if(_oldAndroid)
-            {
-                var encKey = _settings.GetValueOrDefault<string>(AesKey);
-                var encKeyBytes = Convert.FromBase64String(encKey);
-                var key = RsaDecrypt(encKeyBytes);
-                return new SecretKeySpec(key, "AES");
-            }
-            else
-            {
-                return _keyStore.GetKey(KeyAlias, null);
             }
         }
 
@@ -163,26 +157,39 @@ namespace Bit.Android.Services
             return _keyStore.GetEntry(KeyAlias, null) as KeyStore.PrivateKeyEntry;
         }
 
-        private string AesEncrypt(byte[] input)
+        private void GenerateAesKey()
         {
-            var cipher = Cipher.GetInstance(AesMode);
-            cipher.Init(CipherMode.EncryptMode, GetAesKey());
-            var encBytes = cipher.DoFinal(input);
-            var ivBytes = cipher.GetIV();
-            return $"{Convert.ToBase64String(ivBytes)}|{Convert.ToBase64String(encBytes)}";
+            if(_settings.Contains(AesKey))
+            {
+                return;
+            }
+
+            var key = App.Utilities.Crypto.RandomBytes(512 / 8);
+            var encKey = RsaEncrypt(key);
+            _settings.AddOrUpdateValue(AesKey, Convert.ToBase64String(encKey));
         }
 
-        private byte[] AesDecrypt(string cipherString)
+        private App.Models.SymmetricCryptoKey GetAesKey()
         {
-            var parts = cipherString.Split('|');
-            var ivBytes = Convert.FromBase64String(parts[0]);
-            var encBytes = Convert.FromBase64String(parts[1]);
+            try
+            {
+                var encKey = _settings.GetValueOrDefault<string>(AesKey);
+                if(encKey == null)
+                {
+                    return null;
+                }
 
-            var cipher = Cipher.GetInstance(AesMode);
-            var spec = new GCMParameterSpec(128, ivBytes);
-            cipher.Init(CipherMode.DecryptMode, GetAesKey(), spec);
-            var decBytes = cipher.DoFinal(encBytes);
-            return decBytes;
+                var encKeyBytes = Convert.FromBase64String(encKey);
+                var key = RsaDecrypt(encKeyBytes);
+                return new App.Models.SymmetricCryptoKey(key);
+            }
+            catch
+            {
+                Console.WriteLine("Cannot get AesKey.");
+                _keyStore.DeleteEntry(KeyAlias);
+                _settings.Remove(AesKey);
+                return null;
+            }
         }
 
         private byte[] RsaEncrypt(byte[] input)
