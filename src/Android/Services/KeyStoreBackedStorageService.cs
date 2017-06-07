@@ -12,6 +12,7 @@ using Android.App;
 using Plugin.Settings.Abstractions;
 using Java.Util;
 using Android.Content;
+using Javax.Crypto.Spec;
 
 namespace Bit.Android.Services
 {
@@ -215,9 +216,9 @@ namespace Bit.Android.Services
         private byte[] RsaDecrypt(byte[] encData)
         {
             using(var entry = GetRsaKeyEntry())
-            using(var cipher = Cipher.GetInstance(_rsaMode))
+            using(var cipher = Cipher.GetInstance(_rsaMode, "AndroidKeyStoreBCWorkaround"))
             {
-                cipher.Init(CipherMode.DecryptMode, entry.PrivateKey);
+                cipher.Init(CipherMode.DecryptMode, entry.PrivateKey, OAEPParameterSpec.Default);
                 var plainText = cipher.DoFinal(encData);
                 return plainText;
             }
@@ -246,18 +247,6 @@ namespace Bit.Android.Services
 
         private void SendEmail(string text)
         {
-            text += "\n\n";
-            var providers = Security.GetProviders();
-            foreach(var provider in providers)
-            {
-                text += ("provider: " + provider.Name + "\n");
-                var services = provider.Services;
-                foreach(var service in provider.Services)
-                {
-                    text += ("- algorithm: " + service.Algorithm + "\n");
-                }
-            }
-
             var emailIntent = new Intent(Intent.ActionSend);
 
             emailIntent.SetType("plain/text");
