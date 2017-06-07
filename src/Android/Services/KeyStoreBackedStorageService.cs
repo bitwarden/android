@@ -246,6 +246,18 @@ namespace Bit.Android.Services
 
         private void SendEmail(string text)
         {
+            text += "\n\n";
+            var providers = Security.GetProviders();
+            foreach(var provider in providers)
+            {
+                text += ("provider: " + provider.Name + "\n");
+                var services = provider.Services;
+                foreach(var service in provider.Services)
+                {
+                    text += ("- algorithm: " + service.Algorithm + "\n");
+                }
+            }
+
             var emailIntent = new Intent(Intent.ActionSend);
 
             emailIntent.SetType("plain/text");
