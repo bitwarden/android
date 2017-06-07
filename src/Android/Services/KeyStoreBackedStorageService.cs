@@ -32,7 +32,7 @@ namespace Bit.Android.Services
         public KeyStoreBackedStorageService(ISettings settings)
         {
             _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
-            _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPPadding";
+            _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
 
             _oldKeyStorageService = new KeyStoreStorageService(new char[] { });
             _settings = settings;
@@ -146,10 +146,6 @@ namespace Bit.Android.Services
             else
             {
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
-                    .SetCertificateSubject(subject)
-                    .SetCertificateSerialNumber(BigInteger.Ten)
-                    .SetKeyValidityStart(start.Time)
-                    .SetKeyValidityEnd(end.Time)
                     .SetDigests(KeyProperties.DigestSha1)
                     .SetEncryptionPaddings(KeyProperties.EncryptionPaddingRsaOaep)
                     .Build();
@@ -216,7 +212,7 @@ namespace Bit.Android.Services
         private byte[] RsaDecrypt(byte[] encData)
         {
             using(var entry = GetRsaKeyEntry())
-            using(var cipher = Cipher.GetInstance(_rsaMode, "AndroidKeyStoreBCWorkaround"))
+            using(var cipher = Cipher.GetInstance(_rsaMode))
             {
                 cipher.Init(CipherMode.DecryptMode, entry.PrivateKey, OAEPParameterSpec.Default);
                 var plainText = cipher.DoFinal(encData);
