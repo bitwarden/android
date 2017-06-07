@@ -142,9 +142,6 @@ namespace Bit.Android.Services
             {
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
                     .SetCertificateSubject(subject)
-                    .SetCertificateSerialNumber(BigInteger.Ten)
-                    .SetKeyValidityStart(start.Time)
-                    .SetKeyValidityEnd(end.Time)
                     .SetDigests(KeyProperties.DigestSha1)
                     .SetEncryptionPaddings(KeyProperties.EncryptionPaddingRsaOaep)
                     .Build();
