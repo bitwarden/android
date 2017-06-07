@@ -149,7 +149,7 @@ namespace Bit.Android.Services
                     .SetCertificateSerialNumber(BigInteger.Ten)
                     .SetKeyValidityStart(start.Time)
                     .SetKeyValidityEnd(end.Time)
-                    .SetDigests(KeyProperties.DigestSha256)
+                    .SetDigests(KeyProperties.DigestSha1)
                     .SetEncryptionPaddings(KeyProperties.EncryptionPaddingRsaOaep)
                     .Build();
 
