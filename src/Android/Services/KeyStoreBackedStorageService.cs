@@ -11,6 +11,7 @@ using Android.Security.Keystore;
 using Android.App;
 using Plugin.Settings.Abstractions;
 using Java.Util;
+using Android.Content;
 
 namespace Bit.Android.Services
 {
@@ -77,12 +78,13 @@ namespace Bit.Android.Services
             {
                 return App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKey);
             }
-            catch
+            catch(Exception e)
             {
                 Console.WriteLine("Failed to decrypt from secure storage.");
                 _settings.Remove(formattedKey);
-                throw;
-                //return null;
+                //throw;
+                SendEmail(e.Message + "\n\n" + e.StackTrace);
+                return null;
             }
         }
 
@@ -107,10 +109,11 @@ namespace Bit.Android.Services
                 var cipherString = App.Utilities.Crypto.AesCbcEncrypt(dataBytes, aesKey);
                 _settings.AddOrUpdateValue(formattedKey, cipherString.EncryptedString);
             }
-            catch
+            catch(Exception e)
             {
                 Console.WriteLine("Failed to encrypt to secure storage.");
-                throw;
+                SendEmail(e.Message + "\n\n" + e.StackTrace);
+                //throw;
             }
         }
 
@@ -187,13 +190,14 @@ namespace Bit.Android.Services
                 var key = RsaDecrypt(encKeyBytes);
                 return new App.Models.SymmetricCryptoKey(key);
             }
-            catch
+            catch(Exception e)
             {
                 Console.WriteLine("Cannot get AesKey.");
                 _keyStore.DeleteEntry(KeyAlias);
                 _settings.Remove(AesKey);
-                throw;
-                //return null;
+                //throw;
+                SendEmail(e.Message + "\n\n" + e.StackTrace);
+                return null;
             }
         }
 
@@ -238,6 +242,18 @@ namespace Bit.Android.Services
             {
                 _oldKeyStorageService.Delete(key);
             }
+        }
+
+        private void SendEmail(string text)
+        {
+            var emailIntent = new Intent(Intent.ActionSend);
+
+            emailIntent.SetType("plain/text");
+            emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
+            emailIntent.PutExtra(Intent.ExtraSubject, "Crash Report");
+            emailIntent.PutExtra(Intent.ExtraText, text);
+
+            Application.Context.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
         }
     }
 }
