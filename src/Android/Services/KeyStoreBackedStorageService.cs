@@ -31,7 +31,7 @@ namespace Bit.Android.Services
         public KeyStoreBackedStorageService(ISettings settings)
         {
             _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
-            _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-256AndMGF1Padding";
+            _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPPadding";
 
             _oldKeyStorageService = new KeyStoreStorageService(new char[] { });
             _settings = settings;
