@@ -102,9 +102,9 @@ namespace Bit.App.Pages
 
                 if(saveResult.Succeeded)
                 {
-                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast(AppResources.FolderUpdated);
                     _googleAnalyticsService.TrackAppEvent("EditedFolder");
+                    await Navigation.PopForDeviceAsync();
                 }
                 else if(saveResult.Errors.Count() > 0)
                 {
@@ -165,8 +165,8 @@ namespace Bit.App.Pages
 
             if(deleteTask.Succeeded)
             {
-                await Navigation.PopForDeviceAsync();
                 _userDialogs.Toast(AppResources.FolderDeleted);
+                await Navigation.PopForDeviceAsync();
             }
             else if(deleteTask.Errors.Count() > 0)
             {

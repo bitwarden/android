@@ -88,9 +88,9 @@ namespace Bit.App.Pages
 
                 if(saveResult.Succeeded)
                 {
-                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast(AppResources.FolderCreated);
                     _googleAnalyticsService.TrackAppEvent("CreatedFolder");
+                    await Navigation.PopForDeviceAsync();
                 }
                 else if(saveResult.Errors.Count() > 0)
                 {

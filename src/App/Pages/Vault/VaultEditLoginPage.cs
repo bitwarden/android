@@ -190,9 +190,9 @@ namespace Bit.App.Pages
 
                 if(saveTask.Succeeded)
                 {
-                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast(AppResources.LoginUpdated);
                     _googleAnalyticsService.TrackAppEvent("EditeLogin");
+                    await Navigation.PopForDeviceAsync();
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
@@ -307,9 +307,9 @@ namespace Bit.App.Pages
 
             if(deleteTask.Succeeded)
             {
-                await Navigation.PopForDeviceAsync();
                 _userDialogs.Toast(AppResources.LoginDeleted);
                 _googleAnalyticsService.TrackAppEvent("DeletedLogin");
+                await Navigation.PopForDeviceAsync();
             }
             else if(deleteTask.Errors.Count() > 0)
             {

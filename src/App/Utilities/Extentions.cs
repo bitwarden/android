@@ -60,6 +60,11 @@ namespace Bit.App
 
         public static async Task PopForDeviceAsync(this INavigation navigation)
         {
+            if(navigation.ModalStack.Count < 1)
+            {
+                return;
+            }
+
             await navigation.PopModalAsync(true);
         }
 

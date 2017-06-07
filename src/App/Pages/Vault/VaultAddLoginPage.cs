@@ -173,11 +173,10 @@ namespace Bit.App.Pages
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveTask = await _loginService.SaveAsync(login);
-
                 _userDialogs.HideLoading();
+
                 if(saveTask.Succeeded)
                 {
-                    await Navigation.PopForDeviceAsync();
                     _userDialogs.Toast(AppResources.NewLoginCreated);
                     if(_fromAutofill)
                     {
@@ -187,6 +186,7 @@ namespace Bit.App.Pages
                     {
                         _googleAnalyticsService.TrackAppEvent("CreatedLogin");
                     }
+                    await Navigation.PopForDeviceAsync();
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
