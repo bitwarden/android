@@ -395,6 +395,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot open the app &quot;{0}&quot;..
+        /// </summary>
+        public static string CannotOpenApp {
+            get {
+                return ResourceManager.GetString("CannotOpenApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change Email.
         /// </summary>
         public static string ChangeEmail {

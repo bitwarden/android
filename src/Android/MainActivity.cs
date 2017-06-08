@@ -14,6 +14,7 @@ using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using Bit.App.Models.Page;
+using Bit.App;
 
 namespace Bit.Android
 {
@@ -24,6 +25,7 @@ namespace Bit.Android
     public class MainActivity : FormsAppCompatActivity
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
+        private DateTime? _lastAction;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -94,6 +96,12 @@ namespace Bit.Android
             {
                 MoveTaskToBack(true);
             });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
+                Xamarin.Forms.Application.Current, "LaunchApp", (sender, args) =>
+            {
+                LaunchApp(args);
+            });
         }
 
         private void ReturnCredentials(VaultListPageModel.Login login)
@@ -118,7 +126,7 @@ namespace Bit.Android
             {
                 Parent.SetResult(Result.Ok, data);
             }
-            
+
             Finish();
         }
 
@@ -198,6 +206,27 @@ namespace Bit.Android
         {
             var intent = new Intent(global::Android.Provider.Settings.ActionAccessibilitySettings);
             StartActivity(intent);
+        }
+
+        private void LaunchApp(string packageName)
+        {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
+            packageName = packageName.Replace("androidapp://", string.Empty);
+            var launchIntent = PackageManager.GetLaunchIntentForPackage(packageName);
+            if(launchIntent == null)
+            {
+                var dialog = Resolver.Resolve<IUserDialogs>();
+                dialog.Alert(string.Format(App.Resources.AppResources.CannotOpenApp, packageName));
+            }
+            else
+            {
+                StartActivity(launchIntent);
+            }
         }
     }
 }

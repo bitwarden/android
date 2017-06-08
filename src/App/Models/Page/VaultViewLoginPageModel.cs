@@ -114,7 +114,18 @@ namespace Bit.App.Models.Page
         {
             get
             {
-                if(!ShowUri || !Uri.StartsWith("http"))
+                if(!ShowUri)
+                {
+                    return false;
+                }
+
+                if(Device.RuntimePlatform == Device.Android && !Uri.StartsWith("http") &&
+                    !Uri.StartsWith("androidapp://"))
+                {
+                    return false;
+                }
+
+                if(Device.RuntimePlatform != Device.Android && !Uri.StartsWith("http"))
                 {
                     return false;
                 }
