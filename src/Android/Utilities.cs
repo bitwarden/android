@@ -43,7 +43,6 @@ namespace Bit.Android
             emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
             emailIntent.PutExtra(Intent.ExtraSubject, "bitwarden Crash Report");
             emailIntent.PutExtra(Intent.ExtraText, text);
-            //emailIntent.SetFlags(ActivityFlags.NewTask);
 
             Application.Context.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
         }

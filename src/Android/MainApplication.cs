@@ -38,7 +38,7 @@ namespace Bit.Android
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
-            //AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
+            AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
 
             if(!Resolver.IsSet)
             {
