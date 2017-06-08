@@ -38,10 +38,29 @@ namespace Bit.Android
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
+            AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
+
             if(!Resolver.IsSet)
             {
                 SetIoc(this);
             }
+        }
+
+        private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
+        {
+            var message = AppendExceptionToMessage("", e.Exception);
+            Utilities.SendCrashEmail(message, false);
+        }
+
+        private string AppendExceptionToMessage(string message, Exception ex)
+        {
+            message += ("\n\n" + ex.Message + "\n\n" + ex.StackTrace);
+            if(ex.InnerException != null)
+            {
+                return AppendExceptionToMessage(message, ex.InnerException);
+            }
+
+            return message;
         }
 
         public override void OnCreate()

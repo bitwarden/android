@@ -30,25 +30,17 @@ namespace Bit.Android.Services
 
         public KeyStoreBackedStorageService(ISettings settings)
         {
-            try
-            {
-                _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
-                _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
+            _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
+            _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
 
-                _oldKeyStorageService = new KeyStoreStorageService(new char[] { });
-                _settings = settings;
+            _oldKeyStorageService = new KeyStoreStorageService(new char[] { });
+            _settings = settings;
 
-                _keyStore = KeyStore.GetInstance(AndroidKeyStore);
-                _keyStore.Load(null);
+            _keyStore = KeyStore.GetInstance(AndroidKeyStore);
+            _keyStore.Load(null);
 
-                GenerateRsaKey();
-                GenerateAesKey();
-            }
-            catch(Exception e)
-            {
-                Utilities.SendCrashEmail(e);
-                throw;
-            }
+            GenerateRsaKey();
+            GenerateAesKey();
         }
 
         public bool Contains(string key)
@@ -116,7 +108,7 @@ namespace Bit.Android.Services
                 var cipherString = App.Utilities.Crypto.AesCbcEncrypt(dataBytes, aesKey);
                 _settings.AddOrUpdateValue(formattedKey, cipherString.EncryptedString);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Console.WriteLine("Failed to encrypt to secure storage.");
                 Utilities.SendCrashEmail(e);
@@ -193,7 +185,7 @@ namespace Bit.Android.Services
                 var key = RsaDecrypt(encKeyBytes);
                 return new App.Models.SymmetricCryptoKey(key);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Console.WriteLine("Cannot get AesKey.");
                 _keyStore.DeleteEntry(KeyAlias);
