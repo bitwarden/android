@@ -114,7 +114,7 @@ namespace Bit.App.Models.Page
         {
             get
             {
-                if(!ShowUri)
+                if(!ShowUri || !Uri.StartsWith("http"))
                 {
                     return false;
                 }
