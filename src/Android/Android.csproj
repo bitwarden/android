@@ -331,6 +331,7 @@
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SqlService.cs" />
     <Compile Include="SplashActivity.cs" />
+    <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="8bit.keystore.enc" />

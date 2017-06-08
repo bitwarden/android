@@ -12,7 +12,6 @@ using Android.App;
 using Plugin.Settings.Abstractions;
 using Java.Util;
 using Javax.Crypto.Spec;
-using Android.Content;
 
 namespace Bit.Android.Services
 {
@@ -47,43 +46,9 @@ namespace Bit.Android.Services
             }
             catch(Exception e)
             {
-                SendEmail(e.Message + "\n\n" + e.StackTrace);
+                Utilities.SendCrashEmail(e);
                 throw;
             }
-        }
-
-        private void SendEmail(string text, bool includeSecurityProviders = true)
-        {
-            var crashMessage = "bitwarden has crashed. Please send this email to our support team so that we can help " +
-                "resolve the problem for you. Thank you.";
-
-            text = crashMessage + "\n\n =============================================== \n\n" + text;
-
-            if(includeSecurityProviders)
-            {
-                text += "\n\n";
-                var providers = Security.GetProviders();
-                foreach(var provider in providers)
-                {
-                    text += ("provider: " + provider.Name + "\n");
-                    var services = provider.Services;
-                    foreach(var service in provider.Services)
-                    {
-                        text += ("- alg: " + service.Algorithm + "\n");
-                    }
-                }
-            }
-
-            text += "\n\n ==================================================== \n\n" + crashMessage;
-
-            var emailIntent = new Intent(Intent.ActionSend);
-
-            emailIntent.SetType("plain/text");
-            emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
-            emailIntent.PutExtra(Intent.ExtraSubject, "bitwarden Crash Report");
-            emailIntent.PutExtra(Intent.ExtraText, text);
-
-            Application.Context.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
         }
 
         public bool Contains(string key)
@@ -125,7 +90,7 @@ namespace Bit.Android.Services
             {
                 Console.WriteLine("Failed to decrypt from secure storage.");
                 _settings.Remove(formattedKey);
-                SendEmail(e.Message + "\n\n" + e.StackTrace);
+                Utilities.SendCrashEmail(e);
                 return null;
             }
         }
@@ -154,7 +119,7 @@ namespace Bit.Android.Services
             catch (Exception e)
             {
                 Console.WriteLine("Failed to encrypt to secure storage.");
-                SendEmail(e.Message + "\n\n" + e.StackTrace);
+                Utilities.SendCrashEmail(e);
             }
         }
 
@@ -233,7 +198,7 @@ namespace Bit.Android.Services
                 Console.WriteLine("Cannot get AesKey.");
                 _keyStore.DeleteEntry(KeyAlias);
                 _settings.Remove(AesKey);
-                SendEmail(e.Message + "\n\n" + e.StackTrace);
+                Utilities.SendCrashEmail(e);
                 return null;
             }
         }
