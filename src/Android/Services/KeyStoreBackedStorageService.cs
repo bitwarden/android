@@ -208,7 +208,15 @@ namespace Bit.Android.Services
             using(var entry = GetRsaKeyEntry())
             using(var cipher = Cipher.GetInstance(_rsaMode))
             {
-                cipher.Init(CipherMode.DecryptMode, entry.PrivateKey, OAEPParameterSpec.Default);
+                if(_oldAndroid)
+                {
+                    cipher.Init(CipherMode.DecryptMode, entry.PrivateKey);
+                }
+                else
+                {
+                    cipher.Init(CipherMode.DecryptMode, entry.PrivateKey, OAEPParameterSpec.Default);
+                }
+
                 var plainText = cipher.DoFinal(encData);
                 return plainText;
             }
