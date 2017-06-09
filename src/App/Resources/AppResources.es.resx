@@ -849,4 +849,8 @@
   <data name="AutofillAlwaysDescription" xml:space="preserve">
     <value>Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting.</value>
   </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Cannot open the app "{0}".</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
 </root>
