@@ -8,6 +8,7 @@ using Bit.App.Abstractions;
 
 namespace Bit.Android.Services
 {
+    [System.Obsolete]
     public class KeyStoreStorageService : ISecureStorageService
     {
         private const string StorageFile = "Bit.Android.KeyStoreStorageService";

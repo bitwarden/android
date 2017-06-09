@@ -38,7 +38,7 @@ namespace Bit.Android
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
-            AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
+            // AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
 
             if(!Resolver.IsSet)
             {
@@ -215,7 +215,7 @@ namespace Bit.Android
             }
             catch
             {
-                // Some isolated devices are having a hard time generating RSA keys for key store.
+                // Some isolated devices are having a hard time generating RSA keys for the key store.
                 // Continue using the "old" keystore implementation for now.
                 secureStorage = new KeyStoreStorageService(new char[] { });
             }
