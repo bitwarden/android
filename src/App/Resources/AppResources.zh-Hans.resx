@@ -826,27 +826,31 @@
     <value>创建一个组织来安全地分享您的登录信息。</value>
   </data>
   <data name="DisbaleGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>我们会分析扩展的使用情况，以便我们改进。所有的数据收集完全是匿名的。</value>
   </data>
   <data name="Features" xml:space="preserve">
-    <value>Features</value>
+    <value>功能</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Scan When Password Field Focused</value>
+    <value>当焦点在密码字段时扫描</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life.</value>
+    <value>当你选择一个密码字段时，只扫描屏幕字段并提供自动填充通知。此设置可帮助延长电池寿命。</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Persist Notification</value>
+    <value>保持通知</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life.</value>
+    <value>总是提供自动填充通知，并且在试图自动填充后只扫描字段。此设置可帮助延长电池寿命。</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
-    <value>Always Scan</value>
+    <value>始终扫描</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting.</value>
+    <value>始终扫描屏幕上的字段，如果找到密码字段，将只提供自动填充通知。这是默认设置。</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>Cannot open the app "{0}".</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
 </root>
