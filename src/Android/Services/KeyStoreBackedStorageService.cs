@@ -123,13 +123,14 @@ namespace Bit.Android.Services
             }
 
             var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
-            var start = Calendar.Instance;
-            var end = Calendar.Instance;
-            end.Add(CalendarField.Year, 30);
             var subject = new X500Principal($"CN={KeyAlias}");
 
             if(_oldAndroid)
             {
+                var start = Calendar.Instance;
+                var end = Calendar.Instance;
+                end.Add(CalendarField.Year, 30);
+
                 var spec = new KeyPairGeneratorSpec.Builder(Application.Context)
                     .SetAlias(KeyAlias)
                     .SetSubject(subject)
