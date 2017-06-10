@@ -211,7 +211,7 @@ namespace Bit.Android
             ISecureStorageService secureStorage;
             try
             {
-                secureStorage = new KeyStoreBackedStorageService(CrossSettings.Current);
+                secureStorage = new AndroidKeyStoreStorageService(CrossSettings.Current);
             }
             catch
             {

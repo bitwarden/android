@@ -15,7 +15,7 @@ using Javax.Crypto.Spec;
 
 namespace Bit.Android.Services
 {
-    public class KeyStoreBackedStorageService : ISecureStorageService
+    public class AndroidKeyStoreStorageService : ISecureStorageService
     {
         private const string AndroidKeyStore = "AndroidKeyStore";
         private const string KeyAlias = "bitwardenKey";
@@ -28,7 +28,7 @@ namespace Bit.Android.Services
         private readonly KeyStore _keyStore;
         private readonly ISecureStorageService _oldKeyStorageService;
 
-        public KeyStoreBackedStorageService(ISettings settings)
+        public AndroidKeyStoreStorageService(ISettings settings)
         {
             _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
             _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
