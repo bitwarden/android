@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android" package="com.x8bit.bitwarden" android:versionName="1.6.5" android:installLocation="auto" android:versionCode="502">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.x8bit.bitwarden" android:versionName="1.6.5" android:installLocation="auto" android:versionCode="502" xmlns:tools="http://schemas.android.com/tools">
   <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="23" />
 
   <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-permission android:name="android.permission.USE_FINGERPRINT" />
   <uses-permission android:name="com.samsung.android.providers.context.permission.WRITE_USE_APP_FEATURE_SURVEY" />
   <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
   <uses-permission android:name="android.permission.WAKE_LOCK" />
   <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
   <uses-permission android:name="com.x8bit.bitwarden.permission.C2D_MESSAGE" />
-
-  <uses-permission android:name="android.permission.READ_CONTACTS" tools:node="remove" />
-  <uses-permission android:name="android.permission.ACCOUNT_MANAGER" tools:node="remove" />
 
   <application android:label="bitwarden" android:theme="@style/BitwardenTheme" android:allowBackup="false"></application>
 </manifest>
