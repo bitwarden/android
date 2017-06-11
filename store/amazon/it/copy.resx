@@ -130,7 +130,7 @@ Gli esperti di sicurezza raccomandano di utilizzare password casuali e diverse p
 bitwarden salva tutti i tuoi login in una cassaforte criptata che si sincronizza su tutti i tuoi dispositivi. Poichè è completamente criptata ancora prima di lasciare il tuo dispositivo, solo tu puoi accedere ai tuoi dati. Nemmeno il team di bitwarden può leggere i tuoi dati, anche se volessero. I tuoi dati sono criptati con algoritmo AES-256, salted hashing, e PBKDF2 SHA-256.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>-Sincronizza i tuoi login e password su tutti i browser e dispositivi 
+    <value>- Sincronizza i tuoi login e password su tutti i browser e dispositivi 
 - Riempii tuoi login su web e app automaticamente
 - Genera automaticamente password sicure per i tuoi login</value>
   </data>
