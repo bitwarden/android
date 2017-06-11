@@ -850,7 +850,7 @@
     <value>Skanna alltid efter fält och erbjud endast en avisering för att automatiskt fylla i en inloggning om lösenordsfält hittades. Detta är standardinställningen.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Kan inte öppna appen "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
 </root>
