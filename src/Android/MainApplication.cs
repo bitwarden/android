@@ -207,23 +207,10 @@ namespace Bit.Android
             container.RegisterSingleton(application.ApplicationContext);
             container.RegisterSingleton<Application>(application);
 
-            // Secure Storage
-            ISecureStorageService secureStorage;
-            try
-            {
-                secureStorage = new AndroidKeyStoreStorageService(CrossSettings.Current);
-            }
-            catch
-            {
-                // Some isolated devices are having a hard time generating RSA keys for the key store.
-                // Continue using the "old" keystore implementation for now.
-                secureStorage = new KeyStoreStorageService(new char[] { });
-            }
-
             // Services
             container.RegisterSingleton<IDatabaseService, DatabaseService>();
             container.RegisterSingleton<ISqlService, SqlService>();
-            container.RegisterSingleton(secureStorage);
+            container.RegisterSingleton<ISecureStorageService, AndroidKeyStoreStorageService>();
             container.RegisterSingleton<ICryptoService, CryptoService>();
             container.RegisterSingleton<IKeyDerivationService, BouncyCastleKeyDerivationService>();
             container.RegisterSingleton<IAuthService, AuthService>();

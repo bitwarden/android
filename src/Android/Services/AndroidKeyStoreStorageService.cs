@@ -18,9 +18,16 @@ namespace Bit.Android.Services
     public class AndroidKeyStoreStorageService : ISecureStorageService
     {
         private const string AndroidKeyStore = "AndroidKeyStore";
-        private const string KeyAlias = "bitwardenKey";
-        private const string SettingsFormat = "ksSecured:{0}";
-        private const string AesKey = "ksSecured:aesKeyForService";
+        private const string AesMode = "AES/GCM/NoPadding";
+
+        private const string KeyAlias = "bitwardenKey2";
+        private const string KeyAliasV1 = "bitwardenKey";
+
+        private const string SettingsFormat = "ksSecured2:{0}";
+        private const string SettingsFormatV1 = "ksSecured:{0}";
+
+        private const string AesKey = "ksSecured2:aesKeyForService";
+        private const string AesKeyV1 = "ksSecured:aesKeyForService";
 
         private readonly string _rsaMode;
         private readonly bool _oldAndroid;
@@ -39,19 +46,26 @@ namespace Bit.Android.Services
             _keyStore = KeyStore.GetInstance(AndroidKeyStore);
             _keyStore.Load(null);
 
-            GenerateRsaKey();
+            GenerateStoreKey();
             GenerateAesKey();
         }
 
         public bool Contains(string key)
         {
-            return _settings.Contains(string.Format(SettingsFormat, key)) || _oldKeyStorageService.Contains(key);
+            return _settings.Contains(string.Format(SettingsFormat, key)) ||
+                _settings.Contains(string.Format(SettingsFormatV1, key)) ||
+                _oldKeyStorageService.Contains(key);
         }
 
         public void Delete(string key)
         {
-            CleanupOldKeyStore(key);
-            _settings.Remove(string.Format(SettingsFormat, key));
+            CleanupOld(key);
+
+            var formattedKey = string.Format(SettingsFormat, key);
+            if(_settings.Contains(formattedKey))
+            {
+                _settings.Remove(formattedKey);
+            }
         }
 
         public byte[] Retrieve(string key)
@@ -59,7 +73,7 @@ namespace Bit.Android.Services
             var formattedKey = string.Format(SettingsFormat, key);
             if(!_settings.Contains(formattedKey))
             {
-                return TryGetAndMigrateFromOldKeyStore(key);
+                return TryGetAndMigrate(key);
             }
 
             var cs = _settings.GetValueOrDefault<string>(formattedKey);
@@ -90,7 +104,7 @@ namespace Bit.Android.Services
         public void Store(string key, byte[] dataBytes)
         {
             var formattedKey = string.Format(SettingsFormat, key);
-            CleanupOldKeyStore(key);
+            CleanupOld(key);
             if(dataBytes == null)
             {
                 _settings.Remove(formattedKey);
@@ -115,18 +129,16 @@ namespace Bit.Android.Services
             }
         }
 
-        private void GenerateRsaKey()
+        private void GenerateStoreKey()
         {
             if(_keyStore.ContainsAlias(KeyAlias))
             {
                 return;
             }
 
-            var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
-            var subject = new X500Principal($"CN={KeyAlias}");
-
             if(_oldAndroid)
             {
+                var subject = new X500Principal($"CN={KeyAlias}");
                 var start = Calendar.Instance;
                 var end = Calendar.Instance;
                 end.Add(CalendarField.Year, 30);
@@ -139,25 +151,26 @@ namespace Bit.Android.Services
                     .SetEndDate(end.Time)
                     .Build();
 
+                var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
                 gen.Initialize(spec);
+                gen.GenerateKeyPair();
             }
             else
             {
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
-                    .SetCertificateSubject(subject)
-                    .SetDigests(KeyProperties.DigestSha1)
-                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingRsaOaep)
+                    .SetBlockModes(KeyProperties.BlockModeGcm)
+                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
                     .Build();
 
-                gen.Initialize(spec);
+                var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, AndroidKeyStore);
+                gen.Init(spec);
+                gen.GenerateKey();
             }
-
-            gen.GenerateKeyPair();
         }
 
-        private KeyStore.PrivateKeyEntry GetRsaKeyEntry()
+        private KeyStore.PrivateKeyEntry GetRsaKeyEntry(string alias)
         {
-            return _keyStore.GetEntry(KeyAlias, null) as KeyStore.PrivateKeyEntry;
+            return _keyStore.GetEntry(alias, null) as KeyStore.PrivateKeyEntry;
         }
 
         private void GenerateAesKey()
@@ -168,23 +181,39 @@ namespace Bit.Android.Services
             }
 
             var key = App.Utilities.Crypto.RandomBytes(512 / 8);
-            var encKey = RsaEncrypt(key);
-            _settings.AddOrUpdateValue(AesKey, Convert.ToBase64String(encKey));
+            var encKey = _oldAndroid ? RsaEncrypt(key) : AesEncrypt(key);
+            _settings.AddOrUpdateValue(AesKey, encKey);
         }
 
-        private App.Models.SymmetricCryptoKey GetAesKey()
+        private App.Models.SymmetricCryptoKey GetAesKey(bool v1 = false)
         {
             try
             {
-                var encKey = _settings.GetValueOrDefault<string>(AesKey);
+                var encKey = _settings.GetValueOrDefault<string>(v1 ? AesKeyV1 : AesKey);
                 if(encKey == null)
                 {
                     return null;
                 }
 
-                var encKeyBytes = Convert.FromBase64String(encKey);
-                var key = RsaDecrypt(encKeyBytes);
-                return new App.Models.SymmetricCryptoKey(key);
+                if(_oldAndroid || v1)
+                {
+                    var encKeyBytes = Convert.FromBase64String(encKey);
+                    var key = RsaDecrypt(encKeyBytes, v1);
+                    return new App.Models.SymmetricCryptoKey(key);
+                }
+                else
+                {
+                    var parts = encKey.Split('|');
+                    if(parts.Length < 2)
+                    {
+                        return null;
+                    }
+
+                    var ivBytes = Convert.FromBase64String(parts[0]);
+                    var encKeyBytes = Convert.FromBase64String(parts[1]);
+                    var key = AesDecrypt(ivBytes, encKeyBytes);
+                    return new App.Models.SymmetricCryptoKey(key);
+                }
             }
             catch(Exception e)
             {
@@ -196,20 +225,44 @@ namespace Bit.Android.Services
             }
         }
 
-        private byte[] RsaEncrypt(byte[] data)
+        private string AesEncrypt(byte[] input)
         {
-            using(var entry = GetRsaKeyEntry())
+            using(var entry = _keyStore.GetKey(KeyAlias, null))
+            using(var cipher = Cipher.GetInstance(AesMode))
+            {
+                cipher.Init(CipherMode.EncryptMode, entry);
+                var encBytes = cipher.DoFinal(input);
+                var ivBytes = cipher.GetIV();
+                return $"{Convert.ToBase64String(ivBytes)}|{Convert.ToBase64String(encBytes)}";
+            }
+        }
+
+        private byte[] AesDecrypt(byte[] iv, byte[] encData)
+        {
+            using(var entry = _keyStore.GetKey(KeyAlias, null))
+            using(var cipher = Cipher.GetInstance(AesMode))
+            {
+                var spec = new GCMParameterSpec(128, iv);
+                cipher.Init(CipherMode.DecryptMode, entry, spec);
+                var decBytes = cipher.DoFinal(encData);
+                return decBytes;
+            }
+        }
+
+        private string RsaEncrypt(byte[] data)
+        {
+            using(var entry = GetRsaKeyEntry(KeyAlias))
             using(var cipher = Cipher.GetInstance(_rsaMode))
             {
                 cipher.Init(CipherMode.EncryptMode, entry.Certificate.PublicKey);
                 var cipherText = cipher.DoFinal(data);
-                return cipherText;
+                return Convert.ToBase64String(cipherText);
             }
         }
 
-        private byte[] RsaDecrypt(byte[] encData)
+        private byte[] RsaDecrypt(byte[] encData, bool v1)
         {
-            using(var entry = GetRsaKeyEntry())
+            using(var entry = GetRsaKeyEntry(v1 ? KeyAliasV1 : KeyAlias))
             using(var cipher = Cipher.GetInstance(_rsaMode))
             {
                 if(_oldAndroid)
@@ -226,24 +279,42 @@ namespace Bit.Android.Services
             }
         }
 
-        private byte[] TryGetAndMigrateFromOldKeyStore(string key)
+        private byte[] TryGetAndMigrate(string key)
         {
             if(_oldKeyStorageService.Contains(key))
             {
                 var value = _oldKeyStorageService.Retrieve(key);
                 Store(key, value);
-                _oldKeyStorageService.Delete(key);
                 return value;
+            }
+
+            var formattedKeyV1 = string.Format(SettingsFormatV1, key);
+            if(_settings.Contains(formattedKeyV1))
+            {
+                var aesKeyV1 = GetAesKey(true);
+                if(aesKeyV1 != null)
+                {
+                    var cs = _settings.GetValueOrDefault<string>(formattedKeyV1);
+                    var value = App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKeyV1);
+                    Store(key, value);
+                    return value;
+                }
             }
 
             return null;
         }
 
-        private void CleanupOldKeyStore(string key)
+        private void CleanupOld(string key)
         {
             if(_oldKeyStorageService.Contains(key))
             {
                 _oldKeyStorageService.Delete(key);
+            }
+
+            var formattedKeyV1 = string.Format(SettingsFormatV1, key);
+            if(_settings.Contains(formattedKeyV1))
+            {
+                _settings.Remove(formattedKeyV1);
             }
         }
     }
