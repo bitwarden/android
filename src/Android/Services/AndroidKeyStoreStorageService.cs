@@ -340,12 +340,9 @@ namespace Bit.Android.Services
             }
         }
 
-        private void ClearSettings(string prefix = null)
+        private void ClearSettings(string format = SettingsFormat)
         {
-            if(prefix == null)
-            {
-                prefix = string.Format(SettingsFormat);
-            }
+            var prefix = string.Format(format, string.Empty);
 
             using(var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(Application.Context))
             using(var sharedPreferencesEditor = sharedPreferences.Edit())
