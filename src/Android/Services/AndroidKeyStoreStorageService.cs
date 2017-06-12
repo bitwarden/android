@@ -11,6 +11,7 @@ using Android.App;
 using Plugin.Settings.Abstractions;
 using Java.Util;
 using Javax.Crypto.Spec;
+using Android.Preferences;
 
 namespace Bit.Android.Services
 {
@@ -22,6 +23,7 @@ namespace Bit.Android.Services
         private const string KeyAlias = "bitwardenKey2";
         private const string KeyAliasV1 = "bitwardenKey";
 
+        private const string SettingsPrefix = "ksSecured2";
         private const string SettingsFormat = "ksSecured2:{0}";
         private const string SettingsFormatV1 = "ksSecured:{0}";
 
@@ -91,7 +93,7 @@ namespace Bit.Android.Services
             {
                 return App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKey);
             }
-            catch(Exception)
+            catch
             {
                 Console.WriteLine("Failed to decrypt from secure storage.");
                 _settings.Remove(formattedKey);
@@ -121,7 +123,7 @@ namespace Bit.Android.Services
                 var cipherString = App.Utilities.Crypto.AesCbcEncrypt(dataBytes, aesKey);
                 _settings.AddOrUpdateValue(formattedKey, cipherString.EncryptedString);
             }
-            catch(Exception)
+            catch
             {
                 Console.WriteLine("Failed to encrypt to secure storage.");
                 //Utilities.SendCrashEmail(e);
@@ -134,6 +136,8 @@ namespace Bit.Android.Services
             {
                 return;
             }
+
+            ClearSettings();
 
             var end = Calendar.Instance;
             end.Add(CalendarField.Year, 99);
@@ -222,7 +226,7 @@ namespace Bit.Android.Services
                     return new App.Models.SymmetricCryptoKey(key);
                 }
             }
-            catch(Exception)
+            catch
             {
                 Console.WriteLine("Cannot get AesKey.");
                 _keyStore.DeleteEntry(KeyAlias);
@@ -334,6 +338,28 @@ namespace Bit.Android.Services
             if(_settings.Contains(formattedKeyV1))
             {
                 _settings.Remove(formattedKeyV1);
+            }
+        }
+
+        private void ClearSettings(string prefix = SettingsPrefix)
+        {
+            using(var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(Application.Context))
+            using(var sharedPreferencesEditor = sharedPreferences.Edit())
+            {
+                var removed = false;
+                foreach(var pref in sharedPreferences.All)
+                {
+                    if(pref.Key.StartsWith(prefix))
+                    {
+                        removed = true;
+                        sharedPreferencesEditor.Remove(pref.Key);
+                    }
+                }
+
+                if(removed)
+                {
+                    sharedPreferencesEditor.Commit();
+                }
             }
         }
     }
