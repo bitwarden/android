@@ -23,7 +23,6 @@ namespace Bit.Android.Services
         private const string KeyAlias = "bitwardenKey2";
         private const string KeyAliasV1 = "bitwardenKey";
 
-        private const string SettingsPrefix = "ksSecured2";
         private const string SettingsFormat = "ksSecured2:{0}";
         private const string SettingsFormatV1 = "ksSecured:{0}";
 
@@ -341,8 +340,13 @@ namespace Bit.Android.Services
             }
         }
 
-        private void ClearSettings(string prefix = SettingsPrefix)
+        private void ClearSettings(string prefix = null)
         {
+            if(prefix == null)
+            {
+                prefix = string.Format(SettingsFormat);
+            }
+
             using(var sharedPreferences = PreferenceManager.GetDefaultSharedPreferences(Application.Context))
             using(var sharedPreferencesEditor = sharedPreferences.Edit())
             {
