@@ -91,11 +91,11 @@ namespace Bit.Android.Services
             {
                 return App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKey);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 Console.WriteLine("Failed to decrypt from secure storage.");
                 _settings.Remove(formattedKey);
-                Utilities.SendCrashEmail(e);
+                //Utilities.SendCrashEmail(e);
                 return null;
             }
         }
@@ -121,10 +121,10 @@ namespace Bit.Android.Services
                 var cipherString = App.Utilities.Crypto.AesCbcEncrypt(dataBytes, aesKey);
                 _settings.AddOrUpdateValue(formattedKey, cipherString.EncryptedString);
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 Console.WriteLine("Failed to encrypt to secure storage.");
-                Utilities.SendCrashEmail(e);
+                //Utilities.SendCrashEmail(e);
             }
         }
 
@@ -135,18 +135,18 @@ namespace Bit.Android.Services
                 return;
             }
 
+            var end = Calendar.Instance;
+            end.Add(CalendarField.Year, 99);
+
             if(_oldAndroid)
             {
                 var subject = new X500Principal($"CN={KeyAlias}");
-                var start = Calendar.Instance;
-                var end = Calendar.Instance;
-                end.Add(CalendarField.Year, 30);
 
                 var spec = new KeyPairGeneratorSpec.Builder(Application.Context)
                     .SetAlias(KeyAlias)
                     .SetSubject(subject)
                     .SetSerialNumber(BigInteger.Ten)
-                    .SetStartDate(start.Time)
+                    .SetStartDate(new Date(0))
                     .SetEndDate(end.Time)
                     .Build();
 
@@ -159,6 +159,8 @@ namespace Bit.Android.Services
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
                     .SetBlockModes(KeyProperties.BlockModeGcm)
                     .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
+                    .SetKeyValidityStart(new Date(0))
+                    .SetKeyValidityEnd(end.Time)
                     .Build();
 
                 var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, AndroidKeyStore);
@@ -220,14 +222,14 @@ namespace Bit.Android.Services
                     return new App.Models.SymmetricCryptoKey(key);
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 Console.WriteLine("Cannot get AesKey.");
                 _keyStore.DeleteEntry(KeyAlias);
                 _settings.Remove(AesKey);
                 if(!v1)
                 {
-                    Utilities.SendCrashEmail(e);
+                    //Utilities.SendCrashEmail(e);
                 }
                 return null;
             }
@@ -312,10 +314,10 @@ namespace Bit.Android.Services
                     catch
                     {
                         Console.WriteLine("Failed to decrypt v1 from secure storage.");
-                        _settings.Remove(formattedKeyV1);
-                        return null;
                     }
                 }
+
+                _settings.Remove(formattedKeyV1);
             }
 
             return null;
