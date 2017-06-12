@@ -1,4 +1,3 @@
-using System.IO;
 using Java.Security;
 using Javax.Crypto;
 using Android.OS;
@@ -189,8 +188,14 @@ namespace Bit.Android.Services
         {
             try
             {
-                var encKey = _settings.GetValueOrDefault<string>(v1 ? AesKeyV1 : AesKey);
-                if(encKey == null)
+                var aesKey = v1 ? AesKeyV1 : AesKey;
+                if(!_settings.Contains(aesKey))
+                {
+                    return null;
+                }
+
+                var encKey = _settings.GetValueOrDefault<string>(aesKey);
+                if(string.IsNullOrWhiteSpace(encKey))
                 {
                     return null;
                 }
@@ -220,7 +225,10 @@ namespace Bit.Android.Services
                 Console.WriteLine("Cannot get AesKey.");
                 _keyStore.DeleteEntry(KeyAlias);
                 _settings.Remove(AesKey);
-                Utilities.SendCrashEmail(e);
+                if(!v1)
+                {
+                    Utilities.SendCrashEmail(e);
+                }
                 return null;
             }
         }
@@ -294,10 +302,19 @@ namespace Bit.Android.Services
                 var aesKeyV1 = GetAesKey(true);
                 if(aesKeyV1 != null)
                 {
-                    var cs = _settings.GetValueOrDefault<string>(formattedKeyV1);
-                    var value = App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKeyV1);
-                    Store(key, value);
-                    return value;
+                    try
+                    {
+                        var cs = _settings.GetValueOrDefault<string>(formattedKeyV1);
+                        var value = App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKeyV1);
+                        Store(key, value);
+                        return value;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Failed to decrypt v1 from secure storage.");
+                        _settings.Remove(formattedKeyV1);
+                        return null;
+                    }
                 }
             }
 
