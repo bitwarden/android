@@ -1,6 +1,7 @@
 ﻿using Bit.App.Models;
 using PCLCrypto;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Bit.App.Utilities
@@ -63,19 +64,14 @@ namespace Bit.App.Utilities
             return WinRTCrypto.CryptographicBuffer.GenerateRandom(length);
         }
 
-        private static string ComputeMacBase64(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
+        public static string ComputeMacBase64(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
         {
             var mac = ComputeMac(ctBytes, ivBytes, macKey);
             return Convert.ToBase64String(mac);
         }
 
-        private static byte[] ComputeMac(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
+        public static byte[] ComputeMac(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
         {
-            if(macKey == null)
-            {
-                throw new ArgumentNullException(nameof(macKey));
-            }
-
             if(ctBytes == null)
             {
                 throw new ArgumentNullException(nameof(ctBytes));
@@ -86,16 +82,31 @@ namespace Bit.App.Utilities
                 throw new ArgumentNullException(nameof(ivBytes));
             }
 
+            return ComputeMac(ivBytes.Concat(ctBytes), macKey);
+        }
+
+        public static byte[] ComputeMac(IEnumerable<byte> dataBytes, byte[] macKey)
+        {
+            if(macKey == null)
+            {
+                throw new ArgumentNullException(nameof(macKey));
+            }
+
+            if(dataBytes == null)
+            {
+                throw new ArgumentNullException(nameof(dataBytes));
+            }
+
             var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
             var hasher = algorithm.CreateHash(macKey);
-            hasher.Append(ivBytes.Concat(ctBytes).ToArray());
+            hasher.Append(dataBytes.ToArray());
             var mac = hasher.GetValueAndReset();
             return mac;
         }
 
         // Safely compare two MACs in a way that protects against timing attacks (Double HMAC Verification).
         // ref: https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2011/february/double-hmac-verification/
-        private static bool MacsEqual(byte[] macKey, byte[] mac1, byte[] mac2)
+        public static bool MacsEqual(byte[] macKey, byte[] mac1, byte[] mac2)
         {
             var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
             var hasher = algorithm.CreateHash(macKey);

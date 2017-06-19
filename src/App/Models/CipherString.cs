@@ -63,6 +63,15 @@ namespace Bit.App.Models
                     }
                     CipherText = encPieces[0];
                     break;
+                case EncryptionType.Rsa2048_OaepSha1_HmacSha256_B64:
+                case EncryptionType.Rsa2048_OaepSha256_HmacSha256_B64:
+                    if(encPieces.Length != 2)
+                    {
+                        throw new ArgumentException("Malformed encPieces.");
+                    }
+                    CipherText = encPieces[0];
+                    Mac = encPieces[1];
+                    break;
                 default:
                     throw new ArgumentException("Unknown encType.");
             }

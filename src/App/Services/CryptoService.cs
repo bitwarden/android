@@ -323,13 +323,24 @@ namespace Bit.App.Services
                 throw new ArgumentNullException(nameof(privateKey));
             }
 
+            if(EncKey?.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
+            {
+                var computedMacBytes = Crypto.ComputeMac(encyptedValue.CipherTextBytes, EncKey.MacKey);
+                if(!Crypto.MacsEqual(EncKey.MacKey, computedMacBytes, encyptedValue.MacBytes))
+                {
+                    throw new InvalidOperationException("MAC failed.");
+                }
+            }
+
             IAsymmetricKeyAlgorithmProvider provider = null;
             switch(encyptedValue.EncryptionType)
             {
                 case EncryptionType.Rsa2048_OaepSha256_B64:
+                case EncryptionType.Rsa2048_OaepSha256_HmacSha256_B64:
                     provider = WinRTCrypto.AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha256);
                     break;
                 case EncryptionType.Rsa2048_OaepSha1_B64:
+                case EncryptionType.Rsa2048_OaepSha1_HmacSha256_B64:
                     provider = WinRTCrypto.AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha1);
                     break;
                 default:
