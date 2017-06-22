@@ -1,8 +1,8 @@
 ﻿using System;
-
 using Android.App;
 using Android.Content;
 using Java.Security;
+using System.IO;
 
 namespace Bit.Android
 {
@@ -13,7 +13,39 @@ namespace Bit.Android
             SendCrashEmail(e.Message + "\n\n" + e.StackTrace, includeSecurityProviders);
         }
 
+        public static void SaveCrashFile(Exception e, bool includeSecurityProviders = true)
+        {
+            SaveCrashFile(e.Message + "\n\n" + e.StackTrace, includeSecurityProviders);
+        }
+
         public static void SendCrashEmail(string text, bool includeSecurityProviders = true)
+        {
+            var emailIntent = new Intent(Intent.ActionSend);
+
+            emailIntent.SetType("plain/text");
+            emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
+            emailIntent.PutExtra(Intent.ExtraSubject, "bitwarden Crash Report");
+            emailIntent.PutExtra(Intent.ExtraText, FormatText(text, includeSecurityProviders));
+
+            Application.Context.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
+        }
+
+        public static void SaveCrashFile(string text, bool includeSecurityProviders = true)
+        {
+            var path = global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
+            var dir = Path.Combine(path, "bitwarden");
+            if(!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            var filename = Path.Combine(dir, $"crash-{Java.Lang.JavaSystem.CurrentTimeMillis()}.txt");
+            using(var streamWriter = new StreamWriter(filename, true))
+            {
+                streamWriter.WriteLine(FormatText(text, includeSecurityProviders));
+            }
+        }
+
+        private static string FormatText(string text, bool includeSecurityProviders = true)
         {
             var crashMessage = "bitwarden has crashed. Please send this email to our support team so that we can help " +
                 "resolve the problem for you. Thank you.";
@@ -36,15 +68,7 @@ namespace Bit.Android
             }
 
             text += "\n\n ==================================================== \n\n" + crashMessage;
-
-            var emailIntent = new Intent(Intent.ActionSend);
-
-            emailIntent.SetType("plain/text");
-            emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
-            emailIntent.PutExtra(Intent.ExtraSubject, "bitwarden Crash Report");
-            emailIntent.PutExtra(Intent.ExtraText, text);
-
-            Application.Context.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
+            return text;
         }
     }
 }
