@@ -49,8 +49,8 @@ namespace Bit.Android
         private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
             var message = AppendExceptionToMessage("", e.Exception);
-            Utilities.SaveCrashFile(message, true);
-            //Utilities.SendCrashEmail(message, false);
+            //Utilities.SaveCrashFile(message, true);
+            Utilities.SendCrashEmail(message, false);
         }
 
         private string AppendExceptionToMessage(string message, Exception ex)

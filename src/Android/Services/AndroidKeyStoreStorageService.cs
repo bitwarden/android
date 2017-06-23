@@ -97,7 +97,7 @@ namespace Bit.Android.Services
                 Console.WriteLine("Failed to decrypt from secure storage.");
                 _settings.Remove(formattedKey);
                 //Utilities.SendCrashEmail(e);
-                Utilities.SaveCrashFile(e);
+                //Utilities.SaveCrashFile(e);
                 return null;
             }
         }
@@ -127,7 +127,7 @@ namespace Bit.Android.Services
             {
                 Console.WriteLine("Failed to encrypt to secure storage.");
                 //Utilities.SendCrashEmail(e);
-                Utilities.SaveCrashFile(e);
+                //Utilities.SaveCrashFile(e);
             }
         }
 
@@ -235,7 +235,7 @@ namespace Bit.Android.Services
                 if(!v1)
                 {
                     //Utilities.SendCrashEmail(e);
-                    Utilities.SaveCrashFile(e);
+                    //Utilities.SaveCrashFile(e);
                 }
                 return null;
             }
