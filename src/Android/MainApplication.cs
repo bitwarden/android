@@ -213,7 +213,7 @@ namespace Bit.Android
             {
                 secureStorage = new AndroidKeyStoreStorageService(CrossSettings.Current);
             }
-            catch (Exception e)
+            catch
             {
                 secureStorage = new KeyStoreStorageService(new char[] { });
             }
