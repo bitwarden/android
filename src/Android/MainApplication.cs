@@ -38,7 +38,7 @@ namespace Bit.Android
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
-            AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
+            //AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
 
             if(!Resolver.IsSet)
             {
@@ -208,10 +208,20 @@ namespace Bit.Android
             container.RegisterSingleton(application.ApplicationContext);
             container.RegisterSingleton<Application>(application);
 
+            ISecureStorageService secureStorage;
+            try
+            {
+                secureStorage = new AndroidKeyStoreStorageService(CrossSettings.Current);
+            }
+            catch (Exception e)
+            {
+                secureStorage = new KeyStoreStorageService(new char[] { });
+            }
+
             // Services
             container.RegisterSingleton<IDatabaseService, DatabaseService>();
             container.RegisterSingleton<ISqlService, SqlService>();
-            container.RegisterSingleton<ISecureStorageService, AndroidKeyStoreStorageService>();
+            container.RegisterSingleton(secureStorage);
             container.RegisterSingleton<ICryptoService, CryptoService>();
             container.RegisterSingleton<IKeyDerivationService, BouncyCastleKeyDerivationService>();
             container.RegisterSingleton<IAuthService, AuthService>();
