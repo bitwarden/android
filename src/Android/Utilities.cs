@@ -13,6 +13,11 @@ namespace Bit.Android
             SendCrashEmail(e.Message + "\n\n" + e.StackTrace, includeSecurityProviders);
         }
 
+        public static void SendCrashEmail(Activity act, Exception e, bool includeSecurityProviders = true)
+        {
+            SendCrashEmail(act, e.Message + "\n\n" + e.StackTrace, includeSecurityProviders);
+        }
+
         public static void SaveCrashFile(Exception e, bool includeSecurityProviders = true)
         {
             SaveCrashFile(e.Message + "\n\n" + e.StackTrace, includeSecurityProviders);
@@ -30,15 +35,22 @@ namespace Bit.Android
             Application.Context.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
         }
 
+        public static void SendCrashEmail(Activity act, string text, bool includeSecurityProviders = true)
+        {
+            var emailIntent = new Intent(Intent.ActionSend);
+
+            emailIntent.SetType("plain/text");
+            emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
+            emailIntent.PutExtra(Intent.ExtraSubject, "bitwarden Crash Report");
+            emailIntent.PutExtra(Intent.ExtraText, FormatText(text, includeSecurityProviders));
+
+            act.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
+        }
+
         public static void SaveCrashFile(string text, bool includeSecurityProviders = true)
         {
-            var path = global::Android.OS.Environment.ExternalStorageDirectory.AbsolutePath;
-            var dir = Path.Combine(path, "bitwarden");
-            if(!Directory.Exists(dir))
-            {
-                Directory.CreateDirectory(dir);
-            }
-            var filename = Path.Combine(dir, $"crash-{Java.Lang.JavaSystem.CurrentTimeMillis()}.txt");
+            var path = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var filename = Path.Combine(path, $"crash-{Java.Lang.JavaSystem.CurrentTimeMillis()}.txt");
             using(var streamWriter = new StreamWriter(filename, true))
             {
                 streamWriter.WriteLine(FormatText(text, includeSecurityProviders));
@@ -69,6 +81,17 @@ namespace Bit.Android
 
             text += "\n\n ==================================================== \n\n" + crashMessage;
             return text;
+        }
+
+        public static string AppendExceptionToMessage(string message, Exception ex)
+        {
+            message += ("\n\n" + ex.Message + "\n\n" + ex.StackTrace);
+            if(ex.InnerException != null)
+            {
+                return AppendExceptionToMessage(message, ex.InnerException);
+            }
+
+            return message;
         }
     }
 }

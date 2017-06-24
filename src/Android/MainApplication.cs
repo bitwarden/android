@@ -24,9 +24,9 @@ using SimpleInjector;
 namespace Bit.Android
 {
 #if DEBUG
-    [Application(Debuggable = true)]
+    //[Application(Debuggable = true)]
 #else
-    [Application(Debuggable = false)]
+    //[Application(Debuggable = false)]
 #endif
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {
@@ -48,20 +48,9 @@ namespace Bit.Android
 
         private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
         {
-            var message = AppendExceptionToMessage("", e.Exception);
+            var message = Utilities.AppendExceptionToMessage("", e.Exception);
             //Utilities.SaveCrashFile(message, true);
             Utilities.SendCrashEmail(message, false);
-        }
-
-        private string AppendExceptionToMessage(string message, Exception ex)
-        {
-            message += ("\n\n" + ex.Message + "\n\n" + ex.StackTrace);
-            if(ex.InnerException != null)
-            {
-                return AppendExceptionToMessage(message, ex.InnerException);
-            }
-
-            return message;
         }
 
         public override void OnCreate()
