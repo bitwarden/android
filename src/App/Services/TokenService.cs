@@ -168,7 +168,8 @@ namespace Bit.App.Services
 
         public string GetTwoFactorToken(string email)
         {
-            var tokenBytes = _secureStorage.Retrieve(string.Format(TwoFactorTokenKeyFormat, email));
+            var emailEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(email));
+            var tokenBytes = _secureStorage.Retrieve(string.Format(TwoFactorTokenKeyFormat, emailEncoded));
             if(tokenBytes == null)
             {
                 return null;
@@ -179,7 +180,8 @@ namespace Bit.App.Services
 
         public void SetTwoFactorToken(string email, string token)
         {
-            var key = string.Format(TwoFactorTokenKeyFormat, email);
+            var emailEncoded = Convert.ToBase64String(Encoding.UTF8.GetBytes(email));
+            var key = string.Format(TwoFactorTokenKeyFormat, emailEncoded);
             if(token != null)
             {
                 var tokenBytes = Encoding.UTF8.GetBytes(token);
