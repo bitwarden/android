@@ -1,4 +1,5 @@
-﻿using Bit.App.Models;
+﻿using Bit.App.Enums;
+using Bit.App.Models;
 using System.Threading.Tasks;
 
 namespace Bit.App.Abstractions
@@ -15,6 +16,7 @@ namespace Bit.App.Abstractions
         bool BelongsToOrganization(string orgId);
         void LogOut();
         Task<FullLoginResult> TokenPostAsync(string email, string masterPassword);
-        Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash, SymmetricCryptoKey key);
+        Task<LoginResult> TokenPostTwoFactorAsync(TwoFactorProviderType type, string token, bool remember, string email,
+            string masterPasswordHash, SymmetricCryptoKey key);
     }
 }

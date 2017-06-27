@@ -8,6 +8,7 @@ using Plugin.Connectivity.Abstractions;
 using System.Net;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using Bit.App.Enums;
 
 namespace Bit.App.Repositories
 {
@@ -46,11 +47,13 @@ namespace Bit.App.Repositories
                     if(!response.IsSuccessStatusCode)
                     {
                         var errorResponse = JObject.Parse(responseContent);
-                        if(errorResponse["TwoFactorProviders"] != null)
+                        if(errorResponse["TwoFactorProviders2"] != null)
                         {
                             return ApiResult<TokenResponse>.Success(new TokenResponse
                             {
-                                TwoFactorProviders = errorResponse["TwoFactorProviders"].ToObject<List<int>>()
+                                TwoFactorProviders2 =
+                                    errorResponse["TwoFactorProviders2"]
+                                    .ToObject<Dictionary<TwoFactorProviderType, Dictionary<string, object>>>()
                             }, response.StatusCode);
                         }
 

@@ -6,6 +6,7 @@ using Bit.App.Models.Api;
 using Plugin.Settings.Abstractions;
 using Bit.App.Models;
 using System.Linq;
+using Bit.App.Enums;
 
 namespace Bit.App.Services
 {
@@ -230,11 +231,11 @@ namespace Bit.App.Services
             }
 
             result.Success = true;
-            if(response.Result.TwoFactorProviders != null && response.Result.TwoFactorProviders.Count > 0)
+            if(response.Result.TwoFactorProviders2 != null && response.Result.TwoFactorProviders2.Count > 0)
             {
                 result.Key = key;
                 result.MasterPasswordHash = request.MasterPasswordHash;
-                result.TwoFactorRequired = true;
+                result.TwoFactorProviders = response.Result.TwoFactorProviders2;
                 return result;
             }
 
@@ -242,17 +243,18 @@ namespace Bit.App.Services
             return result;
         }
 
-        public async Task<LoginResult> TokenPostTwoFactorAsync(string token, string email, string masterPasswordHash,
-            SymmetricCryptoKey key)
+        public async Task<LoginResult> TokenPostTwoFactorAsync(TwoFactorProviderType type, string token, bool remember,
+            string email, string masterPasswordHash, SymmetricCryptoKey key)
         {
             var result = new LoginResult();
 
             var request = new TokenRequest
             {
+                Remember = remember,
                 Email = email.Trim().ToLower(),
                 MasterPasswordHash = masterPasswordHash,
-                Token = token.Trim().Replace(" ", ""),
-                Provider = 0, // Authenticator app (only 1 provider for now, so hard coded)
+                Token = token,
+                Provider = type,
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 

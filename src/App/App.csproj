@@ -81,6 +81,7 @@
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
     <Compile Include="Controls\VaultListViewCell.cs" />
+    <Compile Include="Enums\TwoFactorProviderType.cs" />
     <Compile Include="Enums\EncryptionType.cs" />
     <Compile Include="Enums\OrganizationUserType.cs" />
     <Compile Include="Enums\LockType.cs" />

@@ -1,4 +1,7 @@
-﻿namespace Bit.App.Models
+﻿using Bit.App.Enums;
+using System.Collections.Generic;
+
+namespace Bit.App.Models
 {
     public class LoginResult
     {
@@ -8,7 +11,8 @@
 
     public class FullLoginResult : LoginResult
     {
-        public bool TwoFactorRequired { get; set; }
+        public bool TwoFactorRequired => TwoFactorProviders != null && TwoFactorProviders.Count > 0;
+        public Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProviders { get; set; }
         public SymmetricCryptoKey Key { get; set; }
         public string MasterPasswordHash { get; set; }
     }

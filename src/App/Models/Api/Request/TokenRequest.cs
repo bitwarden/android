@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Bit.App.Models.Api
@@ -8,10 +9,11 @@ namespace Bit.App.Models.Api
         public string Email { get; set; }
         public string MasterPasswordHash { get; set; }
         public string Token { get; set; }
-        public int? Provider { get; set; }
+        public TwoFactorProviderType? Provider { get; set; }
         [Obsolete]
         public string OldAuthBearer { get; set; }
         public DeviceRequest Device { get; set; }
+        public bool Remember { get; set; }
 
         public IDictionary<string, string> ToIdentityTokenRequest()
         {
@@ -40,7 +42,8 @@ namespace Bit.App.Models.Api
             if(Token != null && Provider.HasValue)
             {
                 dict.Add("TwoFactorToken", Token);
-                dict.Add("TwoFactorProvider", Provider.Value.ToString());
+                dict.Add("TwoFactorProvider", ((byte)(Provider.Value)).ToString());
+                dict.Add("TwoFactorRemember", Remember ? "1" : "0");
             }
 
             return dict;

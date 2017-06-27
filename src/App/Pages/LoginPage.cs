@@ -192,7 +192,7 @@ namespace Bit.App.Pages
             if(result.TwoFactorRequired)
             {
                 _googleAnalyticsService.TrackAppEvent("LoggedIn To Two-step");
-                await Navigation.PushAsync(new LoginTwoFactorPage(EmailCell.Entry.Text, result.MasterPasswordHash, result.Key));
+                await Navigation.PushAsync(new LoginTwoFactorPage(EmailCell.Entry.Text, result));
                 return;
             }
 
