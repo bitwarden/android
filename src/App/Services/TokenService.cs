@@ -9,6 +9,7 @@ namespace Bit.App.Services
     {
         private const string TokenKey = "accessToken";
         private const string RefreshTokenKey = "refreshToken";
+        private const string TwoFactorTokenKey = "twoFactorToken";
         private const string AuthBearerKey = "token";
 
         private readonly ISecureStorageService _secureStorage;
@@ -162,6 +163,32 @@ namespace Bit.App.Services
                 }
 
                 _authBearer = value;
+            }
+        }
+
+        public string TwoFactorToken
+        {
+            get
+            {
+                var tokenBytes = _secureStorage.Retrieve(TwoFactorTokenKey);
+                if(tokenBytes == null)
+                {
+                    return null;
+                }
+
+                return Encoding.UTF8.GetString(tokenBytes, 0, tokenBytes.Length);
+            }
+            set
+            {
+                if(value != null)
+                {
+                    var tokenBytes = Encoding.UTF8.GetBytes(value);
+                    _secureStorage.Store(TwoFactorTokenKey, tokenBytes);
+                }
+                else
+                {
+                    _secureStorage.Delete(TwoFactorTokenKey);
+                }
             }
         }
 

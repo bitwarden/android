@@ -5,7 +5,6 @@ using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
-using System.Net;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Bit.App.Enums;
@@ -49,6 +48,8 @@ namespace Bit.App.Repositories
                         var errorResponse = JObject.Parse(responseContent);
                         if(errorResponse["TwoFactorProviders2"] != null)
                         {
+                            TokenService.TwoFactorToken = null;
+
                             return ApiResult<TokenResponse>.Success(new TokenResponse
                             {
                                 TwoFactorProviders2 =

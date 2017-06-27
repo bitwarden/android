@@ -189,6 +189,8 @@ namespace Bit.App.Pages
                 return;
             }
 
+            PasswordCell.Entry.Text = string.Empty;
+
             if(result.TwoFactorRequired)
             {
                 _googleAnalyticsService.TrackAppEvent("LoggedIn To Two-step");
