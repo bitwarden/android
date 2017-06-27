@@ -15,7 +15,6 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using Bit.App.Models.Page;
 using Bit.App;
-using Android.Runtime;
 
 namespace Bit.Android
 {
@@ -30,8 +29,6 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
-            AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
-
             var uri = Intent.GetStringExtra("uri");
             if(!Resolver.IsSet)
             {
@@ -105,12 +102,6 @@ namespace Bit.Android
             {
                 LaunchApp(args);
             });
-        }
-
-        private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
-        {
-            var message = Utilities.AppendExceptionToMessage("", e.Exception);
-            Utilities.SendCrashEmail(this, e.Exception, true);
         }
 
         private void ReturnCredentials(VaultListPageModel.Login login)

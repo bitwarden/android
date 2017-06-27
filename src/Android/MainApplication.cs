@@ -24,9 +24,9 @@ using SimpleInjector;
 namespace Bit.Android
 {
 #if DEBUG
-    //[Application(Debuggable = true)]
+    [Application(Debuggable = true)]
 #else
-    //[Application(Debuggable = false)]
+    [Application(Debuggable = false)]
 #endif
     public class MainApplication : Application, Application.IActivityLifecycleCallbacks
     {
@@ -197,20 +197,10 @@ namespace Bit.Android
             container.RegisterSingleton(application.ApplicationContext);
             container.RegisterSingleton<Application>(application);
 
-            ISecureStorageService secureStorage;
-            try
-            {
-                secureStorage = new AndroidKeyStoreStorageService(CrossSettings.Current);
-            }
-            catch
-            {
-                secureStorage = new KeyStoreStorageService(new char[] { });
-            }
-
             // Services
             container.RegisterSingleton<IDatabaseService, DatabaseService>();
             container.RegisterSingleton<ISqlService, SqlService>();
-            container.RegisterSingleton(secureStorage);
+            container.RegisterSingleton<ISecureStorageService, AndroidKeyStoreStorageService>();
             container.RegisterSingleton<ICryptoService, CryptoService>();
             container.RegisterSingleton<IKeyDerivationService, BouncyCastleKeyDerivationService>();
             container.RegisterSingleton<IAuthService, AuthService>();
