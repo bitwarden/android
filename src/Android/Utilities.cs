@@ -3,10 +3,6 @@ using Android.App;
 using Android.Content;
 using Java.Security;
 using System.IO;
-using Java.IO;
-using Java.Security.Cert;
-using Android.Util;
-using Android.Content.PM;
 
 namespace Bit.Android
 {
@@ -96,45 +92,6 @@ namespace Bit.Android
             }
 
             return message;
-        }
-
-        public static string GetFacetID(Application aContext, int callingUid)
-        {
-            var packageNames = aContext.PackageManager.GetPackagesForUid(callingUid);
-            if(packageNames == null)
-            {
-                return null;
-            }
-
-            try
-            {
-                var info = aContext.PackageManager.GetPackageInfo(packageNames[0], PackageInfoFlags.Signatures);
-
-                byte[] cert = info.Signatures[0].ToByteArray();
-                var input = new MemoryStream(cert);
-
-                var cf = CertificateFactory.GetInstance("X509");
-                var c = (X509Certificate)cf.GenerateCertificate(input);
-
-                var md = MessageDigest.GetInstance("SHA1");
-
-                return "android:apk-key-hash:" + Base64.EncodeToString(md.Digest(c.GetEncoded()),
-                          Base64Flags.Default | Base64Flags.NoPadding | Base64Flags.NoWrap);
-            }
-            catch(PackageManager.NameNotFoundException e)
-            {
-                e.PrintStackTrace();
-            }
-            catch(CertificateException e)
-            {
-                e.PrintStackTrace();
-            }
-            catch(NoSuchAlgorithmException e)
-            {
-                e.PrintStackTrace();
-            }
-
-            return null;
         }
     }
 }

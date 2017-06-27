@@ -105,10 +105,6 @@ namespace Bit.Android
             {
                 LaunchApp(args);
             });
-
-            var appid = Utilities.GetFacetID(Application, Process.MyUid());
-            Console.WriteLine("APPID: " + appid);
-            Utilities.SendCrashEmail(appid);
         }
 
         private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
