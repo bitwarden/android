@@ -27,11 +27,13 @@ namespace Bit.App.Pages
         private readonly SymmetricCryptoKey _key;
         private readonly Dictionary<TwoFactorProviderType, Dictionary<string, object>> _providers;
         private readonly TwoFactorProviderType? _providerType;
+        private readonly FullLoginResult _result;
 
         public LoginTwoFactorPage(string email, FullLoginResult result, TwoFactorProviderType? type = null)
             : base(updateActivity: false)
         {
             _email = email;
+            _result = result;
             _masterPasswordHash = result.MasterPasswordHash;
             _key = result.Key;
             _providers = result.TwoFactorProviders;
@@ -128,7 +130,7 @@ namespace Bit.App.Pages
                     Text = "Use another two-step login method",
                     Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                     Margin = new Thickness(15, 0, 15, 25),
-                    Command = new Command(() => AnotherMethod()),
+                    Command = new Command(() => AnotherMethodAsync()),
                     Uppercase = false,
                     BackgroundColor = Color.Transparent
                 };
@@ -208,9 +210,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private void AnotherMethod()
+        private async void AnotherMethodAsync()
         {
-
+            await Navigation.PushForDeviceAsync(new TwoFactorMethodsPage(_email, _result));
         }
 
         private void SendEmail()
