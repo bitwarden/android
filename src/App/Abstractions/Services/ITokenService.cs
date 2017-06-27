@@ -8,7 +8,8 @@ namespace Bit.App.Abstractions
         string RefreshToken { get; set; }
         [Obsolete("Old auth scheme")]
         string AuthBearer { get; set; }
-        string TwoFactorToken { get; set; }
+        string GetTwoFactorToken(string email);
+        void SetTwoFactorToken(string email, string token);
         DateTime TokenExpiration { get; }
         string TokenIssuer { get; }
         bool TokenExpired { get; }

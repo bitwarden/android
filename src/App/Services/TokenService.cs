@@ -9,7 +9,7 @@ namespace Bit.App.Services
     {
         private const string TokenKey = "accessToken";
         private const string RefreshTokenKey = "refreshToken";
-        private const string TwoFactorTokenKey = "twoFactorToken";
+        private const string TwoFactorTokenKeyFormat = "twoFactorToken_{0}";
         private const string AuthBearerKey = "token";
 
         private readonly ISecureStorageService _secureStorage;
@@ -166,29 +166,28 @@ namespace Bit.App.Services
             }
         }
 
-        public string TwoFactorToken
+        public string GetTwoFactorToken(string email)
         {
-            get
+            var tokenBytes = _secureStorage.Retrieve(string.Format(TwoFactorTokenKeyFormat, email));
+            if(tokenBytes == null)
             {
-                var tokenBytes = _secureStorage.Retrieve(TwoFactorTokenKey);
-                if(tokenBytes == null)
-                {
-                    return null;
-                }
-
-                return Encoding.UTF8.GetString(tokenBytes, 0, tokenBytes.Length);
+                return null;
             }
-            set
+
+            return Encoding.UTF8.GetString(tokenBytes, 0, tokenBytes.Length);
+        }
+
+        public void SetTwoFactorToken(string email, string token)
+        {
+            var key = string.Format(TwoFactorTokenKeyFormat, email);
+            if(token != null)
             {
-                if(value != null)
-                {
-                    var tokenBytes = Encoding.UTF8.GetBytes(value);
-                    _secureStorage.Store(TwoFactorTokenKey, tokenBytes);
-                }
-                else
-                {
-                    _secureStorage.Delete(TwoFactorTokenKey);
-                }
+                var tokenBytes = Encoding.UTF8.GetBytes(token);
+                _secureStorage.Store(key, tokenBytes);
+            }
+            else
+            {
+                _secureStorage.Delete(key);
             }
         }
 

@@ -48,7 +48,7 @@ namespace Bit.App.Repositories
                         var errorResponse = JObject.Parse(responseContent);
                         if(errorResponse["TwoFactorProviders2"] != null)
                         {
-                            TokenService.TwoFactorToken = null;
+                            TokenService.SetTwoFactorToken(requestObj.Email, null);
 
                             return ApiResult<TokenResponse>.Success(new TokenResponse
                             {

@@ -222,7 +222,7 @@ namespace Bit.App.Services
                 Device = new DeviceRequest(_appIdService, _deviceInfoService)
             };
 
-            var twoFactorToken = _tokenService.TwoFactorToken;
+            var twoFactorToken = _tokenService.GetTwoFactorToken(normalizedEmail);
             if(!string.IsNullOrWhiteSpace(twoFactorToken))
             {
                 request.Token = twoFactorToken;
@@ -281,11 +281,6 @@ namespace Bit.App.Services
 
         private async Task ProcessLoginSuccessAsync(SymmetricCryptoKey key, TokenResponse response)
         {
-            if(!string.IsNullOrWhiteSpace(response.TwoFactorToken))
-            {
-                _tokenService.TwoFactorToken = response.TwoFactorToken;
-            }
-
             if(response.Key != null)
             {
                 _cryptoService.SetEncKey(new CipherString(response.Key));
@@ -310,6 +305,11 @@ namespace Bit.App.Services
                 {
                     _cryptoService.SetOrgKeys(profile.Result);
                 }
+            }
+
+            if(!string.IsNullOrWhiteSpace(response.TwoFactorToken))
+            {
+                _tokenService.SetTwoFactorToken(_tokenService.TokenEmail, response.TwoFactorToken);
             }
         }
     }
