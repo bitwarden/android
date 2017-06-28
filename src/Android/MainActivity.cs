@@ -15,6 +15,7 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using Bit.App.Models.Page;
 using Bit.App;
+using Android.Nfc;
 
 namespace Bit.Android
 {
@@ -26,6 +27,7 @@ namespace Bit.Android
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
         private DateTime? _lastAction;
+        private Java.Util.Regex.Pattern _otpPattern = Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -101,6 +103,12 @@ namespace Bit.Android
                 Xamarin.Forms.Application.Current, "LaunchApp", (sender, args) =>
             {
                 LaunchApp(args);
+            });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(
+                Xamarin.Forms.Application.Current, "ListenYubiKeyOTP", (sender) =>
+            {
+                ListenYubiKey();
             });
         }
 
@@ -226,6 +234,38 @@ namespace Bit.Android
             else
             {
                 StartActivity(launchIntent);
+            }
+        }
+
+        private void ListenYubiKey()
+        {
+            var intent = new Intent(this, Class);
+            intent.AddFlags(ActivityFlags.SingleTop);
+            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
+
+            // register for all NDEF tags starting with http och https
+            var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
+            ndef.AddDataScheme("http");
+            ndef.AddDataScheme("https");
+
+            // register for foreground dispatch so we'll receive tags according to our intent filters
+            var adapter = NfcAdapter.GetDefaultAdapter(this);
+            adapter.EnableForegroundDispatch(this, pendingIntent, new IntentFilter[] { ndef }, null);
+
+            var data = Intent.DataString;
+            if(data != null)
+            {
+                var otpMatch = _otpPattern.Matcher(data);
+                if(otpMatch.Matches())
+                {
+                    var otp = otpMatch.Group(1);
+                    Console.WriteLine("Got OTP: " + otp);
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", otp);
+                }
+                else
+                {
+                    Console.WriteLine("Data from ndef didn't match, it was: " + data);
+                }
             }
         }
     }
