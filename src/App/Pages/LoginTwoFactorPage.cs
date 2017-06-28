@@ -12,6 +12,7 @@ using Bit.App.Utilities;
 using Bit.App.Enums;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace Bit.App.Pages
 {
@@ -50,16 +51,11 @@ namespace Bit.App.Pages
 
         public FormEntryCell TokenCell { get; set; }
         public ExtendedSwitchCell RememberCell { get; set; }
+        public HybridWebView WebView { get; set; }
 
         private void Init()
         {
             var scrollView = new ScrollView();
-
-            var continueToolbarItem = new ToolbarItem(AppResources.Continue, null, async () =>
-            {
-                var token = TokenCell?.Entry.Text.Trim().Replace(" ", "");
-                await LogInAsync(token);
-            }, ToolbarItemOrder.Default, 0);
 
             if(!_providerType.HasValue)
             {
@@ -72,8 +68,15 @@ namespace Bit.App.Pages
                 };
                 scrollView.Content = noProviderLabel;
             }
-            else
+            else if(_providerType.Value == TwoFactorProviderType.Authenticator ||
+                _providerType.Value == TwoFactorProviderType.Email)
             {
+                var continueToolbarItem = new ToolbarItem(AppResources.Continue, null, async () =>
+                {
+                    var token = TokenCell?.Entry.Text.Trim().Replace(" ", "");
+                    await LogInAsync(token, RememberCell.On);
+                }, ToolbarItemOrder.Default, 0);
+
                 var padding = Helpers.OnPlatform(
                     iOS: new Thickness(15, 20),
                     Android: new Thickness(15, 8),
@@ -109,7 +112,6 @@ namespace Bit.App.Pages
                         }
                     }
                 };
-
 
                 if(Device.RuntimePlatform == Device.iOS)
                 {
@@ -150,9 +152,6 @@ namespace Bit.App.Pages
                         layout.Children.Add(instruction);
                         layout.Children.Add(table);
                         layout.Children.Add(anotherMethodButton);
-
-                        ToolbarItems.Add(continueToolbarItem);
-                        Title = AppResources.VerificationCode;
                         break;
                     case TwoFactorProviderType.Email:
                         var emailParams = _providers[TwoFactorProviderType.Email];
@@ -173,18 +172,37 @@ namespace Bit.App.Pages
                         layout.Children.Add(table);
                         layout.Children.Add(resendEmailButton);
                         layout.Children.Add(anotherMethodButton);
-
-                        ToolbarItems.Add(continueToolbarItem);
-                        Title = AppResources.VerificationCode;
-                        break;
-                    case TwoFactorProviderType.Duo:
                         break;
                     default:
                         break;
                 }
-            }
 
-            Content = scrollView;
+                ToolbarItems.Add(continueToolbarItem);
+                Title = AppResources.VerificationCode;
+
+                Content = scrollView;
+            }
+            else if(_providerType == TwoFactorProviderType.Duo)
+            {
+                var duoParams = _providers[TwoFactorProviderType.Duo];
+
+                var host = WebUtility.UrlEncode(duoParams["Host"].ToString());
+                var req = WebUtility.UrlEncode(duoParams["Signature"].ToString());
+
+                WebView = new HybridWebView
+                {
+                    Uri = $"http://192.168.1.6:4001/duo-mobile.html?host={host}&request={req}",
+                    HorizontalOptions = LayoutOptions.FillAndExpand,
+                    VerticalOptions = LayoutOptions.FillAndExpand
+                };
+                WebView.RegisterAction(async (sig) =>
+                {
+                    await LogInAsync(sig, false);
+                });
+
+                Title = "Duo";
+                Content = WebView;
+            }
         }
 
         protected override void OnAppearing()
@@ -228,10 +246,10 @@ namespace Bit.App.Pages
         private async void Entry_Completed(object sender, EventArgs e)
         {
             var token = TokenCell.Entry.Text.Trim().Replace(" ", "");
-            await LogInAsync(token);
+            await LogInAsync(token, RememberCell.On);
         }
 
-        private async Task LogInAsync(string token)
+        private async Task LogInAsync(string token, bool remember)
         {
             if(string.IsNullOrWhiteSpace(token))
             {
@@ -241,7 +259,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.ValidatingCode, MaskType.Black);
-            var response = await _authService.TokenPostTwoFactorAsync(_providerType.Value, token, RememberCell.On,
+            var response = await _authService.TokenPostTwoFactorAsync(_providerType.Value, token, remember,
                 _email, _masterPasswordHash, _key);
             _userDialogs.HideLoading();
             if(!response.Success)
@@ -258,7 +276,11 @@ namespace Bit.App.Pages
             }
 
             var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-            Application.Current.MainPage = new MainPage();
+
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Application.Current.MainPage = new MainPage();
+            });
         }
 
         private TwoFactorProviderType? GetDefaultProvider()

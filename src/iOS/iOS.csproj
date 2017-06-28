@@ -217,6 +217,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controls\ContentPageRenderer.cs" />
+    <Compile Include="Controls\HybridWebViewRenderer.cs" />
     <Compile Include="Controls\ExtendedButtonRenderer.cs" />
     <Compile Include="Controls\CustomButtonRenderer.cs" />
     <Compile Include="Controls\CustomLabelRenderer.cs" />

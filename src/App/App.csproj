@@ -59,6 +59,7 @@
     <Compile Include="Abstractions\Services\ISecureStorageService.cs" />
     <Compile Include="Abstractions\Services\ISqlService.cs" />
     <Compile Include="Constants.cs" />
+    <Compile Include="Controls\HybridWebView.cs" />
     <Compile Include="Controls\ExtendedToolbarItem.cs" />
     <Compile Include="Controls\DismissModalToolBarItem.cs" />
     <Compile Include="Controls\ExtendedEditor.cs" />

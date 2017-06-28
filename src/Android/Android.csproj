@@ -116,6 +116,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Export" />
     <Reference Include="mscorlib" />
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
@@ -302,6 +303,7 @@
     <Compile Include="AutofillCredentials.cs" />
     <Compile Include="Controls\CustomSearchBarRenderer.cs" />
     <Compile Include="Controls\CustomButtonRenderer.cs" />
+    <Compile Include="Controls\HybridWebViewRenderer.cs" />
     <Compile Include="Controls\ExtendedButtonRenderer.cs" />
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
