@@ -5,5 +5,6 @@
         string Model { get; }
         int Version { get; }
         float Scale { get; }
+        bool NfcEnabled { get; }
     }
 }

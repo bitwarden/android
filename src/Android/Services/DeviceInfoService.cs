@@ -1,6 +1,6 @@
 using Android.App;
+using Android.Nfc;
 using Android.OS;
-using Android.Util;
 using Bit.App.Abstractions;
 
 namespace Bit.Android.Services
@@ -40,6 +40,15 @@ namespace Bit.Android.Services
                 }
 
                 return 1f;
+            }
+        }
+        public bool NfcEnabled
+        {
+            get
+            {
+                var manager = (NfcManager)Application.Context.GetSystemService("nfc");
+                var adapter = manager.DefaultAdapter;
+                return adapter != null && adapter.IsEnabled;
             }
         }
     }
