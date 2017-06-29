@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using Bit.App.Models.Page;
 using Bit.App;
 using Android.Nfc;
+using Android.Views.InputMethods;
 
 namespace Bit.Android
 {
@@ -77,6 +78,12 @@ namespace Bit.Android
                 Resolver.Resolve<ILocalizeService>(),
                 Resolver.Resolve<IAppInfoService>(),
                 Resolver.Resolve<IAppSettingsService>()));
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(
+                Xamarin.Forms.Application.Current, "DismissKeyboard", (sender) =>
+            {
+                DismissKeyboard();
+            });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "RateApp", (sender) =>
             {
@@ -292,6 +299,16 @@ namespace Bit.Android
                 var otp = otpMatch.Group(1);
                 MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", otp);
             }
+        }
+
+        private void DismissKeyboard()
+        {
+            try
+            {
+                var imm = (InputMethodManager)GetSystemService(InputMethodService);
+                imm.HideSoftInputFromWindow(CurrentFocus.WindowToken, 0);
+            }
+            catch { }
         }
     }
 }

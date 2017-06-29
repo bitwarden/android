@@ -71,7 +71,7 @@ namespace Bit.App.Pages
 
             var anotherMethodButton = new ExtendedButton
             {
-                Text = "Use another two-step login method",
+                Text = AppResources.UseAnotherTwoStepMethod,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                 Margin = new Thickness(15, 0, 15, 25),
                 Command = new Command(() => AnotherMethodAsync()),
@@ -89,13 +89,13 @@ namespace Bit.App.Pages
 
             RememberCell = new ExtendedSwitchCell
             {
-                Text = "Remember me",
+                Text = AppResources.RememberMe,
                 On = false
             };
 
             if(!_providerType.HasValue)
             {
-                instruction.Text = "No providers available.";
+                instruction.Text = AppResources.NoTwoStepAvailable;
 
                 var layout = new StackLayout
                 {
@@ -105,7 +105,7 @@ namespace Bit.App.Pages
 
                 scrollView.Content = layout;
 
-                Title = "Login Unavailable";
+                Title = AppResources.LoginUnavailable;
                 Content = scrollView;
             }
             else if(_providerType.Value == TwoFactorProviderType.Authenticator ||
@@ -146,17 +146,17 @@ namespace Bit.App.Pages
                 switch(_providerType.Value)
                 {
                     case TwoFactorProviderType.Authenticator:
-                        instruction.Text = "Enter the 6 digit verification code from your authenticator app.";
+                        instruction.Text = AppResources.EnterVerificationCodeApp;
                         layout.Children.Add(anotherMethodButton);
                         break;
                     case TwoFactorProviderType.Email:
                         var emailParams = _providers[TwoFactorProviderType.Email];
                         var redactedEmail = emailParams["Email"].ToString();
 
-                        instruction.Text = $"Enter the 6 digit verification code that was emailed to {redactedEmail}.";
+                        instruction.Text = string.Format(AppResources.EnterVerificationCodeEmail, redactedEmail);
                         var resendEmailButton = new ExtendedButton
                         {
-                            Text = "Send verification code email again",
+                            Text = AppResources.SendVerificationCodeAgain,
                             Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                             Margin = new Thickness(15, 0, 15, 0),
                             Command = new Command(async () => await SendEmailAsync(true)),
@@ -176,6 +176,7 @@ namespace Bit.App.Pages
                 Title = AppResources.VerificationCode;
 
                 Content = scrollView;
+                TokenCell.Entry.FocusWithDelay();
             }
             else if(_providerType == TwoFactorProviderType.Duo)
             {
@@ -215,7 +216,7 @@ namespace Bit.App.Pages
             }
             else if(_providerType == TwoFactorProviderType.YubiKey)
             {
-                instruction.Text = "Hold your YubiKey NEO against the back of the device to continue.";
+                instruction.Text = AppResources.YubiKeyInstruction;
 
                 var image = new CachedImage
                 {
@@ -241,7 +242,7 @@ namespace Bit.App.Pages
 
                 scrollView.Content = layout;
 
-                Title = "YubiKey";
+                Title = AppResources.YubiKeyTitle;
                 Content = scrollView;
             }
         }
@@ -254,8 +255,11 @@ namespace Bit.App.Pages
             if(TokenCell != null)
             {
                 TokenCell.InitEvents();
-                TokenCell.Entry.FocusWithDelay();
                 TokenCell.Entry.Completed += Entry_Completed;
+            }
+            else if(Device.RuntimePlatform == Device.Android)
+            {
+                MessagingCenter.Send(Application.Current, "DismissKeyboard");
             }
         }
 
@@ -278,7 +282,7 @@ namespace Bit.App.Pages
             var options = new List<string>();
             if(_providers.ContainsKey(TwoFactorProviderType.Authenticator))
             {
-                options.Add("Authenticator App");
+                options.Add(AppResources.AuthenticatorAppTitle);
             }
 
             if(_providers.ContainsKey(TwoFactorProviderType.Duo))
@@ -292,19 +296,20 @@ namespace Bit.App.Pages
                     (bool)_providers[TwoFactorProviderType.YubiKey]["Nfc"];
                 if(_deviceInfoService.NfcEnabled || nfcKey)
                 {
-                    options.Add("YubiKey NFC Security Key");
+                    options.Add(AppResources.YubiKeyTitle);
                 }
             }
 
             if(_providers.ContainsKey(TwoFactorProviderType.Email))
             {
-                options.Add("Email");
+                options.Add(AppResources.Email);
             }
 
-            options.Add("Recovery Code");
+            options.Add(AppResources.RecoveryCodeTitle);
 
-            var selection = await DisplayActionSheet("Two-step Login Options", AppResources.Cancel, null, options.ToArray());
-            if(selection == "Authenticator App")
+            var selection = await DisplayActionSheet(AppResources.TwoStepLoginOptions, AppResources.Cancel, null,
+                options.ToArray());
+            if(selection == AppResources.AuthenticatorAppTitle)
             {
                 _providerType = TwoFactorProviderType.Authenticator;
             }
@@ -312,15 +317,15 @@ namespace Bit.App.Pages
             {
                 _providerType = TwoFactorProviderType.Duo;
             }
-            else if(selection == "YubiKey NFC Security Key")
+            else if(selection == AppResources.YubiKeyTitle)
             {
                 _providerType = TwoFactorProviderType.YubiKey;
             }
-            else if(selection == "Email")
+            else if(selection == AppResources.Email)
             {
                 _providerType = TwoFactorProviderType.Email;
             }
-            else if(selection == "Recovery Code")
+            else if(selection == AppResources.RecoveryCodeTitle)
             {
                 Device.OpenUri(new Uri("https://help.bitwarden.com/article/lost-two-step-device/"));
                 return;
@@ -349,11 +354,11 @@ namespace Bit.App.Pages
 
             if(response.Succeeded && doToast)
             {
-                _userDialogs.Toast("Verification email sent.");
+                _userDialogs.Toast(AppResources.VerificationEmailSent);
             }
             else if(!response.Succeeded)
             {
-                _userDialogs.Alert("Could not send verification email. Try again.");
+                _userDialogs.Alert(AppResources.VerificationEmailNotSent);
             }
         }
 

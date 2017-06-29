@@ -143,6 +143,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authenticator App.
+        /// </summary>
+        public static string AuthenticatorAppTitle {
+            get {
+                return ResourceManager.GetString("AuthenticatorAppTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto-fill.
         /// </summary>
         public static string Autofill {
@@ -710,11 +719,20 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Enter your two-step verification code..
+        ///   Looks up a localized string similar to Enter the 6 digit verification code from your authenticator app..
         /// </summary>
-        public static string EnterVerificationCode {
+        public static string EnterVerificationCodeApp {
             get {
-                return ResourceManager.GetString("EnterVerificationCode", resourceCulture);
+                return ResourceManager.GetString("EnterVerificationCodeApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the 6 digit verification code that was emailed to {0}..
+        /// </summary>
+        public static string EnterVerificationCodeEmail {
+            get {
+                return ResourceManager.GetString("EnterVerificationCodeEmail", resourceCulture);
             }
         }
         
@@ -1232,6 +1250,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Login Unavailable.
+        /// </summary>
+        public static string LoginUnavailable {
+            get {
+                return ResourceManager.GetString("LoginUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login updated..
         /// </summary>
         public static string LoginUpdated {
@@ -1475,6 +1502,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported supported device and/or add additional providers that are better supported across devices (such as an authenticator app)..
+        /// </summary>
+        public static string NoTwoStepAvailable {
+            get {
+                return ResourceManager.GetString("NoTwoStepAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This login does not have a username or password configured..
         /// </summary>
         public static string NoUsernamePasswordConfigured {
@@ -1637,11 +1673,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recovery Code.
+        /// </summary>
+        public static string RecoveryCodeTitle {
+            get {
+                return ResourceManager.GetString("RecoveryCodeTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Regenerate Password.
         /// </summary>
         public static string RegeneratePassword {
             get {
                 return ResourceManager.GetString("RegeneratePassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remember me.
+        /// </summary>
+        public static string RememberMe {
+            get {
+                return ResourceManager.GetString("RememberMe", resourceCulture);
             }
         }
         
@@ -1714,6 +1768,15 @@ namespace Bit.App.Resources {
         public static string Select {
             get {
                 return ResourceManager.GetString("Select", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Send verification code email again.
+        /// </summary>
+        public static string SendVerificationCodeAgain {
+            get {
+                return ResourceManager.GetString("SendVerificationCodeAgain", resourceCulture);
             }
         }
         
@@ -1898,6 +1961,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Two-step Login Options.
+        /// </summary>
+        public static string TwoStepLoginOptions {
+            get {
+                return ResourceManager.GetString("TwoStepLoginOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlock with {0}.
         /// </summary>
         public static string UnlockWith {
@@ -1921,6 +1993,15 @@ namespace Bit.App.Resources {
         public static string URI {
             get {
                 return ResourceManager.GetString("URI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use another two-step login method.
+        /// </summary>
+        public static string UseAnotherTwoStepMethod {
+            get {
+                return ResourceManager.GetString("UseAnotherTwoStepMethod", resourceCulture);
             }
         }
         
@@ -1975,6 +2056,24 @@ namespace Bit.App.Resources {
         public static string VerificationCode {
             get {
                 return ResourceManager.GetString("VerificationCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not send verification email. Try again..
+        /// </summary>
+        public static string VerificationEmailNotSent {
+            get {
+                return ResourceManager.GetString("VerificationEmailNotSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verification email sent..
+        /// </summary>
+        public static string VerificationEmailSent {
+            get {
+                return ResourceManager.GetString("VerificationEmailSent", resourceCulture);
             }
         }
         
@@ -2083,6 +2182,24 @@ namespace Bit.App.Resources {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hold your YubiKey NEO against the back of the device to continue..
+        /// </summary>
+        public static string YubiKeyInstruction {
+            get {
+                return ResourceManager.GetString("YubiKeyInstruction", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to YubiKey NEO Security Key.
+        /// </summary>
+        public static string YubiKeyTitle {
+            get {
+                return ResourceManager.GetString("YubiKeyTitle", resourceCulture);
             }
         }
     }
