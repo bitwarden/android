@@ -3,11 +3,19 @@ using Android.App;
 using Android.Content;
 using Java.Security;
 using System.IO;
+using Android.Nfc;
 
 namespace Bit.Android
 {
     public static class Utilities
     {
+        public static bool NfcEnabled()
+        {
+            var manager = (NfcManager)Application.Context.GetSystemService("nfc");
+            var adapter = manager.DefaultAdapter;
+            return adapter != null && adapter.IsEnabled;
+        }
+
         public static void SendCrashEmail(Exception e, bool includeSecurityProviders = true)
         {
             SendCrashEmail(e.Message + "\n\n" + e.StackTrace, includeSecurityProviders);

@@ -2744,8 +2744,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0200e4
 			public const int notification_sm = 2130837732;
 			
-			// aapt resource value: 0x7f0200f3
-			public const int notification_template_icon_bg = 2130837747;
+			// aapt resource value: 0x7f0200f4
+			public const int notification_template_icon_bg = 2130837748;
 			
 			// aapt resource value: 0x7f0200e5
 			public const int plus = 2130837733;
@@ -2788,6 +2788,9 @@ namespace Bit.Android
 			
 			// aapt resource value: 0x7f0200f2
 			public const int user = 2130837746;
+			
+			// aapt resource value: 0x7f0200f3
+			public const int yubikey = 2130837747;
 			
 			static Drawable()
 			{

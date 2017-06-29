@@ -13,14 +13,17 @@ using Bit.App.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
     public class LoginTwoFactorPage : ExtendedContentPage
     {
+        private DateTime? _lastAction;
         private IAuthService _authService;
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
+        private IDeviceInfoService _deviceInfoService;
         private IGoogleAnalyticsService _googleAnalyticsService;
         private IPushNotification _pushNotification;
         private readonly string _email;
@@ -33,6 +36,8 @@ namespace Bit.App.Pages
         public LoginTwoFactorPage(string email, FullLoginResult result, TwoFactorProviderType? type = null)
             : base(updateActivity: false)
         {
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
+
             _email = email;
             _result = result;
             _masterPasswordHash = result.MasterPasswordHash;
@@ -47,26 +52,54 @@ namespace Bit.App.Pages
             _pushNotification = Resolver.Resolve<IPushNotification>();
 
             Init();
+
+            SubscribeYubiKey(true);
         }
 
         public FormEntryCell TokenCell { get; set; }
         public ExtendedSwitchCell RememberCell { get; set; }
-        public HybridWebView WebView { get; set; }
 
         private void Init()
         {
             var scrollView = new ScrollView();
 
+            var anotherMethodButton = new ExtendedButton
+            {
+                Text = "Use another two-step login method",
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                Margin = new Thickness(15, 0, 15, 25),
+                Command = new Command(() => AnotherMethodAsync()),
+                Uppercase = false,
+                BackgroundColor = Color.Transparent
+            };
+
+            var instruction = new Label
+            {
+                LineBreakMode = LineBreakMode.WordWrap,
+                Margin = new Thickness(15),
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+
+            RememberCell = new ExtendedSwitchCell
+            {
+                Text = "Remember me",
+                On = false
+            };
+
             if(!_providerType.HasValue)
             {
-                var noProviderLabel = new Label
+                instruction.Text = "No providers available.";
+
+                var layout = new StackLayout
                 {
-                    Text = "No provider.",
-                    LineBreakMode = LineBreakMode.WordWrap,
-                    Margin = new Thickness(15),
-                    HorizontalTextAlignment = TextAlignment.Center
+                    Children = { instruction, anotherMethodButton },
+                    Spacing = 0
                 };
-                scrollView.Content = noProviderLabel;
+
+                scrollView.Content = layout;
+
+                Title = "Login Unavailable";
+                Content = scrollView;
             }
             else if(_providerType.Value == TwoFactorProviderType.Authenticator ||
                 _providerType.Value == TwoFactorProviderType.Email)
@@ -88,54 +121,12 @@ namespace Bit.App.Pages
                 TokenCell.Entry.Keyboard = Keyboard.Numeric;
                 TokenCell.Entry.ReturnType = ReturnType.Go;
 
-                RememberCell = new ExtendedSwitchCell
-                {
-                    Text = "Remember me",
-                    On = false
-                };
-
-                var table = new ExtendedTableView
-                {
-                    Intent = TableIntent.Settings,
-                    EnableScrolling = false,
-                    HasUnevenRows = true,
-                    EnableSelection = true,
-                    NoFooter = true,
-                    NoHeader = true,
-                    VerticalOptions = LayoutOptions.Start,
-                    Root = new TableRoot
+                var table = new TwoFactorTable(
+                    new TableSection(" ")
                     {
-                        new TableSection(" ")
-                        {
-                            TokenCell,
-                            RememberCell
-                        }
-                    }
-                };
-
-                if(Device.RuntimePlatform == Device.iOS)
-                {
-                    table.RowHeight = -1;
-                    table.EstimatedRowHeight = 70;
-                }
-
-                var instruction = new Label
-                {
-                    Text = AppResources.EnterVerificationCode,
-                    LineBreakMode = LineBreakMode.WordWrap,
-                    Margin = new Thickness(15),
-                    HorizontalTextAlignment = TextAlignment.Center
-                };
-
-                var anotherMethodButton = new ExtendedButton
-                {
-                    Text = "Use another two-step login method",
-                    Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                    Margin = new Thickness(15, 0, 15, 25),
-                    Command = new Command(() => AnotherMethodAsync()),
-                    Uppercase = false,
-                    BackgroundColor = Color.Transparent
-                };
+                        TokenCell,
+                        RememberCell
+                    });
 
                 var layout = new StackLayout
                 {
@@ -189,25 +180,57 @@ namespace Bit.App.Pages
                 var host = WebUtility.UrlEncode(duoParams["Host"].ToString());
                 var req = WebUtility.UrlEncode(duoParams["Signature"].ToString());
 
-                WebView = new HybridWebView
+                var webView = new HybridWebView
                 {
                     Uri = $"http://192.168.1.6:4001/duo-mobile.html?host={host}&request={req}",
                     HorizontalOptions = LayoutOptions.FillAndExpand,
                     VerticalOptions = LayoutOptions.FillAndExpand
                 };
-                WebView.RegisterAction(async (sig) =>
+                webView.RegisterAction(async (sig) =>
                 {
                     await LogInAsync(sig, false);
                 });
 
                 Title = "Duo";
-                Content = WebView;
+                Content = webView;
+            }
+            else if(_providerType == TwoFactorProviderType.YubiKey)
+            {
+                instruction.Text = "Hold your YubiKey NEO against the back of the device to continue.";
+
+                var image = new CachedImage
+                {
+                    Source = "yubikey",
+                    VerticalOptions = LayoutOptions.Start,
+                    HorizontalOptions = LayoutOptions.Center,
+                    WidthRequest = 266,
+                    HeightRequest = 160,
+                    Margin = new Thickness(0, 0, 0, 25)
+                };
+
+                var table = new TwoFactorTable(
+                    new TableSection(" ")
+                    {
+                        RememberCell
+                    });
+
+                var layout = new StackLayout
+                {
+                    Children = { instruction, image, table, anotherMethodButton },
+                    Spacing = 0
+                };
+
+                scrollView.Content = layout;
+
+                Title = "YubiKey";
+                Content = scrollView;
             }
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            ListenYubiKey(true);
 
             if(TokenCell != null)
             {
@@ -220,6 +243,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            ListenYubiKey(false);
 
             if(TokenCell != null)
             {
@@ -251,6 +275,12 @@ namespace Bit.App.Pages
 
         private async Task LogInAsync(string token, bool remember)
         {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
             if(string.IsNullOrWhiteSpace(token))
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
@@ -264,6 +294,7 @@ namespace Bit.App.Pages
             _userDialogs.HideLoading();
             if(!response.Success)
             {
+                ListenYubiKey(true);
                 await DisplayAlert(AppResources.AnErrorHasOccurred, response.ErrorMessage, AppResources.Ok);
                 return;
             }
@@ -299,7 +330,7 @@ namespace Bit.App.Pages
                     switch(p.Key)
                     {
                         case TwoFactorProviderType.Authenticator:
-                            if(provider == TwoFactorProviderType.Duo)
+                            if(provider == TwoFactorProviderType.Duo || provider == TwoFactorProviderType.YubiKey)
                             {
                                 continue;
                             }
@@ -311,6 +342,16 @@ namespace Bit.App.Pages
                             }
                             break;
                         case TwoFactorProviderType.Duo:
+                            if(provider == TwoFactorProviderType.YubiKey)
+                            {
+                                continue;
+                            }
+                            break;
+                        case TwoFactorProviderType.YubiKey:
+                            if(!_deviceInfoService.NfcEnabled)
+                            {
+                                continue;
+                            }
                             break;
                         default:
                             continue;
@@ -321,6 +362,77 @@ namespace Bit.App.Pages
             }
 
             return provider;
+        }
+
+        private void ListenYubiKey(bool listen)
+        {
+            if(_providerType == TwoFactorProviderType.YubiKey)
+            {
+                MessagingCenter.Send(Application.Current, "ListenYubiKeyOTP", listen);
+            }
+        }
+
+        private void SubscribeYubiKey(bool subscribe)
+        {
+            if(_providerType != TwoFactorProviderType.YubiKey)
+            {
+                return;
+            }
+
+            MessagingCenter.Unsubscribe<Application, string>(Application.Current, "GotYubiKeyOTP");
+            MessagingCenter.Unsubscribe<Application>(Application.Current, "ResumeYubiKey");
+            if(!subscribe)
+            {
+                return;
+            }
+
+            MessagingCenter.Subscribe<Application, string>(Application.Current, "GotYubiKeyOTP", async (sender, otp) =>
+            {
+                MessagingCenter.Unsubscribe<Application, string>(Application.Current, "GotYubiKeyOTP");
+                if(_providerType == TwoFactorProviderType.YubiKey)
+                {
+                    await LogInAsync(otp, RememberCell.On);
+                }
+            });
+
+            SubscribeYubiKeyResume();
+        }
+
+        private void SubscribeYubiKeyResume()
+        {
+            MessagingCenter.Subscribe<Application>(Application.Current, "ResumeYubiKey", (sender) =>
+            {
+                MessagingCenter.Unsubscribe<Application>(Application.Current, "ResumeYubiKey");
+                if(_providerType == TwoFactorProviderType.YubiKey)
+                {
+                    MessagingCenter.Send(Application.Current, "ListenYubiKeyOTP", true);
+                    SubscribeYubiKeyResume();
+                }
+            });
+        }
+
+        public class TwoFactorTable : ExtendedTableView
+        {
+            public TwoFactorTable(TableSection section)
+            {
+                Intent = TableIntent.Settings;
+                EnableScrolling = false;
+                HasUnevenRows = true;
+                EnableSelection = true;
+                NoFooter = true;
+                NoHeader = true;
+                VerticalOptions = LayoutOptions.Start;
+                Root = Root = new TableRoot
+                {
+                    section
+                };
+
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    RowHeight = -1;
+                    EstimatedRowHeight = 70;
+                }
+            }
         }
     }
 }

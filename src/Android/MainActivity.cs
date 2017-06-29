@@ -51,7 +51,7 @@ namespace Bit.Android
 
             Console.WriteLine("A OnCreate");
             Window.SetSoftInputMode(SoftInput.StateHidden);
-            Window.AddFlags(WindowManagerFlags.Secure);
+            //Window.AddFlags(WindowManagerFlags.Secure);
 
             var appIdService = Resolver.Resolve<IAppIdService>();
             var authService = Resolver.Resolve<IAuthService>();
@@ -105,10 +105,10 @@ namespace Bit.Android
                 LaunchApp(args);
             });
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(
-                Xamarin.Forms.Application.Current, "ListenYubiKeyOTP", (sender) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(
+                Xamarin.Forms.Application.Current, "ListenYubiKeyOTP", (sender, listen) =>
             {
-                ListenYubiKey();
+                ListenYubiKey(listen);
             });
         }
 
@@ -142,6 +142,7 @@ namespace Bit.Android
         {
             Console.WriteLine("A OnPause");
             base.OnPause();
+            ListenYubiKey(false);
         }
 
         protected override void OnDestroy()
@@ -176,6 +177,18 @@ namespace Bit.Android
             // workaround for app compat bug
             // ref https://bugzilla.xamarin.com/show_bug.cgi?id=36907
             Task.Delay(10).Wait();
+
+            if(Utilities.NfcEnabled())
+            {
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "ResumeYubiKey");
+            }
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            Console.WriteLine("A OnNewIntent");
+            ParseYubiKey(intent.DataString);
         }
 
         public void RateApp()
@@ -237,35 +250,47 @@ namespace Bit.Android
             }
         }
 
-        private void ListenYubiKey()
+        private void ListenYubiKey(bool listen)
         {
-            var intent = new Intent(this, Class);
-            intent.AddFlags(ActivityFlags.SingleTop);
-            var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
-
-            // register for all NDEF tags starting with http och https
-            var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
-            ndef.AddDataScheme("http");
-            ndef.AddDataScheme("https");
-
-            // register for foreground dispatch so we'll receive tags according to our intent filters
-            var adapter = NfcAdapter.GetDefaultAdapter(this);
-            adapter.EnableForegroundDispatch(this, pendingIntent, new IntentFilter[] { ndef }, null);
-
-            var data = Intent.DataString;
-            if(data != null)
+            if(!Utilities.NfcEnabled())
             {
-                var otpMatch = _otpPattern.Matcher(data);
-                if(otpMatch.Matches())
-                {
-                    var otp = otpMatch.Group(1);
-                    Console.WriteLine("Got OTP: " + otp);
-                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", otp);
-                }
-                else
-                {
-                    Console.WriteLine("Data from ndef didn't match, it was: " + data);
-                }
+                return;
+            }
+
+            var adapter = NfcAdapter.GetDefaultAdapter(this);
+            if(listen)
+            {
+                var intent = new Intent(this, Class);
+                intent.AddFlags(ActivityFlags.SingleTop);
+                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
+
+                // register for all NDEF tags starting with http och https
+                var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
+                ndef.AddDataScheme("http");
+                ndef.AddDataScheme("https");
+                var filters = new IntentFilter[] { ndef };
+
+                // register for foreground dispatch so we'll receive tags according to our intent filters
+                adapter.EnableForegroundDispatch(this, pendingIntent, filters, null);
+            }
+            else
+            {
+                adapter.DisableForegroundDispatch(this);
+            }
+        }
+
+        private void ParseYubiKey(string data)
+        {
+            if(data == null)
+            {
+                return;
+            }
+
+            var otpMatch = _otpPattern.Matcher(data);
+            if(otpMatch.Matches())
+            {
+                var otp = otpMatch.Group(1);
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", otp);
             }
         }
     }
