@@ -42,7 +42,7 @@ namespace Bit.iOS.Controls
 
             if(e.NewElement != null)
             {
-                Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri, false)));
+                Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
             }
         }
 
