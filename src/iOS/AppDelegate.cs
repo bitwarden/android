@@ -280,6 +280,7 @@ namespace Bit.iOS
             container.RegisterSingleton<ICipherApiRepository, CipherApiRepository>();
             container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
             container.RegisterSingleton<ISettingsApiRepository, SettingsApiRepository>();
+            container.RegisterSingleton<ITwoFactorApiRepository, TwoFactorApiRepository>();
 
             // Other
             container.RegisterSingleton(CrossConnectivity.Current);

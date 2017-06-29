@@ -728,8 +728,8 @@
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Unlock with PIN Code</value>
   </data>
-  <data name="ValidatingCode" xml:space="preserve">
-    <value>Validating code...</value>
+  <data name="Validating" xml:space="preserve">
+    <value>Validating</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">

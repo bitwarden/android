@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Abstractions\Repositories\ITwoFactorApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ISettingsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IAccountsApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Models\Api\Request\DeviceTokenRequest.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
+    <Compile Include="Models\Api\Request\TwoFactorEmailRequest.cs" />
     <Compile Include="Models\Api\Request\RegisterRequest.cs" />
     <Compile Include="Models\Api\Request\LoginRequest.cs" />
     <Compile Include="Models\Api\Request\PasswordHintRequest.cs" />
@@ -135,7 +137,6 @@
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\Lock\BaseLockPage.cs" />
     <Compile Include="Pages\Lock\LockPasswordPage.cs" />
-    <Compile Include="Pages\TwoFactorMethodsPage.cs" />
     <Compile Include="Pages\LoginTwoFactorPage.cs" />
     <Compile Include="Pages\PasswordHintPage.cs" />
     <Compile Include="Pages\RegisterPage.cs" />
@@ -159,6 +160,7 @@
     <Compile Include="Pages\Vault\VaultAutofillListLoginsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Abstractions\Repositories\ILoginRepository.cs" />
+    <Compile Include="Repositories\TwoFactorApiRepository.cs" />
     <Compile Include="Repositories\SettingsApiRepository.cs" />
     <Compile Include="Repositories\ApiRepository.cs" />
     <Compile Include="Repositories\AccountsApiRepository.cs" />

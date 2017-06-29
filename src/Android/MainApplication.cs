@@ -234,6 +234,7 @@ namespace Bit.Android
             container.RegisterSingleton<ICipherApiRepository, CipherApiRepository>();
             container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
             container.RegisterSingleton<ISettingsApiRepository, SettingsApiRepository>();
+            container.RegisterSingleton<ITwoFactorApiRepository, TwoFactorApiRepository>();
 
             // Other
             container.RegisterSingleton(CrossSettings.Current);

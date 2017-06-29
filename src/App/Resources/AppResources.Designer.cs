@@ -1943,11 +1943,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Validating code....
+        ///   Looks up a localized string similar to Validating.
         /// </summary>
-        public static string ValidatingCode {
+        public static string Validating {
             get {
-                return ResourceManager.GetString("ValidatingCode", resourceCulture);
+                return ResourceManager.GetString("Validating", resourceCulture);
             }
         }
         
