@@ -294,7 +294,7 @@ namespace Bit.App.Pages
             {
                 var nfcKey = _providers[TwoFactorProviderType.YubiKey].ContainsKey("Nfc") &&
                     (bool)_providers[TwoFactorProviderType.YubiKey]["Nfc"];
-                if(_deviceInfoService.NfcEnabled || nfcKey)
+                if(_deviceInfoService.NfcEnabled && nfcKey)
                 {
                     options.Add(AppResources.YubiKeyTitle);
                 }

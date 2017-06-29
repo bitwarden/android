@@ -1502,7 +1502,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported supported device and/or add additional providers that are better supported across devices (such as an authenticator app)..
+        ///   Looks up a localized string similar to This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app)..
         /// </summary>
         public static string NoTwoStepAvailable {
             get {
