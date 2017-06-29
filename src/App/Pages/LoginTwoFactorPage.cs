@@ -187,7 +187,7 @@ namespace Bit.App.Pages
 
                 var webView = new HybridWebView
                 {
-                    Uri = $"http://192.168.1.6:4001/duo-mobile.html?host={host}&request={req}",
+                    Uri = $"https://vault.bitwarden.com/duo-connector.html?host={host}&request={req}",
                     HorizontalOptions = LayoutOptions.FillAndExpand,
                     VerticalOptions = LayoutOptions.FillAndExpand,
                     MinimumHeightRequest = 400
