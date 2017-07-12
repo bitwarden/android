@@ -22,7 +22,10 @@ namespace Bit.App.Models.Data
             Username = login.Username?.EncryptedString;
             Password = login.Password?.EncryptedString;
             Notes = login.Notes?.EncryptedString;
+            Totp = login?.Notes?.EncryptedString;
             Favorite = login.Favorite;
+            Edit = login.Edit;
+            OrganizationUseTotp = login.OrganizationUseTotp;
         }
 
         public LoginData(LoginResponse login, string userId)
@@ -36,8 +39,11 @@ namespace Bit.App.Models.Data
             Username = login.Username;
             Password = login.Password;
             Notes = login.Notes;
+            Totp = login.Totp;
             Favorite = login.Favorite;
             RevisionDateTime = login.RevisionDate;
+            Edit = login.Edit;
+            OrganizationUseTotp = login.OrganizationUseTotp;
         }
 
         public LoginData(CipherResponse cipher, string userId)
@@ -58,7 +64,10 @@ namespace Bit.App.Models.Data
             Username = data.Username;
             Password = data.Password;
             Notes = data.Notes;
+            Totp = data.Totp;
             Favorite = cipher.Favorite;
+            Edit = cipher.Edit;
+            OrganizationUseTotp = cipher.OrganizationUseTotp;
             RevisionDateTime = cipher.RevisionDate;
         }
 
@@ -73,7 +82,10 @@ namespace Bit.App.Models.Data
         public string Username { get; set; }
         public string Password { get; set; }
         public string Notes { get; set; }
+        public string Totp { get; set; }
         public bool Favorite { get; set; }
+        public bool Edit { get; set; }
+        public bool OrganizationUseTotp { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;
 
         public Login ToLogin()

@@ -103,7 +103,7 @@
     <Compile Include="Models\Api\Request\LoginRequest.cs" />
     <Compile Include="Models\Api\Request\PasswordHintRequest.cs" />
     <Compile Include="Models\Api\Request\TokenRequest.cs" />
-    <Compile Include="Models\Api\Response\CipherHistoryResponse.cs" />
+    <Compile Include="Models\Api\Response\AttachmentResponse.cs" />
     <Compile Include="Models\Api\Response\CipherResponse.cs" />
     <Compile Include="Models\Api\Response\DomainsResponse.cs" />
     <Compile Include="Models\Api\Response\ErrorResponse.cs" />
@@ -116,8 +116,9 @@
     <Compile Include="Models\Api\Response\TokenResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileResponse.cs" />
     <Compile Include="Models\Api\LoginDataModel.cs" />
-    <Compile Include="Models\Cipher.cs" />
     <Compile Include="Models\CipherString.cs" />
+    <Compile Include="Models\Data\AttachmentData.cs" />
+    <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\SymmetricCryptoKey.cs" />
     <Compile Include="Models\Data\SettingsData.cs" />
     <Compile Include="Models\Data\FolderData.cs" />

@@ -3,7 +3,7 @@ using Bit.App.Models.Api;
 
 namespace Bit.App.Models
 {
-    public class Folder : Cipher
+    public class Folder
     {
         public Folder()
         { }
@@ -19,6 +19,9 @@ namespace Bit.App.Models
             Id = response.Id;
             Name = response.Name != null ? new CipherString(response.Name) : null;
         }
+
+        public string Id { get; set; }
+        public CipherString Name { get; set; }
 
         public FolderRequest ToFolderRequest()
         {
