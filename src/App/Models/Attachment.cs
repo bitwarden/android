@@ -12,7 +12,7 @@ namespace Bit.App.Models
         {
             Id = data.Id;
             Url = data.Url;
-            FileName = data.FileName;
+            FileName = data.FileName != null ? new CipherString(data.FileName) : null;
             Size = data.Size;
             SizeName = data.SizeName;
         }
@@ -21,14 +21,14 @@ namespace Bit.App.Models
         {
             Id = response.Id;
             Url = response.Url;
-            FileName = response.FileName;
+            FileName = response.FileName != null ? new CipherString(response.FileName) : null;
             Size = response.Size;
             SizeName = response.SizeName;
         }
 
         public string Id { get; set; }
         public string Url { get; set; }
-        public string FileName { get; set; }
+        public CipherString FileName { get; set; }
         public string Size { get; set; }
         public string SizeName { get; set; }
 

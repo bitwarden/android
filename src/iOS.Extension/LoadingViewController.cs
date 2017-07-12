@@ -288,6 +288,7 @@ namespace Bit.iOS.Extension
             container.RegisterSingleton<IFolderRepository, FolderRepository>();
             container.RegisterSingleton<IFolderApiRepository, FolderApiRepository>();
             container.RegisterSingleton<ILoginRepository, LoginRepository>();
+            container.RegisterSingleton<IAttachmentRepository, AttachmentRepository>();
             container.RegisterSingleton<ILoginApiRepository, LoginApiRepository>();
             container.RegisterSingleton<IConnectApiRepository, ConnectApiRepository>();
             container.RegisterSingleton<ISettingsRepository, SettingsRepository>();

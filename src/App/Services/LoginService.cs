@@ -13,17 +13,20 @@ namespace Bit.App.Services
     public class LoginService : ILoginService
     {
         private readonly ILoginRepository _loginRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
         private readonly IAuthService _authService;
         private readonly ILoginApiRepository _loginApiRepository;
         private readonly ISettingsService _settingsService;
 
         public LoginService(
             ILoginRepository loginRepository,
+            IAttachmentRepository attachmentRepository,
             IAuthService authService,
             ILoginApiRepository loginApiRepository,
             ISettingsService settingsService)
         {
             _loginRepository = loginRepository;
+            _attachmentRepository = attachmentRepository;
             _authService = authService;
             _loginApiRepository = loginApiRepository;
             _settingsService = settingsService;
@@ -37,7 +40,8 @@ namespace Bit.App.Services
                 return null;
             }
 
-            var login = new Login(data);
+            var attachments = await _attachmentRepository.GetAllByLoginIdAsync(id);
+            var login = new Login(data, attachments);
             return login;
         }
 

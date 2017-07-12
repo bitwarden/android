@@ -21,6 +21,7 @@ namespace Bit.App.Services
         private readonly ISettingsApiRepository _settingsApiRepository;
         private readonly IFolderRepository _folderRepository;
         private readonly ILoginRepository _loginRepository;
+        private readonly IAttachmentRepository _attachmentRepository;
         private readonly ISettingsRepository _settingsRepository;
         private readonly IAuthService _authService;
         private readonly ICryptoService _cryptoService;
@@ -35,6 +36,7 @@ namespace Bit.App.Services
             ISettingsApiRepository settingsApiRepository,
             IFolderRepository folderRepository,
             ILoginRepository loginRepository,
+            IAttachmentRepository attachmentRepository,
             ISettingsRepository settingsRepository,
             IAuthService authService,
             ICryptoService cryptoService,
@@ -48,6 +50,7 @@ namespace Bit.App.Services
             _settingsApiRepository = settingsApiRepository;
             _folderRepository = folderRepository;
             _loginRepository = loginRepository;
+            _attachmentRepository = attachmentRepository;
             _settingsRepository = settingsRepository;
             _authService = authService;
             _cryptoService = cryptoService;
@@ -79,6 +82,14 @@ namespace Bit.App.Services
                     case Enums.CipherType.Login:
                         var loginData = new LoginData(cipher.Result, _authService.UserId);
                         await _loginRepository.UpsertAsync(loginData).ConfigureAwait(false);
+                        if(cipher.Result.Attachments != null)
+                        {
+                            foreach(var attachment in cipher.Result.Attachments)
+                            {
+                                var attachmentData = new AttachmentData(attachment, loginData.Id);
+                                await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
+                            }
+                        }
                         break;
                     default:
                         SyncCompleted(false);
@@ -363,6 +374,15 @@ namespace Bit.App.Services
                 {
                     var data = new LoginData(serverLogin.Value, _authService.UserId);
                     await _loginRepository.UpsertAsync(data).ConfigureAwait(false);
+
+                    if(serverLogin.Value.Attachments != null)
+                    {
+                        foreach(var attachment in serverLogin.Value.Attachments)
+                        {
+                            var attachmentData = new AttachmentData(attachment, data.Id);
+                            await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
+                        }
+                    }
                 }
                 catch(SQLite.SQLiteException) { }
             }

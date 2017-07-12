@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using Bit.App.Resources;
 using Xamarin.Forms;
+using System.Collections.Generic;
 
 namespace Bit.App.Models.Page
 {
@@ -13,6 +14,7 @@ namespace Bit.App.Models.Page
         private string _uri;
         private string _notes;
         private bool _revealPassword;
+        private List<Attachment> _attachments;
 
         public VaultViewLoginPageModel() { }
 
@@ -192,6 +194,18 @@ namespace Bit.App.Models.Page
         public string ShowHideText => RevealPassword ? AppResources.Hide : AppResources.Show;
         public ImageSource ShowHideImage => RevealPassword ? ImageSource.FromFile("eye_slash") : ImageSource.FromFile("eye");
 
+        public List<Attachment> Attachments
+        {
+            get { return _attachments; }
+            set
+            {
+                _attachments = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(Attachments)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowAttachments)));
+            }
+        }
+        public bool ShowAttachments => (Attachments?.Count ?? 0) > 0;
+
         public void Update(Login login)
         {
             Name = login.Name?.Decrypt(login.OrganizationId);
@@ -199,6 +213,32 @@ namespace Bit.App.Models.Page
             Password = login.Password?.Decrypt(login.OrganizationId);
             Uri = login.Uri?.Decrypt(login.OrganizationId);
             Notes = login.Notes?.Decrypt(login.OrganizationId);
+
+            if(login.Attachments != null)
+            {
+                var attachments = new List<Attachment>();
+                foreach(var attachment in login.Attachments)
+                {
+                    attachments.Add(new Attachment
+                    {
+                        Id = attachment.Id,
+                        Name = attachment.FileName?.Decrypt(login.OrganizationId),
+                        Size = attachment.SizeName
+                    });
+                }
+                Attachments = attachments;
+            }
+            else
+            {
+                login.Attachments = null;
+            }
+        }
+
+        public class Attachment
+        {
+            public string Id { get; set; }
+            public string Name { get; set; }
+            public string Size { get; set; }
         }
     }
 }

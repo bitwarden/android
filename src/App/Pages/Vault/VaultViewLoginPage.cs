@@ -32,6 +32,7 @@ namespace Bit.App.Pages
         private ExtendedTableView Table { get; set; }
         private TableSection LoginInformationSection { get; set; }
         private TableSection NotesSection { get; set; }
+        private TableSection AttachmentsSection { get; set; }
         public LabeledValueCell UsernameCell { get; set; }
         public LabeledValueCell PasswordCell { get; set; }
         public LabeledValueCell UriCell { get; set; }
@@ -184,6 +185,23 @@ namespace Bit.App.Pages
                 Table.Root.Add(NotesSection);
             }
 
+            if(!Model.ShowAttachments && Table.Root.Contains(AttachmentsSection))
+            {
+                Table.Root.Remove(AttachmentsSection);
+            }
+            else if(Model.ShowAttachments && !Table.Root.Contains(AttachmentsSection))
+            {
+                AttachmentsSection = new TableSection(AppResources.Attachments);
+                foreach(var attachment in Model.Attachments)
+                {
+                    AttachmentsSection.Add(new AttachmentViewCell(attachment, () =>
+                    {
+
+                    }));
+                }
+                Table.Root.Add(AttachmentsSection);
+            }
+
             base.OnAppearing();
         }
 
@@ -221,6 +239,24 @@ namespace Bit.App.Pages
             {
                 var page = new VaultEditLoginPage(_loginId);
                 await _page.Navigation.PushForDeviceAsync(page);
+            }
+        }
+
+        public class AttachmentViewCell : ExtendedTextCell
+        {
+            Action _clicked;
+
+            public AttachmentViewCell(VaultViewLoginPageModel.Attachment attachment, Action clickedAction)
+            {
+                _clicked = clickedAction;
+                Text = attachment.Name;
+                Tapped += AttachmentViewCell_Tapped;
+                BackgroundColor = Color.White;
+            }
+
+            private void AttachmentViewCell_Tapped(object sender, EventArgs e)
+            {
+                _clicked?.Invoke();
             }
         }
     }

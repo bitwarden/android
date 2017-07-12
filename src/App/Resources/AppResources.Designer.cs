@@ -125,6 +125,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add New Attachment.
+        /// </summary>
+        public static string AddNewAttachment {
+            get {
+                return ResourceManager.GetString("AddNewAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error has occurred..
         /// </summary>
         public static string AnErrorHasOccurred {
@@ -139,6 +148,15 @@ namespace Bit.App.Resources {
         public static string AppExtension {
             get {
                 return ResourceManager.GetString("AppExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachments.
+        /// </summary>
+        public static string Attachments {
+            get {
+                return ResourceManager.GetString("Attachments", resourceCulture);
             }
         }
         

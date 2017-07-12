@@ -902,4 +902,10 @@
     <value>YubiKey NEO Security Key</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Add New Attachment</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
 </root>
