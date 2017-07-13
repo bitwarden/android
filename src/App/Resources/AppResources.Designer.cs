@@ -629,6 +629,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading....
+        /// </summary>
+        public static string Downloading {
+            get {
+                return ResourceManager.GetString("Downloading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you really want to delete? This cannot be undone..
         /// </summary>
         public static string DoYouReallyWantToDelete {

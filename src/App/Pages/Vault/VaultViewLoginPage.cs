@@ -213,7 +213,9 @@ namespace Bit.App.Pages
 
         private async Task SaveAttachmentAsync(VaultViewLoginPageModel.Attachment attachment)
         {
+            _userDialogs.ShowLoading(AppResources.Downloading, MaskType.Black);
             var data = await _loginService.DownloadAndDecryptAttachmentAsync(null, attachment.Url);
+            _userDialogs.HideLoading();
             if(data == null)
             {
                 await _userDialogs.AlertAsync(AppResources.UnableToDownloadFile, null, AppResources.Ok);

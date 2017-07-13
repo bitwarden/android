@@ -914,4 +914,8 @@
   <data name="UnableToOpenFile" xml:space="preserve">
     <value>Unable to open this type of file on your device.</value>
   </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
 </root>
