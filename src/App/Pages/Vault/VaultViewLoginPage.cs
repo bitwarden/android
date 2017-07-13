@@ -361,6 +361,7 @@ namespace Bit.App.Pages
                 Detail.Text = attachment.SizeName;
                 Icon.Source = "download";
                 BackgroundColor = Color.White;
+                Detail.MinimumWidthRequest = 100;
             }
 
             public void InitEvents()
