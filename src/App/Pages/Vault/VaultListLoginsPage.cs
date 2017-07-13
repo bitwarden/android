@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         private readonly ILoginService _loginService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
-        private readonly IClipboardService _clipboardService;
+        private readonly IDeviceActionService _clipboardService;
         private readonly ISyncService _syncService;
         private readonly IPushNotification _pushNotification;
         private readonly IDeviceInfoService _deviceInfoService;
@@ -41,7 +41,7 @@ namespace Bit.App.Pages
             _loginService = Resolver.Resolve<ILoginService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _clipboardService = Resolver.Resolve<IClipboardService>();
+            _clipboardService = Resolver.Resolve<IDeviceActionService>();
             _syncService = Resolver.Resolve<ISyncService>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();

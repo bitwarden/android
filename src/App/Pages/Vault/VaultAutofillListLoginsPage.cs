@@ -19,7 +19,7 @@ namespace Bit.App.Pages
     {
         private readonly ILoginService _loginService;
         private readonly IDeviceInfoService _deviceInfoService;
-        private readonly IClipboardService _clipboardService;
+        private readonly IDeviceActionService _clipboardService;
         private readonly ISettingsService _settingsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly string _name;
@@ -47,7 +47,7 @@ namespace Bit.App.Pages
 
             _loginService = Resolver.Resolve<ILoginService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _clipboardService = Resolver.Resolve<IClipboardService>();
+            _clipboardService = Resolver.Resolve<IDeviceActionService>();
             _settingsService = Resolver.Resolve<ISettingsService>();
             UserDialogs = Resolver.Resolve<IUserDialogs>();
             GoogleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();

@@ -16,14 +16,14 @@ namespace Bit.App.Pages
         private readonly string _loginId;
         private readonly ILoginService _loginService;
         private readonly IUserDialogs _userDialogs;
-        private readonly IClipboardService _clipboardService;
+        private readonly IDeviceActionService _deviceActionService;
 
         public VaultViewLoginPage(string loginId)
         {
             _loginId = loginId;
             _loginService = Resolver.Resolve<ILoginService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _clipboardService = Resolver.Resolve<IClipboardService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
 
             Init();
         }
@@ -194,9 +194,9 @@ namespace Bit.App.Pages
                 AttachmentsSection = new TableSection(AppResources.Attachments);
                 foreach(var attachment in Model.Attachments)
                 {
-                    AttachmentsSection.Add(new AttachmentViewCell(attachment, () =>
+                    AttachmentsSection.Add(new AttachmentViewCell(attachment, async () =>
                     {
-
+                        await SaveAttachmentAsync(attachment);
                     }));
                 }
                 Table.Root.Add(AttachmentsSection);
@@ -211,6 +211,23 @@ namespace Bit.App.Pages
             EditItem.Dispose();
         }
 
+        private async Task SaveAttachmentAsync(VaultViewLoginPageModel.Attachment attachment)
+        {
+            var data = await _loginService.DownloadAndDecryptAttachmentAsync(null, attachment.Url);
+            if(data == null)
+            {
+                await _userDialogs.AlertAsync(AppResources.UnableToDownloadFile, null, AppResources.Ok);
+                return;
+            }
+
+            var opened = _deviceActionService.OpenFile(data, attachment.Id, attachment.Name);
+            if(!opened)
+            {
+                await _userDialogs.AlertAsync(AppResources.UnableToOpenFile, null, AppResources.Ok);
+                return;
+            }
+        }
+
         private void NotesCell_Tapped(object sender, EventArgs e)
         {
             Copy(Model.Notes, AppResources.Notes);
@@ -218,7 +235,7 @@ namespace Bit.App.Pages
 
         private void Copy(string copyText, string alertLabel)
         {
-            _clipboardService.CopyToClipboard(copyText);
+            _deviceActionService.CopyToClipboard(copyText);
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 

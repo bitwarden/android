@@ -7,6 +7,7 @@ using Bit.App.Models;
 using Bit.App.Models.Api;
 using Bit.App.Models.Data;
 using Xamarin.Forms;
+using System.Net.Http;
 
 namespace Bit.App.Services
 {
@@ -17,19 +18,22 @@ namespace Bit.App.Services
         private readonly IAuthService _authService;
         private readonly ILoginApiRepository _loginApiRepository;
         private readonly ISettingsService _settingsService;
+        private readonly ICryptoService _cryptoService;
 
         public LoginService(
             ILoginRepository loginRepository,
             IAttachmentRepository attachmentRepository,
             IAuthService authService,
             ILoginApiRepository loginApiRepository,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            ICryptoService cryptoService)
         {
             _loginRepository = loginRepository;
             _attachmentRepository = attachmentRepository;
             _authService = authService;
             _loginApiRepository = loginApiRepository;
             _settingsService = settingsService;
+            _cryptoService = cryptoService;
         }
 
         public async Task<Login> GetByIdAsync(string id)
@@ -215,6 +219,33 @@ namespace Bit.App.Services
             }
 
             return response;
+        }
+
+        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(SymmetricCryptoKey key, string url)
+        {
+            using(var client = new HttpClient())
+            {
+                try
+                {
+                    var response = await client.GetAsync(new Uri(url)).ConfigureAwait(false);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return null;
+                    }
+
+                    var data = await response.Content.ReadAsByteArrayAsync();
+                    if(data == null)
+                    {
+                        return null;
+                    }
+
+                    return _cryptoService.DecryptToBytes(data, key);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
         }
 
         private string WebUriFromAndroidAppUri(string androidAppUriString)

@@ -297,18 +297,61 @@ namespace Bit.App.Services
                 // Old encrypt-then-mac scheme, swap out the key
                 if(_legacyEtmKey == null)
                 {
-                    _legacyEtmKey = new SymmetricCryptoKey(key.Key, Enums.EncryptionType.AesCbc128_HmacSha256_B64);
+                    _legacyEtmKey = new SymmetricCryptoKey(key.Key, EncryptionType.AesCbc128_HmacSha256_B64);
                 }
 
                 key = _legacyEtmKey;
             }
 
-            if(encyptedValue.EncryptionType != key.EncryptionType)
+            return Crypto.AesCbcDecrypt(encyptedValue, key);
+        }
+
+        public byte[] DecryptToBytes(byte[] encyptedValue, SymmetricCryptoKey key = null)
+        {
+            if(key == null)
             {
-                throw new ArgumentException("encType unavailable.");
+                key = EncKey ?? Key;
             }
 
-            return Crypto.AesCbcDecrypt(encyptedValue, key);
+            if(key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if(encyptedValue == null || encyptedValue.Length == 0)
+            {
+                throw new ArgumentNullException(nameof(encyptedValue));
+            }
+
+            byte[] ct, iv, mac = null;
+            var encType = (EncryptionType)encyptedValue[0];
+            switch(encType)
+            {
+                case EncryptionType.AesCbc128_HmacSha256_B64:
+                case EncryptionType.AesCbc256_HmacSha256_B64:
+                    if(encyptedValue.Length <= 49)
+                    {
+                        throw new InvalidOperationException("Invalid value length.");
+                    }
+
+                    iv = new ArraySegment<byte>(encyptedValue, 1, 16).ToArray();
+                    mac = new ArraySegment<byte>(encyptedValue, 17, 32).ToArray();
+                    ct = new ArraySegment<byte>(encyptedValue, 49, encyptedValue.Length - 49).ToArray();
+                    break;
+                case EncryptionType.AesCbc256_B64:
+                    if(encyptedValue.Length <= 17)
+                    {
+                        throw new InvalidOperationException("Invalid value length.");
+                    }
+
+                    iv = new ArraySegment<byte>(encyptedValue, 1, 16).ToArray();
+                    ct = new ArraySegment<byte>(encyptedValue, 17, encyptedValue.Length - 17).ToArray();
+                    break;
+                default:
+                    throw new InvalidOperationException("Invalid encryption type.");
+            }
+
+            return Crypto.AesCbcDecrypt(encType, ct, iv, mac, key);
         }
 
         public byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey)

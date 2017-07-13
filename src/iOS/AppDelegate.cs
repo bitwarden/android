@@ -254,7 +254,7 @@ namespace Bit.iOS
             container.RegisterSingleton<IFolderService, FolderService>();
             container.RegisterSingleton<ILoginService, LoginService>();
             container.RegisterSingleton<ISyncService, SyncService>();
-            container.RegisterSingleton<IClipboardService, ClipboardService>();
+            container.RegisterSingleton<IDeviceActionService, DeviceActionService>();
             container.RegisterSingleton<IAppIdService, AppIdService>();
             container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
             container.RegisterSingleton<IReflectionService, ReflectionService>();

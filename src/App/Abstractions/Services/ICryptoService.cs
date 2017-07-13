@@ -19,6 +19,7 @@ namespace Bit.App.Abstractions
         void ClearKeys();
         string Decrypt(CipherString encyptedValue, SymmetricCryptoKey key = null);
         byte[] DecryptToBytes(CipherString encyptedValue, SymmetricCryptoKey key = null);
+        byte[] DecryptToBytes(byte[] encyptedValue, SymmetricCryptoKey key = null);
         byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey);
         CipherString Encrypt(string plaintextValue, SymmetricCryptoKey key = null);
         SymmetricCryptoKey MakeKeyFromPassword(string password, string salt);

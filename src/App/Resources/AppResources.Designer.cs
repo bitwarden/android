@@ -1988,6 +1988,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unable to download file..
+        /// </summary>
+        public static string UnableToDownloadFile {
+            get {
+                return ResourceManager.GetString("UnableToDownloadFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to open this type of file on your device..
+        /// </summary>
+        public static string UnableToOpenFile {
+            get {
+                return ResourceManager.GetString("UnableToOpenFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unlock with {0}.
         /// </summary>
         public static string UnlockWith {

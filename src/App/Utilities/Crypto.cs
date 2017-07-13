@@ -1,4 +1,5 @@
-﻿using Bit.App.Models;
+﻿using Bit.App.Enums;
+using Bit.App.Models;
 using PCLCrypto;
 using System;
 using System.Collections.Generic;
@@ -32,21 +33,41 @@ namespace Bit.App.Utilities
 
         public static byte[] AesCbcDecrypt(CipherString encyptedValue, SymmetricCryptoKey key)
         {
-            if(key == null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
             if(encyptedValue == null)
             {
                 throw new ArgumentNullException(nameof(encyptedValue));
             }
 
-            if(key.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
+            return AesCbcDecrypt(encyptedValue.EncryptionType, encyptedValue.CipherTextBytes,
+                encyptedValue.InitializationVectorBytes, encyptedValue.MacBytes, key);
+        }
+
+        public static byte[] AesCbcDecrypt(EncryptionType type, byte[] ct, byte[] iv, byte[] mac, SymmetricCryptoKey key)
+        {
+            if(key == null)
             {
-                var computedMacBytes = ComputeMac(encyptedValue.CipherTextBytes,
-                    encyptedValue.InitializationVectorBytes, key.MacKey);
-                if(!MacsEqual(key.MacKey, computedMacBytes, encyptedValue.MacBytes))
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if(ct == null)
+            {
+                throw new ArgumentNullException(nameof(ct));
+            }
+
+            if(iv == null)
+            {
+                throw new ArgumentNullException(nameof(iv));
+            }
+
+            if(key.EncryptionType != type)
+            {
+                throw new InvalidOperationException(nameof(type));
+            }
+
+            if(key.MacKey != null && mac != null)
+            {
+                var computedMacBytes = ComputeMac(ct, iv, key.MacKey);
+                if(!MacsEqual(key.MacKey, computedMacBytes, mac))
                 {
                     throw new InvalidOperationException("MAC failed.");
                 }
@@ -54,8 +75,7 @@ namespace Bit.App.Utilities
 
             var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
             var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
-            var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, encyptedValue.CipherTextBytes,
-                encyptedValue.InitializationVectorBytes);
+            var decryptedBytes = WinRTCrypto.CryptographicEngine.Decrypt(cryptoKey, ct, iv);
             return decryptedBytes;
         }
 

@@ -232,7 +232,7 @@
     <Compile Include="Controls\ExtendedEntryRenderer.cs" />
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
     <Compile Include="Services\AppInfoService.cs" />
-    <Compile Include="Services\ClipboardService.cs" />
+    <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Services\ReflectionService.cs" />

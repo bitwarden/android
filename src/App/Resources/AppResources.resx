@@ -908,4 +908,10 @@
   <data name="Attachments" xml:space="preserve">
     <value>Attachments</value>
   </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Unable to download file.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Unable to open this type of file on your device.</value>
+  </data>
 </root>

@@ -16,7 +16,7 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly ISettings _settings;
-        private readonly IClipboardService _clipboardService;
+        private readonly IDeviceActionService _clipboardService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly Action<string> _passwordValueAction;
         private readonly bool _fromAutofill;
@@ -26,7 +26,7 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _passwordGenerationService = Resolver.Resolve<IPasswordGenerationService>();
             _settings = Resolver.Resolve<ISettings>();
-            _clipboardService = Resolver.Resolve<IClipboardService>();
+            _clipboardService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _passwordValueAction = passwordValueAction;
             _fromAutofill = fromAutofill;
