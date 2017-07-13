@@ -13,7 +13,7 @@ namespace Bit.App.Models
             Id = data.Id;
             Url = data.Url;
             FileName = data.FileName != null ? new CipherString(data.FileName) : null;
-            Size = data.Size;
+            SetSize(data.Size);
             SizeName = data.SizeName;
         }
 
@@ -22,19 +22,30 @@ namespace Bit.App.Models
             Id = response.Id;
             Url = response.Url;
             FileName = response.FileName != null ? new CipherString(response.FileName) : null;
-            Size = response.Size;
+            SetSize(response.Size);
             SizeName = response.SizeName;
         }
 
         public string Id { get; set; }
         public string Url { get; set; }
         public CipherString FileName { get; set; }
-        public string Size { get; set; }
+        public long Size { get; set; }
         public string SizeName { get; set; }
 
         public AttachmentData ToAttachmentData(string loginId)
         {
             return new AttachmentData(this, loginId);
+        }
+
+        private void SetSize(string sizeString)
+        {
+            long size;
+            if(!long.TryParse(sizeString, out size))
+            {
+                size = 0;
+            }
+
+            Size = size;
         }
     }
 }

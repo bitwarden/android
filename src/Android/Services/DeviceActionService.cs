@@ -2,11 +2,9 @@
 using Android.Content;
 using Bit.App.Abstractions;
 using Xamarin.Forms;
-using Java.IO;
 using Android.Webkit;
 using Plugin.CurrentActivity;
 using System.IO;
-using System.Diagnostics;
 using Android.Support.V4.Content;
 
 namespace Bit.Android.Services
@@ -21,6 +19,11 @@ namespace Bit.Android.Services
 
         public bool OpenFile(byte[] fileData, string id, string fileName)
         {
+            if(!CanOpenFile(fileName))
+            {
+                return false;
+            }
+
             var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName);
             if(extension == null)
             {
@@ -35,29 +38,47 @@ namespace Bit.Android.Services
 
             var cachePath = CrossCurrentActivity.Current.Activity.CacheDir;
             var filePath = Path.Combine(cachePath.Path, fileName);
-            System.IO.File.WriteAllBytes(filePath, fileData);
+            File.WriteAllBytes(filePath, fileData);
             var file = new Java.IO.File(cachePath, fileName);
+            if(!file.IsFile)
+            {
+                return false;
+            }
+
             try
             {
-                var packageManager = CrossCurrentActivity.Current.Activity.PackageManager;
-                var testIntent = new Intent(Intent.ActionView);
-                testIntent.SetType(mimeType);
-                var list = packageManager.QueryIntentActivities(testIntent,
-                    global::Android.Content.PM.PackageInfoFlags.MatchDefaultOnly);
-                if(list.Count > 0 && file.IsFile)
-                {
-                    var intent = new Intent(Intent.ActionView);
-                    var uri = FileProvider.GetUriForFile(CrossCurrentActivity.Current.Activity.ApplicationContext,
-                        "com.x8bit.bitwarden.fileprovider", file);
-                    intent.SetDataAndType(uri, mimeType);
-                    intent.SetFlags(ActivityFlags.GrantReadUriPermission);
-                    CrossCurrentActivity.Current.Activity.StartActivity(intent);
-                    return true;
-                }
+                var intent = new Intent(Intent.ActionView);
+                var uri = FileProvider.GetUriForFile(CrossCurrentActivity.Current.Activity.ApplicationContext,
+                    "com.x8bit.bitwarden.fileprovider", file);
+                intent.SetDataAndType(uri, mimeType);
+                intent.SetFlags(ActivityFlags.GrantReadUriPermission);
+                CrossCurrentActivity.Current.Activity.StartActivity(intent);
+                return true;
             }
             catch { }
 
             return false;
+        }
+
+        public bool CanOpenFile(string fileName)
+        {
+            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName);
+            if(extension == null)
+            {
+                return false;
+            }
+
+            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension.ToLower());
+            if(mimeType == null)
+            {
+                return false;
+            }
+
+            var pm = CrossCurrentActivity.Current.Activity.PackageManager;
+            var intent = new Intent(Intent.ActionView);
+            intent.SetType(mimeType);
+            var activities = pm.QueryIntentActivities(intent, global::Android.Content.PM.PackageInfoFlags.MatchDefaultOnly);
+            return (activities?.Count ?? 0) > 0;
         }
     }
 }

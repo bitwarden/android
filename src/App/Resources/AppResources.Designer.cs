@@ -152,6 +152,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This attachment is {0} in size. Are you sure you want to download it onto your device?.
+        /// </summary>
+        public static string AttachmentLargeWarning {
+            get {
+                return ResourceManager.GetString("AttachmentLargeWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Attachments.
         /// </summary>
         public static string Attachments {
@@ -2006,7 +2015,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to open this type of file on your device..
+        ///   Looks up a localized string similar to Your device cannot open this type of tile..
         /// </summary>
         public static string UnableToOpenFile {
             get {

@@ -196,7 +196,7 @@ namespace Bit.App.Pages
                 {
                     AttachmentsSection.Add(new AttachmentViewCell(attachment, async () =>
                     {
-                        await SaveAttachmentAsync(attachment);
+                        await OpenAttachmentAsync(attachment);
                     }));
                 }
                 Table.Root.Add(AttachmentsSection);
@@ -211,8 +211,22 @@ namespace Bit.App.Pages
             EditItem.Dispose();
         }
 
-        private async Task SaveAttachmentAsync(VaultViewLoginPageModel.Attachment attachment)
+        private async Task OpenAttachmentAsync(VaultViewLoginPageModel.Attachment attachment)
         {
+            // 20 MB warning
+            if(attachment.Size >= 20971520 && !(await _userDialogs.ConfirmAsync(
+                    string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
+                    AppResources.Yes, AppResources.No)))
+            {
+                return;
+            }
+
+            if(!_deviceActionService.CanOpenFile(attachment.Name))
+            {
+                await _userDialogs.AlertAsync(AppResources.UnableToOpenFile, null, AppResources.Ok);
+                return;
+            }
+
             _userDialogs.ShowLoading(AppResources.Downloading, MaskType.Black);
             var data = await _loginService.DownloadAndDecryptAttachmentAsync(null, attachment.Url);
             _userDialogs.HideLoading();
@@ -222,8 +236,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var opened = _deviceActionService.OpenFile(data, attachment.Id, attachment.Name);
-            if(!opened)
+            if(!_deviceActionService.OpenFile(data, attachment.Id, attachment.Name))
             {
                 await _userDialogs.AlertAsync(AppResources.UnableToOpenFile, null, AppResources.Ok);
                 return;
@@ -269,8 +282,8 @@ namespace Bit.App.Pages
             {
                 _tapped = tappedAction;
                 Label.Text = attachment.Name;
-                Detail.Text = attachment.Size;
-                Icon.Source = "user"; // TODO: download icon
+                Detail.Text = attachment.SizeName;
+                Icon.Source = "download";
                 BackgroundColor = Color.White;
                 Tapped += AttachmentViewCell_Tapped;
             }

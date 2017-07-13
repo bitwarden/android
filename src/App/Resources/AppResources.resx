@@ -912,10 +912,14 @@
     <value>Unable to download file.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Unable to open this type of file on your device.</value>
+    <value>Your device cannot open this type of tile.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>Downloading...</value>
     <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
 </root>

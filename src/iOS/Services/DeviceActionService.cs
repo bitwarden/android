@@ -14,7 +14,12 @@ namespace Bit.iOS.Services
 
         public bool OpenFile(byte[] fileData, string id, string fileName)
         {
-            throw new NotImplementedException();
+            return true;
+        }
+
+        public bool CanOpenFile(string fileName)
+        {
+            return true;
         }
     }
 }

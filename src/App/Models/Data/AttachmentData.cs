@@ -16,7 +16,7 @@ namespace Bit.App.Models.Data
             LoginId = loginId;
             Url = attachment.Url;
             FileName = attachment.FileName?.EncryptedString;
-            Size = attachment.Size;
+            Size = attachment.Size.ToString();
             SizeName = attachment.SizeName;
         }
 

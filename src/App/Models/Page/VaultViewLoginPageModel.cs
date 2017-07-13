@@ -223,7 +223,8 @@ namespace Bit.App.Models.Page
                     {
                         Id = attachment.Id,
                         Name = attachment.FileName?.Decrypt(login.OrganizationId),
-                        Size = attachment.SizeName,
+                        SizeName = attachment.SizeName,
+                        Size = attachment.Size,
                         Url = attachment.Url
                     });
                 }
@@ -239,7 +240,8 @@ namespace Bit.App.Models.Page
         {
             public string Id { get; set; }
             public string Name { get; set; }
-            public string Size { get; set; }
+            public string SizeName { get; set; }
+            public long Size { get; set; }
             public string Url { get; set; }
         }
     }
