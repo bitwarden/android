@@ -17,7 +17,6 @@ namespace Bit.App.Controls
             Detail = new Label
             {
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                LineBreakMode = LineBreakMode.TailTruncation,
                 Style = (Style)Application.Current.Resources["text-muted"],
                 HorizontalOptions = LayoutOptions.End,
                 VerticalOptions = LayoutOptions.Center

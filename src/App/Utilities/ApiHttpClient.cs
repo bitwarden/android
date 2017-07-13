@@ -20,9 +20,9 @@ namespace Bit.App
         private void Init()
         {
             //BaseAddress = new Uri("http://169.254.80.80:4000"); // Desktop from VS Android Emulator
-            BaseAddress = new Uri("http://192.168.1.4:4000"); // Desktop
+            //BaseAddress = new Uri("http://192.168.1.3:4000"); // Desktop
             //BaseAddress = new Uri("https://preview-api.bitwarden.com"); // Preview
-           // BaseAddress = new Uri("https://api.bitwarden.com"); // Production
+            BaseAddress = new Uri("https://api.bitwarden.com"); // Production
             DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
     }

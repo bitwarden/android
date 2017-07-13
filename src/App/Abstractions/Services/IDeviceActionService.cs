@@ -5,5 +5,6 @@
         void CopyToClipboard(string text);
         bool OpenFile(byte[] fileData, string id, string fileName);
         bool CanOpenFile(string fileName);
+        void ClearCache();
     }
 }

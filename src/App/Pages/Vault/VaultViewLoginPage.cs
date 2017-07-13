@@ -8,6 +8,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
+using System.Collections.Generic;
 
 namespace Bit.App.Pages
 {
@@ -38,6 +39,7 @@ namespace Bit.App.Pages
         public LabeledValueCell UriCell { get; set; }
         public LabeledValueCell NotesCell { get; set; }
         private EditLoginToolBarItem EditItem { get; set; }
+        public List<AttachmentViewCell> AttachmentCells { get; set; }
 
         private void Init()
         {
@@ -108,7 +110,7 @@ namespace Bit.App.Pages
                 Intent = TableIntent.Settings,
                 EnableScrolling = true,
                 HasUnevenRows = true,
-                EnableSelection = false,
+                EnableSelection = true,
                 Root = new TableRoot
                 {
                     LoginInformationSection,
@@ -185,6 +187,7 @@ namespace Bit.App.Pages
                 Table.Root.Add(NotesSection);
             }
 
+            CleanupAttachmentCells();
             if(!Model.ShowAttachments && Table.Root.Contains(AttachmentsSection))
             {
                 Table.Root.Remove(AttachmentsSection);
@@ -192,12 +195,16 @@ namespace Bit.App.Pages
             else if(Model.ShowAttachments && !Table.Root.Contains(AttachmentsSection))
             {
                 AttachmentsSection = new TableSection(AppResources.Attachments);
+                AttachmentCells = new List<AttachmentViewCell>();
                 foreach(var attachment in Model.Attachments)
                 {
-                    AttachmentsSection.Add(new AttachmentViewCell(attachment, async () =>
+                    var attachmentCell = new AttachmentViewCell(attachment, async () =>
                     {
                         await OpenAttachmentAsync(attachment);
-                    }));
+                    });
+                    AttachmentCells.Add(attachmentCell);
+                    AttachmentsSection.Add(attachmentCell);
+                    attachmentCell.InitEvents();
                 }
                 Table.Root.Add(AttachmentsSection);
             }
@@ -209,6 +216,18 @@ namespace Bit.App.Pages
         {
             NotesCell.Tapped -= NotesCell_Tapped;
             EditItem.Dispose();
+            CleanupAttachmentCells();
+        }
+
+        private void CleanupAttachmentCells()
+        {
+            if(AttachmentCells != null)
+            {
+                foreach(var cell in AttachmentCells)
+                {
+                    cell.Dispose();
+                }
+            }
         }
 
         private async Task OpenAttachmentAsync(VaultViewLoginPageModel.Attachment attachment)
@@ -274,7 +293,7 @@ namespace Bit.App.Pages
             }
         }
 
-        public class AttachmentViewCell : LabeledRightDetailCell
+        public class AttachmentViewCell : LabeledRightDetailCell, IDisposable
         {
             private readonly Action _tapped;
 
@@ -285,7 +304,16 @@ namespace Bit.App.Pages
                 Detail.Text = attachment.SizeName;
                 Icon.Source = "download";
                 BackgroundColor = Color.White;
+            }
+
+            public void InitEvents()
+            {
                 Tapped += AttachmentViewCell_Tapped;
+            }
+
+            public void Dispose()
+            {
+                Tapped -= AttachmentViewCell_Tapped;
             }
 
             private void AttachmentViewCell_Tapped(object sender, EventArgs e)

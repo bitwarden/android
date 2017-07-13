@@ -32,6 +32,7 @@ namespace Bit.App
         private readonly ILocalizeService _localizeService;
         private readonly IAppInfoService _appInfoService;
         private readonly IAppSettingsService _appSettingsService;
+        private readonly IDeviceActionService _deviceActionService;
 
         public App(
             string uri,
@@ -45,7 +46,8 @@ namespace Bit.App
             IGoogleAnalyticsService googleAnalyticsService,
             ILocalizeService localizeService,
             IAppInfoService appInfoService,
-            IAppSettingsService appSettingsService)
+            IAppSettingsService appSettingsService,
+            IDeviceActionService deviceActionService)
         {
             _uri = uri;
             _databaseService = databaseService;
@@ -59,6 +61,7 @@ namespace Bit.App
             _localizeService = localizeService;
             _appInfoService = appInfoService;
             _appSettingsService = appSettingsService;
+            _deviceActionService = deviceActionService;
 
             SetCulture();
             SetStyles();
@@ -110,6 +113,7 @@ namespace Bit.App
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             }
 
+            await Task.Run(() => _deviceActionService.ClearCache()).ConfigureAwait(false);
             Debug.WriteLine("OnStart");
         }
 

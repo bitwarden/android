@@ -77,7 +77,8 @@ namespace Bit.Android
                 Resolver.Resolve<IGoogleAnalyticsService>(),
                 Resolver.Resolve<ILocalizeService>(),
                 Resolver.Resolve<IAppInfoService>(),
-                Resolver.Resolve<IAppSettingsService>()));
+                Resolver.Resolve<IAppSettingsService>(),
+                Resolver.Resolve<IDeviceActionService>()));
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(
                 Xamarin.Forms.Application.Current, "DismissKeyboard", (sender) =>

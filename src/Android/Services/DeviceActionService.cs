@@ -80,5 +80,39 @@ namespace Bit.Android.Services
             var activities = pm.QueryIntentActivities(intent, global::Android.Content.PM.PackageInfoFlags.MatchDefaultOnly);
             return (activities?.Count ?? 0) > 0;
         }
+
+        public void ClearCache()
+        {
+            try
+            {
+                DeleteDir(CrossCurrentActivity.Current.Activity.CacheDir);
+            }
+            catch(Exception) { }
+        }
+
+        private bool DeleteDir(Java.IO.File dir)
+        {
+            if(dir != null && dir.IsDirectory)
+            {
+                var children = dir.List();
+                for(int i = 0; i < children.Length; i++)
+                {
+                    var success = DeleteDir(new Java.IO.File(dir, children[i]));
+                    if(!success)
+                    {
+                        return false;
+                    }
+                }
+                return dir.Delete();
+            }
+            else if(dir != null && dir.IsFile)
+            {
+                return dir.Delete();
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
