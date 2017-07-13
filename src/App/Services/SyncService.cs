@@ -82,12 +82,29 @@ namespace Bit.App.Services
                     case Enums.CipherType.Login:
                         var loginData = new LoginData(cipher.Result, _authService.UserId);
                         await _loginRepository.UpsertAsync(loginData).ConfigureAwait(false);
+
+                        var localAttachments = (await _attachmentRepository.GetAllByLoginIdAsync(loginData.Id)
+                            .ConfigureAwait(false));
+
                         if(cipher.Result.Attachments != null)
                         {
                             foreach(var attachment in cipher.Result.Attachments)
                             {
                                 var attachmentData = new AttachmentData(attachment, loginData.Id);
                                 await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
+                            }
+                        }
+
+                        if(localAttachments != null)
+                        {
+                            foreach(var attachment in localAttachments
+                                .Where(a => !cipher.Result.Attachments.Any(sa => sa.Id == a.Id)))
+                            {
+                                try
+                                {
+                                    await _attachmentRepository.DeleteAsync(attachment.Id).ConfigureAwait(false);
+                                }
+                                catch(SQLite.SQLiteException) { }
                             }
                         }
                         break;
@@ -363,6 +380,11 @@ namespace Bit.App.Services
                 .Select(s => s.First())
                 .ToDictionary(s => s.Id);
 
+            var localAttachments = (await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId)
+                .ConfigureAwait(false))
+                .GroupBy(a => a.LoginId)
+                .ToDictionary(g => g.Key);
+
             foreach(var serverLogin in serverLogins)
             {
                 if(!_authService.IsAuthenticated)
@@ -372,6 +394,8 @@ namespace Bit.App.Services
 
                 try
                 {
+                    var localLogin = localLogins.ContainsKey(serverLogin.Value.Id) ? localLogins[serverLogin.Value.Id] : null;
+
                     var data = new LoginData(serverLogin.Value, _authService.UserId);
                     await _loginRepository.UpsertAsync(data).ConfigureAwait(false);
 
@@ -381,6 +405,19 @@ namespace Bit.App.Services
                         {
                             var attachmentData = new AttachmentData(attachment, data.Id);
                             await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
+                        }
+                    }
+
+                    if(localLogin != null && localAttachments != null && localAttachments.ContainsKey(localLogin.Id))
+                    {
+                        foreach(var attachment in localAttachments[localLogin.Id]
+                            .Where(a => !serverLogin.Value.Attachments.Any(sa => sa.Id == a.Id)))
+                        {
+                            try
+                            {
+                                await _attachmentRepository.DeleteAsync(attachment.Id).ConfigureAwait(false);
+                            }
+                            catch(SQLite.SQLiteException) { }
                         }
                     }
                 }
