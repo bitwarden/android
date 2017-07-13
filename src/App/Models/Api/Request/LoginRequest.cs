@@ -11,6 +11,7 @@
             Username = login.Username?.EncryptedString;
             Password = login.Password?.EncryptedString;
             Notes = login.Notes?.EncryptedString;
+            Totp = login.Totp?.EncryptedString;
             Favorite = login.Favorite;
         }
 
@@ -21,6 +22,7 @@
         public string Username { get; set; }
         public string Password { get; set; }
         public string Notes { get; set; }
+        public string Totp { get; set; }
         public bool Favorite { get; set; }
     }
 }

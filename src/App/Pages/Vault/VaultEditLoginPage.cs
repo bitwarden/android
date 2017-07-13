@@ -38,6 +38,7 @@ namespace Bit.App.Pages
         public FormEntryCell UsernameCell { get; private set; }
         public FormEntryCell UriCell { get; private set; }
         public FormEntryCell NameCell { get; private set; }
+        public FormEntryCell TotpCell { get; private set; }
         public FormEditorCell NotesCell { get; private set; }
         public FormPickerCell FolderCell { get; private set; }
         public ExtendedTextCell GenerateCell { get; private set; }
@@ -55,7 +56,15 @@ namespace Bit.App.Pages
             NotesCell = new FormEditorCell(height: 180);
             NotesCell.Editor.Text = login.Notes?.Decrypt(login.OrganizationId);
 
-            PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: NotesCell.Editor,
+            TotpCell = new FormEntryCell(AppResources.AuthenticatorKey, nextElement: NotesCell.Editor,
+                useButton: true);
+            TotpCell.Entry.Text = login.Totp?.Decrypt(login.OrganizationId);
+            TotpCell.Button.Image = "camera";
+            TotpCell.Entry.DisableAutocapitalize = true;
+            TotpCell.Entry.Autocorrect = false;
+            TotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+
+            PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: TotpCell.Entry,
                 useButton: true);
             PasswordCell.Entry.Text = login.Password?.Decrypt(login.OrganizationId);
             PasswordCell.Button.Image = "eye";
@@ -122,6 +131,7 @@ namespace Bit.App.Pages
                     },
                     new TableSection(" ")
                     {
+                        TotpCell,
                         FolderCell,
                         favoriteCell
                     },
@@ -143,7 +153,7 @@ namespace Bit.App.Pages
             }
             else if(Device.RuntimePlatform == Device.Android)
             {
-                PasswordCell.Button.WidthRequest = 40;
+                PasswordCell.Button.WidthRequest = TotpCell.Button.WidthRequest = 40;
             }
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
@@ -172,6 +182,7 @@ namespace Bit.App.Pages
                 login.Username = UsernameCell.Entry.Text?.Encrypt(login.OrganizationId);
                 login.Password = PasswordCell.Entry.Text?.Encrypt(login.OrganizationId);
                 login.Notes = NotesCell.Editor.Text?.Encrypt(login.OrganizationId);
+                login.Totp = TotpCell.Entry.Text?.Encrypt(login.OrganizationId);
                 login.Favorite = favoriteCell.On;
 
                 if(FolderCell.Picker.SelectedIndex > 0)
@@ -226,11 +237,16 @@ namespace Bit.App.Pages
             UriCell?.InitEvents();
             NameCell?.InitEvents();
             NotesCell?.InitEvents();
+            TotpCell?.InitEvents();
             FolderCell?.InitEvents();
 
             if(PasswordCell?.Button != null)
             {
                 PasswordCell.Button.Clicked += PasswordButton_Clicked;
+            }
+            if(TotpCell?.Button != null)
+            {
+                TotpCell.Button.Clicked += TotpButton_Clicked;
             }
             if(GenerateCell != null)
             {
@@ -246,6 +262,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             PasswordCell?.Dispose();
+            TotpCell?.Dispose();
             UsernameCell?.Dispose();
             UriCell?.Dispose();
             NameCell?.Dispose();
@@ -255,6 +272,10 @@ namespace Bit.App.Pages
             if(PasswordCell?.Button != null)
             {
                 PasswordCell.Button.Clicked -= PasswordButton_Clicked;
+            }
+            if(TotpCell?.Button != null)
+            {
+                TotpCell.Button.Clicked -= TotpButton_Clicked;
             }
             if(GenerateCell != null)
             {
@@ -270,6 +291,11 @@ namespace Bit.App.Pages
         {
             PasswordCell.Entry.InvokeToggleIsPassword();
             PasswordCell.Button.Image = "eye" + (!PasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
+        }
+
+        private void TotpButton_Clicked(object sender, EventArgs e)
+        {
+            // launch camera
         }
 
         private async void GenerateCell_Tapped(object sender, EventArgs e)

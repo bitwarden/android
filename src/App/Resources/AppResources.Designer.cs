@@ -179,6 +179,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authenticator Key (TOTP).
+        /// </summary>
+        public static string AuthenticatorKey {
+            get {
+                return ResourceManager.GetString("AuthenticatorKey", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto-fill.
         /// </summary>
         public static string Autofill {

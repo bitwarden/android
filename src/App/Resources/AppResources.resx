@@ -922,4 +922,7 @@
     <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Authenticator Key (TOTP)</value>
+  </data>
 </root>
