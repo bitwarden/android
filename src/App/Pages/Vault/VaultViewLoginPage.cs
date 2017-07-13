@@ -113,8 +113,7 @@ namespace Bit.App.Pages
                 EnableSelection = true,
                 Root = new TableRoot
                 {
-                    LoginInformationSection,
-                    NotesSection
+                    LoginInformationSection
                 }
             };
 
