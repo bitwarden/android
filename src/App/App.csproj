@@ -68,6 +68,7 @@
     <Compile Include="Controls\ExtendedButton.cs" />
     <Compile Include="Controls\ExtendedNavigationPage.cs" />
     <Compile Include="Controls\ExtendedContentPage.cs" />
+    <Compile Include="Controls\LabeledRightDetailCell.cs" />
     <Compile Include="Controls\MemoryContentView.cs" />
     <Compile Include="Controls\StepperCell.cs" />
     <Compile Include="Controls\ExtendedTableView.cs" />

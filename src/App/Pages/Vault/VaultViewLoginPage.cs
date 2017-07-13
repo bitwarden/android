@@ -261,21 +261,23 @@ namespace Bit.App.Pages
             }
         }
 
-        public class AttachmentViewCell : ExtendedTextCell
+        public class AttachmentViewCell : LabeledRightDetailCell
         {
-            Action _clicked;
+            private readonly Action _tapped;
 
-            public AttachmentViewCell(VaultViewLoginPageModel.Attachment attachment, Action clickedAction)
+            public AttachmentViewCell(VaultViewLoginPageModel.Attachment attachment, Action tappedAction)
             {
-                _clicked = clickedAction;
-                Text = attachment.Name;
-                Tapped += AttachmentViewCell_Tapped;
+                _tapped = tappedAction;
+                Label.Text = attachment.Name;
+                Detail.Text = attachment.Size;
+                Icon.Source = "user"; // TODO: download icon
                 BackgroundColor = Color.White;
+                Tapped += AttachmentViewCell_Tapped;
             }
 
             private void AttachmentViewCell_Tapped(object sender, EventArgs e)
             {
-                _clicked?.Invoke();
+                _tapped?.Invoke();
             }
         }
     }
