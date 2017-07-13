@@ -113,7 +113,11 @@ namespace Bit.App
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             }
 
-            await Task.Run(() => _deviceActionService.ClearCache()).ConfigureAwait(false);
+            if((DateTime.UtcNow - _appSettingsService.LastCacheClear).TotalDays >= 1)
+            {
+                await Task.Run(() => _deviceActionService.ClearCache()).ConfigureAwait(false);
+            }
+
             Debug.WriteLine("OnStart");
         }
 
@@ -155,6 +159,13 @@ namespace Bit.App
             if(Device.RuntimePlatform == Device.Android)
             {
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+            }
+
+            var now = DateTime.UtcNow;
+            if((now - _appSettingsService.LastCacheClear).TotalDays >= 1
+                && (now - _appSettingsService.LastActivity).TotalHours >= 1)
+            {
+                await Task.Run(() => _deviceActionService.ClearCache()).ConfigureAwait(false);
             }
         }
 

@@ -11,6 +11,13 @@ namespace Bit.Android.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        private readonly IAppSettingsService _appSettingsService;
+
+        public DeviceActionService(IAppSettingsService appSettingsService)
+        {
+            _appSettingsService = appSettingsService;
+        }
+
         public void CopyToClipboard(string text)
         {
             var clipboardManager = (ClipboardManager)Forms.Context.GetSystemService(Context.ClipboardService);
@@ -86,6 +93,7 @@ namespace Bit.Android.Services
             try
             {
                 DeleteDir(CrossCurrentActivity.Current.Activity.CacheDir);
+                _appSettingsService.LastCacheClear = DateTime.UtcNow;
             }
             catch(Exception) { }
         }

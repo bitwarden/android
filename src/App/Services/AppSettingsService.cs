@@ -38,6 +38,18 @@ namespace Bit.App.Services
             }
         }
 
+        public DateTime LastCacheClear
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.LastCacheClearDate, DateTime.MinValue);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.LastCacheClearDate, value);
+            }
+        }
+
         public bool AutofillPersistNotification
         {
             get

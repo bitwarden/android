@@ -28,6 +28,7 @@
 
         public const string SecurityStamp = "other:securityStamp";
         public const string LastActivityDate = "other:lastActivityDate";
+        public const string LastCacheClearDate = "other:cacheClearDate";
         public const string Locked = "other:locked";
         public const string LastLoginEmail = "other:lastLoginEmail";
         public const string LastSync = "other:lastSync";

@@ -8,6 +8,13 @@ namespace Bit.iOS.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        private readonly IAppSettingsService _appSettingsService;
+
+        public DeviceActionService(IAppSettingsService appSettingsService)
+        {
+            _appSettingsService = appSettingsService;
+        }
+
         public void CopyToClipboard(string text)
         {
             UIPasteboard clipboard = UIPasteboard.General;
@@ -44,6 +51,8 @@ namespace Bit.iOS.Services
                     NSFileManager.DefaultManager.Remove(item, out itemError);
                 }
             }
+
+            _appSettingsService.LastCacheClear = DateTime.UtcNow;
         }
 
         private UIViewController GetVisibleViewController(UIViewController controller = null)

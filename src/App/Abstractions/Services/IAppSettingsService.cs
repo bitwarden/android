@@ -6,6 +6,7 @@ namespace Bit.App.Abstractions
     {
         bool Locked { get; set; }
         DateTime LastActivity { get; set; }
+        DateTime LastCacheClear { get; set; }
         bool AutofillPersistNotification { get; set; }
         bool AutofillPasswordField { get; set; }
         string SecurityStamp { get; set; }
