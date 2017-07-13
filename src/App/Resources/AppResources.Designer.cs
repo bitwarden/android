@@ -188,6 +188,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Authenticator key added..
+        /// </summary>
+        public static string AuthenticatorKeyAdded {
+            get {
+                return ResourceManager.GetString("AuthenticatorKeyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot read authenticator key..
+        /// </summary>
+        public static string AuthenticatorKeyReadError {
+            get {
+                return ResourceManager.GetString("AuthenticatorKeyReadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto-fill.
         /// </summary>
         public static string Autofill {
@@ -427,6 +445,24 @@ namespace Bit.App.Resources {
         public static string BitwardenAutofillServiceStep2 {
             get {
                 return ResourceManager.GetString("BitwardenAutofillServiceStep2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scanning will happen automatically..
+        /// </summary>
+        public static string CameraInstructionBottom {
+            get {
+                return ResourceManager.GetString("CameraInstructionBottom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Point your camera at the QR code..
+        /// </summary>
+        public static string CameraInstructionTop {
+            get {
+                return ResourceManager.GetString("CameraInstructionTop", resourceCulture);
             }
         }
         
@@ -1768,6 +1804,15 @@ namespace Bit.App.Resources {
         public static string Saving {
             get {
                 return ResourceManager.GetString("Saving", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scan QR Code.
+        /// </summary>
+        public static string ScanQrTitle {
+            get {
+                return ResourceManager.GetString("ScanQrTitle", resourceCulture);
             }
         }
         

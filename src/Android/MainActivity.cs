@@ -199,6 +199,11 @@ namespace Bit.Android
             ParseYubiKey(intent.DataString);
         }
 
+        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        {
+            ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
         public void RateApp()
         {
             try

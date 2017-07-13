@@ -193,6 +193,12 @@ namespace Bit.Android
 			global::Plugin.Fingerprint.Resource.Layout.FingerprintDialog = global::Bit.Android.Resource.Layout.FingerprintDialog;
 			global::Splat.Resource.String.library_name = global::Bit.Android.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::Bit.Android.Resource.Attribute.actionBarSize;
+			global::ZXing.Net.Mobile.Forms.Android.Resource.Layout.zxingscanneractivitylayout = global::Bit.Android.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Net.Mobile.Forms.Android.Resource.Layout.zxingscannerfragmentlayout = global::Bit.Android.Resource.Layout.zxingscannerfragmentlayout;
+			global::ZXing.Net.Mobile.Forms.Android.Resource.String.library_name = global::Bit.Android.Resource.String.library_name;
+			global::ZXing.Mobile.Resource.Id.contentFrame = global::Bit.Android.Resource.Id.contentFrame;
+			global::ZXing.Mobile.Resource.Layout.zxingscanneractivitylayout = global::Bit.Android.Resource.Layout.zxingscanneractivitylayout;
+			global::ZXing.Mobile.Resource.Layout.zxingscannerfragmentlayout = global::Bit.Android.Resource.Layout.zxingscannerfragmentlayout;
 		}
 		
 		public partial class Animation
@@ -2928,6 +2934,9 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0c0027
 			public const int collapseActionView = 2131492903;
 			
+			// aapt resource value: 0x7f0c00c6
+			public const int contentFrame = 2131493062;
+			
 			// aapt resource value: 0x7f0c0052
 			public const int contentPanel = 2131492946;
 			
@@ -3683,6 +3692,12 @@ namespace Bit.Android
 			
 			// aapt resource value: 0x7f030042
 			public const int toolbar = 2130903106;
+			
+			// aapt resource value: 0x7f030043
+			public const int zxingscanneractivitylayout = 2130903107;
+			
+			// aapt resource value: 0x7f030044
+			public const int zxingscannerfragmentlayout = 2130903108;
 			
 			static Layout()
 			{

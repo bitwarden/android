@@ -188,6 +188,7 @@ namespace Bit.Android
         {
             UserDialogs.Init(application);
             CachedImageRenderer.Init();
+            ZXing.Net.Mobile.Forms.Android.Platform.Init();
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
 
             //var container = new UnityContainer();

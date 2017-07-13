@@ -276,9 +276,26 @@ namespace Bit.App.Pages
             PasswordCell.Button.Image = "eye" + (!PasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
         }
 
-        private void TotpButton_Clicked(object sender, EventArgs e)
+        private async void TotpButton_Clicked(object sender, EventArgs e)
         {
-            // launch camera
+            var scanPage = new ScanPage((key) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await Navigation.PopModalAsync();
+                    if(!string.IsNullOrWhiteSpace(key))
+                    {
+                        TotpCell.Entry.Text = key;
+                        _userDialogs.Toast(AppResources.AuthenticatorKeyAdded);
+                    }
+                    else
+                    {
+                        _userDialogs.Alert(AppResources.AuthenticatorKeyReadError);
+                    }
+                });
+            });
+
+            await Navigation.PushModalAsync(new ExtendedNavigationPage(scanPage));
         }
 
         private async void GenerateCell_Tapped(object sender, EventArgs e)

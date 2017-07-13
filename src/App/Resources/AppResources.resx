@@ -929,4 +929,19 @@
     <value>Verification Code (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Authenticator key added.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Cannot read authenticator key.</value>
+  </data>
+  <data name="CameraInstructionBottom" xml:space="preserve">
+    <value>Scanning will happen automatically.</value>
+  </data>
+  <data name="CameraInstructionTop" xml:space="preserve">
+    <value>Point your camera at the QR code.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Scan QR Code</value>
+  </data>
 </root>

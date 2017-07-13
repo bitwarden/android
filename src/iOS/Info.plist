@@ -101,5 +101,7 @@
 	<string>en</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app does not require access to the photo library.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Scan QR codes</string>
 </dict>
 </plist>

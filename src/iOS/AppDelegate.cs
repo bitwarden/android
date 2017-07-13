@@ -116,6 +116,7 @@ namespace Bit.iOS
                 UIApplication.SharedApplication.SetStatusBarHidden(!show, false);
             });
 
+            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             return base.FinishedLaunching(app, options);
         }
 
