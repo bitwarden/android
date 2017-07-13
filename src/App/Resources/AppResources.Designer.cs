@@ -2123,6 +2123,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verification Code (TOTP).
+        /// </summary>
+        public static string VerificationCodeTotp {
+            get {
+                return ResourceManager.GetString("VerificationCodeTotp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not send verification email. Try again..
         /// </summary>
         public static string VerificationEmailNotSent {

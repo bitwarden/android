@@ -5,6 +5,13 @@ namespace Bit.App.Utilities
 {
     public static class Helpers
     {
+        public static readonly DateTime Epoc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+        public static long EpocUtcNow()
+        {
+            return (long)(DateTime.UtcNow - Epoc).TotalMilliseconds;
+        }
+
         public static T OnPlatform<T>(T iOS = default(T), T Android = default(T),
             T WinPhone = default(T), T Windows = default(T))
         {

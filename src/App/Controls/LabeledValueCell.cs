@@ -8,7 +8,8 @@ namespace Bit.App.Controls
             string labelText = null,
             string valueText = null,
             string button1Text = null,
-            string button2Text = null)
+            string button2Text = null,
+            string subText = null)
         {
             var containerStackLayout = new StackLayout
             {
@@ -56,6 +57,18 @@ namespace Bit.App.Controls
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
+            if(subText != null)
+            {
+                Sub = new Label
+                {
+                    FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.Center
+                };
+
+                buttonStackLayout.Children.Add(Sub);
+            }
+
             if(button1Text != null)
             {
                 Button1 = new ExtendedButton
@@ -100,12 +113,18 @@ namespace Bit.App.Controls
                 containerStackLayout.AdjustPaddingForDevice();
             }
 
+            if(Sub != null && Button1 != null)
+            {
+                Sub.Margin = new Thickness(0, 0, 10, 0);
+            }
+
             containerStackLayout.Children.Add(buttonStackLayout);
             View = containerStackLayout;
         }
 
         public Label Label { get; private set; }
         public Label Value { get; private set; }
+        public Label Sub { get; private set; }
         public ExtendedButton Button1 { get; private set; }
         public ExtendedButton Button2 { get; private set; }
     }

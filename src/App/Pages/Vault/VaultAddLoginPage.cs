@@ -168,12 +168,12 @@ namespace Bit.App.Pages
 
                 var login = new Login
                 {
-                    Uri = UriCell.Entry.Text?.Encrypt(),
-                    Name = NameCell.Entry.Text?.Encrypt(),
-                    Username = UsernameCell.Entry.Text?.Encrypt(),
-                    Password = PasswordCell.Entry.Text?.Encrypt(),
-                    Notes = NotesCell.Editor.Text?.Encrypt(),
-                    Totp = TotpCell.Entry.Text?.Encrypt(),
+                    Name = NameCell.Entry.Text.Encrypt(),
+                    Uri = string.IsNullOrWhiteSpace(UriCell.Entry.Text) ? null : UriCell.Entry.Text.Encrypt(),
+                    Username = string.IsNullOrWhiteSpace(UsernameCell.Entry.Text) ? null : UsernameCell.Entry.Text.Encrypt(),
+                    Password = string.IsNullOrWhiteSpace(PasswordCell.Entry.Text) ? null : PasswordCell.Entry.Text.Encrypt(),
+                    Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null : NotesCell.Editor.Text.Encrypt(),
+                    Totp = string.IsNullOrWhiteSpace(TotpCell.Entry.Text) ? null : TotpCell.Entry.Text.Encrypt(),
                     Favorite = favoriteCell.On
                 };
 

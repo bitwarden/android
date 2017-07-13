@@ -925,4 +925,8 @@
   <data name="AuthenticatorKey" xml:space="preserve">
     <value>Authenticator Key (TOTP)</value>
   </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Verification Code (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
 </root>

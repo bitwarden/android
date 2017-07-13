@@ -13,6 +13,8 @@ namespace Bit.App.Models.Page
         private string _password;
         private string _uri;
         private string _notes;
+        private string _totpCode;
+        private int _totpSec = 30;
         private bool _revealPassword;
         private List<Attachment> _attachments;
 
@@ -193,6 +195,31 @@ namespace Bit.App.Models.Page
         public string MaskedPassword => RevealPassword ? Password : Password == null ? null : new string('●', Password.Length);
         public string ShowHideText => RevealPassword ? AppResources.Hide : AppResources.Show;
         public ImageSource ShowHideImage => RevealPassword ? ImageSource.FromFile("eye_slash") : ImageSource.FromFile("eye");
+
+        public string TotpCode
+        {
+            get { return _totpCode; }
+            set
+            {
+                _totpCode = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(TotpCode)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(TotpCodeFormatted)));
+            }
+        }
+        public int TotpSecond
+        {
+            get { return _totpSec; }
+            set
+            {
+                _totpSec = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(TotpSecond)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(TotpColor)));
+            }
+        }
+        public bool TotpLow => TotpSecond <= 7;
+        public Color TotpColor => !string.IsNullOrWhiteSpace(TotpCode) && TotpLow ? Color.Red : Color.Black;
+        public string TotpCodeFormatted => !string.IsNullOrWhiteSpace(TotpCode) ?
+            string.Format("{0} {1}", TotpCode.Substring(0, 3), TotpCode.Substring(3)) : null;
 
         public List<Attachment> Attachments
         {

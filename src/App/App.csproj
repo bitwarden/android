@@ -294,6 +294,7 @@
     <Compile Include="Pages\Vault\VaultEditLoginPage.cs" />
     <Compile Include="Pages\Vault\VaultListLoginsPage.cs" />
     <Compile Include="Services\PasswordGenerationService.cs" />
+    <Compile Include="Utilities\Base32.cs" />
     <Compile Include="Utilities\Crypto.cs" />
     <Compile Include="Utilities\Helpers.cs" />
     <Compile Include="Utilities\IdentityHttpClient.cs" />

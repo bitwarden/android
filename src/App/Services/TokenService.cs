@@ -2,6 +2,7 @@
 using Bit.App.Abstractions;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using Bit.App.Utilities;
 
 namespace Bit.App.Services
 {
@@ -18,8 +19,6 @@ namespace Bit.App.Services
         private dynamic _decodedToken;
         private string _refreshToken;
         private string _authBearer;
-
-        private static readonly DateTime _epoc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
         public TokenService(ISecureStorageService secureStorage)
         {
@@ -73,7 +72,7 @@ namespace Bit.App.Services
                     throw new InvalidOperationException("No exp in token.");
                 }
 
-                return _epoc.AddSeconds(Convert.ToDouble(decoded["exp"].Value<long>()));
+                return Helpers.Epoc.AddSeconds(Convert.ToDouble(decoded["exp"].Value<long>()));
             }
         }
 
@@ -97,6 +96,7 @@ namespace Bit.App.Services
         public string TokenUserId => DecodeToken()?["sub"].Value<string>();
         public string TokenEmail => DecodeToken()?["email"].Value<string>();
         public string TokenName => DecodeToken()?["name"].Value<string>();
+        public bool TokenPremium => (DecodeToken()?["premium"].Value<bool?>()).GetValueOrDefault(false);
 
         public string RefreshToken
         {

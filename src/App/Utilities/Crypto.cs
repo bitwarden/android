@@ -152,5 +152,36 @@ namespace Bit.App.Utilities
 
             return true;
         }
+
+        // ref: https://github.com/mirthas/totp-net/blob/master/TOTP/Totp.cs
+        public static string Totp(string b32Key)
+        {
+            var key = Base32.FromBase32(b32Key);
+            if(key == null || key.Length == 0)
+            {
+                return null;
+            }
+
+            var now = Helpers.EpocUtcNow() / 1000;
+            var sec = now / 30;
+
+            var secBytes = BitConverter.GetBytes(sec);
+            if(BitConverter.IsLittleEndian)
+            {
+                Array.Reverse(secBytes, 0, secBytes.Length);
+            }
+
+            var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha1);
+            var hasher = algorithm.CreateHash(key);
+            hasher.Append(secBytes);
+            var hash = hasher.GetValueAndReset();
+
+            var offset = (hash[hash.Length - 1] & 0xf);
+            var i = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) |
+                ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);
+            var code = i % (int)Math.Pow(10, 6);
+
+            return code.ToString().PadLeft(6, '0');
+        }
     }
 }

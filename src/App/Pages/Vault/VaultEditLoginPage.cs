@@ -177,12 +177,17 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                login.Uri = UriCell.Entry.Text?.Encrypt(login.OrganizationId);
-                login.Name = NameCell.Entry.Text?.Encrypt(login.OrganizationId);
-                login.Username = UsernameCell.Entry.Text?.Encrypt(login.OrganizationId);
-                login.Password = PasswordCell.Entry.Text?.Encrypt(login.OrganizationId);
-                login.Notes = NotesCell.Editor.Text?.Encrypt(login.OrganizationId);
-                login.Totp = TotpCell.Entry.Text?.Encrypt(login.OrganizationId);
+                login.Name = NameCell.Entry.Text.Encrypt(login.OrganizationId);
+                login.Uri = string.IsNullOrWhiteSpace(UriCell.Entry.Text) ? null :
+                    UriCell.Entry.Text.Encrypt(login.OrganizationId);
+                login.Username = string.IsNullOrWhiteSpace(UsernameCell.Entry.Text) ? null :
+                    UsernameCell.Entry.Text.Encrypt(login.OrganizationId);
+                login.Password = string.IsNullOrWhiteSpace(PasswordCell.Entry.Text) ? null :
+                    PasswordCell.Entry.Text.Encrypt(login.OrganizationId);
+                login.Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null :
+                    NotesCell.Editor.Text.Encrypt(login.OrganizationId);
+                login.Totp = string.IsNullOrWhiteSpace(TotpCell.Entry.Text) ? null :
+                    TotpCell.Entry.Text.Encrypt(login.OrganizationId);
                 login.Favorite = favoriteCell.On;
 
                 if(FolderCell.Picker.SelectedIndex > 0)

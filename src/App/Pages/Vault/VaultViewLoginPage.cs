@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private readonly ILoginService _loginService;
         private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly ITokenService _tokenService;
 
         public VaultViewLoginPage(string loginId)
         {
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
             _loginService = Resolver.Resolve<ILoginService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            _tokenService = Resolver.Resolve<ITokenService>();
 
             Init();
         }
@@ -39,6 +41,7 @@ namespace Bit.App.Pages
         public LabeledValueCell PasswordCell { get; set; }
         public LabeledValueCell UriCell { get; set; }
         public LabeledValueCell NotesCell { get; set; }
+        public LabeledValueCell TotpCodeCell { get; set; }
         private EditLoginToolBarItem EditItem { get; set; }
         public List<AttachmentViewCell> AttachmentCells { get; set; }
 
@@ -91,6 +94,15 @@ namespace Bit.App.Pages
                 }
             });
 
+            // Totp
+            TotpCodeCell = new LabeledValueCell(AppResources.VerificationCodeTotp, button1Text: AppResources.Copy, subText: "--");
+            TotpCodeCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.TotpCodeFormatted));
+            TotpCodeCell.Value.SetBinding(Label.TextColorProperty, nameof(VaultViewLoginPageModel.TotpColor));
+            TotpCodeCell.Button1.Command = new Command(() => Copy(Model.TotpCode, AppResources.VerificationCodeTotp));
+            TotpCodeCell.Sub.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.TotpSecond));
+            TotpCodeCell.Sub.SetBinding(Label.TextColorProperty, nameof(VaultViewLoginPageModel.TotpColor));
+            TotpCodeCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+
             // Notes
             NotesCell = new LabeledValueCell();
             NotesCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Notes));
@@ -129,6 +141,7 @@ namespace Bit.App.Pages
                 PasswordCell.Button1.WidthRequest = 40;
                 PasswordCell.Button2.WidthRequest = 59;
                 UsernameCell.Button1.WidthRequest = 59;
+                TotpCodeCell.Button1.WidthRequest = 59;
                 UriCell.Button1.WidthRequest = 75;
             }
 
@@ -209,6 +222,38 @@ namespace Bit.App.Pages
                 Table.Root.Add(AttachmentsSection);
             }
 
+            // Totp
+            var removeTotp = login.Totp == null || (!_tokenService.TokenPremium && !login.OrganizationUseTotp);
+            if(!removeTotp)
+            {
+                var totpKey = login.Totp.Decrypt(login.OrganizationId);
+                removeTotp = string.IsNullOrWhiteSpace(totpKey);
+                if(!removeTotp)
+                {
+                    Model.TotpCode = Crypto.Totp(totpKey);
+                    removeTotp = string.IsNullOrWhiteSpace(Model.TotpCode);
+                    if(!removeTotp)
+                    {
+                        TotpTick(totpKey);
+                        Device.StartTimer(new TimeSpan(0, 0, 1), () =>
+                        {
+                            TotpTick(totpKey);
+                            return true;
+                        });
+
+                        if(!LoginInformationSection.Contains(TotpCodeCell))
+                        {
+                            LoginInformationSection.Add(TotpCodeCell);
+                        }
+                    }
+                }
+            }
+
+            if(removeTotp && LoginInformationSection.Contains(TotpCodeCell))
+            {
+                LoginInformationSection.Remove(TotpCodeCell);
+            }
+
             base.OnAppearing();
         }
 
@@ -271,6 +316,18 @@ namespace Bit.App.Pages
         {
             _deviceActionService.CopyToClipboard(copyText);
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+        }
+
+        private void TotpTick(string totpKey)
+        {
+            var now = Helpers.EpocUtcNow() / 1000;
+            var mod = now % 30;
+            Model.TotpSecond = (int)(30 - mod);
+
+            if(mod == 0)
+            {
+                Model.TotpCode = Crypto.Totp(totpKey);
+            }
         }
 
         private class EditLoginToolBarItem : ExtendedToolbarItem

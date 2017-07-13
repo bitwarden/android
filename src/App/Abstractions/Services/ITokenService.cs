@@ -18,5 +18,6 @@ namespace Bit.App.Abstractions
         string TokenUserId { get; }
         string TokenEmail { get; }
         string TokenName { get; }
+        bool TokenPremium { get; }
     }
 }

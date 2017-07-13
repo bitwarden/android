@@ -5,13 +5,12 @@ using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Plugin.Connectivity.Abstractions;
 using Newtonsoft.Json;
+using Bit.App.Utilities;
 
 namespace Bit.App.Repositories
 {
     public class AccountsApiRepository : BaseApiRepository, IAccountsApiRepository
     {
-        private static readonly DateTime _epoc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
-
         public AccountsApiRepository(
             IConnectivity connectivity,
             IHttpService httpService,
@@ -125,7 +124,7 @@ namespace Bit.App.Repositories
                     {
                         return await HandleErrorAsync<DateTime?>(response).ConfigureAwait(false);
                     }
-                    return ApiResult<DateTime?>.Success(_epoc.AddMilliseconds(ms), response.StatusCode);
+                    return ApiResult<DateTime?>.Success(Helpers.Epoc.AddMilliseconds(ms), response.StatusCode);
                 }
                 catch
                 {
