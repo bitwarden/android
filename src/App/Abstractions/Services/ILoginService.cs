@@ -14,6 +14,6 @@ namespace Bit.App.Abstractions
         Task<Tuple<IEnumerable<Login>, IEnumerable<Login>>> GetAllAsync(string uriString);
         Task<ApiResult<LoginResponse>> SaveAsync(Login login);
         Task<ApiResult> DeleteAsync(string id);
-        Task<byte[]> DownloadAndDecryptAttachmentAsync(SymmetricCryptoKey key, string url);
+        Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null);
     }
 }

@@ -9,6 +9,7 @@ using XLabs.Ioc;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
 using System.Collections.Generic;
+using Bit.App.Models;
 
 namespace Bit.App.Pages
 {
@@ -199,7 +200,7 @@ namespace Bit.App.Pages
                 {
                     var attachmentCell = new AttachmentViewCell(attachment, async () =>
                     {
-                        await OpenAttachmentAsync(attachment);
+                        await OpenAttachmentAsync(login, attachment);
                     });
                     AttachmentCells.Add(attachmentCell);
                     AttachmentsSection.Add(attachmentCell);
@@ -229,7 +230,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task OpenAttachmentAsync(VaultViewLoginPageModel.Attachment attachment)
+        private async Task OpenAttachmentAsync(Login login, VaultViewLoginPageModel.Attachment attachment)
         {
             // 20 MB warning
             if(attachment.Size >= 20971520 && !(await _userDialogs.ConfirmAsync(
@@ -246,7 +247,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Downloading, MaskType.Black);
-            var data = await _loginService.DownloadAndDecryptAttachmentAsync(null, attachment.Url);
+            var data = await _loginService.DownloadAndDecryptAttachmentAsync(attachment.Url, login.OrganizationId);
             _userDialogs.HideLoading();
             if(data == null)
             {

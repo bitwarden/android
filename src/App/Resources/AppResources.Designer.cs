@@ -2024,7 +2024,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your device cannot open this type of tile..
+        ///   Looks up a localized string similar to Your device cannot open this type of file..
         /// </summary>
         public static string UnableToOpenFile {
             get {

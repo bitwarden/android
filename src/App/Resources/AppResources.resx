@@ -912,7 +912,7 @@
     <value>Unable to download file.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of tile.</value>
+    <value>Your device cannot open this type of file.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>Downloading...</value>

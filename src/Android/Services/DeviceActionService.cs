@@ -31,13 +31,13 @@ namespace Bit.Android.Services
                 return false;
             }
 
-            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName);
+            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
             if(extension == null)
             {
                 return false;
             }
 
-            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension.ToLower());
+            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
             if(mimeType == null)
             {
                 return false;
@@ -69,13 +69,13 @@ namespace Bit.Android.Services
 
         public bool CanOpenFile(string fileName)
         {
-            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName);
+            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
             if(extension == null)
             {
                 return false;
             }
 
-            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension.ToLower());
+            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
             if(mimeType == null)
             {
                 return false;

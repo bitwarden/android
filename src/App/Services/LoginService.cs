@@ -221,7 +221,7 @@ namespace Bit.App.Services
             return response;
         }
 
-        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(SymmetricCryptoKey key, string url)
+        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null)
         {
             using(var client = new HttpClient())
             {
@@ -238,8 +238,15 @@ namespace Bit.App.Services
                     {
                         return null;
                     }
-
-                    return _cryptoService.DecryptToBytes(data, key);
+                    
+                    if(!string.IsNullOrWhiteSpace(orgId))
+                    {
+                        return _cryptoService.DecryptToBytes(data, _cryptoService.GetOrgKey(orgId));
+                    }
+                    else
+                    {
+                        return _cryptoService.DecryptToBytes(data, null);
+                    }
                 }
                 catch
                 {
