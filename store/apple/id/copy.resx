@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden – Free Password Manager</value>
+    <value>bitwarden - Pengelola Sandi Gratis</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
+    <value>bitwarden adalah cara termudah dan teraman untuk menyimpan semua info masuk dan sandi Anda sambil tetap menjaga mereka disinkronkan di antara semua perangkat Anda. Ekstensi aplikasi bitwarden memungkinkan Anda untuk masuk ke situs web dengan cepat melalui Safari atau Chrome dan didukung oleh ratusan aplikasi populer lainnya.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Pencurian sandi adalah masalah serius. Situs web dan aplikasi yang Anda gunakan diserang setiap hari. Pelanggaran keamanan terjadi dan sandi Anda dicuri. Ketika Anda menggunakan sandi yang sama di aplikasi dan situs web peretas dapat dengan mudah mengakses email, bank, dan akun penting Anda yang lain.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Pakar keamanan merekomendasikan agar Anda menggunakan sandi yang berbeda dan dibuat secara acak untuk setiap akun yang Anda buat. Tapi bagaimana mengelola semua sandi tersebut? bitwarden membuatnya menjadi mudah untuk Anda membuat, menyimpan dan mengakses sandi Anda.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden menyimpan semua info masuk Anda di brankas terenkripsi yang disinkronkan di semua perangkat Anda. Karena sepenuhnya dienkripsi sebelum meninggalkan perangkat Anda, hanya Anda yang memiliki akses ke data Anda. Bahkan tim di bitwarden tidak dapat membaca data Anda, bahkan jika kami mau. Data Anda disegel dengan ekripsi AES-256 bit, hash yang di-salt, dan PBKDF2 SHA-256.</value>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
+    <value>bitwarden,bit warden,8bit,sandi,info masuk,pengelola sandi gratis,pengelola sandi,pengelola info masuk</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Kelola semua info masuk dan sandi Anda dari brankas yang aman</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Secara otomatis menghasilkan sandi yang kuat, acak dan aman</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Melindungi brankas Anda dengan Touch ID, kode PIN, atau sandi utama</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Masuk otomatis dari Safari, Chrome, dan ratusan aplikasi lainnya</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>Sinkronkan dan akses brankas Anda dari beberapa perangkat</value>
   </data>
 </root>
