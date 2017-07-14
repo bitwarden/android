@@ -196,7 +196,7 @@
     <value>Mejla oss direkt för att få hjälp eller för att lämna återkoppling.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Skriv in din PIN-kod.</value>
+    <value>Ange din PIN-kod.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Favoriter</value>
@@ -477,10 +477,7 @@
     <value>Aktivera automatisk synkronisering</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Skriv in ditt kontos e-postadress för att hämta din huvudlösenordsledtråd.</value>
-  </data>
-  <data name="EnterVerificationCode" xml:space="preserve">
-    <value>Skriv in din tvåstegsverifieringskod.</value>
+    <value>Ange ditt kontos e-postadress för att hämta din huvudlösenordsledtråd.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Återaktivera apptillägg</value>
@@ -619,7 +616,7 @@
     <value>Det finns inga inloggningar i ditt valv för den här webbplatsen. Tryck för att skapa en.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Den här inloggningen har inte ett användarnamn eller lösenord inskrivet.</value>
+    <value>Den här inloggningen har inte ett användarnamn eller lösenord angivet.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, fattar!</value>
@@ -653,7 +650,7 @@
     <value>Är du säker på att du vill skriva över det nuvarande lösenordet?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-notiser. För den bästa möjliga upplevelsen var god välj \"Ok\" på förfrågan om du vill aktivera push-notiser.</value>
+    <value>bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-aviseringar. För den bästa möjliga upplevelsen var god välj "OK" på förfrågan om du vill aktivera push-aviseringar.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -669,7 +666,7 @@
     <value>Skapa nytt lösenord</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Skriv in huvudlösenordet igen</value>
+    <value>Ange huvudlösenordet igen</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Sök i valvet</value>
@@ -687,7 +684,7 @@
     <value>Ställ in PIN-kod</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Skriv in en fyrsiffrig PIN-kod som du låser upp appen med.</value>
+    <value>Ange en fyrsiffrig PIN-kod som du låser upp appen med.</value>
   </data>
   <data name="LoginInformation" xml:space="preserve">
     <value>Inloggningsinformation</value>
@@ -728,8 +725,8 @@
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Lås upp med PIN-kod</value>
   </data>
-  <data name="ValidatingCode" xml:space="preserve">
-    <value>Validerar kod...</value>
+  <data name="Validating" xml:space="preserve">
+    <value>Validating</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -769,10 +766,10 @@
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>När du ser en bitwarden-notifikation för automatisk ifyllnad så kan du trycka på den för att öppna tjänsten.</value>
+    <value>När du ser en avisering från bitwarden för automatisk ifyllnad så kan du trycka på den för att öppna tjänsten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tryck här för att automatiskt fylla i en inloggning från ditt valv.</value>
+    <value>Tryck på den här aviseringen för att automatiskt fylla i en inloggning från ditt valv.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
     <value>Öppna tillgänglighetsinställningar</value>
@@ -852,5 +849,99 @@
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Kan inte öppna appen "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Authenticator App</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Login Unavailable</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Recovery Code</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember me</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Send verification code email again</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Two-step Login Options</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Use another two-step login method</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Could not send verification email. Try again.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Verification email sent.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>YubiKey NEO Security Key</value>
+    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Add New Attachment</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Unable to download file.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Your device cannot open this type of file.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Authenticator Key (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Verification Code (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Authenticator key added.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Cannot read authenticator key.</value>
+  </data>
+  <data name="CameraInstructionBottom" xml:space="preserve">
+    <value>Scanning will happen automatically.</value>
+  </data>
+  <data name="CameraInstructionTop" xml:space="preserve">
+    <value>Point your camera at the QR code.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Scan QR Code</value>
   </data>
 </root>
