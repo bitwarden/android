@@ -117,45 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title" xml:space="preserve">
-    <value>Менеджер паролей bitwarden</value>
-    <comment>Max 30 characters</comment>
+  <data name="Name" xml:space="preserve">
+    <value>bitwarden – Free Password Manager</value>
   </data>
-  <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden - это менеджер паролей, помогающий обеспечить безопасность в интернете.</value>
-    <comment>Max 80 characters</comment>
+  <data name="Description" xml:space="preserve">
+    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
+
+Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+
+Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+
+bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
   </data>
-  <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden - простой и безопасный способ хранить все ваши логины и пароли и легко их синхронизировать между всеми вашими устройствами.
-
-Кража паролей - серьезная проблема. Сайты и приложения, которые вы используете подвергаются атакам каждый день. Проблемы в их безопасности могут привести к краже вашего пароля. Кроме того, когда вы используете одни и те же пароли на разных сайтах и приложениях, то хакеры могут легко получить доступ к нескольким вашим аккаунтам сразу (к почтовому ящику, к аккаунту банка и т. д.).
-
-Эксперты по безопасности рекомендуют использовать разные случайно сгенерированные пароли для каждого созданного вами аккаунта. Но как же управлять всеми этими паролями? bitwarden позволяет вам легко получить доступ к вашим паролям, а так же создавать и хранить их.
-
-bitwarden хранит все ваши логины и пароли в зашифрованном хранилище, которое синхронизируется между всеми вашими устройствами. До того, как данные покинут ваше устройство они будут зашифрованы и только потом отправлены. Мы в bitwarden не сможем прочесть ваши данные, даже если мы этого захотим. Ваши данные зашифрованы при помощи алгоритма AES-256 и PBKDF2 SHA-256.</value>
-    <comment>Max 4000 characters</comment>
-  </data>
-  <data name="FeatureGraphic" xml:space="preserve">
-    <value>Безопасный и бесплатный менеджер паролей для всех ваших устройств</value>
+  <data name="Keywords" xml:space="preserve">
+    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Управляйте всеми своими логинами и паролями из безопасного хранилища</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Генерируйте стойкие, случайные и надежные пароли</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Защитите ваше хранилище при помощи отпечатка пальца, PIN-кода или мастер-пароля</value>
+    <value>Protect your vault with Touch ID, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Быстрое автозаполнение логинов в веб-браузере и других приложениях</value>
+    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Синхронизация и доступ к хранилищу с нескольких устройств
-
-- телефон
-- планшет
-- компьютер
-- веб-браузер</value>
+    <value>Sync and access your vault from multiple devices</value>
   </data>
 </root>

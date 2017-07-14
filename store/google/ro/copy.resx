@@ -118,44 +118,44 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Менеджер паролей bitwarden</value>
+    <value>manager de parole bitwarden</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden - это менеджер паролей, помогающий обеспечить безопасность в интернете.</value>
+    <value>bitwarden este un manager de autentificări ce vă ajută să fiţi în siguranță.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden - простой и безопасный способ хранить все ваши логины и пароли и легко их синхронизировать между всеми вашими устройствами.
+    <value>bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate autentificările și parolele, în timp ce le păstrați sincronizate între toate dispozitivele dvs.
 
-Кража паролей - серьезная проблема. Сайты и приложения, которые вы используете подвергаются атакам каждый день. Проблемы в их безопасности могут привести к краже вашего пароля. Кроме того, когда вы используете одни и те же пароли на разных сайтах и приложениях, то хакеры могут легко получить доступ к нескольким вашим аккаунтам сразу (к почтовому ящику, к аккаунту банка и т. д.).
+Furtul de parole este o problemă serioasă. Site-urile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Se înregistrează încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole între aplicații și site-uri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
 
-Эксперты по безопасности рекомендуют использовать разные случайно сгенерированные пароли для каждого созданного вами аккаунта. Но как же управлять всеми этими паролями? bitwarden позволяет вам легко получить доступ к вашим паролям, а так же создавать и хранить их.
+Experții în securitate vă recomandă să utilizați o parolă diferită, generată aleatoriu pentru fiecare cont pe care îl creați. Dar cum gestionați toate aceste parole? bitwarden vă ușurează crearea, stocarea și accesarea parolelor.
 
-bitwarden хранит все ваши логины и пароли в зашифрованном хранилище, которое синхронизируется между всеми вашими устройствами. До того, как данные покинут ваше устройство они будут зашифрованы и только потом отправлены. Мы в bitwarden не сможем прочесть ваши данные, даже если мы этого захотим. Ваши данные зашифрованы при помощи алгоритма AES-256 и PBKDF2 SHA-256.</value>
+bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Безопасный и бесплатный менеджер паролей для всех ваших устройств</value>
+    <value>Un manager de parole sigur și gratuit pentru toate dispozitivele dvs.</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Управляйте всеми своими логинами и паролями из безопасного хранилища</value>
+    <value>Gestionați toate datele de conectare și parolele dintr-un seif securizat</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Генерируйте стойкие, случайные и надежные пароли</value>
+    <value>Generați automat parole puternice, aleatoare și securizate</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Защитите ваше хранилище при помощи отпечатка пальца, PIN-кода или мастер-пароля</value>
+    <value>Protejați seiful cu amprentă digitală, cod PIN sau parolă principală</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Быстрое автозаполнение логинов в веб-браузере и других приложениях</value>
+    <value>Completați automat autentificările din browserul dvs. web și din alte aplicații</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Синхронизация и доступ к хранилищу с нескольких устройств
+    <value>Sincronizați și accesați seiful dvs. de pe mai multe dispozitive
 
-- телефон
-- планшет
-- компьютер
-- веб-браузер</value>
+- Telefon
+- Tabletă
+- Desktop
+- Web</value>
   </data>
 </root>

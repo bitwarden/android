@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>Sobre</value>
+    <value>O aplikaciji</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Adicionar</value>
+    <value>Dodaj</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Adicionar pasta</value>
+    <value>Dodaj mapu</value>
   </data>
   <data name="AddLogin" xml:space="preserve">
-    <value>Adicionar login</value>
+    <value>Dodaj prijavu</value>
     <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>Ocorreu um erro.</value>
+    <value>Došlo je do pogreške.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Voltar</value>
+    <value>Natrag</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
@@ -144,207 +144,207 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancelar</value>
+    <value>Odustani</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copiar</value>
+    <value>Kopiraj</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Copiar Senha</value>
+    <value>Kopiraj lozinku</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Copiar o nome de usuário</value>
+    <value>Kopiranje korisničko ime</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Créditos</value>
+    <value>Zasluge</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Excluir</value>
+    <value>Izbriši</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Excluindo...</value>
+    <value>Brisanje...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Você realmente quer apagar? Isto não pode ser desfeito.</value>
+    <value>Doista želite izbrisati? To se ne može poništiti.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Editar</value>
+    <value>Uredi</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Editar pasta</value>
+    <value>Uredi mapu</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>E-Mail</value>
+    <value>E-pošta</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Endereço de e-mail</value>
+    <value>Adresa e-pošte</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Envie-nos um email</value>
+    <value>Pošaljite nam e-poštu</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Envie-nos um email diretamente para obter ajuda ou deixar feedback.</value>
+    <value>Pošaljite nam izravno e-poštu kako biste dobili pomoć ili ostavite povratnu informaciju.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Digite o seu código PIN.</value>
+    <value>Unesite PIN kod.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Favoritos</value>
+    <value>Favoriti</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>Submeter um relatório de bug</value>
+    <value>Pošaljite Izvješće o pogrešci</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Abrir um issue no nosso repositório do GitHub.</value>
+    <value>Otvorite problem u našem GitHub repozitoriju.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Utilize a sua impressão digital para verificar.</value>
+    <value>Koristite vaš otisak prsta za potvrdu.</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Pasta</value>
+    <value>Mapa</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>Nova pasta criada.</value>
+    <value>Stvorena nova mapa.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Pasta eliminada.</value>
+    <value>Mapa obrisana.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Nenhuma pasta</value>
+    <value>Nema mape</value>
     <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Pastas</value>
+    <value>Mape</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Pasta atualizada.</value>
+    <value>Mapa ažurirana.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Ir para o website</value>
+    <value>Idite na web stranicu</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Ajuda e feedback</value>
+    <value>Pomoć i povratne informacije</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Ocultar</value>
+    <value>Sakrij</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Conecte-se à internet antes de continuar.</value>
+    <value>Povežite se na internet prije nastavka.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>É necessária uma conexão com a Internet</value>
+    <value>Potrebna je internetska veza</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Senha inválida, tente novamente.</value>
+    <value>Neispravna glavna lozinka. Pokušajte ponovo.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>PIN inválido. Tentar novamente.</value>
+    <value>Neispravan PIN. Pokušajte ponovo.</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Iniciar</value>
+    <value>Pokreni</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Iniciar sessão</value>
+    <value>Prijavi se</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>Prijava</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Efetuar logout</value>
+    <value>Odjavi se</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Tem certeza que deseja sair?</value>
+    <value>Jeste li sigurni da se želite odjaviti?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Senha Mestre</value>
+    <value>Glavna lozinka</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>Mais</value>
+    <value>Više</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Meu cofre</value>
+    <value>Moj trezor</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Nome</value>
+    <value>Ime</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>Não</value>
+    <value>Ne</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>Notas</value>
+    <value>Bilješke</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>U redu</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Desabilitar o Analytics</value>
+    <value>Onemogućite uslugu Google Analytics</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Senha</value>
+    <value>Lozinka</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Salvar</value>
+    <value>Spremi</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Salvando...</value>
+    <value>Spremanje...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Definições</value>
+    <value>Postavke</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Mostrar</value>
+    <value>Prikaži</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="LoginDeleted" xml:space="preserve">
-    <value>A credencial foi eliminada.</value>
+    <value>Prijava je izbrisana.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="LoginNoName" xml:space="preserve">
-    <value>Sem nome</value>
+    <value>Bez imena</value>
     <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submeter</value>
+    <value>Pošalji</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Sincronizar</value>
+    <value>Sinkronizacija</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Obrigado</value>
+    <value>Hvala Vam</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Ferramentas</value>
+    <value>Alati</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -352,502 +352,502 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Usar a impressão digital para desbloquear</value>
+    <value>Koristite otisak prsta za otključavanje</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Usuário</value>
+    <value>Korisničko ime</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>O campo {0} necessário.</value>
+    <value>Polje {0} je obavezno.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} foi copiado.</value>
+    <value>{0} je kopiran.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verificar impressão digital</value>
+    <value>Potvrdite otisak prsta</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verificar a senha mestre</value>
+    <value>Potvrdite glavnu lozinku</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Verificar PIN</value>
+    <value>Potvrdite PIN</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Versão</value>
+    <value>Verzija</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Visualizar</value>
+    <value>Prikaz</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Visite nosso site</value>
+    <value>Posjetite našu web stranicu</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visite o nosso site para obter ajuda, notícias, enviar-nos um email ou saber mais sobre como utilizar o bitwarden.</value>
+    <value>Posjetite našu web stranicu kako biste dobili pomoć, vijesti, e-poštu i / ili saznali više o tome kako koristiti bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Website</value>
+    <value>Web stranica</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Sim</value>
+    <value>Da</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Conta</value>
+    <value>Račun</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Sua nova conta foi criada! Agora você pode se logar.</value>
+    <value>Vaš novi račun je kreiran! Sada se možete prijaviti.</value>
   </data>
   <data name="AddALogin" xml:space="preserve">
-    <value>Adicionar login</value>
+    <value>Dodaj prijavu</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>Extensão de App</value>
+    <value>Proširenje aplikacije</value>
   </data>
   <data name="AutofillDescription" xml:space="preserve">
-    <value>Use o serviço de acessibilidade do bitwarden para preencher automaticamente seus logins em toda a web e aplicativos.</value>
+    <value>Pomoću usluge pristupačnosti usluge bitwarden možete automatski ispuniti prijave putem aplikacija i weba.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Serviço de autopreenchimento</value>
+    <value>Usluga automatskog popunjavanja</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Evite caracteres ambíguos</value>
+    <value>Izbjegavajte dvosmislene znakove</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>extensão da aplicação bitwarden</value>
+    <value>bitwarden Proširenje aplikacije</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
+    <value>Najlakši način za dodavanje novih prijava u vaš trezor je iz proširenja aplikacije bitwarden. Saznajte više o upotrebi proširenja aplikacije bitwarden odlaskom na zaslon "Alati".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden no Safari e outros apps para preencher automaticamente seus logins.</value>
+    <value>Upotrijebite bitwarden u Safariju i drugim aplikacijama da biste automatski ispunili prijave.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Serviço de auto-preenchimento bitwarden</value>
+    <value>bitwarden usluga automatskog popunjavanja</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use o serviço de acessibilidade do bitwarden para preencher automaticamente seus logins.</value>
+    <value>Upotrijebite uslugu pristupačnosti usluge bitwarden da biste automatski ispunili prijave.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Alterar email</value>
+    <value>Promijeni e-poštu</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Adresu e-pošte možete promijeniti na trezoru web sučelja bitwarden.com. Želite li sada posjetiti web stranicu?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Alterar senha mestra</value>
+    <value>Promjena glavne lozinke</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Možete promijeniti svoju glavnu lozinku na internetskom trezoru bitwarden.com. Želite li sada posjetiti web stranicu?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Fechar</value>
+    <value>Zatvoriti</value>
   </data>
   <data name="ComingSoon" xml:space="preserve">
-    <value>Em breve!</value>
+    <value>Dolazi uskoro!</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continuar</value>
+    <value>Nastaviti</value>
   </data>
   <data name="Copied" xml:space="preserve">
-    <value>Copiado!</value>
+    <value>Kopirano!</value>
   </data>
   <data name="CopiedPassword" xml:space="preserve">
-    <value>Senha copiada!</value>
+    <value>Kopirana lozinka!</value>
   </data>
   <data name="CopiedUsername" xml:space="preserve">
-    <value>Nome de usuário copiado!</value>
+    <value>Kopirano korisničko ime!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Criar conta</value>
+    <value>Stvori račun</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Criando Conta...</value>
+    <value>Stvaranje računa...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="CurrentSession" xml:space="preserve">
-    <value>Sessão atual</value>
+    <value>Trenutačna sesija</value>
   </data>
   <data name="EditLogin" xml:space="preserve">
-    <value>Editar o Login</value>
+    <value>Uredi prijavu</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Ativar sincronização automática</value>
+    <value>Omogućite automatsku sinkronizaciju</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Digite o endereço de email da sua conta para receber a dica da sua palavra-passe mestra.</value>
+    <value>Unesite adresu e-pošte svog računa da biste zaprimili podsjetnik za glavnu lozinku.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Reativar extensão da aplicação</value>
+    <value>Ponovno omogućite proširenje aplikacije</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Quase pronto!</value>
+    <value>Skoro gotovo!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Ativar extensão da aplicação</value>
+    <value>Omogući proširenje aplikacije</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>No Safari, encontrar usando o ícone de compartilhamento de bitwarden (dica: rolar para a direita na linha de fundo do menu).</value>
+    <value>U Safariju, pronađite bitwarden pomoću ikone dijeljenja (savjet: pomaknite se desno u donjem retku izbornika).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Obtenha acesso instantâneo a suas senhas!</value>
+    <value>Dobivanje trenutnog pristupa vašim lozinkama!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Está pronto para iniciar sessão!</value>
+    <value>Spremni ste se prijaviti!</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Ver aplicações suportadas</value>
+    <value>Pogledajte Podržane aplikacije</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Seus logins são agora facilmente acessíveis do Safari, Chrome e outros aplicativos com suporte.</value>
+    <value>Vašim prijava se sada lako može pristupiti iz Safaria, Chromea i drugih podržanih aplikacija.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>No Safari e Chrome, encontrar usando o ícone de compartilhamento de bitwarden (dica: rolar para a direita na linha de fundo do menu compartilhar).</value>
+    <value>U pregledniku Safari i Chrome pronađite bitwarden upotrebom ikone za dijeljenje (savjet: pomaknite se desno u donjem retku izbornika za dijeljenje).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Toque no ícone de bitwarden no menu para iniciar a extensão.</value>
+    <value>Dodirnite bitwarden ikonu u izborniku da biste pokrenuli proširenje.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Para ativar o bitwarden no Safari e outros apps, toque no ícone "mais" no final do menu.</value>
+    <value>Da biste uključili bitwarden u Safariu i drugim aplikacijama, dodirnite ikonu "više" u donjem retku izbornika.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorito</value>
+    <value>Favorit</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Impressão digital</value>
+    <value>Otisak prsta</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Gerar senha</value>
+    <value>Generiraj lozinku</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Obter sua dica de senha mestra</value>
+    <value>Dobijte podsjetnik za glavnu lozinku</value>
   </data>
   <data name="ImportLogins" xml:space="preserve">
-    <value>Importar logins</value>
+    <value>Uvezi prijave</value>
   </data>
   <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>Você pode importar logins em massa a partir do cofre bitwarden.com web. Você quer visitar o site agora?</value>
+    <value>Možete masovno uvesti prijave sa web-trezora bitwarden.com. Želite li sada posjetiti web stranicu?</value>
   </data>
   <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Rapidamente importe seus logins em massa de outros aplicativos de gerenciamento de senha.</value>
+    <value>Brzo uvezite svoje prijave iz drugih aplikacija za upravljanje lozinkama.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Última sincronização:</value>
+    <value>Posljednja sinkronizacija:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Tamanho</value>
+    <value>Dužina</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Bloquear</value>
+    <value>Zaključaj</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minutos</value>
+    <value>15 minuta</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 hora</value>
+    <value>1 sat</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>1 minuto</value>
+    <value>1 minuta</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 horas</value>
+    <value>4 sata</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Imediatamente</value>
+    <value>Odmah</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Opções de bloqueio</value>
+    <value>Opcije zaključavanja</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Iniciando sessão...</value>
+    <value>Prijavljivanje...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Inicie a sessão ou crie uma nova conta para acessar seu cofre seguro.</value>
+    <value>Prijavite se ili stvorite novi račun kako biste pristupili svom sigurnom trezoru.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Gerenciar</value>
+    <value>Upravljanje</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Confirmação de senha não está correta.</value>
+    <value>Potvrda lozinke nije točna.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>A senha mestra é a senha que você usa para acessar o seu cofre. É muito importante que você não esqueça sua senha mestra. Não há nenhuma maneira de recuperar a senha caso você se esqueça.</value>
+    <value>Glavna lozinka je lozinka koju koristite za pristup vašem trezoru. Vrlo je važno da ne zaboravite glavnu lozinku. Ne postoji način za oporavak lozinke u slučaju da je zaboravite.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Dica de senha mestre (opcional)</value>
+    <value>Podsjetnik glavne lozinke (izborno)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Uma dica de senha mestre pode ajudá-lo a lembrá-la caso você esquecê-la.</value>
+    <value>Podsjetnik glavne lozinke Vam može pomoći da se prisjetite svoje lozinke ako je zaboravite.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Senha master deve ser pelo menos 8 caracteres.</value>
+    <value>Glavna lozinka mora imati najmanje 8 znakova.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Números mínimos</value>
+    <value>Najmanje brojeva</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Especiais minímos</value>
+    <value>Najmanje specijalnih</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>Mais configurações</value>
+    <value>Više postavki</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Você deve entrar o app bitwarden principal antes que você pode usar a extensão.</value>
+    <value>Morate se prijaviti u glavnu bitwarden aplikaciju prije nego što možete upotrijebiti proširenje.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Nunca</value>
+    <value>Nikad</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
-    <value>Nova credencial criada.</value>
+    <value>Stvorena je nova prijava.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>Não existem favoritos no seu cofre.</value>
+    <value>U vašem trezoru nema favorita.</value>
   </data>
   <data name="NoLogins" xml:space="preserve">
-    <value>Não existem credenciais no seu cofre.</value>
+    <value>U vašem trezoru nema prijava.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
-    <value>Não há nenhum login no seu cofre para este site. Toque para adicionar um.</value>
+    <value>U vašem se trezoru ne nalaze prijave za ovu web stranicu. Dodirnite da biste je dodali.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Esta credencial não tem um nome de utilizador ou palavra passe configurados.</value>
+    <value>Ova prijava nema definirano korisničko ime ili zaporku.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, entendi!</value>
+    <value>Ok, razumijem!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>Opcije zadanih postavki postavljene su iz alata generatora lozinke glavne aplikacije bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Opções</value>
+    <value>Opcije</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Outros</value>
+    <value>Ostalo</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Senha gerada.</value>
+    <value>Lozinka generirana.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Gerador de senha</value>
+    <value>Generator lozinke</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Gere automaticamente senhas fortes e únicas para seus logins.</value>
+    <value>Automatski generirajte jake, jedinstvene zaporke za prijavu.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Dica de senha</value>
+    <value>Podsjetnik za lozinku</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Enviamos um e-mail com sua dica de senha mestre para você.</value>
+    <value>Poslali smo vam e-poštu s podsjetnikom glavne lozinke.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Tem certeza que deseja substituir a senha atual?</value>
+    <value>Jeste li sigurni da želite prebrisati trenutnu zaporku?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>bitwarden automatski sinkronizira vaš trezor pomoću push obavijesti. Za najbolji mogući doživljaj, molimo odaberite "Ok" u sljedećem upitu kada se zatraži da omogućite push obavijesti.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Avalie a aplicação</value>
+    <value>Ocijenite aplikaciju</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Por favor considere ajudar-nos com uma boa crítica!</value>
+    <value>Molimo razmislite o tome da nam pomognete s dobrom recenzijom!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>Ocjene na trgovini aplikacija resetiraju se svakom novom verzijom bitwardena. Molimo razmislite o tome da nam pomognete s dobrom recenzijom!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Obnovi lozinku</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Digite novamente a senha mestre</value>
+    <value>Ponovno upišite glavnu lozinku</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Pesquisar cofre</value>
+    <value>Pretraživanje trezora</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Segurança</value>
+    <value>Sigurnost</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>Ver o progresso do desenvolvimento</value>
+    <value>Pogledajte napredak razvoja</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Selecionar</value>
+    <value>Odaberi</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Definir PIN</value>
+    <value>Postavi PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Digite um código PIN de 4 dígitos para desbloquear o aplicativo.</value>
+    <value>Unesite četveroznamenkasti PIN kôd za otključavanje aplikacije.</value>
   </data>
   <data name="LoginInformation" xml:space="preserve">
-    <value>Informações de login</value>
+    <value>Podaci za prijavu</value>
   </data>
   <data name="LoginUpdated" xml:space="preserve">
-    <value>Credencial atualizada.</value>
+    <value>Prijava je ažurirana.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Enviando...</value>
+    <value>Slanje...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Sincronizando...</value>
+    <value>Sinkronizacija...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Sincronização completa.</value>
+    <value>Sinkronizacija dovršena.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Sincronização falhou.</value>
+    <value>Sinkronizacija nije uspjela.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sincronizar cofre agora</value>
+    <value>Sinkronizirajte trezor sada</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Login de duas etapas</value>
+    <value>Prijava u dva koraka</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Desbloquear com {0}</value>
+    <value>Otključaj s {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Desbloqueio com código PIN</value>
+    <value>Otključaj PIN kodom</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Validating</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Código de verificação</value>
+    <value>Kod za provjeru</value>
   </data>
   <data name="ViewLogin" xml:space="preserve">
-    <value>Ver login</value>
+    <value>Prikaži prijavu</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>cofre web bitwarden</value>
+    <value>bitwarden Web trezor</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gerencie seus logins de qualquer navegador da web com o cofre de web bitwarden.</value>
+    <value>Upravljajte svojim prijavama s bilo kojeg web-preglednika pomoću bitwarden web trezora.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>App autenticador perdido?</value>
+    <value>Izgubljena aplikacija autentifikatora?</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Prijave</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extensão ativada!</value>
+    <value>Proširenje je aktivirano!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Ícones</value>
+    <value>Ikone</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Traduções</value>
+    <value>Prijevodi</value>
   </data>
   <data name="LoginsForUri" xml:space="preserve">
-    <value>Logins para {0}</value>
+    <value>Prijave za {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoLoginsForUri" xml:space="preserve">
-    <value>Não existem credenciais no seu cofre para {0}.</value>
+    <value>U vašem trezoru nema prijava za {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>Kada vidite bitwarden obavijest o automatskom ispunjavanju, možete ga dodirnuti da biste pokrenuli uslugu automatskog popunjavanja.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Toque nesta notificação para auto-preencher um login a partir de seu cofre.</value>
+    <value>Dodirnite ovu obavijest da biste automatski ispunili prijavu iz svog trezora.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Abrir as configurações de acessibilidade</value>
+    <value>Otvorite Postavke pristupačnosti</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. Na zaslonu Postavki pristupačnosti, dodirnite "bitwarden" ispod naslova usluge.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Ligue o interruptor e pressione OK para aceitar.</value>
+    <value>2. Uključite prekidač i pritisnite OK za prihvaćanje.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Desativado</value>
+    <value>Onemogućeno</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Ativado</value>
+    <value>Omogućeno</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Estado</value>
+    <value>Status</value>
   </data>
   <data name="Beta" xml:space="preserve">
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>Najlakši način za dodavanje novih prijava na vaš trezor je iz usluge s automatskim popunjavanjem bitwarden. Saznajte više o upotrebi usluge automatskog popunjavanja usluge bitwarden odlaskom na zaslon "Alati".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-preenchimento</value>
+    <value>Automatsko popunjavanje</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Pretende auto-preencher ou ver esta credencial?</value>
+    <value>Želite li automatski ispuniti ili pogledati ovu prijavu?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+    <value>Jeste li sigurni da želite automatsko popunjavanje ove prijave? Nije potpuno podudaranje sa "{0}".</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
-    <value>Correspondência de Logins</value>
+    <value>Odgovarajuće prijave</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Possíveis credenciais correspondentes</value>
+    <value>Moguće podudaranje prijava</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Pesquisar</value>
+    <value>Traži</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Você está procurando um login de preenchimento automático para "{0}".</value>
+    <value>Tražite prijavu za automatsko popunjavanje za "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Compartilhar seu cofre</value>
+    <value>Podijelite trezor</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Crie uma organização para compartilhar com segurança seus logins com outros usuários.</value>
+    <value>Izradite organizaciju kako biste sigurno dijelili svoje prijave s drugim korisnicima.</value>
   </data>
   <data name="DisbaleGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Koristimo Google analytics kako bismo saznali na koji način se aplikacija upotrebljava, kako bi istu mogli poboljšati. Svako prikupljanje podataka potpuno je anonimno.</value>
   </data>
   <data name="Features" xml:space="preserve">
-    <value>Características</value>
+    <value>Značajke</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Escarniar quando o campo da senha estiver focado</value>
+    <value>Skeniraj kada se fokusira na polje za lozinku</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life.</value>
+    <value>Samo skeniraj zaslon za polja i ponudi obavijest o automatskom ispunjavanju kad god odaberete polje za unos lozinke. Ova postavka vam može pomoći u održavanju trajanja baterije.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Persistir a notificação</value>
+    <value>Trajna obavijest</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life.</value>
+    <value>Uvijek nudi obavijest o automatskom ispunjavanju i samo pretraži polja nakon pokušaja automatskog popunjavanja. Ova postavka vam može pomoći u održavanju trajanja baterije.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
-    <value>Sempre escarniar</value>
+    <value>Uvijek skeniraj</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Sempre scanear a tela por campos e oferecer auto-preenchimento apenas se um campo de senha for encontrado. Esta é a configuração padrão.</value>
+    <value>Uvijek skeniraj zaslon za polja i nudi samo obavijest o automatskom ispunjavanju ako se pronađu polja za unos lozinke. Ovo je zadana postavka.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Nije moguće otvoriti aplikaciju "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">

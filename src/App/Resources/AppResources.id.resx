@@ -128,7 +128,7 @@
     <value>Tambah Folder</value>
   </data>
   <data name="AddLogin" xml:space="preserve">
-    <value>Tambahkan Log Masuk</value>
+    <value>Tambahkan Info Masuk</value>
     <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -284,7 +284,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Berangkas Saya</value>
+    <value>Brankas Saya</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -292,7 +292,7 @@
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>Tidak</value>
   </data>
   <data name="Notes" xml:space="preserve">
     <value>Catatan</value>
@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Disable Analytics</value>
+    <value>Nonaktifkan Analitik</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Kata Sandi</value>
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="LoginDeleted" xml:space="preserve">
-    <value>Log masuk telah dihapus.</value>
+    <value>Info masuk telah dihapus.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="LoginNoName" xml:space="preserve">
@@ -401,13 +401,13 @@
     <value>Akun baru Anda telah dibuat! Sekarang Anda bisa masuk.</value>
   </data>
   <data name="AddALogin" xml:space="preserve">
-    <value>Tambahkan Log Masuk</value>
+    <value>Tambahkan Info Masuk</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Ekstensi Aplikasi</value>
   </data>
   <data name="AutofillDescription" xml:space="preserve">
-    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis log masuk Anda di seluruh aplikasi dan web.</value>
+    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda di seluruh aplikasi dan web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Layanan Pengisian Otomatis</value>
@@ -419,16 +419,16 @@
     <value>ekstensi Aplikasi bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Cara termudah untuk menambahkan log masuk baru ke brankas Anda adalah dari Ekstensi Aplikasi bitwarden. Pelajari lebih lanjut tentang menggunakan Ekstensi Aplikasi bitwarden dengan menavigasi ke layar "Alat".</value>
+    <value>Cara termudah untuk menambahkan info masuk baru ke brankas Anda adalah dari Ekstensi Aplikasi bitwarden. Pelajari lebih lanjut tentang menggunakan Ekstensi Aplikasi bitwarden dengan menavigasi ke layar "Alat".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Gunakan bitwarden di Safari dan aplikasi lainnya untuk mengisi otomatis log masuk Anda.</value>
+    <value>Gunakan bitwarden di Safari dan aplikasi lainnya untuk mengisi otomatis info masuk Anda.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Layanan Pengisian Otomatis bitwarden</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis log masuk Anda.</value>
+    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Ubah Email</value>
@@ -471,16 +471,13 @@
     <value>Sesi Sekarang</value>
   </data>
   <data name="EditLogin" xml:space="preserve">
-    <value>Edit Log Masuk</value>
+    <value>Edit Info Masuk</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Aktifkan Sinkronisasi Otomatis</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Masukkan email akun Anda untuk menerima pentunjuk sandi utama Anda.</value>
-  </data>
-  <data name="EnterVerificationCode" xml:space="preserve">
-    <value>Masukkan kode verifikasi dua langkah Anda.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Aktifkan Ulang Ekstensi Aplikasi</value>
@@ -505,7 +502,7 @@
     <value>Lihat Aplikasi yang Didukung</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Log masuk Anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
+    <value>Info masuk Anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>Pada Safari dan Chrome, temukan bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
@@ -529,22 +526,22 @@
     <value>Dapatkan petunjuk sandi utama Anda</value>
   </data>
   <data name="ImportLogins" xml:space="preserve">
-    <value>Impor Log Masuk</value>
+    <value>Impor Info Masuk</value>
   </data>
   <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>Anda dapat mengimpor massal log masuk dari brankas web bitwarden.com. Anda ingin mengunjungi situs web sekarang?</value>
+    <value>Anda dapat mengimpor massal info masuk dari brankas web bitwarden.com. Anda ingin mengunjungi situs web sekarang?</value>
   </data>
   <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Mengimpor massal log masuk Anda dari aplikasi pengelola sandi lainnya dengan cepat.</value>
+    <value>Mengimpor massal info masuk Anda dari aplikasi pengelola sandi lainnya dengan cepat.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Sinkronisasi Terakhir:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Length</value>
+    <value>Panjang</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lock</value>
+    <value>Kunci</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
     <value>15 menit</value>
@@ -562,7 +559,7 @@
     <value>Segera</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Lock Options</value>
+    <value>Pilihan Penguncian</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Sedang masuk...</value>
@@ -607,148 +604,148 @@
     <value>Jangan pernah</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
-    <value>New login created.</value>
+    <value>Info masuk baru telah dibuat.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>Tidak ada favorit di brankas Anda.</value>
   </data>
   <data name="NoLogins" xml:space="preserve">
-    <value>There are no logins in your vault.</value>
+    <value>Tidak ada info masuk di brankas Anda.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
-    <value>There are no logins in your vault for this website. Tap to add one.</value>
+    <value>Tidak ada info masuk untuk situs ini di brankas Anda. Ketuk untuk menambahkan.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>Info masuk ini tidak memiliki nama pengguna atau sandi yang dikonfigurasi.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>Oke, saya mengerti!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>Pilihan baku diatur dari alat pembuat sandi utama aplikasi bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>Pilihan</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>Lainnya</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>Sandi telah dibuat.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password Generator</value>
+    <value>Pembuat Kata Sandi</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automatically generate strong, unique passwords for your logins.</value>
+    <value>Secara otomatis membuat sandi yang kuat dan unik untuk info masuk Anda.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password Hint</value>
+    <value>Petunjuk Sandi</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>Kami telah mengirimi Anda email dengan petunjuk sandi utama Anda.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>Anda yakin ingin menimpa sandi saat ini?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>bitwarden membuat brankas Anda disinkronkan secara otomatis dengan menggunakan notifikasi. Untuk pengalaman yang sebaik mungkin, silakan pilih "Oke" pada saran berikut ketika diminta untuk mengaktifkan notifikasi.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>Nilai Aplikasi</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>Mohon pertimbangkan membantu kami dengan ulasan yang baik!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>Peringkat App Store diatur ulang dengan setiap versi baru dari bitwarden. Mohon pertimbangkan membatu kami dengan ulasan yang baik!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Buat Ulang Sandi</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>Ketik Ulang Sandi Utama</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>Cari brankas</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>Keamanan</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
+    <value>Lihat Kemajuan Pengembangan</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Pilih</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Set PIN</value>
+    <value>Atur PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>Masukkan 4 digit kode PIN untuk membuka aplikasi.</value>
   </data>
   <data name="LoginInformation" xml:space="preserve">
-    <value>Login Information</value>
+    <value>Informasi Info Masuk</value>
   </data>
   <data name="LoginUpdated" xml:space="preserve">
-    <value>Login updated.</value>
+    <value>Info masuk diperbarui.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Mengirim...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>Menyinkronkan...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Syncing complete.</value>
+    <value>Sinkronisasi selesai.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Syncing failed.</value>
+    <value>Sinkronisasi gagal.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>Sinkronkan Brankas Sekarang</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Two-step Login</value>
+    <value>Info masuk dua langkah</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
     <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Unlock with {0}</value>
+    <value>Buka denga {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Unlock with PIN Code</value>
+    <value>Buka dengan kode PIN</value>
   </data>
-  <data name="ValidatingCode" xml:space="preserve">
-    <value>Validating code...</value>
+  <data name="Validating" xml:space="preserve">
+    <value>Validating</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification Code</value>
+    <value>Kode Verifikasi</value>
   </data>
   <data name="ViewLogin" xml:space="preserve">
-    <value>View Login</value>
+    <value>Lihat Info Masuk</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden Web Vault</value>
+    <value>Brankas Web bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Manage your logins from any web browser with the bitwarden web vault.</value>
+    <value>Kelola info masuk Anda dari berbagai peramban web dengan brankas web bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Lost authenticator app?</value>
+    <value>Kehilangan aplikasi autentikasi?</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Log Masuk</value>
+    <value>Info Masuk</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -761,18 +758,18 @@
     <value>Terjemahan</value>
   </data>
   <data name="LoginsForUri" xml:space="preserve">
-    <value>Log masuk untuk {0}</value>
+    <value>Info masuk untuk {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoLoginsForUri" xml:space="preserve">
-    <value>Tidak ada log masuk di brankas Anda untuk {0}.</value>
+    <value>Tidak ada info masuk di brankas Anda untuk {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>Ketika Anda melihat notifikasi pengisian otomatis bitwarden, Anda dapat mengetuknya untuk meluncurkan layanan pengisian otomatis.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Ketuk notifikasi ini untuk mengisi otomatis log masuk dari brankas Anda.</value>
+    <value>Ketuk notifikasi ini untuk mengisi info masuk secara otomatis dari brankas Anda.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
     <value>Buka Setelan Aksesibilitas</value>
@@ -781,7 +778,7 @@
     <value>1. Pada layar Setelan Aksesibilitas Android, sentuh "bitwarden" di bawah Layanan.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Aktifkan sakelar dan tekan OKE untuk menerima.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Dinonaktifkan</value>
@@ -796,37 +793,37 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Cara termudah untuk menambahkan log masuk baru ke brankas Anda adalah dari Layanan Pengisian Otomatis bitwarden. Pelajari lebih lanjut tentang menggunakan Layanan Pengisian Otomatis bitwarden dengan menavigasi ke layar "Alat".</value>
+    <value>Cara termudah untuk menambahkan info masuk baru ke brankas Anda adalah dari Layanan Pengisian Otomatis bitwarden. Pelajari lebih lanjut tentang menggunakan Layanan Pengisian Otomatis bitwarden dengan menavigasi ke layar "Alat".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Isi otomatis</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Apakah Anda ingin mengisi otomatis atau melihat log masuk ini?</value>
+    <value>Apakah Anda ingin mengisi otomatis atau melihat info masuk ini?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Anda yakin ingin mengisi otomatis log masuk ini? Ini tidak lengkap cocok untuk "{0}".</value>
+    <value>Anda yakin ingin mengisi otomatis info masuk ini? Ini tidak sepenuhnya cocok untuk "{0}".</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
-    <value>Log Masuk yang Cocok</value>
+    <value>Info Masuk yang Cocok</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Log Masuk yang Mungkin Cocok</value>
+    <value>Info Masuk yang Mungkin Cocok</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Pencarian</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill login for "{0}".</value>
+    <value>Anda mencari info masuk otomatis untuk {0}.</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Bagikan Brankas Anda</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Buat organisasi untuk berbagi log masuk Anda dengan aman dengan pengguna lain.</value>
+    <value>Buat organisasi untuk berbagi info masuk Anda dengan aman dengan pengguna lain.</value>
   </data>
   <data name="DisbaleGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Kami menggunakan analitik untuk mempelajari lebih baik bagaimana aplikasi sedang digunakan sehingga kami dapat membuatnya lebih baik. Semua pengumpulan data benar-benar anonim.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Fitur</value>
@@ -838,7 +835,7 @@
     <value>Hanya pindai layat untuk kolom dan tampilkan notifikasi pengisian otomatis setiap kali Anda memilih kolom kata sandi. Setelan ini mungkin dapat membantu menghemat baterai.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Persist Notification</value>
+    <value>Notikasi Tetap</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
     <value>Selalu munculkan notifikasi pengisian otomatis dan hanya memindai kolom setelah mencoba pengisian otomatis. Setelan ini mungkin dapat membantu menghemat baterai.</value>
@@ -850,7 +847,101 @@
     <value>Selalu pindai layar untuk kolom dan hanya munculkan notifikasi pengisian otomatis jika kolom kata sandi ditemukan. Ini adalah setelan bawaan.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Tidak dapat membuka aplikasi {0}.</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Authenticator App</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Login Unavailable</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Recovery Code</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember me</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Send verification code email again</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Two-step Login Options</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Use another two-step login method</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Could not send verification email. Try again.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Verification email sent.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>YubiKey NEO Security Key</value>
+    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Add New Attachment</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Unable to download file.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Your device cannot open this type of file.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Authenticator Key (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Verification Code (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Authenticator key added.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Cannot read authenticator key.</value>
+  </data>
+  <data name="CameraInstructionBottom" xml:space="preserve">
+    <value>Scanning will happen automatically.</value>
+  </data>
+  <data name="CameraInstructionTop" xml:space="preserve">
+    <value>Point your camera at the QR code.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Scan QR Code</value>
   </data>
 </root>

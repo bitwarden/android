@@ -118,44 +118,44 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>Менеджер паролей bitwarden</value>
+    <value>bitwarden Upravitelj Lozinki</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden - это менеджер паролей, помогающий обеспечить безопасность в интернете.</value>
+    <value>bitwarden je upravitelj prijava i lozinki koji pomaže da ste zaštićeni online.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden - простой и безопасный способ хранить все ваши логины и пароли и легко их синхронизировать между всеми вашими устройствами.
+    <value>bitwarden je najlakši i najsigurniji način pohranjivanja svih vaših prijava i lozinki, dok su iste sinkronizirane među svim vašim uređajima.
 
-Кража паролей - серьезная проблема. Сайты и приложения, которые вы используете подвергаются атакам каждый день. Проблемы в их безопасности могут привести к краже вашего пароля. Кроме того, когда вы используете одни и те же пароли на разных сайтах и приложениях, то хакеры могут легко получить доступ к нескольким вашим аккаунтам сразу (к почтовому ящику, к аккаунту банка и т. д.).
+Krađa lozinki ozbiljan je problem. Web-lokacije i aplikacije koje upotrebljavate svakodnevno su napadnute. Pojavljuju se sigurnosne povrede, a vaše lozinke su ukradene. Ako ponovno upotrebljavate iste zaporke u aplikacijama i web-lokacijama, hakeri mogu lako pristupiti vašoj e-pošti, banci i drugim važnim računima.
 
-Эксперты по безопасности рекомендуют использовать разные случайно сгенерированные пароли для каждого созданного вами аккаунта. Но как же управлять всеми этими паролями? bitwarden позволяет вам легко получить доступ к вашим паролям, а так же создавать и хранить их.
+Sigurnosni stručnjaci preporučuju da koristite različitu, nasumično generiranu lozinku za svaki račun koji stvorite. Ali kako upravljati svim tim lozinkama? Bitwarden vam olakšava stvaranje, pohranu i pristup lozinkama.
 
-bitwarden хранит все ваши логины и пароли в зашифрованном хранилище, которое синхронизируется между всеми вашими устройствами. До того, как данные покинут ваше устройство они будут зашифрованы и только потом отправлены. Мы в bitwarden не сможем прочесть ваши данные, даже если мы этого захотим. Ваши данные зашифрованы при помощи алгоритма AES-256 и PBKDF2 SHA-256.</value>
+bitwarden pohranjuje sve vaše prijave u šifrirani trezor koji se sinkronizira na svim vašim uređajima. Budući da je potpuno šifriran prije nego ikada napusti uređaj, samo vi imate pristup podacima. Čak ni tim u bitwardenu ne može vidjeti vaše podatke. Vaši su podaci zapečaćeni s AES-256 bitnim šifriranjem, salt hashom i PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Безопасный и бесплатный менеджер паролей для всех ваших устройств</value>
+    <value>Siguran i besplatan upravitelj lozinki za sve vaše uređaje</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Управляйте всеми своими логинами и паролями из безопасного хранилища</value>
+    <value>Upravljajte svim svojim prijavama i lozinkama iz sigurnog trezora</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Генерируйте стойкие, случайные и надежные пароли</value>
+    <value>Automatski generirajte jake, nasumične i sigurne lozinke</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Защитите ваше хранилище при помощи отпечатка пальца, PIN-кода или мастер-пароля</value>
+    <value>Zaštitite svoj trezor pomoću otiska prsta, PIN koda ili glavne lozinke</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Быстрое автозаполнение логинов в веб-браузере и других приложениях</value>
+    <value>Brzo automatsko popunjavanje prijava iz web preglednika i drugih aplikacija</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Синхронизация и доступ к хранилищу с нескольких устройств
+    <value>Sinkronizirajte i pristupite trezoru s više uređaja
 
-- телефон
-- планшет
-- компьютер
-- веб-браузер</value>
+- Telefon
+- Tablet
+- Računalo
+- Web</value>
   </data>
 </root>
