@@ -96,6 +96,9 @@
 		<string>it</string>
 		<string>fi</string>
 		<string>fr</string>
+		<string>ro</string>
+		<string>id</string>
+		<string>hr</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
