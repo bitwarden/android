@@ -363,7 +363,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} был скопирован.</value>
+    <value>{0} скопирован.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -413,7 +413,7 @@
     <value>Служба автозаполнения</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Избегать неоднозначные символы</value>
+    <value>Избегать неоднозначных символов</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Расширение bitwarden</value>
@@ -478,9 +478,6 @@
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Введите Ваш email для получения подсказки мастер-пароля.</value>
-  </data>
-  <data name="EnterVerificationCode" xml:space="preserve">
-    <value>Введите код подтверждения двухфакторной аутентификации.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Повторно включить расширение</value>
@@ -578,7 +575,7 @@
     <value>Неверное подтверждение пароля.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Мастер-пароль - пароль для доступа к вашему безопасному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль нельзя.</value>
+    <value>Мастер-пароль - пароль для доступа к вашему безопасному хранилищу. Он очень важен, поэтому не забывайте его. Восстановить мастер-пароль невозможно.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Подсказка к мастер-паролю (необяз.)</value>
@@ -598,7 +595,7 @@
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>Больше настроек</value>
+    <value>Дополнительные настройки</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
     <value>Необходимо войти в основное приложение bitwarden прежде чем вы сможете использовать расширение.</value>
@@ -666,7 +663,7 @@
     <value>Рейтинги App Store обновляются с каждой новой версией bitwarden. Пожалуйста, подумайте о том, чтобы помочь нам хорошим отзывом!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Регенерировать пароль</value>
+    <value>Создать новый пароль</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Введите мастер-пароль повторно</value>
@@ -728,8 +725,8 @@
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Разблокировать с помощью PIN</value>
   </data>
-  <data name="ValidatingCode" xml:space="preserve">
-    <value>Проверка кода...</value>
+  <data name="Validating" xml:space="preserve">
+    <value>Validating</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -742,7 +739,7 @@
     <value>Веб-хранилище bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Управляйте своими аккаунтами из любого браузера при помощи веб-хранилища bitwarden.</value>
+    <value>Управляйте своими логинами из любого браузера при помощи веб-хранилища bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Потеряли доступ к приложению для аутентификации?</value>
@@ -835,13 +832,13 @@
     <value>Сканировать выбор поля пароля</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Сканировать и выводить уведомление автозаполнения только при выборе поля ввода пароля. Этот параметр может помочь сэкономить время автономной работы.</value>
+    <value>Сканировать и выводить уведомление автозаполнения только при выборе поля ввода пароля. Этот параметр может помочь увеличить время автономной работы.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>Постоянное уведомление</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Сканирование выполняется только после нажатия постоянно отображаемого уведомления. Этот параметр может помочь сэкономить время автономной работы.</value>
+    <value>Сканирование выполняется только после нажатия постоянно отображаемого уведомления. Этот параметр может помочь увеличить время автономной работы.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>Сканировать всегда</value>
@@ -852,5 +849,99 @@
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Не удается открыть приложение "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>Authenticator App</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>Login Unavailable</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>Recovery Code</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Remember me</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>Send verification code email again</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>Two-step Login Options</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>Use another two-step login method</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>Could not send verification email. Try again.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>Verification email sent.</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>YubiKey NEO Security Key</value>
+    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>Add New Attachment</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>Attachments</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>Unable to download file.</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>Your device cannot open this type of file.</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>Downloading...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>Authenticator Key (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>Verification Code (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>Authenticator key added.</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>Cannot read authenticator key.</value>
+  </data>
+  <data name="CameraInstructionBottom" xml:space="preserve">
+    <value>Scanning will happen automatically.</value>
+  </data>
+  <data name="CameraInstructionTop" xml:space="preserve">
+    <value>Point your camera at the QR code.</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>Scan QR Code</value>
   </data>
 </root>
