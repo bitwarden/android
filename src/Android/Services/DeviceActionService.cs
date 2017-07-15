@@ -122,5 +122,10 @@ namespace Bit.Android.Services
                 return false;
             }
         }
+
+        public byte[] SelectFile()
+        {
+            return null;
+        }
     }
 }

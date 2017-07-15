@@ -3,6 +3,7 @@ using Bit.App.Abstractions;
 using UIKit;
 using Foundation;
 using System.IO;
+using MobileCoreServices;
 
 namespace Bit.iOS.Services
 {
@@ -82,6 +83,70 @@ namespace Bit.iOS.Services
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var tmp = Path.Combine(documents, "..", "tmp");
             return tmp;
+        }
+
+        public byte[] SelectFile()
+        {
+            var controller = GetVisibleViewController();
+
+            var allowedUTIs = new string[]
+            {
+                UTType.AliasFile,
+                UTType.AliasRecord,
+                UTType.AppleICNS,
+                UTType.Image,
+                UTType.Movie,
+                UTType.GIF,
+                UTType.Video,
+                UTType.Folder,
+                UTType.ApplicationFile,
+                UTType.JPEG,
+                UTType.PNG,
+                UTType.BMP,
+                UTType.Spreadsheet
+            };
+
+            var picker = new UIDocumentMenuViewController(allowedUTIs, UIDocumentPickerMode.Open);
+            picker.AddOption("Camera", null, UIDocumentMenuOrder.First, () =>
+            {
+                var imagePicker = new UIImagePickerController { SourceType = UIImagePickerControllerSourceType.Camera };
+
+                imagePicker.FinishedPickingMedia += (sender, ev) =>
+                {
+                    //var filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "tmp.png");
+                    //var image = (UIImage)ev.Info.ObjectForKey(new NSString("UIImagePickerControllerOriginalImage"));
+                    //DismissViewController(true, null)
+                };
+
+                imagePicker.Canceled += (sender, ev2) =>
+                {
+                    //DismissViewController(true, null)
+                };
+
+                controller.PresentModalViewController(imagePicker, true);
+            });
+            picker.AddOption("Photo Library", null, UIDocumentMenuOrder.First, () =>
+            {
+                var imagePicker = new UIImagePickerController { SourceType = UIImagePickerControllerSourceType.PhotoLibrary };
+
+                imagePicker.FinishedPickingMedia += (sender, ev) =>
+                {
+                    //var filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "tmp.png");
+                    //var image = (UIImage)ev.Info.ObjectForKey(new NSString("UIImagePickerControllerOriginalImage"));
+                    //DismissViewController(true, null)
+                };
+
+                imagePicker.Canceled += (sender, ev2) =>
+                {
+                    //DismissViewController(true, null)
+                };
+
+                controller.PresentModalViewController(imagePicker, true);
+            });
+
+            controller.PresentViewController(picker, true, null);
+
+            return null;
         }
     }
 }
