@@ -10,9 +10,9 @@
 	<array>
 		<string>$(AppIdentifierPrefix)com.8bit.bitwarden</string>
 	</array>
-	<key>com.apple.developer.ubiquity-container-identifiers</key>
-	<array>
-		<string>$(TeamIdentifierPrefix)com.8bit.bitwarden</string>
-	</array>
+    <key>com.apple.developer.ubiquity-container-identifiers</key>
+    <array>
+        <string>iCloud.$(CFBundleIdentifier)</string>
+    </array>
 </dict>
 </plist>

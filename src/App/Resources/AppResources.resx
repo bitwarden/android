@@ -944,4 +944,10 @@
   <data name="ScanQrTitle" xml:space="preserve">
     <value>Scan QR Code</value>
   </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Camera</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Photos</value>
+  </data>
 </root>

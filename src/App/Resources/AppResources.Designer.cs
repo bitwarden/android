@@ -449,6 +449,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Camera.
+        /// </summary>
+        public static string Camera {
+            get {
+                return ResourceManager.GetString("Camera", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scanning will happen automatically..
         /// </summary>
         public static string CameraInstructionBottom {
@@ -1705,6 +1714,15 @@ namespace Bit.App.Resources {
         public static string PasswordOverrideAlert {
             get {
                 return ResourceManager.GetString("PasswordOverrideAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Photos.
+        /// </summary>
+        public static string Photos {
+            get {
+                return ResourceManager.GetString("Photos", resourceCulture);
             }
         }
         

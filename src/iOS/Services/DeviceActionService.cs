@@ -4,6 +4,7 @@ using UIKit;
 using Foundation;
 using System.IO;
 using MobileCoreServices;
+using Bit.App.Resources;
 
 namespace Bit.iOS.Services
 {
@@ -88,65 +89,87 @@ namespace Bit.iOS.Services
         public byte[] SelectFile()
         {
             var controller = GetVisibleViewController();
+            var picker = new UIDocumentMenuViewController(new string[] { UTType.Data }, UIDocumentPickerMode.Import);
 
-            var allowedUTIs = new string[]
-            {
-                UTType.AliasFile,
-                UTType.AliasRecord,
-                UTType.AppleICNS,
-                UTType.Image,
-                UTType.Movie,
-                UTType.GIF,
-                UTType.Video,
-                UTType.Folder,
-                UTType.ApplicationFile,
-                UTType.JPEG,
-                UTType.PNG,
-                UTType.BMP,
-                UTType.Spreadsheet
-            };
-
-            var picker = new UIDocumentMenuViewController(allowedUTIs, UIDocumentPickerMode.Open);
-            picker.AddOption("Camera", null, UIDocumentMenuOrder.First, () =>
+            picker.AddOption(AppResources.Camera, null, UIDocumentMenuOrder.First, () =>
             {
                 var imagePicker = new UIImagePickerController { SourceType = UIImagePickerControllerSourceType.Camera };
-
-                imagePicker.FinishedPickingMedia += (sender, ev) =>
-                {
-                    //var filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "tmp.png");
-                    //var image = (UIImage)ev.Info.ObjectForKey(new NSString("UIImagePickerControllerOriginalImage"));
-                    //DismissViewController(true, null)
-                };
-
-                imagePicker.Canceled += (sender, ev2) =>
-                {
-                    //DismissViewController(true, null)
-                };
-
+                imagePicker.FinishedPickingMedia += ImagePicker_FinishedPickingMedia;
+                imagePicker.Canceled += ImagePicker_Canceled;
                 controller.PresentModalViewController(imagePicker, true);
             });
-            picker.AddOption("Photo Library", null, UIDocumentMenuOrder.First, () =>
+
+            picker.AddOption(AppResources.Photos, null, UIDocumentMenuOrder.First, () =>
             {
                 var imagePicker = new UIImagePickerController { SourceType = UIImagePickerControllerSourceType.PhotoLibrary };
-
-                imagePicker.FinishedPickingMedia += (sender, ev) =>
-                {
-                    //var filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "tmp.png");
-                    //var image = (UIImage)ev.Info.ObjectForKey(new NSString("UIImagePickerControllerOriginalImage"));
-                    //DismissViewController(true, null)
-                };
-
-                imagePicker.Canceled += (sender, ev2) =>
-                {
-                    //DismissViewController(true, null)
-                };
-
+                imagePicker.FinishedPickingMedia += ImagePicker_FinishedPickingMedia;
+                imagePicker.Canceled += ImagePicker_Canceled;
                 controller.PresentModalViewController(imagePicker, true);
             });
 
-            controller.PresentViewController(picker, true, null);
+            picker.DidPickDocumentPicker += (sender, e) =>
+            {
+                controller.PresentViewController(e.DocumentPicker, true, null);
+                e.DocumentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
+            };
 
+            controller.PresentViewController(picker, true, null);
             return null;
+        }
+
+        private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
+        {
+            if(sender is UIImagePickerController picker)
+            {
+                //var image = (UIImage)e.Info.ObjectForKey(new NSString("UIImagePickerControllerOriginalImage"));
+
+                // TODO: determine if JPG or PNG from extension. Get filename somehow?
+                byte[] data;
+                if(false)
+                {
+                    using(var imageData = e.OriginalImage.AsJPEG())
+                    {
+                        data = new byte[imageData.Length];
+                        System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, data, 0,
+                            Convert.ToInt32(imageData.Length));
+                    }
+                }
+                else
+                {
+                    using(var imageData = e.OriginalImage.AsPNG())
+                    {
+                        data = new byte[imageData.Length];
+                        System.Runtime.InteropServices.Marshal.Copy(imageData.Bytes, data, 0,
+                            Convert.ToInt32(imageData.Length));
+                    }
+                }
+
+                picker.DismissViewController(true, null);
+            }
+        }
+
+        private void ImagePicker_Canceled(object sender, EventArgs e)
+        {
+            if(sender is UIImagePickerController picker)
+            {
+                picker.DismissViewController(true, null);
+            }
+        }
+
+        private void DocumentPicker_DidPickDocument(object sender, UIDocumentPickedEventArgs e)
+        {
+            e.Url.StartAccessingSecurityScopedResource();
+            var fileCoordinator = new NSFileCoordinator();
+
+            // TODO: get filename?
+
+            NSError error;
+            fileCoordinator.CoordinateRead(e.Url, NSFileCoordinatorReadingOptions.WithoutChanges, out error, (url) =>
+            {
+                var data = NSData.FromUrl(url).ToArray();
+            });
+
+            e.Url.StopAccessingSecurityScopedResource();
         }
     }
 }

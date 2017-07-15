@@ -215,6 +215,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.hi.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.hr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.hr.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.id.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -239,6 +244,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.pt-PT.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.ro.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.ro.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\AppResources.ru.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -329,6 +339,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.hi.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.hr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.hr.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.id.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.id.Designer.cs</LastGenOutput>
@@ -348,6 +362,10 @@
     <EmbeddedResource Include="Resources\AppResources.pt-PT.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.pt-PT.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.ro.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.ro.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.ru.resx">
       <Generator>ResXFileCodeGenerator</Generator>
