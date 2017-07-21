@@ -1,4 +1,5 @@
 ﻿using Bit.App.Models;
+using System;
 
 namespace Bit.iOS.Extension.Models
 {
@@ -11,6 +12,7 @@ namespace Bit.iOS.Extension.Models
             Username = login.Username?.Decrypt(login.OrganizationId);
             Password = login.Password?.Decrypt(login.OrganizationId);
             Uri = login.Uri?.Decrypt(login.OrganizationId);
+            Totp = new Lazy<string>(() => login.Totp?.Decrypt(login.OrganizationId));
         }
 
         public string Id { get; set; }
@@ -18,5 +20,6 @@ namespace Bit.iOS.Extension.Models
         public string Username { get; set; }
         public string Password { get; set; }
         public string Uri { get; set; }
+        public Lazy<string> Totp { get; set; }
     }
 }

@@ -104,17 +104,22 @@ namespace Bit.iOS.Extension
             private IEnumerable<LoginViewModel> _tableItems = new List<LoginViewModel>();
             private Context _context;
             private LoginListViewController _controller;
+            private ILoginService _loginService;
+            private ISettings _settings;
+            private bool _isPremium;
 
             public TableSource(LoginListViewController controller)
             {
                 _context = controller.Context;
                 _controller = controller;
+                _isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
+                _loginService = Resolver.Resolve<ILoginService>();
+                _settings = Resolver.Resolve<ISettings>();
             }
 
             public async Task LoadItemsAsync()
             {
-                var loginService = Resolver.Resolve<ILoginService>();
-                var logins = await loginService.GetAllAsync(_context.UrlString);
+                var logins = await _loginService.GetAllAsync(_context.UrlString);
                 _tableItems = logins?.Item1?.Select(s => new LoginViewModel(s))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username)
@@ -184,9 +189,16 @@ namespace Bit.iOS.Extension
 
                 if(_controller.CanAutoFill() && !string.IsNullOrWhiteSpace(item.Password))
                 {
-                    _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password);
+                    string totp = null;
+                    if(!_settings.GetValueOrDefault(App.Constants.SettingDisableTotpCopy, false))
+                    {
+                        totp = GetTotp(item);
+                    }
+
+                    _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password, totp);
                 }
-                else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password))
+                else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
+                    !string.IsNullOrWhiteSpace(item.Totp.Value))
                 {
                     var sheet = Dialogs.CreateActionSheet(item.Name, _controller);
                     if(!string.IsNullOrWhiteSpace(item.Username))
@@ -217,6 +229,26 @@ namespace Bit.iOS.Extension
                         }));
                     }
 
+                    if(!string.IsNullOrWhiteSpace(item.Totp.Value))
+                    {
+                        sheet.AddAction(UIAlertAction.Create(AppResources.CopyTotp, UIAlertActionStyle.Default, a =>
+                        {
+                            var totp = GetTotp(item);
+                            if(string.IsNullOrWhiteSpace(totp))
+                            {
+                                return;
+                            }
+
+                            UIPasteboard clipboard = UIPasteboard.General;
+                            clipboard.String = totp;
+                            var alert = Dialogs.CreateMessageAlert(AppResources.CopiedTotp);
+                            _controller.PresentViewController(alert, true, () =>
+                            {
+                                _controller.DismissViewController(true, null);
+                            });
+                        }));
+                    }
+
                     sheet.AddAction(UIAlertAction.Create(AppResources.Cancel, UIAlertActionStyle.Cancel, null));
                     _controller.PresentViewController(sheet, true, null);
                 }
@@ -225,6 +257,20 @@ namespace Bit.iOS.Extension
                     var alert = Dialogs.CreateAlert(null, AppResources.NoUsernamePasswordConfigured, AppResources.Ok);
                     _controller.PresentViewController(alert, true, null);
                 }
+            }
+
+            private string GetTotp(LoginViewModel item)
+            {
+                string totp = null;
+                if(_isPremium)
+                {
+                    if(item != null && !string.IsNullOrWhiteSpace(item.Totp.Value))
+                    {
+                        totp = App.Utilities.Crypto.Totp(item.Totp.Value);
+                    }
+                }
+
+                return totp;
             }
         }
     }

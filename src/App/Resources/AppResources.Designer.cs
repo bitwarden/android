@@ -575,6 +575,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copied TOTP!.
+        /// </summary>
+        public static string CopiedTotp {
+            get {
+                return ResourceManager.GetString("CopiedTotp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copied username!.
         /// </summary>
         public static string CopiedUsername {
@@ -598,6 +607,15 @@ namespace Bit.App.Resources {
         public static string CopyPassword {
             get {
                 return ResourceManager.GetString("CopyPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy TOTP.
+        /// </summary>
+        public static string CopyTotp {
+            get {
+                return ResourceManager.GetString("CopyTotp", resourceCulture);
             }
         }
         
@@ -665,6 +683,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable Automatic TOTP Copy.
+        /// </summary>
+        public static string DisableAutoTotpCopy {
+            get {
+                return ResourceManager.GetString("DisableAutoTotpCopy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login..
+        /// </summary>
+        public static string DisableAutoTotpCopyDescription {
+            get {
+                return ResourceManager.GetString("DisableAutoTotpCopyDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disabled.
         /// </summary>
         public static string Disabled {
@@ -685,9 +721,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous..
         /// </summary>
-        public static string DisbaleGADescription {
+        public static string DisableGADescription {
             get {
-                return ResourceManager.GetString("DisbaleGADescription", resourceCulture);
+                return ResourceManager.GetString("DisableGADescription", resourceCulture);
             }
         }
         

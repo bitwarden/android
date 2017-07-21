@@ -27,6 +27,8 @@ namespace Bit.App.Pages
         }
 
         private StackLayout StackLayout { get; set; }
+        private ExtendedSwitchCell CopyTotpCell { get; set; }
+        private Label CopyTotpLabel { get; set; }
         private ExtendedSwitchCell AnalyticsCell { get; set; }
         private Label AnalyticsLabel { get; set; }
         private ExtendedSwitchCell AutofillPersistNotificationCell { get; set; }
@@ -38,6 +40,23 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            CopyTotpCell = new ExtendedSwitchCell
+            {
+                Text = AppResources.DisableAutoTotpCopy,
+                On = _settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false)
+            };
+
+            var totpTable = new FormTableView(true)
+            {
+                Root = new TableRoot
+                {
+                    new TableSection(" ")
+                    {
+                        CopyTotpCell
+                    }
+                }
+            };
+
             AnalyticsCell = new ExtendedSwitchCell
             {
                 Text = AppResources.DisableGA,
@@ -55,18 +74,19 @@ namespace Bit.App.Pages
                 }
             };
 
-            AnalyticsLabel = new Label
+            CopyTotpLabel = new FormTableLabel(this)
             {
-                Text = AppResources.DisbaleGADescription,
-                LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                Style = (Style)Application.Current.Resources["text-muted"],
-                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
+                Text = AppResources.DisableAutoTotpCopyDescription
+            };
+
+            AnalyticsLabel = new FormTableLabel(this)
+            {
+                Text = AppResources.DisableGADescription
             };
 
             StackLayout = new StackLayout
             {
-                Children = { analyticsTable, AnalyticsLabel },
+                Children = { totpTable, CopyTotpLabel, analyticsTable, AnalyticsLabel },
                 Spacing = 0
             };
 
@@ -78,7 +98,7 @@ namespace Bit.App.Pages
                     On = !_appSettings.AutofillPersistNotification && !_appSettings.AutofillPasswordField
                 };
 
-                var autofillAlwaysTable = new FormTableView
+                var autofillAlwaysTable = new FormTableView(true)
                 {
                     Root = new TableRoot
                     {
@@ -102,7 +122,6 @@ namespace Bit.App.Pages
 
                 var autofillPersistNotificationTable = new FormTableView
                 {
-                    NoHeader = true,
                     Root = new TableRoot
                     {
                         new TableSection(" ")
@@ -125,7 +144,6 @@ namespace Bit.App.Pages
 
                 var autofillPasswordFieldTable = new FormTableView
                 {
-                    NoHeader = true,
                     Root = new TableRoot
                     {
                         new TableSection(" ")
@@ -169,6 +187,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
 
             AnalyticsCell.OnChanged += AnalyticsCell_Changed;
+            CopyTotpCell.OnChanged += CopyTotpCell_OnChanged;
             StackLayout.LayoutChanged += Layout_LayoutChanged;
 
             if(Device.RuntimePlatform == Device.Android)
@@ -184,6 +203,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
 
             AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
+            CopyTotpCell.OnChanged -= CopyTotpCell_OnChanged;
             StackLayout.LayoutChanged -= Layout_LayoutChanged;
 
             if(Device.RuntimePlatform == Device.Android)
@@ -209,6 +229,17 @@ namespace Bit.App.Pages
 
             _settings.AddOrUpdateValue(Constants.SettingGaOptOut, cell.On);
             _googleAnalyticsService.SetAppOptOut(cell.On);
+        }
+
+        private void CopyTotpCell_OnChanged(object sender, ToggledEventArgs e)
+        {
+            var cell = sender as ExtendedSwitchCell;
+            if(cell == null)
+            {
+                return;
+            }
+
+            _settings.AddOrUpdateValue(Constants.SettingDisableTotpCopy, cell.On);
         }
 
         private void AutofillAlwaysCell_OnChanged(object sender, ToggledEventArgs e)
@@ -262,7 +293,7 @@ namespace Bit.App.Pages
 
         private class FormTableView : ExtendedTableView
         {
-            public FormTableView()
+            public FormTableView(bool header = false)
             {
                 Intent = TableIntent.Settings;
                 EnableScrolling = false;
@@ -270,6 +301,7 @@ namespace Bit.App.Pages
                 EnableSelection = true;
                 VerticalOptions = LayoutOptions.Start;
                 NoFooter = true;
+                NoHeader = !header;
             }
         }
 

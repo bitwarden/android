@@ -29,6 +29,8 @@ namespace Bit.Android
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
         private DateTime? _lastAction;
         private Java.Util.Regex.Pattern _otpPattern = Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
+        private IDeviceActionService _deviceActionService;
+        private ISettings _settings;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -65,6 +67,8 @@ namespace Bit.Android
             typeof(Color).GetProperty("Accent", BindingFlags.Public | BindingFlags.Static)
                 .SetValue(null, Color.FromHex("d2d6de"));
 
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            _settings = Resolver.Resolve<ISettings>();
             LoadApplication(new App.App(
                 uri,
                 Resolver.Resolve<IAuthService>(),
@@ -72,13 +76,13 @@ namespace Bit.Android
                 Resolver.Resolve<IUserDialogs>(),
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>(),
-                Resolver.Resolve<ISettings>(),
+                _settings,
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<IGoogleAnalyticsService>(),
                 Resolver.Resolve<ILocalizeService>(),
                 Resolver.Resolve<IAppInfoService>(),
                 Resolver.Resolve<IAppSettingsService>(),
-                Resolver.Resolve<IDeviceActionService>()));
+                _deviceActionService));
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(
                 Xamarin.Forms.Application.Current, "DismissKeyboard", (sender) =>
@@ -129,6 +133,13 @@ namespace Bit.Android
             }
             else
             {
+                var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
+                var autoCopyEnabled = !_settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
+                if(isPremium && autoCopyEnabled && _deviceActionService != null && login.Totp.Value != null)
+                {
+                    _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(login.Totp.Value));
+                }
+
                 data.PutExtra("uri", login.Uri.Value);
                 data.PutExtra("username", login.Username);
                 data.PutExtra("password", login.Password.Value);

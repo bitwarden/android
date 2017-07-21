@@ -8,6 +8,7 @@
         public const string SettingPinUnlockOn = "setting:pinUnlockOn";
         public const string SettingLockSeconds = "setting:lockSeconds";
         public const string SettingGaOptOut = "setting:googleAnalyticsOptOut";
+        public const string SettingDisableTotpCopy = "setting:disableAutoCopyTotp";
         public const string AutofillPersistNotification = "setting:persistNotification";
         public const string AutofillPasswordField = "setting:autofillPasswordField";
 

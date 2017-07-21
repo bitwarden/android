@@ -191,7 +191,7 @@ namespace Bit.iOS.Extension
             }
         }
 
-        public void CompleteUsernamePasswordRequest(string username, string password)
+        public void CompleteUsernamePasswordRequest(string username, string password, string totp)
         {
             NSDictionary itemData = null;
             if(_context.ProviderType == UTType.PropertyList)
@@ -225,6 +225,11 @@ namespace Bit.iOS.Extension
                 itemData = new NSDictionary(
                     Constants.AppExtensionPasswordKey, string.Empty,
                     Constants.AppExtensionOldPasswordKey, password);
+            }
+
+            if(!string.IsNullOrWhiteSpace(totp))
+            {
+                UIPasteboard.General.String = totp;
             }
 
             CompleteRequest(itemData);

@@ -17,6 +17,7 @@ namespace Bit.App.Models.Page
                 Username = login.Username?.Decrypt(login.OrganizationId) ?? " ";
                 Password = new Lazy<string>(() => login.Password?.Decrypt(login.OrganizationId));
                 Uri = new Lazy<string>(() => login.Uri?.Decrypt(login.OrganizationId));
+                Totp = new Lazy<string>(() => login.Totp?.Decrypt(login.OrganizationId));
             }
 
             public string Id { get; set; }
@@ -26,6 +27,7 @@ namespace Bit.App.Models.Page
             public string Username { get; set; }
             public Lazy<string> Password { get; set; }
             public Lazy<string> Uri { get; set; }
+            public Lazy<string> Totp { get; set; }
         }
 
         public class AutofillLogin : Login
