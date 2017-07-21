@@ -962,4 +962,7 @@
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Disable Automatic TOTP Copy</value>
   </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>A premium membership is required to use this feature.</value>
+  </data>
 </root>

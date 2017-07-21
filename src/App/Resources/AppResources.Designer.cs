@@ -1772,6 +1772,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A premium membership is required to use this feature..
+        /// </summary>
+        public static string PremiumRequired {
+            get {
+                return ResourceManager.GetString("PremiumRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Ok&quot; on the following prompt when asked to enable push notifications..
         /// </summary>
         public static string PushNotificationAlert {

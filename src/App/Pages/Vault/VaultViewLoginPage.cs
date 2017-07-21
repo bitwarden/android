@@ -277,8 +277,14 @@ namespace Bit.App.Pages
 
         private async Task OpenAttachmentAsync(Login login, VaultViewLoginPageModel.Attachment attachment)
         {
-            // 20 MB warning
-            if(attachment.Size >= 20971520 && !(await _userDialogs.ConfirmAsync(
+            if(!_tokenService.TokenPremium && !login.OrganizationUseTotp)
+            {
+                _userDialogs.Alert(AppResources.PremiumRequired);
+                return;
+            }
+
+            // 10 MB warning
+            if(attachment.Size >= 10485760 && !(await _userDialogs.ConfirmAsync(
                     string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
                     AppResources.Yes, AppResources.No)))
             {
@@ -314,8 +320,8 @@ namespace Bit.App.Pages
 
         private void Copy(string copyText, string alertLabel)
         {
-            _deviceActionService.CopyToClipboard(copyText);
-            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+           _deviceActionService.CopyToClipboard(copyText);
+           _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private void TotpTick(string totpKey)
