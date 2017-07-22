@@ -22,6 +22,7 @@ namespace Bit.App.Abstractions
         byte[] DecryptToBytes(byte[] encyptedValue, SymmetricCryptoKey key = null);
         byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey);
         CipherString Encrypt(string plaintextValue, SymmetricCryptoKey key = null);
+        byte[] EncryptToBytes(byte[] plainBytes, SymmetricCryptoKey key = null);
         SymmetricCryptoKey MakeKeyFromPassword(string password, string salt);
         string MakeKeyFromPasswordBase64(string password, string salt);
         byte[] HashPassword(SymmetricCryptoKey key, string password);

@@ -2170,6 +2170,9 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f080038
 			public const int collapseActionView = 2131230776;
 			
+			// aapt resource value: 0x7f0800b7
+			public const int contentFrame = 2131230903;
+			
 			// aapt resource value: 0x7f08004c
 			public const int contentPanel = 2131230796;
 			
@@ -2789,6 +2792,12 @@ namespace Bit.Android.Test
 			
 			// aapt resource value: 0x7f03003e
 			public const int test_suite = 2130903102;
+			
+			// aapt resource value: 0x7f03003f
+			public const int zxingscanneractivitylayout = 2130903103;
+			
+			// aapt resource value: 0x7f030040
+			public const int zxingscannerfragmentlayout = 2130903104;
 			
 			static Layout()
 			{

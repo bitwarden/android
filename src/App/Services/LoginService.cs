@@ -17,6 +17,7 @@ namespace Bit.App.Services
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IAuthService _authService;
         private readonly ILoginApiRepository _loginApiRepository;
+        private readonly ICipherApiRepository _cipherApiRepository;
         private readonly ISettingsService _settingsService;
         private readonly ICryptoService _cryptoService;
 
@@ -25,6 +26,7 @@ namespace Bit.App.Services
             IAttachmentRepository attachmentRepository,
             IAuthService authService,
             ILoginApiRepository loginApiRepository,
+            ICipherApiRepository cipherApiRepository,
             ISettingsService settingsService,
             ICryptoService cryptoService)
         {
@@ -32,6 +34,7 @@ namespace Bit.App.Services
             _attachmentRepository = attachmentRepository;
             _authService = authService;
             _loginApiRepository = loginApiRepository;
+            _cipherApiRepository = cipherApiRepository;
             _settingsService = settingsService;
             _cryptoService = cryptoService;
         }
@@ -238,7 +241,7 @@ namespace Bit.App.Services
                     {
                         return null;
                     }
-                    
+
                     if(!string.IsNullOrWhiteSpace(orgId))
                     {
                         return _cryptoService.DecryptToBytes(data, _cryptoService.GetOrgKey(orgId));
@@ -253,6 +256,47 @@ namespace Bit.App.Services
                     return null;
                 }
             }
+        }
+
+        public async Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Login login, byte[] data, string fileName)
+        {
+            var encFileName = fileName.Encrypt(login.OrganizationId);
+            var encBytes = _cryptoService.EncryptToBytes(data,
+                login.OrganizationId != null ? _cryptoService.GetOrgKey(login.OrganizationId) : null);
+            var response = await _cipherApiRepository.PostAttachmentAsync(login.Id, encBytes, encFileName.EncryptedString);
+
+            if(response.Succeeded)
+            {
+                var attachmentData = response.Result.Attachments.Select(a => new AttachmentData(a, login.Id));
+                foreach(var attachment in attachmentData)
+                {
+                    await _attachmentRepository.UpsertAsync(attachment);
+                }
+                login.Attachments = response.Result.Attachments.Select(a => new Attachment(a));
+            }
+            else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
+                || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
+            }
+
+            return response;
+        }
+
+        public async Task<ApiResult> DeleteAttachmentAsync(Login login, string attachmentId)
+        {
+            var response = await _cipherApiRepository.DeleteAttachmentAsync(login.Id, attachmentId);
+            if(response.Succeeded)
+            {
+                await _attachmentRepository.DeleteAsync(attachmentId);
+            }
+            else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
+                || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+            {
+                MessagingCenter.Send(Application.Current, "Logout", (string)null);
+            }
+
+            return response;
         }
 
         private string WebUriFromAndroidAppUri(string androidAppUriString)

@@ -6,6 +6,7 @@ using Android.Webkit;
 using Plugin.CurrentActivity;
 using System.IO;
 using Android.Support.V4.Content;
+using Bit.App;
 
 namespace Bit.Android.Services
 {
@@ -123,9 +124,12 @@ namespace Bit.Android.Services
             }
         }
 
-        public byte[] SelectFile()
+        public void SelectFile()
         {
-            return null;
+            var intent = new Intent(Intent.ActionOpenDocument);
+            intent.AddCategory(Intent.CategoryOpenable);
+            intent.SetType("*/*");
+            CrossCurrentActivity.Current.Activity.StartActivityForResult(intent, Constants.SelectFileRequestCode);
         }
     }
 }

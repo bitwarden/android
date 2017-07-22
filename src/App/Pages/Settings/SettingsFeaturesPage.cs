@@ -217,6 +217,23 @@ namespace Bit.App.Pages
         private void Layout_LayoutChanged(object sender, EventArgs e)
         {
             AnalyticsLabel.WidthRequest = StackLayout.Bounds.Width - AnalyticsLabel.Bounds.Left * 2;
+            CopyTotpLabel.WidthRequest = StackLayout.Bounds.Width - CopyTotpLabel.Bounds.Left * 2;
+
+            if(AutofillAlwaysLabel != null)
+            {
+                AutofillAlwaysLabel.WidthRequest = StackLayout.Bounds.Width - AutofillAlwaysLabel.Bounds.Left * 2;
+            }
+
+            if(AutofillPasswordFieldLabel != null)
+            {
+                AutofillPasswordFieldLabel.WidthRequest = StackLayout.Bounds.Width - AutofillPasswordFieldLabel.Bounds.Left * 2;
+            }
+
+            if(AutofillPersistNotificationLabel != null)
+            {
+                AutofillPersistNotificationLabel.WidthRequest =
+                    StackLayout.Bounds.Width - AutofillPersistNotificationLabel.Bounds.Left * 2;
+            }
         }
 
         private void AnalyticsCell_Changed(object sender, ToggledEventArgs e)

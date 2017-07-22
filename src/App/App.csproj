@@ -84,6 +84,7 @@
     <Compile Include="Controls\FormPickerCell.cs" />
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
+    <Compile Include="Controls\VaultAttachmentsViewCell.cs" />
     <Compile Include="Controls\VaultListViewCell.cs" />
     <Compile Include="Enums\TwoFactorProviderType.cs" />
     <Compile Include="Enums\EncryptionType.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Models\CipherString.cs" />
     <Compile Include="Models\Data\AttachmentData.cs" />
     <Compile Include="Models\Attachment.cs" />
+    <Compile Include="Models\Page\VaultAttachmentsPageModel.cs" />
     <Compile Include="Models\SymmetricCryptoKey.cs" />
     <Compile Include="Models\Data\SettingsData.cs" />
     <Compile Include="Models\Data\FolderData.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Pages\Settings\SettingsPage.cs" />
     <Compile Include="Pages\Settings\SettingsListFoldersPage.cs" />
     <Compile Include="Pages\Vault\VaultAutofillListLoginsPage.cs" />
+    <Compile Include="Pages\Vault\VaultAttachmentsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Abstractions\Repositories\ILoginRepository.cs" />
     <Compile Include="Repositories\AttachmentRepository.cs" />

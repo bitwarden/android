@@ -965,4 +965,22 @@
   <data name="PremiumRequired" xml:space="preserve">
     <value>A premium membership is required to use this feature.</value>
   </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Attachment added</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Attachment deleted</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Choose File</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>No file chosen</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>There are no attachments.</value>
+  </data>
 </root>

@@ -152,6 +152,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Attachment added.
+        /// </summary>
+        public static string AttachementAdded {
+            get {
+                return ResourceManager.GetString("AttachementAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attachment deleted.
+        /// </summary>
+        public static string AttachmentDeleted {
+            get {
+                return ResourceManager.GetString("AttachmentDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This attachment is {0} in size. Are you sure you want to download it onto your device?.
         /// </summary>
         public static string AttachmentLargeWarning {
@@ -526,6 +544,15 @@ namespace Bit.App.Resources {
         public static string ChangePasswordConfirmation {
             get {
                 return ResourceManager.GetString("ChangePasswordConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose File.
+        /// </summary>
+        public static string ChooseFile {
+            get {
+                return ResourceManager.GetString("ChooseFile", resourceCulture);
             }
         }
         
@@ -994,6 +1021,15 @@ namespace Bit.App.Resources {
         public static string Features {
             get {
                 return ResourceManager.GetString("Features", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string File {
+            get {
+                return ResourceManager.GetString("File", resourceCulture);
             }
         }
         
@@ -1583,11 +1619,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no attachments..
+        /// </summary>
+        public static string NoAttachments {
+            get {
+                return ResourceManager.GetString("NoAttachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no favorites in your vault..
         /// </summary>
         public static string NoFavorites {
             get {
                 return ResourceManager.GetString("NoFavorites", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No file chosen.
+        /// </summary>
+        public static string NoFileChosen {
+            get {
+                return ResourceManager.GetString("NoFileChosen", resourceCulture);
             }
         }
         

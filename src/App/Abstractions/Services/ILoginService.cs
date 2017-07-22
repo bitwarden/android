@@ -15,5 +15,7 @@ namespace Bit.App.Abstractions
         Task<ApiResult<LoginResponse>> SaveAsync(Login login);
         Task<ApiResult> DeleteAsync(string id);
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null);
+        Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Login login, byte[] data, string fileName);
+        Task<ApiResult> DeleteAttachmentAsync(Login login, string attachmentId);
     }
 }

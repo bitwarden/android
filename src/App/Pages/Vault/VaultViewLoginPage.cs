@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Bit.App.Utilities;
 using System.Collections.Generic;
 using Bit.App.Models;
+using System.Linq;
 
 namespace Bit.App.Pages
 {
@@ -164,52 +165,77 @@ namespace Bit.App.Pages
 
             Model.Update(login);
 
-            if(!Model.ShowUri)
+            if(LoginInformationSection.Contains(UriCell))
             {
                 LoginInformationSection.Remove(UriCell);
             }
-            else if(!LoginInformationSection.Contains(UriCell))
+            if(Model.ShowUri)
             {
                 LoginInformationSection.Add(UriCell);
             }
 
-            if(!Model.ShowUsername)
+            if(LoginInformationSection.Contains(UsernameCell))
             {
                 LoginInformationSection.Remove(UsernameCell);
             }
-            else if(!LoginInformationSection.Contains(UsernameCell))
+            if(Model.ShowUsername)
             {
                 LoginInformationSection.Add(UsernameCell);
             }
 
-            if(!Model.ShowPassword)
+            if(LoginInformationSection.Contains(PasswordCell))
             {
                 LoginInformationSection.Remove(PasswordCell);
             }
-            else if(!LoginInformationSection.Contains(PasswordCell))
+            if(Model.ShowPassword)
             {
                 LoginInformationSection.Add(PasswordCell);
             }
 
-            if(!Model.ShowNotes)
+            if(Table.Root.Contains(NotesSection))
             {
                 Table.Root.Remove(NotesSection);
             }
-            else if(!Table.Root.Contains(NotesSection))
+            if(Model.ShowNotes)
             {
                 Table.Root.Add(NotesSection);
             }
 
+            // Totp
+            if(LoginInformationSection.Contains(TotpCodeCell))
+            {
+                LoginInformationSection.Remove(TotpCodeCell);
+            }
+            if(login.Totp != null && (_tokenService.TokenPremium || login.OrganizationUseTotp))
+            {
+                var totpKey = login.Totp.Decrypt(login.OrganizationId);
+                if(!string.IsNullOrWhiteSpace(totpKey))
+                {
+                    Model.TotpCode = Crypto.Totp(totpKey);
+                    if(!string.IsNullOrWhiteSpace(Model.TotpCode))
+                    {
+                        TotpTick(totpKey);
+                        Device.StartTimer(new TimeSpan(0, 0, 1), () =>
+                        {
+                            TotpTick(totpKey);
+                            return true;
+                        });
+
+                        LoginInformationSection.Add(TotpCodeCell);
+                    }
+                }
+            }
+
             CleanupAttachmentCells();
-            if(!Model.ShowAttachments && Table.Root.Contains(AttachmentsSection))
+            if(Table.Root.Contains(AttachmentsSection))
             {
                 Table.Root.Remove(AttachmentsSection);
             }
-            else if(Model.ShowAttachments && !Table.Root.Contains(AttachmentsSection))
+            if(Model.ShowAttachments)
             {
                 AttachmentsSection = new TableSection(AppResources.Attachments);
                 AttachmentCells = new List<AttachmentViewCell>();
-                foreach(var attachment in Model.Attachments)
+                foreach(var attachment in Model.Attachments.OrderBy(s => s.Name))
                 {
                     var attachmentCell = new AttachmentViewCell(attachment, async () =>
                     {
@@ -220,38 +246,6 @@ namespace Bit.App.Pages
                     attachmentCell.InitEvents();
                 }
                 Table.Root.Add(AttachmentsSection);
-            }
-
-            // Totp
-            var removeTotp = login.Totp == null || (!_tokenService.TokenPremium && !login.OrganizationUseTotp);
-            if(!removeTotp)
-            {
-                var totpKey = login.Totp.Decrypt(login.OrganizationId);
-                removeTotp = string.IsNullOrWhiteSpace(totpKey);
-                if(!removeTotp)
-                {
-                    Model.TotpCode = Crypto.Totp(totpKey);
-                    removeTotp = string.IsNullOrWhiteSpace(Model.TotpCode);
-                    if(!removeTotp)
-                    {
-                        TotpTick(totpKey);
-                        Device.StartTimer(new TimeSpan(0, 0, 1), () =>
-                        {
-                            TotpTick(totpKey);
-                            return true;
-                        });
-
-                        if(!LoginInformationSection.Contains(TotpCodeCell))
-                        {
-                            LoginInformationSection.Add(TotpCodeCell);
-                        }
-                    }
-                }
-            }
-
-            if(removeTotp && LoginInformationSection.Contains(TotpCodeCell))
-            {
-                LoginInformationSection.Remove(TotpCodeCell);
             }
 
             base.OnAppearing();

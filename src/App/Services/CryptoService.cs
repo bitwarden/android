@@ -260,6 +260,26 @@ namespace Bit.App.Services
             return Crypto.AesCbcEncrypt(plainBytes, key);
         }
 
+        public byte[] EncryptToBytes(byte[] plainBytes, SymmetricCryptoKey key = null)
+        {
+            if(key == null)
+            {
+                key = EncKey ?? Key;
+            }
+
+            if(key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if(plainBytes == null)
+            {
+                throw new ArgumentNullException(nameof(plainBytes));
+            }
+
+            return Crypto.AesCbcEncryptToBytes(plainBytes, key);
+        }
+
         public string Decrypt(CipherString encyptedValue, SymmetricCryptoKey key = null)
         {
             try

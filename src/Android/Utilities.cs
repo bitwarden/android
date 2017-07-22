@@ -4,6 +4,7 @@ using Android.Content;
 using Java.Security;
 using System.IO;
 using Android.Nfc;
+using Android.Provider;
 
 namespace Bit.Android
 {
@@ -100,6 +101,29 @@ namespace Bit.Android
             }
 
             return message;
+        }
+
+        public static string GetFileName(Context context, global::Android.Net.Uri uri)
+        {
+            string name = null;
+            string[] projection = { MediaStore.MediaColumns.DisplayName };
+            var metaCursor = context.ContentResolver.Query(uri, projection, null, null, null);
+            if(metaCursor != null)
+            {
+                try
+                {
+                    if(metaCursor.MoveToFirst())
+                    {
+                        name = metaCursor.GetString(0);
+                    }
+                }
+                finally
+                {
+                    metaCursor.Close();
+                }
+            }
+
+            return name;
         }
     }
 }

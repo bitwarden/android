@@ -5,6 +5,9 @@ using Foundation;
 using System.IO;
 using MobileCoreServices;
 using Bit.App.Resources;
+using Xamarin.Forms;
+using Photos;
+using System.Net;
 
 namespace Bit.iOS.Services
 {
@@ -86,7 +89,7 @@ namespace Bit.iOS.Services
             return tmp;
         }
 
-        public byte[] SelectFile()
+        public void SelectFile()
         {
             var controller = GetVisibleViewController();
             var picker = new UIDocumentMenuViewController(new string[] { UTType.Data }, UIDocumentPickerMode.Import);
@@ -114,18 +117,25 @@ namespace Bit.iOS.Services
             };
 
             controller.PresentViewController(picker, true, null);
-            return null;
         }
 
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if(sender is UIImagePickerController picker)
             {
-                //var image = (UIImage)e.Info.ObjectForKey(new NSString("UIImagePickerControllerOriginalImage"));
+                string fileName = null;
+                NSObject urlObj;
+                if(e.Info.TryGetValue(UIImagePickerController.ReferenceUrl, out urlObj))
+                {
+                    var result = PHAsset.FetchAssets(new NSUrl[] { (urlObj as NSUrl) }, null);
+                    fileName = result?.firstObject?.ValueForKey(new NSString("filename"))?.ToString();
+                }
 
-                // TODO: determine if JPG or PNG from extension. Get filename somehow?
+                fileName = fileName ?? $"photo_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.jpg";
+
+                var lowerFilename = fileName?.ToLowerInvariant();
                 byte[] data;
-                if(false)
+                if(lowerFilename != null && (lowerFilename.EndsWith(".jpg") || lowerFilename.EndsWith(".jpeg")))
                 {
                     using(var imageData = e.OriginalImage.AsJPEG())
                     {
@@ -144,6 +154,7 @@ namespace Bit.iOS.Services
                     }
                 }
 
+                SelectFileResult(data, fileName);
                 picker.DismissViewController(true, null);
             }
         }
@@ -159,17 +170,35 @@ namespace Bit.iOS.Services
         private void DocumentPicker_DidPickDocument(object sender, UIDocumentPickedEventArgs e)
         {
             e.Url.StartAccessingSecurityScopedResource();
+
+            var doc = new UIDocument(e.Url);
+            var fileName = doc.LocalizedName;
+            if(string.IsNullOrWhiteSpace(fileName))
+            {
+                var path = doc.FileUrl?.ToString();
+                if(path != null)
+                {
+                    path = WebUtility.UrlDecode(path);
+                    var split = path.LastIndexOf('/');
+                    fileName = path.Substring(split + 1);
+                }
+            }
+
             var fileCoordinator = new NSFileCoordinator();
-
-            // TODO: get filename?
-
             NSError error;
             fileCoordinator.CoordinateRead(e.Url, NSFileCoordinatorReadingOptions.WithoutChanges, out error, (url) =>
             {
                 var data = NSData.FromUrl(url).ToArray();
+                SelectFileResult(data, fileName ?? "unknown_file_name");
             });
 
             e.Url.StopAccessingSecurityScopedResource();
+        }
+
+        private void SelectFileResult(byte[] data, string fileName)
+        {
+            MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
+                new Tuple<byte[], string>(data, fileName));
         }
     }
 }

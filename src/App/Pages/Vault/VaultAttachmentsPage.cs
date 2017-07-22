@@ -1,0 +1,288 @@
+﻿using System;
+using System.Linq;
+using Acr.UserDialogs;
+using Bit.App.Abstractions;
+using Bit.App.Controls;
+using Bit.App.Models.Page;
+using Bit.App.Resources;
+using Xamarin.Forms;
+using XLabs.Ioc;
+using Bit.App.Utilities;
+using Plugin.Connectivity.Abstractions;
+using System.Collections.Generic;
+using Bit.App.Models;
+using System.Threading.Tasks;
+
+namespace Bit.App.Pages
+{
+    public class VaultAttachmentsPage : ExtendedContentPage
+    {
+        private readonly ILoginService _loginService;
+        private readonly IUserDialogs _userDialogs;
+        private readonly IConnectivity _connectivity;
+        private readonly IDeviceActionService _deviceActiveService;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly string _loginId;
+        private Login _login;
+        private byte[] _fileBytes;
+        private DateTime? _lastAction;
+
+        public VaultAttachmentsPage(string loginId)
+            : base(true)
+        {
+            _loginId = loginId;
+            _loginService = Resolver.Resolve<ILoginService>();
+            _connectivity = Resolver.Resolve<IConnectivity>();
+            _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActiveService = Resolver.Resolve<IDeviceActionService>();
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+
+            Init();
+        }
+
+        public ExtendedObservableCollection<VaultAttachmentsPageModel.Attachment> PresentationAttchments { get; private set; }
+            = new ExtendedObservableCollection<VaultAttachmentsPageModel.Attachment>();
+        public ListView ListView { get; set; }
+        public StackLayout NoDataStackLayout { get; set; }
+        public StackLayout AddNewStackLayout { get; set; }
+        public Label FileLabel { get; set; }
+        public ExtendedTableView NewTable { get; set; }
+        public Label NoDataLabel { get; set; }
+
+        private void Init()
+        {
+            SubscribeFileResult(true);
+            var selectButton = new ExtendedButton
+            {
+                Text = AppResources.ChooseFile,
+                Command = new Command(() => _deviceActiveService.SelectFile()),
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
+            };
+
+            FileLabel = new Label
+            {
+                Text = AppResources.NoFileChosen,
+                Style = (Style)Application.Current.Resources["text-muted"],
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                HorizontalTextAlignment = TextAlignment.Center
+            };
+
+            AddNewStackLayout = new StackLayout
+            {
+                Children = { selectButton, FileLabel },
+                Orientation = StackOrientation.Vertical,
+                Padding = new Thickness(20, Helpers.OnPlatform(iOS: 10, Android: 20), 20, 20),
+                VerticalOptions = LayoutOptions.Start
+            };
+
+            NewTable = new ExtendedTableView
+            {
+                Intent = TableIntent.Settings,
+                HasUnevenRows = true,
+                NoFooter = true,
+                EnableScrolling = false,
+                EnableSelection = false,
+                VerticalOptions = LayoutOptions.Start,
+                Margin = new Thickness(0, Helpers.OnPlatform(iOS: 10, Android: 30), 0, 0),
+                Root = new TableRoot
+                {
+                    new TableSection(AppResources.AddNewAttachment)
+                    {
+                        new ExtendedViewCell
+                        {
+                            View = AddNewStackLayout,
+                            BackgroundColor = Color.White
+                        }
+                    }
+                }
+            };
+
+            ListView = new ListView(ListViewCachingStrategy.RecycleElement)
+            {
+                ItemsSource = PresentationAttchments,
+                HasUnevenRows = true,
+                ItemTemplate = new DataTemplate(() => new VaultAttachmentsViewCell()),
+                Footer = NewTable,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
+
+            NoDataLabel = new Label
+            {
+                Text = AppResources.NoAttachments,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                Style = (Style)Application.Current.Resources["text-muted"]
+            };
+
+            NoDataStackLayout = new StackLayout
+            {
+                VerticalOptions = LayoutOptions.Start,
+                Spacing = 0,
+                Margin = new Thickness(0, 40, 0, 0)
+            };
+
+            var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
+            {
+                if(_lastAction.LastActionWasRecent() || _login == null)
+                {
+                    return;
+                }
+                _lastAction = DateTime.UtcNow;
+
+                if(!_connectivity.IsConnected)
+                {
+                    AlertNoConnection();
+                    return;
+                }
+
+                if(_fileBytes == null)
+                {
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
+                        AppResources.File), AppResources.Ok);
+                    return;
+                }
+
+                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
+                var saveTask = await _loginService.EncryptAndSaveAttachmentAsync(_login, _fileBytes, FileLabel.Text);
+
+                _userDialogs.HideLoading();
+
+                if(saveTask.Succeeded)
+                {
+                    _fileBytes = null;
+                    FileLabel.Text = AppResources.NoFileChosen;
+                    _userDialogs.Toast(AppResources.AttachementAdded);
+                    _googleAnalyticsService.TrackAppEvent("AddedAttachment");
+                    await LoadAttachmentsAsync();
+                }
+                else if(saveTask.Errors.Count() > 0)
+                {
+                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                }
+                else
+                {
+                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                }
+            }, ToolbarItemOrder.Default, 0);
+
+            Title = AppResources.Attachments;
+            Content = ListView;
+            ToolbarItems.Add(saveToolBarItem);
+
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                ListView.RowHeight = -1;
+                NewTable.RowHeight = -1;
+                NewTable.EstimatedRowHeight = 44;
+                NewTable.HeightRequest = 180;
+                ListView.BackgroundColor = Color.Transparent;
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
+            }
+        }
+
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            ListView.ItemSelected += AttachmentSelected;
+            await LoadAttachmentsAsync();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            ListView.ItemSelected -= AttachmentSelected;
+        }
+
+        private async Task LoadAttachmentsAsync()
+        {
+            _login = await _loginService.GetByIdAsync(_loginId);
+            if(_login == null)
+            {
+                await Navigation.PopForDeviceAsync();
+                return;
+            }
+
+            var attachmentsToAdd = _login.Attachments
+                .Select(a => new VaultAttachmentsPageModel.Attachment(a))
+                .OrderBy(s => s.Name);
+            PresentationAttchments.ResetWithRange(attachmentsToAdd);
+            AdjustContent();
+        }
+
+        private void AdjustContent()
+        {
+            if(PresentationAttchments.Count == 0)
+            {
+                NoDataStackLayout.Children.Clear();
+                NoDataStackLayout.Children.Add(NoDataLabel);
+                NoDataStackLayout.Children.Add(NewTable);
+                Content = NoDataStackLayout;
+            }
+            else
+            {
+                Content = ListView;
+            }
+        }
+
+        private async void AttachmentSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            var attachment = e.SelectedItem as VaultAttachmentsPageModel.Attachment;
+            if(attachment == null)
+            {
+                return;
+            }
+
+            ((ListView)sender).SelectedItem = null;
+
+            var buttons = new List<string> { };
+            var selection = await DisplayActionSheet(attachment.Name, AppResources.Cancel, AppResources.Delete,
+                buttons.ToArray());
+
+            if(selection == AppResources.Delete)
+            {
+                _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
+                var saveTask = await _loginService.DeleteAttachmentAsync(_login, attachment.Id);
+                _userDialogs.HideLoading();
+
+                if(saveTask.Succeeded)
+                {
+                    _userDialogs.Toast(AppResources.AttachmentDeleted);
+                    _googleAnalyticsService.TrackAppEvent("DeletedAttachment");
+                    await LoadAttachmentsAsync();
+                }
+                else if(saveTask.Errors.Count() > 0)
+                {
+                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                }
+                else
+                {
+                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                }
+            }
+        }
+
+        private void AlertNoConnection()
+        {
+            DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage,
+                AppResources.Ok);
+        }
+
+        private void SubscribeFileResult(bool subscribe)
+        {
+            MessagingCenter.Unsubscribe<Application, Tuple<byte[], string>>(Application.Current, "SelectFileResult");
+            if(!subscribe)
+            {
+                return;
+            }
+
+            MessagingCenter.Subscribe<Application, Tuple<byte[], string>>(
+                Application.Current, "SelectFileResult", (sender, result) =>
+             {
+                 FileLabel.Text = result.Item2;
+                 _fileBytes = result.Item1;
+                 SubscribeFileResult(true);
+             });
+        }
+    }
+}

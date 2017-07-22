@@ -42,6 +42,7 @@ namespace Bit.App.Pages
         public FormEditorCell NotesCell { get; private set; }
         public FormPickerCell FolderCell { get; private set; }
         public ExtendedTextCell GenerateCell { get; private set; }
+        public ExtendedTextCell AttachmentsCell { get; private set; }
         public ExtendedTextCell DeleteCell { get; private set; }
 
         private void Init()
@@ -112,6 +113,12 @@ namespace Bit.App.Pages
                 On = login.Favorite
             };
 
+            AttachmentsCell = new ExtendedTextCell
+            {
+                Text = AppResources.Attachments,
+                ShowDisclousure = true
+            };
+
             DeleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
 
             var table = new ExtendedTableView
@@ -133,7 +140,8 @@ namespace Bit.App.Pages
                     {
                         TotpCell,
                         FolderCell,
-                        favoriteCell
+                        favoriteCell,
+                        AttachmentsCell
                     },
                     new TableSection(AppResources.Notes)
                     {
@@ -257,6 +265,10 @@ namespace Bit.App.Pages
             {
                 GenerateCell.Tapped += GenerateCell_Tapped;
             }
+            if(AttachmentsCell != null)
+            {
+                AttachmentsCell.Tapped += AttachmentsCell_Tapped;
+            }
             if(DeleteCell != null)
             {
                 DeleteCell.Tapped += DeleteCell_Tapped;
@@ -285,6 +297,10 @@ namespace Bit.App.Pages
             if(GenerateCell != null)
             {
                 GenerateCell.Tapped -= GenerateCell_Tapped;
+            }
+            if(AttachmentsCell != null)
+            {
+                AttachmentsCell.Tapped -= AttachmentsCell_Tapped;
             }
             if(DeleteCell != null)
             {
@@ -334,6 +350,12 @@ namespace Bit.App.Pages
                 _userDialogs.Toast(AppResources.PasswordGenerated);
             });
             await Navigation.PushForDeviceAsync(page);
+        }
+
+        private async void AttachmentsCell_Tapped(object sender, EventArgs e)
+        {
+            var page = new ExtendedNavigationPage(new VaultAttachmentsPage(_loginId));
+            await Navigation.PushModalAsync(page);
         }
 
         private async void DeleteCell_Tapped(object sender, EventArgs e)

@@ -5,7 +5,7 @@ namespace Bit.App.Controls
 {
     public class LabeledRightDetailCell : ExtendedViewCell
     {
-        public LabeledRightDetailCell()
+        public LabeledRightDetailCell(bool showIcon = true)
         {
             Label = new Label
             {
@@ -22,32 +22,38 @@ namespace Bit.App.Controls
                 VerticalOptions = LayoutOptions.Center
             };
 
-            Icon = new CachedImage
-            {
-                WidthRequest = 16,
-                HeightRequest = 16,
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Center,
-                Margin = new Thickness(5, 0, 0, 0)
-            };
-
-            var stackLayout = new StackLayout
+            StackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
                 Padding = new Thickness(15, 10),
-                Children = { Label, Detail, Icon }
+                Children = { Label, Detail }
             };
+
+            if(showIcon)
+            {
+                Icon = new CachedImage
+                {
+                    WidthRequest = 16,
+                    HeightRequest = 16,
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalOptions = LayoutOptions.Center,
+                    Margin = new Thickness(5, 0, 0, 0)
+                };
+
+                StackLayout.Children.Add(Icon);
+            }
 
             if(Device.RuntimePlatform == Device.Android)
             {
                 Label.TextColor = Color.Black;
             }
 
-            View = stackLayout;
+            View = StackLayout;
         }
 
         public Label Label { get; private set; }
         public Label Detail { get; private set; }
         public CachedImage Icon { get; private set; }
+        public StackLayout StackLayout { get; private set; }
     }
 }

@@ -11,6 +11,26 @@ namespace Bit.App.Utilities
     {
         public static CipherString AesCbcEncrypt(byte[] plainBytes, SymmetricCryptoKey key)
         {
+            var parts = AesCbcEncryptToParts(plainBytes, key);
+            return new CipherString(parts.Item1, Convert.ToBase64String(parts.Item2),
+                Convert.ToBase64String(parts.Item4), Convert.ToBase64String(parts.Item3));
+        }
+
+        public static byte[] AesCbcEncryptToBytes(byte[] plainBytes, SymmetricCryptoKey key)
+        {
+            var parts = AesCbcEncryptToParts(plainBytes, key);
+
+            var encBytes = new byte[1 + parts.Item2.Length + parts.Item3.Length + parts.Item4.Length];
+            encBytes[0] = (byte)parts.Item1;
+            parts.Item2.CopyTo(encBytes, 1);
+            parts.Item3.CopyTo(encBytes, 1 + parts.Item2.Length);
+            parts.Item4.CopyTo(encBytes, 1 + parts.Item2.Length + parts.Item3.Length);
+            return encBytes;
+        }
+
+        private static Tuple<EncryptionType, byte[], byte[], byte[]> AesCbcEncryptToParts(byte[] plainBytes, 
+            SymmetricCryptoKey key)
+        {
             if(key == null)
             {
                 throw new ArgumentNullException(nameof(key));
@@ -24,11 +44,10 @@ namespace Bit.App.Utilities
             var provider = WinRTCrypto.SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
             var cryptoKey = provider.CreateSymmetricKey(key.EncKey);
             var iv = RandomBytes(provider.BlockLength);
-            var encryptedBytes = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plainBytes, iv);
-            var mac = key.MacKey != null ? ComputeMacBase64(encryptedBytes, iv, key.MacKey) : null;
+            var ct = WinRTCrypto.CryptographicEngine.Encrypt(cryptoKey, plainBytes, iv);
+            var mac = key.MacKey != null ? ComputeMac(ct, iv, key.MacKey) : null;
 
-            return new CipherString(key.EncryptionType, Convert.ToBase64String(iv),
-                Convert.ToBase64String(encryptedBytes), mac);
+            return new Tuple<EncryptionType, byte[], byte[], byte[]>(key.EncryptionType, iv, mac, ct);
         }
 
         public static byte[] AesCbcDecrypt(CipherString encyptedValue, SymmetricCryptoKey key)
@@ -82,12 +101,6 @@ namespace Bit.App.Utilities
         public static byte[] RandomBytes(int length)
         {
             return WinRTCrypto.CryptographicBuffer.GenerateRandom(length);
-        }
-
-        public static string ComputeMacBase64(byte[] ctBytes, byte[] ivBytes, byte[] macKey)
-        {
-            var mac = ComputeMac(ctBytes, ivBytes, macKey);
-            return Convert.ToBase64String(mac);
         }
 
         public static byte[] ComputeMac(byte[] ctBytes, byte[] ivBytes, byte[] macKey)

@@ -33,5 +33,7 @@
         public const string Locked = "other:locked";
         public const string LastLoginEmail = "other:lastLoginEmail";
         public const string LastSync = "other:lastSync";
+
+        public const int SelectFileRequestCode = 42;
     }
 }

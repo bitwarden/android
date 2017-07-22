@@ -17,6 +17,7 @@ using Bit.App.Models.Page;
 using Bit.App;
 using Android.Nfc;
 using Android.Views.InputMethods;
+using System.IO;
 
 namespace Bit.Android
 {
@@ -213,6 +214,25 @@ namespace Bit.Android
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
             ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            if(requestCode == Constants.SelectFileRequestCode && resultCode == Result.Ok)
+            {
+                global::Android.Net.Uri uri = null;
+                if(data != null)
+                {
+                    uri = data.Data;
+                    using(var stream = ContentResolver.OpenInputStream(uri))
+                    using(var memoryStream = new MemoryStream())
+                    {
+                        stream.CopyTo(memoryStream);
+                        MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
+                            new Tuple<byte[], string>(memoryStream.ToArray(), Utilities.GetFileName(ApplicationContext, uri)));
+                    }
+                }
+            }
         }
 
         public void RateApp()
