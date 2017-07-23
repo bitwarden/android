@@ -19,16 +19,20 @@ namespace Bit.App.Utilities
         public static byte[] AesCbcEncryptToBytes(byte[] plainBytes, SymmetricCryptoKey key)
         {
             var parts = AesCbcEncryptToParts(plainBytes, key);
+            var macLength = parts.Item3?.Length ?? 0;
 
-            var encBytes = new byte[1 + parts.Item2.Length + parts.Item3.Length + parts.Item4.Length];
+            var encBytes = new byte[1 + parts.Item2.Length + macLength + parts.Item4.Length];
             encBytes[0] = (byte)parts.Item1;
             parts.Item2.CopyTo(encBytes, 1);
-            parts.Item3.CopyTo(encBytes, 1 + parts.Item2.Length);
-            parts.Item4.CopyTo(encBytes, 1 + parts.Item2.Length + parts.Item3.Length);
+            if(parts.Item3 != null)
+            {
+                parts.Item3.CopyTo(encBytes, 1 + parts.Item2.Length);
+            }
+            parts.Item4.CopyTo(encBytes, 1 + parts.Item2.Length + macLength);
             return encBytes;
         }
 
-        private static Tuple<EncryptionType, byte[], byte[], byte[]> AesCbcEncryptToParts(byte[] plainBytes, 
+        private static Tuple<EncryptionType, byte[], byte[], byte[]> AesCbcEncryptToParts(byte[] plainBytes,
             SymmetricCryptoKey key)
         {
             if(key == null)
