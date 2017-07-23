@@ -7,14 +7,24 @@ using Plugin.CurrentActivity;
 using System.IO;
 using Android.Support.V4.Content;
 using Bit.App;
+using Bit.App.Resources;
+using Android.Provider;
+using System.Threading.Tasks;
+using Android.OS;
+using System.Collections.Generic;
+using Android;
+using Android.Content.PM;
+using Android.Support.V4.App;
 
 namespace Bit.Android.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
         private readonly IAppSettingsService _appSettingsService;
+        private bool _cameraPermissionsDenied;
 
-        public DeviceActionService(IAppSettingsService appSettingsService)
+        public DeviceActionService(
+            IAppSettingsService appSettingsService)
         {
             _appSettingsService = appSettingsService;
         }
@@ -124,12 +134,86 @@ namespace Bit.Android.Services
             }
         }
 
-        public void SelectFile()
+        public Task SelectFileAsync()
         {
-            var intent = new Intent(Intent.ActionOpenDocument);
-            intent.AddCategory(Intent.CategoryOpenable);
-            intent.SetType("*/*");
-            CrossCurrentActivity.Current.Activity.StartActivityForResult(intent, Constants.SelectFileRequestCode);
+            MessagingCenter.Unsubscribe<Application>(Application.Current, "SelectFileCameraPermissionDenied");
+
+            var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
+            var hasCameraPermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.Camera);
+
+            if(!_cameraPermissionsDenied && !hasStorageWritePermission)
+            {
+                AskCameraPermission(Manifest.Permission.WriteExternalStorage);
+                return Task.FromResult(0);
+            }
+
+            if(!_cameraPermissionsDenied && !hasCameraPermission)
+            {
+                AskCameraPermission(Manifest.Permission.Camera);
+                return Task.FromResult(0);
+            }
+
+            var docIntent = new Intent(Intent.ActionOpenDocument);
+            docIntent.AddCategory(Intent.CategoryOpenable);
+            docIntent.SetType("*/*");
+
+            var chooserIntent = Intent.CreateChooser(docIntent, AppResources.FileSource);
+
+            if(!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
+            {
+                var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
+                var file = new Java.IO.File(root, "temp_camera_photo.jpg");
+                if(!file.Exists())
+                {
+                    var a = file.ParentFile.Mkdirs();
+                    var b = file.CreateNewFile();
+                }
+                var outputFileUri = global::Android.Net.Uri.FromFile(file);
+                var additionalIntents = GetCameraIntents(outputFileUri);
+                chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());
+            }
+
+            CrossCurrentActivity.Current.Activity.StartActivityForResult(chooserIntent, Constants.SelectFileRequestCode);
+            return Task.FromResult(0);
+        }
+
+        private List<IParcelable> GetCameraIntents(global::Android.Net.Uri outputUri)
+        {
+            var intents = new List<IParcelable>();
+            var pm = CrossCurrentActivity.Current.Activity.PackageManager;
+            var captureIntent = new Intent(MediaStore.ActionImageCapture);
+            var listCam = pm.QueryIntentActivities(captureIntent, 0);
+            foreach(var res in listCam)
+            {
+                var packageName = res.ActivityInfo.PackageName;
+                var intent = new Intent(captureIntent);
+                intent.SetComponent(new ComponentName(packageName, res.ActivityInfo.Name));
+                intent.SetPackage(packageName);
+                intent.PutExtra(MediaStore.ExtraOutput, outputUri);
+                intents.Add(intent);
+            }
+            return intents;
+        }
+
+        private bool HasPermission(string permission)
+        {
+            return ContextCompat.CheckSelfPermission(CrossCurrentActivity.Current.Activity, permission) == Permission.Granted;
+        }
+
+        private void AskCameraPermission(string permission)
+        {
+            MessagingCenter.Subscribe<Application>(Application.Current, "SelectFileCameraPermissionDenied", (sender) =>
+            {
+                _cameraPermissionsDenied = true;
+            });
+
+            AskPermission(permission);
+        }
+
+        private void AskPermission(string permission)
+        {
+            ActivityCompat.RequestPermissions(CrossCurrentActivity.Current.Activity, new string[] { permission },
+                Constants.SelectFilePermissionRequestCode);
         }
     }
 }

@@ -1052,6 +1052,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File Source.
+        /// </summary>
+        public static string FileSource {
+            get {
+                return ResourceManager.GetString("FileSource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fingerprint.
         /// </summary>
         public static string Fingerprint {

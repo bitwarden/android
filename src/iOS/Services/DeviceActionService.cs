@@ -8,6 +8,7 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using Photos;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Bit.iOS.Services
 {
@@ -89,12 +90,12 @@ namespace Bit.iOS.Services
             return tmp;
         }
 
-        public void SelectFile()
+        public Task SelectFileAsync()
         {
             var controller = GetVisibleViewController();
             var picker = new UIDocumentMenuViewController(new string[] { UTType.Data }, UIDocumentPickerMode.Import);
 
-            picker.AddOption(AppResources.Camera, null, UIDocumentMenuOrder.First, () =>
+            picker.AddOption(AppResources.Camera, UIImage.FromBundle("camera"), UIDocumentMenuOrder.First, () =>
             {
                 var imagePicker = new UIImagePickerController { SourceType = UIImagePickerControllerSourceType.Camera };
                 imagePicker.FinishedPickingMedia += ImagePicker_FinishedPickingMedia;
@@ -102,7 +103,7 @@ namespace Bit.iOS.Services
                 controller.PresentModalViewController(imagePicker, true);
             });
 
-            picker.AddOption(AppResources.Photos, null, UIDocumentMenuOrder.First, () =>
+            picker.AddOption(AppResources.Photos, UIImage.FromBundle("photo"), UIDocumentMenuOrder.First, () =>
             {
                 var imagePicker = new UIImagePickerController { SourceType = UIImagePickerControllerSourceType.PhotoLibrary };
                 imagePicker.FinishedPickingMedia += ImagePicker_FinishedPickingMedia;
@@ -117,6 +118,7 @@ namespace Bit.iOS.Services
             };
 
             controller.PresentViewController(picker, true, null);
+            return Task.FromResult(0);
         }
 
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)

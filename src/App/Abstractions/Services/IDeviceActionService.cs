@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Bit.App.Abstractions
 {
@@ -7,7 +8,7 @@ namespace Bit.App.Abstractions
         void CopyToClipboard(string text);
         bool OpenFile(byte[] fileData, string id, string fileName);
         bool CanOpenFile(string fileName);
-        void SelectFile();
+        Task SelectFileAsync();
         void ClearCache();
     }
 }

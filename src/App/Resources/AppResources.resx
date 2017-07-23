@@ -983,4 +983,7 @@
   <data name="NoAttachments" xml:space="preserve">
     <value>There are no attachments.</value>
   </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>File Source</value>
+  </data>
 </root>

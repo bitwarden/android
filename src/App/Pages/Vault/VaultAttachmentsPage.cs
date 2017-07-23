@@ -55,7 +55,7 @@ namespace Bit.App.Pages
             var selectButton = new ExtendedButton
             {
                 Text = AppResources.ChooseFile,
-                Command = new Command(() => _deviceActiveService.SelectFile()),
+                Command = new Command(async () => await _deviceActiveService.SelectFileAsync()),
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };

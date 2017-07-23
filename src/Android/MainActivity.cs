@@ -18,6 +18,7 @@ using Bit.App;
 using Android.Nfc;
 using Android.Views.InputMethods;
 using System.IO;
+using System.Linq;
 
 namespace Bit.Android
 {
@@ -211,8 +212,18 @@ namespace Bit.Android
             ParseYubiKey(intent.DataString);
         }
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        public async override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
+            if(requestCode == Constants.SelectFilePermissionRequestCode)
+            {
+                if(grantResults.Any(r => r != Permission.Granted))
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileCameraPermissionDenied");
+                }
+                await _deviceActionService.SelectFileAsync();
+                return;
+            }
+
             ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
@@ -221,16 +232,32 @@ namespace Bit.Android
             if(requestCode == Constants.SelectFileRequestCode && resultCode == Result.Ok)
             {
                 global::Android.Net.Uri uri = null;
-                if(data != null)
+                string fileName = null;
+                if(data != null && data.Data != null)
                 {
                     uri = data.Data;
-                    using(var stream = ContentResolver.OpenInputStream(uri))
-                    using(var memoryStream = new MemoryStream())
-                    {
-                        stream.CopyTo(memoryStream);
-                        MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
-                            new Tuple<byte[], string>(memoryStream.ToArray(), Utilities.GetFileName(ApplicationContext, uri)));
-                    }
+                    fileName = Utilities.GetFileName(ApplicationContext, uri);
+                }
+                else
+                {
+                    // camera
+                    var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
+                    var file = new Java.IO.File(root, "temp_camera_photo.jpg");
+                    uri = global::Android.Net.Uri.FromFile(file);
+                    fileName = $"photo_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.jpg";
+                }
+
+                if(uri == null)
+                {
+                    return;
+                }
+
+                using(var stream = ContentResolver.OpenInputStream(uri))
+                using(var memoryStream = new MemoryStream())
+                {
+                    stream.CopyTo(memoryStream);
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
+                        new Tuple<byte[], string>(memoryStream.ToArray(), fileName ?? "unknown_file_name"));
                 }
             }
         }
