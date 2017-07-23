@@ -36,7 +36,7 @@ namespace Bit.Android
             new Browser("com.google.android.apps.chrome_dev", "url_bar"),
             new Browser("org.codeaurora.swe.browser", "url_bar"),
             new Browser("org.iron.srware", "url_bar"),
-            new Browser("com.sec.android.app.sbrowser", "sbrowser_url_bar"),
+            new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
             new Browser("com.yandex.browser", "bro_omnibar_address_title_text",
                 (s) => s.Split(' ').FirstOrDefault()),
@@ -75,11 +75,9 @@ namespace Bit.Android
                     return;
                 }
 
-                /*
-                var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
-                var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
-                testNodes.Dispose();
-                */
+                //var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
+                //var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+                //testNodes.Dispose();
 
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 var cancelNotification = true;
