@@ -15,12 +15,14 @@ namespace Bit.App.Controls
             Label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Login.Name));
             Detail.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Login.Username));
             LabelIcon.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Login.Shared));
+            LabelIcon2.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Login.HasAttachments));
 
             Button.Image = "more";
             Button.Command = new Command(() => moreClickedAction?.Invoke(LoginParameter));
             Button.BackgroundColor = Color.Transparent;
 
             LabelIcon.Source = "share";
+            LabelIcon2.Source = "paperclip";
 
             BackgroundColor = Color.White;
         }

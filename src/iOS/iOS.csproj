@@ -767,6 +767,15 @@
   <ItemGroup>
     <BundleResource Include="Resources\photo%403x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\paperclip.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\paperclip%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\paperclip%403x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

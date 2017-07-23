@@ -54,15 +54,19 @@ namespace Bit.App.Services
 
         public async Task<IEnumerable<Login>> GetAllAsync()
         {
+            var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
+            var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
             var data = await _loginRepository.GetAllByUserIdAsync(_authService.UserId);
-            var logins = data.Select(f => new Login(f));
+            var logins = data.Select(f => new Login(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
             return logins;
         }
 
         public async Task<IEnumerable<Login>> GetAllAsync(bool favorites)
         {
+            var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
+            var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
             var data = await _loginRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
-            var logins = data.Select(f => new Login(f));
+            var logins = data.Select(f => new Login(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
             return logins;
         }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Bit.App.Resources;
+using System.Linq;
 
 namespace Bit.App.Models.Page
 {
@@ -12,6 +13,7 @@ namespace Bit.App.Models.Page
             {
                 Id = login.Id;
                 Shared = !string.IsNullOrWhiteSpace(login.OrganizationId);
+                HasAttachments = login.Attachments?.Any() ?? false;
                 FolderId = login.FolderId;
                 Name = login.Name?.Decrypt(login.OrganizationId);
                 Username = login.Username?.Decrypt(login.OrganizationId) ?? " ";
@@ -22,6 +24,7 @@ namespace Bit.App.Models.Page
 
             public string Id { get; set; }
             public bool Shared { get; set; }
+            public bool HasAttachments { get; set; }
             public string FolderId { get; set; }
             public string Name { get; set; }
             public string Username { get; set; }
