@@ -13,7 +13,7 @@ namespace Bit.App.Utilities
         {
             var parts = AesCbcEncryptToParts(plainBytes, key);
             return new CipherString(parts.Item1, Convert.ToBase64String(parts.Item2),
-                Convert.ToBase64String(parts.Item4), Convert.ToBase64String(parts.Item3));
+                Convert.ToBase64String(parts.Item4), parts.Item3 != null ? Convert.ToBase64String(parts.Item3) : null);
         }
 
         public static byte[] AesCbcEncryptToBytes(byte[] plainBytes, SymmetricCryptoKey key)
