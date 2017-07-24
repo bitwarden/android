@@ -252,14 +252,19 @@ namespace Bit.App.Pages
             base.OnAppearing();
             ListenYubiKey(true);
 
+            InitEvents();
+            if(TokenCell == null && Device.RuntimePlatform == Device.Android)
+            {
+                MessagingCenter.Send(Application.Current, "DismissKeyboard");
+            }
+        }
+
+        private void InitEvents()
+        {
             if(TokenCell != null)
             {
                 TokenCell.InitEvents();
                 TokenCell.Entry.Completed += Entry_Completed;
-            }
-            else if(Device.RuntimePlatform == Device.Android)
-            {
-                MessagingCenter.Send(Application.Current, "DismissKeyboard");
             }
         }
 
@@ -336,6 +341,7 @@ namespace Bit.App.Pages
                 Init();
                 ListenYubiKey(false, beforeProviderType == TwoFactorProviderType.YubiKey);
                 ListenYubiKey(true);
+                InitEvents();
             }
         }
 
