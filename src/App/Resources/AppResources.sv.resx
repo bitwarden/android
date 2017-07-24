@@ -717,7 +717,7 @@
     <value>Tvåstegsverifiering</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva en verifieringskod från en autentiseringsapp på din mobila enhet när du loggar in. Tvåstegsverifiering kan aktiveras på bitwarden.com webbvalv. Vill du besöka webbplatsen nu?</value>
+    <value>Tvåstegsverifiering gör ditt konto säkrare genom att kräva att du verifierar din inloggning med en annan enhet, till exempel genom en säkerhetsnyckel, autentiseringsapp, SMS, telefonsamtal eller mejl. Tvåstegsverifiering kan aktiveras på bitwardens webbvalv. Vill du besöka webbplatsen nu?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås upp med {0}</value>
@@ -726,7 +726,7 @@
     <value>Lås upp med PIN-kod</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>Validerar</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -822,8 +822,8 @@
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Skapa en organisation för att på ett säkert sätt kunna dela dina inloggningar med andra användare.</value>
   </data>
-  <data name="DisbaleGADescription" xml:space="preserve">
-    <value>Vi använder analytics för att bättre förstå hur appen används så att vi kan göra förbättringar. All datainsamling är helt anonym.</value>
+  <data name="DisableGADescription" xml:space="preserve">
+    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Funktioner</value>
@@ -851,97 +851,151 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Autentiseringsapp</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Ange den 6-siffriga verifieringskoden från din autentiseringsapp.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Ange den 6-siffriga verifieringskoden som skickades till {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Inloggning inte tillgänglig</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Detta konto har tvåstegsverifiering aktiverat, men inget av alternativen som används stöds på den här enheten. Använd en enhet som stöds och/eller lägg till en metod för tvåstegsverifiering med bättre stöd för flera olika typer av enheter (t.ex. via en autentiseringsapp).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Återställningskod</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Förbli inloggad</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Skicka verifieringskod-mejlet igen</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Inställningar för tvåstegsverifiering</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Använd en annan inloggningsmetod för tvåstegsverifiering</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Kunde inte skicka verifierings-mejl. Försök igen.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>Verifierings-mejl skickat.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>Håll din YubiKey NEO mot baksidan av enheten för att fortsätta.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>Säkerhetsnyckel för YubiKey NEO</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Bifoga fil</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Bifogade filer</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>Kunde ej hämta fil.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>Enheten kan inte öppna denna typ av fil.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>Laddar ner...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Denna bilaga är {0} i storlek. Är du säker på att du vill ladda ner den till din enhet?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Autentiseringsnyckel (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Verifieringskod (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Autentiseringsnyckel tillagd.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Kan inte läsa autentiseringsnyckeln.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>Skanningen kommer att ske automatiskt.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>Rikta kameran mot en QR-kod.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Skanna QR-kod</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>Camera</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>Photos</value>
+  </data>
+  <data name="CopiedTotp" xml:space="preserve">
+    <value>Copied TOTP!</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>Copy TOTP</value>
+  </data>
+  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
+    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+  </data>
+  <data name="DisableAutoTotpCopy" xml:space="preserve">
+    <value>Disable Automatic TOTP Copy</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>A premium membership is required to use this feature.</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>Attachment added</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>Attachment deleted</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>Choose File</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>No file chosen</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>There are no attachments.</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>File Source</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Feature Unavailable</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Maximum file size is 100 MB.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>You cannot use this feature until you update your encryption key.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Learn More</value>
   </data>
 </root>
