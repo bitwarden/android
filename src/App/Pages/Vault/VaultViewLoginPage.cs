@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly ITokenService _tokenService;
+        private bool _pageDisappeared = true;
 
         public VaultViewLoginPage(string loginId)
         {
@@ -153,6 +154,7 @@ namespace Bit.App.Pages
 
         protected async override void OnAppearing()
         {
+            _pageDisappeared = false;
             NotesCell.Tapped += NotesCell_Tapped;
             EditItem.InitEvents();
 
@@ -217,6 +219,11 @@ namespace Bit.App.Pages
                         TotpTick(totpKey);
                         Device.StartTimer(new TimeSpan(0, 0, 1), () =>
                         {
+                            if(_pageDisappeared)
+                            {
+                                return false;
+                            }
+
                             TotpTick(totpKey);
                             return true;
                         });
@@ -253,6 +260,7 @@ namespace Bit.App.Pages
 
         protected override void OnDisappearing()
         {
+            _pageDisappeared = true;
             NotesCell.Tapped -= NotesCell_Tapped;
             EditItem.Dispose();
             CleanupAttachmentCells();

@@ -12,6 +12,7 @@ namespace Bit.App.Pages
     {
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IAppInfoService _appInfoService;
+        private bool _pageDisappeared = false;
 
         public ToolsAutofillServicePage()
         {
@@ -170,12 +171,29 @@ namespace Bit.App.Pages
             UpdateEnabled();
             Device.StartTimer(new TimeSpan(0, 0, 3), () =>
             {
+                if(_pageDisappeared)
+                {
+                    return false;
+                }
+                
                 UpdateEnabled();
                 return true;
             });
 
             Title = AppResources.AutofillService;
             Content = ScrollView;
+        }
+
+        protected override void OnAppearing()
+        {
+            _pageDisappeared = false;
+            base.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            _pageDisappeared = true;
+            base.OnDisappearing();
         }
 
         private void UpdateEnabled()

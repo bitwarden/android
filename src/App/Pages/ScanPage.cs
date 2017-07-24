@@ -11,6 +11,7 @@ namespace Bit.App.Pages
     {
         private readonly ZXingScannerView _zxing;
         private readonly OverlayGrid _overlay;
+        private bool _pageDisappeared = true;
 
         public ScanPage(Action<string> callback)
             : base(updateActivity: false)
@@ -78,12 +79,24 @@ namespace Bit.App.Pages
 
         protected override void OnAppearing()
         {
+            _pageDisappeared = false;
             base.OnAppearing();
             _zxing.IsScanning = true;
+            Device.StartTimer(new TimeSpan(0, 0, 2), () =>
+            {
+                if(_pageDisappeared)
+                {
+                    return false;
+                }
+
+                _zxing.AutoFocus();
+                return true;
+            });
         }
 
         protected override void OnDisappearing()
         {
+            _pageDisappeared = true;
             _zxing.IsScanning = false;
             base.OnDisappearing();
         }
