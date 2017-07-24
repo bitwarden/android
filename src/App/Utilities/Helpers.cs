@@ -29,5 +29,14 @@ namespace Bit.App.Utilities
                     throw new Exception("Unsupported platform.");
             }
         }
+
+        public static bool InDebugMode()
+        {
+#if DEBUG
+            return true;
+#else
+            return false;
+#endif
+        }
     }
 }

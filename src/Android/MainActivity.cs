@@ -56,7 +56,10 @@ namespace Bit.Android
 
             Console.WriteLine("A OnCreate");
             Window.SetSoftInputMode(SoftInput.StateHidden);
-            Window.AddFlags(WindowManagerFlags.Secure);
+            if(!App.Utilities.Helpers.InDebugMode())
+            {
+                Window.AddFlags(WindowManagerFlags.Secure);
+            }
 
             var appIdService = Resolver.Resolve<IAppIdService>();
             var authService = Resolver.Resolve<IAuthService>();

@@ -93,7 +93,7 @@ namespace Bit.Android
             }
 
             // 3. In debug mode
-            if(InDebugMode())
+            if(App.Utilities.Helpers.InDebugMode())
             {
                 reregister = true;
             }
@@ -112,15 +112,6 @@ namespace Bit.Android
                     pushNotification.Register();
                 }
             }
-        }
-
-        private bool InDebugMode()
-        {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
         }
 
         public override void OnTerminate()

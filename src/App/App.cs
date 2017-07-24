@@ -104,7 +104,7 @@ namespace Bit.App
             if(string.IsNullOrWhiteSpace(_uri))
             {
                 var lastBuild = _settings.GetValueOrDefault<string>(LastBuildKey);
-                if(InDebugMode() || lastBuild == null || lastBuild != _appInfoService.Build)
+                if(Utilities.Helpers.InDebugMode() || lastBuild == null || lastBuild != _appInfoService.Build)
                 {
                     _settings.AddOrUpdateValue(LastBuildKey, _appInfoService.Build);
                     _databaseService.CreateTables();
@@ -182,15 +182,6 @@ namespace Bit.App
                     });
                 });
             }
-        }
-
-        private bool InDebugMode()
-        {
-#if DEBUG
-            return true;
-#else
-            return false;
-#endif
         }
 
         private async Task FullSyncAsync()
