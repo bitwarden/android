@@ -231,7 +231,7 @@ namespace Bit.App.Pages
             {
                 Table.Root.Remove(AttachmentsSection);
             }
-            if(Model.ShowAttachments)
+            if(Model.ShowAttachments && _tokenService.TokenPremium)
             {
                 AttachmentsSection = new TableSection(AppResources.Attachments);
                 AttachmentCells = new List<AttachmentViewCell>();

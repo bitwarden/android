@@ -1025,6 +1025,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Feature Unavailable.
+        /// </summary>
+        public static string FeatureUnavailable {
+            get {
+                return ResourceManager.GetString("FeatureUnavailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         public static string File {
@@ -1264,6 +1273,15 @@ namespace Bit.App.Resources {
         public static string Launch {
             get {
                 return ResourceManager.GetString("Launch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Learn More.
+        /// </summary>
+        public static string LearnMore {
+            get {
+                return ResourceManager.GetString("LearnMore", resourceCulture);
             }
         }
         
@@ -1534,6 +1552,15 @@ namespace Bit.App.Resources {
         public static string MatchingLogins {
             get {
                 return ResourceManager.GetString("MatchingLogins", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum file size is 100 MB..
+        /// </summary>
+        public static string MaxFileSize {
+            get {
+                return ResourceManager.GetString("MaxFileSize", resourceCulture);
             }
         }
         
@@ -2218,6 +2245,15 @@ namespace Bit.App.Resources {
         public static string UnlockWithPIN {
             get {
                 return ResourceManager.GetString("UnlockWithPIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot use this feature until you update your encryption key..
+        /// </summary>
+        public static string UpdateKey {
+            get {
+                return ResourceManager.GetString("UpdateKey", resourceCulture);
             }
         }
         

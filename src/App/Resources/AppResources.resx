@@ -986,4 +986,16 @@
   <data name="FileSource" xml:space="preserve">
     <value>File Source</value>
   </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>Feature Unavailable</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>Maximum file size is 100 MB.</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>You cannot use this feature until you update your encryption key.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>Learn More</value>
+  </data>
 </root>

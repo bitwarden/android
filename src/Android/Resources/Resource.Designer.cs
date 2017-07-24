@@ -2756,8 +2756,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0200e6
 			public const int notification_sm = 2130837734;
 			
-			// aapt resource value: 0x7f0200f7
-			public const int notification_template_icon_bg = 2130837751;
+			// aapt resource value: 0x7f0200f8
+			public const int notification_template_icon_bg = 2130837752;
 			
 			// aapt resource value: 0x7f0200e7
 			public const int paperclip = 2130837735;
@@ -2799,13 +2799,16 @@ namespace Bit.Android
 			public const int tools_selected = 2130837747;
 			
 			// aapt resource value: 0x7f0200f4
-			public const int upload = 2130837748;
+			public const int trash = 2130837748;
 			
 			// aapt resource value: 0x7f0200f5
-			public const int user = 2130837749;
+			public const int upload = 2130837749;
 			
 			// aapt resource value: 0x7f0200f6
-			public const int yubikey = 2130837750;
+			public const int user = 2130837750;
+			
+			// aapt resource value: 0x7f0200f7
+			public const int yubikey = 2130837751;
 			
 			static Drawable()
 			{

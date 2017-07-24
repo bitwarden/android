@@ -22,10 +22,13 @@ namespace Bit.App.Pages
         private readonly IConnectivity _connectivity;
         private readonly IDeviceActionService _deviceActiveService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly ITokenService _tokenService;
+        private readonly ICryptoService _cryptoService;
         private readonly string _loginId;
         private Login _login;
         private byte[] _fileBytes;
         private DateTime? _lastAction;
+        private bool _canUseAttachments = true;
 
         public VaultAttachmentsPage(string loginId)
             : base(true)
@@ -36,6 +39,8 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActiveService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _tokenService = Resolver.Resolve<ITokenService>();
+            _cryptoService = Resolver.Resolve<ICryptoService>();
 
             Init();
         }
@@ -51,6 +56,8 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            _canUseAttachments = _cryptoService.EncKey != null;
+
             SubscribeFileResult(true);
             var selectButton = new ExtendedButton
             {
@@ -103,9 +110,13 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationAttchments,
                 HasUnevenRows = true,
                 ItemTemplate = new DataTemplate(() => new VaultAttachmentsViewCell()),
-                Footer = NewTable,
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
+
+            if(_tokenService.TokenPremium)
+            {
+                ListView.Footer = NewTable;
+            }
 
             NoDataLabel = new Label
             {
@@ -129,6 +140,13 @@ namespace Bit.App.Pages
                     return;
                 }
                 _lastAction = DateTime.UtcNow;
+
+
+                if(!_canUseAttachments)
+                {
+                    await ShowUpdateKeyAsync();
+                    return;
+                }
 
                 if(!_connectivity.IsConnected)
                 {
@@ -168,7 +186,11 @@ namespace Bit.App.Pages
 
             Title = AppResources.Attachments;
             Content = ListView;
-            ToolbarItems.Add(saveToolBarItem);
+
+            if(_tokenService.TokenPremium)
+            {
+                ToolbarItems.Add(saveToolBarItem);
+            }
 
             if(Device.RuntimePlatform == Device.iOS)
             {
@@ -186,6 +208,11 @@ namespace Bit.App.Pages
             base.OnAppearing();
             ListView.ItemSelected += AttachmentSelected;
             await LoadAttachmentsAsync();
+
+            if(_tokenService.TokenPremium && !_canUseAttachments)
+            {
+                await ShowUpdateKeyAsync();
+            }
         }
 
         protected override void OnDisappearing()
@@ -235,30 +262,28 @@ namespace Bit.App.Pages
 
             ((ListView)sender).SelectedItem = null;
 
-            var buttons = new List<string> { };
-            var selection = await DisplayActionSheet(attachment.Name, AppResources.Cancel, AppResources.Delete,
-                buttons.ToArray());
-
-            if(selection == AppResources.Delete)
+            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
             {
-                _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
-                var saveTask = await _loginService.DeleteAttachmentAsync(_login, attachment.Id);
-                _userDialogs.HideLoading();
+                return;
+            }
 
-                if(saveTask.Succeeded)
-                {
-                    _userDialogs.Toast(AppResources.AttachmentDeleted);
-                    _googleAnalyticsService.TrackAppEvent("DeletedAttachment");
-                    await LoadAttachmentsAsync();
-                }
-                else if(saveTask.Errors.Count() > 0)
-                {
-                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
-                }
-                else
-                {
-                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
-                }
+            _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
+            var saveTask = await _loginService.DeleteAttachmentAsync(_login, attachment.Id);
+            _userDialogs.HideLoading();
+
+            if(saveTask.Succeeded)
+            {
+                _userDialogs.Toast(AppResources.AttachmentDeleted);
+                _googleAnalyticsService.TrackAppEvent("DeletedAttachment");
+                await LoadAttachmentsAsync();
+            }
+            else if(saveTask.Errors.Count() > 0)
+            {
+                await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+            }
+            else
+            {
+                await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
             }
         }
 
@@ -283,6 +308,16 @@ namespace Bit.App.Pages
                  _fileBytes = result.Item1;
                  SubscribeFileResult(true);
              });
+        }
+
+        private async Task ShowUpdateKeyAsync()
+        {
+            var confirmed = await _userDialogs.ConfirmAsync(AppResources.UpdateKey, AppResources.FeatureUnavailable,
+                AppResources.LearnMore, AppResources.Cancel);
+            if(confirmed)
+            {
+                Device.OpenUri(new Uri("https://help.bitwarden.com"));
+            }
         }
     }
 }
