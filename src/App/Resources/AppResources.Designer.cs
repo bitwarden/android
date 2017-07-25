@@ -683,15 +683,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Current Session.
-        /// </summary>
-        public static string CurrentSession {
-            get {
-                return ResourceManager.GetString("CurrentSession", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {

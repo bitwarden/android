@@ -73,10 +73,16 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
+            LockCell = new ExtendedTextCell
+            {
+                Text = AppResources.Lock
+            };
+
             var securitySecion = new TableSection(AppResources.Security)
             {
                 LockOptionsCell,
                 PinCell,
+                LockCell,
                 TwoStepCell
             };
 
@@ -115,11 +121,6 @@ namespace Bit.App.Pages
             {
                 Text = AppResources.Sync,
                 ShowDisclousure = true
-            };
-
-            LockCell = new ExtendedTextCell
-            {
-                Text = AppResources.Lock
             };
 
             LogOutCell = new ExtendedTextCell
@@ -177,17 +178,13 @@ namespace Bit.App.Pages
                     new TableSection(AppResources.Account)
                     {
                         ChangeMasterPasswordCell,
-                        ChangeEmailCell
+                        ChangeEmailCell,
+                        LogOutCell
                     },
                     new TableSection(AppResources.Manage)
                     {
                         FoldersCell,
                         SyncCell
-                    },
-                    new TableSection(AppResources.CurrentSession)
-                    {
-                        LockCell,
-                        LogOutCell
                     },
                     otherSection
                 }

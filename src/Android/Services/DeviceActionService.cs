@@ -153,6 +153,8 @@ namespace Bit.Android.Services
                 return Task.FromResult(0);
             }
 
+            var additionalIntents = new List<IParcelable>();
+
             var docIntent = new Intent(Intent.ActionOpenDocument);
             docIntent.AddCategory(Intent.CategoryOpenable);
             docIntent.SetType("*/*");
@@ -165,11 +167,15 @@ namespace Bit.Android.Services
                 var file = new Java.IO.File(root, "temp_camera_photo.jpg");
                 if(!file.Exists())
                 {
-                    var a = file.ParentFile.Mkdirs();
-                    var b = file.CreateNewFile();
+                    file.ParentFile.Mkdirs();
+                    file.CreateNewFile();
                 }
                 var outputFileUri = global::Android.Net.Uri.FromFile(file);
-                var additionalIntents = GetCameraIntents(outputFileUri);
+                additionalIntents.AddRange(GetCameraIntents(outputFileUri));
+            }
+
+            if(additionalIntents.Count > 0)
+            {
                 chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());
             }
 

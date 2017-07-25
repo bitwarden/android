@@ -316,7 +316,7 @@ namespace Bit.App.Pages
                 AppResources.LearnMore, AppResources.Cancel);
             if(confirmed)
             {
-                Device.OpenUri(new Uri("https://help.bitwarden.com"));
+                Device.OpenUri(new Uri("https://help.bitwarden.com/article/update-encryption-key/"));
             }
         }
     }
