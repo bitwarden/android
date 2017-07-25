@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="5">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
@@ -33,7 +33,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bg.png" width="400" height="400"/>
         <image name="Default.png" width="320" height="480"/>
         <image name="fa-cogs.png" width="22" height="22"/>
         <image name="fa-lock.png" width="22" height="22"/>
@@ -56,13 +55,13 @@
         <image name="ion_chevron_right.png" width="14" height="14"/>
         <image name="ion_plus.png" width="22" height="22"/>
         <image name="logo.png" width="282" height="44"/>
-        <image name="cogs.png" width="25" height="25"/>
+        <image name="cogs.png" width="29" height="29"/>
         <image name="eye.png" width="22" height="22"/>
         <image name="eye_slash.png" width="22" height="22"/>
-        <image name="more.png" width="64" height="64"/>
+        <image name="more.png" width="28" height="28"/>
         <image name="more_selected.png" width="28" height="28"/>
         <image name="plus.png" width="18" height="18"/>
-        <image name="star.png" width="22" height="22"/>
+        <image name="star.png" width="25" height="25"/>
         <image name="cloudup.png" width="44" height="44"/>
         <image name="envelope.png" width="18" height="18"/>
         <image name="globe.png" width="44" height="44"/>
@@ -72,5 +71,22 @@
         <image name="upload.png" width="44" height="44"/>
         <image name="user.png" width="18" height="18"/>
         <image name="wrench.png" width="22" height="22"/>
+        <image name="camera.png" width="22" height="22"/>
+        <image name="download.png" width="18" height="18"/>
+        <image name="ext-act.png" width="290" height="252"/>
+        <image name="ext-more.png" width="290" height="252"/>
+        <image name="ext-use.png" width="290" height="252"/>
+        <image name="fa_lock.png" width="25" height="25"/>
+        <image name="fingerprint.png" width="91" height="92"/>
+        <image name="folder.png" width="18" height="18"/>
+        <image name="Icon-83.5.png" width="83.5" height="83.5"/>
+        <image name="lightbulb.png" width="18" height="18"/>
+        <image name="paperclip.png" width="14" height="14"/>
+        <image name="photo.png" width="22" height="22"/>
+        <image name="share.png" width="14" height="14"/>
+        <image name="share_tools.png" width="44" height="44"/>
+        <image name="tools.png" width="26" height="26"/>
+        <image name="trash.png" width="18" height="18"/>
+        <image name="yubikey.png" width="266" height="160"/>
     </resources>
 </document>
