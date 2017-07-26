@@ -163,15 +163,19 @@ namespace Bit.Android.Services
 
             if(!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
             {
-                var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
-                var file = new Java.IO.File(root, "temp_camera_photo.jpg");
-                if(!file.Exists())
+                try
                 {
-                    file.ParentFile.Mkdirs();
-                    file.CreateNewFile();
+                    var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
+                    var file = new Java.IO.File(root, "temp_camera_photo.jpg");
+                    if(!file.Exists())
+                    {
+                        file.ParentFile.Mkdirs();
+                        file.CreateNewFile();
+                    }
+                    var outputFileUri = global::Android.Net.Uri.FromFile(file);
+                    additionalIntents.AddRange(GetCameraIntents(outputFileUri));
                 }
-                var outputFileUri = global::Android.Net.Uri.FromFile(file);
-                additionalIntents.AddRange(GetCameraIntents(outputFileUri));
+                catch(Java.IO.IOException) { }
             }
 
             if(additionalIntents.Count > 0)
