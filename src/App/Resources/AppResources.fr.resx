@@ -467,9 +467,6 @@
     <value>Création du compte...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="CurrentSession" xml:space="preserve">
-    <value>Session actuelle</value>
-  </data>
   <data name="EditLogin" xml:space="preserve">
     <value>Modifier Identifiant</value>
   </data>
