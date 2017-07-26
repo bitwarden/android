@@ -467,9 +467,6 @@
     <value>Vytvára sa účet...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="CurrentSession" xml:space="preserve">
-    <value>Aktuálna relácia</value>
-  </data>
   <data name="EditLogin" xml:space="preserve">
     <value>Upraviť prihlásenie</value>
   </data>
