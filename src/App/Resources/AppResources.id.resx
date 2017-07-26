@@ -467,9 +467,6 @@
     <value>Membuat akun...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="CurrentSession" xml:space="preserve">
-    <value>Sesi Sekarang</value>
-  </data>
   <data name="EditLogin" xml:space="preserve">
     <value>Edit Info Masuk</value>
   </data>
@@ -823,7 +820,7 @@
     <value>Buat organisasi untuk berbagi info masuk Anda dengan aman dengan pengguna lain.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Kami menggunakan analitik untuk mempelajari lebih baik bagaimana aplikasi sedang digunakan sehingga kami dapat membuatnya lebih baik. Semua pengumpulan data benar-benar anonim.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Fitur</value>
@@ -851,15 +848,15 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Aplikasi Autentikasi</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Masukkan 6 digit kode verifikasi dari aplikasi autentikasi Anda.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Masukkan 6 digit kode verifikasi yang dikirim melalui email ke {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -870,15 +867,15 @@
     <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Kode Pemulihan</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Ingat saya</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Kirim ulang email kode verifikasi</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -888,11 +885,11 @@
     <value>Use another two-step login method</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Tidak dapat mengirim email verifikasi. Coba lagi.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>Email verifikasi terkirim.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -903,30 +900,30 @@
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Tambah Lampiran Baru</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Lampiran</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>Tidak bisa mengunduh berkas.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>Peranti Anda tidak dapat membuka jenis berkas ini.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>Mengunduh...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Lampiran ini berukuran {0}. Anda ingin mengunduhnya ke peranti Anda?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
     <value>Authenticator Key (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Kode Verifikasi (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
@@ -939,16 +936,16 @@
     <value>Scanning will happen automatically.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>Arahkan kamera Anda ke kode QR.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Pindai Kode QR</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Kamera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Foto</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
     <value>Copied TOTP!</value>
@@ -966,36 +963,36 @@
     <value>A premium membership is required to use this feature.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Lampiran ditambahkan</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Lampiran dihapus</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Pilih Berkas</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Berkas</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Tidak ada berkas yang dipilih</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Tidak ada lampiran.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Sumber Berkas</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Fitur Tidak Tersedia</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Ukuran berkas maksimal adalah 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Anda tidak dapat menggunakan fitur ini sampai Anda memperbarui kunci enkripsi Anda.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Pelajari Lebih Lanjut</value>
   </data>
 </root>

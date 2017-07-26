@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Stäng av Analytics</value>
+    <value>Inaktivera Analytics</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Lösenord</value>
@@ -466,9 +466,6 @@
   <data name="CreatingAccount" xml:space="preserve">
     <value>Skapar konto...</value>
     <comment>Message shown when interacting with the server</comment>
-  </data>
-  <data name="CurrentSession" xml:space="preserve">
-    <value>Nuvarande session</value>
   </data>
   <data name="EditLogin" xml:space="preserve">
     <value>Ändra inloggning</value>
@@ -781,7 +778,7 @@
     <value>2. Växla till på-läget och tryck på OK för att acceptera.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Avstängd</value>
+    <value>Inaktiverad</value>
   </data>
   <data name="Enabled" xml:space="preserve">
     <value>Aktiverad</value>
@@ -823,7 +820,7 @@
     <value>Skapa en organisation för att på ett säkert sätt kunna dela dina inloggningar med andra användare.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Vi använder analytics för att bättre förstå hur appen används så att vi kan göra förbättringar. All datainsamling är helt anonym.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Funktioner</value>
@@ -945,57 +942,57 @@
     <value>Skanna QR-kod</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Kamera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Foton</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>Kopierade TOTP!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Kopiera TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Om din inloggning har en autentiseringsnyckel kopplad till den, kommer TOTP-verifieringskoden att automatiskt kopieras till urklipp när du automatiskt fyller i inloggningen.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Inaktivera automatisk TOTP-kopiering</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Ett premium-medlemskap krävs för att använda den här funktionen.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Bilaga tillagd</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Bilaga borttagen</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Välj fil</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Fil</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Ingen fil vald</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Det finns inga bilagor.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Filkälla</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Funktionen är inte tillgänglig</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Filen får vara maximalt 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Du kan inte använda denna funktion förrän du uppdaterar din krypteringsnyckel.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Lär dig mer</value>
   </data>
 </root>

@@ -467,9 +467,6 @@
     <value>Создание аккаунта...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="CurrentSession" xml:space="preserve">
-    <value>Текущая сессия</value>
-  </data>
   <data name="EditLogin" xml:space="preserve">
     <value>Изменить логин</value>
   </data>
