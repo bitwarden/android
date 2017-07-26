@@ -467,9 +467,6 @@
     <value>Stvaranje računa...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="CurrentSession" xml:space="preserve">
-    <value>Trenutačna sesija</value>
-  </data>
   <data name="EditLogin" xml:space="preserve">
     <value>Uredi prijavu</value>
   </data>
