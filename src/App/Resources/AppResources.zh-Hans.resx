@@ -467,9 +467,6 @@
     <value>正在创建账号...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="CurrentSession" xml:space="preserve">
-    <value>当前会话</value>
-  </data>
   <data name="EditLogin" xml:space="preserve">
     <value>编辑网站</value>
   </data>
@@ -726,7 +723,7 @@
     <value>用PIN 码解锁</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>正在验证</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -874,7 +871,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>记住我</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
@@ -903,19 +900,19 @@
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>添加新附件</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>附件</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>无法下载文件。</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>您的设备无法打开这种类型的文件。</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>正在下载……</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
@@ -942,13 +939,13 @@
     <value>Point your camera at the QR code.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>扫描二维码</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>相机</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>照片</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
     <value>Copied TOTP!</value>
@@ -972,30 +969,30 @@
     <value>Attachment deleted</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>选择文件</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>文件</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
     <value>No file chosen</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>沒有附件</value>
   </data>
   <data name="FileSource" xml:space="preserve">
     <value>File Source</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>功能不可用</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>文件最大为 100 MB。</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>在您更新加密密钥前，您不能使用此功能。</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>了解更多信息。</value>
   </data>
 </root>
