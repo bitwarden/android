@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden – Free Password Manager</value>
+    <value>bitwarden Password Manager</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
