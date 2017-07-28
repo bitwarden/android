@@ -348,6 +348,7 @@
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SqlService.cs" />
     <Compile Include="SplashActivity.cs" />
+    <Compile Include="PackageReplacedReceiver.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>

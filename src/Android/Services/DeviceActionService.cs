@@ -95,7 +95,7 @@ namespace Bit.Android.Services
             var pm = CrossCurrentActivity.Current.Activity.PackageManager;
             var intent = new Intent(Intent.ActionView);
             intent.SetType(mimeType);
-            var activities = pm.QueryIntentActivities(intent, global::Android.Content.PM.PackageInfoFlags.MatchDefaultOnly);
+            var activities = pm.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
             return (activities?.Count ?? 0) > 0;
         }
 

@@ -13,13 +13,12 @@ using Acr.UserDialogs;
 using XLabs.Ioc;
 using System.Reflection;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 
 namespace Bit.App
 {
     public class App : Application
     {
-        private const string LastBuildKey = "LastBuild";
-
         private string _uri;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
@@ -103,13 +102,7 @@ namespace Bit.App
 
             if(string.IsNullOrWhiteSpace(_uri))
             {
-                var lastBuild = _settings.GetValueOrDefault<string>(LastBuildKey);
-                if(Utilities.Helpers.InDebugMode() || lastBuild == null || lastBuild != _appInfoService.Build)
-                {
-                    _settings.AddOrUpdateValue(LastBuildKey, _appInfoService.Build);
-                    _databaseService.CreateTables();
-                }
-
+                Helpers.PerformUpdateTasks(_settings, _appInfoService, _databaseService);
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             }
 

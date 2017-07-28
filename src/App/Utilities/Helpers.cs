@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bit.App.Abstractions;
+using Plugin.Settings.Abstractions;
+using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -37,6 +39,20 @@ namespace Bit.App.Utilities
 #else
             return false;
 #endif
+        }
+
+        public static bool PerformUpdateTasks(ISettings settings, IAppInfoService appInfoService,
+            IDatabaseService databaseService)
+        {
+            var lastBuild = settings.GetValueOrDefault<string>(Constants.LastBuildKey);
+            if(InDebugMode() || lastBuild == null || lastBuild != appInfoService.Build)
+            {
+                settings.AddOrUpdateValue(Constants.LastBuildKey, appInfoService.Build);
+                databaseService.CreateTables();
+                return true;
+            }
+
+            return false;
         }
     }
 }
