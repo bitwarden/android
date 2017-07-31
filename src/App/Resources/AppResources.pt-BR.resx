@@ -660,7 +660,7 @@
     <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Gerar nova senha</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Digite novamente a senha mestre</value>
@@ -723,7 +723,7 @@
     <value>Desbloqueio com código PIN</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>Validando</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -844,75 +844,75 @@
     <value>Sempre scanear a tela por campos e oferecer auto-preenchimento apenas se um campo de senha for encontrado. Esta é a configuração padrão.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Não é possível abrir o app "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Aplicativo autenticador</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Digite o código de verificação de 6 dígitos de seu app autenticador.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Digite o código de verificação de 6 dígitos que foi enviado por email para {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Início de sessão indisponível</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
     <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Código de recuperação</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Lembrar de mim</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Enviar e-mail do código de verificação novamente</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Opções de Login em duas etapas</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Usar outro método de login em duas etapas</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Não foi possível enviar o email de verificação. Tente novamente.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>Email de verificação enviado.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>Mantenha seu YubiKey NEO contra a parte de trás do aparelho para continuar.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>Chave de segurança YubiKey NEO</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Adicionar novo anexo</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Anexos</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>O download do arquivo falhou.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>O seu dispositivo não pode abrir este tipo de arquivo.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>Baixando...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
@@ -920,79 +920,79 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Chave do autenticador (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Código de verificação (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Chave de autenticador adicionada.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Não é possível ler a chave de autenticador.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>Digitalização acontecerá automaticamente.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>Aponte sua câmera para o QR code.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Escanear código QR</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Câmera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Fotos</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP copiado!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Copiar TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
     <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Desativar cópia automática de TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Uma conta premium é necessária para usar esse recurso.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Anexo adicionado</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Anexo eliminado</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Escolher arquivo</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Arquivo</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Nenhum arquivo escolhido</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Não existem anexos.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Fonte do arquivo</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Recurso indisponível</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Tamanho máximo do arquivo é 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Você não pode usar esse recurso, até você atualizar sua chave de criptografia.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Saiba Mais</value>
   </data>
 </root>
