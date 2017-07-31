@@ -1,12 +1,11 @@
 ﻿using System;
-using Bit.App.Models;
 using Foundation;
 
 namespace Bit.iOS.Extension.Models
 {
     public class Context
     {
-        private DomainName _domainName;
+        private string _uriString;
 
         public NSExtensionContext ExtContext { get; set; }
         public string ProviderType { get; set; }
@@ -23,7 +22,24 @@ namespace Bit.iOS.Extension.Models
                 return uri;
             }
         }
-        public string UrlString { get; set; }
+        public string UrlString
+        {
+            get
+            {
+                return _uriString;
+            }
+            set
+            {
+                _uriString = value;
+                if(_uriString != null && _uriString.Contains("."))
+                {
+                    if(!_uriString.Contains("://") && !_uriString.Contains(" "))
+                    {
+                        _uriString = string.Concat("http://", _uriString);
+                    }
+                }
+            }
+        }
         public string LoginTitle { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
