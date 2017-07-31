@@ -714,7 +714,7 @@
     <value>两步登录</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>两步登录需要您登录时输入一个从认证应用获得的安全吗，这样能使您的账户更安全。两步登录可以在 bitwarden.com 网页版打开。您现在要访问这个网站吗？</value>
+    <value>两步登录需要您登录时输入一个从认证应用获得的安全码，这样能使您的账户更安全。两步登录可以在 bitwarden.com 网页版打开。您现在要访问这个网站吗？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>用 {0} 解锁</value>
@@ -820,7 +820,7 @@
     <value>创建一个组织来安全地分享您的登录信息。</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>我们使用 analytics 来帮助分析扩展的使用情况，以便我们改进扩展。所有的数据收集完全是匿名的。</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>功能</value>
@@ -832,10 +832,10 @@
     <value>当你选择一个密码字段时，只扫描屏幕字段并提供自动填充通知。此设置可帮助延长电池寿命。</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>保持通知</value>
+    <value>始终通知</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>总是提供自动填充通知，并且在试图自动填充后只扫描字段。此设置可帮助延长电池寿命。</value>
+    <value>始终提供自动填充通知，并且在试图自动填充后只扫描字段。此设置可帮助延长电池寿命。</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>始终扫描</value>
@@ -848,26 +848,26 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>身份验证 App</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>请输入您的身份验证器 App 中的 6 位验证码。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>请输入通过电子邮件发送给 {0} 的 6 位验证码。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>登录不可用</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>此帐户已启用的两步登录，但是，此设备不支持配置两步登录。请使用支持的设备，或者添加附加支持跨设备的提供程序（如验证器 App）。</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>恢复码</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
@@ -875,28 +875,28 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>再次发送验证码电子邮件</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>两步登录选项</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>使用另一种两步登录方法</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>无法发送验证电子邮件。请再试一次。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>验证邮件已发送。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>将您的 YubiKey NEO 靠在设备的后面。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>YubiKey NEO 安全密钥</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -916,27 +916,27 @@
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>此附件大小是 {0} 。您确定要下载到设备？</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>验证器密钥 (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>验证码 (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>验证器密钥已添加。</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>无法读取验证器密钥。</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>将会自动扫描。</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>将相机对准 QR 码。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>扫描二维码</value>
@@ -948,25 +948,25 @@
     <value>照片</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP 已复制！</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>复制 TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>如果您的登录信息包含一个验证密钥，当自动填充该登录信息时，TOTP 验证码将会自动复制到剪贴板。</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>禁用自动 TOTP 备份</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>使用此功能需要高级会员资格。</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>附件已添加</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>附件已删除</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
     <value>选择文件</value>
@@ -975,13 +975,13 @@
     <value>文件</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>未选定任何文件</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
     <value>沒有附件</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>文件源</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
     <value>功能不可用</value>
