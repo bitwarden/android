@@ -42,6 +42,7 @@ namespace Bit.Android
                 (s) => s.Split(' ').FirstOrDefault()),
             new Browser("org.mozilla.firefox", "url_bar_title"),
             new Browser("org.mozilla.firefox_beta", "url_bar_title"),
+            new Browser("org.mozilla.focus", "display_url"),
             new Browser("com.ghostery.android.ghostery", "search_field"),
             new Browser("org.adblockplus.browser", "url_bar_title"),
             new Browser("com.htc.sense.browser", "title"),
@@ -52,7 +53,9 @@ namespace Bit.Android
             new Browser("com.mx.browser", "address_editor_with_progress"),
             new Browser("com.mx.browser.tablet", "address_editor_with_progress"),
             new Browser("com.linkbubble.playstore", "url_text"),
-            new Browser("com.ksmobile.cb", "address_bar_edit_text")
+            new Browser("com.ksmobile.cb", "address_bar_edit_text"),
+            new Browser("acr.browser.lightning", "search"),
+            new Browser("acr.browser.barebones", "search")
         }.ToDictionary(n => n.PackageName);
 
         private readonly IAppSettingsService _appSettings;
@@ -75,9 +78,9 @@ namespace Bit.Android
                     return;
                 }
 
-                //var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
-                //var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
-                //testNodes.Dispose();
+                var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
+                var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+                testNodes.Dispose();
 
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 var cancelNotification = true;
