@@ -190,7 +190,7 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Связь с нами</value>
+    <value>Напишите нам</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
     <value>Напишите нам на email, чтобы получить помощь или оставить отзыв.</value>
@@ -820,7 +820,7 @@
     <value>Создайте организацию, чтобы безопасно делиться своими логинами с другими пользователями.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Мы используем аналитику для понимания как используется приложение, чтобы сделать его лучше. Все собранные данные полностью анонимны.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Дополнительно</value>
@@ -829,13 +829,13 @@
     <value>Сканировать выбор поля пароля</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Сканировать и выводить уведомление автозаполнения только при выборе поля ввода пароля. Этот параметр может помочь увеличить время автономной работы.</value>
+    <value>Сканировать и выводить уведомление автозаполнения только при выборе поля ввода пароля. Этот параметр менее энергозатратен.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>Постоянное уведомление</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Сканирование выполняется только после нажатия постоянно отображаемого уведомления. Этот параметр может помочь увеличить время автономной работы.</value>
+    <value>Сканирование выполняется только после нажатия постоянно отображаемого уведомления. Этот параметр менее энергозатратен.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>Сканировать всегда</value>
@@ -942,57 +942,57 @@
     <value>Сканировать QR-код</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Камера</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Фотографии</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP скопирован!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Копировать TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Если ваш логин имеет прикрепленный к нему ключ проверки подлинности, код подтверждения TOTP автоматически копируется в буфер обмена всякий раз, когда вы автоматически заполняете логин.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Отключить автоматическое копирование TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Для использования этой функции требуется премиум-статус.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Вложение добавлено</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Вложение удалено</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Выбрать файл</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Файл</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Файл не выбран</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Нет вложений.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Источник файла</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Функция недоступна</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Максимальный размер файла 100 МБ.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Вы не можете использовать эту функцию, пока не обновите свой ключ шифрования.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Узнайть больше</value>
   </data>
 </root>

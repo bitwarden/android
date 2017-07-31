@@ -118,9 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden - Gerenciador de senhas grátis</value>
+    <value>bitwarden Password Manager</value>
+    <comment>Max 30 characters</comment>
   </data>
-  <data name="Description" xml:space="preserve">
+  <data name="ShortDescription" xml:space="preserve">
+    <value>bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <comment>Max 80 characters</comment>
+  </data>
+  <data name="FullDesciption" xml:space="preserve">
     <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
 
 Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
@@ -128,33 +133,29 @@ Password theft is a serious problem. The websites and apps that you use are unde
 Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
 
 bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
-  </data>
-  <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sincronize seus logins e senhas em todos os seus navegadores e dispositivos
-- Preenchimento de logins na web e em outros apps automaticamente
-- Gerar senhas fortes e seguras automaticamente para seus logins</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Um Gerenciador de senhas gratuito e seguro para todos os seus dispositivos</value>
+    <value>A secure and free password manager for all of your devices</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gerencie todos os seus logins e senhas de um cofre seguro</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Gerar automaticamente senhas fortes, aleatórias e seguras</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Proteger seu cofre com impressão digital, código PIN ou senha mestra</value>
+    <value>Protect your vault with fingerprint, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-preencha rapidamente logins de dentro do seu navegador web e outros apps</value>
+    <value>Quickly auto-fill logins from within your web browser and other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincronize e acesse o seu cofre de vários dispositivos
+    <value>Sync and access your vault from multiple devices
 
-- Telefone
+- Phone
 - Tablet
-- Computador
+- Desktop
 - Web</value>
   </data>
 </root>

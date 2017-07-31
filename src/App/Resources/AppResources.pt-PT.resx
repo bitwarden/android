@@ -820,7 +820,7 @@
     <value>Crie uma organização para partilhar as suas credenciais em segurança com outros utilizadores.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Utilizamos analítica para aprender melhor como a aplicação está a ser utilizada para que possamos torná-la melhor. Toda a recolha de dados é completamente anónima.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Funcionalidades</value>
@@ -942,57 +942,57 @@
     <value>Digitalizar código QR</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Câmara</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Fotografias</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP copiado!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Copiar TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Se o seu início de sessão tem uma chave de autenticador anexada ao mesmo, o código de verificação TOTP é copiado automaticamente para a sua área de transferência quando quer que auto-preencha o início de sessão.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Desativar cópia automática de TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>É requerida uma adesão premium para utilizar esta funcionalidade.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Anexo adicionado</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Anexo apagado</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Escolher ficheiro</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Ficheiro</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Nenhum ficheiro escolhido</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Não existem anexos.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Fonte de ficheiro</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Funcionalidade indisponível</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>O tamanho máximo do ficheiro é de 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Não pode utilizar esta funcionalidade até atualizar a sua chave de encriptação.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Saber mais</value>
   </data>
 </root>
