@@ -93,10 +93,10 @@ namespace Bit.App.Services
         public bool TokenExpired => DateTime.UtcNow < TokenExpiration;
         public TimeSpan TokenTimeRemaining => TokenExpiration - DateTime.UtcNow;
         public bool TokenNeedsRefresh => TokenTimeRemaining.TotalMinutes < 5;
-        public string TokenUserId => DecodeToken()?["sub"].Value<string>();
-        public string TokenEmail => DecodeToken()?["email"].Value<string>();
-        public string TokenName => DecodeToken()?["name"].Value<string>();
-        public bool TokenPremium => (DecodeToken()?["premium"].Value<bool?>()).GetValueOrDefault(false);
+        public string TokenUserId => DecodeToken()?["sub"]?.Value<string>();
+        public string TokenEmail => DecodeToken()?["email"]?.Value<string>();
+        public string TokenName => DecodeToken()?["name"]?.Value<string>();
+        public bool TokenPremium => DecodeToken()?["premium"]?.Value<bool>() ?? false;
 
         public string RefreshToken
         {
