@@ -820,7 +820,7 @@
     <value>Izradite organizaciju kako biste sigurno dijelili svoje prijave s drugim korisnicima.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Koristimo Google analytics kako bismo saznali na koji način se aplikacija upotrebljava, kako bi istu mogli poboljšati. Svako prikupljanje podataka potpuno je anonimno.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Značajke</value>
@@ -942,57 +942,57 @@
     <value>Skeniraj QR kôd</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Kamera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Fotografije</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP kopiran!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Kopiraj TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Ako uz Vaše podatke za prijavu postoji i autentifikacijski ključ, kontrolni kôd TOTP automatski se kopira u međuspremnik svaki put kada automatski popunite prijavu.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Onemogući automatsko kopiranje TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Za korištenje ove značajke potrebno je premium članstvo.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Prilog dodan</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Prilog obrisan</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Odaberite datoteku</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Datoteka</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Niste odabrali niti jednu datoteku</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Nema privitaka.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Izvor datoteke</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Značajka nije dostupna</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Maksimalna veličina datoteke je 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Ne možete koristiti ovu značajku dok ne ažurirate ključ za šifriranje.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Saznaj više</value>
   </data>
 </root>
