@@ -860,7 +860,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Info Masuk Tidak Tersedia</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
@@ -933,7 +933,7 @@
     <value>Cannot read authenticator key.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>Pemindaian akan terjadi secara otomatis.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
     <value>Arahkan kamera Anda ke kode QR.</value>
@@ -948,19 +948,19 @@
     <value>Foto</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP disalin!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Salin TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
     <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Nonaktifkan salinan TOTP otomatis</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Keanggotaan premium diperlukan untuk menggunakan fitur ini.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Lampiran ditambahkan</value>
