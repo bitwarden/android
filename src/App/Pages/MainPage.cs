@@ -32,6 +32,11 @@ namespace Bit.App.Pages
             Children.Add(vaultNavigation);
             Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
+
+            if(uri != null)
+            {
+                SelectedItem = vaultNavigation;
+            }
         }
     }
 }
