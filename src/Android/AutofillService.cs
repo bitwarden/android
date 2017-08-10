@@ -219,9 +219,18 @@ namespace Bit.Android
                         cancelNotification = false;
                     }
                 }
+
+                AutofillActivity.LastCredentials = null;
+            }
+            else if(AutofillActivity.LastCredentials != null)
+            {
+                System.Threading.Tasks.Task.Run(async () =>
+                {
+                    await System.Threading.Tasks.Task.Delay(1000);
+                    AutofillActivity.LastCredentials = null;
+                });
             }
 
-            AutofillActivity.LastCredentials = null;
             passwordNodes.Dispose();
             return cancelNotification;
         }
