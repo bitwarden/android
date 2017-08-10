@@ -10,8 +10,6 @@ namespace Bit.App.Models.Api
         public string MasterPasswordHash { get; set; }
         public string Token { get; set; }
         public TwoFactorProviderType? Provider { get; set; }
-        [Obsolete]
-        public string OldAuthBearer { get; set; }
         public DeviceRequest Device { get; set; }
         public bool Remember { get; set; }
 
@@ -25,11 +23,6 @@ namespace Bit.App.Models.Api
                 { "scope", "api offline_access" },
                 { "client_id", "mobile" }
             };
-
-            if(OldAuthBearer != null)
-            {
-                dict.Add("OldAuthBearer", OldAuthBearer);
-            }
 
             if(Device != null)
             {

@@ -11,14 +11,12 @@ namespace Bit.App.Services
         private const string TokenKey = "accessToken";
         private const string RefreshTokenKey = "refreshToken";
         private const string TwoFactorTokenKeyFormat = "twoFactorToken_{0}";
-        private const string AuthBearerKey = "token";
 
         private readonly ISecureStorageService _secureStorage;
 
         private string _token;
         private dynamic _decodedToken;
         private string _refreshToken;
-        private string _authBearer;
 
         public TokenService(ISecureStorageService secureStorage)
         {
@@ -54,7 +52,6 @@ namespace Bit.App.Services
                 {
                     _secureStorage.Delete(TokenKey);
                     RefreshToken = null;
-                    AuthBearer = null;
                 }
 
                 _decodedToken = null;
@@ -129,40 +126,6 @@ namespace Bit.App.Services
                 }
 
                 _refreshToken = value;
-            }
-        }
-
-        public string AuthBearer
-        {
-            get
-            {
-                if(_authBearer != null)
-                {
-                    return _authBearer;
-                }
-
-                var tokenBytes = _secureStorage.Retrieve(AuthBearerKey);
-                if(tokenBytes == null)
-                {
-                    return null;
-                }
-
-                _authBearer = Encoding.UTF8.GetString(tokenBytes, 0, tokenBytes.Length);
-                return _authBearer;
-            }
-            set
-            {
-                if(value != null)
-                {
-                    var tokenBytes = Encoding.UTF8.GetBytes(value);
-                    _secureStorage.Store(AuthBearerKey, tokenBytes);
-                }
-                else
-                {
-                    _secureStorage.Delete(AuthBearerKey);
-                }
-
-                _authBearer = value;
             }
         }
 

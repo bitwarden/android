@@ -150,8 +150,7 @@ namespace Bit.App.Services
             get
             {
                 return _cryptoService.Key != null &&
-                    (!string.IsNullOrWhiteSpace(_tokenService.Token) ||
-                        !string.IsNullOrWhiteSpace(_tokenService.AuthBearer)) &&
+                    !string.IsNullOrWhiteSpace(_tokenService.Token) &&
                     !string.IsNullOrWhiteSpace(UserId);
             }
         }
@@ -199,7 +198,6 @@ namespace Bit.App.Services
         {
             _tokenService.Token = null;
             _tokenService.RefreshToken = null;
-            _tokenService.AuthBearer = null;
             UserId = null;
             Email = null;
             _cryptoService.ClearKeys();

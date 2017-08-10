@@ -7,7 +7,6 @@ using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
 using Bit.App.Abstractions;
 using System.Net;
-using XLabs.Ioc;
 using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Repositories
@@ -48,54 +47,7 @@ namespace Bit.App.Repositories
         private async Task<T> HandleTokenStateAsync<T>(Func<T> success, Func<T> webException,
             Func<HttpResponseMessage, Task<T>> error)
         {
-            if(!string.IsNullOrWhiteSpace(TokenService.AuthBearer) && string.IsNullOrWhiteSpace(TokenService.Token))
-            {
-                // Migrate from old auth bearer to new access token
-
-                var deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-                var appIdService = Resolver.Resolve<IAppIdService>();
-
-                using(var client = HttpService.IdentityClient)
-                {
-                    var requestMessage = new HttpRequestMessage
-                    {
-                        Method = HttpMethod.Post,
-                        RequestUri = new Uri(client.BaseAddress, "connect/token"),
-                        Content = new FormUrlEncodedContent(new TokenRequest
-                        {
-                            Email = "abcdefgh",
-                            MasterPasswordHash = "abcdefgh",
-                            OldAuthBearer = TokenService.AuthBearer,
-                            Device = new DeviceRequest(appIdService, deviceInfoService)
-                        }.ToIdentityTokenRequest())
-                    };
-
-                    try
-                    {
-                        var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
-                        if(!response.IsSuccessStatusCode)
-                        {
-                            if(response.StatusCode == HttpStatusCode.BadRequest)
-                            {
-                                response.StatusCode = HttpStatusCode.Unauthorized;
-                            }
-
-                            return await error.Invoke(response).ConfigureAwait(false);
-                        }
-
-                        var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                        var tokenResponse = JsonConvert.DeserializeObject<TokenResponse>(responseContent);
-                        TokenService.Token = tokenResponse.AccessToken;
-                        TokenService.RefreshToken = tokenResponse.RefreshToken;
-                        TokenService.AuthBearer = null;
-                    }
-                    catch
-                    {
-                        return webException.Invoke();
-                    }
-                }
-            }
-            else if(TokenService.TokenNeedsRefresh && !string.IsNullOrWhiteSpace(TokenService.RefreshToken))
+            if(TokenService.TokenNeedsRefresh && !string.IsNullOrWhiteSpace(TokenService.RefreshToken))
             {
                 using(var client = HttpService.IdentityClient)
                 {
@@ -134,10 +86,6 @@ namespace Bit.App.Repositories
                         return webException.Invoke();
                     }
                 }
-            }
-            else if(!string.IsNullOrWhiteSpace(TokenService.AuthBearer))
-            {
-                TokenService.AuthBearer = null;
             }
 
             return success.Invoke();
