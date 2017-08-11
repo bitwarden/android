@@ -14,6 +14,6 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "sites";
+        protected override string ApiRoute => "/logins";
     }
 }

@@ -6,7 +6,6 @@ using Bit.App.Abstractions;
 using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using Plugin.Connectivity.Abstractions;
-using System.Net;
 
 namespace Bit.App.Repositories
 {
@@ -40,7 +39,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", id)),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/", id)),
                 };
 
                 try
@@ -80,7 +79,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, ApiRoute),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute)),
                 };
 
                 try
@@ -120,7 +119,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(client.BaseAddress, ApiRoute),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute)),
                 };
 
                 try
@@ -160,7 +159,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", id)),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/", id)),
                 };
 
                 try
@@ -200,7 +199,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Delete,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", id)),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/", id)),
                 };
 
                 try

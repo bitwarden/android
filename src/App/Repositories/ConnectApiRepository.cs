@@ -20,7 +20,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "connect";
+        protected override string ApiRoute => "/connect";
 
         public virtual async Task<ApiResult<TokenResponse>> PostTokenAsync(TokenRequest requestObj)
         {
@@ -34,7 +34,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new HttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/token")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/token")),
                     Content = new FormUrlEncodedContent(requestObj.ToIdentityTokenRequest())
                 };
 

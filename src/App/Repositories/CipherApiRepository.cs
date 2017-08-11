@@ -19,7 +19,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "ciphers";
+        protected override string ApiRoute => "/ciphers";
 
         public virtual async Task<ApiResult<CipherResponse>> GetByIdAsync(string id)
         {
@@ -39,7 +39,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", id)),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/", id)),
                 };
 
                 try
@@ -79,8 +79,8 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress,
-                        string.Format("{0}?includeFolders=false&includeShared=true", ApiRoute)),
+                    RequestUri = new Uri(string.Format("{0}{1}?includeFolders=false&includeShared=true", 
+                        client.BaseAddress, ApiRoute)),
                 };
 
                 try
@@ -124,7 +124,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/", cipherId, "/attachment")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/", cipherId, "/attachment")),
                     Content = content
                 };
 
@@ -165,8 +165,8 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Delete,
-                    RequestUri = new Uri(client.BaseAddress,
-                        string.Concat(ApiRoute, "/", cipherId, "/attachment/", attachmentId)),
+                    RequestUri = new Uri(
+                        string.Concat(client.BaseAddress, ApiRoute, "/", cipherId, "/attachment/", attachmentId)),
                 };
 
                 try

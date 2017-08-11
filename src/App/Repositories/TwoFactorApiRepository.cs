@@ -16,7 +16,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "two-factor";
+        protected override string ApiRoute => "/two-factor";
 
         public virtual async Task<ApiResult> PostSendEmailLoginAsync(TwoFactorEmailRequest requestObj)
         {
@@ -30,7 +30,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/send-email-login")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/send-email-login")),
                 };
 
                 try

@@ -18,7 +18,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "devices";
+        protected override string ApiRoute => "/devices";
 
         public virtual async Task<ApiResult> PutTokenAsync(string identifier, DeviceTokenRequest request)
         {
@@ -38,7 +38,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage(request)
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/identifier/", identifier, "/token")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/identifier/", identifier, "/token")),
                 };
 
                 try
@@ -70,8 +70,8 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage
                 {
                     Method = HttpMethod.Put,
-                    RequestUri = new Uri(client.BaseAddress,
-                        string.Concat(ApiRoute, "/identifier/", identifier, "/clear-token"))
+                    RequestUri = new Uri(
+                        string.Concat(client.BaseAddress, ApiRoute, "/identifier/", identifier, "/clear-token"))
                 };
 
                 try

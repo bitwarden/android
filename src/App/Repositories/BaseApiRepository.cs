@@ -54,7 +54,7 @@ namespace Bit.App.Repositories
                     var requestMessage = new HttpRequestMessage
                     {
                         Method = HttpMethod.Post,
-                        RequestUri = new Uri(client.BaseAddress, "connect/token"),
+                        RequestUri = new Uri(string.Concat(client.BaseAddress, "/connect/token")),
                         Content = new FormUrlEncodedContent(new Dictionary<string, string>
                         {
                             { "grant_type", "refresh_token" },
@@ -126,7 +126,7 @@ namespace Bit.App.Repositories
             { }
 
             return ApiResult<T>.Failed(response.StatusCode,
-                new ApiError { Message = "An unknown error has occured." });
+                new ApiError { Message = "An unknown error has occurred." });
         }
 
         protected async Task<ApiResult> HandleErrorAsync(HttpResponseMessage response)
@@ -140,7 +140,7 @@ namespace Bit.App.Repositories
             { }
 
             return ApiResult.Failed(response.StatusCode,
-                new ApiError { Message = "An unknown error has occured." });
+                new ApiError { Message = "An unknown error has occurred." });
         }
 
         private async Task<List<ApiError>> ParseErrorsAsync(HttpResponseMessage response)
@@ -186,7 +186,7 @@ namespace Bit.App.Repositories
 
             if(errors.Count == 0)
             {
-                errors.Add(new ApiError { Message = "An unknown error has occured." });
+                errors.Add(new ApiError { Message = "An unknown error has occurred." });
             }
 
             return errors;

@@ -18,7 +18,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "accounts";
+        protected override string ApiRoute => "/accounts";
 
         public virtual async Task<ApiResult> PostRegisterAsync(RegisterRequest requestObj)
         {
@@ -32,7 +32,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/register")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/register")),
                 };
 
                 try
@@ -64,7 +64,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage(requestObj)
                 {
                     Method = HttpMethod.Post,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/password-hint")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/password-hint")),
                 };
 
                 try
@@ -102,7 +102,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/revision-date")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/revision-date")),
                 };
 
                 try
@@ -151,7 +151,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/profile")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/profile")),
                 };
 
                 try
@@ -191,7 +191,7 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress, string.Concat(ApiRoute, "/keys")),
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/keys")),
                 };
 
                 try

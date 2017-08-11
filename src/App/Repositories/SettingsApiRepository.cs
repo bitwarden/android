@@ -17,7 +17,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "settings";
+        protected override string ApiRoute => "/settings";
 
         public virtual async Task<ApiResult<DomainsResponse>> GetDomains(bool excluded = false)
         {
@@ -37,8 +37,8 @@ namespace Bit.App.Repositories
                 var requestMessage = new TokenHttpRequestMessage()
                 {
                     Method = HttpMethod.Get,
-                    RequestUri = new Uri(client.BaseAddress,
-                        string.Concat(ApiRoute, "/domains?excluded=", excluded.ToString().ToLowerInvariant())),
+                    RequestUri = new Uri(
+                        string.Concat(client.BaseAddress, ApiRoute, "/domains?excluded=", excluded.ToString().ToLowerInvariant())),
                 };
 
                 try
