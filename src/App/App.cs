@@ -215,13 +215,13 @@ namespace Bit.App
             }
         }
 
-        private async void Logout(string logoutMessage)
+        private void Logout(string logoutMessage)
         {
             _authService.LogOut();
 
             var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
             var appIdService = Resolver.Resolve<IAppIdService>();
-            await Task.Run(() => deviceApiRepository.PutClearTokenAsync(appIdService.AppId)).ConfigureAwait(false);
+            Task.Run(async () => await deviceApiRepository.PutClearTokenAsync(appIdService.AppId));
 
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
 
