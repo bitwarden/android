@@ -69,6 +69,12 @@ namespace Bit.Android
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
+            var powerManager = (PowerManager)GetSystemService(PowerService);
+            if(!powerManager.IsInteractive)
+            {
+                return;
+            }
+
             try
             {
                 var root = RootInActiveWindow;
