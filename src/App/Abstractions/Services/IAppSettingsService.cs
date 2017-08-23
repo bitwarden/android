@@ -10,5 +10,8 @@ namespace Bit.App.Abstractions
         bool AutofillPersistNotification { get; set; }
         bool AutofillPasswordField { get; set; }
         string SecurityStamp { get; set; }
+        string BaseUrl { get; set; }
+        string ApiUrl { get; set; }
+        string IdentityUrl { get; set; }
     }
 }

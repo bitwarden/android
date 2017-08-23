@@ -144,6 +144,7 @@
     <Compile Include="Pages\Lock\LockPasswordPage.cs" />
     <Compile Include="Pages\LoginTwoFactorPage.cs" />
     <Compile Include="Pages\PasswordHintPage.cs" />
+    <Compile Include="Pages\EnvironmentPage.cs" />
     <Compile Include="Pages\RegisterPage.cs" />
     <Compile Include="Pages\ScanPage.cs" />
     <Compile Include="Pages\Settings\SettingsCreditsPage.cs" />

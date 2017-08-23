@@ -32,12 +32,25 @@ namespace Bit.App.Pages
         {
             MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
 
+            var settingsButton = new Button
+            {
+                Image = "cog",
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                WidthRequest = 25,
+                HeightRequest = 25,
+                BackgroundColor = Color.Transparent,
+                Margin = new Thickness(-20, -30, 0, 0),
+                Command = new Command(async () => await SettingsAsync())
+            };
+
             var logo = new CachedImage
             {
                 Source = "logo",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
                 WidthRequest = 282,
+                Margin = new Thickness(0, 30, 0, 0),
                 HeightRequest = 44
             };
 
@@ -77,7 +90,7 @@ namespace Bit.App.Pages
             {
                 Padding = new Thickness(30, 40),
                 Spacing = 10,
-                Children = { logo, message, createAccountButton, loginButton }
+                Children = { settingsButton, logo, message, createAccountButton, loginButton }
             };
 
             Title = AppResources.Bitwarden;
@@ -118,6 +131,17 @@ namespace Bit.App.Pages
             await Navigation.PopForDeviceAsync();
             await Navigation.PushForDeviceAsync(new LoginPage(email));
             _userDialogs.Toast(AppResources.AccountCreated);
+        }
+
+        public async Task SettingsAsync()
+        {
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
+            await Navigation.PushForDeviceAsync(new EnvironmentPage());
         }
     }
 }

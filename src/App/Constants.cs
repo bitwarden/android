@@ -34,6 +34,9 @@
         public const string LastLoginEmail = "other:lastLoginEmail";
         public const string LastSync = "other:lastSync";
         public const string LastBuildKey = "LastBuild";
+        public const string BaseUrl = "other:baseUrl";
+        public const string ApiUrl = "other:apiUrl";
+        public const string IdentityUrl = "other:identityUrl";
 
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;

@@ -785,6 +785,15 @@
   <ItemGroup>
     <BundleResource Include="Resources\trash%403x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog%403x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

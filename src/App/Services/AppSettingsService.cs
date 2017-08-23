@@ -85,5 +85,59 @@ namespace Bit.App.Services
                 _settings.AddOrUpdateValue(Constants.SecurityStamp, value);
             }
         }
+
+        public string BaseUrl
+        {
+            get
+            {
+                return _settings.GetValueOrDefault<string>(Constants.BaseUrl);
+            }
+            set
+            {
+                if(value == null)
+                {
+                    _settings.Remove(Constants.BaseUrl);
+                    return;
+                }
+
+                _settings.AddOrUpdateValue(Constants.BaseUrl, value);
+            }
+        }
+
+        public string ApiUrl
+        {
+            get
+            {
+                return _settings.GetValueOrDefault<string>(Constants.ApiUrl);
+            }
+            set
+            {
+                if(value == null)
+                {
+                    _settings.Remove(Constants.ApiUrl);
+                    return;
+                }
+
+                _settings.AddOrUpdateValue(Constants.ApiUrl, value);
+            }
+        }
+
+        public string IdentityUrl
+        {
+            get
+            {
+                return _settings.GetValueOrDefault<string>(Constants.IdentityUrl);
+            }
+            set
+            {
+                if(value == null)
+                {
+                    _settings.Remove(Constants.IdentityUrl);
+                    return;
+                }
+
+                _settings.AddOrUpdateValue(Constants.IdentityUrl, value);
+            }
+        }
     }
 }

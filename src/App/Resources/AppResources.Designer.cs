@@ -20,7 +20,7 @@ namespace Bit.App.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class AppResources {
@@ -139,6 +139,15 @@ namespace Bit.App.Resources {
         public static string AnErrorHasOccurred {
             get {
                 return ResourceManager.GetString("AnErrorHasOccurred", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to API Server URL.
+        /// </summary>
+        public static string ApiUrl {
+            get {
+                return ResourceManager.GetString("ApiUrl", resourceCulture);
             }
         }
         
@@ -683,6 +692,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom Environment.
+        /// </summary>
+        public static string CustomEnvironment {
+            get {
+                return ResourceManager.GetString("CustomEnvironment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to For advanced users. You can specify the base URL of each service independently..
+        /// </summary>
+        public static string CustomEnvironmentFooter {
+            get {
+                return ResourceManager.GetString("CustomEnvironmentFooter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -877,6 +904,15 @@ namespace Bit.App.Resources {
         public static string EnterVerificationCodeEmail {
             get {
                 return ResourceManager.GetString("EnterVerificationCodeEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The environment URLs have been saved..
+        /// </summary>
+        public static string EnvironmentSaved {
+            get {
+                return ResourceManager.GetString("EnvironmentSaved", resourceCulture);
             }
         }
         
@@ -1133,6 +1169,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} is not correctly formatted..
+        /// </summary>
+        public static string FormattedIncorrectly {
+            get {
+                return ResourceManager.GetString("FormattedIncorrectly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Generate Password.
         /// </summary>
         public static string GeneratePassword {
@@ -1183,6 +1228,15 @@ namespace Bit.App.Resources {
         public static string Icons {
             get {
                 return ResourceManager.GetString("Icons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identity Server URL.
+        /// </summary>
+        public static string IdentityUrl {
+            get {
+                return ResourceManager.GetString("IdentityUrl", resourceCulture);
             }
         }
         
@@ -2006,11 +2060,38 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Self-hosted Environment.
+        /// </summary>
+        public static string SelfHostedEnvironment {
+            get {
+                return ResourceManager.GetString("SelfHostedEnvironment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Specify the base URL of your on-premise hosted bitwarden installation..
+        /// </summary>
+        public static string SelfHostedEnvironmentFooter {
+            get {
+                return ResourceManager.GetString("SelfHostedEnvironmentFooter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send verification code email again.
         /// </summary>
         public static string SendVerificationCodeAgain {
             get {
                 return ResourceManager.GetString("SendVerificationCodeAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server URL.
+        /// </summary>
+        public static string ServerUrl {
+            get {
+                return ResourceManager.GetString("ServerUrl", resourceCulture);
             }
         }
         
