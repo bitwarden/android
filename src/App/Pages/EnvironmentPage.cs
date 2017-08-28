@@ -26,6 +26,7 @@ namespace Bit.App.Pages
         }
 
         public FormEntryCell BaseUrlCell { get; set; }
+        public FormEntryCell VaultUrlCell { get; set; }
         public FormEntryCell ApiUrlCell { get; set; }
         public FormEntryCell IdentityUrlCell { get; set; }
         public StackLayout StackLayout { get; set; }
@@ -40,7 +41,9 @@ namespace Bit.App.Pages
             IdentityUrlCell.Entry.Text = _appSettings.IdentityUrl;
             ApiUrlCell = new FormEntryCell(AppResources.ApiUrl, nextElement: IdentityUrlCell.Entry, entryKeyboard: Keyboard.Url);
             ApiUrlCell.Entry.Text = _appSettings.ApiUrl;
-            BaseUrlCell = new FormEntryCell(AppResources.ServerUrl, nextElement: ApiUrlCell.Entry, entryKeyboard: Keyboard.Url);
+            VaultUrlCell = new FormEntryCell(AppResources.VaultUrl, nextElement: ApiUrlCell.Entry, entryKeyboard: Keyboard.Url);
+            VaultUrlCell.Entry.Text = _appSettings.VaultUrl;
+            BaseUrlCell = new FormEntryCell(AppResources.ServerUrl, nextElement: VaultUrlCell.Entry, entryKeyboard: Keyboard.Url);
             BaseUrlCell.Entry.Text = _appSettings.BaseUrl;
 
             var table = new FormTableView
@@ -69,6 +72,7 @@ namespace Bit.App.Pages
                 {
                     new TableSection(AppResources.CustomEnvironment)
                     {
+                        VaultUrlCell,
                         ApiUrlCell,
                         IdentityUrlCell
                     }
@@ -120,6 +124,7 @@ namespace Bit.App.Pages
             BaseUrlCell.InitEvents();
             IdentityUrlCell.InitEvents();
             ApiUrlCell.InitEvents();
+            VaultUrlCell.InitEvents();
             StackLayout.LayoutChanged += Layout_LayoutChanged;
             BaseUrlCell.Entry.FocusWithDelay();
         }
@@ -129,6 +134,7 @@ namespace Bit.App.Pages
             BaseUrlCell.Dispose();
             IdentityUrlCell.Dispose();
             ApiUrlCell.Dispose();
+            VaultUrlCell.Dispose();
             StackLayout.LayoutChanged -= Layout_LayoutChanged;
         }
 
@@ -154,6 +160,20 @@ namespace Bit.App.Pages
             else
             {
                 BaseUrlCell.Entry.Text = null;
+            }
+
+            if(!string.IsNullOrWhiteSpace(VaultUrlCell.Entry.Text))
+            {
+                VaultUrlCell.Entry.Text = FixUrl(VaultUrlCell.Entry.Text);
+                if(!Uri.TryCreate(VaultUrlCell.Entry.Text, UriKind.Absolute, out result))
+                {
+                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.VaultUrl));
+                    return;
+                }
+            }
+            else
+            {
+                VaultUrlCell.Entry.Text = null;
             }
 
             if(!string.IsNullOrWhiteSpace(ApiUrlCell.Entry.Text))
@@ -187,6 +207,7 @@ namespace Bit.App.Pages
             _appSettings.BaseUrl = BaseUrlCell.Entry.Text;
             _appSettings.IdentityUrl = IdentityUrlCell.Entry.Text;
             _appSettings.ApiUrl = ApiUrlCell.Entry.Text;
+            _appSettings.VaultUrl = VaultUrlCell.Entry.Text;
             _userDialogs.Toast(AppResources.EnvironmentSaved);
             _googleAnalyticsService.TrackAppEvent("SetEnvironmentUrls");
             await Navigation.PopForDeviceAsync();

@@ -26,6 +26,7 @@ namespace Bit.App.Pages
         private IGoogleAnalyticsService _googleAnalyticsService;
         private ITwoFactorApiRepository _twoFactorApiRepository;
         private IPushNotification _pushNotification;
+        private IAppSettingsService _appSettingsService;
         private readonly string _email;
         private readonly string _masterPasswordHash;
         private readonly SymmetricCryptoKey _key;
@@ -48,6 +49,7 @@ namespace Bit.App.Pages
             _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _twoFactorApiRepository = Resolver.Resolve<ITwoFactorApiRepository>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
@@ -185,9 +187,19 @@ namespace Bit.App.Pages
                 var host = WebUtility.UrlEncode(duoParams["Host"].ToString());
                 var req = WebUtility.UrlEncode(duoParams["Signature"].ToString());
 
+                var vaultUrl = "https://vault.bitwarden.com";
+                if(!string.IsNullOrWhiteSpace(_appSettingsService.BaseUrl))
+                {
+                    vaultUrl = _appSettingsService.BaseUrl;
+                }
+                else if(!string.IsNullOrWhiteSpace(_appSettingsService.VaultUrl))
+                {
+                    vaultUrl = _appSettingsService.VaultUrl;
+                }
+
                 var webView = new HybridWebView
                 {
-                    Uri = $"https://vault.bitwarden.com/duo-connector.html?host={host}&request={req}",
+                    Uri = $"{vaultUrl}/duo-connector.html?host={host}&request={req}",
                     HorizontalOptions = LayoutOptions.FillAndExpand,
                     VerticalOptions = LayoutOptions.FillAndExpand,
                     MinimumHeightRequest = 400

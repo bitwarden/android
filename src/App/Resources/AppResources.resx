@@ -1024,4 +1024,7 @@
   <data name="ServerUrl" xml:space="preserve">
     <value>Server URL</value>
   </data>
+  <data name="VaultUrl" xml:space="preserve">
+    <value>Vault Server URL</value>
+  </data>
 </root>

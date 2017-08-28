@@ -104,6 +104,24 @@ namespace Bit.App.Services
             }
         }
 
+        public string VaultUrl
+        {
+            get
+            {
+                return _settings.GetValueOrDefault<string>(Constants.VaultUrl);
+            }
+            set
+            {
+                if(value == null)
+                {
+                    _settings.Remove(Constants.VaultUrl);
+                    return;
+                }
+
+                _settings.AddOrUpdateValue(Constants.VaultUrl, value);
+            }
+        }
+
         public string ApiUrl
         {
             get
