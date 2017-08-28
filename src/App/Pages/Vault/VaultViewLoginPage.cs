@@ -63,14 +63,13 @@ namespace Bit.App.Pages
             // Username
             UsernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
             UsernameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Username));
-            UsernameCell.Value.SetBinding(Label.FontSizeProperty, nameof(VaultViewLoginPageModel.UsernameFontSize));
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
+            UsernameCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             // Password
             PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty,
                 button2Text: AppResources.Copy);
             PasswordCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.MaskedPassword));
-            PasswordCell.Value.SetBinding(Label.FontSizeProperty, nameof(VaultViewLoginPageModel.PasswordFontSize));
             PasswordCell.Button1.SetBinding(Button.ImageProperty, nameof(VaultViewLoginPageModel.ShowHideImage));
             if(Device.RuntimePlatform == Device.iOS)
             {
@@ -79,6 +78,7 @@ namespace Bit.App.Pages
             PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
             PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
             PasswordCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            PasswordCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             // URI
             UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);

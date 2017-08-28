@@ -39,31 +39,9 @@ namespace Bit.App.Models.Page
                 _username = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Username)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowUsername)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(UsernameFontSize)));
             }
         }
         public bool ShowUsername => !string.IsNullOrWhiteSpace(Username);
-        public double UsernameFontSize
-        {
-            get
-            {
-                if(Device.RuntimePlatform == Device.Android)
-                {
-                    var length = Username?.Length ?? 0;
-
-                    if(length > 35)
-                    {
-                        return Device.GetNamedSize(NamedSize.Micro, typeof(Label));
-                    }
-                    else if(length > 25)
-                    {
-                        return Device.GetNamedSize(NamedSize.Small, typeof(Label));
-                    }
-                }
-
-                return Device.GetNamedSize(NamedSize.Medium, typeof(Label));
-            }
-        }
 
         public string Password
         {
@@ -74,31 +52,9 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Password)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowPassword)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(PasswordFontSize)));
             }
         }
         public bool ShowPassword => !string.IsNullOrWhiteSpace(Password);
-        public double PasswordFontSize
-        {
-            get
-            {
-                if(Device.RuntimePlatform == Device.Android)
-                {
-                    var length = Password?.Length ?? 0;
-
-                    if(length > 25)
-                    {
-                        return Device.GetNamedSize(NamedSize.Micro, typeof(Label));
-                    }
-                    else if(length > 20)
-                    {
-                        return Device.GetNamedSize(NamedSize.Small, typeof(Label));
-                    }
-                }
-
-                return Device.GetNamedSize(NamedSize.Medium, typeof(Label));
-            }
-        }
 
         public string Uri
         {
