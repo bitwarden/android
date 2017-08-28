@@ -35,7 +35,7 @@
         public const string LastSync = "other:lastSync";
         public const string LastBuildKey = "LastBuild";
         public const string BaseUrl = "other:baseUrl";
-        public const string VaultUrl = "other:vaultUrl";
+        public const string WebVaultUrl = "other:webVaultUrl";
         public const string ApiUrl = "other:apiUrl";
         public const string IdentityUrl = "other:identityUrl";
 

@@ -26,7 +26,7 @@ namespace Bit.App.Pages
         }
 
         public FormEntryCell BaseUrlCell { get; set; }
-        public FormEntryCell VaultUrlCell { get; set; }
+        public FormEntryCell WebVaultUrlCell { get; set; }
         public FormEntryCell ApiUrlCell { get; set; }
         public FormEntryCell IdentityUrlCell { get; set; }
         public StackLayout StackLayout { get; set; }
@@ -41,9 +41,9 @@ namespace Bit.App.Pages
             IdentityUrlCell.Entry.Text = _appSettings.IdentityUrl;
             ApiUrlCell = new FormEntryCell(AppResources.ApiUrl, nextElement: IdentityUrlCell.Entry, entryKeyboard: Keyboard.Url);
             ApiUrlCell.Entry.Text = _appSettings.ApiUrl;
-            VaultUrlCell = new FormEntryCell(AppResources.VaultUrl, nextElement: ApiUrlCell.Entry, entryKeyboard: Keyboard.Url);
-            VaultUrlCell.Entry.Text = _appSettings.VaultUrl;
-            BaseUrlCell = new FormEntryCell(AppResources.ServerUrl, nextElement: VaultUrlCell.Entry, entryKeyboard: Keyboard.Url);
+            WebVaultUrlCell = new FormEntryCell(AppResources.WebVaultUrl, nextElement: ApiUrlCell.Entry, entryKeyboard: Keyboard.Url);
+            WebVaultUrlCell.Entry.Text = _appSettings.WebVaultUrl;
+            BaseUrlCell = new FormEntryCell(AppResources.ServerUrl, nextElement: WebVaultUrlCell.Entry, entryKeyboard: Keyboard.Url);
             BaseUrlCell.Entry.Text = _appSettings.BaseUrl;
 
             var table = new FormTableView
@@ -72,7 +72,7 @@ namespace Bit.App.Pages
                 {
                     new TableSection(AppResources.CustomEnvironment)
                     {
-                        VaultUrlCell,
+                        WebVaultUrlCell,
                         ApiUrlCell,
                         IdentityUrlCell
                     }
@@ -124,7 +124,7 @@ namespace Bit.App.Pages
             BaseUrlCell.InitEvents();
             IdentityUrlCell.InitEvents();
             ApiUrlCell.InitEvents();
-            VaultUrlCell.InitEvents();
+            WebVaultUrlCell.InitEvents();
             StackLayout.LayoutChanged += Layout_LayoutChanged;
             BaseUrlCell.Entry.FocusWithDelay();
         }
@@ -134,7 +134,7 @@ namespace Bit.App.Pages
             BaseUrlCell.Dispose();
             IdentityUrlCell.Dispose();
             ApiUrlCell.Dispose();
-            VaultUrlCell.Dispose();
+            WebVaultUrlCell.Dispose();
             StackLayout.LayoutChanged -= Layout_LayoutChanged;
         }
 
@@ -162,18 +162,18 @@ namespace Bit.App.Pages
                 BaseUrlCell.Entry.Text = null;
             }
 
-            if(!string.IsNullOrWhiteSpace(VaultUrlCell.Entry.Text))
+            if(!string.IsNullOrWhiteSpace(WebVaultUrlCell.Entry.Text))
             {
-                VaultUrlCell.Entry.Text = FixUrl(VaultUrlCell.Entry.Text);
-                if(!Uri.TryCreate(VaultUrlCell.Entry.Text, UriKind.Absolute, out result))
+                WebVaultUrlCell.Entry.Text = FixUrl(WebVaultUrlCell.Entry.Text);
+                if(!Uri.TryCreate(WebVaultUrlCell.Entry.Text, UriKind.Absolute, out result))
                 {
-                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.VaultUrl));
+                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.WebVaultUrl));
                     return;
                 }
             }
             else
             {
-                VaultUrlCell.Entry.Text = null;
+                WebVaultUrlCell.Entry.Text = null;
             }
 
             if(!string.IsNullOrWhiteSpace(ApiUrlCell.Entry.Text))
@@ -207,7 +207,7 @@ namespace Bit.App.Pages
             _appSettings.BaseUrl = BaseUrlCell.Entry.Text;
             _appSettings.IdentityUrl = IdentityUrlCell.Entry.Text;
             _appSettings.ApiUrl = ApiUrlCell.Entry.Text;
-            _appSettings.VaultUrl = VaultUrlCell.Entry.Text;
+            _appSettings.WebVaultUrl = WebVaultUrlCell.Entry.Text;
             _userDialogs.Toast(AppResources.EnvironmentSaved);
             _googleAnalyticsService.TrackAppEvent("SetEnvironmentUrls");
             await Navigation.PopForDeviceAsync();

@@ -2393,15 +2393,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vault Server URL.
-        /// </summary>
-        public static string VaultUrl {
-            get {
-                return ResourceManager.GetString("VaultUrl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Verification Code.
         /// </summary>
         public static string VerificationCode {
@@ -2533,6 +2524,15 @@ namespace Bit.App.Resources {
         public static string WebVaultDescription {
             get {
                 return ResourceManager.GetString("WebVaultDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Web Vault Server URL.
+        /// </summary>
+        public static string WebVaultUrl {
+            get {
+                return ResourceManager.GetString("WebVaultUrl", resourceCulture);
             }
         }
         

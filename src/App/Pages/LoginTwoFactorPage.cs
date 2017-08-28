@@ -187,19 +187,19 @@ namespace Bit.App.Pages
                 var host = WebUtility.UrlEncode(duoParams["Host"].ToString());
                 var req = WebUtility.UrlEncode(duoParams["Signature"].ToString());
 
-                var vaultUrl = "https://vault.bitwarden.com";
+                var webVaultUrl = "https://vault.bitwarden.com";
                 if(!string.IsNullOrWhiteSpace(_appSettingsService.BaseUrl))
                 {
-                    vaultUrl = _appSettingsService.BaseUrl;
+                    webVaultUrl = _appSettingsService.BaseUrl;
                 }
-                else if(!string.IsNullOrWhiteSpace(_appSettingsService.VaultUrl))
+                else if(!string.IsNullOrWhiteSpace(_appSettingsService.WebVaultUrl))
                 {
-                    vaultUrl = _appSettingsService.VaultUrl;
+                    webVaultUrl = _appSettingsService.WebVaultUrl;
                 }
 
                 var webView = new HybridWebView
                 {
-                    Uri = $"{vaultUrl}/duo-connector.html?host={host}&request={req}",
+                    Uri = $"{webVaultUrl}/duo-connector.html?host={host}&request={req}",
                     HorizontalOptions = LayoutOptions.FillAndExpand,
                     VerticalOptions = LayoutOptions.FillAndExpand,
                     MinimumHeightRequest = 400

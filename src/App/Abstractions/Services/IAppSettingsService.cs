@@ -11,7 +11,7 @@ namespace Bit.App.Abstractions
         bool AutofillPasswordField { get; set; }
         string SecurityStamp { get; set; }
         string BaseUrl { get; set; }
-        string VaultUrl { get; set; }
+        string WebVaultUrl { get; set; }
         string ApiUrl { get; set; }
         string IdentityUrl { get; set; }
     }

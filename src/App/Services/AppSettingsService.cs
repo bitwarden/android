@@ -104,21 +104,21 @@ namespace Bit.App.Services
             }
         }
 
-        public string VaultUrl
+        public string WebVaultUrl
         {
             get
             {
-                return _settings.GetValueOrDefault<string>(Constants.VaultUrl);
+                return _settings.GetValueOrDefault<string>(Constants.WebVaultUrl);
             }
             set
             {
                 if(value == null)
                 {
-                    _settings.Remove(Constants.VaultUrl);
+                    _settings.Remove(Constants.WebVaultUrl);
                     return;
                 }
 
-                _settings.AddOrUpdateValue(Constants.VaultUrl, value);
+                _settings.AddOrUpdateValue(Constants.WebVaultUrl, value);
             }
         }
 
