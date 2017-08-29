@@ -1,8 +1,7 @@
 ﻿using System;
-#if __UNIFIED__
 using Foundation;
-#else
-using MonoTouch.Foundation;
+#if __IOS__
+using UIKit;
 #endif
 using Plugin.Settings.Abstractions;
 
@@ -11,15 +10,15 @@ namespace Bit.iOS.Core.Services
     /// <summary>
     /// Main implementation for ISettings
     /// </summary>
+    [Preserve(AllMembers = true)]
     public class Settings : ISettings
     {
         private readonly object locker = new object();
-        private readonly NSUserDefaults _defaults;
+        private readonly string _defaultsName;
 
         public Settings(string defaultsName)
         {
-            _defaults = string.IsNullOrWhiteSpace(defaultsName) ? NSUserDefaults.StandardUserDefaults
-                : new NSUserDefaults(defaultsName, NSUserDefaultsType.SuiteName);
+            _defaultsName = defaultsName;
         }
 
         /// <summary>
@@ -28,14 +27,15 @@ namespace Bit.iOS.Core.Services
         /// <typeparam name="T">Vaue of t (bool, int, float, long, string)</typeparam>
         /// <param name="key">Key for settings</param>
         /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
         /// <returns>Value or default</returns>
-        public T GetValueOrDefault<T>(string key, T defaultValue = default(T))
+        T GetValueOrDefaultInternal<T>(string key, T defaultValue = default(T), string fileName = null)
         {
             lock(locker)
             {
-                var defaults = _defaults;
+                var defaults = GetUserDefaults(fileName);
 
-                if(defaults.ValueForKey(new NSString(key)) == null)
+                if(defaults[key] == null)
                     return defaultValue;
 
                 Type typeOf = typeof(T);
@@ -65,18 +65,10 @@ namespace Bit.iOS.Core.Services
                         value = defaults.StringForKey(key);
                         break;
                     case TypeCode.Int32:
-#if __UNIFIED__
                         value = (Int32)defaults.IntForKey(key);
-#else
-                        value = defaults.IntForKey(key);
-#endif
                         break;
                     case TypeCode.Single:
-#if __UNIFIED__
-                        value = (float)defaults.FloatForKey(key);
-#else
                         value = defaults.FloatForKey(key);
-#endif
                         break;
 
                     case TypeCode.DateTime:
@@ -118,7 +110,7 @@ namespace Bit.iOS.Core.Services
                         }
                         else
                         {
-                            throw new ArgumentException(string.Format("Value of type {0} is not supported.", value.GetType().Name));
+                            throw new ArgumentException($"Value of type {typeCode} is not supported.");
                         }
 
                         break;
@@ -134,23 +126,30 @@ namespace Bit.iOS.Core.Services
         /// </summary>
         /// <param name="key">key to update</param>
         /// <param name="value">value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
         /// <returns>True if added or update and you need to save</returns>
-        public bool AddOrUpdateValue<T>(string key, T value)
+        bool AddOrUpdateValueInternal<T>(string key, T value, string fileName = null)
         {
+            if(value == null)
+            {
+                Remove(key, fileName);
+                return true;
+            }
+
             Type typeOf = typeof(T);
             if(typeOf.IsGenericType && typeOf.GetGenericTypeDefinition() == typeof(Nullable<>))
             {
                 typeOf = Nullable.GetUnderlyingType(typeOf);
             }
             var typeCode = Type.GetTypeCode(typeOf);
-            return AddOrUpdateValue(key, value, typeCode);
+            return AddOrUpdateValueCore(key, value, typeCode, fileName);
         }
 
-        private bool AddOrUpdateValue(string key, object value, TypeCode typeCode)
+        bool AddOrUpdateValueCore(string key, object value, TypeCode typeCode, string fileName)
         {
             lock(locker)
             {
-                var defaults = _defaults;
+                var defaults = GetUserDefaults(fileName);
                 switch(typeCode)
                 {
                     case TypeCode.Decimal:
@@ -187,7 +186,7 @@ namespace Bit.iOS.Core.Services
                         }
                         else
                         {
-                            throw new ArgumentException(string.Format("Value of type {0} is not supported.", value.GetType().Name));
+                            throw new ArgumentException($"Value of type {typeCode} is not supported.");
                         }
                         break;
                 }
@@ -209,15 +208,15 @@ namespace Bit.iOS.Core.Services
         /// Removes a desired key from the settings
         /// </summary>
         /// <param name="key">Key for setting</param>
-        public void Remove(string key)
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        public void Remove(string key, string fileName = null)
         {
             lock(locker)
             {
-                var defaults = _defaults;
+                var defaults = GetUserDefaults(fileName);
                 try
                 {
-                    var nsString = new NSString(key);
-                    if(defaults.ValueForKey(nsString) != null)
+                    if(defaults[key] != null)
                     {
                         defaults.RemoveObject(key);
                         defaults.Synchronize();
@@ -233,14 +232,21 @@ namespace Bit.iOS.Core.Services
         /// <summary>
         /// Clear all keys from settings
         /// </summary>
-        public void Clear()
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        public void Clear(string fileName = null)
         {
             lock(locker)
             {
-                var defaults = _defaults;
+                var defaults = GetUserDefaults(fileName);
                 try
                 {
-                    defaults.RemovePersistentDomain(NSBundle.MainBundle.BundleIdentifier);
+                    var items = defaults.ToDictionary();
+
+                    foreach(var item in items.Keys)
+                    {
+                        if(item is NSString nsString)
+                            defaults.RemoveObject(nsString);
+                    }
                     defaults.Synchronize();
                 }
                 catch(Exception ex)
@@ -254,16 +260,16 @@ namespace Bit.iOS.Core.Services
         /// Checks to see if the key has been added.
         /// </summary>
         /// <param name="key">Key to check</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
         /// <returns>True if contains key, else false</returns>
-        public bool Contains(string key)
+        public bool Contains(string key, string fileName = null)
         {
             lock(locker)
             {
-                var defaults = _defaults;
+                var defaults = GetUserDefaults(fileName);
                 try
                 {
-                    var nsString = new NSString(key);
-                    var setting = defaults.ValueForKey(nsString);
+                    var setting = defaults[key];
                     return setting != null;
                 }
                 catch(Exception ex)
@@ -274,5 +280,216 @@ namespace Bit.iOS.Core.Services
                 return false;
             }
         }
+
+        NSUserDefaults GetUserDefaults(string fileName = null)
+        {
+            if(string.IsNullOrWhiteSpace(fileName) && !string.IsNullOrWhiteSpace(_defaultsName))
+            {
+                return new NSUserDefaults(_defaultsName, NSUserDefaultsType.SuiteName);
+            }
+
+            return string.IsNullOrWhiteSpace(fileName) ?
+                NSUserDefaults.StandardUserDefaults :
+                new NSUserDefaults(fileName, NSUserDefaultsType.SuiteName);
+        }
+
+
+
+        #region GetValueOrDefault
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public decimal GetValueOrDefault(string key, decimal defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public bool GetValueOrDefault(string key, bool defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public long GetValueOrDefault(string key, long defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public string GetValueOrDefault(string key, string defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public int GetValueOrDefault(string key, int defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public float GetValueOrDefault(string key, float defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public DateTime GetValueOrDefault(string key, DateTime defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public Guid GetValueOrDefault(string key, Guid defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        /// <summary>
+        /// Gets the current value or the default that you specify.
+        /// </summary>
+        /// <param name="key">Key for settings</param>
+        /// <param name="defaultValue">default value if not set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>Value or default</returns>
+        public double GetValueOrDefault(string key, double defaultValue, string fileName = null) =>
+            GetValueOrDefaultInternal(key, defaultValue, fileName);
+        #endregion
+
+        #region AddOrUpdateValue
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, decimal value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, bool value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, long value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, string value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, int value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, float value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, DateTime value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, Guid value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+        /// <summary>
+        /// Adds or updates the value 
+        /// </summary>
+        /// <param name="key">Key for settting</param>
+        /// <param name="value">Value to set</param>
+        /// <param name="fileName">Name of file for settings to be stored and retrieved </param>
+        /// <returns>True of was added or updated and you need to save it.</returns>
+        public bool AddOrUpdateValue(string key, double value, string fileName = null) =>
+            AddOrUpdateValueInternal(key, value, fileName);
+
+        #endregion
+
+
+        /// <summary>
+        /// Attempts to open the app settings page.
+        /// </summary>
+        /// <returns>true if success, else false and not supported</returns>
+        public bool OpenAppSettings()
+        {
+#if __IOS__
+            //Opening settings only open in iOS 8+
+            if(!UIDevice.CurrentDevice.CheckSystemVersion(8, 0))
+                return false;
+
+            try
+            {
+                UIApplication.SharedApplication.OpenUrl(new NSUrl(UIApplication.OpenSettingsUrlString));
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+#else
+            return false;
+#endif
+        }
+
     }
+
 }

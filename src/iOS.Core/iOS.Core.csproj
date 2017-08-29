@@ -91,9 +91,9 @@
     <Compile Include="Services\CommonCryptoKeyDerivationService.cs" />
     <Compile Include="Services\HttpService.cs" />
     <Compile Include="Services\LogService.cs" />
-    <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\GoogleAnalyticsService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
+    <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\SqlService.cs" />
     <Compile Include="Utilities\Dialogs.cs" />
     <Compile Include="Views\ISelectable.cs" />
