@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Models.Page;
 using Bit.App.Controls;
+using System.Threading.Tasks;
 
 namespace Bit.App.Pages
 {
@@ -79,7 +80,29 @@ namespace Bit.App.Pages
             _tgr.Tapped += Tgr_Tapped;
             PinControl.OnPinEntered += PinEntered;
             PinControl.InitEvents();
-            PinControl.Entry.FocusWithDelay();
+
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                Task.Run(async () =>
+                {
+                    for(int i = 0; i < 5; i++)
+                    {
+                        await Task.Delay(1000);
+                        if(!PinControl.Entry.IsFocused)
+                        {
+                            Device.BeginInvokeOnMainThread(() => PinControl.Entry.Focus());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                });
+            }
+            else
+            {
+                PinControl.Entry.Focus();
+            }
         }
 
         protected override void OnDisappearing()
