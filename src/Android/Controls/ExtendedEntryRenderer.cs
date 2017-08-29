@@ -55,6 +55,11 @@ namespace Bit.Android.Controls
                 Control.SetRawInputType(Control.InputType |= InputTypes.TextFlagNoSuggestions);
             }
 
+            if(_view.IsPassword)
+            {
+                Control.SetRawInputType(InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationVisiblePassword);
+            }
+
             _view.ToggleIsPassword += ToggleIsPassword;
 
             if(_view.FontFamily == "monospace")
@@ -69,6 +74,7 @@ namespace Bit.Android.Controls
             var cursorEnd = Control.SelectionEnd;
 
             Control.TransformationMethod = _isPassword ? null : new PasswordTransformationMethod();
+            Control.SetRawInputType(InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationVisiblePassword);
 
             // set focus
             Control.RequestFocus();
@@ -85,11 +91,9 @@ namespace Bit.Android.Controls
             }
 
             // show keyboard
-            var app = XLabs.Ioc.Resolver.Resolve<global::Android.App.Application>();
-            var inputMethodManager =
-                app.GetSystemService(global::Android.Content.Context.InputMethodService) as InputMethodManager;
-            inputMethodManager.ShowSoftInput(Control, ShowFlags.Forced);
-            inputMethodManager.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
+            var imm = Forms.Context.GetSystemService(global::Android.Content.Context.InputMethodService) as InputMethodManager;
+            imm.ShowSoftInput(Control, ShowFlags.Forced);
+            imm.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
 
             _isPassword = _view.IsPasswordFromToggled = !_isPassword;
             _toggledPassword = true;
