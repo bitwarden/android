@@ -78,7 +78,7 @@ namespace Bit.App.Services
         {
             get
             {
-                return _settings.GetValueOrDefault<string>(Constants.SecurityStamp);
+                return _settings.GetValueOrDefault(Constants.SecurityStamp, null);
             }
             set
             {
@@ -90,7 +90,7 @@ namespace Bit.App.Services
         {
             get
             {
-                return _settings.GetValueOrDefault<string>(Constants.BaseUrl);
+                return _settings.GetValueOrDefault(Constants.BaseUrl, null);
             }
             set
             {
@@ -108,7 +108,7 @@ namespace Bit.App.Services
         {
             get
             {
-                return _settings.GetValueOrDefault<string>(Constants.WebVaultUrl);
+                return _settings.GetValueOrDefault(Constants.WebVaultUrl, null);
             }
             set
             {
@@ -126,7 +126,7 @@ namespace Bit.App.Services
         {
             get
             {
-                return _settings.GetValueOrDefault<string>(Constants.ApiUrl);
+                return _settings.GetValueOrDefault(Constants.ApiUrl, null);
             }
             set
             {
@@ -144,7 +144,7 @@ namespace Bit.App.Services
         {
             get
             {
-                return _settings.GetValueOrDefault<string>(Constants.IdentityUrl);
+                return _settings.GetValueOrDefault(Constants.IdentityUrl, null);
             }
             set
             {

@@ -76,7 +76,7 @@ namespace Bit.Android.Services
                 return TryGetAndMigrate(key);
             }
 
-            var cs = _settings.GetValueOrDefault<string>(formattedKey);
+            var cs = _settings.GetValueOrDefault(formattedKey, null);
             if(string.IsNullOrWhiteSpace(cs))
             {
                 return null;
@@ -201,7 +201,7 @@ namespace Bit.Android.Services
                     return null;
                 }
 
-                var encKey = _settings.GetValueOrDefault<string>(aesKey);
+                var encKey = _settings.GetValueOrDefault(aesKey, null);
                 if(string.IsNullOrWhiteSpace(encKey))
                 {
                     return null;
@@ -312,7 +312,7 @@ namespace Bit.Android.Services
                 {
                     try
                     {
-                        var cs = _settings.GetValueOrDefault<string>(formattedKeyV1);
+                        var cs = _settings.GetValueOrDefault(formattedKeyV1, null);
                         var value = App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKeyV1);
                         Store(key, value);
                         return value;

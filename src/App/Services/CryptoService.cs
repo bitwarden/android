@@ -78,7 +78,7 @@ namespace Bit.App.Services
             {
                 if(_encKey == null && _settings.Contains(EncKeyKey))
                 {
-                    var encKey = _settings.GetValueOrDefault<string>(EncKeyKey);
+                    var encKey = _settings.GetValueOrDefault(EncKeyKey, null);
                     var encKeyCs = new CipherString(encKey);
                     try
                     {
@@ -102,7 +102,7 @@ namespace Bit.App.Services
             {
                 if(_privateKey == null && _settings.Contains(PrivateKeyKey))
                 {
-                    var encPrivateKey = _settings.GetValueOrDefault<string>(PrivateKeyKey);
+                    var encPrivateKey = _settings.GetValueOrDefault(PrivateKeyKey, null);
                     var encPrivateKeyCs = new CipherString(encPrivateKey);
                     try
                     {
@@ -125,7 +125,7 @@ namespace Bit.App.Services
             {
                 if((!_orgKeys?.Any() ?? true) && _settings.Contains(OrgKeysKey))
                 {
-                    var orgKeysEncDictJson = _settings.GetValueOrDefault<string>(OrgKeysKey);
+                    var orgKeysEncDictJson = _settings.GetValueOrDefault(OrgKeysKey, null);
                     if(!string.IsNullOrWhiteSpace(orgKeysEncDictJson))
                     {
                         _orgKeys = new Dictionary<string, SymmetricCryptoKey>();

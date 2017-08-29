@@ -44,7 +44,7 @@ namespace Bit.App.Utilities
         public static bool PerformUpdateTasks(ISettings settings, IAppInfoService appInfoService,
             IDatabaseService databaseService)
         {
-            var lastBuild = settings.GetValueOrDefault<string>(Constants.LastBuildKey);
+            var lastBuild = settings.GetValueOrDefault(Constants.LastBuildKey, null);
             if(InDebugMode() || lastBuild == null || lastBuild != appInfoService.Build)
             {
                 settings.AddOrUpdateValue(Constants.LastBuildKey, appInfoService.Build);

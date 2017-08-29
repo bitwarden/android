@@ -239,9 +239,8 @@ namespace Bit.App.Pages
                 var pushPromptShow = _settings.GetValueOrDefault(Constants.PushInitialPromptShown, false);
                 Action registerAction = () =>
                 {
-                    var lastPushRegistration = _settings.GetValueOrDefault<DateTime?>(Constants.PushLastRegistrationDate, null);
-                    if(!pushPromptShow || !lastPushRegistration.HasValue
-                        || (DateTime.UtcNow - lastPushRegistration) > TimeSpan.FromDays(1))
+                    var lastPushRegistration = _settings.GetValueOrDefault(Constants.PushLastRegistrationDate, DateTime.MinValue);
+                    if(!pushPromptShow || DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
                     {
                         _pushNotification.Register();
                     }

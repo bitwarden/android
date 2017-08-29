@@ -242,8 +242,8 @@ namespace Bit.App.Services
 
         public async Task<bool> FullSyncAsync(TimeSpan syncThreshold, bool forceSync = false)
         {
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
-            if(lastSync != null && DateTime.UtcNow - lastSync.Value < syncThreshold)
+            var lastSync = _settings.GetValueOrDefault(Constants.LastSync, DateTime.MinValue);
+            if(DateTime.UtcNow - lastSync < syncThreshold)
             {
                 return false;
             }
@@ -307,11 +307,11 @@ namespace Bit.App.Services
 
         private async Task<bool> NeedsToSyncAsync()
         {
-            DateTime? lastSync = _settings.GetValueOrDefault<DateTime?>(Constants.LastSync, null);
-            if(!lastSync.HasValue)
+            if(!_settings.Contains(Constants.LastSync))
             {
                 return true;
             }
+            var lastSync = _settings.GetValueOrDefault(Constants.LastSync, DateTime.MinValue);
 
             var accountRevisionDate = await _accountsApiRepository.GetAccountRevisionDateAsync();
             if(accountRevisionDate.Succeeded && accountRevisionDate.Result.HasValue &&
