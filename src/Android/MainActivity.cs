@@ -24,8 +24,7 @@ namespace Bit.Android
 {
     [Activity(Label = "bitwarden",
         Icon = "@drawable/icon",
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-        WindowSoftInputMode = SoftInput.StateHidden)]
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : FormsAppCompatActivity
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
@@ -55,7 +54,6 @@ namespace Bit.Android
             Task.Delay(10).Wait();
 
             Console.WriteLine("A OnCreate");
-            Window.SetSoftInputMode(SoftInput.StateHidden);
             if(!App.Utilities.Helpers.InDebugMode())
             {
                 Window.AddFlags(WindowManagerFlags.Secure);

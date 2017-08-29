@@ -62,6 +62,7 @@ namespace Bit.App.Controls
             }
 
             base.OnDisappearing();
+            MessagingCenter.Send(Application.Current, "DismissKeyboard");
         }
     }
 }
