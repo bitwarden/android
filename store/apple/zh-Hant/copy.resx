@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden – 免費密碼管理器</value>
+    <value>bitwarden 密碼管理器</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden 簡單易用，可以安全地儲存你所有的帳戶名稱和密碼，並在多部裝置之間同步。 bitwarden 小工具可以幫你在Safari或Chrome快速登入任何網頁，也支援數以百計的受歡迎程式。

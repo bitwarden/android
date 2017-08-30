@@ -419,7 +419,7 @@
     <value>bitwarden apptillägg</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Det enklaste sättet att lägga till nya inloggningar i ditt valv är genom apptillägget. Lär dig mer om bitwardens apptillägg genom att navigera till "Verktyg"-skärmen.</value>
+    <value>Det enklaste sättet att lägga till nya inloggningar i ditt valv är genom apptillägget. Läs mer om bitwardens apptillägg genom att navigera till "Verktyg"-skärmen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Använd bitwarden i Safari och andra applikationer för att automatiskt fylla i din inloggningsinformation.</value>
@@ -572,7 +572,7 @@
     <value>Bekräftelsen för huvudlösenordet stämde ej.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det ej går att hämta lösenordet.</value>
+    <value>Huvudlösenordet är det lösenord som du använder för att komma åt ditt valv. Det är väldigt viktigt att du inte glömmer bort ditt huvudlösenord, eftersom det inte går att återställa lösenordet om du skulle glömma bort det.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Huvudlösenordsledtråd (frivillig)</value>
@@ -790,7 +790,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är från bitwardens hjälpmedelsservice för automatisk ifyllnad. Lär dig mer om hur man använder bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till "Verktyg"-skärmen.</value>
+    <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är från bitwardens hjälpmedelsservice för automatisk ifyllnad. Läs mer om hur man använder bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till "Verktyg"-skärmen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatisk ifyllnad</value>
@@ -879,7 +879,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Inställningar för tvåstegsverifiering</value>
+    <value>Alternativ för tvåstegsverifiering</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Använd en annan inloggningsmetod för tvåstegsverifiering</value>
@@ -896,7 +896,7 @@
     <value>Håll din YubiKey NEO mot baksidan av enheten för att fortsätta.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>Säkerhetsnyckel för YubiKey NEO</value>
+    <value>YubiKey NEO säkerhetsnyckel</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -993,6 +993,38 @@
     <value>Du kan inte använda denna funktion förrän du uppdaterar din krypteringsnyckel.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Lär dig mer</value>
+    <value>Läs mer</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>API Server URL</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Custom Environment</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>For advanced users. You can specify the base URL of each service independently.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>The environment URLs have been saved.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} is not correctly formatted.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>Identity Server URL</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Self-hosted Environment</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>Server URL</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>Web Vault Server URL</value>
   </data>
 </root>
