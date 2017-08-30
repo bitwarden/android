@@ -118,42 +118,42 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Free Password Manager</value>
+    <value>bitwarden - Manager de parole gratuit</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate datele de autentificare și parolele dvs. păstrându-le în același timp sincronizate între toate dispozitivele dvs.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Furtul de parole este o problemă serioasă. Saiturile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Se înregistrează încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole pe aplicații și saituri web, hackerii pot accesa cu ușurință emailurile, conturile bancare și alte conturi importante.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Experții în securitate vă recomandă să utilizați câte o parolă diferită, generată aleatoriu, pentru fiecare cont pe care îl utilizați. Dar cum veți gestiona toate aceste parole? bitwarden vă ușurează crearea, stocarea și accesarea parolelor dvs.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden stochează toate date dvs. de autentificare într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece seiful este complet criptat înainte de a fi transmis prin internet, numai dvs. aveți acces la date. Nici măcar echipa bitwarden nu poate citi datele dvs. chiar dacă ar dori. Datele dvs. sunt codificate prin criptare AES-256, salted hashing și PBKDF2 SHA-256.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>- Sincronizați-vă autentificările și parolele pe toate browserele și dispozitivele dvs.
+- Completați automat datele de conectare pe web și în alte aplicații
+- Generați automat parole puternice și securizate pentru conectările dvs</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Un manager de parole sigur și gratuit pentru toate dispozitivele dvs</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Gestionați toate datele de conectare și parolele dintr-un seif securizat</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Generați automat parole puternice, aleatoare și securizate</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Protejați seiful cu amprentă digitală, cod PIN sau parolă principală</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Completați automat autentificările din browserul dvs. web și din alte aplicații</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Sincronizați și accesați seiful dvs. de pe mai multe dispozitive
 
-- Phone
-- Tablet
+- Telefon
+- Tabletă
 - Desktop
 - Web</value>
   </data>
