@@ -239,6 +239,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.ja.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.pl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.pl.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.pt-BR.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -358,6 +363,10 @@
     <EmbeddedResource Include="Resources\AppResources.ja.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.ja.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.pl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.pl.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.pt-BR.resx">
       <Generator>ResXFileCodeGenerator</Generator>
