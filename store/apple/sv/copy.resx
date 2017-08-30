@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden - gratis lösenordshanterare</value>
+    <value>bitwarden lösenordshanterare</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden är det lättaste och säkraste sättet att lagra alla dina inloggningar och lösenord samtidigt som de hålls synkroniserade mellan alla dina enheter.
