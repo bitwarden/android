@@ -723,7 +723,7 @@
     <value>Odomknúť s PIN kódom</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>Overujem</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
@@ -820,7 +820,7 @@
     <value>Vytvorte organizáciu pre bezpečné zdieľanie vašich prihlasovacích údajov s inými používateľmi.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Používame analytiku, aby sme zistili, ako je aplikácia používaná, aby sme ju mohli vylepšiť. Všetky zhromaždené údaje sú kompletne anonymné.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Funkcie</value>
@@ -848,151 +848,183 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Overovacia aplikácia</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Zadajte 6-miestny verifikačný kód z vašej overovacej aplikácie.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Zadajte 6-miestny verifikačný kód, ktorý bol zaslaný emailom na {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Prihlásenie nedostupné</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Tento účet má povolené dvojstupňové prihlásenie, ale žiadny z konfigurovaných poskytovateľov nie je podporovaný na tomto zariadení. Prosím, použite podporované zariadenie a/alebo pridajte poskytovateľa, ktorý je lepšie podporovaný na zariadeniach (napríklad overovaciu aplikáciu).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Záchranný kód</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Zapamätať si ma</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Znovu zaslať overovací kód emailom</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Možnosti dvojstupňového prihlásenia</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Použiť inú dvojstupňovú metódu prihlásenia</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Nepodarilo sa odoslať overovací email. Skúste znova.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>Overovací email bol odoslaný.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>Pre pokračovanie podržte vaše YubiKey NEO na zadnej strane zariadenia.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>YubiKey NEO bezpečnostný kľúč</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Pridať novú prílohu</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Prílohy</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>Nepodarilo sa stiahnuť súbor.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>Vaše zariadenie nevie otvoriť tento typ súboru.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>Sťahovanie...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Táto príloha je veľká {0}. Naozaj ju chcete stiahnúť do vášho zariadenia?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Kľúč overovateľa (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Overovací kód (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Kľúč overovateľa pridaný.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Overovací kľúč sa nedá čítať.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>Skenovanie prebehne automaticky.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>Namierte fotoaparát na QR kód.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Skenovať QR kód</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Kamera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Fotky</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP skopírované!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Kopírovať TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Ak je kľúč overovateľa spojený s vašim prihlásením, TOTP verifikačný kód bude automaticky skopírovaný do schránky vždy, keď použijete automatické vypĺňanie.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Zakázať automatické kopírovanie TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Pre použitie tejto funkcie je potrebné prémiové členstvo.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Príloha pridaná</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Príloha odstránená</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Vybrať súbor</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Súbor</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Nebol vybratý žiadny súbor</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Nie sú žiadne prílohy.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Zdroj súboru</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Funkcia nie je k dispozícii</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Maximálna veľkosť súboru je 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Túto funkciu nemožno použiť, kým neaktualizujete svoj šifrovací kľúč.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Zistiť viac</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>API Server URL</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>Custom Environment</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>For advanced users. You can specify the base URL of each service independently.</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>The environment URLs have been saved.</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} is not correctly formatted.</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>Identity Server URL</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>Self-hosted Environment</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>Server URL</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>Web Vault Server URL</value>
   </data>
 </root>
