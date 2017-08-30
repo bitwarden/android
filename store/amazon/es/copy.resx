@@ -118,43 +118,41 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden gestor de contraseñas gratuito</value>
+    <value>bitwarden Gestor de Contraseñas Gratuito</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden es la manera más fácil y segura de guardar todos usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos.
 
 El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas informáticos pueden acceder facilmente tu correo electrónico, cuenta bancaria y otras cuentas importantes.
 
-Expertos de seguridad recomiendan utilizar contraseñas diferentes y aleatorias para cada cuenta que crees. Pero, ¿como gestionas todas esas contraseñas? bitwarden hace fácil crear, guardar y acceder a tus contraseñas.
-
 bitwarden guarda todos tus usuarios es una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu data está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>- Sincroniza tus usuarios y contraseñas entre todos tus navegadores y dispositivos
+- Rellena entradas en la web o en otras aplicaciones automáticamente
+- Genera automáticamente contraseñas fuertes y seguras para tus entradas</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>Un gestor de contraseñas seguro y gratuito para todos tus dispositivos</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Gestiona todos tus usuarios y contraseñas desde una bóveda segura</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Genera contraseñas fuertes, aleatorias y seguras automáticamente</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Protege tu bóveda con huella dactilar, código PIN o contraseña maestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Autorellena rápidamente entradas en tu navegador web u otras aplicaciones</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Sincroniza y accede a tu bóveda desde múltiples dispositivos
 
-- Phone
+- Teléfono
 - Tablet
-- Desktop
+- Escritorio
 - Web</value>
   </data>
 </root>
