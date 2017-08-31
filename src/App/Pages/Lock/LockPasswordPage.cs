@@ -100,8 +100,30 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             PasswordCell.InitEvents();
-            PasswordCell.Entry.FocusWithDelay();
             PasswordCell.Entry.Completed += Entry_Completed;
+
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                Task.Run(async () =>
+                {
+                    for(int i = 0; i < 5; i++)
+                    {
+                        await Task.Delay(1000);
+                        if(!PasswordCell.Entry.IsFocused)
+                        {
+                            Device.BeginInvokeOnMainThread(() => PasswordCell.Entry.FocusWithDelay());
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    }
+                });
+            }
+            else
+            {
+                PasswordCell.Entry.Focus();
+            }
         }
 
         protected override void OnDisappearing()
