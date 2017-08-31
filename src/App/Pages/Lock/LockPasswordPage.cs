@@ -108,7 +108,6 @@ namespace Bit.App.Pages
                 {
                     for(int i = 0; i < 5; i++)
                     {
-                        await Task.Delay(1000);
                         if(!PasswordCell.Entry.IsFocused)
                         {
                             Device.BeginInvokeOnMainThread(() => PasswordCell.Entry.FocusWithDelay());
@@ -117,6 +116,8 @@ namespace Bit.App.Pages
                         {
                             break;
                         }
+
+                        await Task.Delay(1000);
                     }
                 });
             }
