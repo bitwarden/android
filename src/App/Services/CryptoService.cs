@@ -203,12 +203,9 @@ namespace Bit.App.Services
             else if(_settings.Contains(OrgKeysKey))
             {
                 _settings.Remove(OrgKeysKey);
-                _orgKeys = null;
             }
-            else
-            {
-                _orgKeys = null;
-            }
+
+            _orgKeys = null;
         }
 
         public SymmetricCryptoKey GetOrgKey(string orgId)
