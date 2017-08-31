@@ -15,4 +15,4 @@ artifacts:
 branches:
   except:
     - l10n_master
-image: Visual Studio 2017
+image: Previous Visual Studio 2017
