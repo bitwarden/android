@@ -23,5 +23,7 @@
           android:name="android.support.FILE_PROVIDER_PATHS"
           android:resource="@xml/filepaths" />
     </provider>
+
+    <activity android:name="net.hockeyapp.android.UpdateActivity" android:exported="false" />
   </application>
 </manifest>
