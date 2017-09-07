@@ -78,11 +78,12 @@ namespace Bit.App.Services
             }
 
             Uri uri = null;
-            DomainName domainName = null;
+            string domainName = null;
             var androidApp = UriIsAndroidApp(uriString);
 
             if(!androidApp &&
-                (!Uri.TryCreate(uriString, UriKind.Absolute, out uri) || !DomainName.TryParse(uri.Host, out domainName)))
+                (!Uri.TryCreate(uriString, UriKind.Absolute, out uri) || 
+                    !DomainName.TryParseBaseDomain(uri.Host, out domainName)))
             {
                 return null;
             }
@@ -104,7 +105,7 @@ namespace Bit.App.Services
                         matchingFuzzyDomains.AddRange(eqDomain.Select(d => d).ToList());
                     }
                 }
-                else if(Array.IndexOf(eqDomain, domainName.BaseDomain) >= 0)
+                else if(Array.IndexOf(eqDomain, domainName) >= 0)
                 {
                     matchingDomains.AddRange(eqDomain.Select(d => d).ToList());
                 }
@@ -112,7 +113,7 @@ namespace Bit.App.Services
 
             if(!matchingDomains.Any())
             {
-                matchingDomains.Add(androidApp ? uriString : domainName.BaseDomain);
+                matchingDomains.Add(androidApp ? uriString : domainName);
             }
 
             if(androidApp && androidAppWebUriString != null &&
@@ -156,18 +157,18 @@ namespace Bit.App.Services
                 }
 
                 Uri loginUri;
-                DomainName loginDomainName;
+                string loginDomainName = null;
                 if(!Uri.TryCreate(loginUriString, UriKind.Absolute, out loginUri)
-                    || !DomainName.TryParse(loginUri.Host, out loginDomainName))
+                    || !DomainName.TryParseBaseDomain(loginUri.Host, out loginDomainName))
                 {
                     continue;
                 }
 
-                if(Array.IndexOf(matchingDomainsArray, loginDomainName.BaseDomain) >= 0)
+                if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
                 {
                     matchingLogins.Add(new Login(login));
                 }
-                else if(androidApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName.BaseDomain) >= 0)
+                else if(androidApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
                 {
                     matchingFuzzyLogins.Add(new Login(login));
                 }

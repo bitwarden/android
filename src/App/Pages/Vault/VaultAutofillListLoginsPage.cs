@@ -30,19 +30,14 @@ namespace Bit.App.Pages
             Uri = uriString;
 
             Uri uri;
-            DomainName domainName;
             if(uriString?.StartsWith(Constants.AndroidAppProtocol) ?? false)
             {
                 _name = uriString.Substring(Constants.AndroidAppProtocol.Length);
             }
             else if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
-                !DomainName.TryParse(uri.Host, out domainName))
+                !DomainName.TryParseBaseDomain(uri.Host, out _name))
             {
                 _name = "--";
-            }
-            else
-            {
-                _name = domainName.BaseDomain;
             }
 
             _loginService = Resolver.Resolve<ILoginService>();

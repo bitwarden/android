@@ -115,10 +115,10 @@ namespace Bit.App.Models.Page
                     return Uri;
                 }
 
-                DomainName domain;
-                if(DomainName.TryParse(uri.Host, out domain))
+                string domain;
+                if(DomainName.TryParseBaseDomain(uri.Host, out domain))
                 {
-                    return domain.BaseDomain;
+                    return domain;
                 }
 
                 return uri.Host;
