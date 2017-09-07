@@ -25,6 +25,7 @@ namespace Bit.App.Pages
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ISettings _settings;
         private readonly IAppInfoService _appInfoService;
+        private readonly IDeviceInfoService _deviceInfo;
         private readonly string _defaultUri;
         private readonly string _defaultName;
         private readonly bool _fromAutofill;
@@ -43,6 +44,7 @@ namespace Bit.App.Pages
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _settings = Resolver.Resolve<ISettings>();
             _appInfoService = Resolver.Resolve<IAppInfoService>();
+            _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
 
             Init();
         }
@@ -61,8 +63,11 @@ namespace Bit.App.Pages
             NotesCell = new FormEditorCell(height: 180);
 
             TotpCell = new FormEntryCell(AppResources.AuthenticatorKey, nextElement: NotesCell.Editor,
-                useButton: true);
-            TotpCell.Button.Image = "camera";
+                useButton: _deviceInfo.HasCamera);
+            if(_deviceInfo.HasCamera)
+            {
+                TotpCell.Button.Image = "camera";
+            }
             TotpCell.Entry.DisableAutocapitalize = true;
             TotpCell.Entry.Autocorrect = false;
             TotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
@@ -142,7 +147,12 @@ namespace Bit.App.Pages
             }
             else if(Device.RuntimePlatform == Device.Android)
             {
-                PasswordCell.Button.WidthRequest = TotpCell.Button.WidthRequest = 40;
+                PasswordCell.Button.WidthRequest = 40;
+
+                if(TotpCell.Button != null)
+                {
+                    TotpCell.Button.WidthRequest = 40;
+                }
             }
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
@@ -234,7 +244,10 @@ namespace Bit.App.Pages
             TotpCell.InitEvents();
             FolderCell.InitEvents();
             PasswordCell.Button.Clicked += PasswordButton_Clicked;
-            TotpCell.Button.Clicked += TotpButton_Clicked;
+            if(TotpCell?.Button != null)
+            {
+                TotpCell.Button.Clicked += TotpButton_Clicked;
+            }
             GenerateCell.Tapped += GenerateCell_Tapped;
 
             if(!_fromAutofill && !_settings.GetValueOrDefault(AddedLoginAlertKey, false))
@@ -266,7 +279,10 @@ namespace Bit.App.Pages
             TotpCell.Dispose();
             FolderCell.Dispose();
             PasswordCell.Button.Clicked -= PasswordButton_Clicked;
-            TotpCell.Button.Clicked -= TotpButton_Clicked;
+            if(TotpCell?.Button != null)
+            {
+                TotpCell.Button.Clicked -= TotpButton_Clicked;
+            }
             GenerateCell.Tapped -= GenerateCell_Tapped;
         }
 

@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
+        private readonly IDeviceInfoService _deviceInfo;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private DateTime? _lastAction;
 
@@ -29,6 +30,7 @@ namespace Bit.App.Pages
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
+            _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
@@ -58,9 +60,12 @@ namespace Bit.App.Pages
             NotesCell.Editor.Text = login.Notes?.Decrypt(login.OrganizationId);
 
             TotpCell = new FormEntryCell(AppResources.AuthenticatorKey, nextElement: NotesCell.Editor,
-                useButton: true);
+                useButton: _deviceInfo.HasCamera);
+            if(_deviceInfo.HasCamera)
+            {
+                TotpCell.Button.Image = "camera";
+            }
             TotpCell.Entry.Text = login.Totp?.Decrypt(login.OrganizationId);
-            TotpCell.Button.Image = "camera";
             TotpCell.Entry.DisableAutocapitalize = true;
             TotpCell.Entry.Autocorrect = false;
             TotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
@@ -161,7 +166,12 @@ namespace Bit.App.Pages
             }
             else if(Device.RuntimePlatform == Device.Android)
             {
-                PasswordCell.Button.WidthRequest = TotpCell.Button.WidthRequest = 40;
+                PasswordCell.Button.WidthRequest = 40;
+
+                if(TotpCell.Button != null)
+                {
+                    TotpCell.Button.WidthRequest = 40;
+                }
             }
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>

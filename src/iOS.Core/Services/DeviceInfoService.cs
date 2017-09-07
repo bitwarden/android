@@ -23,5 +23,6 @@ namespace Bit.iOS.Core.Services
         }
         public float Scale => (float)UIScreen.MainScreen.Scale;
         public bool NfcEnabled => false;
+        public bool HasCamera => true;
     }
 }

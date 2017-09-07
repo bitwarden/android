@@ -1,4 +1,5 @@
 using Android.App;
+using Android.Content.PM;
 using Android.OS;
 using Bit.App.Abstractions;
 
@@ -42,5 +43,6 @@ namespace Bit.Android.Services
             }
         }
         public bool NfcEnabled => Utilities.NfcEnabled();
+        public bool HasCamera => Xamarin.Forms.Forms.Context.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
     }
 }

@@ -139,45 +139,47 @@ namespace Bit.Android.Services
             MessagingCenter.Unsubscribe<Application>(Application.Current, "SelectFileCameraPermissionDenied");
 
             var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
-            var hasCameraPermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.Camera);
-
-            if(!_cameraPermissionsDenied && !hasStorageWritePermission)
-            {
-                AskCameraPermission(Manifest.Permission.WriteExternalStorage);
-                return Task.FromResult(0);
-            }
-
-            if(!_cameraPermissionsDenied && !hasCameraPermission)
-            {
-                AskCameraPermission(Manifest.Permission.Camera);
-                return Task.FromResult(0);
-            }
 
             var additionalIntents = new List<IParcelable>();
+            if(Forms.Context.PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
+            {
+                var hasCameraPermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.Camera);
+
+                if(!_cameraPermissionsDenied && !hasStorageWritePermission)
+                {
+                    AskCameraPermission(Manifest.Permission.WriteExternalStorage);
+                    return Task.FromResult(0);
+                }
+
+                if(!_cameraPermissionsDenied && !hasCameraPermission)
+                {
+                    AskCameraPermission(Manifest.Permission.Camera);
+                    return Task.FromResult(0);
+                }
+
+                if(!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
+                {
+                    try
+                    {
+                        var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
+                        var file = new Java.IO.File(root, "temp_camera_photo.jpg");
+                        if(!file.Exists())
+                        {
+                            file.ParentFile.Mkdirs();
+                            file.CreateNewFile();
+                        }
+                        var outputFileUri = global::Android.Net.Uri.FromFile(file);
+                        additionalIntents.AddRange(GetCameraIntents(outputFileUri));
+                    }
+                    catch(Java.IO.IOException) { }
+                }
+            }
 
             var docIntent = new Intent(Intent.ActionOpenDocument);
             docIntent.AddCategory(Intent.CategoryOpenable);
             docIntent.SetType("*/*");
 
             var chooserIntent = Intent.CreateChooser(docIntent, AppResources.FileSource);
-
-            if(!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
-            {
-                try
-                {
-                    var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
-                    var file = new Java.IO.File(root, "temp_camera_photo.jpg");
-                    if(!file.Exists())
-                    {
-                        file.ParentFile.Mkdirs();
-                        file.CreateNewFile();
-                    }
-                    var outputFileUri = global::Android.Net.Uri.FromFile(file);
-                    additionalIntents.AddRange(GetCameraIntents(outputFileUri));
-                }
-                catch(Java.IO.IOException) { }
-            }
-
             if(additionalIntents.Count > 0)
             {
                 chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());

@@ -6,5 +6,6 @@
         int Version { get; }
         float Scale { get; }
         bool NfcEnabled { get; }
+        bool HasCamera { get; }
     }
 }
