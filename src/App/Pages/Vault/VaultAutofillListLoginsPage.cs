@@ -205,7 +205,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if(Uri.StartsWith("http") && _deviceInfoService.Version < 21)
+            if(_deviceInfoService.Version < 21)
             {
                 MoreClickedAsync(login);
             }

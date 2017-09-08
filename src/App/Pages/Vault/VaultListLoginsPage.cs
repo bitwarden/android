@@ -403,7 +403,7 @@ namespace Bit.App.Pages
             }
             else if(selection == AppResources.Autofill)
             {
-                if(Uri.StartsWith("http") && _deviceInfoService.Version < 21)
+                if(_deviceInfoService.Version < 21)
                 {
                     MoreClickedAsync(login);
                 }

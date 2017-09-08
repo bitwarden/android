@@ -440,6 +440,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tap this notification to view logins from your vault..
+        /// </summary>
+        public static string BitwardenAutofillServiceNotificationContentOld {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceNotificationContentOld", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Accessibility Settings.
         /// </summary>
         public static string BitwardenAutofillServiceOpenSettings {

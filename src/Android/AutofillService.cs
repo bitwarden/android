@@ -70,7 +70,11 @@ namespace Bit.Android
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var powerManager = (PowerManager)GetSystemService(PowerService);
-            if(!powerManager.IsInteractive)
+            if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch && !powerManager.IsInteractive)
+            {
+                return;
+            }
+            else if(Build.VERSION.SdkInt < BuildVersionCodes.Lollipop && !powerManager.IsScreenOn)
             {
                 return;
             }
@@ -337,11 +341,15 @@ namespace Bit.Android
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
             var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.UpdateCurrent);
 
+            var notificationContent = Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch ?
+                App.Resources.AppResources.BitwardenAutofillServiceNotificationContent :
+                App.Resources.AppResources.BitwardenAutofillServiceNotificationContentOld;
+
             var builder = new Notification.Builder(this);
             builder.SetSmallIcon(Resource.Drawable.notification_sm)
                    .SetContentTitle(App.Resources.AppResources.BitwardenAutofillService)
-                   .SetContentText(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
-                   .SetTicker(App.Resources.AppResources.BitwardenAutofillServiceNotificationContent)
+                   .SetContentText(notificationContent)
+                   .SetTicker(notificationContent)
                    .SetWhen(now)
                    .SetContentIntent(pendingIntent);
 
