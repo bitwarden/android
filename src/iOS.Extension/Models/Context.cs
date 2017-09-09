@@ -1,5 +1,6 @@
 ﻿using System;
 using Foundation;
+using Bit.App;
 
 namespace Bit.iOS.Extension.Models
 {
@@ -31,12 +32,17 @@ namespace Bit.iOS.Extension.Models
             set
             {
                 _uriString = value;
-                if(_uriString != null && _uriString.Contains("."))
+                if(_uriString != null && !_uriString.StartsWith(Constants.iOSAppProtocol) && _uriString.Contains("."))
                 {
                     if(!_uriString.Contains("://") && !_uriString.Contains(" "))
                     {
                         _uriString = string.Concat("http://", _uriString);
                     }
+                }
+
+                if(!_uriString.StartsWith("http") && !_uriString.StartsWith(Constants.iOSAppProtocol))
+                {
+                    _uriString = string.Concat(Constants.iOSAppProtocol, _uriString);
                 }
             }
         }

@@ -14,6 +14,7 @@ using Bit.iOS.Core;
 using MobileCoreServices;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
+using Bit.App.Models;
 
 namespace Bit.iOS.Extension
 {
@@ -119,8 +120,19 @@ namespace Bit.iOS.Extension
 
             public async Task LoadItemsAsync()
             {
+                var combinedLogins = new List<Login>();
+
                 var logins = await _loginService.GetAllAsync(_context.UrlString);
-                _tableItems = logins?.Item1?.Select(s => new LoginViewModel(s))
+                if(logins?.Item1 != null)
+                {
+                    combinedLogins.AddRange(logins.Item1);
+                }
+                if(logins?.Item2 != null)
+                {
+                    combinedLogins.AddRange(logins.Item2);
+                }
+
+                _tableItems = combinedLogins.Select(s => new LoginViewModel(s))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username)
                     .ToList() ?? new List<LoginViewModel>();

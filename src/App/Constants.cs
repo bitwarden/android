@@ -3,6 +3,7 @@
     public static class Constants
     {
         public const string AndroidAppProtocol = "androidapp://";
+        public const string iOSAppProtocol = "iosapp://";
 
         public const string SettingFingerprintUnlockOn = "setting:fingerprintUnlockOn";
         public const string SettingPinUnlockOn = "setting:pinUnlockOn";

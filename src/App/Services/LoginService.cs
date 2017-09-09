@@ -80,27 +80,30 @@ namespace Bit.App.Services
             Uri uri = null;
             string domainName = null;
             var androidApp = UriIsAndroidApp(uriString);
+            var iosApp = UriIsiOSApp(uriString);
+            var mobileApp = androidApp || iosApp;
 
-            if(!androidApp &&
-                (!Uri.TryCreate(uriString, UriKind.Absolute, out uri) || 
+            if(!mobileApp &&
+                (!Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
                     !DomainName.TryParseBaseDomain(uri.Host, out domainName)))
             {
                 return null;
             }
 
-            var androidAppWebUriString = WebUriFromAndroidAppUri(uriString);
+            var mobileAppWebUriString = androidApp ? WebUriFromAndroidAppUri(uriString) :
+                iosApp ? WebUriFromiOSAppUri(uriString) : null;
             var eqDomains = (await _settingsService.GetEquivalentDomainsAsync()).Select(d => d.ToArray());
             var matchingDomains = new List<string>();
             var matchingFuzzyDomains = new List<string>();
             foreach(var eqDomain in eqDomains)
             {
-                if(androidApp)
+                if(mobileApp)
                 {
                     if(Array.IndexOf(eqDomain, uriString) >= 0)
                     {
                         matchingDomains.AddRange(eqDomain.Select(d => d).ToList());
                     }
-                    else if(androidAppWebUriString != null && Array.IndexOf(eqDomain, androidAppWebUriString) >= 0)
+                    else if(mobileAppWebUriString != null && Array.IndexOf(eqDomain, mobileAppWebUriString) >= 0)
                     {
                         matchingFuzzyDomains.AddRange(eqDomain.Select(d => d).ToList());
                     }
@@ -113,13 +116,13 @@ namespace Bit.App.Services
 
             if(!matchingDomains.Any())
             {
-                matchingDomains.Add(androidApp ? uriString : domainName);
+                matchingDomains.Add(mobileApp ? uriString : domainName);
             }
 
-            if(androidApp && androidAppWebUriString != null &&
-                !matchingFuzzyDomains.Any() && !matchingDomains.Contains(androidAppWebUriString))
+            if(mobileApp && mobileAppWebUriString != null &&
+                !matchingFuzzyDomains.Any() && !matchingDomains.Contains(mobileAppWebUriString))
             {
-                matchingFuzzyDomains.Add(androidAppWebUriString);
+                matchingFuzzyDomains.Add(mobileAppWebUriString);
             }
 
             var matchingDomainsArray = matchingDomains.ToArray();
@@ -145,12 +148,12 @@ namespace Bit.App.Services
                     matchingLogins.Add(new Login(login));
                     continue;
                 }
-                else if(androidApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
+                else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
                 {
                     matchingFuzzyLogins.Add(new Login(login));
                     continue;
                 }
-                else if(!androidApp && Array.IndexOf(matchingDomainsArray, WebUriFromAndroidAppUri(loginUriString)) >= 0)
+                else if(!mobileApp && Array.IndexOf(matchingDomainsArray, WebUriFromAndroidAppUri(loginUriString)) >= 0)
                 {
                     matchingFuzzyLogins.Add(new Login(login));
                     continue;
@@ -168,7 +171,7 @@ namespace Bit.App.Services
                 {
                     matchingLogins.Add(new Login(login));
                 }
-                else if(androidApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
+                else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
                 {
                     matchingFuzzyLogins.Add(new Login(login));
                 }
@@ -320,9 +323,24 @@ namespace Bit.App.Services
             return null;
         }
 
+        private string WebUriFromiOSAppUri(string iosAppUriString)
+        {
+            if(!UriIsiOSApp(iosAppUriString))
+            {
+                return null;
+            }
+
+            return iosAppUriString.Replace(Constants.iOSAppProtocol, string.Empty);
+        }
+
         private bool UriIsAndroidApp(string uriString)
         {
             return uriString.StartsWith(Constants.AndroidAppProtocol);
+        }
+
+        private bool UriIsiOSApp(string uriString)
+        {
+            return uriString.StartsWith(Constants.iOSAppProtocol);
         }
     }
 }
