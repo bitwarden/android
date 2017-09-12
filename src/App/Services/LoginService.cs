@@ -13,6 +13,7 @@ namespace Bit.App.Services
 {
     public class LoginService : ILoginService
     {
+        private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android" };
         private readonly ILoginRepository _loginRepository;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IAuthService _authService;
@@ -90,8 +91,10 @@ namespace Bit.App.Services
                 return null;
             }
 
-            var mobileAppWebUriString = androidApp ? WebUriFromAndroidAppUri(uriString) :
-                iosApp ? WebUriFromiOSAppUri(uriString) : null;
+            var mobileAppInfo = androidApp ? InfoFromAndroidAppUri(uriString) :
+                iosApp ? InfoFromiOSAppUri(uriString) : null;
+            var mobileAppWebUriString = mobileAppInfo?.Item1;
+            var mobileAppSearchTerms = mobileAppInfo?.Item2;
             var eqDomains = (await _settingsService.GetEquivalentDomainsAsync()).Select(d => d.ToArray());
             var matchingDomains = new List<string>();
             var matchingFuzzyDomains = new List<string>();
@@ -153,7 +156,7 @@ namespace Bit.App.Services
                     matchingFuzzyLogins.Add(new Login(login));
                     continue;
                 }
-                else if(!mobileApp && Array.IndexOf(matchingDomainsArray, WebUriFromAndroidAppUri(loginUriString)) >= 0)
+                else if(!mobileApp && Array.IndexOf(matchingDomainsArray, InfoFromAndroidAppUri(loginUriString)) >= 0)
                 {
                     matchingFuzzyLogins.Add(new Login(login));
                     continue;
@@ -161,19 +164,49 @@ namespace Bit.App.Services
 
                 Uri loginUri;
                 string loginDomainName = null;
-                if(!Uri.TryCreate(loginUriString, UriKind.Absolute, out loginUri)
-                    || !DomainName.TryParseBaseDomain(loginUri.Host, out loginDomainName))
+                if(Uri.TryCreate(loginUriString, UriKind.Absolute, out loginUri)
+                    && DomainName.TryParseBaseDomain(loginUri.Host, out loginDomainName))
                 {
-                    continue;
+                    loginDomainName = loginDomainName.ToLowerInvariant();
+
+                    if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
+                    {
+                        matchingLogins.Add(new Login(login));
+                        continue;
+                    }
+                    else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
+                    {
+                        matchingFuzzyLogins.Add(new Login(login));
+                        continue;
+                    }
                 }
 
-                if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
+                if(mobileApp && mobileAppSearchTerms != null && mobileAppSearchTerms.Length > 0)
                 {
-                    matchingLogins.Add(new Login(login));
-                }
-                else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
-                {
-                    matchingFuzzyLogins.Add(new Login(login));
+                    var addedFromSearchTerm = false;
+                    var loginNameString = login.Name == null ? null :
+                        new CipherString(login.Name).Decrypt(login.OrganizationId)?.ToLowerInvariant();
+                    foreach(var term in mobileAppSearchTerms)
+                    {
+                        addedFromSearchTerm = (loginDomainName != null && loginDomainName.Contains(term)) ||
+                            (loginNameString != null && loginNameString.Contains(term));
+                        if(!addedFromSearchTerm)
+                        {
+                            addedFromSearchTerm = (loginDomainName != null && term.Contains(loginDomainName.Split('.')[0]))
+                                || (loginNameString != null && term.Contains(loginNameString));
+                        }
+
+                        if(addedFromSearchTerm)
+                        {
+                            matchingFuzzyLogins.Add(new Login(login));
+                            break;
+                        }
+                    }
+
+                    if(addedFromSearchTerm)
+                    {
+                        continue;
+                    }
                 }
             }
 
@@ -307,7 +340,7 @@ namespace Bit.App.Services
             return response;
         }
 
-        private string WebUriFromAndroidAppUri(string androidAppUriString)
+        private Tuple<string, string[]> InfoFromAndroidAppUri(string androidAppUriString)
         {
             if(!UriIsAndroidApp(androidAppUriString))
             {
@@ -317,20 +350,24 @@ namespace Bit.App.Services
             var androidUriParts = androidAppUriString.Replace(Constants.AndroidAppProtocol, string.Empty).Split('.');
             if(androidUriParts.Length >= 2)
             {
-                return string.Join(".", androidUriParts[1], androidUriParts[0]);
+                var webUri = string.Join(".", androidUriParts[1], androidUriParts[0]);
+                var searchTerms = androidUriParts.Where(p => !_ignoredSearchTerms.Contains(p))
+                    .Select(p => p.ToLowerInvariant()).ToArray();
+                return new Tuple<string, string[]>(webUri, searchTerms);
             }
 
             return null;
         }
 
-        private string WebUriFromiOSAppUri(string iosAppUriString)
+        private Tuple<string, string[]> InfoFromiOSAppUri(string iosAppUriString)
         {
             if(!UriIsiOSApp(iosAppUriString))
             {
                 return null;
             }
 
-            return iosAppUriString.Replace(Constants.iOSAppProtocol, string.Empty);
+            var webUri = iosAppUriString.Replace(Constants.iOSAppProtocol, string.Empty);
+            return new Tuple<string, string[]>(webUri, null);
         }
 
         private bool UriIsAndroidApp(string uriString)
