@@ -224,6 +224,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.hr.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.hu.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.hu.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.id.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -238,6 +243,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.ja.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.nl.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.nl.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\AppResources.pl.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -278,6 +288,16 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.th.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.tr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.tr.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\AppResources.uk.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.uk.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\AppResources.zh-Hans.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -352,6 +372,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.hr.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.hu.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.hu.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.id.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.id.Designer.cs</LastGenOutput>
@@ -363,6 +387,10 @@
     <EmbeddedResource Include="Resources\AppResources.ja.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.ja.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.nl.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.nl.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.pl.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -395,6 +423,14 @@
     <EmbeddedResource Include="Resources\AppResources.th.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.th.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.tr.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.tr.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.uk.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.uk.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.zh-Hans.resx">
       <Generator>ResXFileCodeGenerator</Generator>
