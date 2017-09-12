@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden – Gestor de contraseñas gratuito</value>
+    <value>bitwarden – Gestor de contraseñas</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden es la manera más fácil y segura de guardar todos usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos. La aplicación de bitwarden permite que te identifiques rápidamente en cualquier sitio web a través de Safari o Chrome and es soportada por cientos de otras aplicaciones populares.
