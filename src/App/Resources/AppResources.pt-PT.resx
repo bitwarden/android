@@ -996,35 +996,38 @@
     <value>Saber mais</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>URL do servidor da API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Ambiente personalizado</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Para utilizadores avançados. Pode especificar o URL de base de cada serviço independentemente.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>Os URLs de ambiente foram guardados.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} não está formatado corretamente.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>URL do servidor de identidade</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Ambiente auto-hospedado</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+    <value>Especifique o URL de base da sua instalação local do bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>URL do servidor</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Vault Server URL</value>
+    <value>URL do servidor do cofre web</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Tap this notification to view logins from your vault.</value>
   </data>
 </root>
