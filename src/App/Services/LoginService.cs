@@ -13,7 +13,8 @@ namespace Bit.App.Services
 {
     public class LoginService : ILoginService
     {
-        private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android" };
+        private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android",
+            "io", "co", "uk", "au", "nz", "fr", "de", "tv", "info", "app", "apps", "eu", "me", "dev", "jp", "mobile" };
         private readonly ILoginRepository _loginRepository;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IAuthService _authService;
