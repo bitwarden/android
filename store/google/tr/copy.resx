@@ -117,32 +117,45 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Name" xml:space="preserve">
-    <value>bitwarden – Gestor de contraseñas</value>
+  <data name="Title" xml:space="preserve">
+    <value>bitwarden Parola Yöneticisi</value>
+    <comment>Max 30 characters</comment>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>bitwarden es la manera más fácil y segura de guardar todos usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos. La aplicación de bitwarden permite que te identifiques rápidamente en cualquier sitio web a través de Safari o Chrome and es soportada por cientos de otras aplicaciones populares.
-
-El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas informáticos pueden acceder facilmente tu correo electrónico, cuenta bancaria y otras cuentas importantes.
-
-bitwarden guarda todos tus usuarios es una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu data está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <comment>Max 80 characters</comment>
   </data>
-  <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
+  <data name="FullDesciption" xml:space="preserve">
+    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+
+Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+
+Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+
+bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
+  </data>
+  <data name="FeatureGraphic" xml:space="preserve">
+    <value>Tüm aygıtlarınız için güvenli ve ücretsiz bir parola yöneticisi</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gestiona todos tus usuarios y contraseñas desde una bóveda segura</value>
+    <value>Tüm giriş bilgilerinizi ve parolalarınızı güvenli bir kasadan yönetin</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Genera contraseñas fuertes, aleatorias y seguras automáticamente</value>
+    <value>Otomatik olarak güçlü, rastgele ve güvenli parolalar oluşturun</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protege tu bóveda con Touch ID, código PIN o contraseña maestra</value>
+    <value>Protect your vault with fingerprint, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Autorellena entradas en Safari, Chrome y cientos de otras aplicaciones</value>
+    <value>Quickly auto-fill logins from within your web browser and other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincroniza y accede a tu bóveda desde múltiples dispositivos</value>
+    <value>Sync and access your vault from multiple devices
+
+- Phone
+- Tablet
+- Desktop
+- Web</value>
   </data>
 </root>

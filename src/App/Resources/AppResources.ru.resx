@@ -280,7 +280,7 @@
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>Еще</value>
+    <value>Больше</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
@@ -508,7 +508,7 @@
     <value>Нажмите на иконку bitwarden в меню, чтобы запустить расширение.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Чтобы включить bitwarden в Safari и других приложениях, нажмите Еще в нижней строке меню.</value>
+    <value>Чтобы включить bitwarden в Safari и других приложениях, нажмите "больше" в нижней строке меню.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Избранный</value>
@@ -647,7 +647,7 @@
     <value>Вы хотите перезаписать текущий пароль?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden автоматически синхронизирует ваше хранилище при помощи push-уведомлений. Для вашего максимального удобства, пожалуйста, выберите Ок при следующем предложении включить push-уведомления.</value>
+    <value>bitwarden автоматически синхронизирует ваше хранилище при помощи push-уведомлений. Для вашего максимального удобства, пожалуйста, выберите "Ok" при появлении предложения включить push-уведомления.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -996,35 +996,38 @@
     <value>Узнайть больше</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>API URL-адреса сервера</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Пользовательская среда</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Для опытных пользователей. Можно указать URL-адрес отдельно для каждой службы.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>URL-адреса среды сохранены.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} это неправильный формат.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>URL-адрес сервера идентификации</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Среда собственного хостинга</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+    <value>Укажите URL-адрес bitwarden на вашем сервере.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>URL-адрес сервера</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Vault Server URL</value>
+    <value>URL-адрес сервера веб-хранилища</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>Tap this notification to view logins from your vault.</value>
   </data>
 </root>
