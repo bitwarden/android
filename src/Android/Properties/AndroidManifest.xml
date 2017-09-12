@@ -27,6 +27,6 @@
           android:resource="@xml/filepaths" />
     </provider>
 
-    <activity android:name="net.hockeyapp.android.UpdateActivity" android:exported="false" />
+    <activity android:name="net.hockeyapp.android.UpdateActivity" android:exported="false" android:icon="@drawable/icon" />
   </application>
 </manifest>
