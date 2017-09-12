@@ -83,7 +83,8 @@ namespace Bit.Android
             {
                 var root = RootInActiveWindow;
                 if(e == null || root == null || string.IsNullOrWhiteSpace(e.PackageName) ||
-                    e.PackageName == SystemUiPackage || root.PackageName != e.PackageName)
+                    e.PackageName == SystemUiPackage || e.PackageName.Contains("launcher") ||
+                    root.PackageName != e.PackageName)
                 {
                     return;
                 }
