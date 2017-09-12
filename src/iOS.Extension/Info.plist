@@ -83,6 +83,10 @@
 		<string>ro</string>
 		<string>id</string>
 		<string>hr</string>
+		<string>hu</string>
+		<string>nl</string>
+		<string>tr</string>
+		<string>uk</string>
 	</array>
 </dict>
 </plist>
