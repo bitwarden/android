@@ -54,7 +54,7 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;
-            PasswordLabel.Font = UIFont.FromName("Courier", descriptor.PointSize * 1.3f);
+            PasswordLabel.Font = UIFont.FromName("Menlo-Regular", descriptor.PointSize * 1.3f);
             PasswordLabel.LineBreakMode = UILineBreakMode.TailTruncation;
             PasswordLabel.Lines = 1;
             PasswordLabel.AdjustsFontSizeToFitWidth = false;

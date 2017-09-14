@@ -396,13 +396,13 @@
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="- - - -" lineBreakMode="tailTruncation" minimumFontSize="10" id="7373" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" misplaced="YES">
                                 <rect key="frame" x="30" y="104" width="540" height="17"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                <fontDescription key="fontDescription" name="Courier" family="Courier" pointSize="40"/>
+                                <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="40"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" id="7350" translatesAutoresizingMaskIntoConstraints="NO" textAlignment="center" misplaced="YES">
                                 <rect key="frame" x="30" y="79" width="540" height="77"/>
-                                <fontDescription key="fontDescription" name="Courier-BoldOblique" family="Courier" pointSize="14"/>
+                                <fontDescription key="fontDescription" name="Menlo-Regular" family="Menlo" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                 <color key="backgroundColor" colorSpace="calibratedWhite" white="0" alpha="0"/>
                                 <color key="tintColor" colorSpace="calibratedWhite" white="0" alpha="0"/>

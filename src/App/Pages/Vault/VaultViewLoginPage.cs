@@ -77,7 +77,7 @@ namespace Bit.App.Pages
             }
             PasswordCell.Button1.Command = new Command(() => Model.RevealPassword = !Model.RevealPassword);
             PasswordCell.Button2.Command = new Command(() => Copy(Model.Password, AppResources.Password));
-            PasswordCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            PasswordCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
             PasswordCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             // URI
@@ -103,7 +103,7 @@ namespace Bit.App.Pages
             TotpCodeCell.Button1.Command = new Command(() => Copy(Model.TotpCode, AppResources.VerificationCodeTotp));
             TotpCodeCell.Sub.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.TotpSecond));
             TotpCodeCell.Sub.SetBinding(Label.TextColorProperty, nameof(VaultViewLoginPageModel.TotpColor));
-            TotpCodeCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            TotpCodeCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
             // Notes
             NotesCell = new LabeledValueCell();

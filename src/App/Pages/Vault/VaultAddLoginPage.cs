@@ -70,14 +70,14 @@ namespace Bit.App.Pages
             }
             TotpCell.Entry.DisableAutocapitalize = true;
             TotpCell.Entry.Autocorrect = false;
-            TotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            TotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
             PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: TotpCell.Entry,
                 useButton: true);
             PasswordCell.Button.Image = "eye";
             PasswordCell.Entry.DisableAutocapitalize = true;
             PasswordCell.Entry.Autocorrect = false;
-            PasswordCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Courier", Android: "monospace", WinPhone: "Courier");
+            PasswordCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
             UsernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
             UsernameCell.Entry.DisableAutocapitalize = true;
