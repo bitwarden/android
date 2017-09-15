@@ -81,9 +81,7 @@ namespace Bit.App.Services
 
             Uri uri = null;
             string domainName = null;
-            var androidApp = UriIsAndroidApp(uriString);
-            var iosApp = UriIsiOSApp(uriString);
-            var mobileApp = androidApp || iosApp;
+            var mobileApp = UriIsMobileApp(uriString);
 
             if(!mobileApp &&
                 (!Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
@@ -92,8 +90,7 @@ namespace Bit.App.Services
                 return null;
             }
 
-            var mobileAppInfo = androidApp ? InfoFromAndroidAppUri(uriString) :
-                iosApp ? InfoFromiOSAppUri(uriString) : null;
+            var mobileAppInfo = InfoFromMobileAppUri(uriString);
             var mobileAppWebUriString = mobileAppInfo?.Item1;
             var mobileAppSearchTerms = mobileAppInfo?.Item2;
             var eqDomains = (await _settingsService.GetEquivalentDomainsAsync()).Select(d => d.ToArray());
@@ -157,10 +154,14 @@ namespace Bit.App.Services
                     matchingFuzzyLogins.Add(new Login(login));
                     continue;
                 }
-                else if(!mobileApp && Array.IndexOf(matchingDomainsArray, InfoFromAndroidAppUri(loginUriString)) >= 0)
+                else if(!mobileApp)
                 {
-                    matchingFuzzyLogins.Add(new Login(login));
-                    continue;
+                    var info = InfoFromMobileAppUri(loginUriString);
+                    if(info?.Item1 != null && Array.IndexOf(matchingDomainsArray, info.Item1) >= 0)
+                    {
+                        matchingFuzzyLogins.Add(new Login(login));
+                        continue;
+                    }
                 }
 
                 Uri loginUri;
@@ -341,6 +342,20 @@ namespace Bit.App.Services
             return response;
         }
 
+        private Tuple<string, string[]> InfoFromMobileAppUri(string mobileAppUriString)
+        {
+            if(UriIsAndroidApp(mobileAppUriString))
+            {
+                return InfoFromAndroidAppUri(mobileAppUriString);
+            }
+            else if(UriIsiOSApp(mobileAppUriString))
+            {
+                return InfoFromiOSAppUri(mobileAppUriString);
+            }
+
+            return null;
+        }
+
         private Tuple<string, string[]> InfoFromAndroidAppUri(string androidAppUriString)
         {
             if(!UriIsAndroidApp(androidAppUriString))
@@ -369,6 +384,11 @@ namespace Bit.App.Services
 
             var webUri = iosAppUriString.Replace(Constants.iOSAppProtocol, string.Empty);
             return new Tuple<string, string[]>(webUri, null);
+        }
+
+        private bool UriIsMobileApp(string uriString)
+        {
+            return UriIsAndroidApp(uriString) || UriIsiOSApp(uriString);
         }
 
         private bool UriIsAndroidApp(string uriString)
