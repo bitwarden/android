@@ -59,6 +59,7 @@ namespace Bit.iOS
 
             LoadApplication(new App.App(
                 null,
+                false,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),

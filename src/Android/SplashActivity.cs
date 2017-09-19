@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Bit.Android
 {
-    [Activity(Theme = "@style/BitwardenTheme.Splash", 
-        MainLauncher = true, 
+    [Activity(Theme = "@style/BitwardenTheme.Splash",
+        MainLauncher = true,
         NoHistory = true,
         WindowSoftInputMode = global::Android.Views.SoftInput.StateHidden)]
     public class SplashActivity : AppCompatActivity
@@ -23,7 +23,9 @@ namespace Bit.Android
             base.OnResume();
             var startupWork = new Task(() =>
             {
-                StartActivity(new Intent(Application.Context, typeof(MainActivity)));
+                var mainIntent = new Intent(Application.Context, typeof(MainActivity));
+                mainIntent.PutExtra("myVaultTile", Intent.GetBooleanExtra("myVaultTile", false));
+                StartActivity(mainIntent);
             });
 
             startupWork.Start();

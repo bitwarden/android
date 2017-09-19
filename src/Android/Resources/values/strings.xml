@@ -5,4 +5,7 @@
     accessibility service by tapping the toggle switch above, then press OK on the confirmation pop-up. You can then press
     the back button twice to return to the main bitwarden app.
   </string>
+  <string name="MyVault">
+    My Vault
+  </string>
 </resources>

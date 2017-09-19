@@ -7,7 +7,7 @@ namespace Bit.App.Pages
 {
     public class MainPage : ExtendedTabbedPage
     {
-        public MainPage(string uri = null)
+        public MainPage(string uri = null, bool myVault = false)
         {
             TintColor = Color.FromHex("3c8dbc");
 
@@ -33,7 +33,7 @@ namespace Bit.App.Pages
             Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
 
-            if(uri != null)
+            if(myVault || uri != null)
             {
                 SelectedItem = vaultNavigation;
             }

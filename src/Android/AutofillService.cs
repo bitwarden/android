@@ -11,7 +11,7 @@ using XLabs.Ioc;
 
 namespace Bit.Android
 {
-    [Service(Permission = "android.permission.BIND_ACCESSIBILITY_SERVICE", Label = "bitwarden")]
+    [Service(Permission = global::Android.Manifest.Permission.BindAccessibilityService, Label = "bitwarden")]
     [IntentFilter(new string[] { "android.accessibilityservice.AccessibilityService" })]
     [MetaData("android.accessibilityservice", Resource = "@xml/accessibilityservice")]
     public class AutofillService : AccessibilityService

@@ -74,6 +74,7 @@ namespace Bit.Android
             _settings = Resolver.Resolve<ISettings>();
             LoadApplication(new App.App(
                 uri,
+                Intent.GetBooleanExtra("myVaultTile", false),
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),

@@ -2769,8 +2769,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0200e7
 			public const int notification_sm = 2130837735;
 			
-			// aapt resource value: 0x7f0200f9
-			public const int notification_template_icon_bg = 2130837753;
+			// aapt resource value: 0x7f0200fa
+			public const int notification_template_icon_bg = 2130837754;
 			
 			// aapt resource value: 0x7f0200e8
 			public const int paperclip = 2130837736;
@@ -2797,31 +2797,34 @@ namespace Bit.Android
 			public const int share_tools = 2130837743;
 			
 			// aapt resource value: 0x7f0200f0
-			public const int splash_screen = 2130837744;
+			public const int shield = 2130837744;
 			
 			// aapt resource value: 0x7f0200f1
-			public const int star = 2130837745;
+			public const int splash_screen = 2130837745;
 			
 			// aapt resource value: 0x7f0200f2
-			public const int star_selected = 2130837746;
+			public const int star = 2130837746;
 			
 			// aapt resource value: 0x7f0200f3
-			public const int tools = 2130837747;
+			public const int star_selected = 2130837747;
 			
 			// aapt resource value: 0x7f0200f4
-			public const int tools_selected = 2130837748;
+			public const int tools = 2130837748;
 			
 			// aapt resource value: 0x7f0200f5
-			public const int trash = 2130837749;
+			public const int tools_selected = 2130837749;
 			
 			// aapt resource value: 0x7f0200f6
-			public const int upload = 2130837750;
+			public const int trash = 2130837750;
 			
 			// aapt resource value: 0x7f0200f7
-			public const int user = 2130837751;
+			public const int upload = 2130837751;
 			
 			// aapt resource value: 0x7f0200f8
-			public const int yubikey = 2130837752;
+			public const int user = 2130837752;
+			
+			// aapt resource value: 0x7f0200f9
+			public const int yubikey = 2130837753;
 			
 			static Drawable()
 			{
@@ -3755,6 +3758,9 @@ namespace Bit.Android
 			
 			// aapt resource value: 0x7f080046
 			public const int Hello = 2131230790;
+			
+			// aapt resource value: 0x7f08009a
+			public const int MyVault = 2131230874;
 			
 			// aapt resource value: 0x7f08002e
 			public const int abc_action_bar_home_description = 2131230766;

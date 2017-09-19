@@ -35,6 +35,7 @@ namespace Bit.App
 
         public App(
             string uri,
+            bool myVault,
             IAuthService authService,
             IConnectivity connectivity,
             IUserDialogs userDialogs,
@@ -71,7 +72,7 @@ namespace Bit.App
             }
             else if(authService.IsAuthenticated)
             {
-                MainPage = new MainPage();
+                MainPage = new MainPage(myVault: myVault);
             }
             else
             {
