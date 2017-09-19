@@ -61,6 +61,7 @@ namespace Bit.App.Pages
         private void Init()
         {
             NotesCell = new FormEditorCell(height: 180);
+            NotesCell.Editor.Keyboard = Keyboard.Text;
 
             TotpCell = new FormEntryCell(AppResources.AuthenticatorKey, nextElement: NotesCell.Editor,
                 useButton: _deviceInfo.HasCamera);
