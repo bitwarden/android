@@ -16,9 +16,9 @@ namespace Bit.App.Services
     {
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly IFolderApiRepository _folderApiRepository;
-        private readonly ILoginApiRepository _loginApiRepository;
         private readonly IAccountsApiRepository _accountsApiRepository;
         private readonly ISettingsApiRepository _settingsApiRepository;
+        private readonly ISyncApiRepository _syncApiRepository;
         private readonly IFolderRepository _folderRepository;
         private readonly ILoginRepository _loginRepository;
         private readonly IAttachmentRepository _attachmentRepository;
@@ -31,9 +31,9 @@ namespace Bit.App.Services
         public SyncService(
             ICipherApiRepository cipherApiRepository,
             IFolderApiRepository folderApiRepository,
-            ILoginApiRepository loginApiRepository,
             IAccountsApiRepository accountsApiRepository,
             ISettingsApiRepository settingsApiRepository,
+            ISyncApiRepository syncApiRepository,
             IFolderRepository folderRepository,
             ILoginRepository loginRepository,
             IAttachmentRepository attachmentRepository,
@@ -45,9 +45,9 @@ namespace Bit.App.Services
         {
             _cipherApiRepository = cipherApiRepository;
             _folderApiRepository = folderApiRepository;
-            _loginApiRepository = loginApiRepository;
             _accountsApiRepository = accountsApiRepository;
             _settingsApiRepository = settingsApiRepository;
+            _syncApiRepository = syncApiRepository;
             _folderRepository = folderRepository;
             _loginRepository = loginRepository;
             _attachmentRepository = attachmentRepository;
@@ -268,29 +268,23 @@ namespace Bit.App.Services
 
             var now = DateTime.UtcNow;
 
-            // Just check profile first to make sure we'll have a success with the API
-            var profile = await _accountsApiRepository.GetProfileAsync().ConfigureAwait(false);
-            if(!CheckSuccess(profile, !string.IsNullOrWhiteSpace(_appSettingsService.SecurityStamp) &&
-                _appSettingsService.SecurityStamp != profile.Result.SecurityStamp))
+            var syncResponse = await _syncApiRepository.Get();
+            if(!CheckSuccess(syncResponse, 
+                !string.IsNullOrWhiteSpace(_appSettingsService.SecurityStamp) &&
+                syncResponse.Result?.Profile != null && 
+                _appSettingsService.SecurityStamp != syncResponse.Result.Profile.SecurityStamp))
             {
                 return false;
             }
 
-            var ciphers = await _cipherApiRepository.GetAsync().ConfigureAwait(false);
-            var folders = await _folderApiRepository.GetAsync().ConfigureAwait(false);
-            var domains = await _settingsApiRepository.GetDomains(false).ConfigureAwait(false);
-            if(!CheckSuccess(ciphers) || !CheckSuccess(folders) || !CheckSuccess(domains))
-            {
-                return false;
-            }
-
-            var loginsDict = ciphers.Result.Data.Where(c => c.Type == Enums.CipherType.Login).ToDictionary(s => s.Id);
-            var foldersDict = folders.Result.Data.ToDictionary(f => f.Id);
+            var loginsDict = syncResponse.Result.Ciphers.Where(c => c.Type == Enums.CipherType.Login)
+                .ToDictionary(s => s.Id);
+            var foldersDict = syncResponse.Result.Folders.ToDictionary(f => f.Id);
 
             var loginTask = SyncLoginsAsync(loginsDict);
             var folderTask = SyncFoldersAsync(foldersDict);
-            var domainsTask = SyncDomainsAsync(domains.Result);
-            var profileTask = SyncProfileKeysAsync(profile.Result);
+            var domainsTask = SyncDomainsAsync(syncResponse.Result.Domains);
+            var profileTask = SyncProfileKeysAsync(syncResponse.Result.Profile);
             await Task.WhenAll(loginTask, folderTask, domainsTask, profileTask).ConfigureAwait(false);
 
             if(folderTask.Exception != null || loginTask.Exception != null || domainsTask.Exception != null ||
@@ -436,6 +430,11 @@ namespace Bit.App.Services
 
         private async Task SyncDomainsAsync(DomainsResponse serverDomains)
         {
+            if(serverDomains == null)
+            {
+                return;
+            }
+
             var eqDomains = new List<IEnumerable<string>>();
             if(serverDomains.EquivalentDomains != null)
             {
@@ -460,6 +459,11 @@ namespace Bit.App.Services
 
         private Task SyncProfileKeysAsync(ProfileResponse profile)
         {
+            if(profile == null)
+            {
+                return Task.FromResult(0);
+            }
+
             if(!string.IsNullOrWhiteSpace(profile.Key))
             {
                 _cryptoService.SetEncKey(new CipherString(profile.Key));

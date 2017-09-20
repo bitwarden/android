@@ -299,6 +299,7 @@ namespace Bit.iOS.Extension
             container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
             container.RegisterSingleton<IAccountsApiRepository, AccountsApiRepository>();
             container.RegisterSingleton<ICipherApiRepository, CipherApiRepository>();
+            container.RegisterSingleton<ISyncApiRepository, SyncApiRepository>();
 
             // Other
             container.RegisterSingleton(CrossConnectivity.Current);

@@ -172,45 +172,5 @@ namespace Bit.App.Repositories
                 }
             }
         }
-
-        public virtual async Task<ApiResult<KeysResponse>> GetKeys()
-        {
-            if(!Connectivity.IsConnected)
-            {
-                return HandledNotConnected<KeysResponse>();
-            }
-
-            var tokenStateResponse = await HandleTokenStateAsync<KeysResponse>();
-            if(!tokenStateResponse.Succeeded)
-            {
-                return tokenStateResponse;
-            }
-
-            using(var client = HttpService.ApiClient)
-            {
-                var requestMessage = new TokenHttpRequestMessage()
-                {
-                    Method = HttpMethod.Get,
-                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/keys")),
-                };
-
-                try
-                {
-                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
-                    if(!response.IsSuccessStatusCode)
-                    {
-                        return await HandleErrorAsync<KeysResponse>(response).ConfigureAwait(false);
-                    }
-
-                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    var responseObj = JsonConvert.DeserializeObject<KeysResponse>(responseContent);
-                    return ApiResult<KeysResponse>.Success(responseObj, response.StatusCode);
-                }
-                catch
-                {
-                    return HandledWebException<KeysResponse>();
-                }
-            }
-        }
     }
 }

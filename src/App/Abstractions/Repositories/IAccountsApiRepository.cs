@@ -10,6 +10,5 @@ namespace Bit.App.Abstractions
         Task<ApiResult> PostPasswordHintAsync(PasswordHintRequest requestObj);
         Task<ApiResult<DateTime?>> GetAccountRevisionDateAsync();
         Task<ApiResult<ProfileResponse>> GetProfileAsync();
-        Task<ApiResult<KeysResponse>> GetKeys();
     }
 }
