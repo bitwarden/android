@@ -104,7 +104,7 @@
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
     <Compile Include="Models\Api\Request\TwoFactorEmailRequest.cs" />
     <Compile Include="Models\Api\Request\RegisterRequest.cs" />
-    <Compile Include="Models\Api\Request\LoginRequest.cs" />
+    <Compile Include="Models\Api\Request\CipherRequest.cs" />
     <Compile Include="Models\Api\Request\PasswordHintRequest.cs" />
     <Compile Include="Models\Api\Request\TokenRequest.cs" />
     <Compile Include="Models\Api\Response\AttachmentResponse.cs" />
@@ -114,7 +114,6 @@
     <Compile Include="Models\Api\Response\FolderResponse.cs" />
     <Compile Include="Models\Api\Response\ListResponse.cs" />
     <Compile Include="Models\Api\Response\DeviceResponse.cs" />
-    <Compile Include="Models\Api\Response\LoginResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileOrganizationResponse.cs" />
     <Compile Include="Models\Api\Response\KeysResponse.cs" />
     <Compile Include="Models\Api\Response\SyncResponse.cs" />
@@ -180,13 +179,11 @@
     <Compile Include="Repositories\BaseApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IFolderApiRepository.cs" />
-    <Compile Include="Abstractions\Repositories\ILoginApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\IConnectApiRepository.cs" />
     <Compile Include="Repositories\DeviceApiRepository.cs" />
     <Compile Include="Repositories\CipherApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ICipherApiRepository.cs" />
     <Compile Include="Repositories\SettingsRepository.cs" />
-    <Compile Include="Repositories\LoginApiRepository.cs" />
     <Compile Include="Repositories\FolderApiRepository.cs" />
     <Compile Include="Repositories\LoginRepository.cs" />
     <Compile Include="Repositories\FolderRepository.cs" />

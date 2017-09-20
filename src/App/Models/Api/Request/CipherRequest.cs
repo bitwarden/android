@@ -1,9 +1,12 @@
-﻿namespace Bit.App.Models.Api
+﻿using Bit.App.Enums;
+
+namespace Bit.App.Models.Api
 {
-    public class LoginRequest
+    public class CipherRequest
     {
-        public LoginRequest(Login login)
+        public CipherRequest(Login login)
         {
+            Type = CipherType.Login;
             OrganizationId = login.OrganizationId;
             FolderId = login.FolderId;
             Name = login.Name?.EncryptedString;
@@ -15,6 +18,7 @@
             Favorite = login.Favorite;
         }
 
+        public CipherType Type { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
         public string Name { get; set; }

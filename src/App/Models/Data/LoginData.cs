@@ -28,24 +28,6 @@ namespace Bit.App.Models.Data
             OrganizationUseTotp = login.OrganizationUseTotp;
         }
 
-        public LoginData(LoginResponse login, string userId)
-        {
-            Id = login.Id;
-            FolderId = login.FolderId;
-            UserId = userId;
-            OrganizationId = login.OrganizationId;
-            Name = login.Name;
-            Uri = login.Uri;
-            Username = login.Username;
-            Password = login.Password;
-            Notes = login.Notes;
-            Totp = login.Totp;
-            Favorite = login.Favorite;
-            RevisionDateTime = login.RevisionDate;
-            Edit = login.Edit;
-            OrganizationUseTotp = login.OrganizationUseTotp;
-        }
-
         public LoginData(CipherResponse cipher, string userId)
         {
             if(cipher.Type != Enums.CipherType.Login)

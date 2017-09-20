@@ -12,7 +12,7 @@ namespace Bit.App.Abstractions
         Task<IEnumerable<Login>> GetAllAsync();
         Task<IEnumerable<Login>> GetAllAsync(bool favorites);
         Task<Tuple<IEnumerable<Login>, IEnumerable<Login>>> GetAllAsync(string uriString);
-        Task<ApiResult<LoginResponse>> SaveAsync(Login login);
+        Task<ApiResult<CipherResponse>> SaveAsync(Login login);
         Task<ApiResult> DeleteAsync(string id);
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null);
         Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Login login, byte[] data, string fileName);

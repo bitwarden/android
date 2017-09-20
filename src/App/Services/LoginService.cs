@@ -18,7 +18,6 @@ namespace Bit.App.Services
         private readonly ILoginRepository _loginRepository;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IAuthService _authService;
-        private readonly ILoginApiRepository _loginApiRepository;
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly ISettingsService _settingsService;
         private readonly ICryptoService _cryptoService;
@@ -27,7 +26,6 @@ namespace Bit.App.Services
             ILoginRepository loginRepository,
             IAttachmentRepository attachmentRepository,
             IAuthService authService,
-            ILoginApiRepository loginApiRepository,
             ICipherApiRepository cipherApiRepository,
             ISettingsService settingsService,
             ICryptoService cryptoService)
@@ -35,7 +33,6 @@ namespace Bit.App.Services
             _loginRepository = loginRepository;
             _attachmentRepository = attachmentRepository;
             _authService = authService;
-            _loginApiRepository = loginApiRepository;
             _cipherApiRepository = cipherApiRepository;
             _settingsService = settingsService;
             _cryptoService = cryptoService;
@@ -215,18 +212,18 @@ namespace Bit.App.Services
             return new Tuple<IEnumerable<Login>, IEnumerable<Login>>(matchingLogins, matchingFuzzyLogins);
         }
 
-        public async Task<ApiResult<LoginResponse>> SaveAsync(Login login)
+        public async Task<ApiResult<CipherResponse>> SaveAsync(Login login)
         {
-            ApiResult<LoginResponse> response = null;
-            var request = new LoginRequest(login);
+            ApiResult<CipherResponse> response = null;
+            var request = new CipherRequest(login);
 
             if(login.Id == null)
             {
-                response = await _loginApiRepository.PostAsync(request);
+                response = await _cipherApiRepository.PostAsync(request);
             }
             else
             {
-                response = await _loginApiRepository.PutAsync(login.Id, request);
+                response = await _cipherApiRepository.PutAsync(login.Id, request);
             }
 
             if(response.Succeeded)
@@ -253,7 +250,7 @@ namespace Bit.App.Services
 
         public async Task<ApiResult> DeleteAsync(string id)
         {
-            var response = await _loginApiRepository.DeleteAsync(id);
+            var response = await _cipherApiRepository.DeleteAsync(id);
             if(response.Succeeded)
             {
                 await _loginRepository.DeleteAsync(id);

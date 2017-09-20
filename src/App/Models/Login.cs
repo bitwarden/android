@@ -28,24 +28,6 @@ namespace Bit.App.Models
             Attachments = attachments?.Select(a => new Attachment(a));
         }
 
-        public Login(LoginResponse response)
-        {
-            Id = response.Id;
-            UserId = response.UserId;
-            OrganizationId = response.OrganizationId;
-            FolderId = response.FolderId;
-            Name = response.Name != null ? new CipherString(response.Name) : null;
-            Uri = response.Uri != null ? new CipherString(response.Uri) : null;
-            Username = response.Username != null ? new CipherString(response.Username) : null;
-            Password = response.Password != null ? new CipherString(response.Password) : null;
-            Notes = response.Notes != null ? new CipherString(response.Notes) : null;
-            Totp = response.Totp != null ? new CipherString(response.Totp) : null;
-            Favorite = response.Favorite;
-            Edit = response.Edit;
-            OrganizationUseTotp = response.OrganizationUseTotp;
-            Attachments = response.Attachments?.Select(a => new Attachment(a));
-        }
-
         public string Id { get; set; }
         public string UserId { get; set; }
         public string OrganizationId { get; set; }
@@ -60,11 +42,6 @@ namespace Bit.App.Models
         public bool Edit { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
-
-        public LoginRequest ToLoginRequest()
-        {
-            return new LoginRequest(this);
-        }
 
         public LoginData ToLoginData(string userId)
         {
