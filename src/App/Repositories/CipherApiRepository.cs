@@ -19,7 +19,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "/ciphers";
+        protected override string ApiRoute => "ciphers";
 
         public virtual async Task<ApiResult<CipherResponse>> GetByIdAsync(string id)
         {

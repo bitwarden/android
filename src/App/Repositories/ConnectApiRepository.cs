@@ -20,7 +20,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "/connect";
+        protected override string ApiRoute => "connect";
 
         public virtual async Task<ApiResult<TokenResponse>> PostTokenAsync(TokenRequest requestObj)
         {

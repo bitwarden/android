@@ -17,7 +17,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "/settings";
+        protected override string ApiRoute => "settings";
 
         public virtual async Task<ApiResult<DomainsResponse>> GetDomains(bool excluded = false)
         {
