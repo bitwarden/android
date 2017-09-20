@@ -17,7 +17,7 @@ using Android.App.Assist;
 
 namespace Bit.Android
 {
-    [Service(Permission = "android.permission.BIND_AUTOFILL_SERVICE", Label = "bitwarden")]
+    [Service(Permission = global::Android.Manifest.Permission.BindAutofillService, Label = "bitwarden")]
     [IntentFilter(new string[] { "android.service.autofill.AutofillService" })]
     [MetaData("android.autofill", Resource = "@xml/autofillservice")]
     public class AutofillFrameworkService : global::Android.Service.Autofill.AutofillService
@@ -98,7 +98,7 @@ namespace Bit.Android
             _structure = structure;
         }
 
-        public AutofillFieldMetadataCollection AutofillFields { get; private set; } 
+        public AutofillFieldMetadataCollection AutofillFields { get; private set; }
             = new AutofillFieldMetadataCollection();
 
         public void ParseForFill()
@@ -129,7 +129,10 @@ namespace Bit.Android
         private void ParseLocked(bool forFill, ViewNode viewNode)
         {
             var autofillHints = viewNode.GetAutofillHints();
-            if(autofillHints != null && autofillHints.Length > 0)
+            var autofillType = (AutofillType)(int)viewNode.AutofillType;
+            var inputType = (InputTypes)(int)viewNode.InputType;
+            var isEditText = viewNode.ClassName == "android.widget.EditText";
+            if(isEditText || (autofillHints?.Length ?? 0) > 0)
             {
                 if(forFill)
                 {
@@ -157,10 +160,14 @@ namespace Bit.Android
     {
         private int _size = 0;
 
+        public List<int> Ids { get; private set; } = new List<int>();
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
         public SaveDataType SaveType { get; private set; } = SaveDataType.Generic;
         public List<string> AutofillHints { get; private set; } = new List<string>();
         public List<string> FocusedAutofillHints { get; private set; } = new List<string>();
+        public List<AutofillFieldMetadata> Feilds { get; private set; }
+        public IDictionary<int, AutofillFieldMetadata> IdToFieldMap { get; private set; } =
+            new Dictionary<int, AutofillFieldMetadata>();
         public IDictionary<string, List<AutofillFieldMetadata>> AutofillHintsToFieldsMap { get; private set; } =
             new Dictionary<string, List<AutofillFieldMetadata>>();
 
@@ -168,22 +175,27 @@ namespace Bit.Android
         {
             _size++;
             SaveType |= data.SaveType;
+            Ids.Add(data.Id);
             AutofillIds.Add(data.AutofillId);
+            IdToFieldMap.Add(data.Id, data);
 
-            AutofillHints.AddRange(data.AutofillHints);
-            if(data.IsFocused)
+            if((data.AutofillHints?.Count ?? 0) > 0)
             {
-                FocusedAutofillHints.AddRange(data.AutofillHints);
-            }
-
-            foreach(var hint in data.AutofillHints)
-            {
-                if(!AutofillHintsToFieldsMap.ContainsKey(hint))
+                AutofillHints.AddRange(data.AutofillHints);
+                if(data.IsFocused)
                 {
-                    AutofillHintsToFieldsMap.Add(hint, new List<AutofillFieldMetadata>());
+                    FocusedAutofillHints.AddRange(data.AutofillHints);
                 }
 
-                AutofillHintsToFieldsMap[hint].Add(data);
+                foreach(var hint in data.AutofillHints)
+                {
+                    if(!AutofillHintsToFieldsMap.ContainsKey(hint))
+                    {
+                        AutofillHintsToFieldsMap.Add(hint, new List<AutofillFieldMetadata>());
+                    }
+
+                    AutofillHintsToFieldsMap[hint].Add(data);
+                }
             }
         }
     }
@@ -196,8 +208,10 @@ namespace Bit.Android
         public AutofillFieldMetadata(ViewNode view)
         {
             _autofillOptions = view.GetAutofillOptions();
+            Id = view.Id;
             AutofillId = view.AutofillId;
             AutofillType = (AutofillType)(int)view.AutofillType;
+            InputType = (InputTypes)(int)view.InputType;
             IsFocused = view.IsFocused;
             AutofillHints = AutofillHelper.FilterForSupportedHints(view.GetAutofillHints())?.ToList() ?? new List<string>();
         }
@@ -212,8 +226,10 @@ namespace Bit.Android
                 UpdateSaveTypeFromHints();
             }
         }
+        public int Id { get; private set; }
         public AutofillId AutofillId { get; private set; }
         public AutofillType AutofillType { get; private set; }
+        public InputTypes InputType { get; private set; }
         public bool IsFocused { get; private set; }
 
         /**
@@ -568,6 +584,11 @@ namespace Bit.Android
 
         public static string[] FilterForSupportedHints(string[] hints)
         {
+            if((hints?.Length ?? 0) == 0)
+            {
+                return new string[0];
+            }
+
             var filteredHints = new string[hints.Length];
             var i = 0;
             foreach(var hint in hints)
@@ -575,10 +596,6 @@ namespace Bit.Android
                 if(IsValidHint(hint))
                 {
                     filteredHints[i++] = hint;
-                }
-                else
-                {
-                    //Log.d(TAG, "Invalid autofill hint: " + hint);
                 }
             }
 
