@@ -719,6 +719,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom Fields.
+        /// </summary>
+        public static string CustomFields {
+            get {
+                return ResourceManager.GetString("CustomFields", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {

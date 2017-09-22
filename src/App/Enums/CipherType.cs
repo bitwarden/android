@@ -4,6 +4,8 @@
     {
         // Folder deprecated
         //Folder = 0,
-        Login = 1
+        Login = 1,
+        SecureNote = 2,
+        Card = 3
     }
 }

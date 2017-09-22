@@ -1030,4 +1030,7 @@
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Tap this notification to view logins from your vault.</value>
   </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Custom Fields</value>
+  </data>
 </root>

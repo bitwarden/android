@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using System.Collections.Generic;
+using Bit.App.Enums;
 
 namespace Bit.App.Models.Page
 {
@@ -17,6 +18,7 @@ namespace Bit.App.Models.Page
         private int _totpSec = 30;
         private bool _revealPassword;
         private List<Attachment> _attachments;
+        private List<Field> _fields;
 
         public VaultViewLoginPageModel() { }
 
@@ -144,12 +146,10 @@ namespace Bit.App.Models.Page
                 _revealPassword = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(RevealPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedPassword)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowHideText)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowHideImage)));
             }
         }
         public string MaskedPassword => RevealPassword ? Password : Password == null ? null : new string('●', Password.Length);
-        public string ShowHideText => RevealPassword ? AppResources.Hide : AppResources.Show;
         public ImageSource ShowHideImage => RevealPassword ? ImageSource.FromFile("eye_slash") : ImageSource.FromFile("eye");
 
         public string TotpCode
@@ -189,6 +189,18 @@ namespace Bit.App.Models.Page
         }
         public bool ShowAttachments => (Attachments?.Count ?? 0) > 0;
 
+        public List<Field> Fields
+        {
+            get { return _fields; }
+            set
+            {
+                _fields = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(Fields)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowFields)));
+            }
+        }
+        public bool ShowFields => (Fields?.Count ?? 0) > 0;
+
         public void Update(Login login)
         {
             Name = login.Name?.Decrypt(login.OrganizationId);
@@ -217,6 +229,25 @@ namespace Bit.App.Models.Page
             {
                 login.Attachments = null;
             }
+
+            if(login.Fields != null)
+            {
+                var fields = new List<Field>();
+                foreach(var field in login.Fields)
+                {
+                    fields.Add(new Field
+                    {
+                        Name = field.Name?.Decrypt(login.OrganizationId),
+                        Value = field.Value?.Decrypt(login.OrganizationId),
+                        Type = field.Type
+                    });
+                }
+                Fields = fields;
+            }
+            else
+            {
+                login.Fields = null;
+            }
         }
 
         public class Attachment
@@ -226,6 +257,27 @@ namespace Bit.App.Models.Page
             public string SizeName { get; set; }
             public long Size { get; set; }
             public string Url { get; set; }
+        }
+
+        public class Field
+        {
+            private string _maskedValue;
+
+            public string Name { get; set; }
+            public string Value { get; set; }
+            public string MaskedValue
+            {
+                get
+                {
+                    if(_maskedValue == null && Value != null)
+                    {
+                        _maskedValue = new string('●', Value.Length);
+                    }
+
+                    return _maskedValue;
+                }
+            }
+            public FieldType Type { get; set; }
         }
     }
 }

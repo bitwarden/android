@@ -87,6 +87,7 @@
     <Compile Include="Controls\PinControl.cs" />
     <Compile Include="Controls\VaultAttachmentsViewCell.cs" />
     <Compile Include="Controls\VaultListViewCell.cs" />
+    <Compile Include="Enums\FieldType.cs" />
     <Compile Include="Enums\TwoFactorProviderType.cs" />
     <Compile Include="Enums\EncryptionType.cs" />
     <Compile Include="Enums\OrganizationUserType.cs" />
@@ -98,7 +99,8 @@
     <Compile Include="Abstractions\Services\ILocalizeService.cs" />
     <Compile Include="Models\Api\ApiError.cs" />
     <Compile Include="Models\Api\ApiResult.cs" />
-    <Compile Include="Models\Api\FolderDataModel.cs" />
+    <Compile Include="Models\Api\CipherDataModel.cs" />
+    <Compile Include="Models\Api\FieldDataModel.cs" />
     <Compile Include="Models\Api\Request\DeviceTokenRequest.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
@@ -123,6 +125,7 @@
     <Compile Include="Models\CipherString.cs" />
     <Compile Include="Models\Data\AttachmentData.cs" />
     <Compile Include="Models\Attachment.cs" />
+    <Compile Include="Models\Field.cs" />
     <Compile Include="Models\Page\VaultAttachmentsPageModel.cs" />
     <Compile Include="Models\SymmetricCryptoKey.cs" />
     <Compile Include="Models\Data\SettingsData.cs" />

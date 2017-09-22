@@ -1,5 +1,6 @@
 ﻿using Bit.App.Models.Api;
 using Bit.App.Models.Data;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,6 +27,16 @@ namespace Bit.App.Models
             Edit = data.Edit;
             OrganizationUseTotp = data.OrganizationUseTotp;
             Attachments = attachments?.Select(a => new Attachment(a));
+
+            if(!string.IsNullOrWhiteSpace(data.Fields))
+            {
+                try
+                {
+                    var fieldModels = JsonConvert.DeserializeObject<IEnumerable<FieldDataModel>>(data.Fields);
+                    Fields = fieldModels?.Select(f => new Field(f));
+                }
+                catch(JsonSerializationException) { }
+            }
         }
 
         public string Id { get; set; }
@@ -38,14 +49,10 @@ namespace Bit.App.Models
         public CipherString Password { get; set; }
         public CipherString Notes { get; set; }
         public CipherString Totp { get; set; }
+        public IEnumerable<Field> Fields { get; set; }
         public bool Favorite { get; set; }
         public bool Edit { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
-
-        public LoginData ToLoginData(string userId)
-        {
-            return new LoginData(this, userId);
-        }
     }
 }

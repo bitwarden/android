@@ -11,6 +11,7 @@ using Bit.App.Utilities;
 using System.Collections.Generic;
 using Bit.App.Models;
 using System.Linq;
+using Bit.App.Enums;
 
 namespace Bit.App.Pages
 {
@@ -39,12 +40,14 @@ namespace Bit.App.Pages
         private TableSection LoginInformationSection { get; set; }
         private TableSection NotesSection { get; set; }
         private TableSection AttachmentsSection { get; set; }
+        private TableSection FieldsSection { get; set; }
         public LabeledValueCell UsernameCell { get; set; }
         public LabeledValueCell PasswordCell { get; set; }
         public LabeledValueCell UriCell { get; set; }
         public LabeledValueCell NotesCell { get; set; }
         public LabeledValueCell TotpCodeCell { get; set; }
         private EditLoginToolBarItem EditItem { get; set; }
+        public List<LabeledValueCell> FieldsCells { get; set; }
         public List<AttachmentViewCell> AttachmentCells { get; set; }
 
         private void Init()
@@ -255,6 +258,53 @@ namespace Bit.App.Pages
                 Table.Root.Add(AttachmentsSection);
             }
 
+            if(Table.Root.Contains(FieldsSection))
+            {
+                Table.Root.Remove(FieldsSection);
+            }
+            if(Model.ShowFields)
+            {
+                FieldsSection = new TableSection(AppResources.CustomFields);
+                foreach(var field in Model.Fields)
+                {
+                    LabeledValueCell fieldCell;
+                    ExtendedButton copyButton = null;
+                    switch(field.Type)
+                    {
+                        case FieldType.Text:
+                            fieldCell = new LabeledValueCell(field.Name, field.Value, AppResources.Copy);
+                            copyButton = fieldCell.Button1;
+                            break;
+                        case FieldType.Hidden:
+                            fieldCell = new LabeledValueCell(field.Name, field.MaskedValue, string.Empty, AppResources.Copy);
+                            copyButton = fieldCell.Button2;
+                            fieldCell.Value.FontFamily =
+                                Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                            if(Device.RuntimePlatform == Device.iOS)
+                            {
+                                fieldCell.Button1.Margin = new Thickness(10, 0);
+                            }
+                            // TODO: show/hide image toggle
+                            break;
+                        case FieldType.Boolean:
+                            fieldCell = new LabeledValueCell(field.Name, field.Value == "true" ? "✓" : "-");
+                            break;
+                        default:
+                            continue;
+                    }
+
+                    fieldCell.Value.LineBreakMode = LineBreakMode.WordWrap;
+                    if(copyButton != null)
+                    {
+                        copyButton.Command = new Command(() => Copy(field.Value, field.Name));
+                        copyButton.WidthRequest = 59;
+                    }
+
+                    FieldsSection.Add(fieldCell);
+                }
+                Table.Root.Add(FieldsSection);
+            }
+
             base.OnAppearing();
         }
 
@@ -322,8 +372,8 @@ namespace Bit.App.Pages
 
         private void Copy(string copyText, string alertLabel)
         {
-           _deviceActionService.CopyToClipboard(copyText);
-           _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+            _deviceActionService.CopyToClipboard(copyText);
+            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private void TotpTick(string totpKey)

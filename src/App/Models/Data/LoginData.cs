@@ -2,6 +2,8 @@
 using SQLite;
 using Bit.App.Abstractions;
 using Bit.App.Models.Api;
+using Newtonsoft.Json;
+using System.Linq;
 
 namespace Bit.App.Models.Data
 {
@@ -10,23 +12,6 @@ namespace Bit.App.Models.Data
     {
         public LoginData()
         { }
-
-        public LoginData(Login login, string userId)
-        {
-            Id = login.Id;
-            FolderId = login.FolderId;
-            UserId = userId;
-            OrganizationId = login.OrganizationId;
-            Name = login.Name?.EncryptedString;
-            Uri = login.Uri?.EncryptedString;
-            Username = login.Username?.EncryptedString;
-            Password = login.Password?.EncryptedString;
-            Notes = login.Notes?.EncryptedString;
-            Totp = login?.Notes?.EncryptedString;
-            Favorite = login.Favorite;
-            Edit = login.Edit;
-            OrganizationUseTotp = login.OrganizationUseTotp;
-        }
 
         public LoginData(CipherResponse cipher, string userId)
         {
@@ -51,6 +36,15 @@ namespace Bit.App.Models.Data
             Edit = cipher.Edit;
             OrganizationUseTotp = cipher.OrganizationUseTotp;
             RevisionDateTime = cipher.RevisionDate;
+
+            if(data.Fields != null && data.Fields.Any())
+            {
+                try
+                {
+                    Fields = JsonConvert.SerializeObject(data.Fields);
+                }
+                catch(JsonSerializationException) { }
+            }
         }
 
         [PrimaryKey]
@@ -65,6 +59,7 @@ namespace Bit.App.Models.Data
         public string Password { get; set; }
         public string Notes { get; set; }
         public string Totp { get; set; }
+        public string Fields { get; set; }
         public bool Favorite { get; set; }
         public bool Edit { get; set; }
         public bool OrganizationUseTotp { get; set; }
