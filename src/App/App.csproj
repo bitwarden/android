@@ -168,6 +168,7 @@
     <Compile Include="Pages\Settings\SettingsSyncPage.cs" />
     <Compile Include="Pages\Settings\SettingsPage.cs" />
     <Compile Include="Pages\Settings\SettingsListFoldersPage.cs" />
+    <Compile Include="Pages\Vault\VaultCustomFieldsPage.cs" />
     <Compile Include="Pages\Vault\VaultAutofillListLoginsPage.cs" />
     <Compile Include="Pages\Vault\VaultAttachmentsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

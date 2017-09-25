@@ -5,6 +5,8 @@ namespace Bit.App.Models
 {
     public class Field
     {
+        public Field() { }
+
         public Field(FieldDataModel model)
         {
             Type = model.Type;

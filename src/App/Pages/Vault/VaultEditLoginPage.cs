@@ -45,6 +45,7 @@ namespace Bit.App.Pages
         public FormPickerCell FolderCell { get; private set; }
         public ExtendedTextCell GenerateCell { get; private set; }
         public ExtendedTextCell AttachmentsCell { get; private set; }
+        public ExtendedTextCell CustomFieldsCell { get; private set; }
         public ExtendedTextCell DeleteCell { get; private set; }
 
         private void Init()
@@ -125,6 +126,12 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
+            CustomFieldsCell = new ExtendedTextCell
+            {
+                Text = AppResources.CustomFields,
+                ShowDisclousure = true
+            };
+
             DeleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
 
             var table = new ExtendedTableView
@@ -147,7 +154,8 @@ namespace Bit.App.Pages
                         TotpCell,
                         FolderCell,
                         favoriteCell,
-                        AttachmentsCell
+                        AttachmentsCell,
+                        CustomFieldsCell
                     },
                     new TableSection(AppResources.Notes)
                     {
@@ -226,7 +234,7 @@ namespace Bit.App.Pages
                 if(saveTask.Succeeded)
                 {
                     _userDialogs.Toast(AppResources.LoginUpdated);
-                    _googleAnalyticsService.TrackAppEvent("EditeLogin");
+                    _googleAnalyticsService.TrackAppEvent("EditedLogin");
                     await Navigation.PopForDeviceAsync();
                 }
                 else if(saveTask.Errors.Count() > 0)
@@ -280,6 +288,10 @@ namespace Bit.App.Pages
             {
                 AttachmentsCell.Tapped += AttachmentsCell_Tapped;
             }
+            if(CustomFieldsCell != null)
+            {
+                CustomFieldsCell.Tapped += CustomFieldsCell_Tapped;
+            }
             if(DeleteCell != null)
             {
                 DeleteCell.Tapped += DeleteCell_Tapped;
@@ -312,6 +324,10 @@ namespace Bit.App.Pages
             if(AttachmentsCell != null)
             {
                 AttachmentsCell.Tapped -= AttachmentsCell_Tapped;
+            }
+            if(CustomFieldsCell != null)
+            {
+                CustomFieldsCell.Tapped -= CustomFieldsCell_Tapped;
             }
             if(DeleteCell != null)
             {
@@ -366,6 +382,12 @@ namespace Bit.App.Pages
         private async void AttachmentsCell_Tapped(object sender, EventArgs e)
         {
             var page = new ExtendedNavigationPage(new VaultAttachmentsPage(_loginId));
+            await Navigation.PushModalAsync(page);
+        }
+
+        private async void CustomFieldsCell_Tapped(object sender, EventArgs e)
+        {
+            var page = new ExtendedNavigationPage(new VaultCustomFieldsPage(_loginId));
             await Navigation.PushModalAsync(page);
         }
 

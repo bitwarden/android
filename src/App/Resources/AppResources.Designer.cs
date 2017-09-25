@@ -728,6 +728,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom fields updated..
+        /// </summary>
+        public static string CustomFieldsUpdated {
+            get {
+                return ResourceManager.GetString("CustomFieldsUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
@@ -1723,6 +1732,15 @@ namespace Bit.App.Resources {
         public static string NoAttachments {
             get {
                 return ResourceManager.GetString("NoAttachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No custom fields. You can fully manage custom fields from the web vault or browser extension..
+        /// </summary>
+        public static string NoCustomFields {
+            get {
+                return ResourceManager.GetString("NoCustomFields", resourceCulture);
             }
         }
         

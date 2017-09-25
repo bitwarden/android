@@ -1,4 +1,6 @@
 ﻿using Bit.App.Enums;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Bit.App.Models.Api
 {
@@ -12,6 +14,16 @@ namespace Bit.App.Models.Api
             Name = login.Name?.EncryptedString;
             Notes = login.Notes?.EncryptedString;
             Favorite = login.Favorite;
+
+            if(login.Fields != null)
+            {
+                Fields = login.Fields.Select(f => new FieldDataModel
+                {
+                    Name = f.Name?.EncryptedString,
+                    Value = f.Value?.EncryptedString,
+                    Type = f.Type
+                });
+            }
 
             switch(Type)
             {
@@ -29,6 +41,7 @@ namespace Bit.App.Models.Api
         public bool Favorite { get; set; }
         public string Name { get; set; }
         public string Notes { get; set; }
+        public IEnumerable<FieldDataModel> Fields { get; set; }
         public LoginType Login { get; set; }
 
         public class LoginType
