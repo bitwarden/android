@@ -278,6 +278,7 @@ namespace Bit.App.Models.Page
                 }
             }
             public FieldType Type { get; set; }
+            public bool Revealed { get; set; }
         }
     }
 }

@@ -267,39 +267,21 @@ namespace Bit.App.Pages
                 FieldsSection = new TableSection(AppResources.CustomFields);
                 foreach(var field in Model.Fields)
                 {
-                    LabeledValueCell fieldCell;
-                    ExtendedButton copyButton = null;
+                    FieldViewCell fieldCell;
                     switch(field.Type)
                     {
                         case FieldType.Text:
-                            fieldCell = new LabeledValueCell(field.Name, field.Value, AppResources.Copy);
-                            copyButton = fieldCell.Button1;
+                            fieldCell = new FieldViewCell(this, field, null);
                             break;
                         case FieldType.Hidden:
-                            fieldCell = new LabeledValueCell(field.Name, field.MaskedValue, string.Empty, AppResources.Copy);
-                            copyButton = fieldCell.Button2;
-                            fieldCell.Value.FontFamily =
-                                Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
-                            if(Device.RuntimePlatform == Device.iOS)
-                            {
-                                fieldCell.Button1.Margin = new Thickness(10, 0);
-                            }
-                            // TODO: show/hide image toggle
+                            fieldCell = new FieldViewCell(this, field, null, null);
                             break;
                         case FieldType.Boolean:
-                            fieldCell = new LabeledValueCell(field.Name, field.Value == "true" ? "✓" : "-");
+                            fieldCell = new FieldViewCell(this, field);
                             break;
                         default:
                             continue;
                     }
-
-                    fieldCell.Value.LineBreakMode = LineBreakMode.WordWrap;
-                    if(copyButton != null)
-                    {
-                        copyButton.Command = new Command(() => Copy(field.Value, field.Name));
-                        copyButton.WidthRequest = 59;
-                    }
-
                     FieldsSection.Add(fieldCell);
                 }
                 Table.Root.Add(FieldsSection);
@@ -435,6 +417,61 @@ namespace Bit.App.Pages
             private void AttachmentViewCell_Tapped(object sender, EventArgs e)
             {
                 _tapped?.Invoke();
+            }
+        }
+
+        public class FieldViewCell : LabeledValueCell
+        {
+            public FieldViewCell(VaultViewLoginPage page, VaultViewLoginPageModel.Field field)
+                : base(field.Name, field.Value == "true" ? "✓" : "-")
+            {
+                Init(page, field, null);
+            }
+
+            public FieldViewCell(VaultViewLoginPage page, VaultViewLoginPageModel.Field field, bool? a)
+                : base(field.Name, field.Value, AppResources.Copy)
+            {
+                Init(page, field, Button1);
+            }
+
+            public FieldViewCell(VaultViewLoginPage page, VaultViewLoginPageModel.Field field, bool? a, bool? b)
+                : base(field.Name, field.MaskedValue, string.Empty, AppResources.Copy)
+            {
+                Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular",
+                    Android: "monospace", WinPhone: "Courier");
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    Button1.Margin = new Thickness(10, 0);
+                }
+
+                Button1.WidthRequest = 40;
+                Button1.Image = "eye";
+                Button1.Command = new Command(() =>
+                {
+                    field.Revealed = !field.Revealed;
+                    if(field.Revealed)
+                    {
+                        Button1.Image = "eye_slash";
+                        Value.Text = field.Value;
+                    }
+                    else
+                    {
+                        Button1.Image = "eye";
+                        Value.Text = field.MaskedValue;
+                    }
+                });
+
+                Init(page, field, Button2);
+            }
+
+            private void Init(VaultViewLoginPage page, VaultViewLoginPageModel.Field field, ExtendedButton copyButton)
+            {
+                Value.LineBreakMode = LineBreakMode.WordWrap;
+                if(copyButton != null)
+                {
+                    copyButton.Command = new Command(() => page.Copy(field.Value, field.Name));
+                    copyButton.WidthRequest = 59;
+                }
             }
         }
     }
