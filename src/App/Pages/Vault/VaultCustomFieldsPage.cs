@@ -174,7 +174,7 @@ namespace Bit.App.Pages
                         case FieldType.Hidden:
                             var hidden = field.Type == FieldType.Hidden;
 
-                            var textFieldCell = new FormEntryCell(label, isPassword: hidden);
+                            var textFieldCell = new FormEntryCell(label, isPassword: hidden, useButton: hidden);
                             textFieldCell.Entry.Text = value;
                             textFieldCell.Entry.DisableAutocapitalize = true;
                             textFieldCell.Entry.Autocorrect = false;
@@ -183,6 +183,18 @@ namespace Bit.App.Pages
                             {
                                 textFieldCell.Entry.FontFamily = Helpers.OnPlatform(
                                     iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                                textFieldCell.Button.Image = "eye";
+                                textFieldCell.Button.Command = new Command(() =>
+                                {
+                                    textFieldCell.Entry.InvokeToggleIsPassword();
+                                    textFieldCell.Button.Image = 
+                                        "eye" + (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
+                                });
+                            }
+
+                            if(Device.RuntimePlatform == Device.Android && textFieldCell.Button != null)
+                            {
+                                textFieldCell.Button.WidthRequest = 40;
                             }
 
                             textFieldCell.InitEvents();
