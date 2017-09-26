@@ -2,4 +2,7 @@
 <resources>
     <string name="Hello">Hello World, Click Me!</string>
     <string name="ApplicationName">Android.Test</string>
+    <string name="MyVault">
+      My Vault
+    </string>
 </resources>
