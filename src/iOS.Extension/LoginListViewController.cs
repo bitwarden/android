@@ -207,7 +207,8 @@ namespace Bit.iOS.Extension
                         totp = GetTotp(item);
                     }
 
-                    _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password, totp);
+                    _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password, 
+                        item.Fields.Value, totp);
                 }
                 else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
                     !string.IsNullOrWhiteSpace(item.Totp.Value))

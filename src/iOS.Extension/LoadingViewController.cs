@@ -20,6 +20,7 @@ using Bit.App.Resources;
 using Bit.iOS.Core.Controllers;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
+using System.Collections.Generic;
 
 namespace Bit.iOS.Extension
 {
@@ -191,12 +192,13 @@ namespace Bit.iOS.Extension
             }
         }
 
-        public void CompleteUsernamePasswordRequest(string username, string password, string totp)
+        public void CompleteUsernamePasswordRequest(string username, string password,
+            List<Tuple<string, string>> fields, string totp)
         {
             NSDictionary itemData = null;
             if(_context.ProviderType == UTType.PropertyList)
             {
-                var fillScript = new FillScript(_context.Details, username, password);
+                var fillScript = new FillScript(_context.Details, username, password, fields);
                 var scriptJson = JsonConvert.SerializeObject(fillScript, _jsonSettings);
                 var scriptDict = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
                 itemData = new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, scriptDict);
@@ -210,7 +212,7 @@ namespace Bit.iOS.Extension
             else if(_context.ProviderType == Constants.UTTypeAppExtensionFillBrowserAction
                 || _context.ProviderType == Constants.UTTypeAppExtensionFillWebViewAction)
             {
-                var fillScript = new FillScript(_context.Details, username, password);
+                var fillScript = new FillScript(_context.Details, username, password, fields);
                 var scriptJson = JsonConvert.SerializeObject(fillScript, _jsonSettings);
                 itemData = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
             }

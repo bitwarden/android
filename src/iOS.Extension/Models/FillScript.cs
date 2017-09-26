@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Text.RegularExpressions;
 
 namespace Bit.iOS.Extension.Models
 {
     public class FillScript
     {
-        public FillScript(PageDetails pageDetails, string fillUsername, string fillPassword)
+        private static string[] _usernameFieldNames = new[]{ "username", "user name", "email",
+            "email address", "e-mail", "e-mail address", "userid", "user id" };
+
+        public FillScript(PageDetails pageDetails, string fillUsername, string fillPassword,
+            List<Tuple<string, string>> fillFields)
         {
             if(pageDetails == null)
             {
@@ -15,6 +20,38 @@ namespace Bit.iOS.Extension.Models
             }
 
             DocumentUUID = pageDetails.DocumentUUID;
+
+            var filledOpIds = new HashSet<string>();
+
+            if(fillFields?.Any() ?? false)
+            {
+                var fieldNames = fillFields.Select(f => f.Item1?.ToLower()).ToArray();
+                foreach(var field in pageDetails.Fields.Where(f => f.Viewable))
+                {
+                    if(filledOpIds.Contains(field.OpId))
+                    {
+                        continue;
+                    }
+
+                    var matchingIndex = FindMatchingFieldIndex(field, fieldNames);
+                    if(matchingIndex > -1)
+                    {
+                        filledOpIds.Add(field.OpId);
+                        Script.Add(new List<string> { "click_on_opid", field.OpId });
+                        Script.Add(new List<string> { "fill_by_opid", field.OpId, fillFields[matchingIndex].Item2 });
+                    }
+                }
+            }
+
+            if(string.IsNullOrWhiteSpace(fillPassword))
+            {
+                // No password for this login. Maybe they just wanted to auto-fill some custom fields?
+                if(filledOpIds.Any())
+                {
+                    Script.Add(new List<string> { "focus_by_opid", filledOpIds.Last() });
+                }
+                return;
+            }
 
             List<PageDetails.Field> usernames = new List<PageDetails.Field>();
             List<PageDetails.Field> passwords = new List<PageDetails.Field>();
@@ -76,38 +113,132 @@ namespace Bit.iOS.Extension.Models
                 }
             }
 
-            foreach(var username in usernames)
+            if(!passwordFields.Any())
             {
+                // No password fields on this page. Let's try to just fuzzy fill the username.
+                var usernameFieldNamesList = _usernameFieldNames.ToList();
+                foreach(var f in pageDetails.Fields)
+                {
+                    if((f.Type == "text" || f.Type == "email" || f.Type == "tel") &&
+                        FieldIsFuzzyMatch(f, usernameFieldNamesList))
+                    {
+                        usernames.Add(f);
+                    }
+                }
+            }
+
+            foreach(var username in usernames.Where(u => !filledOpIds.Contains(u.OpId)))
+            {
+                filledOpIds.Add(username.OpId);
                 Script.Add(new List<string> { "click_on_opid", username.OpId });
                 Script.Add(new List<string> { "fill_by_opid", username.OpId, fillUsername });
             }
 
-            foreach(var password in passwords)
+            foreach(var password in passwords.Where(p => !filledOpIds.Contains(p.OpId)))
             {
+                filledOpIds.Add(password.OpId);
                 Script.Add(new List<string> { "click_on_opid", password.OpId });
                 Script.Add(new List<string> { "fill_by_opid", password.OpId, fillPassword });
             }
 
-            if(passwords.Any())
+            if(filledOpIds.Any())
             {
-                AutoSubmit = new Submit { FocusOpId = passwords.First().OpId };
+                Script.Add(new List<string> { "focus_by_opid", filledOpIds.Last() });
             }
         }
 
         private PageDetails.Field FindUsernameField(PageDetails pageDetails, PageDetails.Field passwordField, bool canBeHidden,
             bool checkForm)
         {
-            return pageDetails.Fields.LastOrDefault(f =>
-                (!checkForm || f.Form == passwordField.Form)
-                && (canBeHidden || f.Viewable)
-                && f.ElementNumber < passwordField.ElementNumber
-                && (f.Type == "text" || f.Type == "email" || f.Type == "tel"));
+            PageDetails.Field usernameField = null;
+
+            foreach(var f in pageDetails.Fields)
+            {
+                if(f.ElementNumber >= passwordField.ElementNumber)
+                {
+                    break;
+                }
+
+                if((!checkForm || f.Form == passwordField.Form)
+                    && (canBeHidden || f.Viewable)
+                    && f.ElementNumber < passwordField.ElementNumber
+                    && (f.Type == "text" || f.Type == "email" || f.Type == "tel"))
+                {
+                    usernameField = f;
+
+                    if(FindMatchingFieldIndex(f, _usernameFieldNames) > -1)
+                    {
+                        // We found an exact match. No need to keep looking.
+                        break;
+                    }
+                }
+            }
+
+            return usernameField;
+        }
+
+        private int FindMatchingFieldIndex(PageDetails.Field field, string[] names)
+        {
+            var matchingIndex = -1;
+            if(!string.IsNullOrWhiteSpace(field.HtmlId))
+            {
+                matchingIndex = Array.IndexOf(names, field.HtmlId.ToLower());
+            }
+            if(matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.HtmlName))
+            {
+                matchingIndex = Array.IndexOf(names, field.HtmlName.ToLower());
+            }
+            if(matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.LabelTag))
+            {
+                matchingIndex = Array.IndexOf(names, CleanLabel(field.LabelTag));
+            }
+            if(matchingIndex < 0 && !string.IsNullOrWhiteSpace(field.Placeholder))
+            {
+                matchingIndex = Array.IndexOf(names, field.Placeholder.ToLower());
+            }
+
+            return matchingIndex;
+        }
+
+        private bool FieldIsFuzzyMatch(PageDetails.Field field, List<string> names)
+        {
+            if(!string.IsNullOrWhiteSpace(field.HtmlId) && FuzzyMatch(names, field.HtmlId.ToLower()))
+            {
+                return true;
+            }
+            if(!string.IsNullOrWhiteSpace(field.HtmlName) && FuzzyMatch(names, field.HtmlName.ToLower()))
+            {
+                return true;
+            }
+            if(!string.IsNullOrWhiteSpace(field.LabelTag) && FuzzyMatch(names, CleanLabel(field.LabelTag)))
+            {
+                return true;
+            }
+            if(!string.IsNullOrWhiteSpace(field.Placeholder) && FuzzyMatch(names, field.Placeholder.ToLower()))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool FuzzyMatch(List<string> options, string value)
+        {
+            if((!options?.Any() ?? true) || string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            return options.Any(o => value.Contains(o));
+        }
+
+        private string CleanLabel(string label)
+        {
+            return Regex.Replace(label, @"(?:\r\n|\r|\n)", string.Empty).Trim().ToLower();
         }
 
         [JsonProperty(PropertyName = "script")]
         public List<List<string>> Script { get; set; } = new List<List<string>>();
-        [JsonProperty(PropertyName = "autosubmit")]
-        public Submit AutoSubmit { get; set; }
         [JsonProperty(PropertyName = "documentUUID")]
         public object DocumentUUID { get; set; }
         [JsonProperty(PropertyName = "properties")]
@@ -116,12 +247,5 @@ namespace Bit.iOS.Extension.Models
         public object Options { get; set; } = new { animate = false };
         [JsonProperty(PropertyName = "metadata")]
         public object MetaData { get; set; } = new object();
-
-        public class Submit
-        {
-            [JsonProperty(PropertyName = "focusOpid")]
-            public string FocusOpId { get; set; }
-        }
     }
-
 }

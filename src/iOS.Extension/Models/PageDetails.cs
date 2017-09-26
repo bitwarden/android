@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -36,6 +37,9 @@ namespace Bit.iOS.Extension.Models
             public string HtmlClass { get; set; }
             public string LabelRight { get; set; }
             public string LabelLeft { get; set; }
+            [JsonProperty("label-tag")]
+            public string LabelTag { get; set; }
+            public string Placeholder { get; set; }
             public string Type { get; set; }
             public string Value { get; set; }
             public bool Disabled { get; set; }

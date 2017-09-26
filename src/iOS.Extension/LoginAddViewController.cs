@@ -177,7 +177,7 @@ namespace Bit.iOS.Extension
                 else if(LoadingController != null)
                 {
                     LoadingController.CompleteUsernamePasswordRequest(UsernameCell.TextField.Text, PasswordCell.TextField.Text,
-                        null);
+                        null, null);
                 }
             }
             else if(saveTask.Result.Errors.Count() > 0)
