@@ -57,7 +57,6 @@ namespace Bit.Android.Controls
 
             // For Scrolling in Editor innner area
             Control.VerticalScrollBarEnabled = true;
-            Control.MovementMethod = ScrollingMovementMethod.Instance;
             Control.ScrollBarStyle = ScrollbarStyles.InsideInset;
 
             // Force scrollbars to be displayed
