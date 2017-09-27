@@ -57,7 +57,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            NotesCell = new FormEditorCell(height: 180);
+            NotesCell = new FormEditorCell(height: 300);
             NotesCell.Editor.Keyboard = Keyboard.Text;
             NotesCell.Editor.Text = login.Notes?.Decrypt(login.OrganizationId);
 
