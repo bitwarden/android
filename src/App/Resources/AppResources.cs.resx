@@ -209,7 +209,7 @@
     <value>Nahlaste chybu přímo v našem GitHub repositáři.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Použijte svůj otisk prstu k ověření.</value>
+    <value>Pro ověření použijte otisk prstu.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Složka</value>
@@ -352,7 +352,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Pro odemknutí použít otisk prstu</value>
+    <value>Odemknout otiskem prstu</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Uživatelské jméno</value>
@@ -398,7 +398,7 @@
     <value>Účet</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Váš nový účet byl vytvořen! Můžete se přihlásit.</value>
+    <value>Váš účet byl vytvořen! Můžete se přihlásit.</value>
   </data>
   <data name="AddALogin" xml:space="preserve">
     <value>Přidat přihlašovací údaje</value>
@@ -413,7 +413,7 @@
     <value>Služba automatického vyplňování</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Nepoužít snadno zaměnitelné znaky</value>
+    <value>Nepoužít zaměnitelné znaky</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Rozšíření aplikace bitwarden</value>
@@ -474,7 +474,7 @@
     <value>Povolit automatickou synchronizaci</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Zadejte emailovou adresu pro zaslání nápovědy k vašemu hlavnímu heslu.</value>
+    <value>Zadejte emailovou adresu pro zaslání nápovědy k hlavnímu heslu.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Znovu zapnout rozšíření aplikace</value>
@@ -572,7 +572,7 @@
     <value>Potvrzení hesla se neshoduje.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Hlavní heslo je heslo, které používáte k přístupu do vašeho trezoru. Je velmi důležité, abyste své hlavní heslo nezapomněli. Neexistuje totiž žádný způsob, jak heslo obnovit v případě, že jste na něj zapomněli.</value>
+    <value>Hlavní heslo je heslo, které používáte k přístupu do vašeho trezoru. Je velmi důležité, abyste jej nezapomněli. Neexistuje totiž žádný způsob, jak heslo obnovit v případě, že jste na něj zapomněli.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Nápověda k hlavnímu heslu (volitelné)</value>
@@ -635,7 +635,7 @@
     <value>Generátor hesla</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Vygenerujte si silné a unikátní heslo pro vaše přihlašovací údaje.</value>
+    <value>Vygenerujte si silné a unikátní heslo pro přihlašovací údaje.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Nápověda k heslu</value>
@@ -736,7 +736,7 @@
     <value>Webová aplikace</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Spravujte vaše přihlašovací údaje z jakéhokoliv prohlížeče pomocí webové aplikace bitwarden.</value>
+    <value>Spravujte přihlašovací údaje z jakéhokoliv prohlížeče pomocí webové aplikace bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Ztratili jste ověřovací aplikaci?</value>
@@ -1028,6 +1028,15 @@
     <value>URL serveru webového trezoru</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Klepnutím na toto oznámení zobrazíte přihlašovací údaje z trezoru.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Custom Fields</value>
+  </data>
+  <data name="CustomFieldsUpdated" xml:space="preserve">
+    <value>Custom fields updated.</value>
+  </data>
+  <data name="NoCustomFields" xml:space="preserve">
+    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
   </data>
 </root>

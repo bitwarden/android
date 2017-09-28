@@ -1028,6 +1028,15 @@
     <value>URL-ul serverului seifului web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Atingeți această notificare pentru a vizualiza autentificările din seiful dvs.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Custom Fields</value>
+  </data>
+  <data name="CustomFieldsUpdated" xml:space="preserve">
+    <value>Custom fields updated.</value>
+  </data>
+  <data name="NoCustomFields" xml:space="preserve">
+    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
   </data>
 </root>

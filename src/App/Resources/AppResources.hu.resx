@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>About</value>
+    <value>Névjegy</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Hozzáadás</value>
@@ -196,7 +196,7 @@
     <value>Írjon nekünk E-mailt közvetlenül a segítség kéréshez vagy visszajelzés beküldéséhez.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Enter your PIN code.</value>
+    <value>Add meg a PIN-kódodat.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Kedvencek</value>
@@ -303,48 +303,48 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Disable Analytics</value>
+    <value>Analitika kikapcsolása</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Jelszó</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Mentés</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Saving...</value>
+    <value>Mentés...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Beállítások</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Show</value>
+    <value>Mutat</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="LoginDeleted" xml:space="preserve">
-    <value>Login has been deleted.</value>
+    <value>A bejelentkezés törölve.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="LoginNoName" xml:space="preserve">
-    <value>No Name</value>
+    <value>Nincs név</value>
     <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>Mehet</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Sync</value>
+    <value>Szinkronizálás</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Thank You</value>
+    <value>Köszönjük</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Tools</value>
+    <value>Eszközök</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -352,682 +352,691 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Use Fingerprint to Unlock</value>
+    <value>Ujjlenyomat használata feloldáshoz</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>Felhasználónév</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>The {0} field is required.</value>
+    <value>A(z) {0} mező megadása kötelező.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} has been copied.</value>
+    <value>{0} a vágólapra másolva.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify Fingerprint</value>
+    <value>Ujjlenyomat megerősítése</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verify Master Password</value>
+    <value>Mester jelszó megerősítése</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Verify PIN</value>
+    <value>PIN megerősítése</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>Verzió</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>View</value>
+    <value>Megtekintés</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Visit Our Website</value>
+    <value>Látogasd meg a weboldalunkat</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use bitwarden.</value>
+    <value>Látogasd meg a weboldalunkat segítség kéréshez, hírekért, küldj nekünk e-mailt és/vagy tanuld meg hogyan használd a bitwarden-t.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Website</value>
+    <value>Weboldal</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Igen</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Account</value>
+    <value>Fiók</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Your new account has been created! You may now log in.</value>
+    <value>Fiókodat létrehoztuk. Most már be tudsz jelentkezni.</value>
   </data>
   <data name="AddALogin" xml:space="preserve">
-    <value>Add a Login</value>
+    <value>Bejelentkezés hozzáadása</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App Extension</value>
+    <value>App kiterjesztés</value>
   </data>
   <data name="AutofillDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Használ a bitwarden kisegítő szolgáltatást, mely automatikusan kitölti a bejelentkezési adataidat akár egy app-ban, akár webes felületeken.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>Automatikus kitöltő szolgáltatás</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Avoid Ambiguous Characters</value>
+    <value>Félreérthető karakterek mellőzése</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden App Extension</value>
+    <value>bitwarden alkalmazás</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
+    <value>A legegyszerűbb módja új bejelentkezési adatok hozzáadásának a széfedhez, a bitwarden alkalmazás. Az alkalmazás használatáról az "Eszközök" képernyőn tudhatsz meg többet.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>Használd a bitwarden automatikus kitöltő szolgáltatását a Safari-ban és más alkalmazásokban.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden Auto-fill Service</value>
+    <value>Bitwarden automatikus kitöltő szolgáltatás</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>A bitwarden kisegítő szolgáltatás használata bejelentkezések automatikus kitöltéséhez.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Change Email</value>
+    <value>E-mail cím módosítása</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>E-mail címedet a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Change Master Password</value>
+    <value>Mesterjelszó módosítása</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Mesterjelszavadat a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Bezár</value>
   </data>
   <data name="ComingSoon" xml:space="preserve">
-    <value>Coming Soon!</value>
+    <value>Hamarosan!</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>Folytatás</value>
   </data>
   <data name="Copied" xml:space="preserve">
-    <value>Copied!</value>
+    <value>Másolva!</value>
   </data>
   <data name="CopiedPassword" xml:space="preserve">
-    <value>Copied password!</value>
+    <value>Jelszó másolva!</value>
   </data>
   <data name="CopiedUsername" xml:space="preserve">
-    <value>Copied username!</value>
+    <value>Másolt felhasználónév!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Create Account</value>
+    <value>Fiók létrehozása</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Creating account...</value>
+    <value>Fiók létrehozása...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditLogin" xml:space="preserve">
-    <value>Edit Login</value>
+    <value>Bejelentkezés szerkesztése</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable Automatic Syncing</value>
+    <value>Automatikus szinkronizálás engedélyezése</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Enter your account email address to receive your master password hint.</value>
+    <value>Írd be a fiókod e-mail címét, hogy megkapd a mesterjelszó emlékeztetőt.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>Alkalmazás újra engedélyezése</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Almost done!</value>
+    <value>Mindjárt kész!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>Bővítmény engedélyezése</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>A Safari-ban a bitwarden-t a megosztás ikon alatt találod (Tipp: a menü alsó sorában gördítsd jobbra).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>Kérj azonnali hozzáférést a jelszavakhoz!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>Készen állsz a bejelentkezéshez!</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>See Supported Apps</value>
+    <value>Lásd: támogatott alkalmazások</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
+    <value>A bejelentkezéseid mostantól könnyen hozzáférhetők a Safari-ból, Chrome-ból és más támogatott alkalmazásból.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>A Safari-ban és a Chrome-ban a bitwarden-t a megosztás ikon alatt találod (Tipp: a menü alsó sorában gördítsd jobbra).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the bitwarden icon in the menu to launch the extension.</value>
+    <value>A bővítmény elindításához bökj a bitwarden ikonra a menüben.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>A bitwarden Safari-ban és más alkalmazásokban való bekapcsolásához bökj az "Egyéb" ikonra a menü alsó sorában.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorite</value>
+    <value>Kedvenc</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingerprint</value>
+    <value>Ujjlenyomat</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Generate Password</value>
+    <value>Jelszó generálása</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Get your master password hint</value>
+    <value>Kérj mesterjelszó emlékeztetőt</value>
   </data>
   <data name="ImportLogins" xml:space="preserve">
-    <value>Import Logins</value>
+    <value>Bejelentkezések importálása</value>
   </data>
   <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>You can bulk import logins from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Több bejelentkezést egyszerre a bitwarden.com webes széfében tudsz importálni. Szeretnéd meglátogatni a most a weboldalt?</value>
   </data>
   <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Quickly bulk import your logins from other password management apps.</value>
+    <value>Több bejelentkezés gyors importálása egyszerre egy másik jelszókezelő alkalmazásból.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Last Sync:</value>
+    <value>Utolsó szinkronizálás:</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Length</value>
+    <value>Hossz</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lock</value>
+    <value>Lezárás</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15 perc</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1 óra</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 perc</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4 óra</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>Azonnal</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Lock Options</value>
+    <value>Zárolási beállítások</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Logging in...</value>
+    <value>Bejelentkezés...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Log in or create a new account to access your secure vault.</value>
+    <value>Jelentkezz be vagy készíts új fiókot a biztonsági széfed eléréshez.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
+    <value>Kezelés</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Password confirmation is not correct.</value>
+    <value>A megadott két jelszó nem egyezik.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
+    <value>A mesterjelszó az a jelszó amit a széfed eléréséhez fogsz használni. Nagyon fontos, hogy ne felejtsd el a mesterjelszavad, mert nincs lehetőséged visszaállítani ha elfelejtetted.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Master Password Hint (optional)</value>
+    <value>Mesterjelszó emlékeztető (nem kötelező)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>A master password hint can help you remember your password if you forget it.</value>
+    <value>A mesterjelszó emlékeztető segíthet emlékezni a jelszavadra ha elfejetetted volna.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Master password must be at least 8 characters long.</value>
+    <value>Mesterjelszónak legalább 8 karakter hosszúnak kell lennie.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum Numbers</value>
+    <value>Kevesebb szám</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum Special</value>
+    <value>Kevesebb különleges karakter</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>More Settings</value>
+    <value>További beállítások</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main bitwarden app before you can use the extension.</value>
+    <value>A bővítmény használata előtt be kell lépned a bitwarden alkalmazásba.</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Never</value>
+    <value>Soha</value>
   </data>
   <data name="NewLoginCreated" xml:space="preserve">
-    <value>New login created.</value>
+    <value>Új bejelentkezés létrehozva.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>Nincsenek kedvencek a széfedben.</value>
   </data>
   <data name="NoLogins" xml:space="preserve">
-    <value>There are no logins in your vault.</value>
+    <value>Nincsenek bejelentkezések a széfedben.</value>
   </data>
   <data name="NoLoginsTap" xml:space="preserve">
-    <value>There are no logins in your vault for this website. Tap to add one.</value>
+    <value>Ehhez a weboldalhoz nincs bejelentkezés a széfedben. Bökj ide, ha létrehoznál egyet.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>Ehhez a bejelentkezéshez nem lett felhasználónév vagy jelszó beállítva.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>Ok, megvan!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>A beállítások alapértelmezései beállítva a fő bitwarden alkalmazás jelszó generátor eszközéből.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>Beállítások</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>Egyéb</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>Jelszó generálva.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password Generator</value>
+    <value>Jelszó generátor</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automatically generate strong, unique passwords for your logins.</value>
+    <value>Automatikusan létrehoz erős, egyedi jelszavakat a bejelentkezéseidhez.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password Hint</value>
+    <value>Jelszó emlékeztető</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>Elküldtünk neked egy E-mailt mely tartalmazza a mesterjelszó emlékeztetődet.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>Biztosan felül akarod írni a jelenlegi jelszót?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>A bitwarden a push értesítések használatával biztosítja a széfed automatikus szinkronizálását. A lehető legjobb élmény érdekében kérjük, válaszd ki az "Ok" opciót a következő értesítéskor, amikor felkér a push értesítések engedélyezésére.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>Az alkalmazás értékelése</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>Egy jó értékeléssel mindig segíted a munkánkat!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>Az App áruházban az értékelések mindig alaphelyzetre állnak egy új verzió megjelenésével. Egy jó értékeléssel mindig segíted a munkánkat!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>Jelszó újragenerálása</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>Írd be újra a mesterjelszavad</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>Keresés a széfben</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>Biztonság</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
+    <value>Fejlesztési folyamat megtekintése</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>Kijelölés</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Set PIN</value>
+    <value>PIN beállítása</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>Egy 4 számjegyű PIN-kód beállítása az alkalmazás kinyitásához.</value>
   </data>
   <data name="LoginInformation" xml:space="preserve">
-    <value>Login Information</value>
+    <value>Bejelentkezési információk</value>
   </data>
   <data name="LoginUpdated" xml:space="preserve">
-    <value>Login updated.</value>
+    <value>Bejelentkezés frissítve.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Küldés...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>Szinkronizálás...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Syncing complete.</value>
+    <value>Szinkronizálás befejezve.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Syncing failed.</value>
+    <value>Szinkronizáció sikertelen.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>Széf szinkronizálása most</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Two-step Login</value>
+    <value>Kétlépcsős bejelentkezés</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to verify your login with another device such as a security key, authenticator app, SMS, phone call, or email. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>A kétlépcsős bejelentkezés biztonságosabbá teszi a fiókodat azáltal, hogy meg kell erősítened a bejelentkezésedet egy másik eszközzel mint például biztonsági kulcs, hitelesítő alkalmazás, SMS, telefon hívás vagy e-mail. Kétlépcsős bejelentkezést a bitwarden.com webes széfében tudod megváltoztatni. Szeretnéd meglátogatni most a weboldalt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Unlock with {0}</value>
+    <value>Kinyitás ezzel: {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Unlock with PIN Code</value>
+    <value>Kinyitás PIN-kóddal</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>Hitelesítés</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Verification Code</value>
+    <value>Hitelesítő kód</value>
   </data>
   <data name="ViewLogin" xml:space="preserve">
-    <value>View Login</value>
+    <value>Bejelentkezés megtekintése</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden Web Vault</value>
+    <value>bitwarden webes széf</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Manage your logins from any web browser with the bitwarden web vault.</value>
+    <value>Kezeld az összes bejelentkezésedet bármely böngészőből a bitwarden webes széfével.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Lost authenticator app?</value>
+    <value>Elveszett hitelesítő alkalmazás?</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Bejelentkezések</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>Kiterjesztés aktiválva!</value>
   </data>
   <data name="Icons" xml:space="preserve">
-    <value>Icons</value>
+    <value>Ikonok</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Translations</value>
+    <value>Fordítások</value>
   </data>
   <data name="LoginsForUri" xml:space="preserve">
-    <value>Logins for {0}</value>
+    <value>Bejelentkezés ehhez: {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoLoginsForUri" xml:space="preserve">
-    <value>There are no logins in your vault for {0}.</value>
+    <value>Nincs mentett bejelentkezési adat ehhez: {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>Ha látsz egy bitwarden auto-kitöltés értesítést, érintsd meg azt az automatikus kitöltési szolgáltatás elindításához.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill a login from your vault.</value>
+    <value>Az értesítést megéríntétésvel automatikusan kitöltésre kerül egy bejelentkezés a széfedből.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Kisegítő lehetőségek megnyitása</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. az Android kisegítő szolgáltatások képernyőn válaszd ki a "bitwarden"-t a Szolgáltatások fejléc alatt.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. A felugró ablakban a jóváhagyáshoz bökj az OK gombra.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>Disabled</value>
+    <value>Letiltva</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>Enabled</value>
+    <value>Engedélyezve</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Status</value>
+    <value>Állapot</value>
   </data>
   <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
+    <value>Béta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>A legegyszerűbb módja új bejelentkezési adatok hozzáadásának a bitwarden automatikus kitöltö szolgáltatás. Az automatikus kitöltő szolgáltatás használatáról az "Eszközök" képernyőn tudhatsz meg többet.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>Automatikus kitöltés</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this login?</value>
+    <value>Szeretnéd automatikusan kitölteni ezt a belentkezést, vagy megnézed inkább?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+    <value>Biztos, hogy automatikusan kitöltöd ezt a bejelentkezést? Nem egyezik teljesen ehhez: {0}.</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
-    <value>Matching Logins</value>
+    <value>Egyező bejelentkezések</value>
   </data>
   <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Possible Matching Logins</value>
+    <value>Lehetséges bejelentkezések</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>Keresés</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill login for "{0}".</value>
+    <value>Egy bejelentkezést keresel ehhez: "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>Széfed megosztása</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your logins with other users.</value>
+    <value>Hozz létre egy szervezetet, hogy biztonságosan megoszthasd bejelentkezéseidet másokkal.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Analitikát használunk arra, hogy többet többet tudjunk arról hogyan használod az alkalmazást, hogy jobbá tudjuk azt. Az adatok gyűjtése teljesen névtelen.</value>
   </data>
   <data name="Features" xml:space="preserve">
-    <value>Features</value>
+    <value>Funkciók</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Scan When Password Field Focused</value>
+    <value>Szkennelés, amikor a jelszó mezőre fókuszált</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life.</value>
+    <value>Csak akkor szkennelje az ablakot és ajánljon automatikus kitöltést, amikor a jelszó mező van kijelölve. Ez a beállítás segíthet megnövelni az akku élettartamát.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Persist Notification</value>
+    <value>Állandó értestés</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life.</value>
+    <value>Mindig mutatja az automatikus kitöltés értesítést és csak az automatikus kitöltés megkísérlése után szkenneli a mezőket. Ez a beállítás segíthet megnövelni az akku élettartamát.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
-    <value>Always Scan</value>
+    <value>Mindig szkennel</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting.</value>
+    <value>Mindig szkenneli a mezőket a képernyőn és csak akkor ajánl automatikus kitöltést, ha jelszó mezőt talál. Ez az alapértelmezett beállítás.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>Nem lehet megnyitni a(z) "{0}" alkalmazást.</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Hitelesítő alkalmazás</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Add meg a 6 számjegyű ellenőrző kódot a hitelesítő alkalmazásodból.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Add meg a 6 számjegyű ellenőrző kódot ami a(z) {0} e-mail címre lett küldve.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Bejelentkezés nem érhető el</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Ennél a fióknál a kétlépcsős bejelentkezés engedélyezve lett, azonban a beállított kétlépcsős szolgáltatók egyike sem támogatott ezen az eszközön. Használj támogatott eszközt és/vagy olyan szolgáltatókat, amelyek jobb támogatást élveznek az eszközökön (például egy hitelesítő alkalmazás).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Helyreállító kód</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Emlékezz rám</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Megerősítő kód újraküldése email-ben</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Kétlépcsős bejelentkezés opciók</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Más kétlépcsős bejelentkezés használata</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Nem sikerült elküldeni a megerősítő e-mailt. Próbáld újra.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>Megerősítő e-mail elküldve.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>A folytatáshoz tartsd a YubiKey NEO-t a készülék hátuljához.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>YubiKey NEO biztonsági kulcs</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Melléklet hozzáadása</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Mellékletek</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>Nem lehet letölteni a fájlt.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>A készülék nem tudja megnyitni az ilyen típusú fájlt.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>Letöltés...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Ez a melléklet {0} méretű. Biztosan le akarod tölteni a készülékedre?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Hitelesítő kulcs (egyszeri-idő alapú)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Ellenőrző kód (egyszeri-idő alapú)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Hitelesítő kulcs hozzáadva.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Nem lehet olvasni a hitelesítő kulcsot.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>A szkennelés automatikusan megtörténik.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>Irányítsd a kamerát a QR-kódra.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>QR kód beolvasása</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Kamera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Képek</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>Egyszeri jelszó másolva!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Egyszeri jelszó másolása</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Ha a bejelentkezésedhez csatolva van egy hitelesítő kód, az egyszeri ellenőrző kód automatikusan másolva lesz a vágólapra a bejelentkezés automatikus kitöltése esetén.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Egyszeri jelszó automatikus másolás tiltása</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>A funkció használatához prémium tagság szükséges.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Melléklet hozzáadva</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Melléklet törölve</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Fájl kiválasztása</value>
   </data>
   <data name="File" xml:space="preserve">
-    <value>File</value>
+    <value>Fájl</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Nincs kiválasztott fájl</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Nincsenek mellékletek.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Fájl forrás</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Ez a funkció nem érhető el</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>Maximális fájl méret 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Ez a funkció nem használható, amíg nem frissíted a titkosítási kulcsodat.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Tudj meg többet</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>API szerver URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Egyéni környezet</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Haladó felhasználóknak. Minden egyes szolgáltatásnak külön megadhatod az alap URL-t.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>A környezet URL-ek el lettek mentve.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} nem megfelelő formátumú.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>Identitás szerver URL</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Saját üzemeltetésű környezet</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+    <value>Add meg az alap URL-t a helyileg üzemeltetett bitwarden telepítéshez.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>Szerver URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Vault Server URL</value>
+    <value>Webes széf szerver URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Az értesítés megérintésével megnézheted a széfedben tárolt bejelentkezéseket.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Custom Fields</value>
+  </data>
+  <data name="CustomFieldsUpdated" xml:space="preserve">
+    <value>Custom fields updated.</value>
+  </data>
+  <data name="NoCustomFields" xml:space="preserve">
+    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
   </data>
 </root>

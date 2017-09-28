@@ -117,34 +117,45 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Name" xml:space="preserve">
-    <value>bitwarden Jelszókezelő</value>
+  <data name="Title" xml:space="preserve">
+    <value>bitwarden Password Manager</value>
+    <comment>Max 30 characters</comment>
   </data>
-  <data name="Description" xml:space="preserve">
-    <value>A bitwarden a legegyszerűbb és legbiztonságosabb módja a bejelentkezések és jelszavak tárolására, miközben kényelmet nyújtva tartja szinkronizálva az adatokat az összes eszköz között. A bitwarden alkalmazásbővítmény lehetővé teszi, hogy gyorsan bejelentkezz bármely webhelyre a Safari vagy a Chrome segítségével, és több száz népszerű alkalmazás is támogatja.
-
-Manapság a jelszó lopás a legnagyobb gond. A weboldalak és alkalmazások melyeket használsz, minden pillanatban támadások alatt állnak. Egy biztonsági rés és a jelszavadat máris ellopták. Ha ugyanazokat a belépési adatokat használod a böngészőben, vagy alkalmazásokban, a hekkerek dolgát megkönnyíted és könnyedén hozzáférhetnek az email fiókodhoz, internetbankárodhoz, a legfontosabb adataidhoz.
-
-A biztonsági szakemberek azt javasolják, hogy mindig használj eltérő, véletleszerűen generált jelszót minden fiókhoz, amit használsz. De hogyan kezelhetnéd ezeket a jelszavakat? A bitwaren segítségével könnyedén tudsz létrehozni, tárolni jelszavakat és könnyű hozzáférést biztosít a tárolt jelszavaidhoz.
-
-A bitwaren minden bejelentkezési adatodat titkosított széfben tárolja és titkosítva szinkronizálja eszközeid között. Mivel teljesen titkosított, csak te férhetsz hozzá az adataidhoz. Még a bitwarden csapata sem tudja olvasni az adataidat, még ha akarná se tudná. Adataidat AES 256 bites titkosítással és SHA-256 PBKDF2-vel zárjuk le.</value>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <comment>Max 80 characters</comment>
   </data>
-  <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,jelszó,bejelentkezés,ingyenes jelszókezelő,jelszókezelő,bejelentkezés kezelő</value>
+  <data name="FullDesciption" xml:space="preserve">
+    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+
+Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+
+Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+
+bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
+  </data>
+  <data name="FeatureGraphic" xml:space="preserve">
+    <value>A secure and free password manager for all of your devices</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Kezeld az összes bejelentkezésedet és jelszavadat egy biztonságos széfből</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Generálj automatikusan erős, véletlenszerű és biztonságos jelszavakat</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Védd a széfedet ujjlenyomatoddal, PIN-kóddal vagy mesterjelszóval</value>
+    <value>Protect your vault with fingerprint, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Bejelentkezések automatikus kitöltése a Safari-ban, Chrome-ban, és több száz más alkalmazásban</value>
+    <value>Quickly auto-fill logins from within your web browser and other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Szinkronizáld és érd el a széfedet több eszközről is</value>
+    <value>Sync and access your vault from multiple devices
+
+- Phone
+- Tablet
+- Desktop
+- Web</value>
   </data>
 </root>
