@@ -15,7 +15,7 @@ namespace Bit.App
 
             if(!string.IsNullOrWhiteSpace(tokenService.Token))
             {
-                Headers.Add("Authorization", $"Bearer3 {tokenService.Token}");
+                Headers.Add("Authorization", $"Bearer {tokenService.Token}");
             }
             if(!string.IsNullOrWhiteSpace(appIdService.AppId))
             {
