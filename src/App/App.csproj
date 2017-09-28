@@ -198,6 +198,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.cs.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.da.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.da.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -303,6 +308,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.uk.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\AppResources.vi.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.vi.resx</DependentUpon>
+    </Compile>
     <Compile Include="Resources\AppResources.zh-Hans.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -355,6 +365,10 @@
     <EmbeddedResource Include="Resources\AppResources.cs.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.cs.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.da.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.da.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.es.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -435,6 +449,10 @@
     <EmbeddedResource Include="Resources\AppResources.uk.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>AppResources.uk.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\AppResources.vi.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.vi.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AppResources.zh-Hans.resx">
       <Generator>ResXFileCodeGenerator</Generator>
