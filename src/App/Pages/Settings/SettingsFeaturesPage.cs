@@ -171,7 +171,7 @@ namespace Bit.App.Pages
                 Content = StackLayout
             };
 
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 analyticsTable.RowHeight = -1;
                 analyticsTable.EstimatedRowHeight = 70;

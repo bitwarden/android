@@ -250,7 +250,7 @@ namespace Bit.App.Pages
             Title = AppResources.EditLogin;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

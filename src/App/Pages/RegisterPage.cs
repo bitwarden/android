@@ -122,7 +122,7 @@ namespace Bit.App.Pages
                 await Register();
             }, ToolbarItemOrder.Default, 0);
 
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 table.RowHeight = table2.RowHeight = -1;
                 table.EstimatedRowHeight = table2.EstimatedRowHeight = 70;

@@ -102,7 +102,7 @@ namespace Bit.App.Pages
             var toolbarItem = new ToolbarItem(AppResources.Save, null, async () => await SaveAsync(),
                 ToolbarItemOrder.Default, 0);
 
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 table.RowHeight = table2.RowHeight = -1;
                 table.EstimatedRowHeight = table2.EstimatedRowHeight = 70;
