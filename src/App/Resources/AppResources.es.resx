@@ -1005,7 +1005,7 @@
     <value>Para usuarios avanzados. Puedes especificar la URL base de cada servicio de forma independiente.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>La URLs del entorno han sido guardadas.</value>
+    <value>Las URLs del entorno han sido guardadas.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} no está formateado correctamente.</value>
@@ -1028,6 +1028,15 @@
     <value>URL del servidor de la bóveda web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Pulsa en esta notificación para ver las entradas de tu bóveda.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Custom Fields</value>
+  </data>
+  <data name="CustomFieldsUpdated" xml:space="preserve">
+    <value>Custom fields updated.</value>
+  </data>
+  <data name="NoCustomFields" xml:space="preserve">
+    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
   </data>
 </root>
