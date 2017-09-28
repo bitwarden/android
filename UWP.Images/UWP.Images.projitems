@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>0be54bbb-7772-4289-bd51-1fdbb0cc2446</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>UWP.Images</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="$(MSBuildThisFileDirectory)camera.png" />
+    <Content Include="$(MSBuildThisFileDirectory)cloudup.png" />
+    <Content Include="$(MSBuildThisFileDirectory)cog.png" />
+    <Content Include="$(MSBuildThisFileDirectory)cogs.png" />
+    <Content Include="$(MSBuildThisFileDirectory)download.png" />
+    <Content Include="$(MSBuildThisFileDirectory)envelope.png" />
+    <Content Include="$(MSBuildThisFileDirectory)eye.png" />
+    <Content Include="$(MSBuildThisFileDirectory)eye_slash.png" />
+    <Content Include="$(MSBuildThisFileDirectory)fa_lock.png" />
+    <Content Include="$(MSBuildThisFileDirectory)fingerprint.png" />
+    <Content Include="$(MSBuildThisFileDirectory)folder.png" />
+    <Content Include="$(MSBuildThisFileDirectory)globe.png" />
+    <Content Include="$(MSBuildThisFileDirectory)lightbulb.png" />
+    <Content Include="$(MSBuildThisFileDirectory)lock.png" />
+    <Content Include="$(MSBuildThisFileDirectory)logo.png" />
+    <Content Include="$(MSBuildThisFileDirectory)more.png" />
+    <Content Include="$(MSBuildThisFileDirectory)more_selected.png" />
+    <Content Include="$(MSBuildThisFileDirectory)paperclip.png" />
+    <Content Include="$(MSBuildThisFileDirectory)photo.png" />
+    <Content Include="$(MSBuildThisFileDirectory)plus.png" />
+    <Content Include="$(MSBuildThisFileDirectory)refresh.png" />
+    <Content Include="$(MSBuildThisFileDirectory)share.png" />
+    <Content Include="$(MSBuildThisFileDirectory)share_tools.png" />
+    <Content Include="$(MSBuildThisFileDirectory)star.png" />
+    <Content Include="$(MSBuildThisFileDirectory)tools.png" />
+    <Content Include="$(MSBuildThisFileDirectory)trash.png" />
+    <Content Include="$(MSBuildThisFileDirectory)upload.png" />
+    <Content Include="$(MSBuildThisFileDirectory)user.png" />
+    <Content Include="$(MSBuildThisFileDirectory)yubikey.png" />
+  </ItemGroup>
+</Project>

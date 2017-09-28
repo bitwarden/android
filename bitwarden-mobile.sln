@@ -31,7 +31,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Publisher", "store\google\P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UWP", "UWP\UWP.csproj", "{3A2D5669-ED71-4F2B-BA85-2D36BAA05141}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UWP.Images", "UWP.Images\UWP.Images.shproj", "{0BE54BBB-7772-4289-BD51-1FDBB0CC2446}"
+EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		UWP.Images\UWP.Images.projitems*{0be54bbb-7772-4289-bd51-1fdbb0cc2446}*SharedItemsImports = 13
+		UWP.Images\UWP.Images.projitems*{3a2d5669-ed71-4f2b-ba85-2d36baa05141}*SharedItemsImports = 4
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
 		Ad-Hoc|ARM = Ad-Hoc|ARM
@@ -534,6 +540,7 @@ Global
 		{2E399654-26A2-46F6-B9CA-1B496A3F370A} = {92470CBD-9047-4C3C-8EA3-D972D6622D84}
 		{428CACAB-CC26-4F41-9062-1E4A9BC82640} = {2E399654-26A2-46F6-B9CA-1B496A3F370A}
 		{3A2D5669-ED71-4F2B-BA85-2D36BAA05141} = {EC730FD9-F623-4B6C-B503-95CDCFBCF277}
+		{0BE54BBB-7772-4289-BD51-1FDBB0CC2446} = {EC730FD9-F623-4B6C-B503-95CDCFBCF277}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {318CB2DF-0118-43A3-AC83-56BADCF71CCD}
