@@ -34,7 +34,7 @@ namespace Bit.App.Pages
 
             var settingsButton = new Button
             {
-                Image = "cog",
+                Image = "cog.png",
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Start,
                 WidthRequest = 25,
@@ -46,7 +46,7 @@ namespace Bit.App.Pages
 
             var logo = new CachedImage
             {
-                Source = "logo",
+                Source = "logo.png",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
                 WidthRequest = 282,

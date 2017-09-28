@@ -123,7 +123,7 @@ namespace Bit.App.Pages
 
             var tapNotificationImage = new CachedImage
             {
-                Source = "accessibility_notification",
+                Source = "accessibility_notification.png",
                 HorizontalOptions = LayoutOptions.Center,
                 Margin = new Thickness(0, 20, 0, 0),
                 WidthRequest = 300,
@@ -132,7 +132,7 @@ namespace Bit.App.Pages
 
             var tapNotificationIcon = new CachedImage
             {
-                Source = "accessibility_notification_icon",
+                Source = "accessibility_notification_icon.png",
                 HorizontalOptions = LayoutOptions.Center,
                 Margin = new Thickness(0, 20, 0, 0),
                 WidthRequest = 300,

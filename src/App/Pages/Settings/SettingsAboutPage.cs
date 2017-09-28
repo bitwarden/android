@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         {
             var logo = new CachedImage
             {
-                Source = "logo",
+                Source = "logo.png",
                 HorizontalOptions = LayoutOptions.Center,
                 WidthRequest = 282,
                 HeightRequest = 44

@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         {
             var fingerprintIcon = new ExtendedButton
             {
-                Image = "fingerprint",
+                Image = "fingerprint.png",
                 BackgroundColor = Color.Transparent,
                 Command = new Command(async () => await CheckFingerprintAsync()),
                 VerticalOptions = LayoutOptions.CenterAndExpand,

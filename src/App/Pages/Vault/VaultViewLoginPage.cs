@@ -399,7 +399,7 @@ namespace Bit.App.Pages
                 _tapped = tappedAction;
                 Label.Text = attachment.Name;
                 Detail.Text = attachment.SizeName;
-                Icon.Source = "download";
+                Icon.Source = "download.png";
                 BackgroundColor = Color.White;
                 Detail.MinimumWidthRequest = 100;
             }

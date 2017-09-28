@@ -87,7 +87,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = AppResources.Add;
-                Icon = "plus";
+                Icon = "plus.png";
                 ClickAction = () => ClickedItem();
             }
 

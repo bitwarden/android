@@ -17,16 +17,16 @@ namespace Bit.App.Pages
             var toolsNavigation = new ExtendedNavigationPage(new ToolsPage());
 
             favoritesNavigation.Title = AppResources.Favorites;
-            favoritesNavigation.Icon = "star";
+            favoritesNavigation.Icon = "star.png";
 
             vaultNavigation.Title = AppResources.MyVault;
-            vaultNavigation.Icon = "fa_lock";
+            vaultNavigation.Icon = "fa_lock.png";
 
             toolsNavigation.Title = AppResources.Tools;
-            toolsNavigation.Icon = "tools";
+            toolsNavigation.Icon = "tools.png";
 
             settingsNavigation.Title = AppResources.Settings;
-            settingsNavigation.Icon = "cogs";
+            settingsNavigation.Icon = "cogs.png";
 
             Children.Add(favoritesNavigation);
             Children.Add(vaultNavigation);
