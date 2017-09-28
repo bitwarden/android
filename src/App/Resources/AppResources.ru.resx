@@ -193,10 +193,10 @@
     <value>Напишите нам</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Напишите нам на email, чтобы получить помощь или оставить отзыв.</value>
+    <value>Чтобы получить помощь или оставить отзыв, отправьте нам письмо.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Введите ваш PIN-код.</value>
+    <value>Введите PIN-код.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Избранное</value>
@@ -474,7 +474,7 @@
     <value>Включить автоматическую синхронизацию</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Введите Ваш email для получения подсказки мастер-пароля.</value>
+    <value>Введите свой email для получения подсказки мастер-пароля.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Повторно включить расширение</value>
@@ -1028,6 +1028,15 @@
     <value>URL-адрес сервера веб-хранилища</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Коснитесь этого уведомления, чтобы посмотреть логины из вашего хранилища.</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>Custom Fields</value>
+  </data>
+  <data name="CustomFieldsUpdated" xml:space="preserve">
+    <value>Custom fields updated.</value>
+  </data>
+  <data name="NoCustomFields" xml:space="preserve">
+    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
   </data>
 </root>
