@@ -11,37 +11,35 @@ namespace Bit.UWP.Services
     {
         public void Dispatch(Action completionHandler = null)
         {
-            throw new NotImplementedException();
+
         }
 
         public void SetAppOptOut(bool optOut)
         {
-            throw new NotImplementedException();
+
         }
 
         public void TrackAppEvent(string eventName, string label = null)
         {
-            throw new NotImplementedException();
+
         }
 
         public void TrackEvent(string category, string eventName, string label = null)
         {
-            throw new NotImplementedException();
+
         }
 
         public void TrackException(string message, bool fatal)
         {
-            throw new NotImplementedException();
         }
 
         public void TrackExtensionEvent(string eventName, string label = null)
         {
-            throw new NotImplementedException();
+
         }
 
         public void TrackPage(string pageName)
         {
-            throw new NotImplementedException();
         }
     }
 }

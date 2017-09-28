@@ -148,6 +148,7 @@ namespace Bit.UWP
             container.RegisterSingleton<ITokenService, TokenService>();
             container.RegisterSingleton<ISettingsService, SettingsService>();
             container.RegisterSingleton<IAppSettingsService, AppSettingsService>();
+            container.RegisterSingleton<IReflectionService, ReflectionService>();
 
             // Repositories
             container.RegisterSingleton<IFolderRepository, FolderRepository>();

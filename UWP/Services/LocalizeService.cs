@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Globalization;
+using Windows.Globalization;
 
 namespace Bit.UWP.Services
 {
@@ -12,12 +13,18 @@ namespace Bit.UWP.Services
     {
         public CultureInfo GetCurrentCultureInfo()
         {
-            throw new NotImplementedException();
+            return CultureInfo.CurrentCulture;
         }
 
-        public void SetLocale(CultureInfo ci)
+        public void SetLocale(CultureInfo locale)
         {
-            throw new NotImplementedException();
+            CultureInfo.CurrentCulture = locale;
+            CultureInfo.CurrentUICulture = locale;
+            CultureInfo.DefaultThreadCurrentCulture = locale;
+            CultureInfo.DefaultThreadCurrentUICulture = locale;
+
+            ApplicationLanguages.PrimaryLanguageOverride = locale.TwoLetterISOLanguageName;
+
         }
     }
 }

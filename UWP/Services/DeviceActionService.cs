@@ -11,27 +11,25 @@ namespace Bit.UWP.Services
     {
         public bool CanOpenFile(string fileName)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public void ClearCache()
         {
-            throw new NotImplementedException();
         }
 
         public void CopyToClipboard(string text)
         {
-            throw new NotImplementedException();
         }
 
         public bool OpenFile(byte[] fileData, string id, string fileName)
         {
-            throw new NotImplementedException();
+            return false;
         }
 
         public Task SelectFileAsync()
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }

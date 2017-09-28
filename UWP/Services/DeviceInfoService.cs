@@ -9,14 +9,14 @@ namespace Bit.UWP.Services
 {
     public class DeviceInfoService : IDeviceInfoService
     {
-        public string Model => throw new NotImplementedException();
+        public string Model => "6S";
 
-        public int Version => throw new NotImplementedException();
+        public int Version => 0;
 
-        public float Scale => throw new NotImplementedException();
+        public float Scale => 1;
 
-        public bool NfcEnabled => throw new NotImplementedException();
+        public bool NfcEnabled => false;
 
-        public bool HasCamera => throw new NotImplementedException();
+        public bool HasCamera => true;
     }
 }
