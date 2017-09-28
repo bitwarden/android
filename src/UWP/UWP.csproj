@@ -185,7 +185,7 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\src\App\App.csproj">
+    <ProjectReference Include="..\App\App.csproj">
       <Project>{b490c5da-639e-4994-abd2-54222b8a348e}</Project>
       <Name>App</Name>
     </ProjectReference>

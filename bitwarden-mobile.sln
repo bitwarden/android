@@ -29,14 +29,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "google", "google", "{2E3996
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Publisher", "store\google\Publisher\Publisher.csproj", "{428CACAB-CC26-4F41-9062-1E4A9BC82640}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UWP", "UWP\UWP.csproj", "{3A2D5669-ED71-4F2B-BA85-2D36BAA05141}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UWP", "src\UWP\UWP.csproj", "{3A2D5669-ED71-4F2B-BA85-2D36BAA05141}"
 EndProject
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UWP.Images", "UWP.Images\UWP.Images.shproj", "{0BE54BBB-7772-4289-BD51-1FDBB0CC2446}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UWP.Images", "src\UWP.Images\UWP.Images.shproj", "{0BE54BBB-7772-4289-BD51-1FDBB0CC2446}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		UWP.Images\UWP.Images.projitems*{0be54bbb-7772-4289-bd51-1fdbb0cc2446}*SharedItemsImports = 13
-		UWP.Images\UWP.Images.projitems*{3a2d5669-ed71-4f2b-ba85-2d36baa05141}*SharedItemsImports = 4
+		src\UWP.Images\UWP.Images.projitems*{0be54bbb-7772-4289-bd51-1fdbb0cc2446}*SharedItemsImports = 13
+		src\UWP.Images\UWP.Images.projitems*{3a2d5669-ed71-4f2b-ba85-2d36baa05141}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
