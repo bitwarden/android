@@ -215,6 +215,9 @@
     <OutputPath>bin\iPhoneSimulator\AppStore</OutputPath>
     <MtouchExtraArgs>--nodevcodeshare --http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
+    <AppExtensionDebugBundleId />
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Controls\ContentPageRenderer.cs" />
     <Compile Include="Controls\HybridWebViewRenderer.cs" />
