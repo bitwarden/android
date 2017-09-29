@@ -21,14 +21,14 @@ namespace Bit.iOS.Extension.Models
 
             DocumentUUID = pageDetails.DocumentUUID;
 
-            var filledOpIds = new HashSet<string>();
+            var filledFields = new Dictionary<string, PageDetails.Field>();
 
             if(fillFields?.Any() ?? false)
             {
                 var fieldNames = fillFields.Select(f => f.Item1?.ToLower()).ToArray();
                 foreach(var field in pageDetails.Fields.Where(f => f.Viewable))
                 {
-                    if(filledOpIds.Contains(field.OpId))
+                    if(filledFields.ContainsKey(field.OpId))
                     {
                         continue;
                     }
@@ -36,7 +36,7 @@ namespace Bit.iOS.Extension.Models
                     var matchingIndex = FindMatchingFieldIndex(field, fieldNames);
                     if(matchingIndex > -1)
                     {
-                        filledOpIds.Add(field.OpId);
+                        filledFields.Add(field.OpId, field);
                         Script.Add(new List<string> { "click_on_opid", field.OpId });
                         Script.Add(new List<string> { "fill_by_opid", field.OpId, fillFields[matchingIndex].Item2 });
                     }
@@ -46,10 +46,7 @@ namespace Bit.iOS.Extension.Models
             if(string.IsNullOrWhiteSpace(fillPassword))
             {
                 // No password for this login. Maybe they just wanted to auto-fill some custom fields?
-                if(filledOpIds.Any())
-                {
-                    Script.Add(new List<string> { "focus_by_opid", filledOpIds.Last() });
-                }
+                SetFillScriptForFocus(filledFields);
                 return;
             }
 
@@ -119,7 +116,7 @@ namespace Bit.iOS.Extension.Models
                 var usernameFieldNamesList = _usernameFieldNames.ToList();
                 foreach(var f in pageDetails.Fields)
                 {
-                    if((f.Type == "text" || f.Type == "email" || f.Type == "tel") &&
+                    if(f.Viewable && (f.Type == "text" || f.Type == "email" || f.Type == "tel") &&
                         FieldIsFuzzyMatch(f, usernameFieldNamesList))
                     {
                         usernames.Add(f);
@@ -127,24 +124,21 @@ namespace Bit.iOS.Extension.Models
                 }
             }
 
-            foreach(var username in usernames.Where(u => !filledOpIds.Contains(u.OpId)))
+            foreach(var username in usernames.Where(u => !filledFields.ContainsKey(u.OpId)))
             {
-                filledOpIds.Add(username.OpId);
+                filledFields.Add(username.OpId, username);
                 Script.Add(new List<string> { "click_on_opid", username.OpId });
                 Script.Add(new List<string> { "fill_by_opid", username.OpId, fillUsername });
             }
 
-            foreach(var password in passwords.Where(p => !filledOpIds.Contains(p.OpId)))
+            foreach(var password in passwords.Where(p => !filledFields.ContainsKey(p.OpId)))
             {
-                filledOpIds.Add(password.OpId);
+                filledFields.Add(password.OpId, password);
                 Script.Add(new List<string> { "click_on_opid", password.OpId });
                 Script.Add(new List<string> { "fill_by_opid", password.OpId, fillPassword });
             }
 
-            if(filledOpIds.Any())
-            {
-                Script.Add(new List<string> { "focus_by_opid", filledOpIds.Last() });
-            }
+            SetFillScriptForFocus(filledFields);
         }
 
         private PageDetails.Field FindUsernameField(PageDetails pageDetails, PageDetails.Field passwordField, bool canBeHidden,
@@ -230,6 +224,37 @@ namespace Bit.iOS.Extension.Models
             }
 
             return options.Any(o => value.Contains(o));
+        }
+
+        private void SetFillScriptForFocus(IDictionary<string, PageDetails.Field> filledFields)
+        {
+            if(!filledFields.Any())
+            {
+                return;
+            }
+
+            PageDetails.Field lastField = null, lastPasswordField = null;
+            foreach(var field in filledFields)
+            {
+                if(field.Value.Viewable)
+                {
+                    lastField = field.Value;
+                    if(field.Value.Type == "password")
+                    {
+                        lastPasswordField = field.Value;
+                    }
+                }
+            }
+
+            // Prioritize password field over others.
+            if(lastPasswordField != null)
+            {
+                Script.Add(new List<string> { "focus_by_opid", lastPasswordField.OpId });
+            }
+            else if(lastField != null)
+            {
+                Script.Add(new List<string> { "focus_by_opid", lastField.OpId });
+            }
         }
 
         private string CleanLabel(string label)
