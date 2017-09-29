@@ -17,7 +17,7 @@ namespace Bit.iOS.Extension.Models
             Totp = new Lazy<string>(() => login.Totp?.Decrypt(login.OrganizationId));
             Fields = new Lazy<List<Tuple<string, string>>>(() =>
             {
-                if(login.Fields?.Any() ?? true)
+                if(!login.Fields?.Any() ?? true)
                 {
                     return null;
                 }

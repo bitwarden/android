@@ -260,7 +260,10 @@ namespace Bit.iOS.Extension
                 NSRunLoop.Main.BeginInvokeOnMainThread(() =>
                 {
                     Resolver.ResetResolver();
-                    ExtensionContext.CompleteRequest(returningItems, null);
+                    if(ExtensionContext != null)
+                    {
+                        ExtensionContext.CompleteRequest(returningItems, null);
+                    }
                 });
             });
         }
