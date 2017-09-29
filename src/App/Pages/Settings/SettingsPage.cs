@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly IFingerprint _fingerprint;
         private readonly IPushNotification _pushNotification;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly IDeviceInfoService _deviceInfoService;
 
         // TODO: Model binding context?
 
@@ -31,6 +32,7 @@ namespace Bit.App.Pages
             _fingerprint = Resolver.Resolve<IFingerprint>();
             _pushNotification = Resolver.Resolve<IPushNotification>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 
             Init();
         }
@@ -213,7 +215,7 @@ namespace Bit.App.Pages
             SyncCell.Tapped += SyncCell_Tapped;
             LockCell.Tapped += LockCell_Tapped;
             LogOutCell.Tapped += LogOutCell_Tapped;
-            AboutCell.Tapped += AboutCell_Tapped;   
+            AboutCell.Tapped += AboutCell_Tapped;
             HelpCell.Tapped += HelpCell_Tapped;
             FeaturesCell.Tapped += FeaturesCell_Tapped;
 
@@ -328,8 +330,15 @@ namespace Bit.App.Pages
             _googleAnalyticsService.TrackAppEvent("OpenedSetting", "RateApp");
             if(Device.RuntimePlatform == Device.iOS)
             {
-                Device.OpenUri(new Uri($"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews" +
-                    "?id=1137397744&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
+                if(_deviceInfoService.Version < 11)
+                {
+                    Device.OpenUri(new Uri("itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews" +
+                        "?id=1137397744&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
+                }
+                else
+                {
+                    Device.OpenUri(new Uri("itms-apps://itunes.apple.com/us/app/id1137397744?action=write-review"));
+                }
             }
             else if(Device.RuntimePlatform == Device.Android)
             {
