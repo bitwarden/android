@@ -248,18 +248,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\Icon-60%402x.png" />
-    <BundleResource Include="Resources\Icon-60%403x.png" />
-    <BundleResource Include="Resources\Icon-76.png" />
-    <BundleResource Include="Resources\Icon-76%402x.png" />
-    <BundleResource Include="Resources\Icon-Small-40.png" />
-    <BundleResource Include="Resources\Icon-Small-40%402x.png" />
-    <BundleResource Include="Resources\Icon-Small-40%403x.png" />
-    <BundleResource Include="Resources\Icon-Small.png" />
-    <BundleResource Include="Resources\Icon-Small%402x.png" />
-    <BundleResource Include="Resources\Icon-Small%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="Acr.Support.iOS, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Acr.Support.2.1.0\lib\Xamarin.iOS10\Acr.Support.iOS.dll</HintPath>
       <Private>True</Private>
@@ -437,63 +425,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\fa_lock%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-120.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-60.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-40%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-40%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-40.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-16.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-152.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-64.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-72.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-72%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-Small-50.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-Small-50%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ITunesArtwork Include="Resources\iTunesArtwork.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ITunesArtwork Include="Resources\iTunesArtwork%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\logo.png" />
@@ -692,9 +623,6 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\fingerprint%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\Icon-83.5%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\share%403x.png" />
