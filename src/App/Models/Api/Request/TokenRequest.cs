@@ -24,7 +24,7 @@ namespace Bit.App.Models.Api
                 { "client_id", "mobile" }
             };
 
-            if(false && Device != null)
+            if(Device != null)
             {
                 dict.Add("DeviceType", Device.Type.ToString());
                 dict.Add("DeviceIdentifier", Device.Identifier);

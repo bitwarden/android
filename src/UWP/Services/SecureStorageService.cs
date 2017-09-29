@@ -10,14 +10,14 @@ namespace Bit.UWP.Services
 {
     public class SecureStorageService : ISecureStorageService
     {
-        private string resourceName = "BitWarden";
+        private const string ResourceName = "bitwarden";
         private PasswordVault _vault = new PasswordVault();
 
         public bool Contains(string key)
         {
             try
             {
-                var entry = _vault.Retrieve(resourceName, key);
+                var entry = _vault.Retrieve(ResourceName, key);
                 return entry != null;
             }
             catch
@@ -28,7 +28,7 @@ namespace Bit.UWP.Services
 
         public void Delete(string key)
         {
-            var entry = _vault.Retrieve(resourceName, key);
+            var entry = _vault.Retrieve(ResourceName, key);
             if (entry != null)
                 _vault.Remove(entry);
         }
@@ -37,7 +37,7 @@ namespace Bit.UWP.Services
         {
             try
             {
-                var entry = _vault.Retrieve(resourceName, key);
+                var entry = _vault.Retrieve(ResourceName, key);
                 if (entry != null)
                     return Convert.FromBase64String(entry.Password);
                 else
@@ -52,7 +52,7 @@ namespace Bit.UWP.Services
         public void Store(string key, byte[] dataBytes)
         {
             var data = Convert.ToBase64String(dataBytes);
-            _vault.Add(new PasswordCredential(resourceName, key, data));
+            _vault.Add(new PasswordCredential(ResourceName, key, data));
         }
     }
 }

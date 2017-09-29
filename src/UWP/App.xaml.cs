@@ -36,7 +36,6 @@ namespace Bit.UWP
     sealed partial class App : Application
     {
 
-        public ISettings Settings { get; set; }
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -52,6 +51,8 @@ namespace Bit.UWP
 
         }
 
+
+        public ISettings Settings { get; set; }
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
