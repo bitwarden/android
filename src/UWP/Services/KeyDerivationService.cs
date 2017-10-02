@@ -17,7 +17,6 @@ namespace Bit.UWP.Services
     {
         private const int KeyLength = 32; // 32 bytes
 
-        //todo review this
         public byte[] DeriveKey(byte[] password, byte[] salt, uint rounds)
         {
             IBuffer buffSalt = salt.AsBuffer();
