@@ -26,10 +26,18 @@ namespace Bit.UWP.Services
                 if (!Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.Devices.SmartCards.SmartCardEmulator"))
                     return false;
 
-                return SmartCardEmulator.GetDefaultAsync().GetResults() != null;
+                return Task.Run(async () => await SmartCardEmulator.GetDefaultAsync()).Result != null;
             }
         }
 
-        public bool HasCamera => DeviceInformation.FindAllAsync(DeviceClass.VideoCapture).GetResults().Any();
+        public bool HasCamera
+        {
+            get
+            {
+                var cameraList = Task.Run(async () => await DeviceInformation.FindAllAsync(DeviceClass.VideoCapture)).Result;
+
+                return cameraList?.Any() ?? false;
+            }
+        }
     }
 }
