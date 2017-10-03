@@ -103,7 +103,7 @@ namespace Bit.App.Pages
 
             var scrollView = new ScrollView { Content = layout };
 
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows) 
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;

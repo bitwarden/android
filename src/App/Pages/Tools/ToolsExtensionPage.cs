@@ -205,7 +205,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }

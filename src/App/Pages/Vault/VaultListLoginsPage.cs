@@ -481,7 +481,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = AppResources.Add;
-                Icon = "plus";
+                Icon = "plus.png";
             }
         }
 
@@ -491,7 +491,7 @@ namespace Bit.App.Pages
             {
                 var image = new CachedImage
                 {
-                    Source = "folder",
+                    Source = "folder.png",
                     WidthRequest = 18,
                     HeightRequest = 18
                 };

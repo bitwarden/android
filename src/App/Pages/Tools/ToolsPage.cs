@@ -33,10 +33,10 @@ namespace Bit.App.Pages
         public void Init()
         {
             GeneratorCell = new ToolsViewCell(AppResources.PasswordGenerator, AppResources.PasswordGeneratorDescription,
-                "refresh");
-            WebCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe");
-            ShareCell = new ToolsViewCell(AppResources.ShareVault, AppResources.ShareVaultDescription, "share_tools");
-            ImportCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup");
+                "refresh.png");
+            WebCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe.png");
+            ShareCell = new ToolsViewCell(AppResources.ShareVault, AppResources.ShareVaultDescription, "share_tools.png");
+            ImportCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup.png");
 
             var section = new TableSection(" ") { GeneratorCell };
 
@@ -49,7 +49,7 @@ namespace Bit.App.Pages
             else
             {
                 AutofillCell = new ToolsViewCell(AppResources.BitwardenAutofillService,
-                    AppResources.BitwardenAutofillServiceDescription, "upload");
+                    AppResources.BitwardenAutofillServiceDescription, "upload.png");
                 section.Add(AutofillCell);
             }
 

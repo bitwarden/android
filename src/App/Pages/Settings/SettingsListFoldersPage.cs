@@ -40,8 +40,8 @@ namespace Bit.App.Pages
                 ItemsSource = Folders,
                 ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this))
             };
-
-            if(Device.RuntimePlatform == Device.iOS)
+             
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }
@@ -87,7 +87,7 @@ namespace Bit.App.Pages
             {
                 _page = page;
                 Text = AppResources.Add;
-                Icon = "plus";
+                Icon = "plus.png";
                 ClickAction = () => ClickedItem();
             }
 

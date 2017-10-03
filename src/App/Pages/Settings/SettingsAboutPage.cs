@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         {
             var logo = new CachedImage
             {
-                Source = "logo",
+                Source = "logo.png",
                 HorizontalOptions = LayoutOptions.Center,
                 WidthRequest = 282,
                 HeightRequest = 44
@@ -78,7 +78,7 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

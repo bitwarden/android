@@ -54,7 +54,7 @@ namespace Bit.App.Pages
         {
             EditItem = new EditLoginToolBarItem(this, _loginId);
             ToolbarItems.Add(EditItem);
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this));
             }
@@ -399,7 +399,7 @@ namespace Bit.App.Pages
                 _tapped = tappedAction;
                 Label.Text = attachment.Name;
                 Detail.Text = attachment.SizeName;
-                Icon.Source = "download";
+                Icon.Source = "download.png";
                 BackgroundColor = Color.White;
                 Detail.MinimumWidthRequest = 100;
             }

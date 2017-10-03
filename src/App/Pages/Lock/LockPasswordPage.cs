@@ -36,7 +36,7 @@ namespace Bit.App.Pages
                 WinPhone: new Thickness(15, 20));
 
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
-                useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
+                useLabelAsPlaceholder: true, imageSource: "lock.png", containerPadding: padding);
 
             PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
 

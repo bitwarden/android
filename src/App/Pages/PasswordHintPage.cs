@@ -36,7 +36,7 @@ namespace Bit.App.Pages
                 WinPhone: new Thickness(15, 20));
 
             EmailCell = new FormEntryCell(AppResources.EmailAddress, entryKeyboard: Keyboard.Email,
-                useLabelAsPlaceholder: true, imageSource: "envelope", containerPadding: padding);
+                useLabelAsPlaceholder: true, imageSource: "envelope.png", containerPadding: padding);
 
             EmailCell.Entry.ReturnType = Enums.ReturnType.Go;
 

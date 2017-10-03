@@ -50,15 +50,15 @@ namespace Bit.App.Pages
                 WinPhone: new Thickness(15, 20));
 
             PasswordHintCell = new FormEntryCell(AppResources.MasterPasswordHint, useLabelAsPlaceholder: true,
-                imageSource: "lightbulb", containerPadding: padding);
+                imageSource: "lightbulb.png", containerPadding: padding);
             ConfirmPasswordCell = new FormEntryCell(AppResources.RetypeMasterPassword, isPassword: true,
-                nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock",
+                nextElement: PasswordHintCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock.png",
                 containerPadding: padding);
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
-                nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock",
+                nextElement: ConfirmPasswordCell.Entry, useLabelAsPlaceholder: true, imageSource: "lock.png",
                 containerPadding: padding);
             EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,
-                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",
+                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope.png",
                 containerPadding: padding);
 
             PasswordHintCell.Entry.ReturnType = Enums.ReturnType.Done;
@@ -122,7 +122,7 @@ namespace Bit.App.Pages
                 await Register();
             }, ToolbarItemOrder.Default, 0);
 
-            if(Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 table.RowHeight = table2.RowHeight = -1;
                 table.EstimatedRowHeight = table2.EstimatedRowHeight = 70;
