@@ -1,10 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
@@ -26,7 +23,7 @@ namespace Bit.UWP.Services
         {
             Task.Run(async () =>
             {
-                foreach (var item in await ApplicationData.Current.LocalCacheFolder.GetItemsAsync())
+                foreach(var item in await ApplicationData.Current.LocalCacheFolder.GetItemsAsync())
                 {
                     await item.DeleteAsync();
                 }
@@ -35,10 +32,11 @@ namespace Bit.UWP.Services
 
         public void CopyToClipboard(string text)
         {
-            DataPackage dataPackage = new DataPackage();
-            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            var dataPackage = new DataPackage
+            {
+                RequestedOperation = DataPackageOperation.Copy
+            };
             dataPackage.SetText(text);
-
             Clipboard.SetContent(dataPackage);
         }
 
@@ -72,16 +70,17 @@ namespace Bit.UWP.Services
             return CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
             {
                 var file = await picker.PickSingleFileAsync();
-                if (file != null)
+                if(file != null)
+                {
                     await SelectFileResult(file);
+                }
             }).AsTask();
         }
 
         private async Task SelectFileResult(StorageFile file)
         {
             var buffer = await FileIO.ReadBufferAsync(file);
-
-            MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
+            MessagingCenter.Send(Application.Current, "SelectFileResult",
                 new Tuple<byte[], string>(buffer.ToArray(), file.Name));
         }
     }

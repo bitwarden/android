@@ -10,7 +10,7 @@ namespace Bit.UWP.Services
     {
         public Func<double, double, SizeRequest> GetVisualElementOnSizeRequest(ExtendedTableView tableView)
         {
-            //todo
+            // TODO
             throw new NotImplementedException();
         }
     }
