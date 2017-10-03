@@ -14,10 +14,7 @@ namespace Bit.UWP.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
-        public bool CanOpenFile(string fileName)
-        {
-            return true;
-        }
+        public bool CanOpenFile(string fileName) => true;
 
         public void ClearCache()
         {
