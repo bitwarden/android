@@ -125,10 +125,10 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Ajouter dossier</value>
+    <value>Ajouter un dossier</value>
   </data>
   <data name="AddLogin" xml:space="preserve">
-    <value>Ajouter identifiant</value>
+    <value>Ajouter un identifiant</value>
     <comment>The title for the add login page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -152,11 +152,11 @@
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Copier mot de passe</value>
+    <value>Copier le mot de passe</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Copier nom d'utilisateur</value>
+    <value>Copier le nom d'utilisateur</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Êtes-vous sûr(e) de vouloir supprimer ? Ne peut être annulé.</value>
+    <value>Êtes-vous sûr(e) de vouloir supprimer ? Cette opération ne peut être annulée.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -206,7 +206,7 @@
     <value>Envoyer un rapport de bogue</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Ouvrir un ticket dans notre dépôt Github.</value>
+    <value>Ouvrir un ticket sur notre dépôt Github.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
     <value>Utiliser votre empreinte pour vous identifier.</value>
@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Désactiver les Analyses</value>
+    <value>Désactiver la collecte de données</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
@@ -334,7 +334,7 @@
     <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Soumettre</value>
+    <value>Valider</value>
   </data>
   <data name="Sync" xml:space="preserve">
     <value>Synchronisation</value>
@@ -452,7 +452,7 @@
     <value>Continuer</value>
   </data>
   <data name="Copied" xml:space="preserve">
-    <value>Copié!</value>
+    <value>Copié !</value>
   </data>
   <data name="CopiedPassword" xml:space="preserve">
     <value>Mot de passe copié !</value>
@@ -468,7 +468,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditLogin" xml:space="preserve">
-    <value>Modifier Identifiant</value>
+    <value>Modifier l'identifiant</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Activer la synchronisation automatique</value>
@@ -584,11 +584,11 @@
     <value>Le mot de passe maître doit faire plus de 8 caractères.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Nombres minimums</value>
+    <value>Nombres minimum</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Caractères spéciaux minimums</value>
+    <value>Caractères spéciaux minimum</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -690,7 +690,7 @@
     <value>Identifiant mis à jour.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Soumission...</value>
+    <value>Validation...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -711,10 +711,10 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Identification à double facteurs</value>
+    <value>Identification à double facteur</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>L'authentification à double facteurs rend votre compte plus sécurisé en vous demandant la saisie d'un code de sécurité à chaque identification depuis l'application d'authentification. L'identification à double facteurs peut être activée dans le coffre web sur bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
+    <value>L'authentification à double facteur rend votre compte plus sécurisé en vous demandant la saisie d'un code de sécurité à chaque identification depuis l'application d'authentification. L'identification à double facteur peut être activée dans le coffre web sur bitwarden.com. Voulez-vous visiter le site web maintenant ?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Déverrouiller avec {0}</value>
@@ -799,7 +799,7 @@
     <value>Voulez vous remplir automatiquement ou voir cet identifiant?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir remplir automatiquement cet identifiant? Il ne correspond pas complètement à «{0}».</value>
+    <value>Êtes-vous sûr de vouloir remplir automatiquement cet identifiant ? Il ne correspond pas complètement à «{0}».</value>
   </data>
   <data name="MatchingLogins" xml:space="preserve">
     <value>Identifiants correspondants</value>
@@ -832,7 +832,7 @@
     <value>Si champ "Mot de passe" sélectionné : déclenchement d'un scan et notification d’auto-complétion. Ceci peut aider à économiser de la batterie.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Notification Persistante</value>
+    <value>Notification persistante</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
     <value>Notification d'auto-complétion persistante et scanner uniquement après avoir appuyé sur la notification. Ceci peut aider à économiser de la batterie.</value>
@@ -864,7 +864,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Ce compte utilise l'authentification à double facteurs, mais aucun des services d'authentification à double facteurs n'est supporté sur cet appareil. Veuillez utiliser un appareil compatible et/ou ajouter des services supplémentaires qui sont mieux supportés sur les appareils (comme une application d'authentification).</value>
+    <value>Ce compte utilise l'authentification à double facteur, mais aucun des services d'authentification à double facteur n'est supporté sur cet appareil. Veuillez utiliser un appareil compatible et/ou ajouter des services supplémentaires qui sont mieux supportés sur les appareils (comme une application d'authentification).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Code de récupération</value>
@@ -960,7 +960,7 @@
     <value>Désactiver la copie automatique du TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Une adhésion premium est requises pour utiliser cette fonctionnalité.</value>
+    <value>Une adhésion premium est requise pour utiliser cette fonctionnalité.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Pièce jointe ajoutée</value>
@@ -996,47 +996,47 @@
     <value>En savoir plus</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>URL du serveur API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Environenment personnalisé</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Pour les utilisateurs avertis. Vous pouvez préciser l'URL de base de chaque service indépendamment.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>Les URLs de l'environnement ont bien été enregistrées.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} n'est pas valide.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>URL du serveur d'identification</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Environnement hébergé</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>URL du serveur</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Vault Server URL</value>
+    <value>URL du serveur du coffre web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Touchez cette notification pour voir les identifiants de votre coffre.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>Champs personnalisés</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>Champs personnalisés mis à jour.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>Aucun champ personnalisé. Vous pouvez entièrement gérer les champs personnalisés depuis le coffre web ou sur l'extension du navigateur.</value>
   </data>
 </root>
