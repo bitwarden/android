@@ -43,6 +43,8 @@ namespace Bit.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
                 Xamarin.Forms.Forms.Init(e);
 
+                ((Style)Resources["TabbedPageStyle"]).Setters[0] = ((Style)Resources["TabbedPageStyle2"]).Setters[0];
+
                 if(e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
