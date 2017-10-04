@@ -17,7 +17,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "sync";
+        protected override string ApiRoute => "/sync";
 
         public virtual async Task<ApiResult<SyncResponse>> Get()
         {

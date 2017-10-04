@@ -16,7 +16,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "two-factor";
+        protected override string ApiRoute => "/two-factor";
 
         public virtual async Task<ApiResult> PostSendEmailLoginAsync(TwoFactorEmailRequest requestObj)
         {

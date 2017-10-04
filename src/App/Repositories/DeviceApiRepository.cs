@@ -18,7 +18,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "devices";
+        protected override string ApiRoute => "/devices";
 
         public virtual async Task<ApiResult> PutTokenAsync(string identifier, DeviceTokenRequest request)
         {

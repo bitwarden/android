@@ -18,7 +18,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "ciphers";
+        protected override string ApiRoute => "/ciphers";
 
         public virtual async Task<ApiResult<CipherResponse>> PostAttachmentAsync(string cipherId, byte[] data,
             string fileName)
