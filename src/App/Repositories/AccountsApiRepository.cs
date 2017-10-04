@@ -18,7 +18,7 @@ namespace Bit.App.Repositories
             : base(connectivity, httpService, tokenService)
         { }
 
-        protected override string ApiRoute => "accounts";
+        protected override string ApiRoute => "/accounts";
 
         public virtual async Task<ApiResult> PostRegisterAsync(RegisterRequest requestObj)
         {
