@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Bit.UWP.Services
 {
-    public class PushNotificationImplementation : IPushNotification
+    public class UwpPushNotificationService : IPushNotificationService
     {
         private PushNotificationChannel _channel;
         private JsonSerializer serializer = new JsonSerializer()
@@ -44,11 +44,9 @@ namespace Bit.UWP.Services
                 case PushNotificationType.Badge:
                     jobject = JObject.FromObject(args.BadgeNotification, serializer);
                     break;
-
                 case PushNotificationType.Raw:
                     jobject = JObject.FromObject(args.RawNotification, serializer);
                     break;
-
                 case PushNotificationType.Tile:
                     jobject = JObject.FromObject(args.TileNotification, serializer);
                     break;
@@ -78,8 +76,8 @@ namespace Bit.UWP.Services
 
     internal class CrossPushNotification
     {
-        private static Lazy<IPushNotification> Implementation = new Lazy<IPushNotification>(
-            () => new PushNotificationImplementation(),
+        private static Lazy<IPushNotificationService> Implementation = new Lazy<IPushNotificationService>(
+            () => new UwpPushNotificationService(),
             LazyThreadSafetyMode.PublicationOnly);
         public static bool IsInitialized => PushNotificationListener != null;
         public static IPushNotificationListener PushNotificationListener { get; private set; }
@@ -102,7 +100,7 @@ namespace Bit.UWP.Services
             Initialize(new T());
         }
 
-        public static IPushNotification Current
+        public static IPushNotificationService Current
         {
             get
             {

@@ -25,7 +25,7 @@ namespace Bit.App.Pages
         private readonly IConnectivity _connectivity;
         private readonly IDeviceActionService _clipboardService;
         private readonly ISyncService _syncService;
-        private readonly IPushNotification _pushNotification;
+        private readonly IPushNotificationService _pushNotification;
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly ISettings _settings;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
@@ -42,7 +42,7 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IDeviceActionService>();
             _syncService = Resolver.Resolve<ISyncService>();
-            _pushNotification = Resolver.Resolve<IPushNotification>();
+            _pushNotification = Resolver.Resolve<IPushNotificationService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();

@@ -17,7 +17,7 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private readonly IFingerprint _fingerprint;
-        private readonly IPushNotification _pushNotification;
+        private readonly IPushNotificationService _pushNotification;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IDeviceInfoService _deviceInfoService;
 
@@ -29,7 +29,7 @@ namespace Bit.App.Pages
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
-            _pushNotification = Resolver.Resolve<IPushNotification>();
+            _pushNotification = Resolver.Resolve<IPushNotificationService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 

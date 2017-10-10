@@ -67,7 +67,7 @@ namespace Bit.Android
 
         private void HandlePushReregistration()
         {
-            var pushNotification = Resolver.Resolve<IPushNotification>();
+            var pushNotification = Resolver.Resolve<IPushNotificationService>();
             var settings = Resolver.Resolve<ISettings>();
 
             // Reregister for push token based on certain conditions
@@ -151,11 +151,11 @@ namespace Bit.Android
 
         public static void StartPushService()
         {
-            AppContext.StartService(new Intent(AppContext, typeof(PushNotificationService)));
+            AppContext.StartService(new Intent(AppContext, typeof(AndroidPushNotificationService)));
             if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
             {
                 PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
-                    typeof(PushNotificationService)), 0);
+                    typeof(AndroidPushNotificationService)), 0);
                 AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
                 alarm.Cancel(pintent);
             }
@@ -163,11 +163,11 @@ namespace Bit.Android
 
         public static void StopPushService()
         {
-            AppContext.StopService(new Intent(AppContext, typeof(PushNotificationService)));
+            AppContext.StopService(new Intent(AppContext, typeof(AndroidPushNotificationService)));
             if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
             {
                 PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
-                    typeof(PushNotificationService)), 0);
+                    typeof(AndroidPushNotificationService)), 0);
                 AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
                 alarm.Cancel(pintent);
             }

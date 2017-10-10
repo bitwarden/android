@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         private IDeviceInfoService _deviceInfoService;
         private IGoogleAnalyticsService _googleAnalyticsService;
         private ITwoFactorApiRepository _twoFactorApiRepository;
-        private IPushNotification _pushNotification;
+        private IPushNotificationService _pushNotification;
         private IAppSettingsService _appSettingsService;
         private readonly string _email;
         private readonly string _masterPasswordHash;
@@ -51,7 +51,7 @@ namespace Bit.App.Pages
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _twoFactorApiRepository = Resolver.Resolve<ITwoFactorApiRepository>();
-            _pushNotification = Resolver.Resolve<IPushNotification>();
+            _pushNotification = Resolver.Resolve<IPushNotificationService>();
 
             Init();
         }

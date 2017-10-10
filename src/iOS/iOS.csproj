@@ -238,7 +238,7 @@
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Services\PushNotificationImplementation.cs" />
+    <Compile Include="Services\iOSPushNotificationService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <None Include="app.config">
       <SubType>Designer</SubType>

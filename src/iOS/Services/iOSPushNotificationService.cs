@@ -11,9 +11,9 @@ using Xamarin.Forms;
 
 namespace Bit.iOS.Services
 {
-    public class PushNotificationImplementation : IPushNotification, IPushNotificationHandler
+    public class iOSPushNotificationService : IPushNotificationService, IPushNotificationHandler
     {
-        public string Token => NSUserDefaults.StandardUserDefaults.StringForKey(PushNotificationKey.Token);
+        public string Token => NSUserDefaults.StandardUserDefaults.StringForKey(PushNotificationContants.Token);
 
         public void Register()
         {
@@ -65,13 +65,13 @@ namespace Bit.iOS.Services
 
         public void OnErrorReceived(NSError error)
         {
-            Debug.WriteLine("{0} - Registration Failed.", PushNotificationKey.DomainName);
+            Debug.WriteLine("{0} - Registration Failed.", PushNotificationContants.DomainName);
             CrossPushNotification.PushNotificationListener.OnError(error.LocalizedDescription, Device.iOS);
         }
 
         public void OnRegisteredSuccess(NSData token)
         {
-            Debug.WriteLine("{0} - Succesfully Registered.", PushNotificationKey.DomainName);
+            Debug.WriteLine("{0} - Succesfully Registered.", PushNotificationContants.DomainName);
 
             var trimmedDeviceToken = token.Description;
             if(!string.IsNullOrWhiteSpace(trimmedDeviceToken))
@@ -82,16 +82,16 @@ namespace Bit.iOS.Services
                 trimmedDeviceToken = trimmedDeviceToken.Replace(" ", "");
             }
 
-            Console.WriteLine("{0} - Token: {1}", PushNotificationKey.DomainName, trimmedDeviceToken);
+            Console.WriteLine("{0} - Token: {1}", PushNotificationContants.DomainName, trimmedDeviceToken);
             CrossPushNotification.PushNotificationListener.OnRegistered(trimmedDeviceToken, Device.iOS);
-            NSUserDefaults.StandardUserDefaults.SetString(trimmedDeviceToken, PushNotificationKey.Token);
+            NSUserDefaults.StandardUserDefaults.SetString(trimmedDeviceToken, PushNotificationContants.Token);
             NSUserDefaults.StandardUserDefaults.Synchronize();
         }
 
         public void OnUnregisteredSuccess()
         {
             CrossPushNotification.PushNotificationListener.OnUnregistered(Device.iOS);
-            NSUserDefaults.StandardUserDefaults.SetString(string.Empty, PushNotificationKey.Token);
+            NSUserDefaults.StandardUserDefaults.SetString(string.Empty, PushNotificationContants.Token);
             NSUserDefaults.StandardUserDefaults.Synchronize();
         }
     }
@@ -106,8 +106,8 @@ namespace Bit.iOS.Services
 
     internal class CrossPushNotification
     {
-        private static Lazy<IPushNotification> Implementation = new Lazy<IPushNotification>(
-            () => new PushNotificationImplementation(), 
+        private static Lazy<IPushNotificationService> Implementation = new Lazy<IPushNotificationService>(
+            () => new iOSPushNotificationService(), 
             LazyThreadSafetyMode.PublicationOnly);
         public static bool IsInitialized => PushNotificationListener != null;
         public static IPushNotificationListener PushNotificationListener { get; private set; }
@@ -130,7 +130,7 @@ namespace Bit.iOS.Services
             Initialize(new T());
         }
 
-        public static IPushNotification Current
+        public static IPushNotificationService Current
         {
             get
             {

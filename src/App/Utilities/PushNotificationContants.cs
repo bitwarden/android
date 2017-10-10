@@ -1,6 +1,6 @@
 ﻿namespace Bit.App.Utilities
 {
-    public static class PushNotificationKey
+    public static class PushNotificationContants
     {
         /// <summary>
         /// Type

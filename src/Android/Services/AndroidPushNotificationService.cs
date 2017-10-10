@@ -17,7 +17,7 @@ using Newtonsoft.Json;
 
 namespace Bit.Android.Services
 {
-    public class PushNotificationImplementation : IPushNotification
+    public class AndroidPushNotificationService : IPushNotificationService
     {
         private const string GcmPreferencesKey = "GCMPreferences";
         private const string Tag = "PushNotification";
@@ -29,20 +29,20 @@ namespace Bit.Android.Services
         {
 
             System.Diagnostics.Debug.WriteLine(
-                $"{PushNotificationKey.DomainName} - Register -  Registering push notifications");
+                $"{PushNotificationContants.DomainName} - Register -  Registering push notifications");
 
             if(string.IsNullOrEmpty(CrossPushNotification.SenderId))
             {
                 System.Diagnostics.Debug.WriteLine(
-                    $"{PushNotificationKey.DomainName} - Register - SenderId is missing.");
+                    $"{PushNotificationContants.DomainName} - Register - SenderId is missing.");
 
                 CrossPushNotification.PushNotificationListener.OnError(
-                    $"{PushNotificationKey.DomainName} - Register - Sender Id is missing.", Device.Android);
+                    $"{PushNotificationContants.DomainName} - Register - Sender Id is missing.", Device.Android);
             }
             else
             {
                 System.Diagnostics.Debug.WriteLine(
-                    $"{PushNotificationKey.DomainName} - Register -  Registering for Push Notifications");
+                    $"{PushNotificationContants.DomainName} - Register -  Registering for Push Notifications");
 
                 ThreadPool.QueueUserWorkItem(state =>
                 {
@@ -68,10 +68,10 @@ namespace Bit.Android.Services
             ThreadPool.QueueUserWorkItem(state =>
             {
                 System.Diagnostics.Debug.WriteLine(
-                    $"{PushNotificationKey.DomainName} - Unregister -  Unregistering push notifications");
+                    $"{PushNotificationContants.DomainName} - Unregister -  Unregistering push notifications");
                 try
                 {
-                    InstanceID instanceID = InstanceID.GetInstance(global::Android.App.Application.Context);
+                    var instanceID = InstanceID.GetInstance(global::Android.App.Application.Context);
                     instanceID.DeleteToken(CrossPushNotification.SenderId, GoogleCloudMessaging.InstanceIdScope);
 
                     CrossPushNotification.PushNotificationListener.OnUnregistered(Device.Android);
@@ -89,35 +89,31 @@ namespace Bit.Android.Services
 
         private string GetRegistrationId()
         {
-            var retVal = string.Empty;
             var context = global::Android.App.Application.Context;
             var prefs = GetGCMPreferences(context);
-            var registrationId = prefs.GetString(PushNotificationKey.Token, string.Empty);
+            var registrationId = prefs.GetString(PushNotificationContants.Token, string.Empty);
             if(string.IsNullOrEmpty(registrationId))
             {
-                System.Diagnostics.Debug.WriteLine($"{PushNotificationKey.DomainName} - Registration not found.");
-                return retVal;
+                System.Diagnostics.Debug.WriteLine($"{PushNotificationContants.DomainName} - Registration not found.");
+                return string.Empty;
             }
 
             // Check if app was updated; if so, it must clear the registration ID
             // since the existing registration ID is not guaranteed to work with
             // the new app version.
-            var registeredVersion = prefs.GetInt(PushNotificationKey.AppVersion, Java.Lang.Integer.MinValue);
+            var registeredVersion = prefs.GetInt(PushNotificationContants.AppVersion, Java.Lang.Integer.MinValue);
             var currentVersion = GetAppVersion(context);
             if(registeredVersion != currentVersion)
             {
-                System.Diagnostics.Debug.WriteLine($"{PushNotificationKey.DomainName} - App version changed.");
-                return retVal;
+                System.Diagnostics.Debug.WriteLine($"{PushNotificationContants.DomainName} - App version changed.");
+                return string.Empty;
             }
 
-            retVal = registrationId;
-            return retVal;
+            return registrationId;
         }
 
         internal static ISharedPreferences GetGCMPreferences(Context context)
         {
-            // This sample app persists the registration ID in shared preferences, but
-            // how you store the registration ID in your app is up to you.
             return context.GetSharedPreferences(GcmPreferencesKey, FileCreationMode.Private);
         }
 
@@ -141,11 +137,11 @@ namespace Bit.Android.Services
             var appVersion = GetAppVersion(context);
 
             System.Diagnostics.Debug.WriteLine(
-                $"{PushNotificationKey.DomainName} - Saving token on app version {appVersion}");
+                $"{PushNotificationContants.DomainName} - Saving token on app version {appVersion}");
 
             var editor = prefs.Edit();
-            editor.PutString(PushNotificationKey.Token, regId);
-            editor.PutInt(PushNotificationKey.AppVersion, appVersion);
+            editor.PutString(PushNotificationContants.Token, regId);
+            editor.PutInt(PushNotificationContants.AppVersion, appVersion);
             editor.Commit();
         }
     }
@@ -168,7 +164,7 @@ namespace Bit.Android.Services
                     var token = instanceID.GetToken(CrossPushNotification.SenderId,
                         GoogleCloudMessaging.InstanceIdScope, null);
                     CrossPushNotification.PushNotificationListener.OnRegistered(token, Device.Android);
-                    PushNotificationImplementation.StoreRegistrationId(global::Android.App.Application.Context, token);
+                    AndroidPushNotificationService.StoreRegistrationId(global::Android.App.Application.Context, token);
                     SubscribeTopics(token);
                     System.Diagnostics.Debug.WriteLine($"{token} - Device registered, registration ID={Tag}");
                 }
@@ -230,7 +226,7 @@ namespace Bit.Android.Services
             if(extras != null && !extras.IsEmpty)
             {
                 System.Diagnostics.Debug.WriteLine(
-                    $"{PushNotificationKey.DomainName} - GCM Listener - Push Received");
+                    $"{PushNotificationContants.DomainName} - GCM Listener - Push Received");
 
                 var parameters = new Dictionary<string, object>();
                 var values = new JObject();
@@ -249,7 +245,7 @@ namespace Bit.Android.Services
 
                     parameters.Add(key, extras.Get(key));
                     System.Diagnostics.Debug.WriteLine(
-                        $"{PushNotificationKey.DomainName} - GCM Listener - Push Params {key} : {extras.Get(key)}");
+                        $"{PushNotificationContants.DomainName} - GCM Listener - Push Params {key} : {extras.Get(key)}");
                 }
 
                 var context = global::Android.App.Application.Context;
@@ -267,21 +263,21 @@ namespace Bit.Android.Services
                     {
                         message = parameters[CrossPushNotification.NotificationContentTextKey].ToString();
                     }
-                    else if(parameters.ContainsKey(PushNotificationKey.Alert))
+                    else if(parameters.ContainsKey(PushNotificationContants.Alert))
                     {
-                        message = parameters[PushNotificationKey.Alert].ToString();
+                        message = parameters[PushNotificationContants.Alert].ToString();
                     }
-                    else if(parameters.ContainsKey(PushNotificationKey.Message))
+                    else if(parameters.ContainsKey(PushNotificationContants.Message))
                     {
-                        message = parameters[PushNotificationKey.Message].ToString();
+                        message = parameters[PushNotificationContants.Message].ToString();
                     }
-                    else if(parameters.ContainsKey(PushNotificationKey.Subtitle))
+                    else if(parameters.ContainsKey(PushNotificationContants.Subtitle))
                     {
-                        message = parameters[PushNotificationKey.Subtitle].ToString();
+                        message = parameters[PushNotificationContants.Subtitle].ToString();
                     }
-                    else if(parameters.ContainsKey(PushNotificationKey.Text))
+                    else if(parameters.ContainsKey(PushNotificationContants.Text))
                     {
-                        message = parameters[PushNotificationKey.Text].ToString();
+                        message = parameters[PushNotificationContants.Text].ToString();
                     }
 
                     if(!string.IsNullOrEmpty(CrossPushNotification.NotificationContentTitleKey) &&
@@ -289,15 +285,15 @@ namespace Bit.Android.Services
                     {
                         title = parameters[CrossPushNotification.NotificationContentTitleKey].ToString();
                     }
-                    else if(parameters.ContainsKey(PushNotificationKey.Title))
+                    else if(parameters.ContainsKey(PushNotificationContants.Title))
                     {
                         if(!string.IsNullOrEmpty(message))
                         {
-                            title = parameters[PushNotificationKey.Title].ToString();
+                            title = parameters[PushNotificationContants.Title].ToString();
                         }
                         else
                         {
-                            message = parameters[PushNotificationKey.Title].ToString();
+                            message = parameters[PushNotificationContants.Title].ToString();
                         }
                     }
 
@@ -307,7 +303,7 @@ namespace Bit.Android.Services
                             !string.IsNullOrEmpty(CrossPushNotification.NotificationContentDataKey) &&
                             values[CrossPushNotification.NotificationContentDataKey] != null) ?
                                 values[CrossPushNotification.NotificationContentDataKey] :
-                                values[PushNotificationKey.Data];
+                                values[PushNotificationContants.Data];
 
                         if(data != null)
                         {
@@ -316,21 +312,21 @@ namespace Bit.Android.Services
                             {
                                 message = data[CrossPushNotification.NotificationContentTextKey].ToString();
                             }
-                            else if(data[PushNotificationKey.Alert] != null)
+                            else if(data[PushNotificationContants.Alert] != null)
                             {
-                                message = data[PushNotificationKey.Alert].ToString();
+                                message = data[PushNotificationContants.Alert].ToString();
                             }
-                            else if(data[PushNotificationKey.Message] != null)
+                            else if(data[PushNotificationContants.Message] != null)
                             {
-                                message = data[PushNotificationKey.Message].ToString();
+                                message = data[PushNotificationContants.Message].ToString();
                             }
-                            else if(data[PushNotificationKey.Subtitle] != null)
+                            else if(data[PushNotificationContants.Subtitle] != null)
                             {
-                                message = data[PushNotificationKey.Subtitle].ToString();
+                                message = data[PushNotificationContants.Subtitle].ToString();
                             }
-                            else if(data[PushNotificationKey.Text] != null)
+                            else if(data[PushNotificationContants.Text] != null)
                             {
-                                message = data[PushNotificationKey.Text].ToString();
+                                message = data[PushNotificationContants.Text].ToString();
                             }
 
                             if(!string.IsNullOrEmpty(CrossPushNotification.NotificationContentTitleKey) &&
@@ -338,23 +334,23 @@ namespace Bit.Android.Services
                             {
                                 title = data[CrossPushNotification.NotificationContentTitleKey].ToString();
                             }
-                            else if(data[PushNotificationKey.Title] != null)
+                            else if(data[PushNotificationContants.Title] != null)
                             {
                                 if(!string.IsNullOrEmpty(message))
                                 {
-                                    title = data[PushNotificationKey.Title].ToString();
+                                    title = data[PushNotificationContants.Title].ToString();
                                 }
                                 else
                                 {
-                                    message = data[PushNotificationKey.Title].ToString();
+                                    message = data[PushNotificationContants.Title].ToString();
                                 }
                             }
                         }
                     }
 
-                    if(parameters.ContainsKey(PushNotificationKey.Id))
+                    if(parameters.ContainsKey(PushNotificationContants.Id))
                     {
-                        var str = parameters[PushNotificationKey.Id].ToString();
+                        var str = parameters[PushNotificationContants.Id].ToString();
                         try
                         {
                             notifyId = Convert.ToInt32(str);
@@ -366,13 +362,13 @@ namespace Bit.Android.Services
                         }
                     }
 
-                    if(parameters.ContainsKey(PushNotificationKey.Tag))
+                    if(parameters.ContainsKey(PushNotificationContants.Tag))
                     {
-                        tag = parameters[PushNotificationKey.Tag].ToString();
+                        tag = parameters[PushNotificationContants.Tag].ToString();
                     }
 
-                    if(!parameters.ContainsKey(PushNotificationKey.Silent) ||
-                        !System.Boolean.Parse(parameters[PushNotificationKey.Silent].ToString()))
+                    if(!parameters.ContainsKey(PushNotificationContants.Silent) ||
+                        !System.Boolean.Parse(parameters[PushNotificationContants.Silent].ToString()))
                     {
                         if(CrossPushNotification.PushNotificationListener.ShouldShowNotification())
                         {
@@ -395,7 +391,7 @@ namespace Bit.Android.Services
         private void CreateNotification(string title, string message, int notifyId, string tag, Bundle extras)
         {
             System.Diagnostics.Debug.WriteLine(
-                $"{PushNotificationKey.DomainName} - PushNotification - Message {title} : {message}");
+                $"{PushNotificationContants.DomainName} - PushNotification - Message {title} : {message}");
 
             NotificationCompat.Builder builder = null;
             var context = global::Android.App.Application.Context;
@@ -480,7 +476,7 @@ namespace Bit.Android.Services
     { }
 
     [Service]
-    public class PushNotificationService : Service
+    public class AndroidPushService : Service
     {
         public override void OnCreate()
         {
@@ -509,8 +505,8 @@ namespace Bit.Android.Services
 
     internal class CrossPushNotification
     {
-        private static Lazy<IPushNotification> Implementation = new Lazy<IPushNotification>(
-            () => new PushNotificationImplementation(),
+        private static Lazy<IPushNotificationService> Implementation = new Lazy<IPushNotificationService>(
+            () => new AndroidPushNotificationService(),
             LazyThreadSafetyMode.PublicationOnly);
         public static bool IsInitialized => PushNotificationListener != null;
         public static IPushNotificationListener PushNotificationListener { get; private set; }
@@ -542,7 +538,7 @@ namespace Bit.Android.Services
             Initialize(new T(), senderId);
         }
 
-        public static IPushNotification Current
+        public static IPushNotificationService Current
         {
             get
             {

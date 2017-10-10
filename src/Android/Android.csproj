@@ -317,7 +317,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LogService.cs" />
     <Compile Include="Services\MemoryService.cs" />
-    <Compile Include="Services\PushNotificationImplementation.cs" />
+    <Compile Include="Services\AndroidPushNotificationService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SqlService.cs" />
     <Compile Include="SplashActivity.cs" />

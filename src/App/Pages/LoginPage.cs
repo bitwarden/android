@@ -18,7 +18,7 @@ namespace Bit.App.Pages
         private ISyncService _syncService;
         private ISettings _settings;
         private IGoogleAnalyticsService _googleAnalyticsService;
-        private IPushNotification _pushNotification;
+        private IPushNotificationService _pushNotification;
         private readonly string _email;
 
         public LoginPage(string email = null)
@@ -30,7 +30,7 @@ namespace Bit.App.Pages
             _syncService = Resolver.Resolve<ISyncService>();
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
-            _pushNotification = Resolver.Resolve<IPushNotification>();
+            _pushNotification = Resolver.Resolve<IPushNotificationService>();
 
             Init();
         }

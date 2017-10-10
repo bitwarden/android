@@ -1,6 +1,6 @@
 ﻿namespace Bit.App.Abstractions
 {
-    public interface IPushNotification
+    public interface IPushNotificationService
     {
         string Token { get; }
         void Register();
