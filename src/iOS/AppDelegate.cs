@@ -21,7 +21,6 @@ using Google.Analytics;
 using FFImageLoading.Forms.Touch;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
-using UserNotifications;
 
 namespace Bit.iOS
 {
@@ -35,9 +34,7 @@ namespace Bit.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            global::Xamarin.Forms.Forms.Init();
-
-            UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterDelegate();
+            Forms.Init();
 
             if(!Resolver.IsSet)
             {
@@ -80,7 +77,7 @@ namespace Bit.iOS
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             UIBarButtonItem.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
-            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).SetTitleColor(primaryColor, 
+            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).SetTitleColor(primaryColor,
                 UIControlState.Normal);
             UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
             UIStepper.Appearance.TintColor = grayLight;
@@ -113,7 +110,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current, 
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
                 "ShowStatusBar", (sender, show) =>
             {
                 UIApplication.SharedApplication.SetStatusBarHidden(!show, false);
@@ -158,7 +155,6 @@ namespace Bit.iOS
             Debug.WriteLine("DidEnterBackground");
         }
 
-
         public override void OnResignActivation(UIApplication uiApplication)
         {
             base.OnResignActivation(uiApplication);
@@ -198,7 +194,7 @@ namespace Bit.iOS
             Debug.WriteLine("WillEnterForeground");
         }
 
-        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, 
+        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication,
             NSObject annotation)
         {
             return true;
@@ -206,40 +202,40 @@ namespace Bit.iOS
 
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler)
+            if(CrossPushNotification.Current is IPushNotificationHandler handler)
             {
-                ((IPushNotificationHandler)CrossPushNotification.Current).OnErrorReceived(error);
+                handler.OnErrorReceived(error);
             }
         }
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler)
+            if(CrossPushNotification.Current is IPushNotificationHandler handler)
             {
-                ((IPushNotificationHandler)CrossPushNotification.Current).OnRegisteredSuccess(deviceToken);
+                handler.OnRegisteredSuccess(deviceToken);
             }
         }
 
-        public override void DidRegisterUserNotificationSettings(UIApplication application, 
+        public override void DidRegisterUserNotificationSettings(UIApplication application,
             UIUserNotificationSettings notificationSettings)
         {
             application.RegisterForRemoteNotifications();
         }
 
-        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, 
+        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo,
             Action<UIBackgroundFetchResult> completionHandler)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler)
+            if(CrossPushNotification.Current is IPushNotificationHandler handler)
             {
-                ((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived(userInfo);
+                handler.OnMessageReceived(userInfo);
             }
         }
 
         public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler)
+            if(CrossPushNotification.Current is IPushNotificationHandler handler)
             {
-                ((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived(userInfo);
+                handler.OnMessageReceived(userInfo);
             }
         }
 

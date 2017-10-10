@@ -105,20 +105,6 @@ namespace Bit.iOS.Services
         void OnUnregisteredSuccess();
     }
 
-    public class UserNotificationCenterDelegate : UNUserNotificationCenterDelegate
-    {
-        public override void WillPresentNotification(UNUserNotificationCenter center,
-            UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
-        {
-            Debug.WriteLine("WillPresentNotification: {0}", notification);
-
-            if(CrossPushNotification.Current is IPushNotificationHandler)
-            {
-                //((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived();
-            }
-        }
-    }
-
     internal class CrossPushNotification
     {
         private static Lazy<IPushNotificationService> Implementation = new Lazy<IPushNotificationService>(
