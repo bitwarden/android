@@ -7,7 +7,6 @@ using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
-using PushNotification.Plugin.Abstractions;
 using Bit.App.Utilities;
 
 namespace Bit.App.Pages

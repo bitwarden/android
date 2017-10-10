@@ -1,5 +1,5 @@
-﻿using System;
-using PushNotification.Plugin.Abstractions;
+﻿using Bit.App.Enums;
+using System;
 
 namespace Bit.App.Models.Api
 {

@@ -1,6 +1,4 @@
-using PushNotification.Plugin.Abstractions;
 using System.Diagnostics;
-using PushNotification.Plugin;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Bit.App.Abstractions;
@@ -37,7 +35,7 @@ namespace Bit.App.Services
             _resolved = true;
         }
 
-        public void OnMessage(JObject value, DeviceType deviceType)
+        public void OnMessage(JObject value, string deviceType)
         {
             Resolve();
 
@@ -144,7 +142,7 @@ namespace Bit.App.Services
             }
         }
 
-        public async void OnRegistered(string token, DeviceType deviceType)
+        public async void OnRegistered(string token, string deviceType)
         {
             Resolve();
 
@@ -168,12 +166,12 @@ namespace Bit.App.Services
             }
         }
 
-        public void OnUnregistered(DeviceType deviceType)
+        public void OnUnregistered(string deviceType)
         {
             Debug.WriteLine("Push Notification - Device Unnregistered");
         }
 
-        public void OnError(string message, DeviceType deviceType)
+        public void OnError(string message, string deviceType)
         {
             Debug.WriteLine(string.Format("Push notification error - {0}", message));
         }

@@ -170,9 +170,6 @@
     <PackageReference Include="Xam.Plugin.Connectivity">
       <Version>3.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Xam.Plugin.PushNotification">
-      <Version>1.2.4</Version>
-    </PackageReference>
     <PackageReference Include="Xam.Plugins.Settings">
       <Version>3.0.1</Version>
     </PackageReference>

@@ -7,7 +7,6 @@ using Bit.App.Controls;
 using Acr.UserDialogs;
 using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
-using PushNotification.Plugin.Abstractions;
 using Bit.App.Utilities;
 
 namespace Bit.App.Pages

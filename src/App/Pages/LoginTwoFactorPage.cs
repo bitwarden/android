@@ -6,7 +6,6 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
 using System.Threading.Tasks;
-using PushNotification.Plugin.Abstractions;
 using Bit.App.Models;
 using Bit.App.Utilities;
 using Bit.App.Enums;

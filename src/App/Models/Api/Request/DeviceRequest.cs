@@ -1,5 +1,5 @@
 ﻿using Bit.App.Abstractions;
-using PushNotification.Plugin.Abstractions;
+using Bit.App.Enums;
 using Xamarin.Forms;
 
 namespace Bit.App.Models.Api

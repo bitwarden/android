@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using XLabs.Ioc;
-
 using Foundation;
 using UIKit;
 using Bit.App.Abstractions;
@@ -16,7 +13,6 @@ using Plugin.Settings.Abstractions;
 using System.Diagnostics;
 using Xamarin.Forms;
 using Bit.iOS.Core.Services;
-using PushNotification.Plugin;
 using Plugin.Connectivity.Abstractions;
 using Bit.App.Pages;
 using HockeyApp.iOS;
@@ -81,14 +77,16 @@ namespace Bit.iOS
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             UIBarButtonItem.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
-            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).SetTitleColor(primaryColor, UIControlState.Normal);
+            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).SetTitleColor(primaryColor, 
+                UIControlState.Normal);
             UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
             UIStepper.Appearance.TintColor = grayLight;
             UISlider.Appearance.TintColor = primaryColor;
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, ToolsExtensionPage>(Xamarin.Forms.Application.Current, "ShowAppExtension", (sender, page) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, ToolsExtensionPage>(
+                Xamarin.Forms.Application.Current, "ShowAppExtension", (sender, page) =>
             {
-                var itemProvider = new NSItemProvider(new NSDictionary(), iOS.Core.Constants.UTTypeAppExtensionSetup);
+                var itemProvider = new NSItemProvider(new NSDictionary(), Core.Constants.UTTypeAppExtensionSetup);
                 var extensionItem = new NSExtensionItem();
                 extensionItem.Attachments = new NSItemProvider[] { itemProvider };
                 var activityViewController = new UIActivityViewController(new NSExtensionItem[] { extensionItem }, null);
@@ -112,7 +110,8 @@ namespace Bit.iOS
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current, "ShowStatusBar", (sender, show) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current, 
+                "ShowStatusBar", (sender, show) =>
             {
                 UIApplication.SharedApplication.SetStatusBarHidden(!show, false);
             });
@@ -196,7 +195,8 @@ namespace Bit.iOS
             Debug.WriteLine("WillEnterForeground");
         }
 
-        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, NSObject annotation)
+        public override bool OpenUrl(UIApplication application, NSUrl url, string sourceApplication, 
+            NSObject annotation)
         {
             return true;
         }
@@ -217,12 +217,14 @@ namespace Bit.iOS
             }
         }
 
-        public override void DidRegisterUserNotificationSettings(UIApplication application, UIUserNotificationSettings notificationSettings)
+        public override void DidRegisterUserNotificationSettings(UIApplication application, 
+            UIUserNotificationSettings notificationSettings)
         {
             application.RegisterForRemoteNotifications();
         }
 
-        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, Action<UIBackgroundFetchResult> completionHandler)
+        public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo, 
+            Action<UIBackgroundFetchResult> completionHandler)
         {
             if(CrossPushNotification.Current is IPushNotificationHandler)
             {

@@ -238,6 +238,7 @@
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\PushNotificationImplementation.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <None Include="app.config">
       <SubType>Designer</SubType>
@@ -323,14 +324,6 @@
     </Reference>
     <Reference Include="Plugin.Settings.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.0.1\lib\Xamarin.iOS10\Plugin.Settings.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="PushNotification.Plugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugin.PushNotification.1.2.4\lib\Xamarin.iOS10\PushNotification.Plugin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PushNotification.Plugin.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugin.PushNotification.1.2.4\lib\Xamarin.iOS10\PushNotification.Plugin.Abstractions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="SimpleInjector, Version=4.0.8.0, Culture=neutral, PublicKeyToken=984cb50dea722e99, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SimpleInjector.4.0.8\lib\netstandard1.3\SimpleInjector.dll</HintPath>

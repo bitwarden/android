@@ -12,8 +12,6 @@ using Plugin.Connectivity;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Plugin.Settings;
-using PushNotification.Plugin;
-using PushNotification.Plugin.Abstractions;
 using XLabs.Ioc;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;

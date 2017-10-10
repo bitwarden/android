@@ -44,6 +44,8 @@
     <Compile Include="Abstractions\Repositories\ISettingsRepository.cs" />
     <Compile Include="Abstractions\Services\IAppSettingsService.cs" />
     <Compile Include="Abstractions\Services\IMemoryService.cs" />
+    <Compile Include="Abstractions\Services\IPushNotificationListener.cs" />
+    <Compile Include="Abstractions\Services\IPushNotification.cs" />
     <Compile Include="Abstractions\Services\ISettingsService.cs" />
     <Compile Include="Abstractions\Services\ITokenService.cs" />
     <Compile Include="Abstractions\Services\IHttpService.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Controls\PinControl.cs" />
     <Compile Include="Controls\VaultAttachmentsViewCell.cs" />
     <Compile Include="Controls\VaultListViewCell.cs" />
+    <Compile Include="Enums\DeviceType.cs" />
     <Compile Include="Enums\FieldType.cs" />
     <Compile Include="Enums\TwoFactorProviderType.cs" />
     <Compile Include="Enums\EncryptionType.cs" />
@@ -355,6 +358,7 @@
     <Compile Include="Utilities\Extentions.cs" />
     <Compile Include="Utilities\ExtendedObservableCollection.cs" />
     <Compile Include="Utilities\ApiHttpClient.cs" />
+    <Compile Include="Utilities\PushNotificationKey.cs" />
     <Compile Include="Utilities\TokenHttpRequestMessage.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -527,14 +531,6 @@
     </Reference>
     <Reference Include="Plugin.Settings.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.0.1\lib\netstandard1.0\Plugin.Settings.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="PushNotification.Plugin, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugin.PushNotification.1.2.4\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\PushNotification.Plugin.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="PushNotification.Plugin.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xam.Plugin.PushNotification.1.2.4\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\PushNotification.Plugin.Abstractions.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Splat.1.6.2\lib\Portable-net45+win+wpa81+wp80\Splat.dll</HintPath>
