@@ -105,6 +105,7 @@
     <Compile Include="Services\DeviceInfoService.cs" />
     <Compile Include="Services\GoogleAnalyticsService.cs" />
     <Compile Include="Services\HttpService.cs" />
+    <Compile Include="Services\PushNotificationImplementation.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <Compile Include="Services\SecureStorageService.cs" />
     <Compile Include="Services\KeyDerivationService.cs" />
