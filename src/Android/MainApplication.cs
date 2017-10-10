@@ -151,11 +151,11 @@ namespace Bit.Android
 
         public static void StartPushService()
         {
-            AppContext.StartService(new Intent(AppContext, typeof(AndroidPushNotificationService)));
+            AppContext.StartService(new Intent(AppContext, typeof(AndroidPushService)));
             if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
             {
                 PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
-                    typeof(AndroidPushNotificationService)), 0);
+                    typeof(AndroidPushService)), 0);
                 AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
                 alarm.Cancel(pintent);
             }
@@ -163,11 +163,11 @@ namespace Bit.Android
 
         public static void StopPushService()
         {
-            AppContext.StopService(new Intent(AppContext, typeof(AndroidPushNotificationService)));
+            AppContext.StopService(new Intent(AppContext, typeof(AndroidPushService)));
             if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
             {
                 PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
-                    typeof(AndroidPushNotificationService)), 0);
+                    typeof(AndroidPushService)), 0);
                 AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
                 alarm.Cancel(pintent);
             }
