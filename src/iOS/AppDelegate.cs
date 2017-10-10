@@ -21,6 +21,7 @@ using Google.Analytics;
 using FFImageLoading.Forms.Touch;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
+using UserNotifications;
 
 namespace Bit.iOS
 {
@@ -35,6 +36,8 @@ namespace Bit.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             global::Xamarin.Forms.Forms.Init();
+
+            UNUserNotificationCenter.Current.Delegate = new UserNotificationCenterDelegate();
 
             if(!Resolver.IsSet)
             {

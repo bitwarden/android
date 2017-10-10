@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using UIKit;
+using UserNotifications;
 using Xamarin.Forms;
 
 namespace Bit.iOS.Services
@@ -17,7 +18,7 @@ namespace Bit.iOS.Services
 
         public void Register()
         {
-            var userNotificationTypes = UIUserNotificationType.Alert | UIUserNotificationType.Badge | 
+            var userNotificationTypes = UIUserNotificationType.Alert | UIUserNotificationType.Badge |
                 UIUserNotificationType.Sound;
             var settings = UIUserNotificationSettings.GetSettingsForTypes(userNotificationTypes, null);
             UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
@@ -104,10 +105,24 @@ namespace Bit.iOS.Services
         void OnUnregisteredSuccess();
     }
 
+    public class UserNotificationCenterDelegate : UNUserNotificationCenterDelegate
+    {
+        public override void WillPresentNotification(UNUserNotificationCenter center,
+            UNNotification notification, Action<UNNotificationPresentationOptions> completionHandler)
+        {
+            Debug.WriteLine("WillPresentNotification: {0}", notification);
+
+            if(CrossPushNotification.Current is IPushNotificationHandler)
+            {
+                //((IPushNotificationHandler)CrossPushNotification.Current).OnMessageReceived();
+            }
+        }
+    }
+
     internal class CrossPushNotification
     {
         private static Lazy<IPushNotificationService> Implementation = new Lazy<IPushNotificationService>(
-            () => new iOSPushNotificationService(), 
+            () => new iOSPushNotificationService(),
             LazyThreadSafetyMode.PublicationOnly);
         public static bool IsInitialized => PushNotificationListener != null;
         public static IPushNotificationListener PushNotificationListener { get; private set; }
