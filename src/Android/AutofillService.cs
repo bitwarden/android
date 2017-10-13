@@ -55,7 +55,8 @@ namespace Bit.Android
             new Browser("com.linkbubble.playstore", "url_text"),
             new Browser("com.ksmobile.cb", "address_bar_edit_text"),
             new Browser("acr.browser.lightning", "search"),
-            new Browser("acr.browser.barebones", "search")
+            new Browser("acr.browser.barebones", "search"),
+            new Browser("com.microsoft.emmx", "url_bar")
         }.ToDictionary(n => n.PackageName);
 
         private readonly IAppSettingsService _appSettings;
