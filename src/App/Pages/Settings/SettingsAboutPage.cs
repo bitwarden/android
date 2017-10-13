@@ -80,7 +80,7 @@ namespace Bit.App.Pages
 
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }
 
             Title = AppResources.About;
