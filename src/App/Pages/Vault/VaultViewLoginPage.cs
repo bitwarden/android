@@ -18,7 +18,7 @@ namespace Bit.App.Pages
     public class VaultViewLoginPage : ExtendedContentPage
     {
         private readonly string _loginId;
-        private readonly ILoginService _loginService;
+        private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly ITokenService _tokenService;
@@ -27,7 +27,7 @@ namespace Bit.App.Pages
         public VaultViewLoginPage(string loginId)
         {
             _loginId = loginId;
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _tokenService = Resolver.Resolve<ITokenService>();
@@ -161,14 +161,14 @@ namespace Bit.App.Pages
             NotesCell.Tapped += NotesCell_Tapped;
             EditItem.InitEvents();
 
-            var login = await _loginService.GetByIdAsync(_loginId);
-            if(login == null)
+            var cipher = await _cipherService.GetByIdAsync(_loginId);
+            if(cipher == null)
             {
                 await Navigation.PopForDeviceAsync();
                 return;
             }
 
-            Model.Update(login);
+            Model.Update(cipher);
 
             if(LoginInformationSection.Contains(UriCell))
             {
@@ -211,9 +211,9 @@ namespace Bit.App.Pages
             {
                 LoginInformationSection.Remove(TotpCodeCell);
             }
-            if(login.Totp != null && (_tokenService.TokenPremium || login.OrganizationUseTotp))
+            if(cipher.Login?.Totp != null && (_tokenService.TokenPremium || cipher.OrganizationUseTotp))
             {
-                var totpKey = login.Totp.Decrypt(login.OrganizationId);
+                var totpKey = cipher.Login?.Totp.Decrypt(cipher.OrganizationId);
                 if(!string.IsNullOrWhiteSpace(totpKey))
                 {
                     Model.TotpCode = Crypto.Totp(totpKey);
@@ -249,7 +249,7 @@ namespace Bit.App.Pages
                 {
                     var attachmentCell = new AttachmentViewCell(attachment, async () =>
                     {
-                        await OpenAttachmentAsync(login, attachment);
+                        await OpenAttachmentAsync(cipher, attachment);
                     });
                     AttachmentCells.Add(attachmentCell);
                     AttachmentsSection.Add(attachmentCell);
@@ -309,7 +309,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task OpenAttachmentAsync(Login login, VaultViewLoginPageModel.Attachment attachment)
+        private async Task OpenAttachmentAsync(Cipher login, VaultViewLoginPageModel.Attachment attachment)
         {
             if(!_tokenService.TokenPremium && !login.OrganizationUseTotp)
             {
@@ -332,7 +332,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Downloading, MaskType.Black);
-            var data = await _loginService.DownloadAndDecryptAttachmentAsync(attachment.Url, login.OrganizationId);
+            var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, login.OrganizationId);
             _userDialogs.HideLoading();
             if(data == null)
             {

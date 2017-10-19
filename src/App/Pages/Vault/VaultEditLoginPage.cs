@@ -15,7 +15,7 @@ namespace Bit.App.Pages
     public class VaultEditLoginPage : ExtendedContentPage
     {
         private readonly string _loginId;
-        private readonly ILoginService _loginService;
+        private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
@@ -26,7 +26,7 @@ namespace Bit.App.Pages
         public VaultEditLoginPage(string loginId)
         {
             _loginId = loginId;
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
@@ -50,8 +50,8 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var login = _loginService.GetByIdAsync(_loginId).GetAwaiter().GetResult();
-            if(login == null)
+            var cipher = _cipherService.GetByIdAsync(_loginId).GetAwaiter().GetResult();
+            if(cipher == null)
             {
                 // TODO: handle error. navigate back? should never happen...
                 return;
@@ -59,7 +59,7 @@ namespace Bit.App.Pages
 
             NotesCell = new FormEditorCell(height: 300);
             NotesCell.Editor.Keyboard = Keyboard.Text;
-            NotesCell.Editor.Text = login.Notes?.Decrypt(login.OrganizationId);
+            NotesCell.Editor.Text = cipher.Notes?.Decrypt(cipher.OrganizationId);
 
             TotpCell = new FormEntryCell(AppResources.AuthenticatorKey, nextElement: NotesCell.Editor,
                 useButton: _deviceInfo.HasCamera);
@@ -67,28 +67,28 @@ namespace Bit.App.Pages
             {
                 TotpCell.Button.Image = "camera";
             }
-            TotpCell.Entry.Text = login.Totp?.Decrypt(login.OrganizationId);
+            TotpCell.Entry.Text = cipher.Login?.Totp?.Decrypt(cipher.OrganizationId);
             TotpCell.Entry.DisableAutocapitalize = true;
             TotpCell.Entry.Autocorrect = false;
             TotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
             PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: TotpCell.Entry,
                 useButton: true);
-            PasswordCell.Entry.Text = login.Password?.Decrypt(login.OrganizationId);
+            PasswordCell.Entry.Text = cipher.Login?.Password?.Decrypt(cipher.OrganizationId);
             PasswordCell.Button.Image = "eye";
             PasswordCell.Entry.DisableAutocapitalize = true;
             PasswordCell.Entry.Autocorrect = false;
             PasswordCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
             UsernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
-            UsernameCell.Entry.Text = login.Username?.Decrypt(login.OrganizationId);
+            UsernameCell.Entry.Text = cipher.Login?.Username?.Decrypt(cipher.OrganizationId);
             UsernameCell.Entry.DisableAutocapitalize = true;
             UsernameCell.Entry.Autocorrect = false;
 
             UriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: UsernameCell.Entry);
-            UriCell.Entry.Text = login.Uri?.Decrypt(login.OrganizationId);
+            UriCell.Entry.Text = cipher.Login?.Uri?.Decrypt(cipher.OrganizationId);
             NameCell = new FormEntryCell(AppResources.Name, nextElement: UriCell.Entry);
-            NameCell.Entry.Text = login.Name?.Decrypt(login.OrganizationId);
+            NameCell.Entry.Text = cipher.Name?.Decrypt(cipher.OrganizationId);
 
             GenerateCell = new ExtendedTextCell
             {
@@ -104,7 +104,7 @@ namespace Bit.App.Pages
             foreach(var folder in folders)
             {
                 i++;
-                if(folder.Id == login.FolderId)
+                if(folder.Id == cipher.FolderId)
                 {
                     selectedIndex = i;
                 }
@@ -117,7 +117,7 @@ namespace Bit.App.Pages
             var favoriteCell = new ExtendedSwitchCell
             {
                 Text = AppResources.Favorite,
-                On = login.Favorite
+                On = cipher.Favorite
             };
 
             AttachmentsCell = new ExtendedTextCell
@@ -204,30 +204,34 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                login.Name = NameCell.Entry.Text.Encrypt(login.OrganizationId);
-                login.Uri = string.IsNullOrWhiteSpace(UriCell.Entry.Text) ? null :
-                    UriCell.Entry.Text.Encrypt(login.OrganizationId);
-                login.Username = string.IsNullOrWhiteSpace(UsernameCell.Entry.Text) ? null :
-                    UsernameCell.Entry.Text.Encrypt(login.OrganizationId);
-                login.Password = string.IsNullOrWhiteSpace(PasswordCell.Entry.Text) ? null :
-                    PasswordCell.Entry.Text.Encrypt(login.OrganizationId);
-                login.Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null :
-                    NotesCell.Editor.Text.Encrypt(login.OrganizationId);
-                login.Totp = string.IsNullOrWhiteSpace(TotpCell.Entry.Text) ? null :
-                    TotpCell.Entry.Text.Encrypt(login.OrganizationId);
-                login.Favorite = favoriteCell.On;
+                cipher.Name = NameCell.Entry.Text.Encrypt(cipher.OrganizationId);
+                cipher.Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null :
+                    NotesCell.Editor.Text.Encrypt(cipher.OrganizationId);
+                cipher.Favorite = favoriteCell.On;
+
+                cipher.Login = new Models.Login
+                {
+                    Uri = string.IsNullOrWhiteSpace(UriCell.Entry.Text) ? null :
+                        UriCell.Entry.Text.Encrypt(cipher.OrganizationId),
+                    Username = string.IsNullOrWhiteSpace(UsernameCell.Entry.Text) ? null :
+                        UsernameCell.Entry.Text.Encrypt(cipher.OrganizationId),
+                    Password = string.IsNullOrWhiteSpace(PasswordCell.Entry.Text) ? null :
+                        PasswordCell.Entry.Text.Encrypt(cipher.OrganizationId),
+                    Totp = string.IsNullOrWhiteSpace(TotpCell.Entry.Text) ? null :
+                        TotpCell.Entry.Text.Encrypt(cipher.OrganizationId)
+                };
 
                 if(FolderCell.Picker.SelectedIndex > 0)
                 {
-                    login.FolderId = folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
+                    cipher.FolderId = folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
                 }
                 else
                 {
-                    login.FolderId = null;
+                    cipher.FolderId = null;
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _loginService.SaveAsync(login);
+                var saveTask = await _cipherService.SaveAsync(cipher);
 
                 _userDialogs.HideLoading();
 
@@ -405,7 +409,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
-            var deleteTask = await _loginService.DeleteAsync(_loginId);
+            var deleteTask = await _cipherService.DeleteAsync(_loginId);
             _userDialogs.HideLoading();
 
             if(deleteTask.Succeeded)

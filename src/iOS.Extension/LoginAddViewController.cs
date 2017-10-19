@@ -19,7 +19,7 @@ namespace Bit.iOS.Extension
 {
     public partial class LoginAddViewController : ExtendedUITableViewController
     {
-        private ILoginService _loginService;
+        private ICipherService _cipherService;
         private IFolderService _folderService;
         private IConnectivity _connectivity;
         private IEnumerable<Folder> _folders;
@@ -49,7 +49,7 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _folderService = Resolver.Resolve<IFolderService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
@@ -151,18 +151,21 @@ namespace Bit.iOS.Extension
                 return;
             }
 
-            var login = new Login
+            var cipher = new Cipher
             {
-                Uri = string.IsNullOrWhiteSpace(UriCell.TextField.Text) ? null : UriCell.TextField.Text.Encrypt(),
                 Name = string.IsNullOrWhiteSpace(NameCell.TextField.Text) ? null : NameCell.TextField.Text.Encrypt(),
-                Username = string.IsNullOrWhiteSpace(UsernameCell.TextField.Text) ? null : UsernameCell.TextField.Text.Encrypt(),
-                Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ? null : PasswordCell.TextField.Text.Encrypt(),
                 Notes = string.IsNullOrWhiteSpace(NotesCell.TextView.Text) ? null : NotesCell.TextView.Text.Encrypt(),
                 Favorite = FavoriteCell.Switch.On,
-                FolderId = FolderCell.SelectedIndex == 0 ? null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id
+                FolderId = FolderCell.SelectedIndex == 0 ? null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id,
+                Login = new Login
+                {
+                    Uri = string.IsNullOrWhiteSpace(UriCell.TextField.Text) ? null : UriCell.TextField.Text.Encrypt(),
+                    Username = string.IsNullOrWhiteSpace(UsernameCell.TextField.Text) ? null : UsernameCell.TextField.Text.Encrypt(),
+                    Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ? null : PasswordCell.TextField.Text.Encrypt()
+                }
             };
 
-            var saveTask = _loginService.SaveAsync(login);
+            var saveTask = _cipherService.SaveAsync(cipher);
             var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
             PresentViewController(loadingAlert, true, null);
             await saveTask;

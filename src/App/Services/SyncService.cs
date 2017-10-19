@@ -20,7 +20,7 @@ namespace Bit.App.Services
         private readonly ISettingsApiRepository _settingsApiRepository;
         private readonly ISyncApiRepository _syncApiRepository;
         private readonly IFolderRepository _folderRepository;
-        private readonly ILoginRepository _loginRepository;
+        private readonly ICipherRepository _cipherRepository;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly ISettingsRepository _settingsRepository;
         private readonly IAuthService _authService;
@@ -35,7 +35,7 @@ namespace Bit.App.Services
             ISettingsApiRepository settingsApiRepository,
             ISyncApiRepository syncApiRepository,
             IFolderRepository folderRepository,
-            ILoginRepository loginRepository,
+            ICipherRepository cipherRepository,
             IAttachmentRepository attachmentRepository,
             ISettingsRepository settingsRepository,
             IAuthService authService,
@@ -49,7 +49,7 @@ namespace Bit.App.Services
             _settingsApiRepository = settingsApiRepository;
             _syncApiRepository = syncApiRepository;
             _folderRepository = folderRepository;
-            _loginRepository = loginRepository;
+            _cipherRepository = cipherRepository;
             _attachmentRepository = attachmentRepository;
             _settingsRepository = settingsRepository;
             _authService = authService;
@@ -77,40 +77,32 @@ namespace Bit.App.Services
 
             try
             {
-                switch(cipher.Result.Type)
+                var cipherData = new CipherData(cipher.Result, _authService.UserId);
+                await _cipherRepository.UpsertAsync(cipherData).ConfigureAwait(false);
+
+                var localAttachments = (await _attachmentRepository.GetAllByCipherIdAsync(cipherData.Id)
+                    .ConfigureAwait(false));
+
+                if(cipher.Result.Attachments != null)
                 {
-                    case Enums.CipherType.Login:
-                        var loginData = new LoginData(cipher.Result, _authService.UserId);
-                        await _loginRepository.UpsertAsync(loginData).ConfigureAwait(false);
+                    foreach(var attachment in cipher.Result.Attachments)
+                    {
+                        var attachmentData = new AttachmentData(attachment, cipherData.Id);
+                        await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
+                    }
+                }
 
-                        var localAttachments = (await _attachmentRepository.GetAllByLoginIdAsync(loginData.Id)
-                            .ConfigureAwait(false));
-
-                        if(cipher.Result.Attachments != null)
+                if(localAttachments != null)
+                {
+                    foreach(var attachment in localAttachments
+                        .Where(a => !cipher.Result.Attachments.Any(sa => sa.Id == a.Id)))
+                    {
+                        try
                         {
-                            foreach(var attachment in cipher.Result.Attachments)
-                            {
-                                var attachmentData = new AttachmentData(attachment, loginData.Id);
-                                await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
-                            }
+                            await _attachmentRepository.DeleteAsync(attachment.Id).ConfigureAwait(false);
                         }
-
-                        if(localAttachments != null)
-                        {
-                            foreach(var attachment in localAttachments
-                                .Where(a => !cipher.Result.Attachments.Any(sa => sa.Id == a.Id)))
-                            {
-                                try
-                                {
-                                    await _attachmentRepository.DeleteAsync(attachment.Id).ConfigureAwait(false);
-                                }
-                                catch(SQLite.SQLiteException) { }
-                            }
-                        }
-                        break;
-                    default:
-                        SyncCompleted(false);
-                        return false;
+                        catch(SQLite.SQLiteException) { }
+                    }
                 }
             }
             catch(SQLite.SQLiteException)
@@ -164,7 +156,7 @@ namespace Bit.App.Services
 
             try
             {
-                await _folderRepository.DeleteWithLoginUpdateAsync(id, revisionDate).ConfigureAwait(false);
+                await _folderRepository.DeleteWithCipherUpdateAsync(id, revisionDate).ConfigureAwait(false);
                 SyncCompleted(true);
                 return true;
             }
@@ -175,7 +167,7 @@ namespace Bit.App.Services
             }
         }
 
-        public async Task<bool> SyncDeleteLoginAsync(string id)
+        public async Task<bool> SyncDeleteCipherAsync(string id)
         {
             if(!_authService.IsAuthenticated)
             {
@@ -186,7 +178,7 @@ namespace Bit.App.Services
 
             try
             {
-                await _loginRepository.DeleteAsync(id).ConfigureAwait(false);
+                await _cipherRepository.DeleteAsync(id).ConfigureAwait(false);
                 SyncCompleted(true);
                 return true;
             }
@@ -277,17 +269,16 @@ namespace Bit.App.Services
                 return false;
             }
 
-            var loginsDict = syncResponse.Result.Ciphers.Where(c => c.Type == Enums.CipherType.Login)
-                .ToDictionary(s => s.Id);
+            var ciphersDict = syncResponse.Result.Ciphers.ToDictionary(s => s.Id);
             var foldersDict = syncResponse.Result.Folders.ToDictionary(f => f.Id);
 
-            var loginTask = SyncLoginsAsync(loginsDict);
+            var cipherTask = SyncCiphersAsync(ciphersDict);
             var folderTask = SyncFoldersAsync(foldersDict);
             var domainsTask = SyncDomainsAsync(syncResponse.Result.Domains);
             var profileTask = SyncProfileKeysAsync(syncResponse.Result.Profile);
-            await Task.WhenAll(loginTask, folderTask, domainsTask, profileTask).ConfigureAwait(false);
+            await Task.WhenAll(cipherTask, folderTask, domainsTask, profileTask).ConfigureAwait(false);
 
-            if(folderTask.Exception != null || loginTask.Exception != null || domainsTask.Exception != null ||
+            if(folderTask.Exception != null || cipherTask.Exception != null || domainsTask.Exception != null ||
                 profileTask.Exception != null)
             {
                 SyncCompleted(false);
@@ -361,14 +352,14 @@ namespace Bit.App.Services
             }
         }
 
-        private async Task SyncLoginsAsync(IDictionary<string, CipherResponse> serverLogins)
+        private async Task SyncCiphersAsync(IDictionary<string, CipherResponse> serviceCiphers)
         {
             if(!_authService.IsAuthenticated)
             {
                 return;
             }
 
-            var localLogins = (await _loginRepository.GetAllByUserIdAsync(_authService.UserId)
+            var localCiphers = (await _cipherRepository.GetAllByUserIdAsync(_authService.UserId)
                 .ConfigureAwait(false))
                 .GroupBy(s => s.Id)
                 .Select(s => s.First())
@@ -379,7 +370,7 @@ namespace Bit.App.Services
                 .GroupBy(a => a.LoginId)
                 .ToDictionary(g => g.Key);
 
-            foreach(var serverLogin in serverLogins)
+            foreach(var serverCipher in serviceCiphers)
             {
                 if(!_authService.IsAuthenticated)
                 {
@@ -388,24 +379,25 @@ namespace Bit.App.Services
 
                 try
                 {
-                    var localLogin = localLogins.ContainsKey(serverLogin.Value.Id) ? localLogins[serverLogin.Value.Id] : null;
+                    var localCipher = localCiphers.ContainsKey(serverCipher.Value.Id) ? 
+                        localCiphers[serverCipher.Value.Id] : null;
 
-                    var data = new LoginData(serverLogin.Value, _authService.UserId);
-                    await _loginRepository.UpsertAsync(data).ConfigureAwait(false);
+                    var data = new CipherData(serverCipher.Value, _authService.UserId);
+                    await _cipherRepository.UpsertAsync(data).ConfigureAwait(false);
 
-                    if(serverLogin.Value.Attachments != null)
+                    if(serverCipher.Value.Attachments != null)
                     {
-                        foreach(var attachment in serverLogin.Value.Attachments)
+                        foreach(var attachment in serverCipher.Value.Attachments)
                         {
                             var attachmentData = new AttachmentData(attachment, data.Id);
                             await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
                         }
                     }
 
-                    if(localLogin != null && localAttachments != null && localAttachments.ContainsKey(localLogin.Id))
+                    if(localCipher != null && localAttachments != null && localAttachments.ContainsKey(localCipher.Id))
                     {
-                        foreach(var attachment in localAttachments[localLogin.Id]
-                            .Where(a => !serverLogin.Value.Attachments.Any(sa => sa.Id == a.Id)))
+                        foreach(var attachment in localAttachments[localCipher.Id]
+                            .Where(a => !serverCipher.Value.Attachments.Any(sa => sa.Id == a.Id)))
                         {
                             try
                             {
@@ -418,11 +410,11 @@ namespace Bit.App.Services
                 catch(SQLite.SQLiteException) { }
             }
 
-            foreach(var login in localLogins.Where(localLogin => !serverLogins.ContainsKey(localLogin.Key)))
+            foreach(var cipher in localCiphers.Where(local => !serviceCiphers.ContainsKey(local.Key)))
             {
                 try
                 {
-                    await _loginRepository.DeleteAsync(login.Value.Id).ConfigureAwait(false);
+                    await _cipherRepository.DeleteAsync(cipher.Value.Id).ConfigureAwait(false);
                 }
                 catch(SQLite.SQLiteException) { }
             }

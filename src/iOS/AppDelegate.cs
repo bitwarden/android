@@ -256,7 +256,7 @@ namespace Bit.iOS
             container.RegisterSingleton<IKeyDerivationService, CommonCryptoKeyDerivationService>();
             container.RegisterSingleton<IAuthService, AuthService>();
             container.RegisterSingleton<IFolderService, FolderService>();
-            container.RegisterSingleton<ILoginService, LoginService>();
+            container.RegisterSingleton<ICipherService, CipherService>();
             container.RegisterSingleton<ISyncService, SyncService>();
             container.RegisterSingleton<IDeviceActionService, DeviceActionService>();
             container.RegisterSingleton<IAppIdService, AppIdService>();
@@ -276,7 +276,7 @@ namespace Bit.iOS
             // Repositories
             container.RegisterSingleton<IFolderRepository, FolderRepository>();
             container.RegisterSingleton<IFolderApiRepository, FolderApiRepository>();
-            container.RegisterSingleton<ILoginRepository, LoginRepository>();
+            container.RegisterSingleton<ICipherRepository, CipherRepository>();
             container.RegisterSingleton<IAttachmentRepository, AttachmentRepository>();
             container.RegisterSingleton<IConnectApiRepository, ConnectApiRepository>();
             container.RegisterSingleton<IDeviceApiRepository, DeviceApiRepository>();

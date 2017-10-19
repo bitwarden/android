@@ -105,7 +105,7 @@ namespace Bit.iOS.Extension
             private IEnumerable<LoginViewModel> _tableItems = new List<LoginViewModel>();
             private Context _context;
             private LoginListViewController _controller;
-            private ILoginService _loginService;
+            private ICipherService _cipherService;
             private ISettings _settings;
             private bool _isPremium;
 
@@ -114,15 +114,15 @@ namespace Bit.iOS.Extension
                 _context = controller.Context;
                 _controller = controller;
                 _isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
-                _loginService = Resolver.Resolve<ILoginService>();
+                _cipherService = Resolver.Resolve<ICipherService>();
                 _settings = Resolver.Resolve<ISettings>();
             }
 
             public async Task LoadItemsAsync()
             {
-                var combinedLogins = new List<Login>();
+                var combinedLogins = new List<Cipher>();
 
-                var logins = await _loginService.GetAllAsync(_context.UrlString);
+                var logins = await _cipherService.GetAllAsync(_context.UrlString);
                 if(logins?.Item1 != null)
                 {
                     combinedLogins.AddRange(logins.Item1);

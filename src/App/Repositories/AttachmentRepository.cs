@@ -13,9 +13,10 @@ namespace Bit.App.Repositories
             : base(sqlService)
         { }
 
-        public Task<IEnumerable<AttachmentData>> GetAllByLoginIdAsync(string loginId)
+        public Task<IEnumerable<AttachmentData>> GetAllByCipherIdAsync(string cipherId)
         {
-            var attachments = Connection.Table<AttachmentData>().Where(a => a.LoginId == loginId).Cast<AttachmentData>();
+            var attachments = Connection.Table<AttachmentData>().Where(a => a.LoginId == cipherId)
+                .Cast<AttachmentData>();
             return Task.FromResult(attachments);
         }
 

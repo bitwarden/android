@@ -16,19 +16,19 @@ namespace Bit.App.Pages
 {
     public class VaultCustomFieldsPage : ExtendedContentPage
     {
-        private readonly ILoginService _loginService;
+        private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly string _loginId;
-        private Login _login;
+        private Cipher _login;
         private DateTime? _lastAction;
 
         public VaultCustomFieldsPage(string loginId)
             : base(true)
         {
             _loginId = loginId;
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
@@ -114,7 +114,7 @@ namespace Bit.App.Pages
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _loginService.SaveAsync(_login);
+                var saveTask = await _cipherService.SaveAsync(_login);
 
                 _userDialogs.HideLoading();
 
@@ -148,7 +148,7 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
 
-            _login = await _loginService.GetByIdAsync(_loginId);
+            _login = await _cipherService.GetByIdAsync(_loginId);
             if(_login == null)
             {
                 await Navigation.PopForDeviceAsync();

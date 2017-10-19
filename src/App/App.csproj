@@ -58,7 +58,7 @@
     <Compile Include="Abstractions\Services\IKeyDerivationService.cs" />
     <Compile Include="Abstractions\Services\ILogService.cs" />
     <Compile Include="Abstractions\Services\IReflectionService.cs" />
-    <Compile Include="Abstractions\Services\ILoginService.cs" />
+    <Compile Include="Abstractions\Services\ICipherService.cs" />
     <Compile Include="Abstractions\Services\IFolderService.cs" />
     <Compile Include="App.cs" />
     <Compile Include="Abstractions\Services\ISecureStorageService.cs" />
@@ -91,6 +91,7 @@
     <Compile Include="Controls\VaultListViewCell.cs" />
     <Compile Include="Enums\DeviceType.cs" />
     <Compile Include="Enums\FieldType.cs" />
+    <Compile Include="Enums\SecureNoteType.cs" />
     <Compile Include="Enums\TwoFactorProviderType.cs" />
     <Compile Include="Enums\EncryptionType.cs" />
     <Compile Include="Enums\OrganizationUserType.cs" />
@@ -104,6 +105,9 @@
     <Compile Include="Models\Api\ApiResult.cs" />
     <Compile Include="Models\Api\CipherDataModel.cs" />
     <Compile Include="Models\Api\FieldDataModel.cs" />
+    <Compile Include="Models\Api\CardDataModel.cs" />
+    <Compile Include="Models\Api\IdentityDataModel.cs" />
+    <Compile Include="Models\Api\SecureNoteDataModel.cs" />
     <Compile Include="Models\Api\Request\DeviceTokenRequest.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />
     <Compile Include="Models\Api\Request\DeviceRequest.cs" />
@@ -125,16 +129,20 @@
     <Compile Include="Models\Api\Response\TokenResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileResponse.cs" />
     <Compile Include="Models\Api\LoginDataModel.cs" />
+    <Compile Include="Models\Card.cs" />
     <Compile Include="Models\CipherString.cs" />
     <Compile Include="Models\Data\AttachmentData.cs" />
     <Compile Include="Models\Attachment.cs" />
     <Compile Include="Models\Field.cs" />
+    <Compile Include="Models\Identity.cs" />
+    <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Page\VaultAttachmentsPageModel.cs" />
+    <Compile Include="Models\SecureNote.cs" />
     <Compile Include="Models\SymmetricCryptoKey.cs" />
     <Compile Include="Models\Data\SettingsData.cs" />
     <Compile Include="Models\Data\FolderData.cs" />
     <Compile Include="Abstractions\IDataObject.cs" />
-    <Compile Include="Models\Data\LoginData.cs" />
+    <Compile Include="Models\Data\CipherData.cs" />
     <Compile Include="Models\DomainName.cs" />
     <Compile Include="Models\Folder.cs" />
     <Compile Include="Models\LoginResult.cs" />
@@ -144,7 +152,7 @@
     <Compile Include="Models\Page\PasswordGeneratorPageModel.cs" />
     <Compile Include="Models\PlatformCulture.cs" />
     <Compile Include="Models\PushNotification.cs" />
-    <Compile Include="Models\Login.cs" />
+    <Compile Include="Models\Cipher.cs" />
     <Compile Include="Models\Page\VaultViewLoginPageModel.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\Lock\BaseLockPage.cs" />
@@ -175,7 +183,7 @@
     <Compile Include="Pages\Vault\VaultAutofillListLoginsPage.cs" />
     <Compile Include="Pages\Vault\VaultAttachmentsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Abstractions\Repositories\ILoginRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ICipherRepository.cs" />
     <Compile Include="Repositories\AttachmentRepository.cs" />
     <Compile Include="Repositories\SyncApiRepository.cs" />
     <Compile Include="Repositories\TwoFactorApiRepository.cs" />
@@ -192,7 +200,7 @@
     <Compile Include="Abstractions\Repositories\ICipherApiRepository.cs" />
     <Compile Include="Repositories\SettingsRepository.cs" />
     <Compile Include="Repositories\FolderApiRepository.cs" />
-    <Compile Include="Repositories\LoginRepository.cs" />
+    <Compile Include="Repositories\CipherRepository.cs" />
     <Compile Include="Repositories\FolderRepository.cs" />
     <Compile Include="Abstractions\Repositories\IFolderRepository.cs" />
     <Compile Include="Abstractions\Repositories\IRepository.cs" />
@@ -340,7 +348,7 @@
     <Compile Include="Abstractions\Services\ISyncService.cs" />
     <Compile Include="Abstractions\Services\IPasswordGenerationService.cs" />
     <Compile Include="Services\SyncService.cs" />
-    <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\CipherService.cs" />
     <Compile Include="Services\AuthService.cs" />
     <Compile Include="Services\CryptoService.cs" />
     <Compile Include="Models\Page\VaultListPageModel.cs" />

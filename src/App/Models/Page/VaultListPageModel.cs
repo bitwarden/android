@@ -9,17 +9,17 @@ namespace Bit.App.Models.Page
     {
         public class Login
         {
-            public Login(Models.Login login)
+            public Login(Models.Cipher cipher)
             {
-                Id = login.Id;
-                Shared = !string.IsNullOrWhiteSpace(login.OrganizationId);
-                HasAttachments = login.Attachments?.Any() ?? false;
-                FolderId = login.FolderId;
-                Name = login.Name?.Decrypt(login.OrganizationId);
-                Username = login.Username?.Decrypt(login.OrganizationId) ?? " ";
-                Password = new Lazy<string>(() => login.Password?.Decrypt(login.OrganizationId));
-                Uri = new Lazy<string>(() => login.Uri?.Decrypt(login.OrganizationId));
-                Totp = new Lazy<string>(() => login.Totp?.Decrypt(login.OrganizationId));
+                Id = cipher.Id;
+                Shared = !string.IsNullOrWhiteSpace(cipher.OrganizationId);
+                HasAttachments = cipher.Attachments?.Any() ?? false;
+                FolderId = cipher.FolderId;
+                Name = cipher.Name?.Decrypt(cipher.OrganizationId);
+                Username = cipher.Login?.Username?.Decrypt(cipher.OrganizationId) ?? " ";
+                Password = new Lazy<string>(() => cipher.Login?.Password?.Decrypt(cipher.OrganizationId));
+                Uri = new Lazy<string>(() => cipher.Login?.Uri?.Decrypt(cipher.OrganizationId));
+                Totp = new Lazy<string>(() => cipher.Login?.Totp?.Decrypt(cipher.OrganizationId));
             }
 
             public string Id { get; set; }
@@ -35,7 +35,7 @@ namespace Bit.App.Models.Page
 
         public class AutofillLogin : Login
         {
-            public AutofillLogin(Models.Login login, bool fuzzy = false)
+            public AutofillLogin(Models.Cipher login, bool fuzzy = false)
                 : base(login)
             {
                 Fuzzy = fuzzy;

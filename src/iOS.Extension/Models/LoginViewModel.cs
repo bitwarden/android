@@ -7,7 +7,7 @@ namespace Bit.iOS.Extension.Models
 {
     public class LoginViewModel
     {
-        public LoginViewModel(Login login)
+        public LoginViewModel(Cipher login)
         {
             Id = login.Id;
             Name = login.Name?.Decrypt(login.OrganizationId);

@@ -20,7 +20,7 @@ namespace Bit.App.Pages
     public class VaultListLoginsPage : ExtendedContentPage
     {
         private readonly IFolderService _folderService;
-        private readonly ILoginService _loginService;
+        private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IDeviceActionService _clipboardService;
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
         {
             _favorites = favorites;
             _folderService = Resolver.Resolve<IFolderService>();
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _clipboardService = Resolver.Resolve<IDeviceActionService>();
@@ -310,7 +310,7 @@ namespace Bit.App.Pages
             Task.Run(async () =>
             {
                 var foldersTask = _folderService.GetAllAsync();
-                var loginsTask = _favorites ? _loginService.GetAllAsync(true) : _loginService.GetAllAsync();
+                var loginsTask = _favorites ? _cipherService.GetAllAsync(true) : _cipherService.GetAllAsync();
                 await Task.WhenAll(foldersTask, loginsTask);
 
                 var folders = await foldersTask;

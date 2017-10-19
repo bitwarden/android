@@ -17,7 +17,7 @@ namespace Bit.App.Pages
 {
     public class VaultAutofillListLoginsPage : ExtendedContentPage
     {
-        private readonly ILoginService _loginService;
+        private readonly ICipherService _cipherService;
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly IDeviceActionService _clipboardService;
         private readonly ISettingsService _settingsService;
@@ -40,7 +40,7 @@ namespace Bit.App.Pages
                 _name = "--";
             }
 
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _clipboardService = Resolver.Resolve<IDeviceActionService>();
             _settingsService = Resolver.Resolve<ISettingsService>();
@@ -162,7 +162,7 @@ namespace Bit.App.Pages
             Task.Run(async () =>
             {
                 var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>();
-                var logins = await _loginService.GetAllAsync(Uri);
+                var logins = await _cipherService.GetAllAsync(Uri);
 
                 var normalLogins = logins?.Item1.Select(l => new VaultListPageModel.AutofillLogin(l, false))
                     .OrderBy(s => s.Name)

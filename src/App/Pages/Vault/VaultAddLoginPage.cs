@@ -18,7 +18,7 @@ namespace Bit.App.Pages
     {
         private const string AddedLoginAlertKey = "addedSiteAlert";
 
-        private readonly ILoginService _loginService;
+        private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
             _defaultName = defaultName;
             _fromAutofill = fromAutofill;
 
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
@@ -177,24 +177,31 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                var login = new Login
+                var cipher = new Cipher
                 {
                     Name = NameCell.Entry.Text.Encrypt(),
-                    Uri = string.IsNullOrWhiteSpace(UriCell.Entry.Text) ? null : UriCell.Entry.Text.Encrypt(),
-                    Username = string.IsNullOrWhiteSpace(UsernameCell.Entry.Text) ? null : UsernameCell.Entry.Text.Encrypt(),
-                    Password = string.IsNullOrWhiteSpace(PasswordCell.Entry.Text) ? null : PasswordCell.Entry.Text.Encrypt(),
                     Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null : NotesCell.Editor.Text.Encrypt(),
-                    Totp = string.IsNullOrWhiteSpace(TotpCell.Entry.Text) ? null : TotpCell.Entry.Text.Encrypt(),
-                    Favorite = favoriteCell.On
+                    Favorite = favoriteCell.On,
+                    Login = new Login
+                    {
+                        Uri = string.IsNullOrWhiteSpace(UriCell.Entry.Text) ? null :
+                            UriCell.Entry.Text.Encrypt(),
+                        Username = string.IsNullOrWhiteSpace(UsernameCell.Entry.Text) ? null :
+                            UsernameCell.Entry.Text.Encrypt(),
+                        Password = string.IsNullOrWhiteSpace(PasswordCell.Entry.Text) ? null :
+                            PasswordCell.Entry.Text.Encrypt(),
+                        Totp = string.IsNullOrWhiteSpace(TotpCell.Entry.Text) ? null :
+                            TotpCell.Entry.Text.Encrypt(),
+                    }
                 };
 
                 if(FolderCell.Picker.SelectedIndex > 0)
                 {
-                    login.FolderId = folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
+                    cipher.FolderId = folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _loginService.SaveAsync(login);
+                var saveTask = await _cipherService.SaveAsync(cipher);
                 _userDialogs.HideLoading();
 
                 if(saveTask.Succeeded)

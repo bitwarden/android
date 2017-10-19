@@ -10,20 +10,20 @@ namespace Bit.App.Models.Data
         public AttachmentData()
         { }
 
-        public AttachmentData(Attachment attachment, string loginId)
+        public AttachmentData(Attachment attachment, string cipherId)
         {
             Id = attachment.Id;
-            LoginId = loginId;
+            LoginId = cipherId;
             Url = attachment.Url;
             FileName = attachment.FileName?.EncryptedString;
             Size = attachment.Size.ToString();
             SizeName = attachment.SizeName;
         }
 
-        public AttachmentData(AttachmentResponse response, string loginId)
+        public AttachmentData(AttachmentResponse response, string cipherId)
         {
             Id = response.Id;
-            LoginId = loginId;
+            LoginId = cipherId;
             Url = response.Url;
             FileName = response.FileName;
             Size = response.Size;
@@ -32,6 +32,7 @@ namespace Bit.App.Models.Data
 
         [PrimaryKey]
         public string Id { get; set; }
+        // Really should be called CipherId
         [Indexed]
         public string LoginId { get; set; }
         public string Url { get; set; }

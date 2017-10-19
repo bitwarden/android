@@ -22,11 +22,11 @@ namespace Bit.App.Repositories
         public override Task DeleteAsync(string id)
         {
             var now = DateTime.UtcNow;
-            DeleteWithLoginUpdateAsync(id, now);
+            DeleteWithCipherUpdateAsync(id, now);
             return Task.FromResult(0);
         }
 
-        public Task DeleteWithLoginUpdateAsync(string id, DateTime revisionDate)
+        public Task DeleteWithCipherUpdateAsync(string id, DateTime revisionDate)
         {
             Connection.RunInTransaction(() =>
             {

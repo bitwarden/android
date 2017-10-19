@@ -17,7 +17,7 @@ namespace Bit.App.Pages
 {
     public class VaultAttachmentsPage : ExtendedContentPage
     {
-        private readonly ILoginService _loginService;
+        private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IDeviceActionService _deviceActiveService;
@@ -25,7 +25,7 @@ namespace Bit.App.Pages
         private readonly ITokenService _tokenService;
         private readonly ICryptoService _cryptoService;
         private readonly string _loginId;
-        private Login _login;
+        private Cipher _login;
         private byte[] _fileBytes;
         private DateTime? _lastAction;
         private bool _canUseAttachments = true;
@@ -34,7 +34,7 @@ namespace Bit.App.Pages
             : base(true)
         {
             _loginId = loginId;
-            _loginService = Resolver.Resolve<ILoginService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActiveService = Resolver.Resolve<IDeviceActionService>();
@@ -162,7 +162,7 @@ namespace Bit.App.Pages
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _loginService.EncryptAndSaveAttachmentAsync(_login, _fileBytes, FileLabel.Text);
+                var saveTask = await _cipherService.EncryptAndSaveAttachmentAsync(_login, _fileBytes, FileLabel.Text);
 
                 _userDialogs.HideLoading();
 
@@ -223,7 +223,7 @@ namespace Bit.App.Pages
 
         private async Task LoadAttachmentsAsync()
         {
-            _login = await _loginService.GetByIdAsync(_loginId);
+            _login = await _cipherService.GetByIdAsync(_loginId);
             if(_login == null)
             {
                 await Navigation.PopForDeviceAsync();
@@ -268,7 +268,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
-            var saveTask = await _loginService.DeleteAttachmentAsync(_login, attachment.Id);
+            var saveTask = await _cipherService.DeleteAttachmentAsync(_login, attachment.Id);
             _userDialogs.HideLoading();
 
             if(saveTask.Succeeded)

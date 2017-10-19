@@ -110,7 +110,7 @@ namespace Bit.App.Services
                     {
                         break;
                     }
-                    _syncService.SyncDeleteLoginAsync(loginDeleteMessage.Id);
+                    _syncService.SyncDeleteCipherAsync(loginDeleteMessage.Id);
                     break;
                 case Enums.PushType.SyncCiphers:
                 case Enums.PushType.SyncVault:

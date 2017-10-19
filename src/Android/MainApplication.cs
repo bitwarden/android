@@ -195,7 +195,7 @@ namespace Bit.Android
             container.RegisterSingleton<IKeyDerivationService, BouncyCastleKeyDerivationService>();
             container.RegisterSingleton<IAuthService, AuthService>();
             container.RegisterSingleton<IFolderService, FolderService>();
-            container.RegisterSingleton<ILoginService, LoginService>();
+            container.RegisterSingleton<ICipherService, CipherService>();
             container.RegisterSingleton<ISyncService, SyncService>();
             container.RegisterSingleton<IDeviceActionService, DeviceActionService>();
             container.RegisterSingleton<IAppIdService, AppIdService>();
@@ -216,7 +216,7 @@ namespace Bit.Android
             // Repositories
             container.RegisterSingleton<IFolderRepository, FolderRepository>();
             container.RegisterSingleton<IFolderApiRepository, FolderApiRepository>();
-            container.RegisterSingleton<ILoginRepository, LoginRepository>();
+            container.RegisterSingleton<ICipherRepository, CipherRepository>();
             container.RegisterSingleton<IAttachmentRepository, AttachmentRepository>();
             container.RegisterSingleton<IConnectApiRepository, ConnectApiRepository>();
             container.RegisterSingleton<IDeviceApiRepository, DeviceApiRepository>();

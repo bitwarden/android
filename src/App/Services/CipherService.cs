@@ -11,26 +11,26 @@ using System.Net.Http;
 
 namespace Bit.App.Services
 {
-    public class LoginService : ILoginService
+    public class CipherService : ICipherService
     {
         private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android",
             "io", "co", "uk", "au", "nz", "fr", "de", "tv", "info", "app", "apps", "eu", "me", "dev", "jp", "mobile" };
-        private readonly ILoginRepository _loginRepository;
+        private readonly ICipherRepository _cipherRepository;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IAuthService _authService;
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly ISettingsService _settingsService;
         private readonly ICryptoService _cryptoService;
 
-        public LoginService(
-            ILoginRepository loginRepository,
+        public CipherService(
+            ICipherRepository cipherRepository,
             IAttachmentRepository attachmentRepository,
             IAuthService authService,
             ICipherApiRepository cipherApiRepository,
             ISettingsService settingsService,
             ICryptoService cryptoService)
         {
-            _loginRepository = loginRepository;
+            _cipherRepository = cipherRepository;
             _attachmentRepository = attachmentRepository;
             _authService = authService;
             _cipherApiRepository = cipherApiRepository;
@@ -38,38 +38,38 @@ namespace Bit.App.Services
             _cryptoService = cryptoService;
         }
 
-        public async Task<Login> GetByIdAsync(string id)
+        public async Task<Cipher> GetByIdAsync(string id)
         {
-            var data = await _loginRepository.GetByIdAsync(id);
+            var data = await _cipherRepository.GetByIdAsync(id);
             if(data == null || data.UserId != _authService.UserId)
             {
                 return null;
             }
 
-            var attachments = await _attachmentRepository.GetAllByLoginIdAsync(id);
-            var login = new Login(data, attachments);
-            return login;
+            var attachments = await _attachmentRepository.GetAllByCipherIdAsync(id);
+            var cipher = new Cipher(data, attachments);
+            return cipher;
         }
 
-        public async Task<IEnumerable<Login>> GetAllAsync()
+        public async Task<IEnumerable<Cipher>> GetAllAsync()
         {
             var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
             var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
-            var data = await _loginRepository.GetAllByUserIdAsync(_authService.UserId);
-            var logins = data.Select(f => new Login(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
+            var data = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId);
+            var logins = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
             return logins;
         }
 
-        public async Task<IEnumerable<Login>> GetAllAsync(bool favorites)
+        public async Task<IEnumerable<Cipher>> GetAllAsync(bool favorites)
         {
             var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
             var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
-            var data = await _loginRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
-            var logins = data.Select(f => new Login(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
+            var data = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
+            var logins = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
             return logins;
         }
 
-        public async Task<Tuple<IEnumerable<Login>, IEnumerable<Login>>> GetAllAsync(string uriString)
+        public async Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString)
         {
             if(string.IsNullOrWhiteSpace(uriString))
             {
@@ -125,9 +125,9 @@ namespace Bit.App.Services
 
             var matchingDomainsArray = matchingDomains.ToArray();
             var matchingFuzzyDomainsArray = matchingFuzzyDomains.ToArray();
-            var matchingLogins = new List<Login>();
-            var matchingFuzzyLogins = new List<Login>();
-            var logins = await _loginRepository.GetAllByUserIdAsync(_authService.UserId);
+            var matchingLogins = new List<Cipher>();
+            var matchingFuzzyLogins = new List<Cipher>();
+            var logins = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId);
             foreach(var login in logins)
             {
                 if(string.IsNullOrWhiteSpace(login.Uri))
@@ -143,12 +143,12 @@ namespace Bit.App.Services
 
                 if(Array.IndexOf(matchingDomainsArray, loginUriString) >= 0)
                 {
-                    matchingLogins.Add(new Login(login));
+                    matchingLogins.Add(new Cipher(login));
                     continue;
                 }
                 else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
                 {
-                    matchingFuzzyLogins.Add(new Login(login));
+                    matchingFuzzyLogins.Add(new Cipher(login));
                     continue;
                 }
                 else if(!mobileApp)
@@ -156,7 +156,7 @@ namespace Bit.App.Services
                     var info = InfoFromMobileAppUri(loginUriString);
                     if(info?.Item1 != null && Array.IndexOf(matchingDomainsArray, info.Item1) >= 0)
                     {
-                        matchingFuzzyLogins.Add(new Login(login));
+                        matchingFuzzyLogins.Add(new Cipher(login));
                         continue;
                     }
                 }
@@ -170,12 +170,12 @@ namespace Bit.App.Services
 
                     if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
                     {
-                        matchingLogins.Add(new Login(login));
+                        matchingLogins.Add(new Cipher(login));
                         continue;
                     }
                     else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
                     {
-                        matchingFuzzyLogins.Add(new Login(login));
+                        matchingFuzzyLogins.Add(new Cipher(login));
                         continue;
                     }
                 }
@@ -197,7 +197,7 @@ namespace Bit.App.Services
 
                         if(addedFromSearchTerm)
                         {
-                            matchingFuzzyLogins.Add(new Login(login));
+                            matchingFuzzyLogins.Add(new Cipher(login));
                             break;
                         }
                     }
@@ -209,10 +209,10 @@ namespace Bit.App.Services
                 }
             }
 
-            return new Tuple<IEnumerable<Login>, IEnumerable<Login>>(matchingLogins, matchingFuzzyLogins);
+            return new Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>(matchingLogins, matchingFuzzyLogins);
         }
 
-        public async Task<ApiResult<CipherResponse>> SaveAsync(Login login)
+        public async Task<ApiResult<CipherResponse>> SaveAsync(Cipher login)
         {
             ApiResult<CipherResponse> response = null;
             var request = new CipherRequest(login);
@@ -228,15 +228,15 @@ namespace Bit.App.Services
 
             if(response.Succeeded)
             {
-                var data = new LoginData(response.Result, _authService.UserId);
+                var data = new CipherData(response.Result, _authService.UserId);
                 if(login.Id == null)
                 {
-                    await _loginRepository.InsertAsync(data);
+                    await _cipherRepository.InsertAsync(data);
                     login.Id = data.Id;
                 }
                 else
                 {
-                    await _loginRepository.UpdateAsync(data);
+                    await _cipherRepository.UpdateAsync(data);
                 }
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
@@ -253,7 +253,7 @@ namespace Bit.App.Services
             var response = await _cipherApiRepository.DeleteAsync(id);
             if(response.Succeeded)
             {
-                await _loginRepository.DeleteAsync(id);
+                await _cipherRepository.DeleteAsync(id);
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -298,7 +298,7 @@ namespace Bit.App.Services
             }
         }
 
-        public async Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Login login, byte[] data, string fileName)
+        public async Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher login, byte[] data, string fileName)
         {
             var encFileName = fileName.Encrypt(login.OrganizationId);
             var encBytes = _cryptoService.EncryptToBytes(data,
@@ -323,7 +323,7 @@ namespace Bit.App.Services
             return response;
         }
 
-        public async Task<ApiResult> DeleteAttachmentAsync(Login login, string attachmentId)
+        public async Task<ApiResult> DeleteAttachmentAsync(Cipher login, string attachmentId)
         {
             var response = await _cipherApiRepository.DeleteAttachmentAsync(login.Id, attachmentId);
             if(response.Succeeded)

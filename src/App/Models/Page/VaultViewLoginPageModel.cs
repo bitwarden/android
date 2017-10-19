@@ -201,23 +201,23 @@ namespace Bit.App.Models.Page
         }
         public bool ShowFields => (Fields?.Count ?? 0) > 0;
 
-        public void Update(Login login)
+        public void Update(Cipher cipher)
         {
-            Name = login.Name?.Decrypt(login.OrganizationId);
-            Username = login.Username?.Decrypt(login.OrganizationId);
-            Password = login.Password?.Decrypt(login.OrganizationId);
-            Uri = login.Uri?.Decrypt(login.OrganizationId);
-            Notes = login.Notes?.Decrypt(login.OrganizationId);
+            Name = cipher.Name?.Decrypt(cipher.OrganizationId);
+            Username = cipher.Login?.Username?.Decrypt(cipher.OrganizationId);
+            Password = cipher.Login?.Password?.Decrypt(cipher.OrganizationId);
+            Uri = cipher.Login?.Uri?.Decrypt(cipher.OrganizationId);
+            Notes = cipher.Notes?.Decrypt(cipher.OrganizationId);
 
-            if(login.Attachments != null)
+            if(cipher.Attachments != null)
             {
                 var attachments = new List<Attachment>();
-                foreach(var attachment in login.Attachments)
+                foreach(var attachment in cipher.Attachments)
                 {
                     attachments.Add(new Attachment
                     {
                         Id = attachment.Id,
-                        Name = attachment.FileName?.Decrypt(login.OrganizationId),
+                        Name = attachment.FileName?.Decrypt(cipher.OrganizationId),
                         SizeName = attachment.SizeName,
                         Size = attachment.Size,
                         Url = attachment.Url
@@ -227,18 +227,18 @@ namespace Bit.App.Models.Page
             }
             else
             {
-                login.Attachments = null;
+                cipher.Attachments = null;
             }
 
-            if(login.Fields != null)
+            if(cipher.Fields != null)
             {
                 var fields = new List<Field>();
-                foreach(var field in login.Fields)
+                foreach(var field in cipher.Fields)
                 {
                     fields.Add(new Field
                     {
-                        Name = field.Name?.Decrypt(login.OrganizationId),
-                        Value = field.Value?.Decrypt(login.OrganizationId),
+                        Name = field.Name?.Decrypt(cipher.OrganizationId),
+                        Value = field.Value?.Decrypt(cipher.OrganizationId),
                         Type = field.Type
                     });
                 }
@@ -246,7 +246,7 @@ namespace Bit.App.Models.Page
             }
             else
             {
-                login.Fields = null;
+                cipher.Fields = null;
             }
         }
 
