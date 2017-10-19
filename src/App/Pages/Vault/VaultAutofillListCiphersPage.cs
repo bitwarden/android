@@ -232,7 +232,7 @@ namespace Bit.App.Pages
 
         private async void AddCipherAsync()
         {
-            var page = new VaultAddLoginPage(CipherType.Login, Uri, _name, true);
+            var page = new VaultAddCipherPage(CipherType.Login, Uri, _name, true);
             await Navigation.PushForDeviceAsync(page);
         }
 

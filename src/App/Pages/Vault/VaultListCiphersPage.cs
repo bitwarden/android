@@ -512,7 +512,7 @@ namespace Bit.App.Pages
                 selectedType = CipherType.Identity;
             }
 
-            var page = new VaultAddLoginPage(selectedType, Uri);
+            var page = new VaultAddCipherPage(selectedType, Uri);
             await Navigation.PushForDeviceAsync(page);
         }
 
