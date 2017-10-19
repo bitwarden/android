@@ -129,6 +129,7 @@ namespace Bit.App.Controls
                 {
                     Button.Padding = new Thickness(0);
                     Button.BackgroundColor = Color.Transparent;
+                    Button.WidthRequest = 40;
                 }
             }
 

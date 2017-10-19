@@ -481,18 +481,6 @@ namespace Bit.App.Pages
                 Table.RowHeight = -1;
                 Table.EstimatedRowHeight = 70;
             }
-            else if(Device.RuntimePlatform == Device.Android)
-            {
-                if(LoginPasswordCell?.Button != null)
-                {
-                    LoginPasswordCell.Button.WidthRequest = 40;
-                }
-
-                if(LoginTotpCell?.Button != null)
-                {
-                    LoginTotpCell.Button.WidthRequest = 40;
-                }
-            }
         }
 
         private void InitSave()

@@ -64,14 +64,14 @@ namespace Bit.App.Pages
             nameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Name));
 
             // Username
-            UsernameCell = new LabeledValueCell(AppResources.Username, button1Text: AppResources.Copy);
+            UsernameCell = new LabeledValueCell(AppResources.Username, button1Image: "clipboard.png");
             UsernameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Username));
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
             UsernameCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             // Password
-            PasswordCell = new LabeledValueCell(AppResources.Password, button1Text: string.Empty,
-                button2Text: AppResources.Copy);
+            PasswordCell = new LabeledValueCell(AppResources.Password, button1Image: string.Empty,
+                button2Image: "clipboard.png");
             PasswordCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.MaskedPassword));
             PasswordCell.Button1.SetBinding(Button.ImageProperty, nameof(VaultViewLoginPageModel.ShowHideImage));
             if(Device.RuntimePlatform == Device.iOS)
@@ -84,7 +84,7 @@ namespace Bit.App.Pages
             PasswordCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             // URI
-            UriCell = new LabeledValueCell(AppResources.Website, button1Text: AppResources.Launch);
+            UriCell = new LabeledValueCell(AppResources.Website, button1Image: "launch.png");
             UriCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.UriHost));
             UriCell.Button1.SetBinding(IsVisibleProperty, nameof(VaultViewLoginPageModel.ShowLaunch));
             UriCell.Button1.Command = new Command(() =>
@@ -100,7 +100,7 @@ namespace Bit.App.Pages
             });
 
             // Totp
-            TotpCodeCell = new LabeledValueCell(AppResources.VerificationCodeTotp, button1Text: AppResources.Copy, subText: "--");
+            TotpCodeCell = new LabeledValueCell(AppResources.VerificationCodeTotp, button1Image: "clipboard.png", subText: "--");
             TotpCodeCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.TotpCodeFormatted));
             TotpCodeCell.Value.SetBinding(Label.TextColorProperty, nameof(VaultViewLoginPageModel.TotpColor));
             TotpCodeCell.Button1.Command = new Command(() => Copy(Model.TotpCode, AppResources.VerificationCodeTotp));
@@ -139,15 +139,6 @@ namespace Bit.App.Pages
             {
                 Table.RowHeight = -1;
                 Table.EstimatedRowHeight = 70;
-            }
-            else if(Device.RuntimePlatform == Device.Android)
-            {
-                // NOTE: This is going to cause problems with i18n strings since various languages have difference string sizes
-                PasswordCell.Button1.WidthRequest = 40;
-                PasswordCell.Button2.WidthRequest = 59;
-                UsernameCell.Button1.WidthRequest = 59;
-                TotpCodeCell.Button1.WidthRequest = 59;
-                UriCell.Button1.WidthRequest = 75;
             }
 
             Title = AppResources.ViewItem;
@@ -429,13 +420,13 @@ namespace Bit.App.Pages
             }
 
             public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, bool? a)
-                : base(field.Name, field.Value, AppResources.Copy)
+                : base(field.Name, field.Value, "clipboard.png")
             {
                 Init(page, field, Button1);
             }
 
             public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, bool? a, bool? b)
-                : base(field.Name, field.MaskedValue, string.Empty, AppResources.Copy)
+                : base(field.Name, field.MaskedValue, string.Empty, "clipboard.png")
             {
                 Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular",
                     Android: "monospace", WinPhone: "Courier");
@@ -443,20 +434,19 @@ namespace Bit.App.Pages
                 {
                     Button1.Margin = new Thickness(10, 0);
                 }
-
-                Button1.WidthRequest = 40;
+                
                 Button1.Image = "eye";
                 Button1.Command = new Command(() =>
                 {
                     field.Revealed = !field.Revealed;
                     if(field.Revealed)
                     {
-                        Button1.Image = "eye_slash";
+                        Button1.Image = "eye_slash.png";
                         Value.Text = field.Value;
                     }
                     else
                     {
-                        Button1.Image = "eye";
+                        Button1.Image = "eye.png";
                         Value.Text = field.MaskedValue;
                     }
                 });
@@ -470,7 +460,6 @@ namespace Bit.App.Pages
                 if(copyButton != null)
                 {
                     copyButton.Command = new Command(() => page.Copy(field.Value, field.Name));
-                    copyButton.WidthRequest = 59;
                 }
             }
         }

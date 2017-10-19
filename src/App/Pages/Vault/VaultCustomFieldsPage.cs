@@ -183,18 +183,13 @@ namespace Bit.App.Pages
                             {
                                 textFieldCell.Entry.FontFamily = Helpers.OnPlatform(
                                     iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
-                                textFieldCell.Button.Image = "eye";
+                                textFieldCell.Button.Image = "eye.png";
                                 textFieldCell.Button.Command = new Command(() =>
                                 {
                                     textFieldCell.Entry.InvokeToggleIsPassword();
                                     textFieldCell.Button.Image = 
-                                        "eye" + (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
+                                        "eye" + (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
                                 });
-                            }
-
-                            if(Device.RuntimePlatform == Device.Android && textFieldCell.Button != null)
-                            {
-                                textFieldCell.Button.WidthRequest = 40;
                             }
 
                             textFieldCell.InitEvents();

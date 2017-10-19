@@ -7,8 +7,8 @@ namespace Bit.App.Controls
         public LabeledValueCell(
             string labelText = null,
             string valueText = null,
-            string button1Text = null,
-            string button2Text = null,
+            string button1Image = null,
+            string button2Image = null,
             string subText = null)
         {
             var containerStackLayout = new StackLayout
@@ -69,11 +69,11 @@ namespace Bit.App.Controls
                 buttonStackLayout.Children.Add(Sub);
             }
 
-            if(button1Text != null)
+            if(button1Image != null)
             {
                 Button1 = new ExtendedButton
                 {
-                    Text = button1Text,
+                    Image = button1Image,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
                     Margin = new Thickness(0)
@@ -82,11 +82,11 @@ namespace Bit.App.Controls
                 buttonStackLayout.Children.Add(Button1);
             }
 
-            if(button2Text != null)
+            if(button2Image != null)
             {
                 Button2 = new ExtendedButton
                 {
-                    Text = button2Text,
+                    Image = button2Image,
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.Center,
                     Margin = new Thickness(0)
@@ -103,11 +103,13 @@ namespace Bit.App.Controls
                 {
                     Button1.Padding = new Thickness(0);
                     Button1.BackgroundColor = Color.Transparent;
+                    Button1.WidthRequest = 40;
                 }
                 if(Button2 != null)
                 {
                     Button2.Padding = new Thickness(0);
                     Button2.BackgroundColor = Color.Transparent;
+                    Button2.WidthRequest = 40;
                 }
 
                 containerStackLayout.AdjustPaddingForDevice();

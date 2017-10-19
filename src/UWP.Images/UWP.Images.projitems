@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="$(MSBuildThisFileDirectory)camera.png" />
+    <Content Include="$(MSBuildThisFileDirectory)clipboard.png" />
     <Content Include="$(MSBuildThisFileDirectory)cloudup.png" />
     <Content Include="$(MSBuildThisFileDirectory)cog.png" />
     <Content Include="$(MSBuildThisFileDirectory)cogs.png" />
@@ -25,6 +26,7 @@
     <Content Include="$(MSBuildThisFileDirectory)globe.png" />
     <Content Include="$(MSBuildThisFileDirectory)icon.png" />
     <Content Include="$(MSBuildThisFileDirectory)ion_chevron_right.png" />
+    <Content Include="$(MSBuildThisFileDirectory)launch.png" />
     <Content Include="$(MSBuildThisFileDirectory)lightbulb.png" />
     <Content Include="$(MSBuildThisFileDirectory)lock.png" />
     <Content Include="$(MSBuildThisFileDirectory)logo.png" />

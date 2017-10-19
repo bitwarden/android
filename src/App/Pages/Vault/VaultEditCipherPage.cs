@@ -65,7 +65,7 @@ namespace Bit.App.Pages
                 useButton: _deviceInfo.HasCamera);
             if(_deviceInfo.HasCamera)
             {
-                TotpCell.Button.Image = "camera";
+                TotpCell.Button.Image = "camera.png";
             }
             TotpCell.Entry.Text = cipher.Login?.Totp?.Decrypt(cipher.OrganizationId);
             TotpCell.Entry.DisableAutocapitalize = true;
@@ -75,7 +75,7 @@ namespace Bit.App.Pages
             PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: TotpCell.Entry,
                 useButton: true);
             PasswordCell.Entry.Text = cipher.Login?.Password?.Decrypt(cipher.OrganizationId);
-            PasswordCell.Button.Image = "eye";
+            PasswordCell.Button.Image = "eye.png";
             PasswordCell.Entry.DisableAutocapitalize = true;
             PasswordCell.Entry.Autocorrect = false;
             PasswordCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
@@ -172,15 +172,6 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
-            }
-            else if(Device.RuntimePlatform == Device.Android)
-            {
-                PasswordCell.Button.WidthRequest = 40;
-
-                if(TotpCell.Button != null)
-                {
-                    TotpCell.Button.WidthRequest = 40;
-                }
             }
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
