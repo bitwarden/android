@@ -153,7 +153,7 @@
     <Compile Include="Models\PlatformCulture.cs" />
     <Compile Include="Models\PushNotification.cs" />
     <Compile Include="Models\Cipher.cs" />
-    <Compile Include="Models\Page\VaultViewLoginPageModel.cs" />
+    <Compile Include="Models\Page\VaultViewCipherPageModel.cs" />
     <Compile Include="Pages\HomePage.cs" />
     <Compile Include="Pages\Lock\BaseLockPage.cs" />
     <Compile Include="Pages\Lock\LockPasswordPage.cs" />

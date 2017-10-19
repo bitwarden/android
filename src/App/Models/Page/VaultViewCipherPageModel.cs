@@ -7,7 +7,7 @@ using Bit.App.Enums;
 
 namespace Bit.App.Models.Page
 {
-    public class VaultViewLoginPageModel : INotifyPropertyChanged
+    public class VaultViewCipherPageModel : INotifyPropertyChanged
     {
         private string _name;
         private string _username;
@@ -20,7 +20,7 @@ namespace Bit.App.Models.Page
         private List<Attachment> _attachments;
         private List<Field> _fields;
 
-        public VaultViewLoginPageModel() { }
+        public VaultViewCipherPageModel() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

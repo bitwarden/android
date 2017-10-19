@@ -17,16 +17,16 @@ namespace Bit.App.Pages
 {
     public class VaultViewCipherPage : ExtendedContentPage
     {
-        private readonly string _loginId;
+        private readonly string _cipherId;
         private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly ITokenService _tokenService;
         private bool _pageDisappeared = true;
 
-        public VaultViewCipherPage(string loginId)
+        public VaultViewCipherPage(string cipherId)
         {
-            _loginId = loginId;
+            _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
@@ -35,9 +35,9 @@ namespace Bit.App.Pages
             Init();
         }
 
-        private VaultViewLoginPageModel Model { get; set; } = new VaultViewLoginPageModel();
+        private VaultViewCipherPageModel Model { get; set; } = new VaultViewCipherPageModel();
         private ExtendedTableView Table { get; set; }
-        private TableSection LoginInformationSection { get; set; }
+        private TableSection ItemInformationSection { get; set; }
         private TableSection NotesSection { get; set; }
         private TableSection AttachmentsSection { get; set; }
         private TableSection FieldsSection { get; set; }
@@ -46,13 +46,13 @@ namespace Bit.App.Pages
         public LabeledValueCell UriCell { get; set; }
         public LabeledValueCell NotesCell { get; set; }
         public LabeledValueCell TotpCodeCell { get; set; }
-        private EditLoginToolBarItem EditItem { get; set; }
+        private EditCipherToolBarItem EditItem { get; set; }
         public List<LabeledValueCell> FieldsCells { get; set; }
         public List<AttachmentViewCell> AttachmentCells { get; set; }
 
         private void Init()
         {
-            EditItem = new EditLoginToolBarItem(this, _loginId);
+            EditItem = new EditCipherToolBarItem(this, _cipherId);
             ToolbarItems.Add(EditItem);
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
@@ -61,19 +61,19 @@ namespace Bit.App.Pages
 
             // Name
             var nameCell = new LabeledValueCell(AppResources.Name);
-            nameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Name));
+            nameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.Name));
 
             // Username
             UsernameCell = new LabeledValueCell(AppResources.Username, button1Image: "clipboard.png");
-            UsernameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Username));
+            UsernameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.Username));
             UsernameCell.Button1.Command = new Command(() => Copy(Model.Username, AppResources.Username));
             UsernameCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             // Password
             PasswordCell = new LabeledValueCell(AppResources.Password, button1Image: string.Empty,
                 button2Image: "clipboard.png");
-            PasswordCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.MaskedPassword));
-            PasswordCell.Button1.SetBinding(Button.ImageProperty, nameof(VaultViewLoginPageModel.ShowHideImage));
+            PasswordCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.MaskedPassword));
+            PasswordCell.Button1.SetBinding(Button.ImageProperty, nameof(VaultViewCipherPageModel.ShowHideImage));
             if(Device.RuntimePlatform == Device.iOS)
             {
                 PasswordCell.Button1.Margin = new Thickness(10, 0);
@@ -85,8 +85,8 @@ namespace Bit.App.Pages
 
             // URI
             UriCell = new LabeledValueCell(AppResources.Website, button1Image: "launch.png");
-            UriCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.UriHost));
-            UriCell.Button1.SetBinding(IsVisibleProperty, nameof(VaultViewLoginPageModel.ShowLaunch));
+            UriCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.UriHost));
+            UriCell.Button1.SetBinding(IsVisibleProperty, nameof(VaultViewCipherPageModel.ShowLaunch));
             UriCell.Button1.Command = new Command(() =>
             {
                 if(Device.RuntimePlatform == Device.Android && Model.Uri.StartsWith("androidapp://"))
@@ -101,19 +101,19 @@ namespace Bit.App.Pages
 
             // Totp
             TotpCodeCell = new LabeledValueCell(AppResources.VerificationCodeTotp, button1Image: "clipboard.png", subText: "--");
-            TotpCodeCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.TotpCodeFormatted));
-            TotpCodeCell.Value.SetBinding(Label.TextColorProperty, nameof(VaultViewLoginPageModel.TotpColor));
+            TotpCodeCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.TotpCodeFormatted));
+            TotpCodeCell.Value.SetBinding(Label.TextColorProperty, nameof(VaultViewCipherPageModel.TotpColor));
             TotpCodeCell.Button1.Command = new Command(() => Copy(Model.TotpCode, AppResources.VerificationCodeTotp));
-            TotpCodeCell.Sub.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.TotpSecond));
-            TotpCodeCell.Sub.SetBinding(Label.TextColorProperty, nameof(VaultViewLoginPageModel.TotpColor));
+            TotpCodeCell.Sub.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.TotpSecond));
+            TotpCodeCell.Sub.SetBinding(Label.TextColorProperty, nameof(VaultViewCipherPageModel.TotpColor));
             TotpCodeCell.Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
             // Notes
             NotesCell = new LabeledValueCell();
-            NotesCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Notes));
+            NotesCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.Notes));
             NotesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
-            LoginInformationSection = new TableSection(AppResources.ItemInformation)
+            ItemInformationSection = new TableSection(AppResources.ItemInformation)
             {
                 nameCell
             };
@@ -131,7 +131,7 @@ namespace Bit.App.Pages
                 EnableSelection = true,
                 Root = new TableRoot
                 {
-                    LoginInformationSection
+                    ItemInformationSection
                 }
             };
 
@@ -152,7 +152,7 @@ namespace Bit.App.Pages
             NotesCell.Tapped += NotesCell_Tapped;
             EditItem.InitEvents();
 
-            var cipher = await _cipherService.GetByIdAsync(_loginId);
+            var cipher = await _cipherService.GetByIdAsync(_cipherId);
             if(cipher == null)
             {
                 await Navigation.PopForDeviceAsync();
@@ -161,31 +161,31 @@ namespace Bit.App.Pages
 
             Model.Update(cipher);
 
-            if(LoginInformationSection.Contains(UriCell))
+            if(ItemInformationSection.Contains(UriCell))
             {
-                LoginInformationSection.Remove(UriCell);
+                ItemInformationSection.Remove(UriCell);
             }
             if(Model.ShowUri)
             {
-                LoginInformationSection.Add(UriCell);
+                ItemInformationSection.Add(UriCell);
             }
 
-            if(LoginInformationSection.Contains(UsernameCell))
+            if(ItemInformationSection.Contains(UsernameCell))
             {
-                LoginInformationSection.Remove(UsernameCell);
+                ItemInformationSection.Remove(UsernameCell);
             }
             if(Model.ShowUsername)
             {
-                LoginInformationSection.Add(UsernameCell);
+                ItemInformationSection.Add(UsernameCell);
             }
 
-            if(LoginInformationSection.Contains(PasswordCell))
+            if(ItemInformationSection.Contains(PasswordCell))
             {
-                LoginInformationSection.Remove(PasswordCell);
+                ItemInformationSection.Remove(PasswordCell);
             }
             if(Model.ShowPassword)
             {
-                LoginInformationSection.Add(PasswordCell);
+                ItemInformationSection.Add(PasswordCell);
             }
 
             if(Table.Root.Contains(NotesSection))
@@ -198,9 +198,9 @@ namespace Bit.App.Pages
             }
 
             // Totp
-            if(LoginInformationSection.Contains(TotpCodeCell))
+            if(ItemInformationSection.Contains(TotpCodeCell))
             {
-                LoginInformationSection.Remove(TotpCodeCell);
+                ItemInformationSection.Remove(TotpCodeCell);
             }
             if(cipher.Login?.Totp != null && (_tokenService.TokenPremium || cipher.OrganizationUseTotp))
             {
@@ -222,7 +222,7 @@ namespace Bit.App.Pages
                             return true;
                         });
 
-                        LoginInformationSection.Add(TotpCodeCell);
+                        ItemInformationSection.Add(TotpCodeCell);
                     }
                 }
             }
@@ -300,9 +300,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private async Task OpenAttachmentAsync(Cipher login, VaultViewLoginPageModel.Attachment attachment)
+        private async Task OpenAttachmentAsync(Cipher cipher, VaultViewCipherPageModel.Attachment attachment)
         {
-            if(!_tokenService.TokenPremium && !login.OrganizationUseTotp)
+            if(!_tokenService.TokenPremium && !cipher.OrganizationUseTotp)
             {
                 _userDialogs.Alert(AppResources.PremiumRequired);
                 return;
@@ -323,7 +323,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Downloading, MaskType.Black);
-            var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, login.OrganizationId);
+            var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, cipher.OrganizationId);
             _userDialogs.HideLoading();
             if(data == null)
             {
@@ -361,22 +361,22 @@ namespace Bit.App.Pages
             }
         }
 
-        private class EditLoginToolBarItem : ExtendedToolbarItem
+        private class EditCipherToolBarItem : ExtendedToolbarItem
         {
             private readonly VaultViewCipherPage _page;
-            private readonly string _loginId;
+            private readonly string _cipherId;
 
-            public EditLoginToolBarItem(VaultViewCipherPage page, string loginId)
+            public EditCipherToolBarItem(VaultViewCipherPage page, string cipherId)
             {
                 _page = page;
-                _loginId = loginId;
+                _cipherId = cipherId;
                 Text = AppResources.Edit;
                 ClickAction = async () => await ClickedItem();
             }
 
             private async Task ClickedItem()
             {
-                var page = new VaultEditCipherPage(_loginId);
+                var page = new VaultEditCipherPage(_cipherId);
                 await _page.Navigation.PushForDeviceAsync(page);
             }
         }
@@ -385,7 +385,7 @@ namespace Bit.App.Pages
         {
             private readonly Action _tapped;
 
-            public AttachmentViewCell(VaultViewLoginPageModel.Attachment attachment, Action tappedAction)
+            public AttachmentViewCell(VaultViewCipherPageModel.Attachment attachment, Action tappedAction)
             {
                 _tapped = tappedAction;
                 Label.Text = attachment.Name;
@@ -413,19 +413,19 @@ namespace Bit.App.Pages
 
         public class FieldViewCell : LabeledValueCell
         {
-            public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field)
+            public FieldViewCell(VaultViewCipherPage page, VaultViewCipherPageModel.Field field)
                 : base(field.Name, field.Value == "true" ? "✓" : "-")
             {
                 Init(page, field, null);
             }
 
-            public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, bool? a)
+            public FieldViewCell(VaultViewCipherPage page, VaultViewCipherPageModel.Field field, bool? a)
                 : base(field.Name, field.Value, "clipboard.png")
             {
                 Init(page, field, Button1);
             }
 
-            public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, bool? a, bool? b)
+            public FieldViewCell(VaultViewCipherPage page, VaultViewCipherPageModel.Field field, bool? a, bool? b)
                 : base(field.Name, field.MaskedValue, string.Empty, "clipboard.png")
             {
                 Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular",
@@ -454,7 +454,7 @@ namespace Bit.App.Pages
                 Init(page, field, Button2);
             }
 
-            private void Init(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, ExtendedButton copyButton)
+            private void Init(VaultViewCipherPage page, VaultViewCipherPageModel.Field field, ExtendedButton copyButton)
             {
                 Value.LineBreakMode = LineBreakMode.WordWrap;
                 if(copyButton != null)
