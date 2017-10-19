@@ -36,7 +36,7 @@ namespace Bit.iOS.Extension
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            NavItem.Title = AppResources.Logins;
+            NavItem.Title = AppResources.Items;
             if(!CanAutoFill())
             {
                 CancelBarButton.Title = AppResources.Close;
@@ -150,7 +150,7 @@ namespace Bit.iOS.Extension
                 if(_tableItems == null || _tableItems.Count() == 0)
                 {
                     var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
-                    noDataCell.TextLabel.Text = AppResources.NoLoginsTap;
+                    noDataCell.TextLabel.Text = AppResources.NoItemsTap;
                     noDataCell.TextLabel.TextAlignment = UITextAlignment.Center;
                     noDataCell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
                     noDataCell.TextLabel.Lines = 0;

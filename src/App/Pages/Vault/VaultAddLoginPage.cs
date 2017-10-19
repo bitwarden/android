@@ -120,7 +120,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection(AppResources.LoginInformation)
+                    new TableSection(AppResources.ItemInformation)
                     {
                         NameCell,
                         UriCell,
@@ -206,7 +206,7 @@ namespace Bit.App.Pages
 
                 if(saveTask.Succeeded)
                 {
-                    _userDialogs.Toast(AppResources.NewLoginCreated);
+                    _userDialogs.Toast(AppResources.NewItemCreated);
                     if(_fromAutofill)
                     {
                         _googleAnalyticsService.TrackExtensionEvent("CreatedLogin");
@@ -227,7 +227,7 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = AppResources.AddLogin;
+            Title = AppResources.AddItem;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)

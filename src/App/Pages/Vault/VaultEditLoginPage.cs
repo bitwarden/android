@@ -141,7 +141,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection(AppResources.LoginInformation)
+                    new TableSection(AppResources.ItemInformation)
                     {
                         NameCell,
                         UriCell,
@@ -237,7 +237,7 @@ namespace Bit.App.Pages
 
                 if(saveTask.Succeeded)
                 {
-                    _userDialogs.Toast(AppResources.LoginUpdated);
+                    _userDialogs.Toast(AppResources.ItemUpdated);
                     _googleAnalyticsService.TrackAppEvent("EditedLogin");
                     await Navigation.PopForDeviceAsync();
                 }
@@ -251,7 +251,7 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = AppResources.EditLogin;
+            Title = AppResources.EditItem;
             Content = table;
             ToolbarItems.Add(saveToolBarItem);
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
@@ -414,7 +414,7 @@ namespace Bit.App.Pages
 
             if(deleteTask.Succeeded)
             {
-                _userDialogs.Toast(AppResources.LoginDeleted);
+                _userDialogs.Toast(AppResources.ItemDeleted);
                 _googleAnalyticsService.TrackAppEvent("DeletedLogin");
                 await Navigation.PopForDeviceAsync();
             }

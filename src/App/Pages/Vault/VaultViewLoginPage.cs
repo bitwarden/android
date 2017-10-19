@@ -113,7 +113,7 @@ namespace Bit.App.Pages
             NotesCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewLoginPageModel.Notes));
             NotesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
-            LoginInformationSection = new TableSection(AppResources.LoginInformation)
+            LoginInformationSection = new TableSection(AppResources.ItemInformation)
             {
                 nameCell
             };
@@ -150,7 +150,7 @@ namespace Bit.App.Pages
                 UriCell.Button1.WidthRequest = 75;
             }
 
-            Title = AppResources.ViewLogin;
+            Title = AppResources.ViewItem;
             Content = Table;
             BindingContext = Model;
         }

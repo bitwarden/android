@@ -98,11 +98,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add a Login.
+        ///   Looks up a localized string similar to Add an Item.
         /// </summary>
-        public static string AddALogin {
+        public static string AddAnItem {
             get {
-                return ResourceManager.GetString("AddALogin", resourceCulture);
+                return ResourceManager.GetString("AddAnItem", resourceCulture);
             }
         }
         
@@ -116,11 +116,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Login.
+        ///   Looks up a localized string similar to Add Item.
         /// </summary>
-        public static string AddLogin {
+        public static string AddItem {
             get {
-                return ResourceManager.GetString("AddLogin", resourceCulture);
+                return ResourceManager.GetString("AddItem", resourceCulture);
             }
         }
         
@@ -269,7 +269,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to auto-fill or view this login?.
+        ///   Looks up a localized string similar to Do you want to auto-fill or view this item?.
         /// </summary>
         public static string AutofillOrView {
             get {
@@ -413,7 +413,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Are you sure you want to auto-fill this login? It is not a complete match for &quot;{0}&quot;..
+        ///   Looks up a localized string similar to Are you sure you want to auto-fill this item? It is not a complete match for &quot;{0}&quot;..
         /// </summary>
         public static string BitwardenAutofillServiceMatchConfirm {
             get {
@@ -431,7 +431,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap this notification to auto-fill a login from your vault..
+        ///   Looks up a localized string similar to Tap this notification to auto-fill an item from your vault..
         /// </summary>
         public static string BitwardenAutofillServiceNotificationContent {
             get {
@@ -440,7 +440,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap this notification to view logins from your vault..
+        ///   Looks up a localized string similar to Tap this notification to view items from your vault..
         /// </summary>
         public static string BitwardenAutofillServiceNotificationContentOld {
             get {
@@ -458,7 +458,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are searching for an auto-fill login for &quot;{0}&quot;..
+        ///   Looks up a localized string similar to You are searching for an auto-fill item for &quot;{0}&quot;..
         /// </summary>
         public static string BitwardenAutofillServiceSearch {
             get {
@@ -854,11 +854,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Edit Login.
+        ///   Looks up a localized string similar to Edit Item.
         /// </summary>
-        public static string EditLogin {
+        public static string EditItem {
             get {
-                return ResourceManager.GetString("EditLogin", resourceCulture);
+                return ResourceManager.GetString("EditItem", resourceCulture);
             }
         }
         
@@ -1286,29 +1286,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Import Logins.
+        ///   Looks up a localized string similar to Import Items.
         /// </summary>
-        public static string ImportLogins {
+        public static string ImportItems {
             get {
-                return ResourceManager.GetString("ImportLogins", resourceCulture);
+                return ResourceManager.GetString("ImportItems", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You can bulk import logins from the bitwarden.com web vault. Do you want to visit the website now?.
+        ///   Looks up a localized string similar to You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?.
         /// </summary>
-        public static string ImportLoginsConfirmation {
+        public static string ImportItemsConfirmation {
             get {
-                return ResourceManager.GetString("ImportLoginsConfirmation", resourceCulture);
+                return ResourceManager.GetString("ImportItemsConfirmation", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quickly bulk import your logins from other password management apps..
+        ///   Looks up a localized string similar to Quickly bulk import your items from other password management apps..
         /// </summary>
-        public static string ImportLoginsDescription {
+        public static string ImportItemsDescription {
             get {
-                return ResourceManager.GetString("ImportLoginsDescription", resourceCulture);
+                return ResourceManager.GetString("ImportItemsDescription", resourceCulture);
             }
         }
         
@@ -1345,6 +1345,51 @@ namespace Bit.App.Resources {
         public static string InvalidPIN {
             get {
                 return ResourceManager.GetString("InvalidPIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item has been deleted..
+        /// </summary>
+        public static string ItemDeleted {
+            get {
+                return ResourceManager.GetString("ItemDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Information.
+        /// </summary>
+        public static string ItemInformation {
+            get {
+                return ResourceManager.GetString("ItemInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        public static string Items {
+            get {
+                return ResourceManager.GetString("Items", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items for {0}.
+        /// </summary>
+        public static string ItemsForUri {
+            get {
+                return ResourceManager.GetString("ItemsForUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item updated..
+        /// </summary>
+        public static string ItemUpdated {
+            get {
+                return ResourceManager.GetString("ItemUpdated", resourceCulture);
             }
         }
         
@@ -1466,33 +1511,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Login has been deleted..
-        /// </summary>
-        public static string LoginDeleted {
-            get {
-                return ResourceManager.GetString("LoginDeleted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Login Information.
-        /// </summary>
-        public static string LoginInformation {
-            get {
-                return ResourceManager.GetString("LoginInformation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No Name.
-        /// </summary>
-        public static string LoginNoName {
-            get {
-                return ResourceManager.GetString("LoginNoName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Login.
         /// </summary>
         public static string LogInNoun {
@@ -1511,38 +1529,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logins.
-        /// </summary>
-        public static string Logins {
-            get {
-                return ResourceManager.GetString("Logins", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Logins for {0}.
-        /// </summary>
-        public static string LoginsForUri {
-            get {
-                return ResourceManager.GetString("LoginsForUri", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Login Unavailable.
         /// </summary>
         public static string LoginUnavailable {
             get {
                 return ResourceManager.GetString("LoginUnavailable", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Login updated..
-        /// </summary>
-        public static string LoginUpdated {
-            get {
-                return ResourceManager.GetString("LoginUpdated", resourceCulture);
             }
         }
         
@@ -1637,11 +1628,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Matching Logins.
+        ///   Looks up a localized string similar to Matching Items.
         /// </summary>
-        public static string MatchingLogins {
+        public static string MatchingItems {
             get {
-                return ResourceManager.GetString("MatchingLogins", resourceCulture);
+                return ResourceManager.GetString("MatchingItems", resourceCulture);
             }
         }
         
@@ -1727,11 +1718,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New login created..
+        ///   Looks up a localized string similar to New item created..
         /// </summary>
-        public static string NewLoginCreated {
+        public static string NewItemCreated {
             get {
-                return ResourceManager.GetString("NewLoginCreated", resourceCulture);
+                return ResourceManager.GetString("NewItemCreated", resourceCulture);
             }
         }
         
@@ -1781,29 +1772,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no logins in your vault..
+        ///   Looks up a localized string similar to There are no items in your vault..
         /// </summary>
-        public static string NoLogins {
+        public static string NoItems {
             get {
-                return ResourceManager.GetString("NoLogins", resourceCulture);
+                return ResourceManager.GetString("NoItems", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no logins in your vault for {0}..
+        ///   Looks up a localized string similar to There are no items in your vault for {0}..
         /// </summary>
-        public static string NoLoginsForUri {
+        public static string NoItemsForUri {
             get {
-                return ResourceManager.GetString("NoLoginsForUri", resourceCulture);
+                return ResourceManager.GetString("NoItemsForUri", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no logins in your vault for this website. Tap to add one..
+        ///   Looks up a localized string similar to There are no items in your vault for this website. Tap to add one..
         /// </summary>
-        public static string NoLoginsTap {
+        public static string NoItemsTap {
             get {
-                return ResourceManager.GetString("NoLoginsTap", resourceCulture);
+                return ResourceManager.GetString("NoItemsTap", resourceCulture);
             }
         }
         
@@ -1961,11 +1952,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Possible Matching Logins.
+        ///   Looks up a localized string similar to Possible Matching Items.
         /// </summary>
-        public static string PossibleMatchingLogins {
+        public static string PossibleMatchingItems {
             get {
-                return ResourceManager.GetString("PossibleMatchingLogins", resourceCulture);
+                return ResourceManager.GetString("PossibleMatchingItems", resourceCulture);
             }
         }
         
@@ -2204,7 +2195,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create an organization to securely share your logins with other users..
+        ///   Looks up a localized string similar to Create an organization to securely share your items with other users..
         /// </summary>
         public static string ShareVaultDescription {
             get {
@@ -2546,11 +2537,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View Login.
+        ///   Looks up a localized string similar to View Item.
         /// </summary>
-        public static string ViewLogin {
+        public static string ViewItem {
             get {
-                return ResourceManager.GetString("ViewLogin", resourceCulture);
+                return ResourceManager.GetString("ViewItem", resourceCulture);
             }
         }
         
@@ -2591,7 +2582,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage your logins from any web browser with the bitwarden web vault..
+        ///   Looks up a localized string similar to Manage your items from any web browser with the bitwarden web vault..
         /// </summary>
         public static string WebVaultDescription {
             get {

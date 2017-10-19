@@ -119,7 +119,7 @@ namespace Bit.App.Pages
 
             var noDataLabel = new Label
             {
-                Text = _favorites ? AppResources.NoFavorites : AppResources.NoLogins,
+                Text = _favorites ? AppResources.NoFavorites : AppResources.NoItems,
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"]
@@ -137,7 +137,7 @@ namespace Bit.App.Pages
             {
                 var addCipherButton = new ExtendedButton
                 {
-                    Text = AppResources.AddALogin,
+                    Text = AppResources.AddAnItem,
                     Command = new Command(() => AddCipher()),
                     Style = (Style)Application.Current.Resources["btn-primaryAccent"]
                 };

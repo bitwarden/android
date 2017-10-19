@@ -65,7 +65,7 @@ namespace Bit.App.Pages
         {
             var noDataLabel = new Label
             {
-                Text = string.Format(AppResources.NoLoginsForUri, _name ?? "--"),
+                Text = string.Format(AppResources.NoItemsForUri, _name ?? "--"),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"]
@@ -73,7 +73,7 @@ namespace Bit.App.Pages
 
             var addCipherButton = new ExtendedButton
             {
-                Text = AppResources.AddALogin,
+                Text = AppResources.AddAnItem,
                 Command = new Command(() => AddCipherAsync()),
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
@@ -106,7 +106,7 @@ namespace Bit.App.Pages
                 ListView.RowHeight = -1;
             }
 
-            Title = string.Format(AppResources.LoginsForUri, _name ?? "--");
+            Title = string.Format(AppResources.ItemsForUri, _name ?? "--");
 
             LoadingIndicator = new ActivityIndicator
             {
@@ -170,7 +170,7 @@ namespace Bit.App.Pages
                     .ToList();
                 if(normalLogins?.Any() ?? false)
                 {
-                    autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins, AppResources.MatchingLogins));
+                    autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins, AppResources.MatchingItems));
                 }
 
                 var fuzzyLogins = ciphers?.Item2.Select(l => new VaultListPageModel.AutofillCipher(l, true))
@@ -180,7 +180,7 @@ namespace Bit.App.Pages
                 if(fuzzyLogins?.Any() ?? false)
                 {
                     autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(fuzzyLogins,
-                        AppResources.PossibleMatchingLogins));
+                        AppResources.PossibleMatchingItems));
                 }
 
                 Device.BeginInvokeOnMainThread(() =>

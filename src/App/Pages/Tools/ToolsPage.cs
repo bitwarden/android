@@ -36,7 +36,7 @@ namespace Bit.App.Pages
                 "refresh.png");
             WebCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe.png");
             ShareCell = new ToolsViewCell(AppResources.ShareVault, AppResources.ShareVaultDescription, "share_tools.png");
-            ImportCell = new ToolsViewCell(AppResources.ImportLogins, AppResources.ImportLoginsDescription, "cloudup.png");
+            ImportCell = new ToolsViewCell(AppResources.ImportItems, AppResources.ImportItemsDescription, "cloudup.png");
 
             var section = new TableSection(" ") { GeneratorCell };
 
@@ -142,7 +142,7 @@ namespace Bit.App.Pages
 
         private async void ImportCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(AppResources.ImportLoginsConfirmation, null, AppResources.Yes,
+            if(!await _userDialogs.ConfirmAsync(AppResources.ImportItemsConfirmation, null, AppResources.Yes,
                 AppResources.Cancel))
             {
                 return;
