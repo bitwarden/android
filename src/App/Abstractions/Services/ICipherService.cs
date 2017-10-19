@@ -12,10 +12,10 @@ namespace Bit.App.Abstractions
         Task<IEnumerable<Cipher>> GetAllAsync();
         Task<IEnumerable<Cipher>> GetAllAsync(bool favorites);
         Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString);
-        Task<ApiResult<CipherResponse>> SaveAsync(Cipher login);
+        Task<ApiResult<CipherResponse>> SaveAsync(Cipher cipher);
         Task<ApiResult> DeleteAsync(string id);
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null);
-        Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher login, byte[] data, string fileName);
-        Task<ApiResult> DeleteAttachmentAsync(Cipher login, string attachmentId);
+        Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher cipher, byte[] data, string fileName);
+        Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId);
     }
 }

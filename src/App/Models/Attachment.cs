@@ -32,11 +32,6 @@ namespace Bit.App.Models
         public long Size { get; set; }
         public string SizeName { get; set; }
 
-        public AttachmentData ToAttachmentData(string loginId)
-        {
-            return new AttachmentData(this, loginId);
-        }
-
         private void SetSize(string sizeString)
         {
             long size;

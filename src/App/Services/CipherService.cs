@@ -56,8 +56,8 @@ namespace Bit.App.Services
             var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
             var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
             var data = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId);
-            var logins = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
-            return logins;
+            var cipher = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
+            return cipher;
         }
 
         public async Task<IEnumerable<Cipher>> GetAllAsync(bool favorites)
@@ -65,8 +65,8 @@ namespace Bit.App.Services
             var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
             var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
             var data = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
-            var logins = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
-            return logins;
+            var cipher = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
+            return cipher;
         }
 
         public async Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString)
@@ -212,27 +212,27 @@ namespace Bit.App.Services
             return new Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>(matchingLogins, matchingFuzzyLogins);
         }
 
-        public async Task<ApiResult<CipherResponse>> SaveAsync(Cipher login)
+        public async Task<ApiResult<CipherResponse>> SaveAsync(Cipher cipher)
         {
             ApiResult<CipherResponse> response = null;
-            var request = new CipherRequest(login);
+            var request = new CipherRequest(cipher);
 
-            if(login.Id == null)
+            if(cipher.Id == null)
             {
                 response = await _cipherApiRepository.PostAsync(request);
             }
             else
             {
-                response = await _cipherApiRepository.PutAsync(login.Id, request);
+                response = await _cipherApiRepository.PutAsync(cipher.Id, request);
             }
 
             if(response.Succeeded)
             {
                 var data = new CipherData(response.Result, _authService.UserId);
-                if(login.Id == null)
+                if(cipher.Id == null)
                 {
                     await _cipherRepository.InsertAsync(data);
-                    login.Id = data.Id;
+                    cipher.Id = data.Id;
                 }
                 else
                 {
@@ -298,21 +298,21 @@ namespace Bit.App.Services
             }
         }
 
-        public async Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher login, byte[] data, string fileName)
+        public async Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher cipher, byte[] data, string fileName)
         {
-            var encFileName = fileName.Encrypt(login.OrganizationId);
+            var encFileName = fileName.Encrypt(cipher.OrganizationId);
             var encBytes = _cryptoService.EncryptToBytes(data,
-                login.OrganizationId != null ? _cryptoService.GetOrgKey(login.OrganizationId) : null);
-            var response = await _cipherApiRepository.PostAttachmentAsync(login.Id, encBytes, encFileName.EncryptedString);
+                cipher.OrganizationId != null ? _cryptoService.GetOrgKey(cipher.OrganizationId) : null);
+            var response = await _cipherApiRepository.PostAttachmentAsync(cipher.Id, encBytes, encFileName.EncryptedString);
 
             if(response.Succeeded)
             {
-                var attachmentData = response.Result.Attachments.Select(a => new AttachmentData(a, login.Id));
+                var attachmentData = response.Result.Attachments.Select(a => new AttachmentData(a, cipher.Id));
                 foreach(var attachment in attachmentData)
                 {
                     await _attachmentRepository.UpsertAsync(attachment);
                 }
-                login.Attachments = response.Result.Attachments.Select(a => new Attachment(a));
+                cipher.Attachments = response.Result.Attachments.Select(a => new Attachment(a));
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -323,9 +323,9 @@ namespace Bit.App.Services
             return response;
         }
 
-        public async Task<ApiResult> DeleteAttachmentAsync(Cipher login, string attachmentId)
+        public async Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId)
         {
-            var response = await _cipherApiRepository.DeleteAttachmentAsync(login.Id, attachmentId);
+            var response = await _cipherApiRepository.DeleteAttachmentAsync(cipher.Id, attachmentId);
             if(response.Succeeded)
             {
                 await _attachmentRepository.DeleteAsync(attachmentId);
