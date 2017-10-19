@@ -32,7 +32,7 @@ namespace Bit.App.Pages
         {
             MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
 
-            var settingsButton = new Button
+            var settingsButton = new ExtendedButton
             {
                 Image = "cog.png",
                 VerticalOptions = LayoutOptions.Start,
