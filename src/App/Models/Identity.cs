@@ -6,6 +6,8 @@ namespace Bit.App.Models
 {
     public class Identity
     {
+        public Identity() { }
+
         public Identity(CipherData data)
         {
             var deserializedData = JsonConvert.DeserializeObject<IdentityDataModel>(data.Data);

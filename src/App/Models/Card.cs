@@ -6,6 +6,8 @@ namespace Bit.App.Models
 {
     public class Card
     {
+        public Card() { }
+
         public Card(CipherData data)
         {
             var deserializedData = JsonConvert.DeserializeObject<CardDataModel>(data.Data);

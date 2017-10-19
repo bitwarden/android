@@ -12,6 +12,7 @@ using Bit.App.Utilities;
 using System.Threading;
 using Bit.App.Models;
 using System.Collections.Generic;
+using Bit.App.Enums;
 
 namespace Bit.App.Pages
 {
@@ -231,7 +232,7 @@ namespace Bit.App.Pages
 
         private async void AddCipherAsync()
         {
-            var page = new VaultAddLoginPage(Uri, _name, true);
+            var page = new VaultAddLoginPage(CipherType.Login, Uri, _name, true);
             await Navigation.PushForDeviceAsync(page);
         }
 

@@ -14,6 +14,7 @@ using Plugin.Connectivity.Abstractions;
 using System.Collections.Generic;
 using System.Threading;
 using FFImageLoading.Forms;
+using Bit.App.Enums;
 
 namespace Bit.App.Pages
 {
@@ -490,7 +491,28 @@ namespace Bit.App.Pages
 
         private async void AddCipher()
         {
-            var page = new VaultAddLoginPage(Uri);
+            var type = await _userDialogs.ActionSheetAsync(AppResources.SelectTypeAdd, AppResources.Cancel, null, null,
+                AppResources.TypeLogin, AppResources.TypeCard, AppResources.TypeIdentity, AppResources.TypeSecureNote);
+
+            var selectedType = CipherType.SecureNote;
+            if(type == AppResources.Cancel)
+            {
+                return;
+            }
+            else if(type == AppResources.TypeLogin)
+            {
+                selectedType = CipherType.Login;
+            }
+            else if(type == AppResources.TypeCard)
+            {
+                selectedType = CipherType.Card;
+            }
+            else if(type == AppResources.TypeIdentity)
+            {
+                selectedType = CipherType.Identity;
+            }
+
+            var page = new VaultAddLoginPage(selectedType, Uri);
             await Navigation.PushForDeviceAsync(page);
         }
 

@@ -138,6 +138,14 @@ namespace Bit.App.Controls
         public Label Label { get; private set; }
         public ExtendedEntry Entry { get; private set; }
         public ExtendedButton Button { get; private set; }
+        public VisualElement NextElement
+        {
+            get => _nextElement;
+            set
+            {
+                _nextElement = value;
+            }
+        }
 
         public void InitEvents()
         {
@@ -150,7 +158,7 @@ namespace Bit.App.Controls
             {
                 _tgr.Tapped += Tgr_Tapped;
             }
-            
+
             Tapped += FormEntryCell_Tapped;
         }
 

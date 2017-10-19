@@ -5,6 +5,8 @@ namespace Bit.App.Models
 {
     public class SecureNote
     {
+        public SecureNote() { }
+
         public SecureNote(CipherData data)
         {
             Type = data.SecureNoteType.Value;

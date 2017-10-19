@@ -134,6 +134,33 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address 1.
+        /// </summary>
+        public static string Address1 {
+            get {
+                return ResourceManager.GetString("Address1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address 2.
+        /// </summary>
+        public static string Address2 {
+            get {
+                return ResourceManager.GetString("Address2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Address 3.
+        /// </summary>
+        public static string Address3 {
+            get {
+                return ResourceManager.GetString("Address3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error has occurred..
         /// </summary>
         public static string AnErrorHasOccurred {
@@ -157,6 +184,15 @@ namespace Bit.App.Resources {
         public static string AppExtension {
             get {
                 return ResourceManager.GetString("AppExtension", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to April.
+        /// </summary>
+        public static string April {
+            get {
+                return ResourceManager.GetString("April", resourceCulture);
             }
         }
         
@@ -193,6 +229,15 @@ namespace Bit.App.Resources {
         public static string Attachments {
             get {
                 return ResourceManager.GetString("Attachments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to August.
+        /// </summary>
+        public static string August {
+            get {
+                return ResourceManager.GetString("August", resourceCulture);
             }
         }
         
@@ -485,6 +530,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Brand.
+        /// </summary>
+        public static string Brand {
+            get {
+                return ResourceManager.GetString("Brand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Camera.
         /// </summary>
         public static string Camera {
@@ -526,6 +580,15 @@ namespace Bit.App.Resources {
         public static string CannotOpenApp {
             get {
                 return ResourceManager.GetString("CannotOpenApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cardholder Name.
+        /// </summary>
+        public static string CardholderName {
+            get {
+                return ResourceManager.GetString("CardholderName", resourceCulture);
             }
         }
         
@@ -575,6 +638,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to City / Town.
+        /// </summary>
+        public static string CityTown {
+            get {
+                return ResourceManager.GetString("CityTown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
@@ -589,6 +661,15 @@ namespace Bit.App.Resources {
         public static string ComingSoon {
             get {
                 return ResourceManager.GetString("ComingSoon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company.
+        /// </summary>
+        public static string Company {
+            get {
+                return ResourceManager.GetString("Company", resourceCulture);
             }
         }
         
@@ -692,6 +773,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Country.
+        /// </summary>
+        public static string Country {
+            get {
+                return ResourceManager.GetString("Country", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Account.
         /// </summary>
         public static string CreateAccount {
@@ -751,6 +841,15 @@ namespace Bit.App.Resources {
         public static string CustomFieldsUpdated {
             get {
                 return ResourceManager.GetString("CustomFieldsUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to December.
+        /// </summary>
+        public static string December {
+            get {
+                return ResourceManager.GetString("December", resourceCulture);
             }
         }
         
@@ -832,6 +931,15 @@ namespace Bit.App.Resources {
         public static string DoYouReallyWantToDelete {
             get {
                 return ResourceManager.GetString("DoYouReallyWantToDelete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dr.
+        /// </summary>
+        public static string Dr {
+            get {
+                return ResourceManager.GetString("Dr", resourceCulture);
             }
         }
         
@@ -971,6 +1079,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Expiration Month.
+        /// </summary>
+        public static string ExpirationMonth {
+            get {
+                return ResourceManager.GetString("ExpirationMonth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration Year.
+        /// </summary>
+        public static string ExpirationYear {
+            get {
+                return ResourceManager.GetString("ExpirationYear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extension Activated!.
         /// </summary>
         public static string ExtensionActivated {
@@ -1106,6 +1232,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to February.
+        /// </summary>
+        public static string February {
+            get {
+                return ResourceManager.GetString("February", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         public static string File {
@@ -1156,6 +1291,15 @@ namespace Bit.App.Resources {
         public static string FingerprintDirection {
             get {
                 return ResourceManager.GetString("FingerprintDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First Name.
+        /// </summary>
+        public static string FirstName {
+            get {
+                return ResourceManager.GetString("FirstName", resourceCulture);
             }
         }
         
@@ -1394,6 +1538,42 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to January.
+        /// </summary>
+        public static string January {
+            get {
+                return ResourceManager.GetString("January", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to July.
+        /// </summary>
+        public static string July {
+            get {
+                return ResourceManager.GetString("July", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to June.
+        /// </summary>
+        public static string June {
+            get {
+                return ResourceManager.GetString("June", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Last Name.
+        /// </summary>
+        public static string LastName {
+            get {
+                return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Last Sync:.
         /// </summary>
         public static string LastSync {
@@ -1426,6 +1606,15 @@ namespace Bit.App.Resources {
         public static string Length {
             get {
                 return ResourceManager.GetString("Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License Number.
+        /// </summary>
+        public static string LicenseNumber {
+            get {
+                return ResourceManager.GetString("LicenseNumber", resourceCulture);
             }
         }
         
@@ -1574,6 +1763,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to March.
+        /// </summary>
+        public static string March {
+            get {
+                return ResourceManager.GetString("March", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Master Password.
         /// </summary>
         public static string MasterPassword {
@@ -1646,6 +1844,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to May.
+        /// </summary>
+        public static string May {
+            get {
+                return ResourceManager.GetString("May", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Middle Name.
+        /// </summary>
+        public static string MiddleName {
+            get {
+                return ResourceManager.GetString("MiddleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Minimum Numbers.
         /// </summary>
         public static string MinNumbers {
@@ -1678,6 +1894,33 @@ namespace Bit.App.Resources {
         public static string MoreSettings {
             get {
                 return ResourceManager.GetString("MoreSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mr.
+        /// </summary>
+        public static string Mr {
+            get {
+                return ResourceManager.GetString("Mr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mrs.
+        /// </summary>
+        public static string Mrs {
+            get {
+                return ResourceManager.GetString("Mrs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ms.
+        /// </summary>
+        public static string Ms {
+            get {
+                return ResourceManager.GetString("Ms", resourceCulture);
             }
         }
         
@@ -1826,11 +2069,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to November.
+        /// </summary>
+        public static string November {
+            get {
+                return ResourceManager.GetString("November", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number.
         /// </summary>
         public static string Number {
             get {
                 return ResourceManager.GetString("Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to October.
+        /// </summary>
+        public static string October {
+            get {
+                return ResourceManager.GetString("October", resourceCulture);
             }
         }
         
@@ -1876,6 +2137,15 @@ namespace Bit.App.Resources {
         public static string Other {
             get {
                 return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passport Number.
+        /// </summary>
+        public static string PassportNumber {
+            get {
+                return ResourceManager.GetString("PassportNumber", resourceCulture);
             }
         }
         
@@ -1939,6 +2209,15 @@ namespace Bit.App.Resources {
         public static string PasswordOverrideAlert {
             get {
                 return ResourceManager.GetString("PasswordOverrideAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone.
+        /// </summary>
+        public static string Phone {
+            get {
+                return ResourceManager.GetString("Phone", resourceCulture);
             }
         }
         
@@ -2123,6 +2402,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to What type of item do you want to add?.
+        /// </summary>
+        public static string SelectTypeAdd {
+            get {
+                return ResourceManager.GetString("SelectTypeAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Self-hosted Environment.
         /// </summary>
         public static string SelfHostedEnvironment {
@@ -2146,6 +2434,15 @@ namespace Bit.App.Resources {
         public static string SendVerificationCodeAgain {
             get {
                 return ResourceManager.GetString("SendVerificationCodeAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to September.
+        /// </summary>
+        public static string September {
+            get {
+                return ResourceManager.GetString("September", resourceCulture);
             }
         }
         
@@ -2209,6 +2506,24 @@ namespace Bit.App.Resources {
         public static string Show {
             get {
                 return ResourceManager.GetString("Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Social Security Number.
+        /// </summary>
+        public static string SSN {
+            get {
+                return ResourceManager.GetString("SSN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State / Province.
+        /// </summary>
+        public static string StateProvince {
+            get {
+                return ResourceManager.GetString("StateProvince", resourceCulture);
             }
         }
         
@@ -2294,6 +2609,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Title.
+        /// </summary>
+        public static string Title {
+            get {
+                return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tools.
         /// </summary>
         public static string Tools {
@@ -2344,6 +2668,42 @@ namespace Bit.App.Resources {
         public static string TwoStepLoginOptions {
             get {
                 return ResourceManager.GetString("TwoStepLoginOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Card.
+        /// </summary>
+        public static string TypeCard {
+            get {
+                return ResourceManager.GetString("TypeCard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Identity.
+        /// </summary>
+        public static string TypeIdentity {
+            get {
+                return ResourceManager.GetString("TypeIdentity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Login.
+        /// </summary>
+        public static string TypeLogin {
+            get {
+                return ResourceManager.GetString("TypeLogin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Secure Note.
+        /// </summary>
+        public static string TypeSecureNote {
+            get {
+                return ResourceManager.GetString("TypeSecureNote", resourceCulture);
             }
         }
         
@@ -2623,6 +2983,15 @@ namespace Bit.App.Resources {
         public static string YubiKeyTitle {
             get {
                 return ResourceManager.GetString("YubiKeyTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zip / Postal Code.
+        /// </summary>
+        public static string ZipPostalCode {
+            get {
+                return ResourceManager.GetString("ZipPostalCode", resourceCulture);
             }
         }
     }
