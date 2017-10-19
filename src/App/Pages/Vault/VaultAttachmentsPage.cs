@@ -9,7 +9,6 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Utilities;
 using Plugin.Connectivity.Abstractions;
-using System.Collections.Generic;
 using Bit.App.Models;
 using System.Threading.Tasks;
 
@@ -24,16 +23,16 @@ namespace Bit.App.Pages
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ITokenService _tokenService;
         private readonly ICryptoService _cryptoService;
-        private readonly string _loginId;
-        private Cipher _login;
+        private readonly string _cipherId;
+        private Cipher _cipher;
         private byte[] _fileBytes;
         private DateTime? _lastAction;
         private bool _canUseAttachments = true;
 
-        public VaultAttachmentsPage(string loginId)
+        public VaultAttachmentsPage(string cipherId)
             : base(true)
         {
-            _loginId = loginId;
+            _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -135,7 +134,7 @@ namespace Bit.App.Pages
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
-                if(_lastAction.LastActionWasRecent() || _login == null)
+                if(_lastAction.LastActionWasRecent() || _cipher == null)
                 {
                     return;
                 }
@@ -162,7 +161,7 @@ namespace Bit.App.Pages
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _cipherService.EncryptAndSaveAttachmentAsync(_login, _fileBytes, FileLabel.Text);
+                var saveTask = await _cipherService.EncryptAndSaveAttachmentAsync(_cipher, _fileBytes, FileLabel.Text);
 
                 _userDialogs.HideLoading();
 
@@ -223,14 +222,14 @@ namespace Bit.App.Pages
 
         private async Task LoadAttachmentsAsync()
         {
-            _login = await _cipherService.GetByIdAsync(_loginId);
-            if(_login == null)
+            _cipher = await _cipherService.GetByIdAsync(_cipherId);
+            if(_cipher == null)
             {
                 await Navigation.PopForDeviceAsync();
                 return;
             }
 
-            var attachmentsToAdd = _login.Attachments
+            var attachmentsToAdd = _cipher.Attachments
                 .Select(a => new VaultAttachmentsPageModel.Attachment(a))
                 .OrderBy(s => s.Name);
             PresentationAttchments.ResetWithRange(attachmentsToAdd);
@@ -268,7 +267,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
-            var saveTask = await _cipherService.DeleteAttachmentAsync(_login, attachment.Id);
+            var saveTask = await _cipherService.DeleteAttachmentAsync(_cipher, attachment.Id);
             _userDialogs.HideLoading();
 
             if(saveTask.Succeeded)

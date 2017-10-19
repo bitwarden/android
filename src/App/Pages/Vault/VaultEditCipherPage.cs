@@ -12,9 +12,9 @@ using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
-    public class VaultEditLoginPage : ExtendedContentPage
+    public class VaultEditCipherPage : ExtendedContentPage
     {
-        private readonly string _loginId;
+        private readonly string _cipherId;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
@@ -23,9 +23,9 @@ namespace Bit.App.Pages
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private DateTime? _lastAction;
 
-        public VaultEditLoginPage(string loginId)
+        public VaultEditCipherPage(string cipherId)
         {
-            _loginId = loginId;
+            _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -50,7 +50,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            var cipher = _cipherService.GetByIdAsync(_loginId).GetAwaiter().GetResult();
+            var cipher = _cipherService.GetByIdAsync(_cipherId).GetAwaiter().GetResult();
             if(cipher == null)
             {
                 // TODO: handle error. navigate back? should never happen...
@@ -385,13 +385,13 @@ namespace Bit.App.Pages
 
         private async void AttachmentsCell_Tapped(object sender, EventArgs e)
         {
-            var page = new ExtendedNavigationPage(new VaultAttachmentsPage(_loginId));
+            var page = new ExtendedNavigationPage(new VaultAttachmentsPage(_cipherId));
             await Navigation.PushModalAsync(page);
         }
 
         private async void CustomFieldsCell_Tapped(object sender, EventArgs e)
         {
-            var page = new ExtendedNavigationPage(new VaultCustomFieldsPage(_loginId));
+            var page = new ExtendedNavigationPage(new VaultCustomFieldsPage(_cipherId));
             await Navigation.PushModalAsync(page);
         }
 
@@ -409,7 +409,7 @@ namespace Bit.App.Pages
             }
 
             _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
-            var deleteTask = await _cipherService.DeleteAsync(_loginId);
+            var deleteTask = await _cipherService.DeleteAsync(_cipherId);
             _userDialogs.HideLoading();
 
             if(deleteTask.Succeeded)

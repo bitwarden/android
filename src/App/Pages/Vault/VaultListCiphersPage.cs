@@ -398,7 +398,7 @@ namespace Bit.App.Pages
 
             if(selection == AppResources.View || string.IsNullOrWhiteSpace(Uri))
             {
-                var page = new VaultViewLoginPage(cipher.Id);
+                var page = new VaultViewCipherPage(cipher.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.Autofill)
@@ -421,7 +421,7 @@ namespace Bit.App.Pages
         {
             var buttons = new List<string> { AppResources.View, AppResources.Edit };
 
-            if(cipher.Type == Enums.CipherType.Login)
+            if(cipher.Type == CipherType.Login)
             {
                 if(!string.IsNullOrWhiteSpace(cipher.Password.Value))
                 {
@@ -437,7 +437,7 @@ namespace Bit.App.Pages
                     buttons.Add(AppResources.GoToWebsite);
                 }
             }
-            else if(cipher.Type == Enums.CipherType.Card)
+            else if(cipher.Type == CipherType.Card)
             {
                 if(!string.IsNullOrWhiteSpace(cipher.CardNumber))
                 {
@@ -453,12 +453,12 @@ namespace Bit.App.Pages
 
             if(selection == AppResources.View)
             {
-                var page = new VaultViewLoginPage(cipher.Id);
+                var page = new VaultViewCipherPage(cipher.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.Edit)
             {
-                var page = new VaultEditLoginPage(cipher.Id);
+                var page = new VaultEditCipherPage(cipher.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.CopyPassword)

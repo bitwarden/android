@@ -15,7 +15,7 @@ using Bit.App.Enums;
 
 namespace Bit.App.Pages
 {
-    public class VaultViewLoginPage : ExtendedContentPage
+    public class VaultViewCipherPage : ExtendedContentPage
     {
         private readonly string _loginId;
         private readonly ICipherService _cipherService;
@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         private readonly ITokenService _tokenService;
         private bool _pageDisappeared = true;
 
-        public VaultViewLoginPage(string loginId)
+        public VaultViewCipherPage(string loginId)
         {
             _loginId = loginId;
             _cipherService = Resolver.Resolve<ICipherService>();
@@ -372,10 +372,10 @@ namespace Bit.App.Pages
 
         private class EditLoginToolBarItem : ExtendedToolbarItem
         {
-            private readonly VaultViewLoginPage _page;
+            private readonly VaultViewCipherPage _page;
             private readonly string _loginId;
 
-            public EditLoginToolBarItem(VaultViewLoginPage page, string loginId)
+            public EditLoginToolBarItem(VaultViewCipherPage page, string loginId)
             {
                 _page = page;
                 _loginId = loginId;
@@ -385,7 +385,7 @@ namespace Bit.App.Pages
 
             private async Task ClickedItem()
             {
-                var page = new VaultEditLoginPage(_loginId);
+                var page = new VaultEditCipherPage(_loginId);
                 await _page.Navigation.PushForDeviceAsync(page);
             }
         }
@@ -422,19 +422,19 @@ namespace Bit.App.Pages
 
         public class FieldViewCell : LabeledValueCell
         {
-            public FieldViewCell(VaultViewLoginPage page, VaultViewLoginPageModel.Field field)
+            public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field)
                 : base(field.Name, field.Value == "true" ? "✓" : "-")
             {
                 Init(page, field, null);
             }
 
-            public FieldViewCell(VaultViewLoginPage page, VaultViewLoginPageModel.Field field, bool? a)
+            public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, bool? a)
                 : base(field.Name, field.Value, AppResources.Copy)
             {
                 Init(page, field, Button1);
             }
 
-            public FieldViewCell(VaultViewLoginPage page, VaultViewLoginPageModel.Field field, bool? a, bool? b)
+            public FieldViewCell(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, bool? a, bool? b)
                 : base(field.Name, field.MaskedValue, string.Empty, AppResources.Copy)
             {
                 Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular",
@@ -464,7 +464,7 @@ namespace Bit.App.Pages
                 Init(page, field, Button2);
             }
 
-            private void Init(VaultViewLoginPage page, VaultViewLoginPageModel.Field field, ExtendedButton copyButton)
+            private void Init(VaultViewCipherPage page, VaultViewLoginPageModel.Field field, ExtendedButton copyButton)
             {
                 Value.LineBreakMode = LineBreakMode.WordWrap;
                 if(copyButton != null)

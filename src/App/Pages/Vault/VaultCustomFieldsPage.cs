@@ -20,14 +20,14 @@ namespace Bit.App.Pages
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
-        private readonly string _loginId;
-        private Cipher _login;
+        private readonly string _cipherId;
+        private Cipher _cipher;
         private DateTime? _lastAction;
 
-        public VaultCustomFieldsPage(string loginId)
+        public VaultCustomFieldsPage(string cipherId)
             : base(true)
         {
-            _loginId = loginId;
+            _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
@@ -66,7 +66,7 @@ namespace Bit.App.Pages
 
             SaveToolbarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
-                if(_lastAction.LastActionWasRecent() || _login == null)
+                if(_lastAction.LastActionWasRecent() || _cipher == null)
                 {
                     return;
                 }
@@ -88,9 +88,9 @@ namespace Bit.App.Pages
                             fields.Add(new Field
                             {
                                 Name = string.IsNullOrWhiteSpace(entryCell.Label.Text) ? null :
-                                    entryCell.Label.Text.Encrypt(_login.OrganizationId),
+                                    entryCell.Label.Text.Encrypt(_cipher.OrganizationId),
                                 Value = string.IsNullOrWhiteSpace(entryCell.Entry.Text) ? null :
-                                    entryCell.Entry.Text.Encrypt(_login.OrganizationId),
+                                    entryCell.Entry.Text.Encrypt(_cipher.OrganizationId),
                                 Type = entryCell.Entry.IsPassword ? FieldType.Hidden : FieldType.Text
                             });
                         }
@@ -100,21 +100,21 @@ namespace Bit.App.Pages
                             fields.Add(new Field
                             {
                                 Name = string.IsNullOrWhiteSpace(switchCell.Text) ? null :
-                                    switchCell.Text.Encrypt(_login.OrganizationId),
-                                Value = value.Encrypt(_login.OrganizationId),
+                                    switchCell.Text.Encrypt(_cipher.OrganizationId),
+                                Value = value.Encrypt(_cipher.OrganizationId),
                                 Type = FieldType.Boolean
                             });
                         }
                     }
-                    _login.Fields = fields;
+                    _cipher.Fields = fields;
                 }
                 else
                 {
-                    _login.Fields = null;
+                    _cipher.Fields = null;
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _cipherService.SaveAsync(_login);
+                var saveTask = await _cipherService.SaveAsync(_cipher);
 
                 _userDialogs.HideLoading();
 
@@ -148,14 +148,14 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
 
-            _login = await _cipherService.GetByIdAsync(_loginId);
-            if(_login == null)
+            _cipher = await _cipherService.GetByIdAsync(_cipherId);
+            if(_cipher == null)
             {
                 await Navigation.PopForDeviceAsync();
                 return;
             }
 
-            if(_login.Fields != null && _login.Fields.Any())
+            if(_cipher.Fields != null && _cipher.Fields.Any())
             {
                 Content = Table;
                 ToolbarItems.Add(SaveToolbarItem);
@@ -164,10 +164,10 @@ namespace Bit.App.Pages
                     ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
                 }
 
-                foreach(var field in _login.Fields)
+                foreach(var field in _cipher.Fields)
                 {
-                    var label = field.Name?.Decrypt(_login.OrganizationId) ?? string.Empty;
-                    var value = field.Value?.Decrypt(_login.OrganizationId);
+                    var label = field.Name?.Decrypt(_cipher.OrganizationId) ?? string.Empty;
+                    var value = field.Value?.Decrypt(_cipher.OrganizationId);
                     switch(field.Type)
                     {
                         case FieldType.Text:
