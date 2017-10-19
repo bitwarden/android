@@ -15,7 +15,7 @@ using Bit.App.Enums;
 
 namespace Bit.App.Pages
 {
-    public class VaultAddLoginPage : ExtendedContentPage
+    public class VaultAddCipherPage : ExtendedContentPage
     {
         private const string AddedLoginAlertKey = "addedSiteAlert";
 
@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         private readonly bool _fromAutofill;
         private DateTime? _lastAction;
 
-        public VaultAddLoginPage(CipherType type, string defaultUri = null,
+        public VaultAddCipherPage(CipherType type, string defaultUri = null,
             string defaultName = null, bool fromAutofill = false)
         {
             _type = type;
@@ -678,11 +678,11 @@ namespace Bit.App.Pages
                     _userDialogs.Toast(AppResources.NewItemCreated);
                     if(_fromAutofill)
                     {
-                        _googleAnalyticsService.TrackExtensionEvent("CreatedLogin");
+                        _googleAnalyticsService.TrackExtensionEvent("CreatedCipher");
                     }
                     else
                     {
-                        _googleAnalyticsService.TrackAppEvent("CreatedLogin");
+                        _googleAnalyticsService.TrackAppEvent("CreatedCipher");
                     }
                     await Navigation.PopForDeviceAsync();
                 }

@@ -354,7 +354,7 @@
     <Compile Include="Models\Page\VaultListPageModel.cs" />
     <Compile Include="Pages\LoginPage.cs" />
     <Compile Include="Pages\Settings\SettingsAddFolderPage.cs" />
-    <Compile Include="Pages\Vault\VaultAddLoginPage.cs" />
+    <Compile Include="Pages\Vault\VaultAddCipherPage.cs" />
     <Compile Include="Pages\Vault\VaultViewLoginPage.cs" />
     <Compile Include="Pages\Vault\VaultEditLoginPage.cs" />
     <Compile Include="Pages\Vault\VaultListCiphersPage.cs" />
