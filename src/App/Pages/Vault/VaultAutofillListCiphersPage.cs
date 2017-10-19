@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace Bit.App.Pages
 {
-    public class VaultAutofillListLoginsPage : ExtendedContentPage
+    public class VaultAutofillListCiphersPage : ExtendedContentPage
     {
         private readonly ICipherService _cipherService;
         private readonly IDeviceInfoService _deviceInfoService;
@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly string _name;
 
-        public VaultAutofillListLoginsPage(string uriString)
+        public VaultAutofillListCiphersPage(string uriString)
             : base(true)
         {
             Uri = uriString;
@@ -50,13 +50,13 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<VaultListPageModel.AutofillGrouping> PresentationLoginsGroup { get; private set; }
+        public ExtendedObservableCollection<VaultListPageModel.AutofillGrouping> PresentationCiphersGroup { get; private set; }
             = new ExtendedObservableCollection<VaultListPageModel.AutofillGrouping>();
         public StackLayout NoDataStackLayout { get; set; }
         public ListView ListView { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
         private SearchToolBarItem SearchItem { get; set; }
-        private AddLoginToolBarItem AddLoginItem { get; set; }
+        private AddCipherToolBarItem AddCipherItem { get; set; }
         private IGoogleAnalyticsService GoogleAnalyticsService { get; set; }
         private IUserDialogs UserDialogs { get; set; }
         private string Uri { get; set; }
@@ -71,34 +71,34 @@ namespace Bit.App.Pages
                 Style = (Style)Application.Current.Resources["text-muted"]
             };
 
-            var addLoginButton = new ExtendedButton
+            var addCipherButton = new ExtendedButton
             {
                 Text = AppResources.AddALogin,
-                Command = new Command(() => AddLoginAsync()),
+                Command = new Command(() => AddCipherAsync()),
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
 
             NoDataStackLayout = new StackLayout
             {
-                Children = { noDataLabel, addLoginButton },
+                Children = { noDataLabel, addCipherButton },
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 Padding = new Thickness(20, 0),
                 Spacing = 20
             };
 
-            AddLoginItem = new AddLoginToolBarItem(this);
-            ToolbarItems.Add(AddLoginItem);
+            AddCipherItem = new AddCipherToolBarItem(this);
+            ToolbarItems.Add(AddCipherItem);
             SearchItem = new SearchToolBarItem(this);
             ToolbarItems.Add(SearchItem);
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
-                ItemsSource = PresentationLoginsGroup,
+                ItemsSource = PresentationCiphersGroup,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new HeaderViewCell()),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
-                    (VaultListPageModel.Login l) => MoreClickedAsync(l)))
+                    (VaultListPageModel.Cipher l) => MoreClickedAsync(l)))
             };
 
             if(Device.RuntimePlatform == Device.iOS)
@@ -121,8 +121,8 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            ListView.ItemSelected += LoginSelected;
-            AddLoginItem.InitEvents();
+            ListView.ItemSelected += CipherSelected;
+            AddCipherItem.InitEvents();
             SearchItem.InitEvents();
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
         }
@@ -130,21 +130,21 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            ListView.ItemSelected -= LoginSelected;
-            AddLoginItem.Dispose();
+            ListView.ItemSelected -= CipherSelected;
+            AddCipherItem.Dispose();
             SearchItem.Dispose();
         }
 
         protected override bool OnBackButtonPressed()
         {
             GoogleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
-            MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Login)null);
+            MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Cipher)null);
             return true;
         }
 
         private void AdjustContent()
         {
-            if(PresentationLoginsGroup.Count > 0)
+            if(PresentationCiphersGroup.Count > 0)
             {
                 Content = ListView;
             }
@@ -162,18 +162,18 @@ namespace Bit.App.Pages
             Task.Run(async () =>
             {
                 var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>();
-                var logins = await _cipherService.GetAllAsync(Uri);
+                var ciphers = await _cipherService.GetAllAsync(Uri);
 
-                var normalLogins = logins?.Item1.Select(l => new VaultListPageModel.AutofillLogin(l, false))
+                var normalLogins = ciphers?.Item1.Select(l => new VaultListPageModel.AutofillCipher(l, false))
                     .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Username)
+                    .ThenBy(s => s.Subtitle)
                     .ToList();
                 if(normalLogins?.Any() ?? false)
                 {
                     autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins, AppResources.MatchingLogins));
                 }
 
-                var fuzzyLogins = logins?.Item2.Select(l => new VaultListPageModel.AutofillLogin(l, true))
+                var fuzzyLogins = ciphers?.Item2.Select(l => new VaultListPageModel.AutofillCipher(l, true))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username)
                     .ToList();
@@ -187,7 +187,7 @@ namespace Bit.App.Pages
                 {
                     if(autofillGroupings.Any())
                     {
-                        PresentationLoginsGroup.ResetWithRange(autofillGroupings);
+                        PresentationCiphersGroup.ResetWithRange(autofillGroupings);
                     }
 
                     AdjustContent();
@@ -197,22 +197,22 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private async void LoginSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void CipherSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var login = e.SelectedItem as VaultListPageModel.AutofillLogin;
-            if(login == null)
+            var cipher = e.SelectedItem as VaultListPageModel.AutofillCipher;
+            if(cipher == null)
             {
                 return;
             }
 
             if(_deviceInfoService.Version < 21)
             {
-                MoreClickedAsync(login);
+                MoreClickedAsync(cipher);
             }
             else
             {
                 bool doAutofill = true;
-                if(login.Fuzzy)
+                if(cipher.Fuzzy)
                 {
                     doAutofill = await UserDialogs.ConfirmAsync(
                         string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name),
@@ -222,50 +222,73 @@ namespace Bit.App.Pages
                 if(doAutofill)
                 {
                     GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
-                    MessagingCenter.Send(Application.Current, "Autofill", login as VaultListPageModel.Login);
+                    MessagingCenter.Send(Application.Current, "Autofill", cipher as VaultListPageModel.Cipher);
                 }
             }
 
             ((ListView)sender).SelectedItem = null;
         }
 
-        private async void AddLoginAsync()
+        private async void AddCipherAsync()
         {
             var page = new VaultAddLoginPage(Uri, _name, true);
             await Navigation.PushForDeviceAsync(page);
         }
 
-        private async void MoreClickedAsync(VaultListPageModel.Login login)
+        private async void MoreClickedAsync(VaultListPageModel.Cipher cipher)
         {
             var buttons = new List<string> { AppResources.View, AppResources.Edit };
-            if(!string.IsNullOrWhiteSpace(login.Password.Value))
+
+            if(cipher.Type == Enums.CipherType.Login)
             {
-                buttons.Add(AppResources.CopyPassword);
+                if(!string.IsNullOrWhiteSpace(cipher.Password.Value))
+                {
+                    buttons.Add(AppResources.CopyPassword);
+                }
+                if(!string.IsNullOrWhiteSpace(cipher.Username))
+                {
+                    buttons.Add(AppResources.CopyUsername);
+                }
             }
-            if(!string.IsNullOrWhiteSpace(login.Username))
+            else if(cipher.Type == Enums.CipherType.Card)
             {
-                buttons.Add(AppResources.CopyUsername);
+                if(!string.IsNullOrWhiteSpace(cipher.CardNumber))
+                {
+                    buttons.Add(AppResources.CopyNumber);
+                }
+                if(!string.IsNullOrWhiteSpace(cipher.CardCode.Value))
+                {
+                    buttons.Add(AppResources.CopySecurityCode);
+                }
             }
 
-            var selection = await DisplayActionSheet(login.Name, AppResources.Cancel, null, buttons.ToArray());
+            var selection = await DisplayActionSheet(cipher.Name, AppResources.Cancel, null, buttons.ToArray());
 
             if(selection == AppResources.View)
             {
-                var page = new VaultViewLoginPage(login.Id);
+                var page = new VaultViewLoginPage(cipher.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.Edit)
             {
-                var page = new VaultEditLoginPage(login.Id);
+                var page = new VaultEditLoginPage(cipher.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.CopyPassword)
             {
-                Copy(login.Password.Value, AppResources.Password);
+                Copy(cipher.Password.Value, AppResources.Password);
             }
             else if(selection == AppResources.CopyUsername)
             {
-                Copy(login.Username, AppResources.Username);
+                Copy(cipher.Username, AppResources.Username);
+            }
+            else if(selection == AppResources.CopyNumber)
+            {
+                Copy(cipher.CardNumber, AppResources.Number);
+            }
+            else if(selection == AppResources.CopySecurityCode)
+            {
+                Copy(cipher.CardCode.Value, AppResources.SecurityCode);
             }
         }
 
@@ -275,26 +298,26 @@ namespace Bit.App.Pages
             UserDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
-        private class AddLoginToolBarItem : ExtendedToolbarItem
+        private class AddCipherToolBarItem : ExtendedToolbarItem
         {
-            public AddLoginToolBarItem(VaultAutofillListLoginsPage page)
-                : base(() => page.AddLoginAsync())
+            public AddCipherToolBarItem(VaultAutofillListCiphersPage page)
+                : base(() => page.AddCipherAsync())
             {
                 Text = AppResources.Add;
-                Icon = "plus";
+                Icon = "plus.png";
                 Priority = 2;
             }
         }
 
         private class SearchToolBarItem : ExtendedToolbarItem
         {
-            private readonly VaultAutofillListLoginsPage _page;
+            private readonly VaultAutofillListCiphersPage _page;
 
-            public SearchToolBarItem(VaultAutofillListLoginsPage page)
+            public SearchToolBarItem(VaultAutofillListCiphersPage page)
             {
                 _page = page;
                 Text = AppResources.Search;
-                Icon = "search";
+                Icon = "search.png";
                 Priority = 1;
                 ClickAction = () => DoClick();
             }

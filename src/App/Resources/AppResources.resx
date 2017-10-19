@@ -1039,4 +1039,16 @@
   <data name="NoCustomFields" xml:space="preserve">
     <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
   </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Copy Number</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Copy Security Code</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Security Code</value>
+  </data>
 </root>

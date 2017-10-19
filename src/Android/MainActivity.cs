@@ -104,7 +104,7 @@ namespace Bit.Android
                 OpenAccessibilitySettings();
             });
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, VaultListPageModel.Login>(
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, VaultListPageModel.Cipher>(
                 Xamarin.Forms.Application.Current, "Autofill", (sender, args) =>
             {
                 ReturnCredentials(args);
@@ -128,10 +128,10 @@ namespace Bit.Android
             });
         }
 
-        private void ReturnCredentials(VaultListPageModel.Login login)
+        private void ReturnCredentials(VaultListPageModel.Cipher cipher)
         {
             Intent data = new Intent();
-            if(login == null)
+            if(cipher == null)
             {
                 data.PutExtra("canceled", "true");
             }
@@ -139,14 +139,14 @@ namespace Bit.Android
             {
                 var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
                 var autoCopyEnabled = !_settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
-                if(isPremium && autoCopyEnabled && _deviceActionService != null && login.Totp.Value != null)
+                if(isPremium && autoCopyEnabled && _deviceActionService != null && cipher.Totp.Value != null)
                 {
-                    _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(login.Totp.Value));
+                    _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(cipher.Totp.Value));
                 }
 
-                data.PutExtra("uri", login.Uri.Value);
-                data.PutExtra("username", login.Username);
-                data.PutExtra("password", login.Password.Value);
+                data.PutExtra("uri", cipher.Uri.Value);
+                data.PutExtra("username", cipher.Username);
+                data.PutExtra("password", cipher.Password.Value);
             }
 
             if(Parent == null)

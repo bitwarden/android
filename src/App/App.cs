@@ -68,7 +68,7 @@ namespace Bit.App
 
             if(authService.IsAuthenticated && _uri != null)
             {
-                MainPage = new ExtendedNavigationPage(new VaultAutofillListLoginsPage(_uri));
+                MainPage = new ExtendedNavigationPage(new VaultAutofillListCiphersPage(_uri));
             }
             else if(authService.IsAuthenticated)
             {
