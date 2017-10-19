@@ -10,7 +10,8 @@ namespace Bit.Android
     [Activity(Theme = "@style/BitwardenTheme.Splash",
         MainLauncher = true,
         NoHistory = true,
-        WindowSoftInputMode = global::Android.Views.SoftInput.StateHidden)]
+        WindowSoftInputMode = global::Android.Views.SoftInput.StateHidden,
+        Exported = false)]
     public class SplashActivity : AppCompatActivity
     {
         public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)

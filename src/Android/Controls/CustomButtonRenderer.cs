@@ -16,6 +16,8 @@ namespace Bit.Android.Controls
             {
                 Control.TextSize = (float)Device.GetNamedSize(NamedSize.Medium, typeof(Button));
             }
+
+            Control.FilterTouchesWhenObscured = true;
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
