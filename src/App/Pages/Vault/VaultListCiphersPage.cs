@@ -434,8 +434,8 @@ namespace Bit.App.Pages
                 {
                     buttons.Add(AppResources.CopyUsername);
                 }
-                if(!string.IsNullOrWhiteSpace(cipher.LoginUri.Value) && (cipher.LoginUri.Value.StartsWith("http://")
-                    || cipher.LoginUri.Value.StartsWith("https://")))
+                if(!string.IsNullOrWhiteSpace(cipher.LoginUri) && (cipher.LoginUri.StartsWith("http://")
+                    || cipher.LoginUri.StartsWith("https://")))
                 {
                     buttons.Add(AppResources.GoToWebsite);
                 }
@@ -474,7 +474,7 @@ namespace Bit.App.Pages
             }
             else if(selection == AppResources.GoToWebsite)
             {
-                Device.OpenUri(new Uri(cipher.LoginUri.Value));
+                Device.OpenUri(new Uri(cipher.LoginUri));
             }
             else if(selection == AppResources.CopyNumber)
             {

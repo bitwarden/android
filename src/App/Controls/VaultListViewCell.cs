@@ -1,4 +1,5 @@
 ﻿using Bit.App.Models.Page;
+using FFImageLoading.Forms;
 using System;
 using Xamarin.Forms;
 
@@ -12,6 +13,8 @@ namespace Bit.App.Controls
         public VaultListViewCell(Action<VaultListPageModel.Cipher> moreClickedAction)
         {
             SetBinding(LoginParameterProperty, new Binding("."));
+            Icon.SetBinding(CachedImage.SourceProperty, nameof(VaultListPageModel.Cipher.Icon));
+            Icon.SetBinding(CachedImage.LoadingPlaceholderProperty, nameof(VaultListPageModel.Cipher.Icon));
             Label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Cipher.Name));
             Detail.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Cipher.Subtitle));
             LabelIcon.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Cipher.Shared));

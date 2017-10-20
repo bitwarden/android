@@ -145,7 +145,7 @@ namespace Bit.Android
                     _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
                 }
 
-                data.PutExtra("uri", cipher.LoginUri.Value);
+                data.PutExtra("uri", cipher.LoginUri);
                 data.PutExtra("username", cipher.LoginUsername);
                 data.PutExtra("password", cipher.LoginPassword.Value);
             }

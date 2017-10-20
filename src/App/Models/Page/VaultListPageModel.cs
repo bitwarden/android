@@ -23,13 +23,40 @@ namespace Bit.App.Models.Page
                 {
                     case CipherType.Login:
                         LoginUsername = cipher.Login?.Username?.Decrypt(cipher.OrganizationId) ?? " ";
+                        LoginUri = cipher.Login?.Uri?.Decrypt(cipher.OrganizationId) ?? " ";
                         LoginPassword = new Lazy<string>(() => cipher.Login?.Password?.Decrypt(cipher.OrganizationId));
-                        LoginUri = new Lazy<string>(() => cipher.Login?.Uri?.Decrypt(cipher.OrganizationId));
                         LoginTotp = new Lazy<string>(() => cipher.Login?.Totp?.Decrypt(cipher.OrganizationId));
+
+                        Icon = "login.png";
+                        var hostnameUri = LoginUri;
+                        var isWebsite = false;
+                        if(hostnameUri.StartsWith("androidapp://"))
+                        {
+                            Icon = "android.png";
+                        }
+                        else if(hostnameUri.StartsWith("iosapp://"))
+                        {
+                            Icon = "apple.png";
+                        }
+                        else if(!hostnameUri.Contains("://") && hostnameUri.Contains("."))
+                        {
+                            hostnameUri = $"http://{hostnameUri}";
+                            isWebsite = true;
+                        }
+                        else if(true)
+                        {
+                            isWebsite = hostnameUri.StartsWith("http") && hostnameUri.Contains(".");
+                        }
+
+                        if(isWebsite && Uri.TryCreate(LoginUri, UriKind.Absolute, out Uri u))
+                        {
+                            Icon = "https://icons.bitwarden.com/" + u.Host + "/icon.png";
+                        }
 
                         Subtitle = LoginUsername;
                         break;
                     case CipherType.SecureNote:
+                        Icon = "note.png";
                         Subtitle = " ";
                         break;
                     case CipherType.Card:
@@ -37,6 +64,7 @@ namespace Bit.App.Models.Page
                         var cardBrand = cipher.Card?.Brand?.Decrypt(cipher.OrganizationId) ?? " ";
                         CardCode = new Lazy<string>(() => cipher.Card?.Code?.Decrypt(cipher.OrganizationId));
 
+                        Icon = "card.png";
                         Subtitle = cardBrand;
                         if(!string.IsNullOrWhiteSpace(CardNumber) && CardNumber.Length >= 4)
                         {
@@ -51,6 +79,7 @@ namespace Bit.App.Models.Page
                         var firstName = cipher.Identity?.FirstName?.Decrypt(cipher.OrganizationId) ?? " ";
                         var lastName = cipher.Identity?.LastName?.Decrypt(cipher.OrganizationId) ?? " ";
 
+                        Icon = "id.png";
                         Subtitle = " ";
                         if(!string.IsNullOrWhiteSpace(firstName))
                         {
@@ -77,11 +106,13 @@ namespace Bit.App.Models.Page
             public string Name { get; set; }
             public string Subtitle { get; set; }
             public CipherType Type { get; set; }
+            public string Icon { get; set; }
+            public string Image { get; set; }
 
             // Login metadata
             public string LoginUsername { get; set; }
             public Lazy<string> LoginPassword { get; set; }
-            public Lazy<string> LoginUri { get; set; }
+            public string LoginUri { get; set; }
             public Lazy<string> LoginTotp { get; set; }
 
             // Login metadata
