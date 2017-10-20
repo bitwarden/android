@@ -62,7 +62,6 @@ namespace Bit.App.Pages
         public FormEntryCell NameCell { get; private set; }
         public FormEditorCell NotesCell { get; private set; }
         public FormPickerCell FolderCell { get; private set; }
-        public ExtendedTextCell GenerateCell { get; private set; }
         public ExtendedSwitchCell FavoriteCell { get; set; }
 
         // Login
@@ -70,6 +69,7 @@ namespace Bit.App.Pages
         public FormEntryCell LoginUsernameCell { get; private set; }
         public FormEntryCell LoginUriCell { get; private set; }
         public FormEntryCell LoginTotpCell { get; private set; }
+        public ExtendedTextCell LoginGenerateCell { get; private set; }
 
         // Card
         public FormEntryCell CardNameCell { get; private set; }
@@ -109,8 +109,7 @@ namespace Bit.App.Pages
             }
 
             // Notes
-            NotesCell = new FormEditorCell(height: 180);
-            NotesCell.Editor.Keyboard = Keyboard.Text;
+            NotesCell = new FormEditorCell(Keyboard.Text, 180);
 
             // Folders
             var folderOptions = new List<string> { AppResources.FolderNone };
@@ -156,7 +155,7 @@ namespace Bit.App.Pages
                     LoginUriCell.InitEvents();
                     LoginTotpCell.InitEvents();
                     LoginPasswordCell.Button.Clicked += PasswordButton_Clicked;
-                    GenerateCell.Tapped += GenerateCell_Tapped;
+                    LoginGenerateCell.Tapped += GenerateCell_Tapped;
                     if(LoginTotpCell?.Button != null)
                     {
                         LoginTotpCell.Button.Clicked += TotpButton_Clicked;
@@ -228,7 +227,7 @@ namespace Bit.App.Pages
                     LoginUsernameCell.Dispose();
                     LoginUriCell.Dispose();
                     LoginPasswordCell.Button.Clicked -= PasswordButton_Clicked;
-                    GenerateCell.Tapped -= GenerateCell_Tapped;
+                    LoginGenerateCell.Tapped -= GenerateCell_Tapped;
                     if(LoginTotpCell?.Button != null)
                     {
                         LoginTotpCell.Button.Clicked -= TotpButton_Clicked;
@@ -270,7 +269,8 @@ namespace Bit.App.Pages
         private void PasswordButton_Clicked(object sender, EventArgs e)
         {
             LoginPasswordCell.Entry.InvokeToggleIsPassword();
-            LoginPasswordCell.Button.Image = "eye" + (!LoginPasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
+            LoginPasswordCell.Button.Image = 
+                "eye" + (!LoginPasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
         }
 
         private async void TotpButton_Clicked(object sender, EventArgs e)
@@ -331,20 +331,22 @@ namespace Bit.App.Pages
                     useButton: _deviceInfo.HasCamera);
                 if(_deviceInfo.HasCamera)
                 {
-                    LoginTotpCell.Button.Image = "camera";
+                    LoginTotpCell.Button.Image = "camera.png";
                 }
                 LoginTotpCell.Entry.DisableAutocapitalize = true;
                 LoginTotpCell.Entry.Autocorrect = false;
-                LoginTotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                LoginTotpCell.Entry.FontFamily = 
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
                 LoginPasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: LoginTotpCell.Entry,
                     useButton: true);
-                LoginPasswordCell.Button.Image = "eye";
+                LoginPasswordCell.Button.Image = "eye.png";
                 LoginPasswordCell.Entry.DisableAutocapitalize = true;
                 LoginPasswordCell.Entry.Autocorrect = false;
-                LoginPasswordCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                LoginPasswordCell.Entry.FontFamily = 
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
-                GenerateCell = new ExtendedTextCell
+                LoginGenerateCell = new ExtendedTextCell
                 {
                     Text = AppResources.GeneratePassword,
                     ShowDisclousure = true
@@ -366,7 +368,7 @@ namespace Bit.App.Pages
                 TopSection.Add(LoginUriCell);
                 TopSection.Add(LoginUsernameCell);
                 TopSection.Add(LoginPasswordCell);
-                TopSection.Add(GenerateCell);
+                TopSection.Add(LoginGenerateCell);
                 MiddleSection.Insert(0, LoginTotpCell);
             }
             else if(_type == CipherType.Card)

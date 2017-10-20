@@ -9,6 +9,8 @@ using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Utilities;
+using Bit.App.Models;
+using Bit.App.Enums;
 
 namespace Bit.App.Pages
 {
@@ -36,75 +38,83 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public FormEntryCell PasswordCell { get; private set; }
-        public FormEntryCell UsernameCell { get; private set; }
-        public FormEntryCell UriCell { get; private set; }
+        public Cipher Cipher { get; set; }
+        public List<Folder> Folders { get; set; }
+        public TableRoot TableRoot { get; set; }
+        public TableSection TopSection { get; set; }
+        public TableSection MiddleSection { get; set; }
+        public ExtendedTableView Table { get; set; }
+
         public FormEntryCell NameCell { get; private set; }
-        public FormEntryCell TotpCell { get; private set; }
         public FormEditorCell NotesCell { get; private set; }
         public FormPickerCell FolderCell { get; private set; }
-        public ExtendedTextCell GenerateCell { get; private set; }
+        public ExtendedSwitchCell FavoriteCell { get; set; }
         public ExtendedTextCell AttachmentsCell { get; private set; }
         public ExtendedTextCell CustomFieldsCell { get; private set; }
         public ExtendedTextCell DeleteCell { get; private set; }
 
+        // Login
+        public FormEntryCell LoginPasswordCell { get; private set; }
+        public FormEntryCell LoginUsernameCell { get; private set; }
+        public FormEntryCell LoginUriCell { get; private set; }
+        public FormEntryCell LoginTotpCell { get; private set; }
+        public ExtendedTextCell LoginGenerateCell { get; private set; }
+
+        // Card
+        public FormEntryCell CardNameCell { get; private set; }
+        public FormEntryCell CardNumberCell { get; private set; }
+        public FormPickerCell CardBrandCell { get; private set; }
+        public FormPickerCell CardExpMonthCell { get; private set; }
+        public FormEntryCell CardExpYearCell { get; private set; }
+        public FormEntryCell CardCodeCell { get; private set; }
+
+        // Identity
+        public FormPickerCell IdTitleCell { get; private set; }
+        public FormEntryCell IdFirstNameCell { get; private set; }
+        public FormEntryCell IdMiddleNameCell { get; private set; }
+        public FormEntryCell IdLastNameCell { get; private set; }
+        public FormEntryCell IdUsernameCell { get; private set; }
+        public FormEntryCell IdCompanyCell { get; private set; }
+        public FormEntryCell IdSsnCell { get; private set; }
+        public FormEntryCell IdPassportNumberCell { get; private set; }
+        public FormEntryCell IdLicenseNumberCell { get; private set; }
+        public FormEntryCell IdEmailCell { get; private set; }
+        public FormEntryCell IdPhoneCell { get; private set; }
+        public FormEntryCell IdAddress1Cell { get; private set; }
+        public FormEntryCell IdAddress2Cell { get; private set; }
+        public FormEntryCell IdAddress3Cell { get; private set; }
+        public FormEntryCell IdCityCell { get; private set; }
+        public FormEntryCell IdStateCell { get; private set; }
+        public FormEntryCell IdPostalCodeCell { get; private set; }
+        public FormEntryCell IdCountryCell { get; private set; }
+
         private void Init()
         {
-            var cipher = _cipherService.GetByIdAsync(_cipherId).GetAwaiter().GetResult();
-            if(cipher == null)
+            Cipher = _cipherService.GetByIdAsync(_cipherId).GetAwaiter().GetResult();
+            if(Cipher == null)
             {
                 // TODO: handle error. navigate back? should never happen...
                 return;
             }
 
-            NotesCell = new FormEditorCell(height: 300);
-            NotesCell.Editor.Keyboard = Keyboard.Text;
-            NotesCell.Editor.Text = cipher.Notes?.Decrypt(cipher.OrganizationId);
+            // Name
+            NameCell = new FormEntryCell(AppResources.Name);
+            NameCell.Entry.Text = Cipher.Name?.Decrypt(Cipher.OrganizationId);
 
-            TotpCell = new FormEntryCell(AppResources.AuthenticatorKey, nextElement: NotesCell.Editor,
-                useButton: _deviceInfo.HasCamera);
-            if(_deviceInfo.HasCamera)
-            {
-                TotpCell.Button.Image = "camera.png";
-            }
-            TotpCell.Entry.Text = cipher.Login?.Totp?.Decrypt(cipher.OrganizationId);
-            TotpCell.Entry.DisableAutocapitalize = true;
-            TotpCell.Entry.Autocorrect = false;
-            TotpCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+            // Notes
+            NotesCell = new FormEditorCell(Keyboard.Text, 180);
+            NotesCell.Editor.Text = Cipher.Notes?.Decrypt(Cipher.OrganizationId);
 
-            PasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: TotpCell.Entry,
-                useButton: true);
-            PasswordCell.Entry.Text = cipher.Login?.Password?.Decrypt(cipher.OrganizationId);
-            PasswordCell.Button.Image = "eye.png";
-            PasswordCell.Entry.DisableAutocapitalize = true;
-            PasswordCell.Entry.Autocorrect = false;
-            PasswordCell.Entry.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
-
-            UsernameCell = new FormEntryCell(AppResources.Username, nextElement: PasswordCell.Entry);
-            UsernameCell.Entry.Text = cipher.Login?.Username?.Decrypt(cipher.OrganizationId);
-            UsernameCell.Entry.DisableAutocapitalize = true;
-            UsernameCell.Entry.Autocorrect = false;
-
-            UriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: UsernameCell.Entry);
-            UriCell.Entry.Text = cipher.Login?.Uri?.Decrypt(cipher.OrganizationId);
-            NameCell = new FormEntryCell(AppResources.Name, nextElement: UriCell.Entry);
-            NameCell.Entry.Text = cipher.Name?.Decrypt(cipher.OrganizationId);
-
-            GenerateCell = new ExtendedTextCell
-            {
-                Text = AppResources.GeneratePassword,
-                ShowDisclousure = true
-            };
-
+            // Folders
             var folderOptions = new List<string> { AppResources.FolderNone };
-            var folders = _folderService.GetAllAsync().GetAwaiter().GetResult()
+            Folders = _folderService.GetAllAsync().GetAwaiter().GetResult()
                 .OrderBy(f => f.Name?.Decrypt()).ToList();
             int selectedIndex = 0;
             int i = 0;
-            foreach(var folder in folders)
+            foreach(var folder in Folders)
             {
                 i++;
-                if(folder.Id == cipher.FolderId)
+                if(folder.Id == Cipher.FolderId)
                 {
                     selectedIndex = i;
                 }
@@ -114,12 +124,29 @@ namespace Bit.App.Pages
             FolderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
             FolderCell.Picker.SelectedIndex = selectedIndex;
 
-            var favoriteCell = new ExtendedSwitchCell
+            // Favorite
+            FavoriteCell = new ExtendedSwitchCell
             {
                 Text = AppResources.Favorite,
-                On = cipher.Favorite
+                On = Cipher.Favorite
             };
 
+            // Delete
+            DeleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
+
+            InitTable();
+            InitSave();
+
+            Title = AppResources.EditItem;
+            Content = Table;
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+            }
+        }
+
+        private void InitTable()
+        {
             AttachmentsCell = new ExtendedTextCell
             {
                 Text = AppResources.Attachments,
@@ -132,48 +159,280 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
-            DeleteCell = new ExtendedTextCell { Text = AppResources.Delete, TextColor = Color.Red };
+            // Sections
+            TopSection = new TableSection(AppResources.ItemInformation)
+            {
+                NameCell
+            };
 
-            var table = new ExtendedTableView
+            MiddleSection = new TableSection(" ")
+            {
+                FolderCell,
+                FavoriteCell,
+                AttachmentsCell,
+                CustomFieldsCell
+            };
+
+            // Types
+            if(Cipher.Type == CipherType.Login)
+            {
+                LoginTotpCell = new FormEntryCell(AppResources.AuthenticatorKey, nextElement: NotesCell.Editor,
+                    useButton: _deviceInfo.HasCamera);
+                if(_deviceInfo.HasCamera)
+                {
+                    LoginTotpCell.Button.Image = "camera.png";
+                }
+                LoginTotpCell.Entry.Text = Cipher.Login?.Totp?.Decrypt(Cipher.OrganizationId);
+                LoginTotpCell.Entry.DisableAutocapitalize = true;
+                LoginTotpCell.Entry.Autocorrect = false;
+                LoginTotpCell.Entry.FontFamily =
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+
+                LoginPasswordCell = new FormEntryCell(AppResources.Password, isPassword: true,
+                    nextElement: LoginTotpCell.Entry, useButton: true);
+                LoginPasswordCell.Entry.Text = Cipher.Login?.Password?.Decrypt(Cipher.OrganizationId);
+                LoginPasswordCell.Button.Image = "eye.png";
+                LoginPasswordCell.Entry.DisableAutocapitalize = true;
+                LoginPasswordCell.Entry.Autocorrect = false;
+                LoginPasswordCell.Entry.FontFamily =
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+
+                LoginGenerateCell = new ExtendedTextCell
+                {
+                    Text = AppResources.GeneratePassword,
+                    ShowDisclousure = true
+                };
+
+                LoginUsernameCell = new FormEntryCell(AppResources.Username, nextElement: LoginPasswordCell.Entry);
+                LoginUsernameCell.Entry.Text = Cipher.Login?.Username?.Decrypt(Cipher.OrganizationId);
+                LoginUsernameCell.Entry.DisableAutocapitalize = true;
+                LoginUsernameCell.Entry.Autocorrect = false;
+
+                LoginUriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: LoginUsernameCell.Entry);
+                LoginUriCell.Entry.Text = Cipher.Login?.Uri?.Decrypt(Cipher.OrganizationId);
+
+                // Name
+                NameCell.NextElement = LoginUriCell.Entry;
+
+                // Build sections
+                TopSection.Add(LoginUriCell);
+                TopSection.Add(LoginUsernameCell);
+                TopSection.Add(LoginPasswordCell);
+                TopSection.Add(LoginGenerateCell);
+                MiddleSection.Insert(0, LoginTotpCell);
+            }
+            else if(Cipher.Type == CipherType.Card)
+            {
+                CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric,
+                    nextElement: NotesCell.Editor);
+                CardCodeCell.Entry.Text = Cipher.Card.Code?.Decrypt(Cipher.OrganizationId);
+
+                CardExpYearCell = new FormEntryCell(AppResources.ExpirationYear, Keyboard.Numeric,
+                    nextElement: CardCodeCell.Entry);
+                CardExpYearCell.Entry.Text = Cipher.Card.ExpYear?.Decrypt(Cipher.OrganizationId);
+
+                var month = Cipher.Card.ExpMonth?.Decrypt(Cipher.OrganizationId);
+                CardExpMonthCell = new FormPickerCell(AppResources.ExpirationMonth, new string[] {
+                    "--", AppResources.January, AppResources.February, AppResources.March, AppResources.April,
+                    AppResources.May, AppResources.June, AppResources.July, AppResources.August, AppResources.September,
+                    AppResources.October, AppResources.November, AppResources.December
+                });
+                if(!string.IsNullOrWhiteSpace(month) && int.TryParse(month, out int monthIndex))
+                {
+                    CardExpMonthCell.Picker.SelectedIndex = monthIndex;
+                }
+                else
+                {
+                    CardExpMonthCell.Picker.SelectedIndex = 0;
+                }
+
+                var brandOptions = new string[] {
+                    "--", "Visa", "Mastercard", "American Express", "Discover", "Diners Club",
+                    "JCB", "Maestro", "UnionPay", AppResources.Other
+                };
+                var brand = Cipher.Card.Brand?.Decrypt(Cipher.OrganizationId);
+                CardBrandCell = new FormPickerCell(AppResources.Brand, brandOptions);
+                CardBrandCell.Picker.SelectedIndex = 0;
+                if(!string.IsNullOrWhiteSpace(brand))
+                {
+                    var i = 0;
+                    foreach(var o in brandOptions)
+                    {
+                        var option = o;
+                        if(option == AppResources.Other)
+                        {
+                            option = "Other";
+                        }
+
+                        i++;
+                        if(option == brand)
+                        {
+                            CardBrandCell.Picker.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                CardNumberCell = new FormEntryCell(AppResources.Number, Keyboard.Numeric);
+                CardNumberCell.Entry.Text = Cipher.Card.Number?.Decrypt(Cipher.OrganizationId);
+
+                CardNameCell = new FormEntryCell(AppResources.CardholderName, nextElement: CardNumberCell.Entry);
+                CardNameCell.Entry.Text = Cipher.Card.CardholderName?.Decrypt(Cipher.OrganizationId);
+
+                // Name
+                NameCell.NextElement = CardNameCell.Entry;
+
+                // Build sections
+                TopSection.Add(CardNameCell);
+                TopSection.Add(CardNumberCell);
+                TopSection.Add(CardBrandCell);
+                TopSection.Add(CardExpMonthCell);
+                TopSection.Add(CardExpYearCell);
+                TopSection.Add(CardCodeCell);
+            }
+            else if(Cipher.Type == CipherType.Identity)
+            {
+                IdCountryCell = new FormEntryCell(AppResources.Country, nextElement: NotesCell.Editor);
+                IdCountryCell.Entry.Text = Cipher.Identity.Country?.Decrypt(Cipher.OrganizationId);
+
+                IdPostalCodeCell = new FormEntryCell(AppResources.ZipPostalCode, nextElement: IdCountryCell.Entry);
+                IdPostalCodeCell.Entry.Text = Cipher.Identity.PostalCode?.Decrypt(Cipher.OrganizationId);
+                IdPostalCodeCell.Entry.DisableAutocapitalize = true;
+                IdPostalCodeCell.Entry.Autocorrect = false;
+
+                IdStateCell = new FormEntryCell(AppResources.StateProvince, nextElement: IdPostalCodeCell.Entry);
+                IdStateCell.Entry.Text = Cipher.Identity.State?.Decrypt(Cipher.OrganizationId);
+
+                IdCityCell = new FormEntryCell(AppResources.CityTown, nextElement: IdStateCell.Entry);
+                IdCityCell.Entry.Text = Cipher.Identity.City?.Decrypt(Cipher.OrganizationId);
+
+                IdAddress3Cell = new FormEntryCell(AppResources.Address3, nextElement: IdCityCell.Entry);
+                IdAddress3Cell.Entry.Text = Cipher.Identity.Address3?.Decrypt(Cipher.OrganizationId);
+
+                IdAddress2Cell = new FormEntryCell(AppResources.Address2, nextElement: IdAddress3Cell.Entry);
+                IdAddress2Cell.Entry.Text = Cipher.Identity.Address2?.Decrypt(Cipher.OrganizationId);
+
+                IdAddress1Cell = new FormEntryCell(AppResources.Address1, nextElement: IdAddress2Cell.Entry);
+                IdAddress1Cell.Entry.Text = Cipher.Identity.Address1?.Decrypt(Cipher.OrganizationId);
+
+                IdPhoneCell = new FormEntryCell(AppResources.Phone, nextElement: IdAddress1Cell.Entry);
+                IdPhoneCell.Entry.Text = Cipher.Identity.Phone?.Decrypt(Cipher.OrganizationId);
+                IdPhoneCell.Entry.DisableAutocapitalize = true;
+                IdPhoneCell.Entry.Autocorrect = false;
+
+                IdEmailCell = new FormEntryCell(AppResources.Email, Keyboard.Email, nextElement: IdPhoneCell.Entry);
+                IdEmailCell.Entry.Text = Cipher.Identity.Email?.Decrypt(Cipher.OrganizationId);
+                IdEmailCell.Entry.DisableAutocapitalize = true;
+                IdEmailCell.Entry.Autocorrect = false;
+
+                IdLicenseNumberCell = new FormEntryCell(AppResources.LicenseNumber, nextElement: IdEmailCell.Entry);
+                IdLicenseNumberCell.Entry.Text = Cipher.Identity.LicenseNumber?.Decrypt(Cipher.OrganizationId);
+                IdLicenseNumberCell.Entry.DisableAutocapitalize = true;
+                IdLicenseNumberCell.Entry.Autocorrect = false;
+
+                IdPassportNumberCell = new FormEntryCell(AppResources.PassportNumber, nextElement: IdLicenseNumberCell.Entry);
+                IdPassportNumberCell.Entry.Text = Cipher.Identity.PassportNumber?.Decrypt(Cipher.OrganizationId);
+                IdPassportNumberCell.Entry.DisableAutocapitalize = true;
+                IdPassportNumberCell.Entry.Autocorrect = false;
+
+                IdSsnCell = new FormEntryCell(AppResources.SSN, nextElement: IdPassportNumberCell.Entry);
+                IdSsnCell.Entry.Text = Cipher.Identity.SSN?.Decrypt(Cipher.OrganizationId);
+                IdSsnCell.Entry.DisableAutocapitalize = true;
+                IdSsnCell.Entry.Autocorrect = false;
+
+                IdCompanyCell = new FormEntryCell(AppResources.Company, nextElement: IdSsnCell.Entry);
+                IdCompanyCell.Entry.Text = Cipher.Identity.Company?.Decrypt(Cipher.OrganizationId);
+
+                IdUsernameCell = new FormEntryCell(AppResources.Username, nextElement: IdCompanyCell.Entry);
+                IdUsernameCell.Entry.Text = Cipher.Identity.Username?.Decrypt(Cipher.OrganizationId);
+                IdUsernameCell.Entry.DisableAutocapitalize = true;
+                IdUsernameCell.Entry.Autocorrect = false;
+
+                IdLastNameCell = new FormEntryCell(AppResources.LastName, nextElement: IdUsernameCell.Entry);
+                IdLastNameCell.Entry.Text = Cipher.Identity.LastName?.Decrypt(Cipher.OrganizationId);
+
+                IdMiddleNameCell = new FormEntryCell(AppResources.MiddleName, nextElement: IdLastNameCell.Entry);
+                IdMiddleNameCell.Entry.Text = Cipher.Identity.MiddleName?.Decrypt(Cipher.OrganizationId);
+
+                IdFirstNameCell = new FormEntryCell(AppResources.FirstName, nextElement: IdMiddleNameCell.Entry);
+                IdFirstNameCell.Entry.Text = Cipher.Identity.FirstName?.Decrypt(Cipher.OrganizationId);
+
+                var titleOptions = new string[] {
+                    "--", AppResources.Mr, AppResources.Mrs, AppResources.Ms, AppResources.Dr
+                };
+                IdTitleCell = new FormPickerCell(AppResources.Title, titleOptions);
+                var title = Cipher.Identity.Title?.Decrypt(Cipher.OrganizationId);
+                IdTitleCell.Picker.SelectedIndex = 0;
+                if(!string.IsNullOrWhiteSpace(title))
+                {
+                    var i = 0;
+                    foreach(var o in titleOptions)
+                    {
+                        i++;
+                        if(o == title)
+                        {
+                            IdTitleCell.Picker.SelectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+
+                // Name
+                NameCell.NextElement = IdFirstNameCell.Entry;
+
+                // Build sections
+                TopSection.Add(IdTitleCell);
+                TopSection.Add(IdFirstNameCell);
+                TopSection.Add(IdMiddleNameCell);
+                TopSection.Add(IdLastNameCell);
+                TopSection.Add(IdUsernameCell);
+                TopSection.Add(IdCompanyCell);
+                TopSection.Add(IdSsnCell);
+                TopSection.Add(IdPassportNumberCell);
+                TopSection.Add(IdLicenseNumberCell);
+                TopSection.Add(IdEmailCell);
+                TopSection.Add(IdPhoneCell);
+                TopSection.Add(IdAddress1Cell);
+                TopSection.Add(IdAddress2Cell);
+                TopSection.Add(IdAddress3Cell);
+                TopSection.Add(IdCityCell);
+                TopSection.Add(IdStateCell);
+                TopSection.Add(IdPostalCodeCell);
+                TopSection.Add(IdCountryCell);
+            }
+
+            // Make table
+            TableRoot = new TableRoot
+            {
+                TopSection,
+                MiddleSection,
+                new TableSection(AppResources.Notes)
+                {
+                    NotesCell
+                },
+                new TableSection(" ")
+                {
+                    DeleteCell
+                }
+            };
+
+            Table = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
                 EnableScrolling = true,
                 HasUnevenRows = true,
-                Root = new TableRoot
-                {
-                    new TableSection(AppResources.ItemInformation)
-                    {
-                        NameCell,
-                        UriCell,
-                        UsernameCell,
-                        PasswordCell,
-                        GenerateCell
-                    },
-                    new TableSection(" ")
-                    {
-                        TotpCell,
-                        FolderCell,
-                        favoriteCell,
-                        AttachmentsCell,
-                        CustomFieldsCell
-                    },
-                    new TableSection(AppResources.Notes)
-                    {
-                        NotesCell
-                    },
-                    new TableSection(" ")
-                    {
-                        DeleteCell
-                    }
-                }
+                Root = TableRoot
             };
 
             if(Device.RuntimePlatform == Device.iOS)
             {
-                table.RowHeight = -1;
-                table.EstimatedRowHeight = 70;
+                Table.RowHeight = -1;
+                Table.EstimatedRowHeight = 70;
             }
+        }
 
+        private void InitSave()
+        {
             var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
             {
                 if(_lastAction.LastActionWasRecent())
@@ -195,41 +454,167 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                cipher.Name = NameCell.Entry.Text.Encrypt(cipher.OrganizationId);
-                cipher.Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null :
-                    NotesCell.Editor.Text.Encrypt(cipher.OrganizationId);
-                cipher.Favorite = favoriteCell.On;
+                Cipher.Name = NameCell.Entry.Text.Encrypt(Cipher.OrganizationId);
+                Cipher.Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null :
+                    NotesCell.Editor.Text.Encrypt(Cipher.OrganizationId);
+                Cipher.Favorite = FavoriteCell.On;
 
-                cipher.Login = new Models.Login
+                switch(Cipher.Type)
                 {
-                    Uri = string.IsNullOrWhiteSpace(UriCell.Entry.Text) ? null :
-                        UriCell.Entry.Text.Encrypt(cipher.OrganizationId),
-                    Username = string.IsNullOrWhiteSpace(UsernameCell.Entry.Text) ? null :
-                        UsernameCell.Entry.Text.Encrypt(cipher.OrganizationId),
-                    Password = string.IsNullOrWhiteSpace(PasswordCell.Entry.Text) ? null :
-                        PasswordCell.Entry.Text.Encrypt(cipher.OrganizationId),
-                    Totp = string.IsNullOrWhiteSpace(TotpCell.Entry.Text) ? null :
-                        TotpCell.Entry.Text.Encrypt(cipher.OrganizationId)
-                };
+                    case CipherType.Login:
+                        Cipher.Login = new Login
+                        {
+                            Uri = string.IsNullOrWhiteSpace(LoginUriCell.Entry.Text) ? null :
+                                LoginUriCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Username = string.IsNullOrWhiteSpace(LoginUsernameCell.Entry.Text) ? null :
+                                LoginUsernameCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Password = string.IsNullOrWhiteSpace(LoginPasswordCell.Entry.Text) ? null :
+                                LoginPasswordCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Totp = string.IsNullOrWhiteSpace(LoginTotpCell.Entry.Text) ? null :
+                                LoginTotpCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                        };
+                        break;
+                    case CipherType.SecureNote:
+                        Cipher.SecureNote = new SecureNote
+                        {
+                            Type = SecureNoteType.Generic
+                        };
+                        break;
+                    case CipherType.Card:
+                        string brand;
+                        switch(CardBrandCell.Picker.SelectedIndex)
+                        {
+                            case 1:
+                                brand = "Visa";
+                                break;
+                            case 2:
+                                brand = "Mastercard";
+                                break;
+                            case 3:
+                                brand = "Amex";
+                                break;
+                            case 4:
+                                brand = "Discover";
+                                break;
+                            case 5:
+                                brand = "Diners Club";
+                                break;
+                            case 6:
+                                brand = "JCB";
+                                break;
+                            case 7:
+                                brand = "Maestro";
+                                break;
+                            case 8:
+                                brand = "UnionPay";
+                                break;
+                            case 9:
+                                brand = "Other";
+                                break;
+                            default:
+                                brand = null;
+                                break;
+                        }
+
+                        var expMonth = CardExpMonthCell.Picker.SelectedIndex > 0 ?
+                            CardExpMonthCell.Picker.SelectedIndex.ToString() : null;
+
+                        Cipher.Card = new Card
+                        {
+                            CardholderName = string.IsNullOrWhiteSpace(CardNameCell.Entry.Text) ? null :
+                                CardNameCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Number = string.IsNullOrWhiteSpace(CardNumberCell.Entry.Text) ? null :
+                                CardNumberCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            ExpYear = string.IsNullOrWhiteSpace(CardExpYearCell.Entry.Text) ? null :
+                                CardExpYearCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Code = string.IsNullOrWhiteSpace(CardCodeCell.Entry.Text) ? null :
+                                CardCodeCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Brand = string.IsNullOrWhiteSpace(brand) ? null : brand.Encrypt(Cipher.OrganizationId),
+                            ExpMonth = string.IsNullOrWhiteSpace(expMonth) ? null : expMonth.Encrypt(Cipher.OrganizationId)
+                        };
+                        break;
+                    case CipherType.Identity:
+                        string title;
+                        switch(IdTitleCell.Picker.SelectedIndex)
+                        {
+                            case 1:
+                                title = AppResources.Mr;
+                                break;
+                            case 2:
+                                title = AppResources.Mrs;
+                                break;
+                            case 3:
+                                title = AppResources.Ms;
+                                break;
+                            case 4:
+                                title = AppResources.Dr;
+                                break;
+                            default:
+                                title = null;
+                                break;
+                        }
+
+                        Cipher.Identity = new Identity
+                        {
+                            Title = string.IsNullOrWhiteSpace(title) ? null : title.Encrypt(Cipher.OrganizationId),
+                            FirstName = string.IsNullOrWhiteSpace(IdFirstNameCell.Entry.Text) ? null :
+                                IdFirstNameCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            MiddleName = string.IsNullOrWhiteSpace(IdMiddleNameCell.Entry.Text) ? null :
+                                IdMiddleNameCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            LastName = string.IsNullOrWhiteSpace(IdLastNameCell.Entry.Text) ? null :
+                                IdLastNameCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Username = string.IsNullOrWhiteSpace(IdUsernameCell.Entry.Text) ? null :
+                                IdUsernameCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Company = string.IsNullOrWhiteSpace(IdCompanyCell.Entry.Text) ? null :
+                                IdCompanyCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            SSN = string.IsNullOrWhiteSpace(IdSsnCell.Entry.Text) ? null :
+                                IdSsnCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            PassportNumber = string.IsNullOrWhiteSpace(IdPassportNumberCell.Entry.Text) ? null :
+                                IdPassportNumberCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            LicenseNumber = string.IsNullOrWhiteSpace(IdLicenseNumberCell.Entry.Text) ? null :
+                                IdLicenseNumberCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Email = string.IsNullOrWhiteSpace(IdEmailCell.Entry.Text) ? null :
+                                IdEmailCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Phone = string.IsNullOrWhiteSpace(IdPhoneCell.Entry.Text) ? null :
+                                IdPhoneCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Address1 = string.IsNullOrWhiteSpace(IdAddress1Cell.Entry.Text) ? null :
+                                IdAddress1Cell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Address2 = string.IsNullOrWhiteSpace(IdAddress2Cell.Entry.Text) ? null :
+                                IdAddress2Cell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Address3 = string.IsNullOrWhiteSpace(IdAddress3Cell.Entry.Text) ? null :
+                                IdAddress3Cell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            City = string.IsNullOrWhiteSpace(IdCityCell.Entry.Text) ? null :
+                                IdCityCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            State = string.IsNullOrWhiteSpace(IdStateCell.Entry.Text) ? null :
+                                IdStateCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            PostalCode = string.IsNullOrWhiteSpace(IdPostalCodeCell.Entry.Text) ? null :
+                                IdPostalCodeCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            Country = string.IsNullOrWhiteSpace(IdCountryCell.Entry.Text) ? null :
+                                IdCountryCell.Entry.Text.Encrypt(Cipher.OrganizationId)
+                        };
+                        break;
+                    default:
+                        break;
+                }
 
                 if(FolderCell.Picker.SelectedIndex > 0)
                 {
-                    cipher.FolderId = folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
+                    Cipher.FolderId = Folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
                 }
                 else
                 {
-                    cipher.FolderId = null;
+                    Cipher.FolderId = null;
                 }
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
-                var saveTask = await _cipherService.SaveAsync(cipher);
+                var saveTask = await _cipherService.SaveAsync(Cipher);
 
                 _userDialogs.HideLoading();
 
                 if(saveTask.Succeeded)
                 {
                     _userDialogs.Toast(AppResources.ItemUpdated);
-                    _googleAnalyticsService.TrackAppEvent("EditedLogin");
+                    _googleAnalyticsService.TrackAppEvent("EditedCipher");
                     await Navigation.PopForDeviceAsync();
                 }
                 else if(saveTask.Errors.Count() > 0)
@@ -242,13 +627,7 @@ namespace Bit.App.Pages
                 }
             }, ToolbarItemOrder.Default, 0);
 
-            Title = AppResources.EditItem;
-            Content = table;
             ToolbarItems.Add(saveToolBarItem);
-            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
-            {
-                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
-            }
         }
 
         protected override void OnAppearing()
@@ -259,26 +638,10 @@ namespace Bit.App.Pages
                 AlertNoConnection();
             }
 
-            PasswordCell?.InitEvents();
-            UsernameCell?.InitEvents();
-            UriCell?.InitEvents();
-            NameCell?.InitEvents();
-            NotesCell?.InitEvents();
-            TotpCell?.InitEvents();
-            FolderCell?.InitEvents();
+            NameCell.InitEvents();
+            NotesCell.InitEvents();
+            FolderCell.InitEvents();
 
-            if(PasswordCell?.Button != null)
-            {
-                PasswordCell.Button.Clicked += PasswordButton_Clicked;
-            }
-            if(TotpCell?.Button != null)
-            {
-                TotpCell.Button.Clicked += TotpButton_Clicked;
-            }
-            if(GenerateCell != null)
-            {
-                GenerateCell.Tapped += GenerateCell_Tapped;
-            }
             if(AttachmentsCell != null)
             {
                 AttachmentsCell.Tapped += AttachmentsCell_Tapped;
@@ -287,35 +650,63 @@ namespace Bit.App.Pages
             {
                 CustomFieldsCell.Tapped += CustomFieldsCell_Tapped;
             }
-            if(DeleteCell != null)
+            DeleteCell.Tapped += DeleteCell_Tapped;
+
+            switch(Cipher.Type)
             {
-                DeleteCell.Tapped += DeleteCell_Tapped;
+                case CipherType.Login:
+                    LoginPasswordCell.InitEvents();
+                    LoginUsernameCell.InitEvents();
+                    LoginUriCell.InitEvents();
+                    LoginTotpCell.InitEvents();
+                    LoginPasswordCell.Button.Clicked += PasswordButton_Clicked;
+                    LoginGenerateCell.Tapped += GenerateCell_Tapped;
+                    if(LoginTotpCell?.Button != null)
+                    {
+                        LoginTotpCell.Button.Clicked += TotpButton_Clicked;
+                    }
+                    break;
+                case CipherType.Card:
+                    CardBrandCell.InitEvents();
+                    CardCodeCell.InitEvents();
+                    CardExpMonthCell.InitEvents();
+                    CardExpYearCell.InitEvents();
+                    CardNameCell.InitEvents();
+                    CardNumberCell.InitEvents();
+                    break;
+                case CipherType.Identity:
+                    IdTitleCell.InitEvents();
+                    IdFirstNameCell.InitEvents();
+                    IdMiddleNameCell.InitEvents();
+                    IdLastNameCell.InitEvents();
+                    IdUsernameCell.InitEvents();
+                    IdCompanyCell.InitEvents();
+                    IdSsnCell.InitEvents();
+                    IdPassportNumberCell.InitEvents();
+                    IdLicenseNumberCell.InitEvents();
+                    IdEmailCell.InitEvents();
+                    IdPhoneCell.InitEvents();
+                    IdAddress1Cell.InitEvents();
+                    IdAddress2Cell.InitEvents();
+                    IdAddress3Cell.InitEvents();
+                    IdCityCell.InitEvents();
+                    IdStateCell.InitEvents();
+                    IdPostalCodeCell.InitEvents();
+                    IdCountryCell.InitEvents();
+                    break;
+                default:
+                    break;
             }
         }
 
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            PasswordCell?.Dispose();
-            TotpCell?.Dispose();
-            UsernameCell?.Dispose();
-            UriCell?.Dispose();
-            NameCell?.Dispose();
-            NotesCell?.Dispose();
-            FolderCell?.Dispose();
 
-            if(PasswordCell?.Button != null)
-            {
-                PasswordCell.Button.Clicked -= PasswordButton_Clicked;
-            }
-            if(TotpCell?.Button != null)
-            {
-                TotpCell.Button.Clicked -= TotpButton_Clicked;
-            }
-            if(GenerateCell != null)
-            {
-                GenerateCell.Tapped -= GenerateCell_Tapped;
-            }
+            NameCell.Dispose();
+            NotesCell.Dispose();
+            FolderCell.Dispose();
+
             if(AttachmentsCell != null)
             {
                 AttachmentsCell.Tapped -= AttachmentsCell_Tapped;
@@ -324,16 +715,60 @@ namespace Bit.App.Pages
             {
                 CustomFieldsCell.Tapped -= CustomFieldsCell_Tapped;
             }
-            if(DeleteCell != null)
+            DeleteCell.Tapped -= DeleteCell_Tapped;
+
+            switch(Cipher.Type)
             {
-                DeleteCell.Tapped -= DeleteCell_Tapped;
+                case CipherType.Login:
+                    LoginTotpCell.Dispose();
+                    LoginPasswordCell.Dispose();
+                    LoginUsernameCell.Dispose();
+                    LoginUriCell.Dispose();
+                    LoginPasswordCell.Button.Clicked -= PasswordButton_Clicked;
+                    LoginGenerateCell.Tapped -= GenerateCell_Tapped;
+                    if(LoginTotpCell?.Button != null)
+                    {
+                        LoginTotpCell.Button.Clicked -= TotpButton_Clicked;
+                    }
+                    break;
+                case CipherType.Card:
+                    CardBrandCell.Dispose();
+                    CardCodeCell.Dispose();
+                    CardExpMonthCell.Dispose();
+                    CardExpYearCell.Dispose();
+                    CardNameCell.Dispose();
+                    CardNumberCell.Dispose();
+                    break;
+                case CipherType.Identity:
+                    IdTitleCell.Dispose();
+                    IdFirstNameCell.Dispose();
+                    IdMiddleNameCell.Dispose();
+                    IdLastNameCell.Dispose();
+                    IdUsernameCell.Dispose();
+                    IdCompanyCell.Dispose();
+                    IdSsnCell.Dispose();
+                    IdPassportNumberCell.Dispose();
+                    IdLicenseNumberCell.Dispose();
+                    IdEmailCell.Dispose();
+                    IdPhoneCell.Dispose();
+                    IdAddress1Cell.Dispose();
+                    IdAddress2Cell.Dispose();
+                    IdAddress3Cell.Dispose();
+                    IdCityCell.Dispose();
+                    IdStateCell.Dispose();
+                    IdPostalCodeCell.Dispose();
+                    IdCountryCell.Dispose();
+                    break;
+                default:
+                    break;
             }
         }
 
         private void PasswordButton_Clicked(object sender, EventArgs e)
         {
-            PasswordCell.Entry.InvokeToggleIsPassword();
-            PasswordCell.Button.Image = "eye" + (!PasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty);
+            LoginPasswordCell.Entry.InvokeToggleIsPassword();
+            LoginPasswordCell.Button.Image =
+                "eye" + (!LoginPasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
         }
 
         private async void TotpButton_Clicked(object sender, EventArgs e)
@@ -345,7 +780,7 @@ namespace Bit.App.Pages
                     await Navigation.PopModalAsync();
                     if(!string.IsNullOrWhiteSpace(key))
                     {
-                        TotpCell.Entry.Text = key;
+                        LoginTotpCell.Entry.Text = key;
                         _userDialogs.Toast(AppResources.AuthenticatorKeyAdded);
                     }
                     else
@@ -360,7 +795,7 @@ namespace Bit.App.Pages
 
         private async void GenerateCell_Tapped(object sender, EventArgs e)
         {
-            if(!string.IsNullOrWhiteSpace(PasswordCell.Entry.Text)
+            if(!string.IsNullOrWhiteSpace(LoginPasswordCell.Entry.Text)
                 && !await _userDialogs.ConfirmAsync(AppResources.PasswordOverrideAlert, null, AppResources.Yes, AppResources.No))
             {
                 return;
@@ -368,7 +803,7 @@ namespace Bit.App.Pages
 
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
-                PasswordCell.Entry.Text = password;
+                LoginPasswordCell.Entry.Text = password;
                 _userDialogs.Toast(AppResources.PasswordGenerated);
             });
             await Navigation.PushForDeviceAsync(page);
@@ -406,7 +841,7 @@ namespace Bit.App.Pages
             if(deleteTask.Succeeded)
             {
                 _userDialogs.Toast(AppResources.ItemDeleted);
-                _googleAnalyticsService.TrackAppEvent("DeletedLogin");
+                _googleAnalyticsService.TrackAppEvent("DeletedCipher");
                 await Navigation.PopForDeviceAsync();
             }
             else if(deleteTask.Errors.Count() > 0)
