@@ -542,8 +542,10 @@ namespace Bit.App.Pages
                 var image = new CachedImage
                 {
                     Source = "folder.png",
-                    WidthRequest = 18,
-                    HeightRequest = 18
+                    WidthRequest = 20,
+                    HeightRequest = 20,
+                    HorizontalOptions = LayoutOptions.Center,
+                    VerticalOptions = LayoutOptions.Center
                 };
 
                 var label = new Label
@@ -557,11 +559,12 @@ namespace Bit.App.Pages
 
                 var grid = new Grid
                 {
-                    ColumnSpacing = 10,
-                    Padding = new Thickness(16, 8, 0, 8)
+                    ColumnSpacing = 0,
+                    RowSpacing = 0,
+                    Padding = new Thickness(3, 8, 0, 8)
                 };
                 grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(18, GridUnitType.Absolute) });
+                grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(40, GridUnitType.Absolute) });
                 grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
                 grid.Children.Add(image, 0, 0);
                 grid.Children.Add(label, 1, 0);
