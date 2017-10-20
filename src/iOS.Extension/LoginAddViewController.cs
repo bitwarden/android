@@ -37,7 +37,7 @@ namespace Bit.iOS.Extension
         public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password);
         public UITableViewCell GeneratePasswordCell { get; set; } = new UITableViewCell(UITableViewCellStyle.Subtitle, "GeneratePasswordCell");
         public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell(AppResources.Favorite);
-        public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(useTextView: true, height: 90);
+        public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(useTextView: true, height: 180);
         public PickerTableViewCell FolderCell { get; set; } = new PickerTableViewCell(AppResources.Folder);
 
         public override void ViewWillAppear(bool animated)

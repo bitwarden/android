@@ -259,7 +259,7 @@
     </None>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
-    <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\CipherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="MainInterface.storyboard" />
     <None Include="packages.config">

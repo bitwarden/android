@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace Bit.iOS.Extension.Models
 {
-    public class LoginViewModel
+    public class CipherViewModel
     {
-        public LoginViewModel(Cipher cipher)
+        public CipherViewModel(Cipher cipher)
         {
             Id = cipher.Id;
             Name = cipher.Name?.Decrypt(cipher.OrganizationId);
@@ -26,7 +26,7 @@ namespace Bit.iOS.Extension.Models
                 foreach(var field in cipher.Fields)
                 {
                     fields.Add(new Tuple<string, string>(
-                        field.Name?.Decrypt(cipher.OrganizationId), 
+                        field.Name?.Decrypt(cipher.OrganizationId),
                         field.Value?.Decrypt(cipher.OrganizationId)));
                 }
                 return fields;

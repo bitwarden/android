@@ -102,7 +102,7 @@ namespace Bit.iOS.Extension
         {
             private const string CellIdentifier = "TableCell";
 
-            private IEnumerable<LoginViewModel> _tableItems = new List<LoginViewModel>();
+            private IEnumerable<CipherViewModel> _tableItems = new List<CipherViewModel>();
             private Context _context;
             private LoginListViewController _controller;
             private ICipherService _cipherService;
@@ -132,13 +132,13 @@ namespace Bit.iOS.Extension
                     combinedLogins.AddRange(logins.Item2);
                 }
 
-                _tableItems = combinedLogins.Select(s => new LoginViewModel(s))
+                _tableItems = combinedLogins.Select(s => new CipherViewModel(s))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Username)
-                    .ToList() ?? new List<LoginViewModel>();
+                    .ToList() ?? new List<CipherViewModel>();
             }
 
-            public IEnumerable<LoginViewModel> TableItems { get; set; }
+            public IEnumerable<CipherViewModel> TableItems { get; set; }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
@@ -272,7 +272,7 @@ namespace Bit.iOS.Extension
                 }
             }
 
-            private string GetTotp(LoginViewModel item)
+            private string GetTotp(CipherViewModel item)
             {
                 string totp = null;
                 if(_isPremium)
