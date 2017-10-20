@@ -74,6 +74,18 @@ namespace Bit.App.Services
             }
         }
 
+        public bool DisableWebsiteIcons
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.SettingDisableWebsiteIcons, false);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.SettingDisableWebsiteIcons, value);
+            }
+        }
+
         public string SecurityStamp
         {
             get

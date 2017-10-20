@@ -1176,4 +1176,10 @@
   <data name="Expiration" xml:space="preserve">
     <value>Expiration</value>
   </data>
+  <data name="DisableWebsiteIcons" xml:space="preserve">
+    <value>Disable Website Icons</value>
+  </data>
+  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
+    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+  </data>
 </root>

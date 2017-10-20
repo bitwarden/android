@@ -28,6 +28,8 @@ namespace Bit.App.Pages
         private Label CopyTotpLabel { get; set; }
         private ExtendedSwitchCell AnalyticsCell { get; set; }
         private Label AnalyticsLabel { get; set; }
+        private ExtendedSwitchCell WebsiteIconsCell { get; set; }
+        private Label WebsiteIconsLabel { get; set; }
         private ExtendedSwitchCell AutofillPersistNotificationCell { get; set; }
         private Label AutofillPersistNotificationLabel { get; set; }
         private ExtendedSwitchCell AutofillPasswordFieldCell { get; set; }
@@ -37,13 +39,30 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            WebsiteIconsCell = new ExtendedSwitchCell
+            {
+                Text = AppResources.DisableWebsiteIcons,
+                On = _appSettings.DisableWebsiteIcons
+            };
+
+            var websiteIconsTable = new FormTableView(true)
+            {
+                Root = new TableRoot
+                {
+                    new TableSection(" ")
+                    {
+                        WebsiteIconsCell
+                    }
+                }
+            };
+
             CopyTotpCell = new ExtendedSwitchCell
             {
                 Text = AppResources.DisableAutoTotpCopy,
                 On = _settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false)
             };
 
-            var totpTable = new FormTableView(true)
+            var totpTable = new FormTableView
             {
                 Root = new TableRoot
                 {
@@ -81,9 +100,19 @@ namespace Bit.App.Pages
                 Text = AppResources.DisableGADescription
             };
 
+            WebsiteIconsLabel = new FormTableLabel(this)
+            {
+                Text = AppResources.DisableWebsiteIconsDescription
+            };
+
             StackLayout = new StackLayout
             {
-                Children = { totpTable, CopyTotpLabel, analyticsTable, AnalyticsLabel },
+                Children =
+                {
+                    websiteIconsTable, WebsiteIconsLabel,
+                    totpTable, CopyTotpLabel,
+                    analyticsTable, AnalyticsLabel
+                },
                 Spacing = 0
             };
 
@@ -170,8 +199,9 @@ namespace Bit.App.Pages
 
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
-                analyticsTable.RowHeight = -1;
-                analyticsTable.EstimatedRowHeight = 70;
+                analyticsTable.RowHeight = websiteIconsTable.RowHeight = totpTable.RowHeight = -1;
+                analyticsTable.EstimatedRowHeight = websiteIconsTable.EstimatedRowHeight =
+                    totpTable.EstimatedRowHeight = 70;
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }
 
@@ -184,6 +214,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
 
             AnalyticsCell.OnChanged += AnalyticsCell_Changed;
+            WebsiteIconsCell.OnChanged += WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged += CopyTotpCell_OnChanged;
             StackLayout.LayoutChanged += Layout_LayoutChanged;
 
@@ -200,6 +231,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
 
             AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
+            WebsiteIconsCell.OnChanged -= WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged -= CopyTotpCell_OnChanged;
             StackLayout.LayoutChanged -= Layout_LayoutChanged;
 
@@ -214,6 +246,7 @@ namespace Bit.App.Pages
         private void Layout_LayoutChanged(object sender, EventArgs e)
         {
             AnalyticsLabel.WidthRequest = StackLayout.Bounds.Width - AnalyticsLabel.Bounds.Left * 2;
+            WebsiteIconsLabel.WidthRequest = StackLayout.Bounds.Width - WebsiteIconsLabel.Bounds.Left * 2;
             CopyTotpLabel.WidthRequest = StackLayout.Bounds.Width - CopyTotpLabel.Bounds.Left * 2;
 
             if(AutofillAlwaysLabel != null)
@@ -231,6 +264,17 @@ namespace Bit.App.Pages
                 AutofillPersistNotificationLabel.WidthRequest =
                     StackLayout.Bounds.Width - AutofillPersistNotificationLabel.Bounds.Left * 2;
             }
+        }
+
+        private void WebsiteIconsCell_Changed(object sender, ToggledEventArgs e)
+        {
+            var cell = sender as ExtendedSwitchCell;
+            if(cell == null)
+            {
+                return;
+            }
+
+            _appSettings.DisableWebsiteIcons = cell.On;
         }
 
         private void AnalyticsCell_Changed(object sender, ToggledEventArgs e)

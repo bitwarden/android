@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly IDeviceActionService _clipboardService;
         private readonly ISettingsService _settingsService;
+        private readonly IAppSettingsService _appSettingsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly string _name;
 
@@ -46,6 +47,7 @@ namespace Bit.App.Pages
             _clipboardService = Resolver.Resolve<IDeviceActionService>();
             _settingsService = Resolver.Resolve<ISettingsService>();
             UserDialogs = Resolver.Resolve<IUserDialogs>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             GoogleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
@@ -159,13 +161,15 @@ namespace Bit.App.Pages
         {
             var cts = new CancellationTokenSource();
             _filterResultsCancellationTokenSource?.Cancel();
+            var websiteIconsEnabled = !_appSettingsService.DisableWebsiteIcons;
 
             Task.Run(async () =>
             {
                 var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>();
                 var ciphers = await _cipherService.GetAllAsync(Uri);
 
-                var normalLogins = ciphers?.Item1.Select(l => new VaultListPageModel.AutofillCipher(l, false))
+                var normalLogins = ciphers?.Item1.Select(l => new VaultListPageModel.AutofillCipher(
+                    l, websiteIconsEnabled, false))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Subtitle)
                     .ToList();
@@ -174,7 +178,8 @@ namespace Bit.App.Pages
                     autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins, AppResources.MatchingItems));
                 }
 
-                var fuzzyLogins = ciphers?.Item2.Select(l => new VaultListPageModel.AutofillCipher(l, true))
+                var fuzzyLogins = ciphers?.Item2.Select(l => new VaultListPageModel.AutofillCipher(
+                    l, websiteIconsEnabled, true))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.LoginUsername)
                     .ToList();

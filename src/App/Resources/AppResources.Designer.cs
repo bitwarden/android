@@ -926,6 +926,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable Website Icons.
+        /// </summary>
+        public static string DisableWebsiteIcons {
+            get {
+                return ResourceManager.GetString("DisableWebsiteIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Website Icons provide a recognizable image next to each login item in your vault..
+        /// </summary>
+        public static string DisableWebsiteIconsDescription {
+            get {
+                return ResourceManager.GetString("DisableWebsiteIconsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Downloading....
         /// </summary>
         public static string Downloading {

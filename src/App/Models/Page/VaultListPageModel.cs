@@ -10,7 +10,7 @@ namespace Bit.App.Models.Page
     {
         public class Cipher
         {
-            public Cipher(Models.Cipher cipher)
+            public Cipher(Models.Cipher cipher, bool imageEnabled)
             {
                 Id = cipher.Id;
                 Shared = !string.IsNullOrWhiteSpace(cipher.OrganizationId);
@@ -38,17 +38,17 @@ namespace Bit.App.Models.Page
                         {
                             Icon = "apple.png";
                         }
-                        else if(!hostnameUri.Contains("://") && hostnameUri.Contains("."))
+                        else if(imageEnabled && !hostnameUri.Contains("://") && hostnameUri.Contains("."))
                         {
                             hostnameUri = $"http://{hostnameUri}";
                             isWebsite = true;
                         }
-                        else if(true)
+                        else if(imageEnabled)
                         {
                             isWebsite = hostnameUri.StartsWith("http") && hostnameUri.Contains(".");
                         }
 
-                        if(isWebsite && Uri.TryCreate(LoginUri, UriKind.Absolute, out Uri u))
+                        if(imageEnabled && isWebsite && Uri.TryCreate(LoginUri, UriKind.Absolute, out Uri u))
                         {
                             Icon = "https://icons.bitwarden.com/" + u.Host + "/icon.png";
                         }
@@ -122,8 +122,8 @@ namespace Bit.App.Models.Page
 
         public class AutofillCipher : Cipher
         {
-            public AutofillCipher(Models.Cipher cipher, bool fuzzy = false)
-                : base(cipher)
+            public AutofillCipher(Models.Cipher cipher, bool imageEnabled, bool fuzzy = false)
+                : base(cipher, imageEnabled)
             {
                 Fuzzy = fuzzy;
             }

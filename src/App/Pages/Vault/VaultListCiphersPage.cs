@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private readonly IPushNotificationService _pushNotification;
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly ISettings _settings;
+        private readonly IAppSettingsService _appSettingsService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly bool _favorites;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
@@ -46,6 +47,7 @@ namespace Bit.App.Pages
             _pushNotification = Resolver.Resolve<IPushNotificationService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _settings = Resolver.Resolve<ISettings>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             var cryptoService = Resolver.Resolve<ICryptoService>();
@@ -309,6 +311,7 @@ namespace Bit.App.Pages
             }
 
             _filterResultsCancellationTokenSource?.Cancel();
+            var websiteIconsEnabled = !_appSettingsService.DisableWebsiteIcons;
 
             Task.Run(async () =>
             {
@@ -325,7 +328,7 @@ namespace Bit.App.Pages
                     .ToArray();
 
                 Ciphers = ciphers
-                    .Select(s => new VaultListPageModel.Cipher(s))
+                    .Select(s => new VaultListPageModel.Cipher(s, websiteIconsEnabled))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Subtitle)
                     .ToArray();

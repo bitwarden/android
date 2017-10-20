@@ -9,6 +9,7 @@ namespace Bit.App.Abstractions
         DateTime LastCacheClear { get; set; }
         bool AutofillPersistNotification { get; set; }
         bool AutofillPasswordField { get; set; }
+        bool DisableWebsiteIcons { get; set; }
         string SecurityStamp { get; set; }
         string BaseUrl { get; set; }
         string WebVaultUrl { get; set; }
