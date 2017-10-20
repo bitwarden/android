@@ -7,27 +7,27 @@ namespace Bit.iOS.Extension.Models
 {
     public class LoginViewModel
     {
-        public LoginViewModel(Cipher login)
+        public LoginViewModel(Cipher cipher)
         {
-            Id = login.Id;
-            Name = login.Name?.Decrypt(login.OrganizationId);
-            Username = login.Username?.Decrypt(login.OrganizationId);
-            Password = login.Password?.Decrypt(login.OrganizationId);
-            Uri = login.Uri?.Decrypt(login.OrganizationId);
-            Totp = new Lazy<string>(() => login.Totp?.Decrypt(login.OrganizationId));
+            Id = cipher.Id;
+            Name = cipher.Name?.Decrypt(cipher.OrganizationId);
+            Username = cipher.Login?.Username?.Decrypt(cipher.OrganizationId);
+            Password = cipher.Login?.Password?.Decrypt(cipher.OrganizationId);
+            Uri = cipher.Login?.Uri?.Decrypt(cipher.OrganizationId);
+            Totp = new Lazy<string>(() => cipher.Login?.Totp?.Decrypt(cipher.OrganizationId));
             Fields = new Lazy<List<Tuple<string, string>>>(() =>
             {
-                if(!login.Fields?.Any() ?? true)
+                if(!cipher.Fields?.Any() ?? true)
                 {
                     return null;
                 }
 
                 var fields = new List<Tuple<string, string>>();
-                foreach(var field in login.Fields)
+                foreach(var field in cipher.Fields)
                 {
                     fields.Add(new Tuple<string, string>(
-                        field.Name?.Decrypt(login.OrganizationId), 
-                        field.Value?.Decrypt(login.OrganizationId)));
+                        field.Name?.Decrypt(cipher.OrganizationId), 
+                        field.Value?.Decrypt(cipher.OrganizationId)));
                 }
                 return fields;
             });
