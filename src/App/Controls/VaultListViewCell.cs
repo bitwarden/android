@@ -17,12 +17,12 @@ namespace Bit.App.Controls
             LabelIcon.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Cipher.Shared));
             LabelIcon2.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Cipher.HasAttachments));
 
-            Button.Image = "more";
+            Button.Image = "more.png";
             Button.Command = new Command(() => moreClickedAction?.Invoke(LoginParameter));
             Button.BackgroundColor = Color.Transparent;
 
-            LabelIcon.Source = "share";
-            LabelIcon2.Source = "paperclip";
+            LabelIcon.Source = "share.png";
+            LabelIcon2.Source = "paperclip.png";
 
             BackgroundColor = Color.White;
         }
