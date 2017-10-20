@@ -134,6 +134,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Address.
+        /// </summary>
+        public static string Address {
+            get {
+                return ResourceManager.GetString("Address", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Address 1.
         /// </summary>
         public static string Address1 {
@@ -1075,6 +1084,15 @@ namespace Bit.App.Resources {
         public static string ExntesionReenable {
             get {
                 return ResourceManager.GetString("ExntesionReenable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Expiration.
+        /// </summary>
+        public static string Expiration {
+            get {
+                return ResourceManager.GetString("Expiration", resourceCulture);
             }
         }
         

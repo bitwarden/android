@@ -267,7 +267,7 @@ namespace Bit.App.Pages
 
             if(selection == AppResources.View)
             {
-                var page = new VaultViewCipherPage(cipher.Id);
+                var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
             else if(selection == AppResources.Edit)

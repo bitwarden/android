@@ -1170,4 +1170,10 @@
   <data name="ZipPostalCode" xml:space="preserve">
     <value>Zip / Postal Code</value>
   </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Expiration</value>
+  </data>
 </root>
