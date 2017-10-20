@@ -48,7 +48,7 @@ namespace Bit.App.Models.Page
                             isWebsite = hostnameUri.StartsWith("http") && hostnameUri.Contains(".");
                         }
 
-                        if(imageEnabled && isWebsite && Uri.TryCreate(LoginUri, UriKind.Absolute, out Uri u))
+                        if(imageEnabled && isWebsite && Uri.TryCreate(hostnameUri, UriKind.Absolute, out Uri u))
                         {
                             Icon = "https://icons.bitwarden.com/" + u.Host + "/icon.png";
                         }
