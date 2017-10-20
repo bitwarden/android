@@ -175,7 +175,8 @@ namespace Bit.App.Pages
                 _filterResultsCancellationTokenSource);
         }
 
-        private CancellationTokenSource FilterResultsBackground(string searchFilter, CancellationTokenSource previousCts)
+        private CancellationTokenSource FilterResultsBackground(string searchFilter, 
+            CancellationTokenSource previousCts)
         {
             var cts = new CancellationTokenSource();
             Task.Run(async () =>
@@ -239,7 +240,8 @@ namespace Bit.App.Pages
                 var pushPromptShow = _settings.GetValueOrDefault(Constants.PushInitialPromptShown, false);
                 Action registerAction = () =>
                 {
-                    var lastPushRegistration = _settings.GetValueOrDefault(Constants.PushLastRegistrationDate, DateTime.MinValue);
+                    var lastPushRegistration = 
+                        _settings.GetValueOrDefault(Constants.PushLastRegistrationDate, DateTime.MinValue);
                     if(!pushPromptShow || DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
                     {
                         _pushNotification.Register();
@@ -409,7 +411,8 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    _googleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
+                    _googleAnalyticsService.TrackExtensionEvent("AutoFilled", 
+                        Uri.StartsWith("http") ? "Website" : "App");
                     MessagingCenter.Send(Application.Current, "Autofill", cipher);
                 }
             }
@@ -423,16 +426,16 @@ namespace Bit.App.Pages
 
             if(cipher.Type == CipherType.Login)
             {
-                if(!string.IsNullOrWhiteSpace(cipher.Password.Value))
+                if(!string.IsNullOrWhiteSpace(cipher.LoginPassword.Value))
                 {
                     buttons.Add(AppResources.CopyPassword);
                 }
-                if(!string.IsNullOrWhiteSpace(cipher.Username))
+                if(!string.IsNullOrWhiteSpace(cipher.LoginUsername))
                 {
                     buttons.Add(AppResources.CopyUsername);
                 }
-                if(!string.IsNullOrWhiteSpace(cipher.Uri.Value) && (cipher.Uri.Value.StartsWith("http://")
-                    || cipher.Uri.Value.StartsWith("https://")))
+                if(!string.IsNullOrWhiteSpace(cipher.LoginUri.Value) && (cipher.LoginUri.Value.StartsWith("http://")
+                    || cipher.LoginUri.Value.StartsWith("https://")))
                 {
                     buttons.Add(AppResources.GoToWebsite);
                 }
@@ -463,15 +466,15 @@ namespace Bit.App.Pages
             }
             else if(selection == AppResources.CopyPassword)
             {
-                Copy(cipher.Password.Value, AppResources.Password);
+                Copy(cipher.LoginPassword.Value, AppResources.Password);
             }
             else if(selection == AppResources.CopyUsername)
             {
-                Copy(cipher.Username, AppResources.Username);
+                Copy(cipher.LoginUsername, AppResources.Username);
             }
             else if(selection == AppResources.GoToWebsite)
             {
-                Device.OpenUri(new Uri(cipher.Uri.Value));
+                Device.OpenUri(new Uri(cipher.LoginUri.Value));
             }
             else if(selection == AppResources.CopyNumber)
             {

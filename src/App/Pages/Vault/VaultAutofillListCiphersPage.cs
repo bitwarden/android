@@ -176,7 +176,7 @@ namespace Bit.App.Pages
 
                 var fuzzyLogins = ciphers?.Item2.Select(l => new VaultListPageModel.AutofillCipher(l, true))
                     .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Username)
+                    .ThenBy(s => s.LoginUsername)
                     .ToList();
                 if(fuzzyLogins?.Any() ?? false)
                 {
@@ -242,11 +242,11 @@ namespace Bit.App.Pages
 
             if(cipher.Type == CipherType.Login)
             {
-                if(!string.IsNullOrWhiteSpace(cipher.Password.Value))
+                if(!string.IsNullOrWhiteSpace(cipher.LoginPassword.Value))
                 {
                     buttons.Add(AppResources.CopyPassword);
                 }
-                if(!string.IsNullOrWhiteSpace(cipher.Username))
+                if(!string.IsNullOrWhiteSpace(cipher.LoginUsername))
                 {
                     buttons.Add(AppResources.CopyUsername);
                 }
@@ -277,11 +277,11 @@ namespace Bit.App.Pages
             }
             else if(selection == AppResources.CopyPassword)
             {
-                Copy(cipher.Password.Value, AppResources.Password);
+                Copy(cipher.LoginPassword.Value, AppResources.Password);
             }
             else if(selection == AppResources.CopyUsername)
             {
-                Copy(cipher.Username, AppResources.Username);
+                Copy(cipher.LoginUsername, AppResources.Username);
             }
             else if(selection == AppResources.CopyNumber)
             {

@@ -22,27 +22,48 @@ namespace Bit.App.Models.Page
                 switch(cipher.Type)
                 {
                     case CipherType.Login:
-                        Username = cipher.Login?.Username?.Decrypt(cipher.OrganizationId) ?? " ";
-                        Password = new Lazy<string>(() => cipher.Login?.Password?.Decrypt(cipher.OrganizationId));
-                        Uri = new Lazy<string>(() => cipher.Login?.Uri?.Decrypt(cipher.OrganizationId));
-                        Totp = new Lazy<string>(() => cipher.Login?.Totp?.Decrypt(cipher.OrganizationId));
+                        LoginUsername = cipher.Login?.Username?.Decrypt(cipher.OrganizationId) ?? " ";
+                        LoginPassword = new Lazy<string>(() => cipher.Login?.Password?.Decrypt(cipher.OrganizationId));
+                        LoginUri = new Lazy<string>(() => cipher.Login?.Uri?.Decrypt(cipher.OrganizationId));
+                        LoginTotp = new Lazy<string>(() => cipher.Login?.Totp?.Decrypt(cipher.OrganizationId));
 
-                        Subtitle = Username;
+                        Subtitle = LoginUsername;
                         break;
                     case CipherType.SecureNote:
                         Subtitle = " ";
                         break;
                     case CipherType.Card:
-                        var cardNumber = cipher.Card?.Number?.Decrypt(cipher.OrganizationId) ?? " ";
+                        CardNumber = cipher.Card?.Number?.Decrypt(cipher.OrganizationId) ?? " ";
                         var cardBrand = cipher.Card?.Brand?.Decrypt(cipher.OrganizationId) ?? " ";
                         CardCode = new Lazy<string>(() => cipher.Card?.Code?.Decrypt(cipher.OrganizationId));
 
-                        Subtitle = $"{cardBrand}, *{cardNumber}";
+                        Subtitle = cardBrand;
+                        if(!string.IsNullOrWhiteSpace(CardNumber) && CardNumber.Length >= 4)
+                        {
+                            if(!string.IsNullOrWhiteSpace(CardNumber))
+                            {
+                                Subtitle += ", ";
+                            }
+                            Subtitle += ("*" + CardNumber.Substring(CardNumber.Length - 4));
+                        }
                         break;
                     case CipherType.Identity:
                         var firstName = cipher.Identity?.FirstName?.Decrypt(cipher.OrganizationId) ?? " ";
                         var lastName = cipher.Identity?.LastName?.Decrypt(cipher.OrganizationId) ?? " ";
-                        Subtitle = $"{firstName} {lastName}";
+
+                        Subtitle = " ";
+                        if(!string.IsNullOrWhiteSpace(firstName))
+                        {
+                            Subtitle = firstName;
+                        }
+                        if(!string.IsNullOrWhiteSpace(lastName))
+                        {
+                            if(!string.IsNullOrWhiteSpace(Subtitle))
+                            {
+                                Subtitle += " ";
+                            }
+                            Subtitle += lastName;
+                        }
                         break;
                     default:
                         break;
@@ -58,10 +79,10 @@ namespace Bit.App.Models.Page
             public CipherType Type { get; set; }
 
             // Login metadata
-            public string Username { get; set; }
-            public Lazy<string> Password { get; set; }
-            public Lazy<string> Uri { get; set; }
-            public Lazy<string> Totp { get; set; }
+            public string LoginUsername { get; set; }
+            public Lazy<string> LoginPassword { get; set; }
+            public Lazy<string> LoginUri { get; set; }
+            public Lazy<string> LoginTotp { get; set; }
 
             // Login metadata
             public string CardNumber { get; set; }
