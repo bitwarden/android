@@ -21,8 +21,6 @@ namespace Bit.App.Controls
             Thickness? containerPadding = null,
             bool useButton = false)
         {
-            _nextElement = nextElement;
-
             if(!useLabelAsPlaceholder)
             {
                 Label = new Label
@@ -50,10 +48,7 @@ namespace Bit.App.Controls
                 Entry.Placeholder = labelText;
             }
 
-            if(nextElement != null)
-            {
-                Entry.ReturnType = Enums.ReturnType.Next;
-            }
+            NextElement = nextElement;
 
             var imageStackLayout = new StackLayout
             {
@@ -145,6 +140,14 @@ namespace Bit.App.Controls
             set
             {
                 _nextElement = value;
+                if(_nextElement != null && Entry != null)
+                {
+                    Entry.ReturnType = Enums.ReturnType.Next;
+                }
+                else if(Entry != null)
+                {
+                    Entry.ReturnType = null;
+                }
             }
         }
 
