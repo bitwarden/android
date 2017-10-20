@@ -109,7 +109,7 @@ namespace Bit.App.Pages
             }
 
             // Notes
-            NotesCell = new FormEditorCell(Keyboard.Text, 180);
+            NotesCell = new FormEditorCell(Keyboard.Text, _type == CipherType.SecureNote ? 500 : 180);
 
             // Folders
             var folderOptions = new List<string> { AppResources.FolderNone };
@@ -457,6 +457,11 @@ namespace Bit.App.Pages
                 TopSection.Add(IdStateCell);
                 TopSection.Add(IdPostalCodeCell);
                 TopSection.Add(IdCountryCell);
+            }
+            else if(_type == CipherType.SecureNote)
+            {
+                // Name
+                NameCell.NextElement = NotesCell.Editor;
             }
 
             // Make table

@@ -102,7 +102,7 @@ namespace Bit.App.Pages
             NameCell.Entry.Text = Cipher.Name?.Decrypt(Cipher.OrganizationId);
 
             // Notes
-            NotesCell = new FormEditorCell(Keyboard.Text, 180);
+            NotesCell = new FormEditorCell(Keyboard.Text, Cipher.Type == CipherType.SecureNote ? 500 : 180);
             NotesCell.Editor.Text = Cipher.Notes?.Decrypt(Cipher.OrganizationId);
 
             // Folders
@@ -399,6 +399,11 @@ namespace Bit.App.Pages
                 TopSection.Add(IdStateCell);
                 TopSection.Add(IdPostalCodeCell);
                 TopSection.Add(IdCountryCell);
+            }
+            else if(Cipher.Type == CipherType.SecureNote)
+            {
+                // Name
+                NameCell.NextElement = NotesCell.Editor;
             }
 
             // Make table
