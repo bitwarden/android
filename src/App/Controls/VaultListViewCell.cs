@@ -7,21 +7,19 @@ namespace Bit.App.Controls
 {
     public class VaultListViewCell : LabeledDetailCell
     {
-        public static readonly BindableProperty LoginParameterProperty = BindableProperty.Create(nameof(LoginParameter),
+        public static readonly BindableProperty CipherParameterProperty = BindableProperty.Create(nameof(CipherParameter),
             typeof(VaultListPageModel.Cipher), typeof(VaultListViewCell), null);
 
         public VaultListViewCell(Action<VaultListPageModel.Cipher> moreClickedAction)
         {
-            SetBinding(LoginParameterProperty, new Binding("."));
-            Icon.SetBinding(CachedImage.SourceProperty, nameof(VaultListPageModel.Cipher.Icon));
-            Icon.SetBinding(CachedImage.LoadingPlaceholderProperty, nameof(VaultListPageModel.Cipher.Icon));
+            SetBinding(CipherParameterProperty, new Binding("."));
             Label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Cipher.Name));
             Detail.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Cipher.Subtitle));
             LabelIcon.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Cipher.Shared));
             LabelIcon2.SetBinding(VisualElement.IsVisibleProperty, nameof(VaultListPageModel.Cipher.HasAttachments));
 
             Button.Image = "more.png";
-            Button.Command = new Command(() => moreClickedAction?.Invoke(LoginParameter));
+            Button.Command = new Command(() => moreClickedAction?.Invoke(CipherParameter));
             Button.BackgroundColor = Color.Transparent;
 
             LabelIcon.Source = "share.png";
@@ -30,10 +28,25 @@ namespace Bit.App.Controls
             BackgroundColor = Color.White;
         }
 
-        public VaultListPageModel.Cipher LoginParameter
+        public VaultListPageModel.Cipher CipherParameter
         {
-            get { return GetValue(LoginParameterProperty) as VaultListPageModel.Cipher; }
-            set { SetValue(LoginParameterProperty, value); }
+            get { return GetValue(CipherParameterProperty) as VaultListPageModel.Cipher; }
+            set { SetValue(CipherParameterProperty, value); }
+        }
+
+        protected override void OnBindingContextChanged()
+        {
+            Icon.Source = null;
+            if(BindingContext is VaultListPageModel.Cipher item)
+            {
+                Icon.Source = item.Icon;
+                if(item.Type == Enums.CipherType.Login)
+                {
+                    Icon.LoadingPlaceholder = "login.png";
+                }
+            }
+
+            base.OnBindingContextChanged();
         }
     }
 }
