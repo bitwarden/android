@@ -39,11 +39,11 @@ namespace Bit.App.Controls
             Icon.Source = null;
             if(BindingContext is VaultListPageModel.Cipher item)
             {
-                Icon.Source = item.Icon;
                 if(item.Type == Enums.CipherType.Login)
                 {
                     Icon.LoadingPlaceholder = "login.png";
                 }
+                Icon.Source = item.Icon;
             }
 
             base.OnBindingContextChanged();
