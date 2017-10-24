@@ -169,5 +169,20 @@ namespace Bit.App.Services
                 _settings.AddOrUpdateValue(Constants.IdentityUrl, value);
             }
         }
+
+        public string IconsUrl
+        {
+            get => _settings.GetValueOrDefault(Constants.IconsUrl, null);
+            set
+            {
+                if(value == null)
+                {
+                    _settings.Remove(Constants.IconsUrl);
+                    return;
+                }
+
+                _settings.AddOrUpdateValue(Constants.IconsUrl, value);
+            }
+        }
     }
 }

@@ -311,7 +311,6 @@ namespace Bit.App.Pages
             }
 
             _filterResultsCancellationTokenSource?.Cancel();
-            var websiteIconsEnabled = !_appSettingsService.DisableWebsiteIcons;
 
             Task.Run(async () =>
             {
@@ -328,7 +327,7 @@ namespace Bit.App.Pages
                     .ToArray();
 
                 Ciphers = ciphers
-                    .Select(s => new VaultListPageModel.Cipher(s, websiteIconsEnabled))
+                    .Select(s => new VaultListPageModel.Cipher(s, _appSettingsService))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Subtitle)
                     .ToArray();

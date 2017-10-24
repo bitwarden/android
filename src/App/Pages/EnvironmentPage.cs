@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         public FormEntryCell WebVaultUrlCell { get; set; }
         public FormEntryCell ApiUrlCell { get; set; }
         public FormEntryCell IdentityUrlCell { get; set; }
+        public FormEntryCell IconsUrlCell { get; set; }
         public StackLayout StackLayout { get; set; }
         public Label SelfHostLabel { get; set; }
         public Label CustomLabel { get; set; }
@@ -37,13 +38,23 @@ namespace Bit.App.Pages
         {
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
 
-            IdentityUrlCell = new FormEntryCell(AppResources.IdentityUrl, entryKeyboard: Keyboard.Url);
+            IconsUrlCell = new FormEntryCell(AppResources.IconsUrl, entryKeyboard: Keyboard.Url);
+            IconsUrlCell.Entry.Text = _appSettings.IconsUrl;
+
+            IdentityUrlCell = new FormEntryCell(AppResources.IdentityUrl, nextElement: IconsUrlCell.Entry,
+                entryKeyboard: Keyboard.Url);
             IdentityUrlCell.Entry.Text = _appSettings.IdentityUrl;
-            ApiUrlCell = new FormEntryCell(AppResources.ApiUrl, nextElement: IdentityUrlCell.Entry, entryKeyboard: Keyboard.Url);
+
+            ApiUrlCell = new FormEntryCell(AppResources.ApiUrl, nextElement: IdentityUrlCell.Entry,
+                entryKeyboard: Keyboard.Url);
             ApiUrlCell.Entry.Text = _appSettings.ApiUrl;
-            WebVaultUrlCell = new FormEntryCell(AppResources.WebVaultUrl, nextElement: ApiUrlCell.Entry, entryKeyboard: Keyboard.Url);
+
+            WebVaultUrlCell = new FormEntryCell(AppResources.WebVaultUrl, nextElement: ApiUrlCell.Entry,
+                entryKeyboard: Keyboard.Url);
             WebVaultUrlCell.Entry.Text = _appSettings.WebVaultUrl;
-            BaseUrlCell = new FormEntryCell(AppResources.ServerUrl, nextElement: WebVaultUrlCell.Entry, entryKeyboard: Keyboard.Url);
+
+            BaseUrlCell = new FormEntryCell(AppResources.ServerUrl, nextElement: WebVaultUrlCell.Entry,
+                entryKeyboard: Keyboard.Url);
             BaseUrlCell.Entry.Text = _appSettings.BaseUrl;
 
             var table = new FormTableView
@@ -74,7 +85,8 @@ namespace Bit.App.Pages
                     {
                         WebVaultUrlCell,
                         ApiUrlCell,
-                        IdentityUrlCell
+                        IdentityUrlCell,
+                        IconsUrlCell
                     }
                 }
             };
@@ -122,6 +134,7 @@ namespace Bit.App.Pages
             base.OnAppearing();
             MessagingCenter.Send(Application.Current, "ShowStatusBar", true);
             BaseUrlCell.InitEvents();
+            IconsUrlCell.InitEvents();
             IdentityUrlCell.InitEvents();
             ApiUrlCell.InitEvents();
             WebVaultUrlCell.InitEvents();
@@ -132,6 +145,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             BaseUrlCell.Dispose();
+            IconsUrlCell.Dispose();
             IdentityUrlCell.Dispose();
             ApiUrlCell.Dispose();
             WebVaultUrlCell.Dispose();
@@ -204,7 +218,22 @@ namespace Bit.App.Pages
                 IdentityUrlCell.Entry.Text = null;
             }
 
+            if(!string.IsNullOrWhiteSpace(IconsUrlCell.Entry.Text))
+            {
+                IconsUrlCell.Entry.Text = FixUrl(IconsUrlCell.Entry.Text);
+                if(!Uri.TryCreate(IconsUrlCell.Entry.Text, UriKind.Absolute, out result))
+                {
+                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.IconsUrl));
+                    return;
+                }
+            }
+            else
+            {
+                IconsUrlCell.Entry.Text = null;
+            }
+
             _appSettings.BaseUrl = BaseUrlCell.Entry.Text;
+            _appSettings.IconsUrl = IconsUrlCell.Entry.Text;
             _appSettings.IdentityUrl = IdentityUrlCell.Entry.Text;
             _appSettings.ApiUrl = ApiUrlCell.Entry.Text;
             _appSettings.WebVaultUrl = WebVaultUrlCell.Entry.Text;

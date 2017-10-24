@@ -15,5 +15,6 @@ namespace Bit.App.Abstractions
         string WebVaultUrl { get; set; }
         string ApiUrl { get; set; }
         string IdentityUrl { get; set; }
+        string IconsUrl { get; set; }
     }
 }

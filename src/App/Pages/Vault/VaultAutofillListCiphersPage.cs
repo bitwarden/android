@@ -161,7 +161,6 @@ namespace Bit.App.Pages
         {
             var cts = new CancellationTokenSource();
             _filterResultsCancellationTokenSource?.Cancel();
-            var websiteIconsEnabled = !_appSettingsService.DisableWebsiteIcons;
 
             Task.Run(async () =>
             {
@@ -169,7 +168,7 @@ namespace Bit.App.Pages
                 var ciphers = await _cipherService.GetAllAsync(Uri);
 
                 var normalLogins = ciphers?.Item1.Select(l => new VaultListPageModel.AutofillCipher(
-                    l, websiteIconsEnabled, false))
+                    l, _appSettingsService, false))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.Subtitle)
                     .ToList();
@@ -179,7 +178,7 @@ namespace Bit.App.Pages
                 }
 
                 var fuzzyLogins = ciphers?.Item2.Select(l => new VaultListPageModel.AutofillCipher(
-                    l, websiteIconsEnabled, true))
+                    l, _appSettingsService, true))
                     .OrderBy(s => s.Name)
                     .ThenBy(s => s.LoginUsername)
                     .ToList();

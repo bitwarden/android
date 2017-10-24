@@ -1457,6 +1457,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Icons Server URL.
+        /// </summary>
+        public static string IconsUrl {
+            get {
+                return ResourceManager.GetString("IconsUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identity Server URL.
         /// </summary>
         public static string IdentityUrl {

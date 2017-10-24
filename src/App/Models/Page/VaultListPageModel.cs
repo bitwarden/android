@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Bit.App.Resources;
 using System.Linq;
 using Bit.App.Enums;
+using Bit.App.Abstractions;
 
 namespace Bit.App.Models.Page
 {
@@ -10,7 +11,7 @@ namespace Bit.App.Models.Page
     {
         public class Cipher
         {
-            public Cipher(Models.Cipher cipher, bool imageEnabled)
+            public Cipher(Models.Cipher cipher, IAppSettingsService appSettings)
             {
                 Id = cipher.Id;
                 Shared = !string.IsNullOrWhiteSpace(cipher.OrganizationId);
@@ -30,6 +31,7 @@ namespace Bit.App.Models.Page
                         Icon = "login.png";
                         var hostnameUri = LoginUri;
                         var isWebsite = false;
+                        var imageEnabled = !appSettings.DisableWebsiteIcons;
                         if(hostnameUri.StartsWith("androidapp://"))
                         {
                             Icon = "android.png";
@@ -50,7 +52,20 @@ namespace Bit.App.Models.Page
 
                         if(imageEnabled && isWebsite && Uri.TryCreate(hostnameUri, UriKind.Absolute, out Uri u))
                         {
-                            Icon = "https://icons.bitwarden.com/" + u.Host + "/icon.png";
+                            var iconsUrl = appSettings.IconsUrl;
+                            if(string.IsNullOrWhiteSpace(iconsUrl))
+                            {
+                                if(!string.IsNullOrWhiteSpace(appSettings.BaseUrl))
+                                {
+                                    iconsUrl = $"{appSettings.BaseUrl}/icons";
+                                }
+                                else
+                                {
+                                    iconsUrl = "https://icons.bitwarden.com";
+                                }
+                            }
+
+                            Icon = $"{iconsUrl}/{u.Host}/icon.png";
                         }
 
                         Subtitle = LoginUsername;
@@ -122,8 +137,8 @@ namespace Bit.App.Models.Page
 
         public class AutofillCipher : Cipher
         {
-            public AutofillCipher(Models.Cipher cipher, bool imageEnabled, bool fuzzy = false)
-                : base(cipher, imageEnabled)
+            public AutofillCipher(Models.Cipher cipher, IAppSettingsService appSettings, bool fuzzy = false)
+                : base(cipher, appSettings)
             {
                 Fuzzy = fuzzy;
             }

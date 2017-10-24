@@ -1182,4 +1182,7 @@
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
     <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
   </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Icons Server URL</value>
+  </data>
 </root>
