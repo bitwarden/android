@@ -118,43 +118,43 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Free Password Manager</value>
+    <value>bitwarden Gratis Adgangskode Administrator</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden er den letteste og sikreste måde at opbevare alle dine login og adgangskoder samtidig med at de er synkronisere mellem alle dine enheder.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Tyveri af adgangskoder er et seriøst problem. Hjemmesider og apps du bruger er under angreb hver dag. Sikkerheden bristes og så er dine adgangskoder væk. Når du genbruger de samme adgangskoder på hjemmesider og apps kan hackere nemt få adgang til din email, bank konti og andre vigtige kontier.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Sikkerhedseksperter anbefaler at man bruger et unikt, tilfældig genreret adgangskode for hver konto man opretter. Men hvordan administrere man alle disse adganskoder? bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden gemmer alle dine login i en kryptere boks der synkroniseres over alle dine enheder. Siden det er komplet krypteret før det forlader dine enheder, er det kun dig der har adgang til din data. Ikke engang de ansatte ved bitwarden can få adgang til data, også selvom de prøvede. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>- Sync your logins and passwords across all your browsers and devices
-- Fill in logins on the web and in other apps automatically
-- Automatically generate strong, secure passwords for your logins</value>
+    <value>-Synkronisere dine logins og adgangskoder mellem alle dine browsere og enheder 
+- fyld ud login felter på nettet og andre apps automatisk 
+- automatisk generere stærke, sikre adgangskoder til dine logins</value>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>En sikker og gratis adgangskode administrator til alle dine enheder</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Administrer alle din logins og adgangskoder fra en sikker boks</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Automatisk generere stærke, tilfældige og sikre adgangskoder</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>Beskyt din boks med fingeraftryk, PIN-kode eller hovedadgangskode</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>Hurtigt auto-udfyld login fra din webbrowser og andre apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>Synkroniser, og få adgang til din boks fra flere enheder 
 
-- Phone
-- Tablet
-- Desktop
+- telefon 
+- Tablet 
+- Desktop 
 - Web</value>
   </data>
 </root>
