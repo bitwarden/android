@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden - Pengelola Sandi Gratis</value>
+    <value>bitwarden - Pengelola Sandi</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden adalah cara termudah dan teraman untuk menyimpan semua info masuk dan sandi Anda sambil tetap menjaga mereka disinkronkan di antara semua perangkat Anda. Ekstensi aplikasi bitwarden memungkinkan Anda untuk masuk ke situs web dengan cepat melalui Safari atau Chrome dan didukung oleh ratusan aplikasi populer lainnya.

@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Přidat složku</value>
   </data>
-  <data name="AddLogin" xml:space="preserve">
-    <value>Přidat přihlašovací údaje</value>
-    <comment>The title for the add login page.</comment>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add Item</value>
+    <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>Došlo k chybě.</value>
@@ -223,7 +223,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Žádná složka</value>
-    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Složky</value>
@@ -325,13 +325,9 @@
     <value>Zobrazit</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="LoginDeleted" xml:space="preserve">
-    <value>Přihlašovací údaje byly smazány.</value>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Item has been deleted.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
-  </data>
-  <data name="LoginNoName" xml:space="preserve">
-    <value>Žádný název</value>
-    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Potvrdit</value>
@@ -385,7 +381,7 @@
     <value>Navštivit naší webovou stránku</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Navštivte webovou stránku pro získání nápovědy, aktuálních zpráv a návodů jak používat bitwarden.</value>
+    <value>Navštivte webovou stránku aplikace pro zobrazení nejnovějších zpráv, nápovědy nebo návodu jak používat bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webová stránka</value>
@@ -400,17 +396,17 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Váš účet byl vytvořen! Můžete se přihlásit.</value>
   </data>
-  <data name="AddALogin" xml:space="preserve">
-    <value>Přidat přihlašovací údaje</value>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Add an Item</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Rozšíření aplikace</value>
   </data>
   <data name="AutofillDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplňování přihlašovacích údajů v aplikacích a na webových stránkách.</value>
+    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů v aplikacích a na webových stránkách.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Služba automatického vyplňování</value>
+    <value>Služba automatického vyplnění</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Nepoužít zaměnitelné znaky</value>
@@ -425,10 +421,10 @@
     <value>Použijte bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Služba automatického vyplňování</value>
+    <value>Služba automatického vyplnění</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplňování přihlašovacích údajů.</value>
+    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Změnit email</value>
@@ -467,8 +463,8 @@
     <value>Vytváření účtu...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="EditLogin" xml:space="preserve">
-    <value>Upravení přihlašovacích údajů</value>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit Item</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Povolit automatickou synchronizaci</value>
@@ -522,14 +518,14 @@
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Získat nápovědu pro hlavní heslo</value>
   </data>
-  <data name="ImportLogins" xml:space="preserve">
-    <value>Import přihlašovacích údajů</value>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Import Items</value>
   </data>
-  <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>Přihlašovací údaje můžete hromadně importovat na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
-  <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Importujte rychle a hromadně své přihlašovací údaje z jiných aplikací pro správu hesel.</value>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Quickly bulk import your items from other password management apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Poslední synchronizace:</value>
@@ -600,17 +596,17 @@
   <data name="Never" xml:space="preserve">
     <value>Nikdy</value>
   </data>
-  <data name="NewLoginCreated" xml:space="preserve">
-    <value>Nové přihlášení bylo vytvořeno.</value>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>New item created.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Žádné oblíbené přihlašovací údaje.</value>
   </data>
-  <data name="NoLogins" xml:space="preserve">
-    <value>Žádné přihlašovací údaje.</value>
+  <data name="NoItems" xml:space="preserve">
+    <value>There are no items in your vault.</value>
   </data>
-  <data name="NoLoginsTap" xml:space="preserve">
-    <value>Pro tuto stránku neexistují žádné přihlašovací údaje. Klikněte pro jejich přidání.</value>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>There are no items in your vault for this website. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Tyto přihlašovací údaje nemají nastavené uživatelské jméno nebo heslo.</value>
@@ -683,11 +679,11 @@
   <data name="SetPINDirection" xml:space="preserve">
     <value>Zadejte 4-místný PIN kód pro odemknutí aplikace.</value>
   </data>
-  <data name="LoginInformation" xml:space="preserve">
-    <value>Přihlašovací údaje</value>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Item Information</value>
   </data>
-  <data name="LoginUpdated" xml:space="preserve">
-    <value>Přihlašovací údaje aktualizovány.</value>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Item updated.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Odesílání...</value>
@@ -714,7 +710,7 @@
     <value>Dvoufázové přihlášení</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Dvoufázové přihlášení činí váš účet mnohem bezpečnější díky nutnosti po každém úspěšném přihlášení zadat ověřovací kód získaný z aplikace, SMS, emailu nebo telefonního hovoru. Dvoufázové přihlášení lze aktivovat na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Odemknout pomocí {0}</value>
@@ -729,8 +725,8 @@
   <data name="VerificationCode" xml:space="preserve">
     <value>Ověřovací kód</value>
   </data>
-  <data name="ViewLogin" xml:space="preserve">
-    <value>Náhled přihlašovacích údajů</value>
+  <data name="ViewItem" xml:space="preserve">
+    <value>View Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Webová aplikace</value>
@@ -741,8 +737,8 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Ztratili jste ověřovací aplikaci?</value>
   </data>
-  <data name="Logins" xml:space="preserve">
-    <value>Přihlášení</value>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -754,16 +750,16 @@
   <data name="Translations" xml:space="preserve">
     <value>Preklady</value>
   </data>
-  <data name="LoginsForUri" xml:space="preserve">
-    <value>Přihlašovací údaje pro {0}</value>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Items for {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
-  <data name="NoLoginsForUri" xml:space="preserve">
-    <value>Žádné přihlašovací údaje pro {0}.</value>
-    <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>There are no items in your vault for {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Pokud uvidíte v liště oznámení bitwardem, stačí na něj klepnout pro automatické vyplnění přihlašovacích údajů.</value>
+    <value>Pokud uvidíte v liště oznámení bitwarden, můžete klepnutím na něj spustit automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Klikněte pro automatické vyplnění přihlašovacích údajů.</value>
@@ -790,10 +786,10 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je služba automatického vyplňování bitwarden. Přečtěte si další informace o použití této služby na obrazovce "Nástroje".</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je prostřednictvím služby automatického vyplnění bitwarden. Přečtěte si další informace o použití této služby na obrazovce "Nástroje".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Automatické vyplňování</value>
+    <value>Automatické vyplnění</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Chcete automaticky vyplnit nebo zobrazit tyto přihlašovací údaje?</value>
@@ -801,11 +797,11 @@
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Opravdu chcete tyto přihlašovací údaje automaticky vyplnit? Nejsou úplně shodné s "{0}".</value>
   </data>
-  <data name="MatchingLogins" xml:space="preserve">
-    <value>Odpovídající přihlašovací údaje</value>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Matching Items</value>
   </data>
-  <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Možné přihlašovací údaje</value>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Hledat</value>
@@ -948,16 +944,16 @@
     <value>Fotografie</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP byl zkopírován!</value>
+    <value>Ověřovací kód (TOTP) byl zkopírován!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Zkopírovat TOTP</value>
+    <value>Zkopírovat ověřovací kód (TOTP)</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Pokud mají vaše přihlašovací údaje použitý ověřovací klíč, ověřovací kód TOTP se automaticky zkopíruje do schránky při každém automatickém vyplňování přihlašovacích údajů.</value>
+    <value>Pokud mají vaše přihlašovací údaje přidán autentizační klíč pro TOTP, vygenerovaný ověřovací kód (TOTP) se automaticky zkopíruje do schránky při každém automatickém vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Vypnout automatické kopírování TOTP</value>
+    <value>Vypnout automatické kopírování kódu TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Pro použití této funkce je potřebné prémiové členství.</value>
@@ -1031,12 +1027,162 @@
     <value>Klepnutím na toto oznámení zobrazíte přihlašovací údaje z trezoru.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>Vlastní pole</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>Vlastní pole upravena.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>Žádná vlastní pole. Vlastní pole můžete spravovat z webového aplikace nebo rozšíření prohlížeče.</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Copy Number</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Copy Security Code</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Security Code</value>
+  </data>
+  <data name="SelectTypeAdd" xml:space="preserve">
+    <value>What type of item do you want to add?</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Card</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Secure Note</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Address 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Cardholder Name</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>City / Town</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Expiration Month</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Expiration Year</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>License Number</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Middle Name</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Mr</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Mrs</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Ms</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Passport Number</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Social Security Number</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>State / Province</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Zip / Postal Code</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Expiration</value>
+  </data>
+  <data name="DisableWebsiteIcons" xml:space="preserve">
+    <value>Disable Website Icons</value>
+  </data>
+  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
+    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Icons Server URL</value>
   </data>
 </root>

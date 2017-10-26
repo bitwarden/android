@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Aggiungi Cartella</value>
   </data>
-  <data name="AddLogin" xml:space="preserve">
-    <value>Aggiungi Login</value>
-    <comment>The title for the add login page.</comment>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add Item</value>
+    <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>Si è verificato un errore.</value>
@@ -223,7 +223,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Nessuna Cartella</value>
-    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Cartelle</value>
@@ -325,13 +325,9 @@
     <value>Mostra</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="LoginDeleted" xml:space="preserve">
-    <value>Il login è stato eliminato.</value>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Item has been deleted.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
-  </data>
-  <data name="LoginNoName" xml:space="preserve">
-    <value>Nessun nome</value>
-    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Invia</value>
@@ -400,8 +396,8 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Il tuo nuovo account è stato creato! Ora puoi fare il login.</value>
   </data>
-  <data name="AddALogin" xml:space="preserve">
-    <value>Aggiungi un Login</value>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Add an Item</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Estensione App</value>
@@ -467,8 +463,8 @@
     <value>Sto creando l'account...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="EditLogin" xml:space="preserve">
-    <value>Modifica Login</value>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit Item</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Abilita la Sincronizzazione Automatica</value>
@@ -522,14 +518,14 @@
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Ottenere il suggerimento per la password principale</value>
   </data>
-  <data name="ImportLogins" xml:space="preserve">
-    <value>Importa Logins</value>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Import Items</value>
   </data>
-  <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>Puoi importare in massa i tuoi login dalla cassaforte online di bitwarden.com. Vuoi visitare ora il sito?</value>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
-  <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Importa rapidamente i dati di accesso da altre applicazioni di gestione password.</value>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Quickly bulk import your items from other password management apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Ultima Sincronizzazione:</value>
@@ -600,17 +596,17 @@
   <data name="Never" xml:space="preserve">
     <value>Mai</value>
   </data>
-  <data name="NewLoginCreated" xml:space="preserve">
-    <value>Nuovo login creato.</value>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>New item created.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Non ci sono preferiti nella tua cassaforte.</value>
   </data>
-  <data name="NoLogins" xml:space="preserve">
-    <value>Non ci sono login nella tua cassaforte.</value>
+  <data name="NoItems" xml:space="preserve">
+    <value>There are no items in your vault.</value>
   </data>
-  <data name="NoLoginsTap" xml:space="preserve">
-    <value>Non ci sono login nella tua cassaforte per questo sito Web. Tocca per aggiungerne uno.</value>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>There are no items in your vault for this website. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Questo login non dispone di un nome utente o password configurata.</value>
@@ -683,11 +679,11 @@
   <data name="SetPINDirection" xml:space="preserve">
     <value>Immetti un codice PIN a 4 cifre con cui sbloccare l'applicazione.</value>
   </data>
-  <data name="LoginInformation" xml:space="preserve">
-    <value>Informazioni di Login</value>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Item Information</value>
   </data>
-  <data name="LoginUpdated" xml:space="preserve">
-    <value>Login aggiornato.</value>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Item updated.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Invio in corso...</value>
@@ -714,7 +710,7 @@
     <value>Verifica in due passaggi</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>L'autenticazione in due passaggi rende il tuo account più sicuro richiedendo di inserire un codice di sicurezza da una app di autenticazione ogni volta che fai il log in. La verifica in due passaggi può esserer attivata sulla cassaforte online di bitwarden.com. Vuoi visitare ora il sito?</value>
+    <value>L'autenticazione in due passaggi rende il tuo account più sicuro richiedendo di verificare il login con un altro dispositivo come una chiave di sicurezza, app di autenticazione, SMS, telefonata o email. Può essere abilitata su bitwarden.com. Vuoi visitare il sito ora?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Sblocca con {0}</value>
@@ -723,14 +719,14 @@
     <value>Sblocca con codice PIN</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>Convalidando</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
     <value>Codice di Verifica</value>
   </data>
-  <data name="ViewLogin" xml:space="preserve">
-    <value>Vedi Login</value>
+  <data name="ViewItem" xml:space="preserve">
+    <value>View Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Cassaforte Web bitwarden</value>
@@ -741,8 +737,8 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Perso l'app di autenticazione?</value>
   </data>
-  <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -754,13 +750,13 @@
   <data name="Translations" xml:space="preserve">
     <value>Traduzioni</value>
   </data>
-  <data name="LoginsForUri" xml:space="preserve">
-    <value>Logins per {0}</value>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Items for {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
-  <data name="NoLoginsForUri" xml:space="preserve">
-    <value>Non ci sono logins nella tua cassaforte per {0}.</value>
-    <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>There are no items in your vault for {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>Quando vedi una notifica di compilazione automatica di bitwarden, puoi toccarla per avviare il servizio di compilazione automatica.</value>
@@ -801,11 +797,11 @@
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Sei sicuro di voler completare automaticamente questo login? Non si tratta di una corrispondenza completa per "{0}".</value>
   </data>
-  <data name="MatchingLogins" xml:space="preserve">
-    <value>Logins Corrispondenti</value>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Matching Items</value>
   </data>
-  <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Possibili Logins Corrispondenti</value>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Cerca</value>
@@ -820,7 +816,7 @@
     <value>Crea un'organizzazione per condividere in sicurezza i tuoi login con gli altri utenti.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Usiamo analytics per capire meglio come l'estensione viene usata in modo da migliorarla. Tutti i dati collezionati sono completamente anonimi.</value>
   </data>
   <data name="Features" xml:space="preserve">
     <value>Funzionalità</value>
@@ -848,195 +844,345 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>App di Autenticazione</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Inserisci il codice di verifica a 6 cifre dalla tua app di autenticazione.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Inserisci il codice di verifica a 6 cifre ricevuto per email su {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Login non disponibile</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Questo account ha il login in due passaggi attivato, ma nessuno dei fornitori di autenticazione in due passaggi configurati è supportato su questo dispositivo. Per favore usa un dispositivo supportato e/o aggiungine uno meglio supportato sui tuoi dispositivi (come una app di autenticazione).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Codice di Recupero</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Ricordami</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Invia nuovamente codice di verifica email</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Opzioni di login in due passaggi</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Usa un altro metodo di login in due passaggi</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Impossibile inviare codice di verifica email. Riprova.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>Email di verifica inviata.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>Apoggia la tua YubiKey NEO sul retro del dispositivo per continuare.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>Chiave di Sicurezza YubiKey NEO</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Aggiungi Nuovo Allegato</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Allegati</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>Impossibile scaricare il file.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>Il tuo dispositivo non può aprire questo tipo di file.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>Download in corso...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Questo allegato ha dimensione {0}. Sei sicuro di volerlo scaricare sul tuo dipositivo?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Chiave di Autenticazione (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Codice di Verifica (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Chiave di autenticazione aggiunta.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Impossibile leggere chiave di autenticazione.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>La scannerizzazione avverrà automaticamente.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>Punta la fotocamera sul codice QR.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>Scansione Codice QR</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>Fotocamera</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>Foto</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP Copiato!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>Copia TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Se il tuo login ha un autenticatore collegato, il codice ti verifica TOTP è automaticamente copiato negli appunti ogni volta che auto-completi il login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>Disattiva Copia TOTP Automatica</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>Un abbonamento premium è richiesto per utilizzare questa funzionalità.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>Allegato aggiunto</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>Allegato eliminato</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
-    <value>Choose File</value>
+    <value>Seleziona File</value>
   </data>
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>No file chosen</value>
+    <value>Nessun file selezionato</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>There are no attachments.</value>
+    <value>Non ci sono allegati.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>Seleziona File</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
-    <value>Feature Unavailable</value>
+    <value>Funzione Non Disponibile</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Maximum file size is 100 MB.</value>
+    <value>La dimensione massima del file è 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>You cannot use this feature until you update your encryption key.</value>
+    <value>Non puoi utilizzare questa funzione finchè non aggiorni la tua chiave di crittografia.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Learn More</value>
+    <value>Altre Informazioni</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>URL del Server API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Custom Environment</value>
+    <value>Ambiente Personalizzato</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Per utenti avanzati. Puoi specificare l'URL principale di ogni servizio indipendentemente.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>Gli URL dell'ambiente sono stati salvati.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} non è formattato correttamente.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>URL del Server di Identità</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Self-hosted Environment</value>
+    <value>Ambiente Self-Hosted</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+    <value>Specifica l'URL principale della tua installazione bitwarden self-hosted.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>URL sel Server</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Vault Server URL</value>
+    <value>URL della Cassaforte Online</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>Tap this notification to view logins from your vault.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>Campi Personalizzati</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>Campi personalizzati aggiornati.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>Nessun campo personalizzato. È possibile gestire i campi personalizzati dall'estensione del vault o browser web.</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Copy Number</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Copy Security Code</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Security Code</value>
+  </data>
+  <data name="SelectTypeAdd" xml:space="preserve">
+    <value>What type of item do you want to add?</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Card</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Secure Note</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Address 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Cardholder Name</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>City / Town</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Expiration Month</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Expiration Year</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>License Number</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Middle Name</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Mr</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Mrs</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Ms</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Passport Number</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Social Security Number</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>State / Province</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Zip / Postal Code</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Expiration</value>
+  </data>
+  <data name="DisableWebsiteIcons" xml:space="preserve">
+    <value>Disable Website Icons</value>
+  </data>
+  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
+    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Icons Server URL</value>
   </data>
 </root>

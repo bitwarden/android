@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Mappa hozzáadása</value>
   </data>
-  <data name="AddLogin" xml:space="preserve">
-    <value>Bejelentkezés hozzáadása</value>
-    <comment>The title for the add login page.</comment>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add Item</value>
+    <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>Hiba történt.</value>
@@ -223,7 +223,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Nincs mappa</value>
-    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Mappák</value>
@@ -325,13 +325,9 @@
     <value>Mutat</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="LoginDeleted" xml:space="preserve">
-    <value>A bejelentkezés törölve.</value>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Item has been deleted.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
-  </data>
-  <data name="LoginNoName" xml:space="preserve">
-    <value>Nincs név</value>
-    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Mehet</value>
@@ -400,8 +396,8 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Fiókodat létrehoztuk. Most már be tudsz jelentkezni.</value>
   </data>
-  <data name="AddALogin" xml:space="preserve">
-    <value>Bejelentkezés hozzáadása</value>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Add an Item</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App kiterjesztés</value>
@@ -467,8 +463,8 @@
     <value>Fiók létrehozása...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="EditLogin" xml:space="preserve">
-    <value>Bejelentkezés szerkesztése</value>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit Item</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Automatikus szinkronizálás engedélyezése</value>
@@ -522,14 +518,14 @@
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Kérj mesterjelszó emlékeztetőt</value>
   </data>
-  <data name="ImportLogins" xml:space="preserve">
-    <value>Bejelentkezések importálása</value>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Import Items</value>
   </data>
-  <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>Több bejelentkezést egyszerre a bitwarden.com webes széfében tudsz importálni. Szeretnéd meglátogatni a most a weboldalt?</value>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
-  <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Több bejelentkezés gyors importálása egyszerre egy másik jelszókezelő alkalmazásból.</value>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Quickly bulk import your items from other password management apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Utolsó szinkronizálás:</value>
@@ -600,17 +596,17 @@
   <data name="Never" xml:space="preserve">
     <value>Soha</value>
   </data>
-  <data name="NewLoginCreated" xml:space="preserve">
-    <value>Új bejelentkezés létrehozva.</value>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>New item created.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Nincsenek kedvencek a széfedben.</value>
   </data>
-  <data name="NoLogins" xml:space="preserve">
-    <value>Nincsenek bejelentkezések a széfedben.</value>
+  <data name="NoItems" xml:space="preserve">
+    <value>There are no items in your vault.</value>
   </data>
-  <data name="NoLoginsTap" xml:space="preserve">
-    <value>Ehhez a weboldalhoz nincs bejelentkezés a széfedben. Bökj ide, ha létrehoznál egyet.</value>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>There are no items in your vault for this website. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Ehhez a bejelentkezéshez nem lett felhasználónév vagy jelszó beállítva.</value>
@@ -683,11 +679,11 @@
   <data name="SetPINDirection" xml:space="preserve">
     <value>Egy 4 számjegyű PIN-kód beállítása az alkalmazás kinyitásához.</value>
   </data>
-  <data name="LoginInformation" xml:space="preserve">
-    <value>Bejelentkezési információk</value>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Item Information</value>
   </data>
-  <data name="LoginUpdated" xml:space="preserve">
-    <value>Bejelentkezés frissítve.</value>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Item updated.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Küldés...</value>
@@ -729,8 +725,8 @@
   <data name="VerificationCode" xml:space="preserve">
     <value>Hitelesítő kód</value>
   </data>
-  <data name="ViewLogin" xml:space="preserve">
-    <value>Bejelentkezés megtekintése</value>
+  <data name="ViewItem" xml:space="preserve">
+    <value>View Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden webes széf</value>
@@ -741,8 +737,8 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Elveszett hitelesítő alkalmazás?</value>
   </data>
-  <data name="Logins" xml:space="preserve">
-    <value>Bejelentkezések</value>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -754,13 +750,13 @@
   <data name="Translations" xml:space="preserve">
     <value>Fordítások</value>
   </data>
-  <data name="LoginsForUri" xml:space="preserve">
-    <value>Bejelentkezés ehhez: {0}</value>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Items for {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
-  <data name="NoLoginsForUri" xml:space="preserve">
-    <value>Nincs mentett bejelentkezési adat ehhez: {0}.</value>
-    <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>There are no items in your vault for {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>Ha látsz egy bitwarden auto-kitöltés értesítést, érintsd meg azt az automatikus kitöltési szolgáltatás elindításához.</value>
@@ -801,11 +797,11 @@
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Biztos, hogy automatikusan kitöltöd ezt a bejelentkezést? Nem egyezik teljesen ehhez: {0}.</value>
   </data>
-  <data name="MatchingLogins" xml:space="preserve">
-    <value>Egyező bejelentkezések</value>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Matching Items</value>
   </data>
-  <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Lehetséges bejelentkezések</value>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Keresés</value>
@@ -1031,12 +1027,162 @@
     <value>Az értesítés megérintésével megnézheted a széfedben tárolt bejelentkezéseket.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>Egyedi mezők</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>Egyedi mezők frissítve.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>Nincsenek egyedi mezők. Az egyedi mezőkek teljes mértékben kezelheted a webes széfedben, vagy a böngésző bővítményen keresztül.</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Copy Number</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Copy Security Code</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Security Code</value>
+  </data>
+  <data name="SelectTypeAdd" xml:space="preserve">
+    <value>What type of item do you want to add?</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Card</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Secure Note</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Address 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Cardholder Name</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>City / Town</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Expiration Month</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Expiration Year</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>License Number</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Middle Name</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Mr</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Mrs</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Ms</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Passport Number</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Social Security Number</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>State / Province</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Zip / Postal Code</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Expiration</value>
+  </data>
+  <data name="DisableWebsiteIcons" xml:space="preserve">
+    <value>Disable Website Icons</value>
+  </data>
+  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
+    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Icons Server URL</value>
   </data>
 </root>

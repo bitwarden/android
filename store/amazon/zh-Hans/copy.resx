@@ -130,7 +130,7 @@
 bitwarden 将您的登录信息保存在加密的密码库，可以在您的所有设备上同步。由于信息在发送出您的设备之前，就已经完全加密，因此只有您可以访问这些数据。甚至，就算 bitwarden 的团队成员有这个想法，也没办法读取您的数据。您的数据采用 AES-256 位、加盐的哈希以及 PBKDF2 SHA-256 加密。</value>
   </data>
   <data name="ProductFeatureBullets" xml:space="preserve">
-    <value>-在您的浏览器和设备之间同步您的登录名和密码
+    <value>-在您的浏览器和设备之间同步您的用户名和密码
 -在网站和其他应用中自动登录
 -自动为您生成强力、安全的密码</value>
   </data>
@@ -138,7 +138,7 @@ bitwarden 将您的登录信息保存在加密的密码库，可以在您的所�
     <value>安全免费的跨平台密码管理器</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>在一个安全的密码库管理您的登录信息</value>
+    <value>在一个安全的密码库管理您的登录项目</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>自动生成强力、随机和安全的密码</value>

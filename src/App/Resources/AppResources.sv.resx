@@ -127,9 +127,9 @@
   <data name="AddFolder" xml:space="preserve">
     <value>Skapa mapp</value>
   </data>
-  <data name="AddLogin" xml:space="preserve">
-    <value>Lägg till inloggning</value>
-    <comment>The title for the add login page.</comment>
+  <data name="AddItem" xml:space="preserve">
+    <value>Add Item</value>
+    <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
     <value>Ett fel har inträffat.</value>
@@ -223,7 +223,7 @@
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Ingen mapp</value>
-    <comment>Logins that have no folder specified go in this special "catch-all" folder.</comment>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
     <value>Mappar</value>
@@ -325,13 +325,9 @@
     <value>Visa</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
-  <data name="LoginDeleted" xml:space="preserve">
-    <value>Tog bort inloggning.</value>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>Item has been deleted.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
-  </data>
-  <data name="LoginNoName" xml:space="preserve">
-    <value>Inget namn</value>
-    <comment>Title text to display when there is no name given for a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Skicka</value>
@@ -400,8 +396,8 @@
   <data name="AccountCreated" xml:space="preserve">
     <value>Ditt nya konto har blivit skapat! Du kan nu logga in.</value>
   </data>
-  <data name="AddALogin" xml:space="preserve">
-    <value>Lägg till en inloggning</value>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>Add an Item</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Apptillägg</value>
@@ -467,8 +463,8 @@
     <value>Skapar konto...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
-  <data name="EditLogin" xml:space="preserve">
-    <value>Ändra inloggning</value>
+  <data name="EditItem" xml:space="preserve">
+    <value>Edit Item</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Aktivera automatisk synkronisering</value>
@@ -522,14 +518,14 @@
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Hämta huvudlösenordsledtråd</value>
   </data>
-  <data name="ImportLogins" xml:space="preserve">
-    <value>Importera inloggningar</value>
+  <data name="ImportItems" xml:space="preserve">
+    <value>Import Items</value>
   </data>
-  <data name="ImportLoginsConfirmation" xml:space="preserve">
-    <value>Du kan massimportera inloggningar på bitwardens webbvalv. Vill du besöka webbsidan nu?</value>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
   </data>
-  <data name="ImportLoginsDescription" xml:space="preserve">
-    <value>Massimportera snabbt dina inloggningar från en annan lösenordshanterare.</value>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>Quickly bulk import your items from other password management apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Senaste synkning:</value>
@@ -600,17 +596,17 @@
   <data name="Never" xml:space="preserve">
     <value>Aldrig</value>
   </data>
-  <data name="NewLoginCreated" xml:space="preserve">
-    <value>Ny inlogging skapad.</value>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>New item created.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Det finns inga favoriter i ditt valv.</value>
   </data>
-  <data name="NoLogins" xml:space="preserve">
-    <value>Det finns inga inloggningar i ditt valv.</value>
+  <data name="NoItems" xml:space="preserve">
+    <value>There are no items in your vault.</value>
   </data>
-  <data name="NoLoginsTap" xml:space="preserve">
-    <value>Det finns inga inloggningar i ditt valv för den här webbplatsen. Tryck för att skapa en.</value>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>There are no items in your vault for this website. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Den här inloggningen har inte ett användarnamn eller lösenord angivet.</value>
@@ -683,11 +679,11 @@
   <data name="SetPINDirection" xml:space="preserve">
     <value>Ange en fyrsiffrig PIN-kod som du låser upp appen med.</value>
   </data>
-  <data name="LoginInformation" xml:space="preserve">
-    <value>Inloggningsinformation</value>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>Item Information</value>
   </data>
-  <data name="LoginUpdated" xml:space="preserve">
-    <value>Inloggning uppdaterad.</value>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>Item updated.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Skickar...</value>
@@ -729,8 +725,8 @@
   <data name="VerificationCode" xml:space="preserve">
     <value>Verifieringskod</value>
   </data>
-  <data name="ViewLogin" xml:space="preserve">
-    <value>Visa inloggning</value>
+  <data name="ViewItem" xml:space="preserve">
+    <value>View Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden webbvalv</value>
@@ -741,8 +737,8 @@
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Förlorat autentiseringsapp?</value>
   </data>
-  <data name="Logins" xml:space="preserve">
-    <value>Inloggningar</value>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -754,13 +750,13 @@
   <data name="Translations" xml:space="preserve">
     <value>Översättningar</value>
   </data>
-  <data name="LoginsForUri" xml:space="preserve">
-    <value>Inloggningar för {0}</value>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>Items for {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
-  <data name="NoLoginsForUri" xml:space="preserve">
-    <value>Det finns inga inloggningar i ditt valv för {0}.</value>
-    <comment>This is used for the autofill service. ex. "There are no logins in your vault for twitter.com".</comment>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>There are no items in your vault for {0}.</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>När du ser en avisering från bitwarden för automatisk ifyllnad så kan du trycka på den för att öppna tjänsten.</value>
@@ -801,11 +797,11 @@
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Är du säker på att du vill automatiskt fylla i den här inloggningen? Det är inte en fullständig träff för "{0}".</value>
   </data>
-  <data name="MatchingLogins" xml:space="preserve">
-    <value>Matchande inloggningar</value>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>Matching Items</value>
   </data>
-  <data name="PossibleMatchingLogins" xml:space="preserve">
-    <value>Möjliga matchande inloggningar</value>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>Possible Matching Items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Sök</value>
@@ -1031,12 +1027,162 @@
     <value>Tryck på den här aviseringen för att visa inloggningar från ditt valv.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>Anpassade fält</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>Anpassade fält uppdaterade.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>Inga anpassade fält. Du kan hantera anpassade fält från webbvalvet eller genom webbläsartillägget.</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>Copy Number</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>Copy Security Code</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>Number</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>Security Code</value>
+  </data>
+  <data name="SelectTypeAdd" xml:space="preserve">
+    <value>What type of item do you want to add?</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>Card</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>Identity</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>Secure Note</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>Address 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>Address 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>Address 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>April</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>August</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>Brand</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>Cardholder Name</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>City / Town</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>Country</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>December</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>Dr</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>Expiration Month</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>Expiration Year</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>February</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>First Name</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>January</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>July</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>June</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Last Name</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>License Number</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>March</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>May</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>Middle Name</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>Mr</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>Mrs</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>Ms</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>November</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>October</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>Passport Number</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>September</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>Social Security Number</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>State / Province</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>Title</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>Zip / Postal Code</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>Expiration</value>
+  </data>
+  <data name="DisableWebsiteIcons" xml:space="preserve">
+    <value>Disable Website Icons</value>
+  </data>
+  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
+    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>Icons Server URL</value>
   </data>
 </root>
