@@ -15,15 +15,15 @@ namespace Bit.App.Repositories
 
         public Task<IEnumerable<CipherData>> GetAllByUserIdAsync(string userId)
         {
-            var logins = Connection.Table<CipherData>().Where(l => l.UserId == userId).Cast<CipherData>();
-            return Task.FromResult(logins);
+            var ciphers = Connection.Table<CipherData>().Where(l => l.UserId == userId).Cast<CipherData>();
+            return Task.FromResult(ciphers);
         }
 
         public Task<IEnumerable<CipherData>> GetAllByUserIdAsync(string userId, bool favorite)
         {
-            var logins = Connection.Table<CipherData>().Where(l => l.UserId == userId && l.Favorite == favorite)
+            var ciphers = Connection.Table<CipherData>().Where(l => l.UserId == userId && l.Favorite == favorite)
                 .Cast<CipherData>();
-            return Task.FromResult(logins);
+            return Task.FromResult(ciphers);
         }
     }
 }
