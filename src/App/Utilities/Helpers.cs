@@ -1,6 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using Plugin.Settings.Abstractions;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -41,14 +42,15 @@ namespace Bit.App.Utilities
 #endif
         }
 
-        public static bool PerformUpdateTasks(ISettings settings, IAppInfoService appInfoService,
-            IDatabaseService databaseService)
+        public static bool PerformUpdateTasks(ISettings settings,
+            IAppInfoService appInfoService, IDatabaseService databaseService, ISyncService syncService)
         {
             var lastBuild = settings.GetValueOrDefault(Constants.LastBuildKey, null);
             if(InDebugMode() || lastBuild == null || lastBuild != appInfoService.Build)
             {
                 settings.AddOrUpdateValue(Constants.LastBuildKey, appInfoService.Build);
                 databaseService.CreateTables();
+                var task = Task.Run(async () => await syncService.FullSyncAsync(true));
                 return true;
             }
 

@@ -15,8 +15,9 @@ namespace Bit.Android
         public override void OnReceive(Context context, Intent intent)
         {
             Debug.WriteLine("App updated!");
-            Helpers.PerformUpdateTasks(Resolver.Resolve<ISettings>(), Resolver.Resolve<IAppInfoService>(),
-                Resolver.Resolve<IDatabaseService>());
+            Helpers.PerformUpdateTasks(Resolver.Resolve<ISettings>(),
+                Resolver.Resolve<IAppInfoService>(),Resolver.Resolve<IDatabaseService>(),
+                Resolver.Resolve<ISyncService>());
         }
     }
 }

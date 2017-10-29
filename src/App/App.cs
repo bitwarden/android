@@ -103,7 +103,7 @@ namespace Bit.App
 
             if(string.IsNullOrWhiteSpace(_uri))
             {
-                Helpers.PerformUpdateTasks(_settings, _appInfoService, _databaseService);
+                Helpers.PerformUpdateTasks(_settings, _appInfoService, _databaseService, _syncService);
                 await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
             }
 
