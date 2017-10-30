@@ -140,14 +140,14 @@ namespace Bit.Android
             {
                 var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
                 var autoCopyEnabled = !_settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
-                if(isPremium && autoCopyEnabled && _deviceActionService != null && cipher.LoginTotp.Value != null)
+                if(isPremium && autoCopyEnabled && _deviceActionService != null && cipher.LoginTotp?.Value != null)
                 {
                     _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
                 }
 
                 data.PutExtra("uri", cipher.LoginUri);
                 data.PutExtra("username", cipher.LoginUsername);
-                data.PutExtra("password", cipher.LoginPassword.Value);
+                data.PutExtra("password", cipher.LoginPassword?.Value ?? null);
             }
 
             if(Parent == null)
