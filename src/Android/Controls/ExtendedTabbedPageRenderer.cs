@@ -62,7 +62,8 @@ namespace Bit.Android.Controls
 
             if(selected)
             {
-                var selectedResource = IdFromTitle(string.Format("{0}_selected", icon), ResourceManager.DrawableClass);
+                var selectedIcon = string.Format("{0}_selected", icon.Replace(".png", string.Empty));
+                var selectedResource = IdFromTitle(selectedIcon, ResourceManager.DrawableClass);
                 if(selectedResource != 0)
                 {
                     tab.SetIcon(selectedResource);
