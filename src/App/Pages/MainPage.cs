@@ -16,16 +16,9 @@ namespace Bit.App.Pages
             var vaultNavigation = new ExtendedNavigationPage(new VaultListCiphersPage(false, uri));
             var toolsNavigation = new ExtendedNavigationPage(new ToolsPage());
 
-            favoritesNavigation.Title = AppResources.Favorites;
             favoritesNavigation.Icon = "star.png";
-
-            vaultNavigation.Title = AppResources.MyVault;
             vaultNavigation.Icon = "fa_lock.png";
-
-            toolsNavigation.Title = AppResources.Tools;
             toolsNavigation.Icon = "tools.png";
-
-            settingsNavigation.Title = AppResources.Settings;
             settingsNavigation.Icon = "cogs.png";
 
             Children.Add(favoritesNavigation);
