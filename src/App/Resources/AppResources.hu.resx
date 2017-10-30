@@ -128,7 +128,7 @@
     <value>Mappa hozzáadása</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Elem hozzáadása</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Elem törölve.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,7 +397,7 @@
     <value>Fiókodat létrehoztuk. Most már be tudsz jelentkezni.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Elem hozzáadása</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App kiterjesztés</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Elem szerkesztése</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Automatikus szinkronizálás engedélyezése</value>
@@ -519,13 +519,13 @@
     <value>Kérj mesterjelszó emlékeztetőt</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Elemek importálása</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Elemek tömeges importálása a bitwarden.com webes széfből. Szeretnéd most meglátogatni a weboldalt?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Több bejelentkezés gyors importálása egyszerre egy másik jelszókezelő alkalmazásból.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Utolsó szinkronizálás:</value>
@@ -597,16 +597,16 @@
     <value>Soha</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Új elem létrehozva.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Nincsenek kedvencek a széfedben.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Nincsenek elemek a széfedben.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Ehhez a weboldalhoz nincs bejelentkezés a széfedben. Bökj ide, ha létrehoznál egyet.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Ehhez a bejelentkezéshez nem lett felhasználónév vagy jelszó beállítva.</value>
@@ -680,10 +680,10 @@
     <value>Egy 4 számjegyű PIN-kód beállítása az alkalmazás kinyitásához.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Elem információ</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Elem frissítve.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Küldés...</value>
@@ -726,7 +726,7 @@
     <value>Hitelesítő kód</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Elem megtekintése</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden webes széf</value>
@@ -738,7 +738,7 @@
     <value>Elveszett hitelesítő alkalmazás?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Elemek</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Fordítások</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Elemek ehhez: {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Nincs mentett bejelentkezési adat ehhez: {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -798,10 +798,10 @@
     <value>Biztos, hogy automatikusan kitöltöd ezt a bejelentkezést? Nem egyezik teljesen ehhez: {0}.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Megegyező elemek</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Lehetséges megfelelő tételek</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Keresés</value>
@@ -1036,61 +1036,61 @@
     <value>Nincsenek egyedi mezők. Az egyedi mezőkek teljes mértékben kezelheted a webes széfedben, vagy a böngésző bővítményen keresztül.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Szám másolása</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Biztonsági kód másolása</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Szám</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Biztonsági Kód</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Milyen típusú tételt szeretnél hozzáadni?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Kártya</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Azonosság</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Bejelentkezés</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Biztonságos jegyzet</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Cím 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Cím 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Cím 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Április</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Augusztus</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Márka</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Kártyatulajdonos neve</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Település neve</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Cég</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Ország</value>
   </data>
   <data name="December" xml:space="preserve">
     <value>December</value>
@@ -1099,90 +1099,90 @@
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Lejárati hónap</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Lejárati év</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Február</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Keresztnév</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Január</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Július</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Június</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Vezetéknév</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Engedélyszám</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Március</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Május</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Középső név</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Úr</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Asszony</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Kisasszony</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Október</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Útlevélszám</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefonszám</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Szeptember</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Társadalombiztosítási szám</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Megye</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titulus</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Irányítószám</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Lakcím</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Lejárat</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Honlap ikonok letiltása</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>A webhelyek ikonjai felismerhető ikonként jelennek meg a széfed minden eleme mellett.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>Ikonok kiszolgáló URL-címe</value>
   </data>
 </root>

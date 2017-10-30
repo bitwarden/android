@@ -128,7 +128,7 @@
     <value>Přidat složku</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Přidat položku</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Položka byla odstraněna.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,7 +397,7 @@
     <value>Váš účet byl vytvořen! Můžete se přihlásit.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Přidat položku</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Rozšíření aplikace</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Upravit položku</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Povolit automatickou synchronizaci</value>
@@ -519,13 +519,13 @@
     <value>Získat nápovědu pro hlavní heslo</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Importovat položky</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Můžete hromadně importovat položky do vašeho trezoru na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Importujte rychle a hromadně údaje z jiných aplikací pro správu hesel.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Poslední synchronizace:</value>
@@ -597,16 +597,16 @@
     <value>Nikdy</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Nová položka byla vytvořena.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Žádné oblíbené přihlašovací údaje.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Žádné položky.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Pro tuto stránku neexistují žádné položky. Klikněte pro jejich přidání.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Tyto přihlašovací údaje nemají nastavené uživatelské jméno nebo heslo.</value>
@@ -680,10 +680,10 @@
     <value>Zadejte 4-místný PIN kód pro odemknutí aplikace.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Informace o položce</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Položka byla upravena.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Odesílání...</value>
@@ -726,7 +726,7 @@
     <value>Ověřovací kód</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Zobrazit položku</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Webová aplikace</value>
@@ -738,7 +738,7 @@
     <value>Ztratili jste ověřovací aplikaci?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Položky</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Preklady</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Položky pro {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Žádné položky pro {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -798,10 +798,10 @@
     <value>Opravdu chcete tyto přihlašovací údaje automaticky vyplnit? Nejsou úplně shodné s "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Odpovídající položky</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Možné odpovídající položky</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Hledat</value>
@@ -1036,153 +1036,153 @@
     <value>Žádná vlastní pole. Vlastní pole můžete spravovat z webového aplikace nebo rozšíření prohlížeče.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Kopírovat číslo</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Kopírovat bezpečnostní kód</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Číslo</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Bezpečnostní kód</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Jaký typ položky chcete přidat?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Kreditní karta</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identita</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Přihlášení</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Zabezpečená poznámka</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Adresa 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Adresa 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Adresa 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Duben</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Srpen</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Značka</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Jméno držitele karty</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Město</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Firma</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Stát</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Prosinec</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dr</value>
+    <value>MUDr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Měsíc expirace</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Rok expirace</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Únor</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Jméno</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Leden</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Červenec</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Červen</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Příjmení</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Číslo dokladu totožnosti</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Březen</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Květen</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Druhé jméno</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Pan</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Paní</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Slečna</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Listopad</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Říjen</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Číslo cestovního pasu</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefon</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Záři</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Číslo sociálního pojištění</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Kraj / Provincie</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Oslovení</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>PSČ</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adresa</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Expirace</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Zakázat ikonky webových stránek</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Skryje ikonky webových stránek zobrazujících se vedle jednotlivých položek přihlašovacích údajů.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL serveru ikonek</value>
   </data>
 </root>

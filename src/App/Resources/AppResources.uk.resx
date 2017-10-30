@@ -128,7 +128,7 @@
     <value>Додати теку</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Додати запис</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Запис було видалено.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -359,7 +359,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} було скопійовано.</value>
+    <value>{0} скопійовано.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -375,7 +375,7 @@
     <value>Версія</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>Перегляд</value>
+    <value>Переглянути</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
     <value>Відвідайте наш веб-сайт</value>
@@ -397,7 +397,7 @@
     <value>Ваш обліковий запис створений! Тепер ви можете увійти.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Додати запис</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Розширення</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Змінити запис</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Увімкнути автоматичну синхронізацію</value>
@@ -519,13 +519,13 @@
     <value>Отримати підказку для головного пароля</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Імпорт записів</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Ви можете робити масовий імпорт записів зі сховища на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Швидкий імпорт ваших записів з інших програм керування паролями.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Остання синхронізація:</value>
@@ -597,16 +597,16 @@
     <value>Ніколи</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Новий запис створено.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>У вашому сховищі немає обраного.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>У вашому сховищі немає записів.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>У вашому сховищі немає записів для цього веб-сайту. Торкніться, щоб додати.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Цей запис не має імені користувача або пароля.</value>
@@ -680,10 +680,10 @@
     <value>Введіть 4-значний PIN-код для розблокування програми.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Інформація про запис</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Запис оновлено.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Відправлення...</value>
@@ -726,7 +726,7 @@
     <value>Код підтвердження</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Переглянути запис</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Веб-сховище bitwarden</value>
@@ -738,7 +738,7 @@
     <value>Втратили доступ до програми перевірки?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Записи</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Переклади</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Записи для {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>У вашому сховищі немає записів для {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -798,10 +798,10 @@
     <value>Ви дійсно хочете використати цей запис для автоматичного заповнення? Він не повністю відповідає "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Відповідні записи</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Можливі відповідні записи</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Пошук</value>
@@ -1036,103 +1036,103 @@
     <value>Немає власних полів. Ви можете керувати власними полями в онлайн сховищі чи розширенні браузера.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Копіювати номер</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Копіювати код безпеки</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Номер</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Код безпеки</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Який тип запису ви хочете додати?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Картка</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Особисті дані</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Вхід</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Захищена нотатка</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Адреса 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Адреса 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Адреса 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Квітень</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Серпень</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Тип картки</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Ім'я власника картки</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Місто / Селище</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Компанія</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Країна</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Грудень</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Місяць завершення</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Рік завершення</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Лютий</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Ім’я</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Січень</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Липень</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Червень</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Прізвище</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Номер ліцензії</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Березень</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Травень</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>По батькові</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Mr</value>
@@ -1144,45 +1144,45 @@
     <value>Ms</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Листопад</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Жовтень</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Номер паспорта</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Телефон</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Вересень</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Номер соціального страхування</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Штат / Область</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Звернення</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Поштовий індекс</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Адреса</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Термін дії</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Вимкнути піктограми веб-сайтів</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Впізнавані піктограми веб-сайтів додаються біля кожного запису вашого сховища.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL-адреса сервера піктограм</value>
   </data>
 </root>

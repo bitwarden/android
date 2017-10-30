@@ -128,7 +128,7 @@
     <value>Добавить папку</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Добавить запись</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Запись была удалена.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,7 +397,7 @@
     <value>Ваш аккаунт был создан! Теперь вы можете войти в систему.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Добавить запись</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Расширение</value>
@@ -464,13 +464,13 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Редактировать запись</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Включить автоматическую синхронизацию</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Введите свой email для получения подсказки мастер-пароля.</value>
+    <value>Введите email учетной записи для получения подсказки к мастер-паролю.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Повторно включить расширение</value>
@@ -519,13 +519,13 @@
     <value>Получить подсказку к мастер-паролю</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Импорт записей</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Вы можете легко импортировать свои записи из других менеджеров паролей в свое веб-хранилище bitwarden. Сделать это сейчас?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Быстрый импорт ваших записей из других менеджеров паролей.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Последняя синхронизация:</value>
@@ -597,16 +597,16 @@
     <value>Никогда</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Новая запись создана.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>В вашем хранилище нет избранного.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>В вашем хранилище нет записей.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>В вашем хранилище нет записей для этого сайта. Нажмите чтобы добавить.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>У логина не заданы имя пользователя и пароль.</value>
@@ -680,10 +680,10 @@
     <value>Введите 4-значный PIN-код для разблокировки приложения.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Информация о записи</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Запись обновлена.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Отправка...</value>
@@ -726,19 +726,19 @@
     <value>Код подтверждения</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Просмотр записи</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Веб-хранилище bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Управляйте своими логинами из любого браузера при помощи веб-хранилища bitwarden.</value>
+    <value>Управляйте своими записями из любого браузера при помощи веб-хранилища bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Потеряли доступ к приложению для аутентификации?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Записи</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,18 +751,18 @@
     <value>Локализации</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Записи для {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>В вашем хранилище нет записей для {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>Увидев уведомление bitwarden нажмите на него, чтобы запустить службу автозаполнения.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Коснитесь этого уведомления, чтобы автоматически заполнить логин из хранилища.</value>
+    <value>Коснитесь этого уведомления, чтобы автоматически заполнить запись из хранилища.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
     <value>Настройки специальных возможностей</value>
@@ -792,28 +792,28 @@
     <value>Автозаполнение</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Выполнить автоматическое заполнение или просмотреть этот логин?</value>
+    <value>Выполнить автоматическое заполнение или просмотреть эту запись?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Вы действительно хотите использовать этот логин? Это не полное соответствие для "{0}".</value>
+    <value>Вы действительно хотите использовать эту запись? Это неточное соответствие для "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Соответствующие записи</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Возможные записи</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Вы ищете логин для "{0}".</value>
+    <value>Вы ищете запись для "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Поделиться вашим хранилищем</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Создайте организацию, чтобы безопасно делиться своими логинами с другими пользователями.</value>
+    <value>Создайте организацию, чтобы безопасно делиться своими записями с другими пользователями.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Мы используем аналитику для понимания как используется приложение, чтобы сделать его лучше. Все собранные данные полностью анонимны.</value>
@@ -995,10 +995,10 @@
     <value>API URL-адреса сервера</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
-    <value>Пользовательская среда</value>
+    <value>Настройка среды</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Для опытных пользователей. Можно указать URL-адрес отдельно для каждой службы.</value>
+    <value>Для продвинутых пользователей. Можно указать URL-адреса отдельно для каждой службы.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>URL-адреса среды сохранены.</value>
@@ -1024,7 +1024,7 @@
     <value>URL-адрес сервера веб-хранилища</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Коснитесь этого уведомления, чтобы посмотреть логины из вашего хранилища.</value>
+    <value>Коснитесь этого уведомления, чтобы посмотреть записи из вашего хранилища.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Пользовательские поля</value>
@@ -1036,153 +1036,153 @@
     <value>Нет пользовательских полей. Вы можете управлять ими из веб-хранилища или расширения браузера.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Копировать номер</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Копировать код безопасности</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Номер</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Код безопасности</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Какой тип записи вы хотите добавить?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Карта</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Личность</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Логин</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Защищенная заметка</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Строка адреса 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Строка адреса 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Строка адреса 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Апрель</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Август</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Название</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Имя владельца карты</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Город / Поселок</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Компания</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Страна</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Декабрь</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dr</value>
+    <value>Д-р</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Месяц</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Год</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Февраль</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Имя</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Январь</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Июль</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Июнь</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Фамилия</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Номер лицензии</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Март</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Май</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Отчество</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Г-н</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Г-жа</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Г-жа</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Ноябрь</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Октябрь</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Номер паспорта</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Телефон</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Сентябрь</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Номер социального страхования</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Страна / Область</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Обращение</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Почтовый индекс</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Адрес</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Срок действия</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Отключить значки веб-сайтов</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Значки веб-сайтов отображаются рядом с каждой записью в вашем хранилище.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL-адрес сервера значков</value>
   </data>
 </root>
