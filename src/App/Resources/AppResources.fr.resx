@@ -128,7 +128,7 @@
     <value>Ajouter dossier</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Ajouter un élément</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>L'élément a été supprimé.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,7 +397,7 @@
     <value>Votre nouveau compte a été créé ! Vous pouvez maintenant vous identifier.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Ajouter un élément</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Extension de l'application</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Modifier l'Élément</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Activer la synchronisation automatique</value>
@@ -519,13 +519,13 @@
     <value>Obtenir votre indice de mot de passe maître</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Importer des éléments</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Vous pouvez importer en masse vos identifiants depuis le coffre web sur bitwarden.com. Souhaitez-vous visiter le site maintenant ?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Importer rapidement en masse vos identifiants depuis d'autres applications de gestion de mots de passe.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Dernière synchronisation :</value>
@@ -597,16 +597,16 @@
     <value>Jamais</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Nouvel élément créé.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Aucun favori dans votre coffre.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Il n’y a aucun élément dans votre coffre.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Il n’y a aucun élément dans votre coffre pour ce site. Appuyer pour en ajouter un.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Cet identifiant n'a ni nom d'utilisateur ni mot de passe de configuré.</value>
@@ -680,10 +680,10 @@
     <value>Saisissez un code PIN à 4 chiffres pour déverrouiller l'application.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Information sur l'élément</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Élément mis à jour.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Soumission...</value>
@@ -726,7 +726,7 @@
     <value>Code de vérification</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Afficher l'élément</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Coffre web bitwarden</value>
@@ -738,7 +738,7 @@
     <value>Application d'authentification perdue ?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Éléments</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Traductions</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Éléments pour {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Il n’y a aucun élément dans votre coffre pour {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -798,10 +798,10 @@
     <value>Êtes-vous sûr de vouloir remplir automatiquement cet identifiant? Il ne correspond pas complètement à «{0}».</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Aucun élément correspondant</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Éléments pouvant correspondre</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Rechercher</value>
@@ -1036,151 +1036,151 @@
     <value>Pas de champs personnalisés. Vous pouvez gérer entièrement les champs personnalisés à partir de l'extension du coffre-fort Web ou du navigateur.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Copier le numéro</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Copier le code de sécurité</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Numéro</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Code de sécurité</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Quel type d'élément voulez-vous ajouter ?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Carte</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identité</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Identifiant</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Note sécurisée</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Adresse 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Adresse 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Adresse 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Avril</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Août</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Type</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Nom du titulaire de la carte</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Ville</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Entreprise</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Pays</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Décembre</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Mois d'expiration de la carte</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Année d'expiration de la carte</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Février</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Prénom</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Janvier</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Juillet</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Juin</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Nom de famille</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Numéro de permis</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Mars</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Mai</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Deuxième prénom</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>M.</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Mme</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Mlle</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Novembre</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Octobre</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Numéro de passeport</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Téléphone</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Septembre</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Numéro de sécurité sociale</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Région</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titre</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Code postal</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adresse</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Date d'expiration</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Désactiver les icônes des sites web</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Les icônes des sites web permettent d'avoir une icône reconnaissable à côté de chaque identifiant dans votre coffre.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons Server URL</value>
