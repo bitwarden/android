@@ -128,7 +128,7 @@
     <value>Añadir carpeta</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Añadir elemento</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>El elemento ha sido eliminado.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,7 +397,7 @@
     <value>¡Tu nueva cuenta ha sido creada! Ahora puedes acceder.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Añadir un elemento</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Extensión de Aplicación</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Editar elemento</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Habilitar sincronizacion automatica</value>
@@ -519,13 +519,13 @@
     <value>Obtener pista de la contraseña maestra</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Importar elementos</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Puedes importar elementos desde la bóveda web de bitwarden.com. ¿Quieres visitar el sitio web ahora?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Importa masiva y rápidamente elemento desde otras aplicaciones gestores de contraseñas.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Última sincronización:</value>
@@ -597,16 +597,16 @@
     <value>Nunca</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Nuevo elemento creado.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>No hay favoritos en tu bóveda.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>No hay elementos en tu bóveda.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>No hay elementos en tu bóveda para este sitio web. Pulsa para añadir uno.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Esta entrada no tiene usuario y contraseña configurados.</value>
@@ -680,10 +680,10 @@
     <value>Introduce un PIN de 4 dígitos para desbloquear la aplicación con él.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Información del elemento</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Elemento actualizado.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Enviando...</value>
@@ -726,19 +726,19 @@
     <value>Código de verificación</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Ver elemento</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Bóveda web de bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gestiona tus usuarios desde cualquier navegador web con la bóveda web de bitwarden.</value>
+    <value>Gestiona las entradas de cualquier web con la bóveda web de bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>¿Has perdido la autenticación en dos pasos?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Elementos</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Traducciones</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Elementos para {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>No hay elemento en tu bóveda para {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -798,10 +798,10 @@
     <value>¿Estás seguro de que quieres autorellenar esta entrada? No es una coincidencia completa para "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Elemento coincidientes</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Posibles elementos coincidientes</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Buscar</value>
@@ -1036,153 +1036,153 @@
     <value>No hay campos personalizados. Puedes gestionarlos desde la bóveda web o la extensión de navegador.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Copiar número</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Copiar código de seguridad</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Número</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Código de seguridad</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>¿Que tipo de elemento quieres añadir?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Tarjeta</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identidad</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Entrada</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Nota segura</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Dirección 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Dirección 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Dirección 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Abril</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Agosto</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Marca</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Nombre en la tarjeta</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Ciudad / Pueblo</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Empresa</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>País</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Diciembre</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Mes de expiración</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Año de expiración</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Febrero</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Nombre</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Enero</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Julio</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Junio</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Apellido</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Nº de licencia</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Marzo</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Mayo</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>2º nombre</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Sr</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Sra</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Srta</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Noviembre</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Octubre</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Nº de pasaporte</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Teléfono</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Septiembre</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Nº de la seguridad social</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Estado / Provincia</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Título</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Código postal</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Dirección</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Expiración</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Deshabilitar iconos del sitio web</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Los iconos del sitio web añaden una imagen reconocible al lado de cada entrada de tu bóveda.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL del servidor de iconos</value>
   </data>
 </root>
