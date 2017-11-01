@@ -17,7 +17,9 @@ namespace Bit.Android.Controls
                 Control.TextSize = (float)Device.GetNamedSize(NamedSize.Medium, typeof(Button));
             }
 
-            Control.FilterTouchesWhenObscured = true;
+            // This will prevent all screen overlay apps from being able to interact with buttons.
+            // Ex: apps that change the screen color for "night mode"
+            // Control.FilterTouchesWhenObscured = true;
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
