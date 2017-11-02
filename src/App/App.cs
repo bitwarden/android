@@ -103,8 +103,11 @@ namespace Bit.App
 
             if(string.IsNullOrWhiteSpace(_uri))
             {
-                Helpers.PerformUpdateTasks(_settings, _appInfoService, _databaseService, _syncService);
-                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+                var updated = Helpers.PerformUpdateTasks(_settings, _appInfoService, _databaseService, _syncService);
+                if(!updated)
+                {
+                    await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+                }
             }
 
             if((DateTime.UtcNow - _appSettingsService.LastCacheClear).TotalDays >= 1)
