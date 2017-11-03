@@ -157,6 +157,7 @@ namespace Bit.iOS.Extension
                 Notes = string.IsNullOrWhiteSpace(NotesCell.TextView.Text) ? null : NotesCell.TextView.Text.Encrypt(),
                 Favorite = FavoriteCell.Switch.On,
                 FolderId = FolderCell.SelectedIndex == 0 ? null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id,
+                Type = App.Enums.CipherType.Login,
                 Login = new Login
                 {
                     Uri = string.IsNullOrWhiteSpace(UriCell.TextField.Text) ? null : UriCell.TextField.Text.Encrypt(),
@@ -170,6 +171,7 @@ namespace Bit.iOS.Extension
             PresentViewController(loadingAlert, true, null);
             await saveTask;
 
+            await loadingAlert.DismissViewControllerAsync(true);
             if(saveTask.Result.Succeeded)
             {
                 _googleAnalyticsService.TrackExtensionEvent("CreatedLogin");
