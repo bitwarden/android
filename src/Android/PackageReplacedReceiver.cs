@@ -14,7 +14,7 @@ namespace Bit.Android
     {
         public override void OnReceive(Context context, Intent intent)
         {
-            Console.WriteLine("Bitwarden App Updated!");
+            Console.WriteLine("Bitwarden App Updated!!");
             Helpers.PerformUpdateTasks(Resolver.Resolve<ISettings>(),
                 Resolver.Resolve<IAppInfoService>(), Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>());
