@@ -313,7 +313,6 @@
     <Compile Include="Services\AppInfoService.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\BouncyCastleKeyDerivationService.cs" />
-    <Compile Include="Services\KeyStoreStorageService.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\LogService.cs" />

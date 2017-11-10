@@ -33,14 +33,12 @@ namespace Bit.Android.Services
         private readonly bool _oldAndroid;
         private readonly ISettings _settings;
         private readonly KeyStore _keyStore;
-        private readonly ISecureStorageService _oldKeyStorageService;
 
         public AndroidKeyStoreStorageService(ISettings settings)
         {
             _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
             _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
 
-            _oldKeyStorageService = new KeyStoreStorageService(new char[] { });
             _settings = settings;
 
             _keyStore = KeyStore.GetInstance(AndroidKeyStore);
@@ -53,8 +51,7 @@ namespace Bit.Android.Services
         public bool Contains(string key)
         {
             return _settings.Contains(string.Format(SettingsFormat, key)) ||
-                _settings.Contains(string.Format(SettingsFormatV1, key)) ||
-                _oldKeyStorageService.Contains(key);
+                _settings.Contains(string.Format(SettingsFormatV1, key));
         }
 
         public void Delete(string key)
@@ -297,13 +294,6 @@ namespace Bit.Android.Services
 
         private byte[] TryGetAndMigrate(string key)
         {
-            if(_oldKeyStorageService.Contains(key))
-            {
-                var value = _oldKeyStorageService.Retrieve(key);
-                Store(key, value);
-                return value;
-            }
-
             var formattedKeyV1 = string.Format(SettingsFormatV1, key);
             if(_settings.Contains(formattedKeyV1))
             {
@@ -331,11 +321,6 @@ namespace Bit.Android.Services
 
         private void CleanupOld(string key)
         {
-            if(_oldKeyStorageService.Contains(key))
-            {
-                _oldKeyStorageService.Delete(key);
-            }
-
             var formattedKeyV1 = string.Format(SettingsFormatV1, key);
             if(_settings.Contains(formattedKeyV1))
             {
