@@ -150,7 +150,7 @@ namespace Bit.App.Services
                 var tokenBytes = Encoding.UTF8.GetBytes(token);
                 _secureStorage.Store(key, tokenBytes);
             }
-            else
+            else if(_secureStorage.Contains(key))
             {
                 _secureStorage.Delete(key);
             }
