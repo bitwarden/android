@@ -3,8 +3,8 @@
   <Identity Name="fb84989a-4cf4-440f-a76d-ef3506d9c9ba" Publisher="CN=Hicham" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="fb84989a-4cf4-440f-a76d-ef3506d9c9ba" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>UWP</DisplayName>
-    <PublisherDisplayName>Hicham</PublisherDisplayName>
+    <DisplayName>Bitwarden</DisplayName>
+    <PublisherDisplayName>8bit Solutions LLC</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -16,7 +16,11 @@
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="Bit.UWP.App">
       <uap:VisualElements DisplayName="bitwarden" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="bitwarden" BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" ShortName="Bitwarden">
+          <uap:ShowNameOnTiles>
+            <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="wide310x150Logo" />
+          </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
       </uap:VisualElements>
