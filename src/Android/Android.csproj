@@ -287,6 +287,7 @@
   <ItemGroup>
     <Compile Include="AutofillActivity.cs" />
     <Compile Include="AutofillCredentials.cs" />
+    <Compile Include="AutofillFrameworkService_OLD.cs" />
     <Compile Include="AutofillFrameworkService.cs" />
     <Compile Include="Controls\CustomLabelRenderer.cs" />
     <Compile Include="Controls\CustomSearchBarRenderer.cs" />
@@ -340,6 +341,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\toolbar.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\autofill_listitem.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>
