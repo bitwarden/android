@@ -5397,7 +5397,10 @@ namespace Bit.Android
 			public const int accessibilityservice = 2131099648;
 			
 			// aapt resource value: 0x7f060001
-			public const int filepaths = 2131099649;
+			public const int autofillservice = 2131099649;
+			
+			// aapt resource value: 0x7f060002
+			public const int filepaths = 2131099650;
 			
 			static Xml()
 			{
