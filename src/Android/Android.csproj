@@ -287,8 +287,10 @@
   <ItemGroup>
     <Compile Include="AutofillActivity.cs" />
     <Compile Include="AutofillCredentials.cs" />
-    <Compile Include="AutofillFrameworkService_OLD.cs" />
-    <Compile Include="AutofillFrameworkService.cs" />
+    <Compile Include="Autofill\AutofillFieldMetadata.cs" />
+    <Compile Include="Autofill\AutofillFieldMetadataCollection.cs" />
+    <Compile Include="Autofill\AutofillFrameworkService.cs" />
+    <Compile Include="Autofill\AutofillHelper.cs" />
     <Compile Include="Controls\CustomLabelRenderer.cs" />
     <Compile Include="Controls\CustomSearchBarRenderer.cs" />
     <Compile Include="Controls\CustomButtonRenderer.cs" />
@@ -296,6 +298,8 @@
     <Compile Include="Controls\ExtendedButtonRenderer.cs" />
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
+    <Compile Include="Autofill\FilledAutofillField.cs" />
+    <Compile Include="Autofill\FilledAutofillFieldCollection.cs" />
     <Compile Include="HockeyAppCrashManagerListener.cs" />
     <Compile Include="AutofillService.cs" />
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />
@@ -324,6 +328,7 @@
     <Compile Include="Services\SqlService.cs" />
     <Compile Include="SplashActivity.cs" />
     <Compile Include="PackageReplacedReceiver.cs" />
+    <Compile Include="Autofill\StructureParser.cs" />
     <Compile Include="Utilities.cs" />
   </ItemGroup>
   <ItemGroup>
