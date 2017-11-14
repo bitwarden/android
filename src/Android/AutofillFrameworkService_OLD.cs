@@ -129,8 +129,8 @@ namespace Bit.Android
         private void ParseLocked(bool forFill, ViewNode viewNode)
         {
             var autofillHints = viewNode.GetAutofillHints();
-            var autofillType = (AutofillType)(int)viewNode.AutofillType;
-            var inputType = (InputTypes)(int)viewNode.InputType;
+            var autofillType = viewNode.AutofillType;
+            var inputType = viewNode.InputType;
             var isEditText = viewNode.ClassName == "android.widget.EditText";
             if(isEditText || (autofillHints?.Length ?? 0) > 0)
             {
@@ -210,8 +210,8 @@ namespace Bit.Android
             _autofillOptions = view.GetAutofillOptions();
             Id = view.Id;
             AutofillId = view.AutofillId;
-            AutofillType = (AutofillType)(int)view.AutofillType;
-            InputType = (InputTypes)(int)view.InputType;
+            AutofillType = view.AutofillType;
+            InputType = view.InputType;
             IsFocused = view.IsFocused;
             AutofillHints = AutofillHelper.FilterForSupportedHints(view.GetAutofillHints())?.ToList() ?? new List<string>();
         }
