@@ -8,29 +8,29 @@ using Android.Text;
 
 namespace Bit.Android.Autofill
 {
-    public class AutofillFieldMetadata
+    public class Field
     {
-        private List<string> _autofillHints;
+        private List<string> _hints;
         private string[] _autofillOptions;
 
-        public AutofillFieldMetadata(ViewNode view)
+        public Field(ViewNode view)
         {
             _autofillOptions = view.GetAutofillOptions();
             Id = view.Id;
             AutofillId = view.AutofillId;
             AutofillType = view.AutofillType;
             InputType = view.InputType;
-            IsFocused = view.IsFocused;
-            AutofillHints = AutofillHelper.FilterForSupportedHints(view.GetAutofillHints())?.ToList() ?? new List<string>();
+            Focused = view.IsFocused;
+            Hints = AutofillHelpers.FilterForSupportedHints(view.GetAutofillHints())?.ToList() ?? new List<string>();
         }
 
         public SaveDataType SaveType { get; set; } = SaveDataType.Generic;
-        public List<string> AutofillHints
+        public List<string> Hints
         {
-            get { return _autofillHints; }
+            get => _hints;
             set
             {
-                _autofillHints = value;
+                _hints = value;
                 UpdateSaveTypeFromHints();
             }
         }
@@ -38,7 +38,7 @@ namespace Bit.Android.Autofill
         public AutofillId AutofillId { get; private set; }
         public AutofillType AutofillType { get; private set; }
         public InputTypes InputType { get; private set; }
-        public bool IsFocused { get; private set; }
+        public bool Focused { get; private set; }
 
         /**
          * When the {@link ViewNode} is a list that the user needs to choose a string from (i.e. a
@@ -60,12 +60,12 @@ namespace Bit.Android.Autofill
         private void UpdateSaveTypeFromHints()
         {
             SaveType = SaveDataType.Generic;
-            if(_autofillHints == null)
+            if(_hints == null)
             {
                 return;
             }
 
-            foreach(var hint in _autofillHints)
+            foreach(var hint in _hints)
             {
                 switch(hint)
                 {

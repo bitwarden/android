@@ -4,37 +4,38 @@ using Android.Content;
 using Android.Service.Autofill;
 using Android.Views;
 using Android.Widget;
+using System.Diagnostics;
+using System.Linq;
 
 namespace Bit.Android.Autofill
 {
-    public static class AutofillHelper
+    public static class AutofillHelpers
     {
         /**
          * Wraps autofill data in a LoginCredential  Dataset object which can then be sent back to the
          * client View.
          */
-        public static Dataset NewDataset(Context context, AutofillFieldMetadataCollection autofillFields,
-            FilledAutofillFieldCollection filledAutofillFieldCollection, bool datasetAuth)
+        public static Dataset NewDataset(Context context, FieldCollection fields, IFilledItem filledItem, bool auth)
         {
-            var datasetName = filledAutofillFieldCollection.DatasetName;
-            if(datasetName != null)
+            var itemName = filledItem.Name;
+            if(itemName != null)
             {
                 Dataset.Builder datasetBuilder;
-                if(datasetAuth)
+                if(auth)
                 {
                     datasetBuilder = new Dataset.Builder(
-                        NewRemoteViews(context.PackageName, datasetName, "username", Resource.Drawable.fa_lock));
+                        NewRemoteViews(context.PackageName, itemName, filledItem.Subtitle, Resource.Drawable.fa_lock));
                     //IntentSender sender = AuthActivity.getAuthIntentSenderForDataset(context, datasetName);
                     //datasetBuilder.SetAuthentication(sender);
                 }
                 else
                 {
                     datasetBuilder = new Dataset.Builder(
-                        NewRemoteViews(context.PackageName, datasetName, "username", Resource.Drawable.user));
+                        NewRemoteViews(context.PackageName, itemName, filledItem.Subtitle, Resource.Drawable.user));
                 }
 
-                var setValueAtLeastOnce = filledAutofillFieldCollection.ApplyToFields(autofillFields, datasetBuilder);
-                if(setValueAtLeastOnce)
+                var setValue = filledItem.ApplyToFields(fields, datasetBuilder);
+                if(setValue)
                 {
                     return datasetBuilder.Build();
                 }
@@ -56,59 +57,43 @@ namespace Bit.Android.Autofill
          * Wraps autofill data in a Response object (essentially a series of Datasets) which can then
          * be sent back to the client View.
          */
-        public static FillResponse NewResponse(Context context, bool datasetAuth,
-            AutofillFieldMetadataCollection autofillFields,
-            IDictionary<string, FilledAutofillFieldCollection> clientFormDataMap)
+        public static FillResponse NewResponse(Context context, bool auth, FieldCollection fields,
+            IDictionary<string, IFilledItem> items)
         {
             var responseBuilder = new FillResponse.Builder();
-            if(clientFormDataMap != null)
+            if(items != null)
             {
-                foreach(var datasetName in clientFormDataMap.Keys)
+                foreach(var datasetName in items.Keys)
                 {
-                    if(clientFormDataMap.ContainsKey(datasetName))
+                    var dataset = NewDataset(context, fields, items[datasetName], auth);
+                    if(dataset != null)
                     {
-                        var dataset = NewDataset(context, autofillFields, clientFormDataMap[datasetName], datasetAuth);
-                        if(dataset != null)
-                        {
-                            responseBuilder.AddDataset(dataset);
-                        }
+                        responseBuilder.AddDataset(dataset);
                     }
                 }
             }
 
-            if(autofillFields.SaveType != SaveDataType.Generic)
+            if(true || fields.SaveType != SaveDataType.Generic)
             {
-                responseBuilder.SetSaveInfo(
-                    new SaveInfo.Builder(autofillFields.SaveType, autofillFields.AutofillIds.ToArray()).Build());
+                var info = new SaveInfo.Builder(fields.SaveType, fields.AutofillIds.ToArray()).Build();
+                responseBuilder.SetSaveInfo(info);
                 return responseBuilder.Build();
             }
             else
             {
-                //Log.d(TAG, "These fields are not meant to be saved by autofill.");
+                Debug.WriteLine("These fields are not meant to be saved by autofill.");
                 return null;
             }
         }
 
-        public static string[] FilterForSupportedHints(string[] hints)
+        public static List<string> FilterForSupportedHints(string[] hints)
         {
-            if((hints?.Length ?? 0) == 0)
+            if(hints == null)
             {
-                return new string[0];
+                return new List<string>();
             }
 
-            var filteredHints = new string[hints.Length];
-            var i = 0;
-            foreach(var hint in hints)
-            {
-                if(IsValidHint(hint))
-                {
-                    filteredHints[i++] = hint;
-                }
-            }
-
-            var finalFilteredHints = new string[i];
-            Array.Copy(filteredHints, 0, finalFilteredHints, 0, i);
-            return finalFilteredHints;
+            return hints.Where(h => IsValidHint(h)).ToList();
         }
 
         public static bool IsValidHint(string hint)

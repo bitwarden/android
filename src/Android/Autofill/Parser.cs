@@ -3,18 +3,26 @@ using Android.App.Assist;
 
 namespace Bit.Android.Autofill
 {
-    public class StructureParser
+    public class Parser
     {
         private readonly AssistStructure _structure;
-        private FilledAutofillFieldCollection _filledAutofillFieldCollection;
+        private string _uri;
+        private FilledFieldCollection _filledAutofillFieldCollection;
 
-        public StructureParser(AssistStructure structure)
+        public Parser(AssistStructure structure)
         {
             _structure = structure;
         }
 
-        public AutofillFieldMetadataCollection AutofillFields { get; private set; }
-            = new AutofillFieldMetadataCollection();
+        public FieldCollection FieldCollection { get; private set; } = new FieldCollection();
+        public string Uri
+        {
+            get => _uri;
+            set
+            {
+                _uri = $"androidapp://{value}";
+            }
+        }
 
         public void ParseForFill()
         {
@@ -31,7 +39,7 @@ namespace Bit.Android.Autofill
          */
         private void Parse(bool forFill)
         {
-            _filledAutofillFieldCollection = new FilledAutofillFieldCollection();
+            _filledAutofillFieldCollection = new FilledFieldCollection();
 
             for(var i = 0; i < _structure.WindowNodeCount; i++)
             {
@@ -51,11 +59,17 @@ namespace Bit.Android.Autofill
             {
                 if(forFill)
                 {
-                    AutofillFields.Add(new AutofillFieldMetadata(viewNode));
+                    var f = new Field(viewNode);
+                    FieldCollection.Add(f);
+
+                    if(Uri == null)
+                    {
+                        Uri = viewNode.IdPackage;
+                    }
                 }
                 else
                 {
-                    _filledAutofillFieldCollection.Add(new FilledAutofillField(viewNode));
+                    _filledAutofillFieldCollection.Add(new FilledField(viewNode));
                 }
             }
 
@@ -65,7 +79,7 @@ namespace Bit.Android.Autofill
             }
         }
 
-        public FilledAutofillFieldCollection GetClientFormData()
+        public FilledFieldCollection GetClientFormData()
         {
             return _filledAutofillFieldCollection;
         }

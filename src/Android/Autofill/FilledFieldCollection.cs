@@ -3,39 +3,42 @@ using System.Collections.Generic;
 using Android.Service.Autofill;
 using Android.Views;
 using Android.Views.Autofill;
+using System.Linq;
+using Android.Text;
 
 namespace Bit.Android.Autofill
 {
-    public class FilledAutofillFieldCollection
+    public class FilledFieldCollection : IFilledItem
     {
-        public FilledAutofillFieldCollection()
-            : this(null, new Dictionary<string, FilledAutofillField>())
+        public FilledFieldCollection()
+            : this(null, new Dictionary<string, FilledField>())
+        { }
+
+        public FilledFieldCollection(string datasetName, IDictionary<string, FilledField> hintMap)
         {
+            HintToFieldMap = hintMap;
+            Name = datasetName;
+            Subtitle = "username";
         }
 
-        public FilledAutofillFieldCollection(string datasetName, IDictionary<string, FilledAutofillField> hintMap)
-        {
-            HintMap = hintMap;
-            DatasetName = datasetName;
-        }
-
-        public IDictionary<string, FilledAutofillField> HintMap { get; private set; }
-        public string DatasetName { get; set; }
+        public IDictionary<string, FilledField> HintToFieldMap { get; private set; }
+        public string Name { get; set; }
+        public string Subtitle { get; set; }
 
         /**
          * Adds a {@code FilledAutofillField} to the collection, indexed by all of its hints.
          */
-        public void Add(FilledAutofillField filledAutofillField)
+        public void Add(FilledField filledAutofillField)
         {
             if(filledAutofillField == null)
             {
                 throw new ArgumentNullException(nameof(filledAutofillField));
             }
 
-            var autofillHints = filledAutofillField.GetAutofillHints();
+            var autofillHints = filledAutofillField.GetHints();
             foreach(var hint in autofillHints)
             {
-                HintMap.Add(hint, filledAutofillField);
+                HintToFieldMap.Add(hint, filledAutofillField);
             }
         }
 
@@ -48,35 +51,33 @@ namespace Bit.Android.Autofill
          * to Views specified in a {@code AutofillFieldMetadataCollection}, which represents the current
          * page the user is on.
          */
-        public bool ApplyToFields(AutofillFieldMetadataCollection autofillFieldMetadataCollection,
-            Dataset.Builder datasetBuilder)
+        public bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder)
         {
             var setValueAtLeastOnce = false;
-            var allHints = autofillFieldMetadataCollection.AutofillHints;
+            var allHints = fieldCollection.Hints;
             for(var hintIndex = 0; hintIndex < allHints.Count; hintIndex++)
             {
                 var hint = allHints[hintIndex];
-                if(!autofillFieldMetadataCollection.AutofillHintsToFieldsMap.ContainsKey(hint))
+                if(!fieldCollection.HintToFieldsMap.ContainsKey(hint))
                 {
                     continue;
                 }
 
-                var fillableAutofillFields = autofillFieldMetadataCollection.AutofillHintsToFieldsMap[hint];
+                var fillableAutofillFields = fieldCollection.HintToFieldsMap[hint];
                 for(var autofillFieldIndex = 0; autofillFieldIndex < fillableAutofillFields.Count; autofillFieldIndex++)
                 {
-                    if(!HintMap.ContainsKey(hint))
+                    if(!HintToFieldMap.ContainsKey(hint))
                     {
                         continue;
                     }
 
-                    var filledAutofillField = HintMap[hint];
-                    var autofillFieldMetadata = fillableAutofillFields[autofillFieldIndex];
-                    var autofillId = autofillFieldMetadata.AutofillId;
-                    var autofillType = autofillFieldMetadata.AutofillType;
-                    switch(autofillType)
+                    var filledField = HintToFieldMap[hint];
+                    var fieldMetadata = fillableAutofillFields[autofillFieldIndex];
+                    var autofillId = fieldMetadata.AutofillId;
+                    switch(fieldMetadata.AutofillType)
                     {
                         case AutofillType.List:
-                            int listValue = autofillFieldMetadata.GetAutofillOptionIndex(filledAutofillField.TextValue);
+                            int listValue = fieldMetadata.GetAutofillOptionIndex(filledField.TextValue);
                             if(listValue != -1)
                             {
                                 datasetBuilder.SetValue(autofillId, AutofillValue.ForList(listValue));
@@ -84,7 +85,7 @@ namespace Bit.Android.Autofill
                             }
                             break;
                         case AutofillType.Date:
-                            var dateValue = filledAutofillField.DateValue;
+                            var dateValue = filledField.DateValue;
                             if(dateValue != null)
                             {
                                 datasetBuilder.SetValue(autofillId, AutofillValue.ForDate(dateValue.Value));
@@ -92,7 +93,7 @@ namespace Bit.Android.Autofill
                             }
                             break;
                         case AutofillType.Text:
-                            var textValue = filledAutofillField.TextValue;
+                            var textValue = filledField.TextValue;
                             if(textValue != null)
                             {
                                 datasetBuilder.SetValue(autofillId, AutofillValue.ForText(textValue));
@@ -100,7 +101,7 @@ namespace Bit.Android.Autofill
                             }
                             break;
                         case AutofillType.Toggle:
-                            var toggleValue = filledAutofillField.ToggleValue;
+                            var toggleValue = filledField.ToggleValue;
                             if(toggleValue != null)
                             {
                                 datasetBuilder.SetValue(autofillId, AutofillValue.ForToggle(toggleValue.Value));
@@ -114,6 +115,16 @@ namespace Bit.Android.Autofill
                 }
             }
 
+            if(!setValueAtLeastOnce)
+            {
+                var password = fieldCollection.Fields.FirstOrDefault(f => f.InputType == InputTypes.TextVariationPassword);
+               // datasetBuilder.SetValue(password.AutofillId, AutofillValue.ForText());
+                if(password != null)
+                {
+                    var username = fieldCollection.Fields.TakeWhile(f => f.Id != password.Id).LastOrDefault();
+                }
+            }
+
             return setValueAtLeastOnce;
         }
 
@@ -124,15 +135,7 @@ namespace Bit.Android.Autofill
          */
         public bool HelpsWithHints(List<String> autofillHints)
         {
-            for(var i = 0; i < autofillHints.Count; i++)
-            {
-                if(HintMap.ContainsKey(autofillHints[i]) && !HintMap[autofillHints[i]].IsNull())
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return autofillHints.Any(h => HintToFieldMap.ContainsKey(h) && !HintToFieldMap[h].IsNull());
         }
     }
 }

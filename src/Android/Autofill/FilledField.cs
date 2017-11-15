@@ -1,41 +1,41 @@
-﻿using static Android.App.Assist.AssistStructure;
+﻿using System.Collections.Generic;
+using static Android.App.Assist.AssistStructure;
 
 namespace Bit.Android.Autofill
 {
-    public class FilledAutofillField
+    public class FilledField
     {
-        /**
-         * Does not need to be serialized into persistent storage, so it's not exposed.
-         */
-        private string[] _autofillHints = null;
+        private IEnumerable<string> _hints = null;
 
-        public FilledAutofillField() { }
+        public FilledField() { }
 
-        public FilledAutofillField(ViewNode viewNode)
+        public FilledField(ViewNode viewNode)
         {
-            _autofillHints = AutofillHelper.FilterForSupportedHints(viewNode.GetAutofillHints());
+            _hints = AutofillHelpers.FilterForSupportedHints(viewNode.GetAutofillHints());
             var autofillValue = viewNode.AutofillValue;
-            if(autofillValue != null)
+            if(autofillValue == null)
             {
-                if(autofillValue.IsList)
+                return;
+            }
+
+            if(autofillValue.IsList)
+            {
+                var autofillOptions = viewNode.GetAutofillOptions();
+                int index = autofillValue.ListValue;
+                if(autofillOptions != null && autofillOptions.Length > 0)
                 {
-                    var autofillOptions = viewNode.GetAutofillOptions();
-                    int index = autofillValue.ListValue;
-                    if(autofillOptions != null && autofillOptions.Length > 0)
-                    {
-                        TextValue = autofillOptions[index];
-                    }
+                    TextValue = autofillOptions[index];
                 }
-                else if(autofillValue.IsDate)
-                {
-                    DateValue = autofillValue.DateValue;
-                }
-                else if(autofillValue.IsText)
-                {
-                    // Using toString of AutofillValue.getTextValue in order to save it to
-                    // SharedPreferences.
-                    TextValue = autofillValue.TextValue;
-                }
+            }
+            else if(autofillValue.IsDate)
+            {
+                DateValue = autofillValue.DateValue;
+            }
+            else if(autofillValue.IsText)
+            {
+                // Using toString of AutofillValue.getTextValue in order to save it to
+                // SharedPreferences.
+                TextValue = autofillValue.TextValue;
             }
         }
 
@@ -43,9 +43,9 @@ namespace Bit.Android.Autofill
         public long? DateValue { get; set; }
         public bool? ToggleValue { get; set; }
 
-        public string[] GetAutofillHints()
+        public IEnumerable<string> GetHints()
         {
-            return _autofillHints;
+            return _hints;
         }
 
         public bool IsNull()
@@ -56,16 +56,25 @@ namespace Bit.Android.Autofill
         public override bool Equals(object o)
         {
             if(this == o)
+            {
                 return true;
+            }
 
             if(o == null || GetType() != o.GetType())
+            {
                 return false;
+            }
 
-            var that = (FilledAutofillField)o;
+            var that = o as FilledField;
             if(TextValue != null ? !TextValue.Equals(that.TextValue) : that.TextValue != null)
+            {
                 return false;
+            }
+
             if(DateValue != null ? !DateValue.Equals(that.DateValue) : that.DateValue != null)
+            {
                 return false;
+            }
 
             return ToggleValue != null ? ToggleValue.Equals(that.ToggleValue) : that.ToggleValue == null;
         }
