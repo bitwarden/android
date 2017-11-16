@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Models.Api;
 using System;
+using Bit.App.Models.Data;
 
 namespace Bit.App.Abstractions
 {
@@ -13,9 +14,13 @@ namespace Bit.App.Abstractions
         Task<IEnumerable<Cipher>> GetAllAsync(bool favorites);
         Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString);
         Task<ApiResult<CipherResponse>> SaveAsync(Cipher cipher);
+        Task UpsertDataAsync(CipherData cipher);
         Task<ApiResult> DeleteAsync(string id);
+        Task DeleteDataAsync(string id);
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null);
         Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher cipher, byte[] data, string fileName);
+        Task UpsertAttachmentDataAsync(IEnumerable<AttachmentData> attachments);
         Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId);
+        Task DeleteAttachmentDataAsync(string attachmentId);
     }
 }

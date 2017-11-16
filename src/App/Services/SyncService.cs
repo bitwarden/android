@@ -20,7 +20,7 @@ namespace Bit.App.Services
         private readonly ISettingsApiRepository _settingsApiRepository;
         private readonly ISyncApiRepository _syncApiRepository;
         private readonly IFolderRepository _folderRepository;
-        private readonly ICipherRepository _cipherRepository;
+        private readonly ICipherService _cipherService;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly ISettingsRepository _settingsRepository;
         private readonly IAuthService _authService;
@@ -35,7 +35,7 @@ namespace Bit.App.Services
             ISettingsApiRepository settingsApiRepository,
             ISyncApiRepository syncApiRepository,
             IFolderRepository folderRepository,
-            ICipherRepository cipherRepository,
+            ICipherService cipherService,
             IAttachmentRepository attachmentRepository,
             ISettingsRepository settingsRepository,
             IAuthService authService,
@@ -49,7 +49,7 @@ namespace Bit.App.Services
             _settingsApiRepository = settingsApiRepository;
             _syncApiRepository = syncApiRepository;
             _folderRepository = folderRepository;
-            _cipherRepository = cipherRepository;
+            _cipherService = cipherService;
             _attachmentRepository = attachmentRepository;
             _settingsRepository = settingsRepository;
             _authService = authService;
@@ -78,18 +78,15 @@ namespace Bit.App.Services
             try
             {
                 var cipherData = new CipherData(cipher.Result, _authService.UserId);
-                await _cipherRepository.UpsertAsync(cipherData).ConfigureAwait(false);
+                await _cipherService.UpsertDataAsync(cipherData).ConfigureAwait(false);
 
                 var localAttachments = (await _attachmentRepository.GetAllByCipherIdAsync(cipherData.Id)
                     .ConfigureAwait(false));
 
                 if(cipher.Result.Attachments != null)
                 {
-                    foreach(var attachment in cipher.Result.Attachments)
-                    {
-                        var attachmentData = new AttachmentData(attachment, cipherData.Id);
-                        await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
-                    }
+                    var attachmentData = cipher.Result.Attachments.Select(a => new AttachmentData(a, cipherData.Id));
+                    await _cipherService.UpsertAttachmentDataAsync(attachmentData).ConfigureAwait(false);
                 }
 
                 if(localAttachments != null)
@@ -99,7 +96,7 @@ namespace Bit.App.Services
                     {
                         try
                         {
-                            await _attachmentRepository.DeleteAsync(attachment.Id).ConfigureAwait(false);
+                            await _cipherService.DeleteAttachmentDataAsync(attachment.Id).ConfigureAwait(false);
                         }
                         catch(SQLite.SQLiteException) { }
                     }
@@ -178,7 +175,7 @@ namespace Bit.App.Services
 
             try
             {
-                await _cipherRepository.DeleteAsync(id).ConfigureAwait(false);
+                await _cipherService.DeleteDataAsync(id).ConfigureAwait(false);
                 SyncCompleted(true);
                 return true;
             }
@@ -359,7 +356,7 @@ namespace Bit.App.Services
                 return;
             }
 
-            var localCiphers = (await _cipherRepository.GetAllByUserIdAsync(_authService.UserId)
+            var localCiphers = (await _cipherService.GetAllAsync()
                 .ConfigureAwait(false))
                 .GroupBy(s => s.Id)
                 .Select(s => s.First())
@@ -383,15 +380,12 @@ namespace Bit.App.Services
                         localCiphers[serverCipher.Value.Id] : null;
 
                     var data = new CipherData(serverCipher.Value, _authService.UserId);
-                    await _cipherRepository.UpsertAsync(data).ConfigureAwait(false);
+                    await _cipherService.UpsertDataAsync(data).ConfigureAwait(false);
 
                     if(serverCipher.Value.Attachments != null)
                     {
-                        foreach(var attachment in serverCipher.Value.Attachments)
-                        {
-                            var attachmentData = new AttachmentData(attachment, data.Id);
-                            await _attachmentRepository.UpsertAsync(attachmentData).ConfigureAwait(false);
-                        }
+                        var attachmentData = serverCipher.Value.Attachments.Select(a => new AttachmentData(a, data.Id));
+                        await _cipherService.UpsertAttachmentDataAsync(attachmentData).ConfigureAwait(false);
                     }
 
                     if(localCipher != null && localAttachments != null && localAttachments.ContainsKey(localCipher.Id))
@@ -401,7 +395,7 @@ namespace Bit.App.Services
                         {
                             try
                             {
-                                await _attachmentRepository.DeleteAsync(attachment.Id).ConfigureAwait(false);
+                                await _cipherService.DeleteAttachmentDataAsync(attachment.Id).ConfigureAwait(false);
                             }
                             catch(SQLite.SQLiteException) { }
                         }
@@ -414,7 +408,7 @@ namespace Bit.App.Services
             {
                 try
                 {
-                    await _cipherRepository.DeleteAsync(cipher.Value.Id).ConfigureAwait(false);
+                    await _cipherService.DeleteDataAsync(cipher.Value.Id).ConfigureAwait(false);
                 }
                 catch(SQLite.SQLiteException) { }
             }

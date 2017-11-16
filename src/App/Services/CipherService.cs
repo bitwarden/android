@@ -236,17 +236,8 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 var data = new CipherData(response.Result, _authService.UserId);
-                if(cipher.Id == null)
-                {
-                    await _cipherRepository.InsertAsync(data);
-                    cipher.Id = data.Id;
-                }
-                else
-                {
-                    await _cipherRepository.UpdateAsync(data);
-                }
-
-                _cachedCiphers = null;
+                await UpsertDataAsync(data);
+                cipher.Id = data.Id;
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -257,13 +248,18 @@ namespace Bit.App.Services
             return response;
         }
 
+        public async Task UpsertDataAsync(CipherData cipher)
+        {
+            await _cipherRepository.UpsertAsync(cipher);
+            _cachedCiphers = null;
+        }
+
         public async Task<ApiResult> DeleteAsync(string id)
         {
             var response = await _cipherApiRepository.DeleteAsync(id);
             if(response.Succeeded)
             {
-                await _cipherRepository.DeleteAsync(id);
-                _cachedCiphers = null;
+                await DeleteDataAsync(id);
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -272,6 +268,12 @@ namespace Bit.App.Services
             }
 
             return response;
+        }
+
+        public async Task DeleteDataAsync(string id)
+        {
+            await _cipherRepository.DeleteAsync(id);
+            _cachedCiphers = null;
         }
 
         public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null)
@@ -318,10 +320,7 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 var attachmentData = response.Result.Attachments.Select(a => new AttachmentData(a, cipher.Id));
-                foreach(var attachment in attachmentData)
-                {
-                    await _attachmentRepository.UpsertAsync(attachment);
-                }
+                await UpsertAttachmentDataAsync(attachmentData);
                 cipher.Attachments = response.Result.Attachments.Select(a => new Attachment(a));
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
@@ -333,12 +332,21 @@ namespace Bit.App.Services
             return response;
         }
 
+        public async Task UpsertAttachmentDataAsync(IEnumerable<AttachmentData> attachments)
+        {
+            foreach(var attachment in attachments)
+            {
+                await _attachmentRepository.UpsertAsync(attachment);
+            }
+            _cachedCiphers = null;
+        }
+
         public async Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId)
         {
             var response = await _cipherApiRepository.DeleteAttachmentAsync(cipher.Id, attachmentId);
             if(response.Succeeded)
             {
-                await _attachmentRepository.DeleteAsync(attachmentId);
+                await DeleteAttachmentDataAsync(attachmentId);
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -347,6 +355,12 @@ namespace Bit.App.Services
             }
 
             return response;
+        }
+
+        public async Task DeleteAttachmentDataAsync(string attachmentId)
+        {
+            await _attachmentRepository.DeleteAsync(attachmentId);
+            _cachedCiphers = null;
         }
 
         private Tuple<string, string[]> InfoFromMobileAppUri(string mobileAppUriString)
