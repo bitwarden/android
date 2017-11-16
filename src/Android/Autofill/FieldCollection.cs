@@ -24,9 +24,9 @@ namespace Bit.Android.Autofill
                 return;
             }
 
-            SaveType |= field.SaveType;
             Ids.Add(field.Id);
             Fields.Add(field);
+            SaveType |= field.SaveType;
             AutofillIds.Add(field.AutofillId);
             IdToFieldMap.Add(field.Id, field);
 

@@ -11,17 +11,20 @@ namespace Bit.Android.Autofill
     public class Field
     {
         private List<string> _hints;
-        private string[] _autofillOptions;
 
-        public Field(ViewNode view)
+        public Field(ViewNode node)
         {
-            _autofillOptions = view.GetAutofillOptions();
-            Id = view.Id;
-            AutofillId = view.AutofillId;
-            AutofillType = view.AutofillType;
-            InputType = view.InputType;
-            Focused = view.IsFocused;
-            Hints = AutofillHelpers.FilterForSupportedHints(view.GetAutofillHints())?.ToList() ?? new List<string>();
+            Id = node.Id;
+            IdEntry = node.IdEntry;
+            AutofillId = node.AutofillId;
+            AutofillType = node.AutofillType;
+            InputType = node.InputType;
+            Focused = node.IsFocused;
+            Selected = node.IsSelected;
+            Clickable = node.IsClickable;
+            Visible = node.Visibility == ViewStates.Visible;
+            Hints = AutofillHelpers.FilterForSupportedHints(node.GetAutofillHints());
+            AutofillOptions = node.GetAutofillOptions()?.ToList();
         }
 
         public SaveDataType SaveType { get; set; } = SaveDataType.Generic;
@@ -35,22 +38,26 @@ namespace Bit.Android.Autofill
             }
         }
         public int Id { get; private set; }
+        public string IdEntry { get; set; }
         public AutofillId AutofillId { get; private set; }
         public AutofillType AutofillType { get; private set; }
         public InputTypes InputType { get; private set; }
         public bool Focused { get; private set; }
+        public bool Selected { get; private set; }
+        public bool Clickable { get; private set; }
+        public bool Visible { get; private set; }
+        public List<string> AutofillOptions { get; set; }
 
-        /**
-         * When the {@link ViewNode} is a list that the user needs to choose a string from (i.e. a
-         * spinner), this is called to return the index of a specific item in the list.
-         */
         public int GetAutofillOptionIndex(string value)
         {
-            for(var i = 0; i < _autofillOptions.Length; i++)
+            if(AutofillOptions != null)
             {
-                if(_autofillOptions[i].Equals(value))
+                for(var i = 0; i < AutofillOptions.Count; i++)
                 {
-                    return i;
+                    if(AutofillOptions[i].Equals(value))
+                    {
+                        return i;
+                    }
                 }
             }
 

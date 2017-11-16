@@ -9,10 +9,10 @@ namespace Bit.Android.Autofill
 
         public FilledField() { }
 
-        public FilledField(ViewNode viewNode)
+        public FilledField(ViewNode node)
         {
-            _hints = AutofillHelpers.FilterForSupportedHints(viewNode.GetAutofillHints());
-            var autofillValue = viewNode.AutofillValue;
+            _hints = AutofillHelpers.FilterForSupportedHints(node.GetAutofillHints());
+            var autofillValue = node.AutofillValue;
             if(autofillValue == null)
             {
                 return;
@@ -20,7 +20,7 @@ namespace Bit.Android.Autofill
 
             if(autofillValue.IsList)
             {
-                var autofillOptions = viewNode.GetAutofillOptions();
+                var autofillOptions = node.GetAutofillOptions();
                 int index = autofillValue.ListValue;
                 if(autofillOptions != null && autofillOptions.Length > 0)
                 {

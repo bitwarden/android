@@ -40,6 +40,12 @@ namespace Bit.Android.Autofill
                     f => f.InputType.HasFlag(InputTypes.TextVariationPassword));
                 if(passwordField == null)
                 {
+                    passwordField = fieldCollection.Fields.FirstOrDefault(
+                        f => f.IdEntry?.ToLower().Contains("password") ?? false);
+                }
+
+                if(passwordField == null)
+                {
                     return false;
                 }
 
