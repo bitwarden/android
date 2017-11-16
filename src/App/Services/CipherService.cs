@@ -22,6 +22,8 @@ namespace Bit.App.Services
         private readonly ISettingsService _settingsService;
         private readonly ICryptoService _cryptoService;
 
+        private List<Cipher> _cachedCiphers = null;
+
         public CipherService(
             ICipherRepository cipherRepository,
             IAttachmentRepository attachmentRepository,
@@ -53,11 +55,18 @@ namespace Bit.App.Services
 
         public async Task<IEnumerable<Cipher>> GetAllAsync()
         {
+            if(_cachedCiphers != null)
+            {
+                return _cachedCiphers;
+            }
+
             var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
             var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
             var data = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId);
-            var cipher = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
-            return cipher;
+            _cachedCiphers = data
+                .Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null))
+                .ToList();
+            return _cachedCiphers;
         }
 
         public async Task<IEnumerable<Cipher>> GetAllAsync(bool favorites)
@@ -76,12 +85,11 @@ namespace Bit.App.Services
                 return null;
             }
 
-            Uri uri = null;
             string domainName = null;
             var mobileApp = UriIsMobileApp(uriString);
 
             if(!mobileApp &&
-                (!Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
+                (!Uri.TryCreate(uriString, UriKind.Absolute, out Uri uri) ||
                     !DomainName.TryParseBaseDomain(uri.Host, out domainName)))
             {
                 return null;
@@ -127,15 +135,15 @@ namespace Bit.App.Services
             var matchingFuzzyDomainsArray = matchingFuzzyDomains.ToArray();
             var matchingLogins = new List<Cipher>();
             var matchingFuzzyLogins = new List<Cipher>();
-            var logins = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId);
-            foreach(var login in logins)
+            var ciphers = await GetAllAsync();
+            foreach(var cipher in ciphers)
             {
-                if(string.IsNullOrWhiteSpace(login.Uri))
+                if(cipher.Type != Enums.CipherType.Login || cipher.Login?.Uri == null)
                 {
                     continue;
                 }
 
-                var loginUriString = new CipherString(login.Uri).Decrypt(login.OrganizationId);
+                var loginUriString = cipher.Login.Uri.Decrypt(cipher.OrganizationId);
                 if(string.IsNullOrWhiteSpace(loginUriString))
                 {
                     continue;
@@ -143,12 +151,12 @@ namespace Bit.App.Services
 
                 if(Array.IndexOf(matchingDomainsArray, loginUriString) >= 0)
                 {
-                    matchingLogins.Add(new Cipher(login));
+                    matchingLogins.Add(cipher);
                     continue;
                 }
                 else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
                 {
-                    matchingFuzzyLogins.Add(new Cipher(login));
+                    matchingFuzzyLogins.Add(cipher);
                     continue;
                 }
                 else if(!mobileApp)
@@ -156,26 +164,25 @@ namespace Bit.App.Services
                     var info = InfoFromMobileAppUri(loginUriString);
                     if(info?.Item1 != null && Array.IndexOf(matchingDomainsArray, info.Item1) >= 0)
                     {
-                        matchingFuzzyLogins.Add(new Cipher(login));
+                        matchingFuzzyLogins.Add(cipher);
                         continue;
                     }
                 }
 
-                Uri loginUri;
                 string loginDomainName = null;
-                if(Uri.TryCreate(loginUriString, UriKind.Absolute, out loginUri)
+                if(Uri.TryCreate(loginUriString, UriKind.Absolute, out Uri loginUri)
                     && DomainName.TryParseBaseDomain(loginUri.Host, out loginDomainName))
                 {
                     loginDomainName = loginDomainName.ToLowerInvariant();
 
                     if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
                     {
-                        matchingLogins.Add(new Cipher(login));
+                        matchingLogins.Add(cipher);
                         continue;
                     }
                     else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
                     {
-                        matchingFuzzyLogins.Add(new Cipher(login));
+                        matchingFuzzyLogins.Add(cipher);
                         continue;
                     }
                 }
@@ -183,8 +190,8 @@ namespace Bit.App.Services
                 if(mobileApp && mobileAppSearchTerms != null && mobileAppSearchTerms.Length > 0)
                 {
                     var addedFromSearchTerm = false;
-                    var loginNameString = login.Name == null ? null :
-                        new CipherString(login.Name).Decrypt(login.OrganizationId)?.ToLowerInvariant();
+                    var loginNameString = cipher.Name == null ? null : 
+                        cipher.Name.Decrypt(cipher.OrganizationId)?.ToLowerInvariant();
                     foreach(var term in mobileAppSearchTerms)
                     {
                         addedFromSearchTerm = (loginDomainName != null && loginDomainName.Contains(term)) ||
@@ -197,7 +204,7 @@ namespace Bit.App.Services
 
                         if(addedFromSearchTerm)
                         {
-                            matchingFuzzyLogins.Add(new Cipher(login));
+                            matchingFuzzyLogins.Add(cipher);
                             break;
                         }
                     }
@@ -238,6 +245,8 @@ namespace Bit.App.Services
                 {
                     await _cipherRepository.UpdateAsync(data);
                 }
+
+                _cachedCiphers = null;
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -254,6 +263,7 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 await _cipherRepository.DeleteAsync(id);
+                _cachedCiphers = null;
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
