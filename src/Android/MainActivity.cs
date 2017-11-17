@@ -117,7 +117,15 @@ namespace Bit.Android
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "BackgroundApp", (sender) =>
             {
-                MoveTaskToBack(true);
+                if(Intent.GetBooleanExtra("autofillFramework", false))
+                {
+                    SetResult(Result.Canceled);
+                    Finish();
+                }
+                else
+                {
+                    MoveTaskToBack(true);
+                }
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
