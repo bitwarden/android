@@ -31,12 +31,11 @@ namespace Bit.App.Pages
         {
             Uri = uriString;
 
-            Uri uri;
             if(uriString?.StartsWith(Constants.AndroidAppProtocol) ?? false)
             {
                 _name = uriString.Substring(Constants.AndroidAppProtocol.Length);
             }
-            else if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out uri) ||
+            else if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out Uri uri) ||
                 !DomainName.TryParseBaseDomain(uri.Host, out _name))
             {
                 _name = "--";
@@ -331,7 +330,7 @@ namespace Bit.App.Pages
             {
                 _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch",
                     _page.Uri.StartsWith("http") ? "Website" : "App");
-                Application.Current.MainPage = new MainPage(_page.Uri);
+                Application.Current.MainPage = new ExtendedNavigationPage(new VaultListCiphersPage(false, _page.Uri));
                 _page.UserDialogs.Toast(string.Format(AppResources.BitwardenAutofillServiceSearch, _page._name),
                     TimeSpan.FromSeconds(10));
             }
