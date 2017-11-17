@@ -76,7 +76,7 @@ namespace Bit.Android.Autofill
 
             var parser = new Parser(structure);
             parser.ParseForSave();
-            var filledAutofillFieldCollection = parser.GetClientFormData();
+            var filledAutofillFieldCollection = parser.FilledFieldCollection;
             //SaveFilledAutofillFieldCollection(filledAutofillFieldCollection);
         }
     }

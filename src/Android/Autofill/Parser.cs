@@ -7,7 +7,6 @@ namespace Bit.Android.Autofill
     {
         private readonly AssistStructure _structure;
         private string _uri;
-        private FilledFieldCollection _filledAutofillFieldCollection;
 
         public Parser(AssistStructure structure)
         {
@@ -15,6 +14,7 @@ namespace Bit.Android.Autofill
         }
 
         public FieldCollection FieldCollection { get; private set; } = new FieldCollection();
+        public FilledFieldCollection FilledFieldCollection { get; private set; } = new FilledFieldCollection();
         public string Uri
         {
             get => _uri;
@@ -34,54 +34,39 @@ namespace Bit.Android.Autofill
             Parse(false);
         }
 
-        /**
-         * Traverse AssistStructure and add ViewNode metadata to a flat list.
-         */
         private void Parse(bool forFill)
         {
-            _filledAutofillFieldCollection = new FilledFieldCollection();
-
             for(var i = 0; i < _structure.WindowNodeCount; i++)
             {
                 var node = _structure.GetWindowNodeAt(i);
-                var view = node.RootViewNode;
-                ParseLocked(forFill, view);
+                ParseNode(forFill, node.RootViewNode);
             }
         }
 
-        private void ParseLocked(bool forFill, ViewNode viewNode)
+        private void ParseNode(bool forFill, ViewNode node)
         {
-            var autofillHints = viewNode.GetAutofillHints();
-            var autofillType = viewNode.AutofillType;
-            var inputType = viewNode.InputType;
-            var isEditText = viewNode.ClassName == "android.widget.EditText";
-            if(isEditText || (autofillHints?.Length ?? 0) > 0)
+            var hints = node.GetAutofillHints();
+            var isEditText = node.ClassName == "android.widget.EditText";
+            if(isEditText || (hints?.Length ?? 0) > 0)
             {
                 if(forFill)
                 {
-                    var f = new Field(viewNode);
-                    FieldCollection.Add(f);
-
+                    FieldCollection.Add(new Field(node));
                     if(Uri == null)
                     {
-                        Uri = viewNode.IdPackage;
+                        Uri = node.IdPackage;
                     }
                 }
                 else
                 {
-                    _filledAutofillFieldCollection.Add(new FilledField(viewNode));
+                    FilledFieldCollection.Add(new FilledField(node));
                 }
             }
 
-            for(var i = 0; i < viewNode.ChildCount; i++)
+            for(var i = 0; i < node.ChildCount; i++)
             {
-                ParseLocked(forFill, viewNode.GetChildAt(i));
+                ParseNode(forFill, node.GetChildAt(i));
             }
-        }
-
-        public FilledFieldCollection GetClientFormData()
-        {
-            return _filledAutofillFieldCollection;
         }
     }
 }

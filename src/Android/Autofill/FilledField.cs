@@ -5,48 +5,39 @@ namespace Bit.Android.Autofill
 {
     public class FilledField
     {
-        private IEnumerable<string> _hints = null;
-
         public FilledField() { }
 
         public FilledField(ViewNode node)
         {
-            _hints = AutofillHelpers.FilterForSupportedHints(node.GetAutofillHints());
-            var autofillValue = node.AutofillValue;
-            if(autofillValue == null)
+            Hints = AutofillHelpers.FilterForSupportedHints(node.GetAutofillHints());
+
+            if(node.AutofillValue == null)
             {
                 return;
             }
 
-            if(autofillValue.IsList)
+            if(node.AutofillValue.IsList)
             {
                 var autofillOptions = node.GetAutofillOptions();
-                int index = autofillValue.ListValue;
                 if(autofillOptions != null && autofillOptions.Length > 0)
                 {
-                    TextValue = autofillOptions[index];
+                    TextValue = autofillOptions[node.AutofillValue.ListValue];
                 }
             }
-            else if(autofillValue.IsDate)
+            else if(node.AutofillValue.IsDate)
             {
-                DateValue = autofillValue.DateValue;
+                DateValue = node.AutofillValue.DateValue;
             }
-            else if(autofillValue.IsText)
+            else if(node.AutofillValue.IsText)
             {
-                // Using toString of AutofillValue.getTextValue in order to save it to
-                // SharedPreferences.
-                TextValue = autofillValue.TextValue;
+                TextValue = node.AutofillValue.TextValue;
             }
         }
 
         public string TextValue { get; set; }
         public long? DateValue { get; set; }
         public bool? ToggleValue { get; set; }
-
-        public IEnumerable<string> GetHints()
-        {
-            return _hints;
-        }
+        public List<string> Hints { get; set; }
 
         public bool IsNull()
         {
@@ -65,18 +56,18 @@ namespace Bit.Android.Autofill
                 return false;
             }
 
-            var that = o as FilledField;
-            if(TextValue != null ? !TextValue.Equals(that.TextValue) : that.TextValue != null)
+            var field = o as FilledField;
+            if(TextValue != null ? !TextValue.Equals(field.TextValue) : field.TextValue != null)
             {
                 return false;
             }
 
-            if(DateValue != null ? !DateValue.Equals(that.DateValue) : that.DateValue != null)
+            if(DateValue != null ? !DateValue.Equals(field.DateValue) : field.DateValue != null)
             {
                 return false;
             }
 
-            return ToggleValue != null ? ToggleValue.Equals(that.ToggleValue) : that.ToggleValue == null;
+            return ToggleValue != null ? ToggleValue.Equals(field.ToggleValue) : field.ToggleValue == null;
         }
 
         public override int GetHashCode()
