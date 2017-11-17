@@ -20,6 +20,12 @@ namespace Bit.Android.Autofill
             get => _uri;
             set
             {
+                if(string.IsNullOrWhiteSpace(value))
+                {
+                    _uri = null;
+                    return;
+                }
+
                 _uri = $"androidapp://{value}";
             }
         }
