@@ -61,14 +61,7 @@ namespace Bit.Android.Autofill
 
             if(Type == CipherType.Login)
             {
-                var passwordField = fieldCollection.Fields.FirstOrDefault(
-                    f => f.InputType.HasFlag(InputTypes.TextVariationPassword));
-                if(passwordField == null)
-                {
-                    passwordField = fieldCollection.Fields.FirstOrDefault(
-                        f => f.IdEntry?.ToLower().Contains("password") ?? false);
-                }
-
+                var passwordField = fieldCollection.PasswordFields.FirstOrDefault();
                 if(passwordField == null)
                 {
                     return false;

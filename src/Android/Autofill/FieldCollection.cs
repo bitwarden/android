@@ -8,6 +8,8 @@ namespace Bit.Android.Autofill
 {
     public class FieldCollection
     {
+        private List<Field> _passwordFields;
+
         public HashSet<int> Ids { get; private set; } = new HashSet<int>();
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
         public SaveDataType SaveType { get; private set; } = SaveDataType.Generic;
@@ -18,6 +20,27 @@ namespace Bit.Android.Autofill
             new Dictionary<int, Field>();
         public IDictionary<string, List<Field>> HintToFieldsMap { get; private set; } =
             new Dictionary<string, List<Field>>();
+
+        public List<Field> PasswordFields
+        {
+            get
+            {
+                if(_passwordFields != null)
+                {
+                    return _passwordFields;
+                }
+
+                _passwordFields = Fields.Where(f => f.InputType.HasFlag(InputTypes.TextVariationPassword)).ToList();
+                if(!_passwordFields.Any())
+                {
+                    _passwordFields = Fields.Where(f => f.IdEntry?.ToLower().Contains("password") ?? false).ToList();
+                }
+
+                return _passwordFields;
+            }
+        }
+
+        public bool FillableForLogin => PasswordFields.Any();
 
         public void Add(Field field)
         {
@@ -59,14 +82,7 @@ namespace Bit.Android.Autofill
                 return null;
             }
 
-            var passwordField = Fields.FirstOrDefault(
-                f => f.InputType.HasFlag(InputTypes.TextVariationPassword) && !string.IsNullOrWhiteSpace(f.TextValue));
-            if(passwordField == null)
-            {
-                passwordField = Fields.FirstOrDefault(
-                    f => (f.IdEntry?.ToLower().Contains("password") ?? false) && !string.IsNullOrWhiteSpace(f.TextValue));
-            }
-
+            var passwordField = PasswordFields.FirstOrDefault(f => !string.IsNullOrWhiteSpace(f.TextValue));
             if(passwordField == null)
             {
                 return null;
