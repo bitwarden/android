@@ -161,7 +161,7 @@ namespace Bit.Android
                 }
 
                 var parser = new Parser(structure);
-                parser.ParseForFill();
+                parser.Parse();
                 if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
                 {
                     SetResult(Result.Canceled);
@@ -438,6 +438,7 @@ namespace Bit.Android
             if(Intent.GetBooleanExtra("autofillFrameworkSave", false))
             {
                 options.SaveType = (CipherType)Intent.GetIntExtra("autofillFrameworkType", 0);
+                options.SaveName = Intent.GetStringExtra("autofillFrameworkName");
                 options.SaveUsername = Intent.GetStringExtra("autofillFrameworkUsername");
                 options.SavePassword = Intent.GetStringExtra("autofillFrameworkPassword");
             }

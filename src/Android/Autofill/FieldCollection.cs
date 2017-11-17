@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Android.Service.Autofill;
 using Android.Views.Autofill;
+using System.Linq;
+using Android.Text;
 
 namespace Bit.Android.Autofill
 {
@@ -48,6 +50,44 @@ namespace Bit.Android.Autofill
                     HintToFieldsMap[hint].Add(field);
                 }
             }
+        }
+
+        public SavedItem GetSavedItem()
+        {
+            if(!Fields?.Any() ?? true)
+            {
+                return null;
+            }
+
+            var passwordField = Fields.FirstOrDefault(
+                f => f.InputType.HasFlag(InputTypes.TextVariationPassword) && !string.IsNullOrWhiteSpace(f.TextValue));
+            if(passwordField == null)
+            {
+                passwordField = Fields.FirstOrDefault(
+                    f => (f.IdEntry?.ToLower().Contains("password") ?? false) && !string.IsNullOrWhiteSpace(f.TextValue));
+            }
+
+            if(passwordField == null)
+            {
+                return null;
+            }
+
+            var savedItem = new SavedItem
+            {
+                Type = App.Enums.CipherType.Login,
+                Login = new SavedItem.LoginItem
+                {
+                    Password = passwordField.TextValue
+                }
+            };
+
+            var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
+            if(usernameField != null && !string.IsNullOrWhiteSpace(usernameField.TextValue))
+            {
+                savedItem.Login.Username = usernameField.TextValue;
+            }
+
+            return savedItem;
         }
     }
 }

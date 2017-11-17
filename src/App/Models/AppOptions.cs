@@ -8,6 +8,7 @@ namespace Bit.App.Models
         public bool FromAutofillFramework { get; set; }
         public string Uri { get; set; }
         public CipherType? SaveType { get; set; }
+        public string SaveName { get; set; }
         public string SaveUsername { get; set; }
         public string SavePassword { get; set; }
     }

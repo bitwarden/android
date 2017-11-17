@@ -300,6 +300,7 @@
     <Compile Include="Autofill\AutofillHelpers.cs" />
     <Compile Include="Autofill\CipherFilledItem.cs" />
     <Compile Include="Autofill\IFilledItem.cs" />
+    <Compile Include="Autofill\SavedItem.cs" />
     <Compile Include="Controls\CustomLabelRenderer.cs" />
     <Compile Include="Controls\CustomSearchBarRenderer.cs" />
     <Compile Include="Controls\CustomButtonRenderer.cs" />
@@ -307,8 +308,6 @@
     <Compile Include="Controls\ExtendedButtonRenderer.cs" />
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />
-    <Compile Include="Autofill\FilledField.cs" />
-    <Compile Include="Autofill\FilledFieldCollection.cs" />
     <Compile Include="HockeyAppCrashManagerListener.cs" />
     <Compile Include="AutofillService.cs" />
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />

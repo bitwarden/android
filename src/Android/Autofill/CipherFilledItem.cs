@@ -54,6 +54,11 @@ namespace Bit.Android.Autofill
 
         public bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder)
         {
+            if(!fieldCollection?.Fields.Any() ?? true)
+            {
+                return false;
+            }
+
             if(Type == CipherType.Login)
             {
                 var passwordField = fieldCollection.Fields.FirstOrDefault(

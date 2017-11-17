@@ -4,6 +4,8 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Service.Autofill;
+using Android.Widget;
+using Bit.App;
 using Bit.App.Abstractions;
 using Bit.App.Enums;
 using System.Linq;
@@ -29,7 +31,7 @@ namespace Bit.Android.Autofill
             }
 
             var parser = new Parser(structure);
-            parser.ParseForFill();
+            parser.Parse();
 
             if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri) ||
                 parser.Uri == "androidapp://com.x8bit.bitwarden" || parser.Uri == "androidapp://android")
@@ -70,16 +72,32 @@ namespace Bit.Android.Autofill
             }
 
             var parser = new Parser(structure);
-            parser.ParseForSave();
+            parser.Parse();
+
+            var savedItem = parser.FieldCollection.GetSavedItem();
+            if(savedItem == null)
+            {
+                Toast.MakeText(this, "Unable to save this form.", ToastLength.Short).Show();
+                return;
+            }
 
             var intent = new Intent(this, typeof(MainActivity));
+            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
             intent.PutExtra("autofillFramework", true);
             intent.PutExtra("autofillFrameworkSave", true);
-            intent.PutExtra("autofillFrameworkType", (int)CipherType.Login);
-            intent.PutExtra("autofillFrameworkUri", parser.Uri);
-            intent.PutExtra("autofillFrameworkUsername", "username");
-            intent.PutExtra("autofillFrameworkPassword", "pass123");
-            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
+            intent.PutExtra("autofillFrameworkType", (int)savedItem.Type);
+            switch(savedItem.Type)
+            {
+                case CipherType.Login:
+                    intent.PutExtra("autofillFrameworkName", parser.Uri.Replace(Constants.AndroidAppProtocol, string.Empty));
+                    intent.PutExtra("autofillFrameworkUri", parser.Uri);
+                    intent.PutExtra("autofillFrameworkUsername", savedItem.Login.Username);
+                    intent.PutExtra("autofillFrameworkPassword", savedItem.Login.Password);
+                    break;
+                default:
+                    Toast.MakeText(this, "Unable to save this type of form.", ToastLength.Short).Show();
+                    return;
+            }
             StartActivity(intent);
         }
     }

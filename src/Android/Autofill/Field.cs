@@ -25,6 +25,26 @@ namespace Bit.Android.Autofill
             Visible = node.Visibility == ViewStates.Visible;
             Hints = AutofillHelpers.FilterForSupportedHints(node.GetAutofillHints());
             AutofillOptions = node.GetAutofillOptions()?.ToList();
+
+            if(node.AutofillValue != null)
+            {
+                if(node.AutofillValue.IsList)
+                {
+                    var autofillOptions = node.GetAutofillOptions();
+                    if(autofillOptions != null && autofillOptions.Length > 0)
+                    {
+                        TextValue = autofillOptions[node.AutofillValue.ListValue];
+                    }
+                }
+                else if(node.AutofillValue.IsDate)
+                {
+                    DateValue = node.AutofillValue.DateValue;
+                }
+                else if(node.AutofillValue.IsText)
+                {
+                    TextValue = node.AutofillValue.TextValue;
+                }
+            }
         }
 
         public SaveDataType SaveType { get; set; } = SaveDataType.Generic;
@@ -47,6 +67,9 @@ namespace Bit.Android.Autofill
         public bool Clickable { get; private set; }
         public bool Visible { get; private set; }
         public List<string> AutofillOptions { get; set; }
+        public string TextValue { get; set; }
+        public long? DateValue { get; set; }
+        public bool? ToggleValue { get; set; }
 
         public int GetAutofillOptionIndex(string value)
         {
@@ -105,6 +128,45 @@ namespace Bit.Android.Autofill
                         break;
                 }
             }
+        }
+
+        public bool ValueIsNull()
+        {
+            return TextValue == null && DateValue == null && ToggleValue == null;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(this == obj)
+            {
+                return true;
+            }
+
+            if(obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            var field = obj as Field;
+            if(TextValue != null ? !TextValue.Equals(field.TextValue) : field.TextValue != null)
+            {
+                return false;
+            }
+
+            if(DateValue != null ? !DateValue.Equals(field.DateValue) : field.DateValue != null)
+            {
+                return false;
+            }
+
+            return ToggleValue != null ? ToggleValue.Equals(field.ToggleValue) : field.ToggleValue == null;
+        }
+
+        public override int GetHashCode()
+        {
+            var result = TextValue != null ? TextValue.GetHashCode() : 0;
+            result = 31 * result + (DateValue != null ? DateValue.GetHashCode() : 0);
+            result = 31 * result + (ToggleValue != null ? ToggleValue.GetHashCode() : 0);
+            return result;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using static Android.App.Assist.AssistStructure;
 using Android.App.Assist;
+using Bit.App;
 
 namespace Bit.Android.Autofill
 {
@@ -14,7 +15,6 @@ namespace Bit.Android.Autofill
         }
 
         public FieldCollection FieldCollection { get; private set; } = new FieldCollection();
-        public FilledFieldCollection FilledFieldCollection { get; private set; } = new FilledFieldCollection();
         public string Uri
         {
             get => _uri;
@@ -26,30 +26,20 @@ namespace Bit.Android.Autofill
                     return;
                 }
 
-                _uri = $"androidapp://{value}";
+                _uri = string.Concat(Constants.AndroidAppProtocol, value);
             }
         }
 
-        public void ParseForFill()
-        {
-            Parse(true);
-        }
-
-        public void ParseForSave()
-        {
-            Parse(false);
-        }
-
-        private void Parse(bool forFill)
+        public void Parse()
         {
             for(var i = 0; i < _structure.WindowNodeCount; i++)
             {
                 var node = _structure.GetWindowNodeAt(i);
-                ParseNode(forFill, node.RootViewNode);
+                ParseNode(node.RootViewNode);
             }
         }
 
-        private void ParseNode(bool forFill, ViewNode node)
+        private void ParseNode(ViewNode node)
         {
             var hints = node.GetAutofillHints();
             var isEditText = node.ClassName == "android.widget.EditText";
@@ -59,20 +49,12 @@ namespace Bit.Android.Autofill
                 {
                     Uri = node.IdPackage;
                 }
-
-                if(forFill)
-                {
-                    FieldCollection.Add(new Field(node));
-                }
-                else
-                {
-                    FilledFieldCollection.Add(new FilledField(node));
-                }
+                FieldCollection.Add(new Field(node));
             }
 
             for(var i = 0; i < node.ChildCount; i++)
             {
-                ParseNode(forFill, node.GetChildAt(i));
+                ParseNode(node.GetChildAt(i));
             }
         }
     }

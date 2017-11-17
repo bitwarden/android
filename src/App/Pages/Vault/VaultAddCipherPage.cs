@@ -38,7 +38,7 @@ namespace Bit.App.Pages
         private DateTime? _lastAction;
 
         public VaultAddCipherPage(AppOptions options)
-            : this(options.SaveType.Value, options.Uri, options.Uri, options.FromAutofillFramework, false)
+            : this(options.SaveType.Value, options.Uri, options.SaveName, options.FromAutofillFramework, false)
         {
             _defaultUsername = options.SaveUsername;
             _defaultPassword = options.SavePassword;
