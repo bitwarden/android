@@ -19,6 +19,10 @@ using Android.Nfc;
 using Android.Views.InputMethods;
 using System.IO;
 using System.Linq;
+using Android.Views.Autofill;
+using Android.App.Assist;
+using Bit.Android.Autofill;
+using System.Collections.Generic;
 
 namespace Bit.Android
 {
@@ -131,35 +135,71 @@ namespace Bit.Android
 
         private void ReturnCredentials(VaultListPageModel.Cipher cipher)
         {
-            Intent data = new Intent();
-            if(cipher == null)
+            if(Intent.GetBooleanExtra("autofillFramework", false))
             {
-                data.PutExtra("canceled", "true");
-            }
-            else
-            {
-                var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
-                var autoCopyEnabled = !_settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
-                if(isPremium && autoCopyEnabled && _deviceActionService != null && cipher.LoginTotp?.Value != null)
+                if(cipher == null)
                 {
-                    _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
+                    SetResult(Result.Canceled);
+                    Finish();
+                    return;
                 }
 
-                data.PutExtra("uri", cipher.LoginUri);
-                data.PutExtra("username", cipher.LoginUsername);
-                data.PutExtra("password", cipher.LoginPassword?.Value ?? null);
-            }
+                var structure = Intent.GetParcelableExtra(AutofillManager.ExtraAssistStructure) as AssistStructure;
+                if(structure == null)
+                {
+                    SetResult(Result.Canceled);
+                    Finish();
+                    return;
+                }
 
-            if(Parent == null)
-            {
-                SetResult(Result.Ok, data);
+                var parser = new Parser(structure);
+                parser.ParseForFill();
+                if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
+                {
+                    SetResult(Result.Canceled);
+                    Finish();
+                    return;
+                }
+
+                var items = new List<IFilledItem> { new CipherFilledItem(cipher) };
+                var response = AutofillHelpers.BuildFillResponse(this, parser.FieldCollection, items);
+                var replyIntent = new Intent();
+                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, response);
+                SetResult(Result.Ok, replyIntent);
+                Finish();
             }
             else
             {
-                Parent.SetResult(Result.Ok, data);
-            }
+                var data = new Intent();
+                if(cipher == null)
+                {
+                    data.PutExtra("canceled", "true");
+                }
+                else
+                {
+                    var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
+                    var autoCopyEnabled = !_settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
+                    if(isPremium && autoCopyEnabled && _deviceActionService != null && cipher.LoginTotp?.Value != null)
+                    {
+                        _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
+                    }
 
-            Finish();
+                    data.PutExtra("uri", cipher.LoginUri);
+                    data.PutExtra("username", cipher.LoginUsername);
+                    data.PutExtra("password", cipher.LoginPassword?.Value ?? null);
+                }
+
+                if(Parent == null)
+                {
+                    SetResult(Result.Ok, data);
+                }
+                else
+                {
+                    Parent.SetResult(Result.Ok, data);
+                }
+
+                Finish();
+            }
         }
 
         protected override void OnPause()

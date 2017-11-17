@@ -1,28 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
 using Android.Service.Autofill;
-using Android.Views;
 using Android.Views.Autofill;
 using System.Linq;
 using Android.Text;
 using Bit.App.Models;
 using Bit.App.Enums;
+using Bit.App.Models.Page;
 
 namespace Bit.Android.Autofill
 {
     public class CipherFilledItem : IFilledItem
     {
-        private readonly Cipher _cipher;
+        private Lazy<string> _password;
 
         public CipherFilledItem(Cipher cipher)
         {
-            _cipher = cipher;
             Name = cipher.Name?.Decrypt() ?? "--";
+            Type = cipher.Type;
 
-            switch(cipher.Type)
+            switch(Type)
             {
                 case CipherType.Login:
-                    Subtitle = _cipher.Login.Username?.Decrypt() ?? string.Empty;
+                    Subtitle = cipher.Login.Username?.Decrypt() ?? string.Empty;
+                    _password = new Lazy<string>(() => cipher.Login.Password?.Decrypt());
+                    Icon = Resource.Drawable.login;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public CipherFilledItem(VaultListPageModel.Cipher cipher)
+        {
+            Name = cipher.Name ?? "--";
+            Type = cipher.Type;
+
+            switch(Type)
+            {
+                case CipherType.Login:
+                    Subtitle = cipher.LoginUsername ?? string.Empty;
+                    _password = cipher.LoginPassword;
                     Icon = Resource.Drawable.login;
                     break;
                 default:
@@ -33,10 +50,11 @@ namespace Bit.Android.Autofill
         public string Name { get; set; }
         public string Subtitle { get; set; } = string.Empty;
         public int Icon { get; set; } = Resource.Drawable.login;
+        public CipherType Type { get; set; }
 
         public bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder)
         {
-            if(_cipher.Type == CipherType.Login && _cipher.Login != null)
+            if(Type == CipherType.Login)
             {
                 var passwordField = fieldCollection.Fields.FirstOrDefault(
                     f => f.InputType.HasFlag(InputTypes.TextVariationPassword));
@@ -51,13 +69,12 @@ namespace Bit.Android.Autofill
                     return false;
                 }
 
-                var password = _cipher.Login.Password?.Decrypt();
-                if(string.IsNullOrWhiteSpace(password))
+                if(string.IsNullOrWhiteSpace(_password.Value))
                 {
                     return false;
                 }
 
-                datasetBuilder.SetValue(passwordField.AutofillId, AutofillValue.ForText(password));
+                datasetBuilder.SetValue(passwordField.AutofillId, AutofillValue.ForText(_password.Value));
 
                 var usernameField = fieldCollection.Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
                 if(usernameField != null)

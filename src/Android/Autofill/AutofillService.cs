@@ -4,9 +4,7 @@ using Android.Content;
 using Android.OS;
 using Android.Runtime;
 using Android.Service.Autofill;
-using Android.Views;
 using Bit.App.Abstractions;
-using System.Collections.Generic;
 using System.Linq;
 using XLabs.Ioc;
 
@@ -42,9 +40,10 @@ namespace Bit.Android.Autofill
                 _lockService = Resolver.Resolve<ILockService>();
             }
 
-            if(true) // if locked
+            var isLocked = (await _lockService.GetLockTypeAsync(false)) != App.Enums.LockType.None;
+            if(isLocked)
             {
-                var authResponse = AutofillHelpers.BuildAuthResponse(this, parser.FieldCollection);
+                var authResponse = AutofillHelpers.BuildAuthResponse(this, parser.FieldCollection, parser.Uri);
                 callback.OnSuccess(authResponse);
                 return;
             }
