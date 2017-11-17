@@ -31,7 +31,7 @@ namespace Bit.Android.Autofill
             parser.ParseForFill();
 
             if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri) ||
-                parser.Uri == "androidapp://com.x8bit.bitwarden")
+                parser.Uri == "androidapp://com.x8bit.bitwarden" || parser.Uri == "androidapp://android")
             {
                 return;
             }
