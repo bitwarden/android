@@ -7,6 +7,7 @@ namespace Bit.Android.Autofill
     {
         string Name { get; set; }
         string Subtitle { get; set; }
+        int Icon { get; set; }
         bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder);
     }
 }

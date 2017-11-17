@@ -23,6 +23,7 @@ namespace Bit.Android.Autofill
             {
                 case CipherType.Login:
                     Subtitle = _cipher.Login.Username?.Decrypt() ?? string.Empty;
+                    Icon = Resource.Drawable.login;
                     break;
                 default:
                     break;
@@ -31,6 +32,7 @@ namespace Bit.Android.Autofill
 
         public string Name { get; set; }
         public string Subtitle { get; set; } = string.Empty;
+        public int Icon { get; set; } = Resource.Drawable.login;
 
         public bool ApplyToFields(FieldCollection fieldCollection, Dataset.Builder datasetBuilder)
         {

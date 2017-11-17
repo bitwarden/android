@@ -4,60 +4,13 @@ using Android.Content;
 using Android.Service.Autofill;
 using Android.Views;
 using Android.Widget;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Bit.Android.Autofill
 {
     public static class AutofillHelpers
     {
-        /**
-         * Wraps autofill data in a LoginCredential  Dataset object which can then be sent back to the
-         * client View.
-         */
-        public static Dataset NewDataset(Context context, FieldCollection fields, IFilledItem filledItem, bool auth)
-        {
-            var itemName = filledItem.Name;
-            if(itemName != null)
-            {
-                Dataset.Builder datasetBuilder;
-                if(auth)
-                {
-                    datasetBuilder = new Dataset.Builder(
-                        NewRemoteViews(context.PackageName, itemName, filledItem.Subtitle, Resource.Drawable.fa_lock));
-                    //IntentSender sender = AuthActivity.getAuthIntentSenderForDataset(context, datasetName);
-                    //datasetBuilder.SetAuthentication(sender);
-                }
-                else
-                {
-                    datasetBuilder = new Dataset.Builder(
-                        NewRemoteViews(context.PackageName, itemName, filledItem.Subtitle, Resource.Drawable.user));
-                }
-
-                var setValue = filledItem.ApplyToFields(fields, datasetBuilder);
-                if(setValue)
-                {
-                    return datasetBuilder.Build();
-                }
-            }
-
-            return null;
-        }
-
-        public static RemoteViews NewRemoteViews(string packageName, string text, string subtext, int iconId)
-        {
-            var views = new RemoteViews(packageName, Resource.Layout.autofill_listitem);
-            views.SetTextViewText(Resource.Id.text, text);
-            views.SetTextViewText(Resource.Id.text2, subtext);
-            views.SetImageViewResource(Resource.Id.icon, iconId);
-            return views;
-        }
-
-        /**
-         * Wraps autofill data in a Response object (essentially a series of Datasets) which can then
-         * be sent back to the client View.
-         */
-        public static FillResponse NewResponse(Context context, bool auth, FieldCollection fields,
+        public static FillResponse BuildFillResponse(Context context, bool auth, FieldCollection fields,
             IDictionary<string, IFilledItem> items)
         {
             var responseBuilder = new FillResponse.Builder();
@@ -65,7 +18,7 @@ namespace Bit.Android.Autofill
             {
                 foreach(var datasetName in items.Keys)
                 {
-                    var dataset = NewDataset(context, fields, items[datasetName], auth);
+                    var dataset = BuildDataset(context, fields, items[datasetName], auth);
                     if(dataset != null)
                     {
                         responseBuilder.AddDataset(dataset);
@@ -73,27 +26,47 @@ namespace Bit.Android.Autofill
                 }
             }
 
-            if(true || fields.SaveType != SaveDataType.Generic)
+            var info = new SaveInfo.Builder(fields.SaveType, fields.AutofillIds.ToArray()).Build();
+            responseBuilder.SetSaveInfo(info);
+            return responseBuilder.Build();
+        }
+
+        public static Dataset BuildDataset(Context context, FieldCollection fields, IFilledItem filledItem, bool auth)
+        {
+            Dataset.Builder datasetBuilder;
+            if(auth)
             {
-                var info = new SaveInfo.Builder(fields.SaveType, fields.AutofillIds.ToArray()).Build();
-                responseBuilder.SetSaveInfo(info);
-                return responseBuilder.Build();
+                datasetBuilder = new Dataset.Builder(
+                    BuildListView(context.PackageName, filledItem.Name, filledItem.Subtitle, Resource.Drawable.fa_lock));
+                //IntentSender sender = AuthActivity.getAuthIntentSenderForDataset(context, datasetName);
+                //datasetBuilder.SetAuthentication(sender);
             }
             else
             {
-                Debug.WriteLine("These fields are not meant to be saved by autofill.");
-                return null;
+                datasetBuilder = new Dataset.Builder(
+                    BuildListView(context.PackageName, filledItem.Name, filledItem.Subtitle, filledItem.Icon));
             }
+            
+            if(filledItem.ApplyToFields(fields, datasetBuilder))
+            {
+                return datasetBuilder.Build();
+            }
+
+            return null;
+        }
+
+        public static RemoteViews BuildListView(string packageName, string text, string subtext, int iconId)
+        {
+            var view = new RemoteViews(packageName, Resource.Layout.autofill_listitem);
+            view.SetTextViewText(Resource.Id.text, text);
+            view.SetTextViewText(Resource.Id.text2, subtext);
+            view.SetImageViewResource(Resource.Id.icon, iconId);
+            return view;
         }
 
         public static List<string> FilterForSupportedHints(string[] hints)
         {
-            if(hints == null)
-            {
-                return new List<string>();
-            }
-
-            return hints.Where(h => IsValidHint(h)).ToList();
+            return hints?.Where(h => IsValidHint(h)).ToList() ?? new List<string>();
         }
 
         public static bool IsValidHint(string hint)

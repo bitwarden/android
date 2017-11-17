@@ -18,12 +18,14 @@ namespace Bit.Android.Autofill
         {
             HintToFieldMap = hintMap;
             Name = datasetName;
-            Subtitle = "username";
+            Subtitle = "subtitle";
+            Icon = Resource.Drawable.login;
         }
 
         public IDictionary<string, FilledField> HintToFieldMap { get; private set; }
         public string Name { get; set; }
         public string Subtitle { get; set; }
+        public int Icon { get; set; }
 
         public void Add(FilledField filledField)
         {

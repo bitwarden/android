@@ -60,7 +60,7 @@ namespace Bit.Android.Autofill
                 return;
             }
 
-            var response = AutofillHelpers.NewResponse(this, false, parser.FieldCollection, items);
+            var response = AutofillHelpers.BuildFillResponse(this, false, parser.FieldCollection, items);
             callback.OnSuccess(response);
         }
 
