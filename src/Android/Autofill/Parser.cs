@@ -55,13 +55,14 @@ namespace Bit.Android.Autofill
             var isEditText = node.ClassName == "android.widget.EditText";
             if(isEditText || (hints?.Length ?? 0) > 0)
             {
+                if(Uri == null)
+                {
+                    Uri = node.IdPackage;
+                }
+
                 if(forFill)
                 {
                     FieldCollection.Add(new Field(node));
-                    if(Uri == null)
-                    {
-                        Uri = node.IdPackage;
-                    }
                 }
                 else
                 {

@@ -33,7 +33,7 @@ namespace Bit.Android.Autofill
         public static FillResponse BuildFillResponse(Context context, FieldCollection fields, List<IFilledItem> items)
         {
             var responseBuilder = new FillResponse.Builder();
-            if(items != null)
+            if(items != null && items.Count > 0)
             {
                 foreach(var item in items)
                 {
@@ -44,6 +44,8 @@ namespace Bit.Android.Autofill
                     }
                 }
             }
+
+            AddSaveInfo(responseBuilder, fields);
             return responseBuilder.Build();
         }
 
@@ -64,11 +66,11 @@ namespace Bit.Android.Autofill
             var view = BuildListView(context.PackageName, "Autofill with bitwarden",
                 "Vault locked", Resource.Drawable.icon);
             var intent = new Intent(context, typeof(MainActivity));
-            intent.PutExtra("uri", uri);
             intent.PutExtra("autofillFramework", true);
-            //intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
+            intent.PutExtra("autofillFrameworkUri", uri);
             var pendingIntent = PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.CancelCurrent);
             responseBuilder.SetAuthentication(fields.AutofillIds.ToArray(), pendingIntent.IntentSender, view);
+            AddSaveInfo(responseBuilder, fields);
             return responseBuilder.Build();
         }
 
@@ -79,6 +81,12 @@ namespace Bit.Android.Autofill
             view.SetTextViewText(Resource.Id.text2, subtext);
             view.SetImageViewResource(Resource.Id.icon, iconId);
             return view;
+        }
+
+        public static void AddSaveInfo(FillResponse.Builder responseBuilder, FieldCollection fields)
+        {
+            var saveInfo = new SaveInfo.Builder(SaveDataType.Password, fields.AutofillIds.ToArray()).Build();
+            responseBuilder.SetSaveInfo(saveInfo);
         }
 
         public static List<string> FilterForSupportedHints(string[] hints)

@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Service.Autofill;
 using Bit.App.Abstractions;
+using Bit.App.Enums;
 using System.Linq;
 using XLabs.Ioc;
 
@@ -41,7 +42,7 @@ namespace Bit.Android.Autofill
                 _lockService = Resolver.Resolve<ILockService>();
             }
 
-            var isLocked = (await _lockService.GetLockTypeAsync(false)) != App.Enums.LockType.None;
+            var isLocked = (await _lockService.GetLockTypeAsync(false)) != LockType.None;
             if(isLocked)
             {
                 var authResponse = AutofillHelpers.BuildAuthResponse(this, parser.FieldCollection, parser.Uri);
@@ -56,11 +57,6 @@ namespace Bit.Android.Autofill
 
             // build response
             var items = await AutofillHelpers.GetFillItemsAsync(_cipherService, parser.Uri);
-            if(!items.Any())
-            {
-                return;
-            }
-
             var response = AutofillHelpers.BuildFillResponse(this, parser.FieldCollection, items);
             callback.OnSuccess(response);
         }
@@ -73,12 +69,18 @@ namespace Bit.Android.Autofill
                 return;
             }
 
-            var clientState = request.ClientState;
-
             var parser = new Parser(structure);
             parser.ParseForSave();
-            var filledAutofillFieldCollection = parser.FilledFieldCollection;
-            //SaveFilledAutofillFieldCollection(filledAutofillFieldCollection);
+
+            var intent = new Intent(this, typeof(MainActivity));
+            intent.PutExtra("autofillFramework", true);
+            intent.PutExtra("autofillFrameworkSave", true);
+            intent.PutExtra("autofillFrameworkType", (int)CipherType.Login);
+            intent.PutExtra("autofillFrameworkUri", parser.Uri);
+            intent.PutExtra("autofillFrameworkUsername", "username");
+            intent.PutExtra("autofillFrameworkPassword", "pass123");
+            intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.ClearTop);
+            StartActivity(intent);
         }
     }
 }

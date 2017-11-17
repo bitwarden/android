@@ -23,6 +23,8 @@ using Android.Views.Autofill;
 using Android.App.Assist;
 using Bit.Android.Autofill;
 using System.Collections.Generic;
+using Bit.App.Models;
+using Bit.App.Enums;
 
 namespace Bit.Android
 {
@@ -40,7 +42,6 @@ namespace Bit.Android
 
         protected override void OnCreate(Bundle bundle)
         {
-            var uri = Intent.GetStringExtra("uri");
             if(!Resolver.IsSet)
             {
                 MainApplication.SetIoc(Application);
@@ -78,8 +79,7 @@ namespace Bit.Android
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _settings = Resolver.Resolve<ISettings>();
             LoadApplication(new App.App(
-                uri,
-                Intent.GetBooleanExtra("myVaultTile", false),
+                GetOptions(),
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),
@@ -424,6 +424,25 @@ namespace Bit.Android
                 imm.HideSoftInputFromWindow(CurrentFocus.WindowToken, 0);
             }
             catch { }
+        }
+
+        private AppOptions GetOptions()
+        {
+            var options = new AppOptions
+            {
+                Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra("autofillFrameworkUri"),
+                MyVault = Intent.GetBooleanExtra("myVaultTile", false),
+                FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false)
+            };
+
+            if(Intent.GetBooleanExtra("autofillFrameworkSave", false))
+            {
+                options.SaveType = (CipherType)Intent.GetIntExtra("autofillFrameworkType", 0);
+                options.SaveUsername = Intent.GetStringExtra("autofillFrameworkUsername");
+                options.SavePassword = Intent.GetStringExtra("autofillFrameworkPassword");
+            }
+
+            return options;
         }
     }
 }

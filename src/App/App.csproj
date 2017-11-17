@@ -129,6 +129,7 @@
     <Compile Include="Models\Api\Response\TokenResponse.cs" />
     <Compile Include="Models\Api\Response\ProfileResponse.cs" />
     <Compile Include="Models\Api\LoginDataModel.cs" />
+    <Compile Include="Models\AppOptions.cs" />
     <Compile Include="Models\Card.cs" />
     <Compile Include="Models\CipherString.cs" />
     <Compile Include="Models\Data\AttachmentData.cs" />

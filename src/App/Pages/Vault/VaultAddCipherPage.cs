@@ -12,6 +12,7 @@ using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
 using Bit.App.Utilities;
 using Bit.App.Enums;
+using Bit.App.Models.Page;
 
 namespace Bit.App.Pages
 {
@@ -30,11 +31,23 @@ namespace Bit.App.Pages
         private readonly IDeviceInfoService _deviceInfo;
         private readonly string _defaultUri;
         private readonly string _defaultName;
+        private readonly string _defaultUsername;
+        private readonly string _defaultPassword;
         private readonly bool _fromAutofill;
+        private readonly bool _fromAutofillFramework;
         private DateTime? _lastAction;
 
+        public VaultAddCipherPage(AppOptions options)
+            : this(options.SaveType.Value, options.Uri, options.Uri, options.FromAutofillFramework, false)
+        {
+            _defaultUsername = options.SaveUsername;
+            _defaultPassword = options.SavePassword;
+            _fromAutofillFramework = options.FromAutofillFramework;
+            Init();
+        }
+
         public VaultAddCipherPage(CipherType type, string defaultUri = null,
-            string defaultName = null, bool fromAutofill = false)
+            string defaultName = null, bool fromAutofill = false, bool doInit = true)
         {
             _type = type;
             _defaultUri = defaultUri;
@@ -50,7 +63,10 @@ namespace Bit.App.Pages
             _appInfoService = Resolver.Resolve<IAppInfoService>();
             _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
 
-            Init();
+            if(doInit)
+            {
+                Init();
+            }
         }
 
         public List<Folder> Folders { get; set; }
@@ -266,10 +282,21 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if(_fromAutofillFramework)
+            {
+                Application.Current.MainPage = new MainPage(true);
+                return true;
+            }
+
+            return base.OnBackButtonPressed();
+        }
+
         private void PasswordButton_Clicked(object sender, EventArgs e)
         {
             LoginPasswordCell.Entry.InvokeToggleIsPassword();
-            LoginPasswordCell.Button.Image = 
+            LoginPasswordCell.Button.Image =
                 "eye" + (!LoginPasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
         }
 
@@ -335,7 +362,7 @@ namespace Bit.App.Pages
                 }
                 LoginTotpCell.Entry.DisableAutocapitalize = true;
                 LoginTotpCell.Entry.Autocorrect = false;
-                LoginTotpCell.Entry.FontFamily = 
+                LoginTotpCell.Entry.FontFamily =
                     Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
 
                 LoginPasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: LoginTotpCell.Entry,
@@ -343,8 +370,12 @@ namespace Bit.App.Pages
                 LoginPasswordCell.Button.Image = "eye.png";
                 LoginPasswordCell.Entry.DisableAutocapitalize = true;
                 LoginPasswordCell.Entry.Autocorrect = false;
-                LoginPasswordCell.Entry.FontFamily = 
+                LoginPasswordCell.Entry.FontFamily =
                     Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                if(!string.IsNullOrWhiteSpace(_defaultPassword))
+                {
+                    LoginPasswordCell.Entry.Text = _defaultPassword;
+                }
 
                 LoginGenerateCell = new ExtendedTextCell
                 {
@@ -355,6 +386,10 @@ namespace Bit.App.Pages
                 LoginUsernameCell = new FormEntryCell(AppResources.Username, nextElement: LoginPasswordCell.Entry);
                 LoginUsernameCell.Entry.DisableAutocapitalize = true;
                 LoginUsernameCell.Entry.Autocorrect = false;
+                if(!string.IsNullOrWhiteSpace(_defaultUsername))
+                {
+                    LoginUsernameCell.Entry.Text = _defaultUsername;
+                }
 
                 LoginUriCell = new FormEntryCell(AppResources.URI, Keyboard.Url, nextElement: LoginUsernameCell.Entry);
                 if(!string.IsNullOrWhiteSpace(_defaultUri))
@@ -679,7 +714,16 @@ namespace Bit.App.Pages
                     {
                         _googleAnalyticsService.TrackAppEvent("CreatedCipher");
                     }
-                    await Navigation.PopForDeviceAsync();
+
+                    if(_fromAutofillFramework)
+                    {
+                        // close and go back to app
+                        MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Cipher)null);
+                    }
+                    else
+                    {
+                        await Navigation.PopForDeviceAsync();
+                    }
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {

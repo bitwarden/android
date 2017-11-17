@@ -14,12 +14,13 @@ using XLabs.Ioc;
 using System.Reflection;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.App.Models;
 
 namespace Bit.App
 {
     public class App : Application
     {
-        private string _uri;
+        private AppOptions _options;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
         private readonly IUserDialogs _userDialogs;
@@ -34,8 +35,7 @@ namespace Bit.App
         private readonly IDeviceActionService _deviceActionService;
 
         public App(
-            string uri,
-            bool myVault,
+            AppOptions options,
             IAuthService authService,
             IConnectivity connectivity,
             IUserDialogs userDialogs,
@@ -49,7 +49,7 @@ namespace Bit.App
             IAppSettingsService appSettingsService,
             IDeviceActionService deviceActionService)
         {
-            _uri = uri;
+            _options = options ?? new AppOptions();
             _databaseService = databaseService;
             _connectivity = connectivity;
             _userDialogs = userDialogs;
@@ -66,13 +66,20 @@ namespace Bit.App
             SetCulture();
             SetStyles();
 
-            if(authService.IsAuthenticated && _uri != null)
+            if(authService.IsAuthenticated)
             {
-                MainPage = new ExtendedNavigationPage(new VaultAutofillListCiphersPage(_uri));
-            }
-            else if(authService.IsAuthenticated)
-            {
-                MainPage = new MainPage(myVault: myVault);
+                if(_options.FromAutofillFramework && _options.SaveType.HasValue)
+                {
+                    MainPage = new ExtendedNavigationPage(new VaultAddCipherPage(_options));
+                }
+                else if (_options.Uri != null)
+                {
+                    MainPage = new ExtendedNavigationPage(new VaultAutofillListCiphersPage(_options.Uri));
+                }
+                else
+                {
+                    MainPage = new MainPage(myVault: _options.MyVault);
+                }
             }
             else
             {
@@ -101,7 +108,7 @@ namespace Bit.App
             // Handle when your app starts
             await CheckLockAsync(false);
 
-            if(string.IsNullOrWhiteSpace(_uri))
+            if(string.IsNullOrWhiteSpace(_options.Uri))
             {
                 var updated = Helpers.PerformUpdateTasks(_settings, _appInfoService, _databaseService, _syncService);
                 if(!updated)
@@ -168,14 +175,14 @@ namespace Bit.App
 
         private void SetMainPageFromAutofill()
         {
-            if(Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_uri))
+            if(Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_options.Uri))
             {
                 Task.Run(() =>
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         Current.MainPage = new MainPage();
-                        _uri = null;
+                        _options.Uri = null;
                     });
                 });
             }
