@@ -72,6 +72,10 @@ namespace Bit.Android.Autofill
                 }
                 FieldCollection.Add(new Field(node));
             }
+            else
+            {
+                FieldCollection.IgnoreAutofillIds.Add(node.AutofillId);
+            }
 
             for(var i = 0; i < node.ChildCount; i++)
             {

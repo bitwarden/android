@@ -21,6 +21,7 @@ namespace Bit.Android.Autofill
             new Dictionary<int, Field>();
         public IDictionary<string, List<Field>> HintToFieldsMap { get; private set; } =
             new Dictionary<string, List<Field>>();
+        public List<AutofillId> IgnoreAutofillIds { get; private set; } = new List<AutofillId>();
 
         public List<Field> PasswordFields
         {

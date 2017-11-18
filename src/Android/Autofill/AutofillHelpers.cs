@@ -46,6 +46,7 @@ namespace Bit.Android.Autofill
             }
 
             AddSaveInfo(responseBuilder, fields);
+            responseBuilder.SetIgnoredIds(fields.IgnoreAutofillIds.ToArray());
             return responseBuilder.Build();
         }
 
@@ -71,6 +72,7 @@ namespace Bit.Android.Autofill
             var pendingIntent = PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.CancelCurrent);
             responseBuilder.SetAuthentication(fields.AutofillIds.ToArray(), pendingIntent.IntentSender, view);
             AddSaveInfo(responseBuilder, fields);
+            responseBuilder.SetIgnoredIds(fields.IgnoreAutofillIds.ToArray());
             return responseBuilder.Build();
         }
 
