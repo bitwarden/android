@@ -3,6 +3,7 @@ using Android.Service.Autofill;
 using Android.Views.Autofill;
 using System.Linq;
 using Android.Text;
+using Android.Views;
 
 namespace Bit.Android.Autofill
 {
@@ -32,10 +33,17 @@ namespace Bit.Android.Autofill
                     return _passwordFields;
                 }
 
-                _passwordFields = Fields.Where(f => f.InputType.HasFlag(InputTypes.TextVariationPassword)).ToList();
-                if(!_passwordFields.Any())
+                if(Hints.Any())
                 {
-                    _passwordFields = Fields.Where(f => f.IdEntry?.ToLower().Contains("password") ?? false).ToList();
+                    _passwordFields = Fields.Where(f => f.Hints.Contains(View.AutofillHintPassword)).ToList();
+                }
+                else
+                {
+                    _passwordFields = Fields.Where(f => f.InputType.HasFlag(InputTypes.TextVariationPassword)).ToList();
+                    if(!_passwordFields.Any())
+                    {
+                        _passwordFields = Fields.Where(f => f.IdEntry?.ToLower().Contains("password") ?? false).ToList();
+                    }
                 }
 
                 return _passwordFields;
@@ -51,15 +59,25 @@ namespace Bit.Android.Autofill
                     return _usernameFields;
                 }
 
-                _usernameFields = new List<Field>();
-                foreach(var passwordField in PasswordFields)
+                if(Hints.Any())
                 {
-                    var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
-                    if(usernameField != null)
+                    _usernameFields = Fields
+                        .Where(f => f.Hints.Any(fh => fh == View.AutofillHintEmailAddress || fh == View.AutofillHintUsername))
+                        .ToList();
+                }
+                else
+                {
+                    _usernameFields = new List<Field>();
+                    foreach(var passwordField in PasswordFields)
                     {
-                        _usernameFields.Add(usernameField);
+                        var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
+                        if(usernameField != null)
+                        {
+                            _usernameFields.Add(usernameField);
+                        }
                     }
                 }
+
                 return _usernameFields;
             }
         }
