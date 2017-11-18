@@ -63,8 +63,8 @@ namespace Bit.Android.Autofill
         public static FillResponse BuildAuthResponse(Context context, FieldCollection fields, string uri)
         {
             var responseBuilder = new FillResponse.Builder();
-            var view = BuildListView(context.PackageName, "Autofill with bitwarden",
-                "Vault locked", Resource.Drawable.icon);
+            var view = BuildListView(context.PackageName, "Auto-fill with bitwarden",
+                "Vault is locked", Resource.Drawable.icon);
             var intent = new Intent(context, typeof(MainActivity));
             intent.PutExtra("autofillFramework", true);
             intent.PutExtra("autofillFrameworkUri", uri);

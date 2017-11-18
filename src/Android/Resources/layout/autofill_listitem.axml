@@ -14,6 +14,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginEnd="10dp"
+        android:maxWidth="25dp"
+        android:maxHeight="25dp"
+        android:adjustViewBounds="true"
         android:src="@drawable/login" />
     <LinearLayout
         android:layout_width="wrap_content"
