@@ -170,7 +170,7 @@ namespace Bit.Android
                 }
 
                 var items = new List<IFilledItem> { new CipherFilledItem(cipher) };
-                var response = AutofillHelpers.BuildFillResponse(this, parser.FieldCollection, items);
+                var response = AutofillHelpers.BuildFillResponse(this, parser, items);
                 var replyIntent = new Intent();
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, response);
                 SetResult(Result.Ok, replyIntent);

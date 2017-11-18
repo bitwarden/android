@@ -23,7 +23,7 @@ namespace Bit.Android.Autofill
             Selected = node.IsSelected;
             Clickable = node.IsClickable;
             Visible = node.Visibility == ViewStates.Visible;
-            Hints = AutofillHelpers.FilterForSupportedHints(node.GetAutofillHints());
+            Hints = FilterForSupportedHints(node.GetAutofillHints());
             AutofillOptions = node.GetAutofillOptions()?.ToList();
 
             if(node.AutofillValue != null)
@@ -167,6 +167,34 @@ namespace Bit.Android.Autofill
             result = 31 * result + (DateValue != null ? DateValue.GetHashCode() : 0);
             result = 31 * result + (ToggleValue != null ? ToggleValue.GetHashCode() : 0);
             return result;
+        }
+
+        private static List<string> FilterForSupportedHints(string[] hints)
+        {
+            return hints?.Where(h => IsValidHint(h)).ToList() ?? new List<string>();
+        }
+
+        private static bool IsValidHint(string hint)
+        {
+            switch(hint)
+            {
+                case View.AutofillHintCreditCardExpirationDate:
+                case View.AutofillHintCreditCardExpirationDay:
+                case View.AutofillHintCreditCardExpirationMonth:
+                case View.AutofillHintCreditCardExpirationYear:
+                case View.AutofillHintCreditCardNumber:
+                case View.AutofillHintCreditCardSecurityCode:
+                case View.AutofillHintEmailAddress:
+                case View.AutofillHintPhone:
+                case View.AutofillHintName:
+                case View.AutofillHintPassword:
+                case View.AutofillHintPostalAddress:
+                case View.AutofillHintPostalCode:
+                case View.AutofillHintUsername:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }

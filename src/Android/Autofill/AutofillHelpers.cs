@@ -2,26 +2,38 @@
 using System.Collections.Generic;
 using Android.Content;
 using Android.Service.Autofill;
-using Android.Views;
 using Android.Widget;
 using System.Linq;
 using Android.App;
 using Bit.App.Abstractions;
 using System.Threading.Tasks;
+using Bit.App.Resources;
 
 namespace Bit.Android.Autofill
 {
     public static class AutofillHelpers
     {
-        public static async Task<List<IFilledItem>> GetFillItemsAsync(ICipherService service, string uri)
+        public static async Task<List<IFilledItem>> GetFillItemsAsync(Parser parser, ICipherService service)
         {
             var items = new List<IFilledItem>();
-            var ciphers = await service.GetAllAsync(uri);
-            if(ciphers.Item1.Any() || ciphers.Item2.Any())
+
+            if(parser.FieldCollection.FillableForLogin)
             {
-                var allCiphers = ciphers.Item1.ToList();
-                allCiphers.AddRange(ciphers.Item2.ToList());
-                foreach(var cipher in allCiphers)
+                var ciphers = await service.GetAllAsync(parser.Uri);
+                if(ciphers.Item1.Any() || ciphers.Item2.Any())
+                {
+                    var allCiphers = ciphers.Item1.ToList();
+                    allCiphers.AddRange(ciphers.Item2.ToList());
+                    foreach(var cipher in allCiphers)
+                    {
+                        items.Add(new CipherFilledItem(cipher));
+                    }
+                }
+            }
+            else if(parser.FieldCollection.FillableForCard)
+            {
+                var ciphers = await service.GetAllAsync();
+                foreach(var cipher in ciphers.Where(c => c.Type == App.Enums.CipherType.Card))
                 {
                     items.Add(new CipherFilledItem(cipher));
                 }
@@ -30,14 +42,14 @@ namespace Bit.Android.Autofill
             return items;
         }
 
-        public static FillResponse BuildFillResponse(Context context, FieldCollection fields, List<IFilledItem> items)
+        public static FillResponse BuildFillResponse(Context context, Parser parser, List<IFilledItem> items)
         {
             var responseBuilder = new FillResponse.Builder();
             if(items != null && items.Count > 0)
             {
                 foreach(var item in items)
                 {
-                    var dataset = BuildDataset(context, fields, item);
+                    var dataset = BuildDataset(context, parser.FieldCollection, item);
                     if(dataset != null)
                     {
                         responseBuilder.AddDataset(dataset);
@@ -45,8 +57,8 @@ namespace Bit.Android.Autofill
                 }
             }
 
-            AddSaveInfo(responseBuilder, fields);
-            responseBuilder.SetIgnoredIds(fields.IgnoreAutofillIds.ToArray());
+            AddSaveInfo(responseBuilder, parser.FieldCollection);
+            responseBuilder.SetIgnoredIds(parser.FieldCollection.IgnoreAutofillIds.ToArray());
             return responseBuilder.Build();
         }
 
@@ -64,8 +76,8 @@ namespace Bit.Android.Autofill
         public static FillResponse BuildAuthResponse(Context context, FieldCollection fields, string uri)
         {
             var responseBuilder = new FillResponse.Builder();
-            var view = BuildListView(context.PackageName, "Auto-fill with bitwarden",
-                "Vault is locked", Resource.Drawable.icon);
+            var view = BuildListView(context.PackageName, AppResources.AutofillWithBitwarden,
+                AppResources.VaultIsLocked, Resource.Drawable.icon);
             var intent = new Intent(context, typeof(MainActivity));
             intent.PutExtra("autofillFramework", true);
             intent.PutExtra("autofillFrameworkUri", uri);
@@ -87,36 +99,14 @@ namespace Bit.Android.Autofill
 
         public static void AddSaveInfo(FillResponse.Builder responseBuilder, FieldCollection fields)
         {
-            var saveInfo = new SaveInfo.Builder(SaveDataType.Password, fields.AutofillIds.ToArray()).Build();
-            responseBuilder.SetSaveInfo(saveInfo);
-        }
-
-        public static List<string> FilterForSupportedHints(string[] hints)
-        {
-            return hints?.Where(h => IsValidHint(h)).ToList() ?? new List<string>();
-        }
-
-        public static bool IsValidHint(string hint)
-        {
-            switch(hint)
+            var saveType = fields.SaveType;
+            if(saveType == SaveDataType.Generic)
             {
-                case View.AutofillHintCreditCardExpirationDate:
-                case View.AutofillHintCreditCardExpirationDay:
-                case View.AutofillHintCreditCardExpirationMonth:
-                case View.AutofillHintCreditCardExpirationYear:
-                case View.AutofillHintCreditCardNumber:
-                case View.AutofillHintCreditCardSecurityCode:
-                case View.AutofillHintEmailAddress:
-                case View.AutofillHintPhone:
-                case View.AutofillHintName:
-                case View.AutofillHintPassword:
-                case View.AutofillHintPostalAddress:
-                case View.AutofillHintPostalCode:
-                case View.AutofillHintUsername:
-                    return true;
-                default:
-                    return false;
+                return;
             }
+
+            var saveInfo = new SaveInfo.Builder(saveType, fields.AutofillIds.ToArray()).Build();
+            responseBuilder.SetSaveInfo(saveInfo);
         }
     }
 }

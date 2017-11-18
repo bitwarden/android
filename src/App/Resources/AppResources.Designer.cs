@@ -377,6 +377,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-fill with bitwarden.
+        /// </summary>
+        public static string AutofillWithBitwarden {
+            get {
+                return ResourceManager.GetString("AutofillWithBitwarden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Avoid Ambiguous Characters.
         /// </summary>
         public static string AvoidAmbiguousCharacters {
@@ -2857,6 +2866,15 @@ namespace Bit.App.Resources {
         public static string ValueHasBeenCopied {
             get {
                 return ResourceManager.GetString("ValueHasBeenCopied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vault is locked.
+        /// </summary>
+        public static string VaultIsLocked {
+            get {
+                return ResourceManager.GetString("VaultIsLocked", resourceCulture);
             }
         }
         

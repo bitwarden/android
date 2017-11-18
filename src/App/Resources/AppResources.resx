@@ -1185,4 +1185,10 @@
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons Server URL</value>
   </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
 </root>

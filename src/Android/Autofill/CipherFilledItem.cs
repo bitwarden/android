@@ -5,12 +5,17 @@ using System.Linq;
 using Bit.App.Models;
 using Bit.App.Enums;
 using Bit.App.Models.Page;
+using Android.Views;
 
 namespace Bit.Android.Autofill
 {
     public class CipherFilledItem : IFilledItem
     {
         private Lazy<string> _password;
+        private string _cardNumber;
+        private Lazy<string> _cardExpMonth;
+        private Lazy<string> _cardExpYear;
+        private Lazy<string> _cardCode;
 
         public CipherFilledItem(Cipher cipher)
         {
@@ -21,8 +26,24 @@ namespace Bit.Android.Autofill
             {
                 case CipherType.Login:
                     Subtitle = cipher.Login.Username?.Decrypt() ?? string.Empty;
-                    _password = new Lazy<string>(() => cipher.Login.Password?.Decrypt());
                     Icon = Resource.Drawable.login;
+                    _password = new Lazy<string>(() => cipher.Login.Password?.Decrypt());
+                    break;
+                case CipherType.Card:
+                    Subtitle = cipher.Card.Brand?.Decrypt();
+                    _cardNumber = cipher.Card.Number?.Decrypt();
+                    if(!string.IsNullOrWhiteSpace(_cardNumber) && _cardNumber.Length >= 4)
+                    {
+                        if(!string.IsNullOrWhiteSpace(_cardNumber))
+                        {
+                            Subtitle += ", ";
+                        }
+                        Subtitle += ("*" + _cardNumber.Substring(_cardNumber.Length - 4));
+                    }
+                    Icon = Resource.Drawable.card;
+                    _cardCode = new Lazy<string>(() => cipher.Card.Code?.Decrypt());
+                    _cardExpMonth = new Lazy<string>(() => cipher.Card.ExpMonth?.Decrypt());
+                    _cardExpYear = new Lazy<string>(() => cipher.Card.ExpYear?.Decrypt());
                     break;
                 default:
                     break;
@@ -58,32 +79,68 @@ namespace Bit.Android.Autofill
                 return false;
             }
 
+            var setValues = false;
             if(Type == CipherType.Login)
             {
-                if(!fieldCollection.PasswordFields.Any() || string.IsNullOrWhiteSpace(_password.Value))
+                if(fieldCollection.PasswordFields.Any() && !string.IsNullOrWhiteSpace(_password.Value))
                 {
-                    return false;
-                }
-
-                foreach(var passwordField in fieldCollection.PasswordFields)
-                {
-                    datasetBuilder.SetValue(passwordField.AutofillId, AutofillValue.ForText(_password.Value));
+                    foreach(var f in fieldCollection.PasswordFields)
+                    {
+                        setValues = true;
+                        datasetBuilder.SetValue(f.AutofillId, AutofillValue.ForText(_password.Value));
+                    }
                 }
 
                 if(fieldCollection.UsernameFields.Any() && !string.IsNullOrWhiteSpace(Subtitle))
                 {
-                    foreach(var usernameField in fieldCollection.UsernameFields)
+                    foreach(var f in fieldCollection.UsernameFields)
                     {
-                        datasetBuilder.SetValue(usernameField.AutofillId, AutofillValue.ForText(Subtitle));
+                        setValues = true;
+                        datasetBuilder.SetValue(f.AutofillId, AutofillValue.ForText(Subtitle));
                     }
                 }
-
-                return true;
             }
-            else
+            else if(Type == CipherType.Card)
             {
-                return false;
+                if(fieldCollection.HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardNumber) &&
+                    !string.IsNullOrWhiteSpace(_cardNumber))
+                {
+                    foreach(var f in fieldCollection.HintToFieldsMap[View.AutofillHintCreditCardNumber])
+                    {
+                        setValues = true;
+                        datasetBuilder.SetValue(f.AutofillId, AutofillValue.ForText(_cardNumber));
+                    }
+                }
+                if(fieldCollection.HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardSecurityCode) &&
+                    !string.IsNullOrWhiteSpace(_cardCode.Value))
+                {
+                    foreach(var f in fieldCollection.HintToFieldsMap[View.AutofillHintCreditCardSecurityCode])
+                    {
+                        setValues = true;
+                        datasetBuilder.SetValue(f.AutofillId, AutofillValue.ForText(_cardCode.Value));
+                    }
+                }
+                if(fieldCollection.HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationMonth) &&
+                    !string.IsNullOrWhiteSpace(_cardExpMonth.Value))
+                {
+                    foreach(var f in fieldCollection.HintToFieldsMap[View.AutofillHintCreditCardExpirationMonth])
+                    {
+                        setValues = true;
+                        datasetBuilder.SetValue(f.AutofillId, AutofillValue.ForText(_cardExpMonth.Value));
+                    }
+                }
+                if(fieldCollection.HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationYear) &&
+                    !string.IsNullOrWhiteSpace(_cardExpYear.Value))
+                {
+                    foreach(var f in fieldCollection.HintToFieldsMap[View.AutofillHintCreditCardExpirationYear])
+                    {
+                        setValues = true;
+                        datasetBuilder.SetValue(f.AutofillId, AutofillValue.ForText(_cardExpYear.Value));
+                    }
+                }
             }
+
+            return setValues;
         }
     }
 }

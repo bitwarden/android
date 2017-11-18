@@ -34,7 +34,8 @@ namespace Bit.Android.Autofill
             parser.Parse();
 
             if(string.IsNullOrWhiteSpace(parser.Uri) || parser.Uri == "androidapp://com.x8bit.bitwarden" ||
-                parser.Uri == "androidapp://android" || !parser.FieldCollection.FillableForLogin)
+                parser.Uri == "androidapp://android" ||
+                (!parser.FieldCollection.FillableForLogin && !parser.FieldCollection.FillableForCard))
             {
                 return;
             }
@@ -58,8 +59,8 @@ namespace Bit.Android.Autofill
             }
 
             // build response
-            var items = await AutofillHelpers.GetFillItemsAsync(_cipherService, parser.Uri);
-            var response = AutofillHelpers.BuildFillResponse(this, parser.FieldCollection, items);
+            var items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService);
+            var response = AutofillHelpers.BuildFillResponse(this, parser, items);
             callback.OnSuccess(response);
         }
 

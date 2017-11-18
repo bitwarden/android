@@ -14,9 +14,24 @@ namespace Bit.Android.Autofill
 
         public HashSet<int> Ids { get; private set; } = new HashSet<int>();
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
-        public SaveDataType SaveType { get; private set; } = SaveDataType.Generic;
-        public List<string> Hints { get; private set; } = new List<string>();
-        public List<string> FocusedHints { get; private set; } = new List<string>();
+        public SaveDataType SaveType
+        {
+            get
+            {
+                if(FillableForLogin)
+                {
+                    return SaveDataType.Password;
+                }
+                else if(FillableForCard)
+                {
+                    return SaveDataType.CreditCard;
+                }
+
+                return SaveDataType.Generic;
+            }
+        }
+        public HashSet<string> Hints { get; private set; } = new HashSet<string>();
+        public HashSet<string> FocusedHints { get; private set; } = new HashSet<string>();
         public List<Field> Fields { get; private set; } = new List<Field>();
         public IDictionary<int, Field> IdToFieldMap { get; private set; } =
             new Dictionary<int, Field>();
@@ -35,7 +50,11 @@ namespace Bit.Android.Autofill
 
                 if(Hints.Any())
                 {
-                    _passwordFields = Fields.Where(f => f.Hints.Contains(View.AutofillHintPassword)).ToList();
+                    _passwordFields = new List<Field>();
+                    if(HintToFieldsMap.ContainsKey(View.AutofillHintPassword))
+                    {
+                        _passwordFields.AddRange(HintToFieldsMap[View.AutofillHintPassword]);
+                    }
                 }
                 else
                 {
@@ -59,15 +78,20 @@ namespace Bit.Android.Autofill
                     return _usernameFields;
                 }
 
+                _usernameFields = new List<Field>();
                 if(Hints.Any())
                 {
-                    _usernameFields = Fields
-                        .Where(f => f.Hints.Any(fh => fh == View.AutofillHintEmailAddress || fh == View.AutofillHintUsername))
-                        .ToList();
+                    if(HintToFieldsMap.ContainsKey(View.AutofillHintEmailAddress))
+                    {
+                        _usernameFields.AddRange(HintToFieldsMap[View.AutofillHintEmailAddress]);
+                    }
+                    if(HintToFieldsMap.ContainsKey(View.AutofillHintUsername))
+                    {
+                        _usernameFields.AddRange(HintToFieldsMap[View.AutofillHintUsername]);
+                    }
                 }
                 else
                 {
-                    _usernameFields = new List<Field>();
                     foreach(var passwordField in PasswordFields)
                     {
                         var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
@@ -82,7 +106,15 @@ namespace Bit.Android.Autofill
             }
         }
 
-        public bool FillableForLogin => UsernameFields.Any(f => f.Focused) || PasswordFields.Any(f => f.Focused);
+        public bool FillableForLogin => FocusedHintsContain(
+            new string[] { View.AutofillHintUsername, View.AutofillHintEmailAddress, View.AutofillHintPassword }) ||
+            UsernameFields.Any(f => f.Focused) || PasswordFields.Any(f => f.Focused);
+        public bool FillableForCard => FocusedHintsContain(
+            new string[] { View.AutofillHintCreditCardNumber, View.AutofillHintCreditCardExpirationMonth,
+                View.AutofillHintCreditCardExpirationYear, View.AutofillHintCreditCardSecurityCode});
+        public bool FillableForIdentity => FocusedHintsContain(
+            new string[] { View.AutofillHintName, View.AutofillHintPhone, View.AutofillHintPostalAddress,
+                View.AutofillHintPostalCode });
 
         public void Add(Field field)
         {
@@ -95,20 +127,19 @@ namespace Bit.Android.Autofill
 
             Ids.Add(field.Id);
             Fields.Add(field);
-            SaveType |= field.SaveType;
             AutofillIds.Add(field.AutofillId);
             IdToFieldMap.Add(field.Id, field);
 
-            if((field.Hints?.Count ?? 0) > 0)
+            if(field.Hints != null)
             {
-                Hints.AddRange(field.Hints);
-                if(field.Focused)
-                {
-                    FocusedHints.AddRange(field.Hints);
-                }
-
                 foreach(var hint in field.Hints)
                 {
+                    Hints.Add(hint);
+                    if(field.Focused)
+                    {
+                        FocusedHints.Add(hint);
+                    }
+
                     if(!HintToFieldsMap.ContainsKey(hint))
                     {
                         HintToFieldsMap.Add(hint, new List<Field>());
@@ -121,33 +152,53 @@ namespace Bit.Android.Autofill
 
         public SavedItem GetSavedItem()
         {
-            if(!Fields?.Any() ?? true)
+            if(SaveType == SaveDataType.Password)
             {
-                return null;
-            }
-
-            var passwordField = PasswordFields.FirstOrDefault(f => !string.IsNullOrWhiteSpace(f.TextValue));
-            if(passwordField == null)
-            {
-                return null;
-            }
-
-            var savedItem = new SavedItem
-            {
-                Type = App.Enums.CipherType.Login,
-                Login = new SavedItem.LoginItem
+                var passwordField = PasswordFields.FirstOrDefault(f => !string.IsNullOrWhiteSpace(f.TextValue));
+                if(passwordField == null)
                 {
-                    Password = passwordField.TextValue
+                    return null;
                 }
-            };
 
-            var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
-            if(usernameField != null && !string.IsNullOrWhiteSpace(usernameField.TextValue))
+                var savedItem = new SavedItem
+                {
+                    Type = App.Enums.CipherType.Login,
+                    Login = new SavedItem.LoginItem
+                    {
+                        Password = passwordField.TextValue
+                    }
+                };
+
+                var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
+                if(usernameField != null && !string.IsNullOrWhiteSpace(usernameField.TextValue))
+                {
+                    savedItem.Login.Username = usernameField.TextValue;
+                }
+
+                return savedItem;
+            }
+            else if(SaveType == SaveDataType.CreditCard)
             {
-                savedItem.Login.Username = usernameField.TextValue;
+                var savedItem = new SavedItem
+                {
+                    Type = App.Enums.CipherType.Card,
+                    Card = new SavedItem.CardItem
+                    {
+                        Number = HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardNumber) ?
+                            HintToFieldsMap[View.AutofillHintCreditCardNumber].FirstOrDefault(
+                                f => !string.IsNullOrWhiteSpace(f.TextValue))?.TextValue : null
+                    }
+                };
+
+                return savedItem;
             }
 
-            return savedItem;
+            return null;
+        }
+
+        private bool FocusedHintsContain(IEnumerable<string> hints)
+        {
+            return hints.Any(h => FocusedHints.Contains(h));
         }
     }
 }
