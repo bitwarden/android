@@ -8,6 +8,7 @@ namespace Bit.Android.Autofill
     {
         private readonly AssistStructure _structure;
         private string _uri;
+        private string _packageName;
 
         public Parser(AssistStructure structure)
         {
@@ -17,16 +18,36 @@ namespace Bit.Android.Autofill
         public FieldCollection FieldCollection { get; private set; } = new FieldCollection();
         public string Uri
         {
-            get => _uri;
+            get
+            {
+                if(!string.IsNullOrWhiteSpace(_uri))
+                {
+                    return _uri;
+                }
+
+                if(string.IsNullOrWhiteSpace(PackageName))
+                {
+                    _uri = null;
+                }
+                else
+                {
+                    _uri = string.Concat(Constants.AndroidAppProtocol, PackageName);
+                }
+
+                return _uri;
+            }
+        }
+        public string PackageName
+        {
+            get => _packageName;
             set
             {
                 if(string.IsNullOrWhiteSpace(value))
                 {
-                    _uri = null;
-                    return;
+                    _packageName = _uri = null;
                 }
 
-                _uri = string.Concat(Constants.AndroidAppProtocol, value);
+                _packageName = value;
             }
         }
 
@@ -45,9 +66,9 @@ namespace Bit.Android.Autofill
             var isEditText = node.ClassName == "android.widget.EditText";
             if(isEditText || (hints?.Length ?? 0) > 0)
             {
-                if(Uri == null)
+                if(PackageName == null)
                 {
-                    Uri = node.IdPackage;
+                    PackageName = node.IdPackage;
                 }
                 FieldCollection.Add(new Field(node));
             }

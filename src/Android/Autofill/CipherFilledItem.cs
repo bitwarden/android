@@ -2,7 +2,6 @@
 using Android.Service.Autofill;
 using Android.Views.Autofill;
 using System.Linq;
-using Android.Text;
 using Bit.App.Models;
 using Bit.App.Enums;
 using Bit.App.Models.Page;
@@ -61,23 +60,19 @@ namespace Bit.Android.Autofill
 
             if(Type == CipherType.Login)
             {
-                var passwordField = fieldCollection.PasswordFields.FirstOrDefault();
-                if(passwordField == null)
+                if(!fieldCollection.PasswordFields.Any() || string.IsNullOrWhiteSpace(_password.Value))
                 {
                     return false;
                 }
 
-                if(string.IsNullOrWhiteSpace(_password.Value))
+                foreach(var passwordField in fieldCollection.PasswordFields)
                 {
-                    return false;
+                    datasetBuilder.SetValue(passwordField.AutofillId, AutofillValue.ForText(_password.Value));
                 }
 
-                datasetBuilder.SetValue(passwordField.AutofillId, AutofillValue.ForText(_password.Value));
-
-                var usernameField = fieldCollection.Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
-                if(usernameField != null)
+                if(fieldCollection.UsernameFields.Any() && !string.IsNullOrWhiteSpace(Subtitle))
                 {
-                    if(!string.IsNullOrWhiteSpace(Subtitle))
+                    foreach(var usernameField in fieldCollection.UsernameFields)
                     {
                         datasetBuilder.SetValue(usernameField.AutofillId, AutofillValue.ForText(Subtitle));
                     }

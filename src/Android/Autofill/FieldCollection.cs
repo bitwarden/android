@@ -8,7 +8,8 @@ namespace Bit.Android.Autofill
 {
     public class FieldCollection
     {
-        private List<Field> _passwordFields;
+        private List<Field> _passwordFields = null;
+        private List<Field> _usernameFields = null;
 
         public HashSet<int> Ids { get; private set; } = new HashSet<int>();
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
@@ -40,7 +41,29 @@ namespace Bit.Android.Autofill
             }
         }
 
-        public bool FillableForLogin => PasswordFields.Any();
+        public List<Field> UsernameFields
+        {
+            get
+            {
+                if(_usernameFields != null)
+                {
+                    return _usernameFields;
+                }
+
+                _usernameFields = new List<Field>();
+                foreach(var passwordField in PasswordFields)
+                {
+                    var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
+                    if(usernameField != null)
+                    {
+                        _usernameFields.Add(usernameField);
+                    }
+                }
+                return _usernameFields;
+            }
+        }
+
+        public bool FillableForLogin => UsernameFields.Any(f => f.Focused) || PasswordFields.Any(f => f.Focused);
 
         public void Add(Field field)
         {
@@ -48,6 +71,8 @@ namespace Bit.Android.Autofill
             {
                 return;
             }
+
+            _passwordFields = _usernameFields = null;
 
             Ids.Add(field.Id);
             Fields.Add(field);
