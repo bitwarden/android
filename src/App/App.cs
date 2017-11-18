@@ -72,7 +72,7 @@ namespace Bit.App
                 {
                     MainPage = new ExtendedNavigationPage(new VaultAddCipherPage(_options));
                 }
-                else if (_options.Uri != null)
+                else if(_options.Uri != null)
                 {
                     MainPage = new ExtendedNavigationPage(new VaultAutofillListCiphersPage(_options.Uri));
                 }
@@ -175,7 +175,8 @@ namespace Bit.App
 
         private void SetMainPageFromAutofill()
         {
-            if(Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_options.Uri))
+            if(Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_options.Uri) &&
+                !_options.FromAutofillFramework)
             {
                 Task.Run(() =>
                 {
