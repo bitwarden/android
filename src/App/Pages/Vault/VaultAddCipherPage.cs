@@ -33,6 +33,11 @@ namespace Bit.App.Pages
         private readonly string _defaultName;
         private readonly string _defaultUsername;
         private readonly string _defaultPassword;
+        private readonly string _defaultCardName;
+        private readonly string _defaultCardNumber;
+        private readonly int? _defaultCardExpMonth;
+        private readonly string _defaultCardExpYear;
+        private readonly string _defaultCardCode;
         private readonly bool _fromAutofill;
         private readonly bool _fromAutofillFramework;
         private DateTime? _lastAction;
@@ -40,9 +45,17 @@ namespace Bit.App.Pages
         public VaultAddCipherPage(AppOptions options)
             : this(options.SaveType.Value, options.Uri, options.SaveName, options.FromAutofillFramework, false)
         {
+            _fromAutofillFramework = options.FromAutofillFramework;
             _defaultUsername = options.SaveUsername;
             _defaultPassword = options.SavePassword;
-            _fromAutofillFramework = options.FromAutofillFramework;
+            _defaultCardCode = options.SaveCardCode;
+            if(int.TryParse(options.SaveCardExpMonth, out int month) && month <= 12 && month >= 1)
+            {
+                _defaultCardExpMonth = month;
+            }
+            _defaultCardExpYear = options.SaveCardExpYear;
+            _defaultCardName = options.SaveCardName;
+            _defaultCardNumber = options.SaveCardNumber;
             Init();
         }
 
@@ -410,19 +423,39 @@ namespace Bit.App.Pages
             {
                 CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric,
                     nextElement: NotesCell.Editor);
+                if(!string.IsNullOrWhiteSpace(_defaultCardCode))
+                {
+                    CardCodeCell.Entry.Text = _defaultCardCode;
+                }
                 CardExpYearCell = new FormEntryCell(AppResources.ExpirationYear, Keyboard.Numeric,
                     nextElement: CardCodeCell.Entry);
+                if(!string.IsNullOrWhiteSpace(_defaultCardExpYear))
+                {
+                    CardExpYearCell.Entry.Text = _defaultCardExpYear;
+                }
                 CardExpMonthCell = new FormPickerCell(AppResources.ExpirationMonth, new string[] {
                     "--", AppResources.January, AppResources.February, AppResources.March, AppResources.April,
                     AppResources.May, AppResources.June, AppResources.July, AppResources.August, AppResources.September,
                     AppResources.October, AppResources.November, AppResources.December
                 });
+                if(_defaultCardExpMonth.HasValue)
+                {
+                    CardExpMonthCell.Picker.SelectedIndex = _defaultCardExpMonth.Value;
+                }
                 CardBrandCell = new FormPickerCell(AppResources.Brand, new string[] {
                     "--", "Visa", "Mastercard", "American Express", "Discover", "Diners Club",
                     "JCB", "Maestro", "UnionPay", AppResources.Other
                 });
                 CardNumberCell = new FormEntryCell(AppResources.Number, Keyboard.Numeric);
+                if(!string.IsNullOrWhiteSpace(_defaultCardNumber))
+                {
+                    CardNumberCell.Entry.Text = _defaultCardNumber;
+                }
                 CardNameCell = new FormEntryCell(AppResources.CardholderName, nextElement: CardNumberCell.Entry);
+                if(!string.IsNullOrWhiteSpace(_defaultCardName))
+                {
+                    CardNameCell.Entry.Text = _defaultCardName;
+                }
                 NameCell.NextElement = CardNameCell.Entry;
 
                 // Build sections

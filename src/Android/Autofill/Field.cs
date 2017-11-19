@@ -33,6 +33,7 @@ namespace Bit.Android.Autofill
                     var autofillOptions = node.GetAutofillOptions();
                     if(autofillOptions != null && autofillOptions.Length > 0)
                     {
+                        ListValue = node.AutofillValue.ListValue;
                         TextValue = autofillOptions[node.AutofillValue.ListValue];
                     }
                 }
@@ -43,6 +44,10 @@ namespace Bit.Android.Autofill
                 else if(node.AutofillValue.IsText)
                 {
                     TextValue = node.AutofillValue.TextValue;
+                }
+                else if(node.AutofillValue.IsToggle)
+                {
+                    ToggleValue = node.AutofillValue.ToggleValue;
                 }
             }
         }
@@ -69,23 +74,8 @@ namespace Bit.Android.Autofill
         public List<string> AutofillOptions { get; set; }
         public string TextValue { get; set; }
         public long? DateValue { get; set; }
+        public int? ListValue { get; set; }
         public bool? ToggleValue { get; set; }
-
-        public int GetAutofillOptionIndex(string value)
-        {
-            if(AutofillOptions != null)
-            {
-                for(var i = 0; i < AutofillOptions.Count; i++)
-                {
-                    if(AutofillOptions[i].Equals(value))
-                    {
-                        return i;
-                    }
-                }
-            }
-
-            return -1;
-        }
 
         private void UpdateSaveTypeFromHints()
         {

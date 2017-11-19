@@ -11,5 +11,10 @@ namespace Bit.App.Models
         public string SaveName { get; set; }
         public string SaveUsername { get; set; }
         public string SavePassword { get; set; }
+        public string SaveCardName { get; set; }
+        public string SaveCardNumber { get; set; }
+        public string SaveCardExpMonth { get; set; }
+        public string SaveCardExpYear { get; set; }
+        public string SaveCardCode { get; set; }
     }
 }

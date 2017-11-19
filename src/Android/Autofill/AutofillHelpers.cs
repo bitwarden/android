@@ -13,9 +13,9 @@ namespace Bit.Android.Autofill
 {
     public static class AutofillHelpers
     {
-        public static async Task<List<IFilledItem>> GetFillItemsAsync(Parser parser, ICipherService service)
+        public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService service)
         {
-            var items = new List<IFilledItem>();
+            var items = new List<FilledItem>();
 
             if(parser.FieldCollection.FillableForLogin)
             {
@@ -26,7 +26,7 @@ namespace Bit.Android.Autofill
                     allCiphers.AddRange(ciphers.Item2.ToList());
                     foreach(var cipher in allCiphers)
                     {
-                        items.Add(new CipherFilledItem(cipher));
+                        items.Add(new FilledItem(cipher));
                     }
                 }
             }
@@ -35,14 +35,14 @@ namespace Bit.Android.Autofill
                 var ciphers = await service.GetAllAsync();
                 foreach(var cipher in ciphers.Where(c => c.Type == App.Enums.CipherType.Card))
                 {
-                    items.Add(new CipherFilledItem(cipher));
+                    items.Add(new FilledItem(cipher));
                 }
             }
 
             return items;
         }
 
-        public static FillResponse BuildFillResponse(Context context, Parser parser, List<IFilledItem> items)
+        public static FillResponse BuildFillResponse(Context context, Parser parser, List<FilledItem> items)
         {
             var responseBuilder = new FillResponse.Builder();
             if(items != null && items.Count > 0)
@@ -62,7 +62,7 @@ namespace Bit.Android.Autofill
             return responseBuilder.Build();
         }
 
-        public static Dataset BuildDataset(Context context, FieldCollection fields, IFilledItem filledItem)
+        public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem)
         {
             var datasetBuilder = new Dataset.Builder(
                 BuildListView(context.PackageName, filledItem.Name, filledItem.Subtitle, filledItem.Icon));
@@ -100,13 +100,19 @@ namespace Bit.Android.Autofill
         public static void AddSaveInfo(FillResponse.Builder responseBuilder, FieldCollection fields)
         {
             var saveType = fields.SaveType;
-            if(saveType == SaveDataType.Generic)
+            var requiredIds = fields.GetRequiredSaveFields();
+            if(saveType == SaveDataType.Generic || requiredIds.Length == 0)
             {
                 return;
             }
 
-            var saveInfo = new SaveInfo.Builder(saveType, fields.AutofillIds.ToArray()).Build();
-            responseBuilder.SetSaveInfo(saveInfo);
+            var saveBuilder = new SaveInfo.Builder(saveType, requiredIds);
+            var optionalIds = fields.GetOptionalSaveIds();
+            if(optionalIds.Length > 0)
+            {
+                saveBuilder.SetOptionalIds(optionalIds);
+            }
+            responseBuilder.SetSaveInfo(saveBuilder.Build());
         }
     }
 }

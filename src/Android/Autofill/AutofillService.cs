@@ -34,8 +34,7 @@ namespace Bit.Android.Autofill
             parser.Parse();
 
             if(string.IsNullOrWhiteSpace(parser.Uri) || parser.Uri == "androidapp://com.x8bit.bitwarden" ||
-                parser.Uri == "androidapp://android" ||
-                (!parser.FieldCollection.FillableForLogin && !parser.FieldCollection.FillableForCard))
+                parser.Uri == "androidapp://android" || !parser.FieldCollection.Fillable)
             {
                 return;
             }
@@ -94,6 +93,13 @@ namespace Bit.Android.Autofill
                     intent.PutExtra("autofillFrameworkUri", parser.Uri);
                     intent.PutExtra("autofillFrameworkUsername", savedItem.Login.Username);
                     intent.PutExtra("autofillFrameworkPassword", savedItem.Login.Password);
+                    break;
+                case CipherType.Card:
+                    intent.PutExtra("autofillFrameworkCardName", savedItem.Card.Name);
+                    intent.PutExtra("autofillFrameworkCardNumber", savedItem.Card.Number);
+                    intent.PutExtra("autofillFrameworkCardExpMonth", savedItem.Card.ExpMonth);
+                    intent.PutExtra("autofillFrameworkCardExpYear", savedItem.Card.ExpYear);
+                    intent.PutExtra("autofillFrameworkCardCode", savedItem.Card.Code);
                     break;
                 default:
                     Toast.MakeText(this, "Unable to save this type of form.", ToastLength.Short).Show();

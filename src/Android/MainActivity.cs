@@ -169,7 +169,7 @@ namespace Bit.Android
                     return;
                 }
 
-                var items = new List<IFilledItem> { new CipherFilledItem(cipher) };
+                var items = new List<FilledItem> { new FilledItem(cipher) };
                 var response = AutofillHelpers.BuildFillResponse(this, parser, items);
                 var replyIntent = new Intent();
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, response);
@@ -441,6 +441,11 @@ namespace Bit.Android
                 options.SaveName = Intent.GetStringExtra("autofillFrameworkName");
                 options.SaveUsername = Intent.GetStringExtra("autofillFrameworkUsername");
                 options.SavePassword = Intent.GetStringExtra("autofillFrameworkPassword");
+                options.SaveCardName = Intent.GetStringExtra("autofillFrameworkCardName");
+                options.SaveCardNumber = Intent.GetStringExtra("autofillFrameworkCardNumber");
+                options.SaveCardExpMonth = Intent.GetStringExtra("autofillFrameworkCardExpMonth");
+                options.SaveCardExpYear = Intent.GetStringExtra("autofillFrameworkCardExpYear");
+                options.SaveCardCode = Intent.GetStringExtra("autofillFrameworkCardCode");
             }
 
             return options;

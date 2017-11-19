@@ -291,8 +291,7 @@
     <Compile Include="Autofill\FieldCollection.cs" />
     <Compile Include="Autofill\AutofillService.cs" />
     <Compile Include="Autofill\AutofillHelpers.cs" />
-    <Compile Include="Autofill\CipherFilledItem.cs" />
-    <Compile Include="Autofill\IFilledItem.cs" />
+    <Compile Include="Autofill\FilledItem.cs" />
     <Compile Include="Autofill\SavedItem.cs" />
     <Compile Include="Controls\CustomLabelRenderer.cs" />
     <Compile Include="Controls\CustomSearchBarRenderer.cs" />

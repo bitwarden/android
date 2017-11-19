@@ -58,7 +58,12 @@ namespace Bit.Android.Autofill
                 }
                 else
                 {
-                    _passwordFields = Fields.Where(f => f.InputType.HasFlag(InputTypes.TextVariationPassword)).ToList();
+                    _passwordFields = Fields
+                        .Where(f =>
+                            f.InputType.HasFlag(InputTypes.TextVariationPassword) ||
+                            f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
+                            f.InputType.HasFlag(InputTypes.TextVariationWebPassword))
+                        .ToList();
                     if(!_passwordFields.Any())
                     {
                         _passwordFields = Fields.Where(f => f.IdEntry?.ToLower().Contains("password") ?? false).ToList();
@@ -116,6 +121,8 @@ namespace Bit.Android.Autofill
             new string[] { View.AutofillHintName, View.AutofillHintPhone, View.AutofillHintPostalAddress,
                 View.AutofillHintPostalCode });
 
+        public bool Fillable => FillableForLogin || FillableForCard || FillableForIdentity;
+
         public void Add(Field field)
         {
             if(Ids.Contains(field.Id))
@@ -165,15 +172,12 @@ namespace Bit.Android.Autofill
                     Type = App.Enums.CipherType.Login,
                     Login = new SavedItem.LoginItem
                     {
-                        Password = passwordField.TextValue
+                        Password = GetFieldValue(passwordField)
                     }
                 };
 
                 var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
-                if(usernameField != null && !string.IsNullOrWhiteSpace(usernameField.TextValue))
-                {
-                    savedItem.Login.Username = usernameField.TextValue;
-                }
+                savedItem.Login.Username = GetFieldValue(usernameField);
 
                 return savedItem;
             }
@@ -184,9 +188,11 @@ namespace Bit.Android.Autofill
                     Type = App.Enums.CipherType.Card,
                     Card = new SavedItem.CardItem
                     {
-                        Number = HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardNumber) ?
-                            HintToFieldsMap[View.AutofillHintCreditCardNumber].FirstOrDefault(
-                                f => !string.IsNullOrWhiteSpace(f.TextValue))?.TextValue : null
+                        Number = GetFieldValue(View.AutofillHintCreditCardNumber),
+                        Name = GetFieldValue(View.AutofillHintName),
+                        ExpMonth = GetFieldValue(View.AutofillHintCreditCardExpirationMonth, true),
+                        ExpYear = GetFieldValue(View.AutofillHintCreditCardExpirationYear),
+                        Code = GetFieldValue(View.AutofillHintCreditCardSecurityCode)
                     }
                 };
 
@@ -196,9 +202,105 @@ namespace Bit.Android.Autofill
             return null;
         }
 
+        public AutofillId[] GetOptionalSaveIds()
+        {
+            if(SaveType == SaveDataType.Password)
+            {
+                return UsernameFields.Select(f => f.AutofillId).ToArray();
+            }
+            else if(SaveType == SaveDataType.CreditCard)
+            {
+                var fieldList = new List<Field>();
+                if(HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardSecurityCode))
+                {
+                    fieldList.AddRange(HintToFieldsMap[View.AutofillHintCreditCardSecurityCode]);
+                }
+                if(HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationYear))
+                {
+                    fieldList.AddRange(HintToFieldsMap[View.AutofillHintCreditCardExpirationYear]);
+                }
+                if(HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardExpirationMonth))
+                {
+                    fieldList.AddRange(HintToFieldsMap[View.AutofillHintCreditCardExpirationMonth]);
+                }
+                if(HintToFieldsMap.ContainsKey(View.AutofillHintName))
+                {
+                    fieldList.AddRange(HintToFieldsMap[View.AutofillHintName]);
+                }
+                return fieldList.Select(f => f.AutofillId).ToArray();
+            }
+
+            return new AutofillId[0];
+        }
+
+        public AutofillId[] GetRequiredSaveFields()
+        {
+            if(SaveType == SaveDataType.Password)
+            {
+                return PasswordFields.Select(f => f.AutofillId).ToArray();
+            }
+            else if(SaveType == SaveDataType.CreditCard && HintToFieldsMap.ContainsKey(View.AutofillHintCreditCardNumber))
+            {
+                return HintToFieldsMap[View.AutofillHintCreditCardNumber].Select(f => f.AutofillId).ToArray();
+            }
+
+            return new AutofillId[0];
+        }
+
         private bool FocusedHintsContain(IEnumerable<string> hints)
         {
             return hints.Any(h => FocusedHints.Contains(h));
+        }
+
+        private string GetFieldValue(string hint, bool monthValue = false)
+        {
+            if(HintToFieldsMap.ContainsKey(hint))
+            {
+                foreach(var field in HintToFieldsMap[hint])
+                {
+                    var val = GetFieldValue(field, monthValue);
+                    if(!string.IsNullOrWhiteSpace(val))
+                    {
+                        return val;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private string GetFieldValue(Field field, bool monthValue = false)
+        {
+            if(field == null)
+            {
+                return null;
+            }
+
+            if(!string.IsNullOrWhiteSpace(field.TextValue))
+            {
+                if(field.AutofillType == AutofillType.List && field.ListValue.HasValue && monthValue)
+                {
+                    if(field.AutofillOptions.Count == 13)
+                    {
+                        return field.ListValue.ToString();
+                    }
+                    else if(field.AutofillOptions.Count == 12)
+                    {
+                        return (field.ListValue + 1).ToString();
+                    }
+                }
+                return field.TextValue;
+            }
+            else if(field.DateValue.HasValue)
+            {
+                return field.DateValue.Value.ToString();
+            }
+            else if(field.ToggleValue.HasValue)
+            {
+                return field.ToggleValue.Value.ToString();
+            }
+
+            return null;
         }
     }
 }
