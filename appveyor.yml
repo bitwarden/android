@@ -1,9 +1,5 @@
-skip_tags: true
 init:
-  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
   - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/bitwarden/mobile/master/install-android26.ps1'))
-on_finish:
-  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 before_build:
   - nuget restore
   - IF DEFINED keystore_dec_secret nuget install secure-file -ExcludeVersion
@@ -20,4 +16,5 @@ artifacts:
 branches:
   except:
     - l10n_master
+skip_tags: true
 image: Visual Studio 2017

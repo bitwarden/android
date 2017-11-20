@@ -4252,6 +4252,9 @@ namespace Bit.Android.Test
 			// aapt resource value: 0x7f050000
 			public const int accessibilityservice = 2131034112;
 			
+			// aapt resource value: 0x7f050001
+			public const int autofillservice = 2131034113;
+			
 			static Xml()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
