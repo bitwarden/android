@@ -13,6 +13,7 @@ namespace Bit.App.Models.Page
         {
             public Cipher(Models.Cipher cipher, IAppSettingsService appSettings)
             {
+                CipherModel = cipher;
                 Id = cipher.Id;
                 Shared = !string.IsNullOrWhiteSpace(cipher.OrganizationId);
                 HasAttachments = cipher.Attachments?.Any() ?? false;
@@ -114,6 +115,7 @@ namespace Bit.App.Models.Page
                 }
             }
 
+            public Models.Cipher CipherModel { get; set; }
             public string Id { get; set; }
             public bool Shared { get; set; }
             public bool HasAttachments { get; set; }

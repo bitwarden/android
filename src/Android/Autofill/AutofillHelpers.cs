@@ -8,6 +8,7 @@ using Android.App;
 using Bit.App.Abstractions;
 using System.Threading.Tasks;
 using Bit.App.Resources;
+using Bit.App.Enums;
 
 namespace Bit.Android.Autofill
 {
@@ -33,7 +34,7 @@ namespace Bit.Android.Autofill
             else if(parser.FieldCollection.FillableForCard)
             {
                 var ciphers = await service.GetAllAsync();
-                foreach(var cipher in ciphers.Where(c => c.Type == App.Enums.CipherType.Card))
+                foreach(var cipher in ciphers.Where(c => c.Type == CipherType.Card))
                 {
                     items.Add(new FilledItem(cipher));
                 }
@@ -80,6 +81,22 @@ namespace Bit.Android.Autofill
                 AppResources.VaultIsLocked, Resource.Drawable.icon);
             var intent = new Intent(context, typeof(MainActivity));
             intent.PutExtra("autofillFramework", true);
+            if(fields.FillableForLogin)
+            {
+                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Login);
+            }
+            else if(fields.FillableForCard)
+            {
+                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Card);
+            }
+            else if(fields.FillableForIdentity)
+            {
+                intent.PutExtra("autofillFrameworkFillType", (int)CipherType.Identity);
+            }
+            else
+            {
+                return null;
+            }
             intent.PutExtra("autofillFrameworkUri", uri);
             var pendingIntent = PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.CancelCurrent);
             responseBuilder.SetAuthentication(fields.AutofillIds.ToArray(), pendingIntent.IntentSender, view);

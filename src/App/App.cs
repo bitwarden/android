@@ -74,7 +74,7 @@ namespace Bit.App
                 }
                 else if(_options.Uri != null)
                 {
-                    MainPage = new ExtendedNavigationPage(new VaultAutofillListCiphersPage(_options.Uri));
+                    MainPage = new ExtendedNavigationPage(new VaultAutofillListCiphersPage(_options));
                 }
                 else
                 {

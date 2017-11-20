@@ -6,6 +6,7 @@ namespace Bit.App.Models
     {
         public bool MyVault { get; set; }
         public bool FromAutofillFramework { get; set; }
+        public CipherType? FillType { get; set; }
         public string Uri { get; set; }
         public CipherType? SaveType { get; set; }
         public string SaveName { get; set; }

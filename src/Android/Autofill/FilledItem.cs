@@ -4,7 +4,6 @@ using Android.Views.Autofill;
 using System.Linq;
 using Bit.App.Models;
 using Bit.App.Enums;
-using Bit.App.Models.Page;
 using Android.Views;
 
 namespace Bit.Android.Autofill
@@ -101,23 +100,6 @@ namespace Bit.Android.Autofill
                         return address;
                     });
                     _idPostalCode = new Lazy<string>(() => cipher.Identity.PostalCode?.Decrypt(cipher.OrganizationId));
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        public FilledItem(VaultListPageModel.Cipher cipher)
-        {
-            Name = cipher.Name ?? "--";
-            Type = cipher.Type;
-
-            switch(Type)
-            {
-                case CipherType.Login:
-                    Subtitle = cipher.LoginUsername ?? string.Empty;
-                    _password = cipher.LoginPassword;
-                    Icon = Resource.Drawable.login;
                     break;
                 default:
                     break;

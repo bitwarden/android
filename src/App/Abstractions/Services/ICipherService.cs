@@ -12,7 +12,7 @@ namespace Bit.App.Abstractions
         Task<Cipher> GetByIdAsync(string id);
         Task<IEnumerable<Cipher>> GetAllAsync();
         Task<IEnumerable<Cipher>> GetAllAsync(bool favorites);
-        Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString);
+        Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString);
         Task<ApiResult<CipherResponse>> SaveAsync(Cipher cipher);
         Task UpsertDataAsync(CipherData cipher);
         Task<ApiResult> DeleteAsync(string id);

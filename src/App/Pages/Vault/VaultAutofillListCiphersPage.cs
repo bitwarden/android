@@ -25,17 +25,18 @@ namespace Bit.App.Pages
         private readonly IAppSettingsService _appSettingsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly string _name;
+        private readonly AppOptions _appOptions;
 
-        public VaultAutofillListCiphersPage(string uriString)
+        public VaultAutofillListCiphersPage(AppOptions appOptions)
             : base(true)
         {
-            Uri = uriString;
-
-            if(uriString?.StartsWith(Constants.AndroidAppProtocol) ?? false)
+            _appOptions = appOptions;
+            Uri = appOptions.Uri;
+            if(Uri.StartsWith(Constants.AndroidAppProtocol))
             {
-                _name = uriString.Substring(Constants.AndroidAppProtocol.Length);
+                _name = Uri.Substring(Constants.AndroidAppProtocol.Length);
             }
-            else if(!System.Uri.TryCreate(uriString, UriKind.Absolute, out Uri uri) ||
+            else if(!System.Uri.TryCreate(Uri, UriKind.Absolute, out Uri uri) ||
                 !DomainName.TryParseBaseDomain(uri.Host, out _name))
             {
                 _name = "--";
@@ -166,25 +167,41 @@ namespace Bit.App.Pages
                 var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>();
                 var ciphers = await _cipherService.GetAllAsync(Uri);
 
-                var normalLogins = ciphers?.Item1.Select(l => new VaultListPageModel.AutofillCipher(
-                    l, _appSettingsService, false))
-                    .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Subtitle)
-                    .ToList();
-                if(normalLogins?.Any() ?? false)
+                if(_appOptions.FillType.HasValue && _appOptions.FillType.Value != CipherType.Login)
                 {
-                    autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins, AppResources.MatchingItems));
+                    var others = ciphers?.Item3.Where(c => c.Type == _appOptions.FillType.Value)
+                        .Select(c => new VaultListPageModel.AutofillCipher(c, _appSettingsService, false))
+                        .OrderBy(s => s.Name)
+                        .ThenBy(s => s.Subtitle)
+                        .ToList();
+                    if(others?.Any() ?? false)
+                    {
+                        autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(others, AppResources.Items));
+                    }
                 }
-
-                var fuzzyLogins = ciphers?.Item2.Select(l => new VaultListPageModel.AutofillCipher(
-                    l, _appSettingsService, true))
-                    .OrderBy(s => s.Name)
-                    .ThenBy(s => s.LoginUsername)
-                    .ToList();
-                if(fuzzyLogins?.Any() ?? false)
+                else
                 {
-                    autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(fuzzyLogins,
-                        AppResources.PossibleMatchingItems));
+                    var normalLogins = ciphers?.Item1
+                        .Select(l => new VaultListPageModel.AutofillCipher(l, _appSettingsService, false))
+                        .OrderBy(s => s.Name)
+                        .ThenBy(s => s.Subtitle)
+                        .ToList();
+                    if(normalLogins?.Any() ?? false)
+                    {
+                        autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins,
+                            AppResources.MatchingItems));
+                    }
+
+                    var fuzzyLogins = ciphers?.Item2
+                        .Select(l => new VaultListPageModel.AutofillCipher(l, _appSettingsService, true))
+                        .OrderBy(s => s.Name)
+                        .ThenBy(s => s.Subtitle)
+                        .ToList();
+                    if(fuzzyLogins?.Any() ?? false)
+                    {
+                        autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(fuzzyLogins,
+                            AppResources.PossibleMatchingItems));
+                    }
                 }
 
                 Device.BeginInvokeOnMainThread(() =>
@@ -235,8 +252,15 @@ namespace Bit.App.Pages
 
         private async void AddCipherAsync()
         {
-            var page = new VaultAddCipherPage(CipherType.Login, Uri, _name, true);
-            await Navigation.PushForDeviceAsync(page);
+            if(_appOptions.FillType.HasValue && _appOptions.FillType != CipherType.Login)
+            {
+                var pageForOther = new VaultAddCipherPage(_appOptions.FillType.Value, null, null, true);
+                await Navigation.PushForDeviceAsync(pageForOther);
+                return;
+            }
+
+            var pageForLogin = new VaultAddCipherPage(CipherType.Login, Uri, _name, true);
+            await Navigation.PushForDeviceAsync(pageForLogin);
         }
 
         private async void MoreClickedAsync(VaultListPageModel.Cipher cipher)

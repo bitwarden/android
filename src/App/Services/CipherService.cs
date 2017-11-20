@@ -78,7 +78,7 @@ namespace Bit.App.Services
             return cipher;
         }
 
-        public async Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString)
+        public async Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString)
         {
             if(string.IsNullOrWhiteSpace(uriString))
             {
@@ -135,9 +135,16 @@ namespace Bit.App.Services
             var matchingFuzzyDomainsArray = matchingFuzzyDomains.ToArray();
             var matchingLogins = new List<Cipher>();
             var matchingFuzzyLogins = new List<Cipher>();
+            var others = new List<Cipher>();
             var ciphers = await GetAllAsync();
             foreach(var cipher in ciphers)
             {
+                if(cipher.Type != Enums.CipherType.Login)
+                {
+                    others.Add(cipher);
+                    continue;
+                }
+
                 if(cipher.Type != Enums.CipherType.Login || cipher.Login?.Uri == null)
                 {
                     continue;
@@ -190,7 +197,7 @@ namespace Bit.App.Services
                 if(mobileApp && mobileAppSearchTerms != null && mobileAppSearchTerms.Length > 0)
                 {
                     var addedFromSearchTerm = false;
-                    var loginNameString = cipher.Name == null ? null : 
+                    var loginNameString = cipher.Name == null ? null :
                         cipher.Name.Decrypt(cipher.OrganizationId)?.ToLowerInvariant();
                     foreach(var term in mobileAppSearchTerms)
                     {
@@ -216,7 +223,8 @@ namespace Bit.App.Services
                 }
             }
 
-            return new Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>>(matchingLogins, matchingFuzzyLogins);
+            return new Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>, IEnumerable<Cipher>>(
+                matchingLogins, matchingFuzzyLogins, others);
         }
 
         public async Task<ApiResult<CipherResponse>> SaveAsync(Cipher cipher)

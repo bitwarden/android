@@ -169,7 +169,7 @@ namespace Bit.Android
                     return;
                 }
 
-                var items = new List<FilledItem> { new FilledItem(cipher) };
+                var items = new List<FilledItem> { new FilledItem(cipher.CipherModel) };
                 var response = AutofillHelpers.BuildFillResponse(this, parser, items);
                 var replyIntent = new Intent();
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, response);
@@ -434,6 +434,12 @@ namespace Bit.Android
                 MyVault = Intent.GetBooleanExtra("myVaultTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false)
             };
+
+            var fillType = Intent.GetIntExtra("autofillFrameworkFillType", 0);
+            if(fillType > 0)
+            {
+                options.FillType = (CipherType)fillType;
+            }
 
             if(Intent.GetBooleanExtra("autofillFrameworkSave", false))
             {
