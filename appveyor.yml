@@ -1,4 +1,8 @@
 skip_tags: true
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 before_build:
   - nuget restore
   - IF DEFINED keystore_dec_secret nuget install secure-file -ExcludeVersion
