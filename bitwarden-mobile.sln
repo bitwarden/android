@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27004.2009
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Android", "src\Android\Android.csproj", "{04B18ED2-B76D-4947-8474-191F8FD2B5E0}"
 EndProject
@@ -32,6 +32,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UWP", "src\UWP\UWP.csproj", "{3A2D5669-ED71-4F2B-BA85-2D36BAA05141}"
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "UWP.Images", "src\UWP.Images\UWP.Images.shproj", "{0BE54BBB-7772-4289-BD51-1FDBB0CC2446}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F0E2E596-C3DB-474A-9C88-7824662894FA}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		crowdin.yml = crowdin.yml
+		README.md = README.md
+		SECURITY.md = SECURITY.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
