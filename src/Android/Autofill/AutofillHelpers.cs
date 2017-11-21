@@ -116,14 +116,13 @@ namespace Bit.Android.Autofill
 
         public static void AddSaveInfo(FillResponse.Builder responseBuilder, FieldCollection fields)
         {
-            var saveType = fields.SaveType;
             var requiredIds = fields.GetRequiredSaveFields();
-            if(saveType == SaveDataType.Generic || requiredIds.Length == 0)
+            if(fields.SaveType == SaveDataType.Generic || requiredIds.Length == 0)
             {
                 return;
             }
 
-            var saveBuilder = new SaveInfo.Builder(saveType, requiredIds);
+            var saveBuilder = new SaveInfo.Builder(fields.SaveType, requiredIds);
             var optionalIds = fields.GetOptionalSaveIds();
             if(optionalIds.Length > 0)
             {
