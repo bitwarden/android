@@ -56,5 +56,15 @@ namespace Bit.App.Utilities
 
             return false;
         }
+
+        public static string GetEmptyTableSectionTitle()
+        {
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                return null;
+            }
+
+            return " ";
+        }
     }
 }

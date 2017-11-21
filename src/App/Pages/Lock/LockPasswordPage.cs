@@ -50,7 +50,7 @@ namespace Bit.App.Pages
                 NoFooter = true,
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         PasswordCell
                     }

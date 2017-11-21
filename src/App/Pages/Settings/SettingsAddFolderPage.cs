@@ -8,6 +8,7 @@ using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using System.Linq;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -42,7 +43,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         NameCell
                     }

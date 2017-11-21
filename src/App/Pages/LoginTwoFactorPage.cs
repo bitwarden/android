@@ -130,7 +130,7 @@ namespace Bit.App.Pages
                 TokenCell.Entry.ReturnType = ReturnType.Go;
 
                 var table = new TwoFactorTable(
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         TokenCell,
                         RememberCell
@@ -209,7 +209,7 @@ namespace Bit.App.Pages
                 });
 
                 var table = new TwoFactorTable(
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         RememberCell
                     });
@@ -240,7 +240,7 @@ namespace Bit.App.Pages
                 };
 
                 var table = new TwoFactorTable(
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         RememberCell
                     });

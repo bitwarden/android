@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Bit.App.Abstractions;
 using XLabs.Ioc;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -38,7 +39,7 @@ namespace Bit.App.Pages
             {
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         EmailCell
                     }
@@ -61,7 +62,7 @@ namespace Bit.App.Pages
                 NoHeader = true,
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         WebsiteCell
                     }
@@ -84,7 +85,7 @@ namespace Bit.App.Pages
                 NoHeader = true,
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         BugCell
                     }

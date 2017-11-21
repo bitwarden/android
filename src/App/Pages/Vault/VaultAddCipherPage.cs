@@ -359,7 +359,7 @@ namespace Bit.App.Pages
                 NameCell
             };
 
-            MiddleSection = new TableSection(" ")
+            MiddleSection = new TableSection(Helpers.GetEmptyTableSectionTitle())
             {
                 FolderCell,
                 FavoriteCell

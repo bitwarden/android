@@ -8,6 +8,7 @@ using Plugin.Connectivity.Abstractions;
 using Plugin.Settings.Abstractions;
 using Xamarin.Forms;
 using XLabs.Ioc;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -77,19 +78,19 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         UppercaseCell,
                         LowercaseCell,
                         NumbersCell,
                         SpecialCell
                     },
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         NumbersMinCell,
                         SpecialMinCell
                     },
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         AvoidAmbiguousCell
                     }

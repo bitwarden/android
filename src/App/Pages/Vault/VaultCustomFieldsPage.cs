@@ -43,7 +43,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            FieldsSection = new TableSection(" ");
+            FieldsSection = new TableSection(Helpers.GetEmptyTableSectionTitle());
 
             Table = new ExtendedTableView
             {

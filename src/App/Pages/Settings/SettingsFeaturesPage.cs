@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Controls;
 using Plugin.Settings.Abstractions;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -49,7 +50,7 @@ namespace Bit.App.Pages
             {
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         WebsiteIconsCell
                     }
@@ -66,7 +67,7 @@ namespace Bit.App.Pages
             {
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         CopyTotpCell
                     }
@@ -83,7 +84,7 @@ namespace Bit.App.Pages
             {
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         AnalyticsCell
                     }
@@ -150,7 +151,7 @@ namespace Bit.App.Pages
                 {
                     Root = new TableRoot
                     {
-                        new TableSection(" ")
+                        new TableSection(Helpers.GetEmptyTableSectionTitle())
                         {
                             AutofillPersistNotificationCell
                         }
@@ -172,7 +173,7 @@ namespace Bit.App.Pages
                 {
                     Root = new TableRoot
                     {
-                        new TableSection(" ")
+                        new TableSection(Helpers.GetEmptyTableSectionTitle())
                         {
                             AutofillPasswordFieldCell
                         }

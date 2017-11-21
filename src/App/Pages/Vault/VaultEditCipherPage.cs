@@ -165,7 +165,7 @@ namespace Bit.App.Pages
                 NameCell
             };
 
-            MiddleSection = new TableSection(" ")
+            MiddleSection = new TableSection(Helpers.GetEmptyTableSectionTitle())
             {
                 FolderCell,
                 FavoriteCell,
@@ -415,7 +415,7 @@ namespace Bit.App.Pages
                 {
                     NotesCell
                 },
-                new TableSection(" ")
+                new TableSection(Helpers.GetEmptyTableSectionTitle())
                 {
                     DeleteCell
                 }

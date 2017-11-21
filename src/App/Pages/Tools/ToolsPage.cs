@@ -7,6 +7,7 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using FFImageLoading.Forms;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -38,7 +39,7 @@ namespace Bit.App.Pages
             ShareCell = new ToolsViewCell(AppResources.ShareVault, AppResources.ShareVaultDescription, "share_tools.png");
             ImportCell = new ToolsViewCell(AppResources.ImportItems, AppResources.ImportItemsDescription, "cloudup.png");
 
-            var section = new TableSection(" ") { GeneratorCell };
+            var section = new TableSection(Helpers.GetEmptyTableSectionTitle()) { GeneratorCell };
 
             if(Device.RuntimePlatform == Device.iOS)
             {

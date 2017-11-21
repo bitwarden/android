@@ -5,6 +5,7 @@ using Bit.App.Abstractions;
 using XLabs.Ioc;
 using Bit.App.Resources;
 using FFImageLoading.Forms;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -59,7 +60,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 Root = new TableRoot
                 {
-                    new TableSection(" ")
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
                         CreditsCell
                     }
