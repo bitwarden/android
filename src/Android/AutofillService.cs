@@ -347,12 +347,12 @@ namespace Bit.Android
             var pendingIntent = PendingIntent.GetActivity(this, 0, intent, PendingIntentFlags.UpdateCurrent);
 
             var notificationContent = Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch ?
-                App.Resources.AppResources.BitwardenAutofillServiceNotificationContent :
-                App.Resources.AppResources.BitwardenAutofillServiceNotificationContentOld;
+                AppResources.BitwardenAutofillServiceNotificationContent :
+                AppResources.BitwardenAutofillServiceNotificationContentOld;
 
             var builder = new Notification.Builder(this);
             builder.SetSmallIcon(Resource.Drawable.notification_sm)
-                   .SetContentTitle(App.Resources.AppResources.BitwardenAutofillService)
+                   .SetContentTitle(AppResources.BitwardenAutofillService)
                    .SetContentText(notificationContent)
                    .SetTicker(notificationContent)
                    .SetWhen(now)
@@ -370,7 +370,7 @@ namespace Bit.Android
                 if(_notificationChannel == null)
                 {
                     _notificationChannel = new NotificationChannel("bitwarden_autofill_service",
-                        AppResources.BitwardenAutofillService, NotificationImportance.Default);
+                        AppResources.AutofillService, NotificationImportance.Low);
                     notificationManager.CreateNotificationChannel(_notificationChannel);
                 }
                 builder.SetChannelId(_notificationChannel.Id);
