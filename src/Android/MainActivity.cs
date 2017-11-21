@@ -169,10 +169,9 @@ namespace Bit.Android
                     return;
                 }
 
-                var items = new List<FilledItem> { new FilledItem(cipher.CipherModel) };
-                var response = AutofillHelpers.BuildFillResponse(this, parser, items);
+                var dataset = AutofillHelpers.BuildDataset(this, parser.FieldCollection, new FilledItem(cipher.CipherModel));
                 var replyIntent = new Intent();
-                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, response);
+                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
                 SetResult(Result.Ok, replyIntent);
                 Finish();
             }

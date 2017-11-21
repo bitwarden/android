@@ -1430,6 +1430,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go to my vault.
+        /// </summary>
+        public static string GoToMyVault {
+            get {
+                return ResourceManager.GetString("GoToMyVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Go To Website.
         /// </summary>
         public static string GoToWebsite {

@@ -1191,4 +1191,7 @@
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Vault is locked</value>
   </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
 </root>

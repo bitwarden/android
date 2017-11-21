@@ -9,11 +9,14 @@ using Bit.App.Abstractions;
 using System.Threading.Tasks;
 using Bit.App.Resources;
 using Bit.App.Enums;
+using Android.Views.Autofill;
 
 namespace Bit.Android.Autofill
 {
     public static class AutofillHelpers
     {
+        private static int _pendingIntentId = 0;
+
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService service)
         {
             var items = new List<FilledItem>();
@@ -43,7 +46,7 @@ namespace Bit.Android.Autofill
             return items;
         }
 
-        public static FillResponse BuildFillResponse(Context context, Parser parser, List<FilledItem> items)
+        public static FillResponse BuildFillResponse(Context context, Parser parser, List<FilledItem> items, bool locked)
         {
             var responseBuilder = new FillResponse.Builder();
             if(items != null && items.Count > 0)
@@ -58,6 +61,7 @@ namespace Bit.Android.Autofill
                 }
             }
 
+            responseBuilder.AddDataset(BuildVaultDataset(context, parser.FieldCollection, parser.Uri, locked));
             AddSaveInfo(responseBuilder, parser.FieldCollection);
             responseBuilder.SetIgnoredIds(parser.FieldCollection.IgnoreAutofillIds.ToArray());
             return responseBuilder.Build();
@@ -74,11 +78,8 @@ namespace Bit.Android.Autofill
             return null;
         }
 
-        public static FillResponse BuildAuthResponse(Context context, FieldCollection fields, string uri)
+        public static Dataset BuildVaultDataset(Context context, FieldCollection fields, string uri, bool locked)
         {
-            var responseBuilder = new FillResponse.Builder();
-            var view = BuildListView(context.PackageName, AppResources.AutofillWithBitwarden,
-                AppResources.VaultIsLocked, Resource.Drawable.icon);
             var intent = new Intent(context, typeof(MainActivity));
             intent.PutExtra("autofillFramework", true);
             if(fields.FillableForLogin)
@@ -98,11 +99,22 @@ namespace Bit.Android.Autofill
                 return null;
             }
             intent.PutExtra("autofillFrameworkUri", uri);
-            var pendingIntent = PendingIntent.GetActivity(context, 0, intent, PendingIntentFlags.CancelCurrent);
-            responseBuilder.SetAuthentication(fields.AutofillIds.ToArray(), pendingIntent.IntentSender, view);
-            AddSaveInfo(responseBuilder, fields);
-            responseBuilder.SetIgnoredIds(fields.IgnoreAutofillIds.ToArray());
-            return responseBuilder.Build();
+            var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
+                PendingIntentFlags.CancelCurrent);
+
+            var view = BuildListView(context.PackageName, AppResources.AutofillWithBitwarden,
+                locked ? AppResources.VaultIsLocked : AppResources.GoToMyVault, Resource.Drawable.icon);
+
+            var datasetBuilder = new Dataset.Builder(view);
+            datasetBuilder.SetAuthentication(pendingIntent.IntentSender);
+
+            // Dataset must have a value set. We will reset this in the main activity when the real item is chosen.
+            foreach(var autofillId in fields.AutofillIds)
+            {
+                datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"));
+            }
+
+            return datasetBuilder.Build();
         }
 
         public static RemoteViews BuildListView(string packageName, string text, string subtext, int iconId)

@@ -8,6 +8,7 @@ using Android.Widget;
 using Bit.App;
 using Bit.App.Abstractions;
 using Bit.App.Enums;
+using System.Collections.Generic;
 using System.Linq;
 using XLabs.Ioc;
 
@@ -44,22 +45,20 @@ namespace Bit.Android.Autofill
                 _lockService = Resolver.Resolve<ILockService>();
             }
 
-            var isLocked = (await _lockService.GetLockTypeAsync(false)) != LockType.None;
-            if(isLocked)
+            List<FilledItem> items = null;
+            var locked = (await _lockService.GetLockTypeAsync(false)) != LockType.None;
+            if(!locked)
             {
-                var authResponse = AutofillHelpers.BuildAuthResponse(this, parser.FieldCollection, parser.Uri);
-                callback.OnSuccess(authResponse);
-                return;
-            }
+                if(_cipherService == null)
+                {
+                    _cipherService = Resolver.Resolve<ICipherService>();
+                }
 
-            if(_cipherService == null)
-            {
-                _cipherService = Resolver.Resolve<ICipherService>();
+                items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService);
             }
 
             // build response
-            var items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService);
-            var response = AutofillHelpers.BuildFillResponse(this, parser, items);
+            var response = AutofillHelpers.BuildFillResponse(this, parser, items, locked);
             callback.OnSuccess(response);
         }
 
