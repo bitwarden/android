@@ -8,6 +8,7 @@ using Android.OS;
 using Android.Views.Accessibility;
 using Bit.App.Abstractions;
 using XLabs.Ioc;
+using Bit.App.Resources;
 
 namespace Bit.Android
 {
@@ -16,6 +17,8 @@ namespace Bit.Android
     [MetaData("android.accessibilityservice", Resource = "@xml/accessibilityservice")]
     public class AutofillService : AccessibilityService
     {
+        private NotificationChannel _notificationChannel;
+
         private const int AutoFillNotificationId = 34573;
         private const string SystemUiPackage = "com.android.systemui";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
@@ -360,6 +363,17 @@ namespace Bit.Android
                 builder.SetVisibility(NotificationVisibility.Secret)
                     .SetColor(global::Android.Support.V4.Content.ContextCompat.GetColor(ApplicationContext,
                         Resource.Color.primary));
+            }
+
+            if(Build.VERSION.SdkInt >= BuildVersionCodes.O)
+            {
+                if(_notificationChannel == null)
+                {
+                    _notificationChannel = new NotificationChannel("bitwarden_autofill_service",
+                        AppResources.BitwardenAutofillService, NotificationImportance.Default);
+                    notificationManager.CreateNotificationChannel(_notificationChannel);
+                }
+                builder.SetChannelId(_notificationChannel.Id);
             }
 
             if(/*Build.VERSION.SdkInt <= BuildVersionCodes.N && */_appSettings.AutofillPersistNotification)

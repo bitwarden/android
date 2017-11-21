@@ -39,6 +39,7 @@ namespace Bit.Android
         private Java.Util.Regex.Pattern _otpPattern = Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
         private IDeviceActionService _deviceActionService;
         private ISettings _settings;
+        private AppOptions _appOptions;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -78,8 +79,9 @@ namespace Bit.Android
 
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _settings = Resolver.Resolve<ISettings>();
+            _appOptions = GetOptions();
             LoadApplication(new App.App(
-                GetOptions(),
+                _appOptions,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),
@@ -93,56 +95,54 @@ namespace Bit.Android
                 Resolver.Resolve<IAppSettingsService>(),
                 _deviceActionService));
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(
-                Xamarin.Forms.Application.Current, "DismissKeyboard", (sender) =>
+            if(_appOptions?.Uri == null)
             {
-                DismissKeyboard();
-            });
+                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                    "DismissKeyboard", (sender) => DismissKeyboard());
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "RateApp", (sender) =>
-            {
-                RateApp();
-            });
+                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                    "RateApp", (sender) => RateApp());
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "Accessibility", (sender) =>
-            {
-                OpenAccessibilitySettings();
-            });
+                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                    "Accessibility", (sender) => OpenAccessibilitySettings());
+
+                MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current,
+                    "LaunchApp", (sender, args) => LaunchApp(args));
+
+                MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
+                    "ListenYubiKeyOTP", (sender, listen) => ListenYubiKey(listen));
+            }
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, VaultListPageModel.Cipher>(
-                Xamarin.Forms.Application.Current, "Autofill", (sender, args) =>
-            {
-                ReturnCredentials(args);
-            });
+                Xamarin.Forms.Application.Current, "Autofill", (sender, args) => ReturnCredentials(args));
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current, "BackgroundApp", (sender) =>
-            {
-                if(Intent.GetBooleanExtra("autofillFramework", false))
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                "BackgroundApp", (sender) =>
                 {
-                    SetResult(Result.Canceled);
-                    Finish();
-                }
-                else
-                {
-                    MoveTaskToBack(true);
-                }
-            });
-
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
-                Xamarin.Forms.Application.Current, "LaunchApp", (sender, args) =>
-            {
-                LaunchApp(args);
-            });
-
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(
-                Xamarin.Forms.Application.Current, "ListenYubiKeyOTP", (sender, listen) =>
-            {
-                ListenYubiKey(listen);
-            });
+                    if(Intent.GetBooleanExtra("autofillFramework", false))
+                    {
+                        MessagingCenter.Unsubscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                            "BackgroundApp");
+                        SetResult(Result.Canceled);
+                        Finish();
+                    }
+                    else
+                    {
+                        MoveTaskToBack(true);
+                    }
+                });
         }
 
         private void ReturnCredentials(VaultListPageModel.Cipher cipher)
         {
+            if(_appOptions?.Uri != null)
+            {
+                MessagingCenter.Unsubscribe<Xamarin.Forms.Application, VaultListPageModel.Cipher>(
+                    Xamarin.Forms.Application.Current, "Autofill");
+                MessagingCenter.Unsubscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                    "BackgroundApp");
+            }
+
             if(Intent.GetBooleanExtra("autofillFramework", false))
             {
                 if(cipher == null)
