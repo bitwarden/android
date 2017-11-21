@@ -121,8 +121,6 @@ namespace Bit.Android
                 {
                     if(Intent.GetBooleanExtra("autofillFramework", false))
                     {
-                        MessagingCenter.Unsubscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                            "BackgroundApp");
                         SetResult(Result.Canceled);
                         Finish();
                     }
@@ -135,14 +133,6 @@ namespace Bit.Android
 
         private void ReturnCredentials(VaultListPageModel.Cipher cipher)
         {
-            if(_appOptions?.Uri != null)
-            {
-                MessagingCenter.Unsubscribe<Xamarin.Forms.Application, VaultListPageModel.Cipher>(
-                    Xamarin.Forms.Application.Current, "Autofill");
-                MessagingCenter.Unsubscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                    "BackgroundApp");
-            }
-
             if(Intent.GetBooleanExtra("autofillFramework", false))
             {
                 if(cipher == null)
