@@ -10,5 +10,12 @@ namespace Bit.App.Abstractions
         bool CanOpenFile(string fileName);
         Task SelectFileAsync();
         void ClearCache();
+        void Autofill(Models.Page.VaultListPageModel.Cipher cipher);
+        void CloseAutofill();
+        void Background();
+        void RateApp();
+        void DismissKeyboard();
+        void OpenAccessibilitySettings();
+        void LaunchApp(string appName);
     }
 }

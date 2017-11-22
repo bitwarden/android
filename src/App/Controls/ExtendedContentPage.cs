@@ -1,6 +1,4 @@
 ﻿using Bit.App.Abstractions;
-using Plugin.Settings.Abstractions;
-using System;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -11,6 +9,7 @@ namespace Bit.App.Controls
         private ISyncService _syncService;
         private IGoogleAnalyticsService _googleAnalyticsService;
         private ILockService _lockService;
+        private IDeviceActionService _deviceActionService;
         private bool _syncIndicator;
         private bool _updateActivity;
 
@@ -21,25 +20,21 @@ namespace Bit.App.Controls
             _syncService = Resolver.Resolve<ISyncService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _lockService = Resolver.Resolve<ILockService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
 
             BackgroundColor = Color.FromHex("efeff4");
-
-            if(_syncIndicator)
-            {
-                MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
-                {
-                    Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress);
-                });
-
-                MessagingCenter.Subscribe<Application>(Application.Current, "SyncStarted", (sender) =>
-                {
-                    Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress);
-                });
-            }
         }
 
         protected override void OnAppearing()
         {
+            if(_syncIndicator)
+            {
+                MessagingCenter.Subscribe<ISyncService, bool>(_syncService, "SyncCompleted",
+                    (sender, success) => Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress));
+                MessagingCenter.Subscribe<ISyncService>(_syncService, "SyncStarted",
+                    (sender) => Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress));
+            }
+
             if(_syncIndicator)
             {
                 IsBusy = _syncService.SyncInProgress;
@@ -53,6 +48,12 @@ namespace Bit.App.Controls
         {
             if(_syncIndicator)
             {
+                MessagingCenter.Unsubscribe<ISyncService, bool>(_syncService, "SyncCompleted");
+                MessagingCenter.Unsubscribe<ISyncService>(_syncService, "SyncStarted");
+            }
+
+            if(_syncIndicator)
+            {
                 IsBusy = false;
             }
 
@@ -62,7 +63,7 @@ namespace Bit.App.Controls
             }
 
             base.OnDisappearing();
-            MessagingCenter.Send(Application.Current, "DismissKeyboard");
+            _deviceActionService.DismissKeyboard();
         }
     }
 }

@@ -8,5 +8,7 @@ namespace Bit.App.Abstractions
     {
         void UpdateLastActivity(DateTime? activityDate = null);
         Task<LockType> GetLockTypeAsync(bool forceLock);
+        Task CheckLockAsync(bool forceLock);
+        bool TopPageIsLock();
     }
 }

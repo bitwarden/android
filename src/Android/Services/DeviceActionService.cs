@@ -15,18 +15,32 @@ using System.Collections.Generic;
 using Android;
 using Android.Content.PM;
 using Android.Support.V4.App;
+using Bit.App.Models.Page;
+using XLabs.Ioc;
+using Android.App;
+using Android.Views.Autofill;
+using Android.App.Assist;
+using Bit.Android.Autofill;
+using System.Linq;
+using Plugin.Settings.Abstractions;
+using Acr.UserDialogs;
+using Android.Views.InputMethods;
 
 namespace Bit.Android.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
         private readonly IAppSettingsService _appSettingsService;
+        private readonly IUserDialogs _userDialogs;
         private bool _cameraPermissionsDenied;
+        private DateTime? _lastAction;
 
         public DeviceActionService(
-            IAppSettingsService appSettingsService)
+            IAppSettingsService appSettingsService,
+            IUserDialogs userDialogs)
         {
             _appSettingsService = appSettingsService;
+            _userDialogs = userDialogs;
         }
 
         public void CopyToClipboard(string text)
@@ -109,34 +123,10 @@ namespace Bit.Android.Services
             catch(Exception) { }
         }
 
-        private bool DeleteDir(Java.IO.File dir)
-        {
-            if(dir != null && dir.IsDirectory)
-            {
-                var children = dir.List();
-                for(int i = 0; i < children.Length; i++)
-                {
-                    var success = DeleteDir(new Java.IO.File(dir, children[i]));
-                    if(!success)
-                    {
-                        return false;
-                    }
-                }
-                return dir.Delete();
-            }
-            else if(dir != null && dir.IsFile)
-            {
-                return dir.Delete();
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public Task SelectFileAsync()
         {
-            MessagingCenter.Unsubscribe<Application>(Application.Current, "SelectFileCameraPermissionDenied");
+            MessagingCenter.Unsubscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                "SelectFileCameraPermissionDenied");
 
             var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
 
@@ -189,6 +179,195 @@ namespace Bit.Android.Services
             return Task.FromResult(0);
         }
 
+        public void Autofill(VaultListPageModel.Cipher cipher)
+        {
+            var activity = (MainActivity)Forms.Context;
+            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
+            {
+                if(cipher == null)
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+
+                var structure = activity.Intent.GetParcelableExtra(
+                    AutofillManager.ExtraAssistStructure) as AssistStructure;
+                if(structure == null)
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+
+                var parser = new Parser(structure);
+                parser.Parse();
+                if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+
+                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection,
+                    new FilledItem(cipher.CipherModel));
+                var replyIntent = new Intent();
+                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
+                activity.SetResult(Result.Ok, replyIntent);
+                activity.Finish();
+            }
+            else
+            {
+                var data = new Intent();
+                if(cipher == null)
+                {
+                    data.PutExtra("canceled", "true");
+                }
+                else
+                {
+                    var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
+                    var settings = Resolver.Resolve<ISettings>();
+                    var autoCopyEnabled = !settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
+                    if(isPremium && autoCopyEnabled && cipher.LoginTotp?.Value != null)
+                    {
+                        CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
+                    }
+
+                    data.PutExtra("uri", cipher.LoginUri);
+                    data.PutExtra("username", cipher.LoginUsername);
+                    data.PutExtra("password", cipher.LoginPassword?.Value ?? null);
+                }
+
+                if(activity.Parent == null)
+                {
+                    activity.SetResult(Result.Ok, data);
+                }
+                else
+                {
+                    activity.Parent.SetResult(Result.Ok, data);
+                }
+
+                activity.Finish();
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "FinishMainActivity");
+            }
+        }
+
+        public void CloseAutofill()
+        {
+            Autofill(null);
+        }
+
+        public void Background()
+        {
+            var activity = (MainActivity)Forms.Context;
+            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
+            {
+                activity.SetResult(Result.Canceled);
+                activity.Finish();
+            }
+            else
+            {
+                activity.MoveTaskToBack(true);
+            }
+        }
+
+        public void RateApp()
+        {
+            var activity = (MainActivity)Forms.Context;
+            try
+            {
+                var rateIntent = RateIntentForUrl("market://details", activity);
+                activity.StartActivity(rateIntent);
+            }
+            catch(ActivityNotFoundException)
+            {
+                var rateIntent = RateIntentForUrl("https://play.google.com/store/apps/details", activity);
+                activity.StartActivity(rateIntent);
+            }
+        }
+
+        public void DismissKeyboard()
+        {
+            var activity = (MainActivity)Forms.Context;
+            try
+            {
+                var imm = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
+                imm.HideSoftInputFromWindow(activity.CurrentFocus.WindowToken, 0);
+            }
+            catch { }
+        }
+
+        public void OpenAccessibilitySettings()
+        {
+            var activity = (MainActivity)Forms.Context;
+            var intent = new Intent(Settings.ActionAccessibilitySettings);
+            activity.StartActivity(intent);
+        }
+
+        public void LaunchApp(string appName)
+        {
+            var activity = (MainActivity)Forms.Context;
+            if(_lastAction.LastActionWasRecent())
+            {
+                return;
+            }
+            _lastAction = DateTime.UtcNow;
+
+            appName = appName.Replace("androidapp://", string.Empty);
+            var launchIntent = activity.PackageManager.GetLaunchIntentForPackage(appName);
+            if(launchIntent == null)
+            {
+                _userDialogs.Alert(string.Format(AppResources.CannotOpenApp, appName));
+            }
+            else
+            {
+                activity.StartActivity(launchIntent);
+            }
+        }
+
+        private Intent RateIntentForUrl(string url, Activity activity)
+        {
+            var intent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse($"{url}?id={activity.PackageName}"));
+            var flags = ActivityFlags.NoHistory | ActivityFlags.MultipleTask;
+            if((int)Build.VERSION.SdkInt >= 21)
+            {
+                flags |= ActivityFlags.NewDocument;
+            }
+            else
+            {
+                // noinspection deprecation
+                flags |= ActivityFlags.ClearWhenTaskReset;
+            }
+
+            intent.AddFlags(flags);
+            return intent;
+        }
+
+        private bool DeleteDir(Java.IO.File dir)
+        {
+            if(dir != null && dir.IsDirectory)
+            {
+                var children = dir.List();
+                for(int i = 0; i < children.Length; i++)
+                {
+                    var success = DeleteDir(new Java.IO.File(dir, children[i]));
+                    if(!success)
+                    {
+                        return false;
+                    }
+                }
+                return dir.Delete();
+            }
+            else if(dir != null && dir.IsFile)
+            {
+                return dir.Delete();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private List<IParcelable> GetCameraIntents(global::Android.Net.Uri outputUri)
         {
             var intents = new List<IParcelable>();
@@ -214,10 +393,11 @@ namespace Bit.Android.Services
 
         private void AskCameraPermission(string permission)
         {
-            MessagingCenter.Subscribe<Application>(Application.Current, "SelectFileCameraPermissionDenied", (sender) =>
-            {
-                _cameraPermissionsDenied = true;
-            });
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                "SelectFileCameraPermissionDenied", (sender) =>
+                {
+                    _cameraPermissionsDenied = true;
+                });
 
             AskPermission(permission);
         }

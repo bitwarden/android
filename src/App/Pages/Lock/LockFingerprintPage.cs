@@ -100,7 +100,7 @@ namespace Bit.App.Pages
             }
             else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
             {
-                MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                AuthService.LogOut();
             }
         }
     }

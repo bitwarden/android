@@ -29,6 +29,7 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
         private readonly IAppInfoService _appInfoService;
         private readonly IDeviceInfoService _deviceInfo;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly string _defaultUri;
         private readonly string _defaultName;
         private readonly string _defaultUsername;
@@ -75,6 +76,7 @@ namespace Bit.App.Pages
             _settings = Resolver.Resolve<ISettings>();
             _appInfoService = Resolver.Resolve<IAppInfoService>();
             _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
 
             if(doInit)
             {
@@ -751,7 +753,7 @@ namespace Bit.App.Pages
                     if(_fromAutofillFramework)
                     {
                         // close and go back to app
-                        MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Cipher)null);
+                        _deviceActionService.CloseAutofill();
                     }
                     else
                     {

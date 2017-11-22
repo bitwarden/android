@@ -8,15 +8,11 @@ namespace Bit.iOS.Core.Services
     public class GoogleAnalyticsService : IGoogleAnalyticsService
     {
         private readonly ITracker _tracker;
-        private readonly IAuthService _authService;
 
         public GoogleAnalyticsService(
             IAppIdService appIdService,
-            IAuthService authService,
             ISettings settings)
         {
-            _authService = authService;
-
             Gai.SharedInstance.DispatchInterval = 10;
             Gai.SharedInstance.TrackUncaughtExceptions = false;
             _tracker = Gai.SharedInstance.GetTracker("UA-81915606-1");

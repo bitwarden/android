@@ -13,16 +13,10 @@ using System.Reflection;
 using Xamarin.Forms.Platform.Android;
 using Xamarin.Forms;
 using System.Threading.Tasks;
-using Bit.App.Models.Page;
 using Bit.App;
 using Android.Nfc;
-using Android.Views.InputMethods;
 using System.IO;
 using System.Linq;
-using Android.Views.Autofill;
-using Android.App.Assist;
-using Bit.Android.Autofill;
-using System.Collections.Generic;
 using Bit.App.Models;
 using Bit.App.Enums;
 
@@ -35,7 +29,6 @@ namespace Bit.Android
     public class MainActivity : FormsAppCompatActivity
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
-        private DateTime? _lastAction;
         private Java.Util.Regex.Pattern _otpPattern = Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
         private IDeviceActionService _deviceActionService;
         private ISettings _settings;
@@ -97,105 +90,11 @@ namespace Bit.Android
 
             if(_appOptions?.Uri == null)
             {
-                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                    "DismissKeyboard", (sender) => DismissKeyboard());
-
-                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                    "RateApp", (sender) => RateApp());
-
-                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                    "Accessibility", (sender) => OpenAccessibilitySettings());
-
-                MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current,
-                    "LaunchApp", (sender, args) => LaunchApp(args));
-
                 MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
                     "ListenYubiKeyOTP", (sender, listen) => ListenYubiKey(listen));
-            }
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, VaultListPageModel.Cipher>(
-                Xamarin.Forms.Application.Current, "Autofill", (sender, args) => ReturnCredentials(args));
-
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                "BackgroundApp", (sender) =>
-                {
-                    if(Intent.GetBooleanExtra("autofillFramework", false))
-                    {
-                        SetResult(Result.Canceled);
-                        Finish();
-                    }
-                    else
-                    {
-                        MoveTaskToBack(true);
-                    }
-                });
-        }
-
-        private void ReturnCredentials(VaultListPageModel.Cipher cipher)
-        {
-            if(Intent.GetBooleanExtra("autofillFramework", false))
-            {
-                if(cipher == null)
-                {
-                    SetResult(Result.Canceled);
-                    Finish();
-                    return;
-                }
-
-                var structure = Intent.GetParcelableExtra(AutofillManager.ExtraAssistStructure) as AssistStructure;
-                if(structure == null)
-                {
-                    SetResult(Result.Canceled);
-                    Finish();
-                    return;
-                }
-
-                var parser = new Parser(structure);
-                parser.Parse();
-                if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
-                {
-                    SetResult(Result.Canceled);
-                    Finish();
-                    return;
-                }
-
-                var dataset = AutofillHelpers.BuildDataset(this, parser.FieldCollection, new FilledItem(cipher.CipherModel));
-                var replyIntent = new Intent();
-                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
-                SetResult(Result.Ok, replyIntent);
-                Finish();
-            }
-            else
-            {
-                var data = new Intent();
-                if(cipher == null)
-                {
-                    data.PutExtra("canceled", "true");
-                }
-                else
-                {
-                    var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
-                    var autoCopyEnabled = !_settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
-                    if(isPremium && autoCopyEnabled && _deviceActionService != null && cipher.LoginTotp?.Value != null)
-                    {
-                        _deviceActionService.CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
-                    }
-
-                    data.PutExtra("uri", cipher.LoginUri);
-                    data.PutExtra("username", cipher.LoginUsername);
-                    data.PutExtra("password", cipher.LoginPassword?.Value ?? null);
-                }
-
-                if(Parent == null)
-                {
-                    SetResult(Result.Ok, data);
-                }
-                else
-                {
-                    Parent.SetResult(Result.Ok, data);
-                }
-
-                Finish();
+                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
+                    "FinishMainActivity", (sender) => Finish());
             }
         }
 
@@ -302,65 +201,6 @@ namespace Bit.Android
             }
         }
 
-        public void RateApp()
-        {
-            try
-            {
-                var rateIntent = RateIntentForUrl("market://details");
-                StartActivity(rateIntent);
-            }
-            catch(ActivityNotFoundException)
-            {
-                var rateIntent = RateIntentForUrl("https://play.google.com/store/apps/details");
-                StartActivity(rateIntent);
-            }
-        }
-
-        private Intent RateIntentForUrl(string url)
-        {
-            var intent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse($"{url}?id={PackageName}"));
-            var flags = ActivityFlags.NoHistory | ActivityFlags.MultipleTask;
-            if((int)Build.VERSION.SdkInt >= 21)
-            {
-                flags |= ActivityFlags.NewDocument;
-            }
-            else
-            {
-                // noinspection deprecation
-                flags |= ActivityFlags.ClearWhenTaskReset;
-            }
-
-            intent.AddFlags(flags);
-            return intent;
-        }
-
-        private void OpenAccessibilitySettings()
-        {
-            var intent = new Intent(global::Android.Provider.Settings.ActionAccessibilitySettings);
-            StartActivity(intent);
-        }
-
-        private void LaunchApp(string packageName)
-        {
-            if(_lastAction.LastActionWasRecent())
-            {
-                return;
-            }
-            _lastAction = DateTime.UtcNow;
-
-            packageName = packageName.Replace("androidapp://", string.Empty);
-            var launchIntent = PackageManager.GetLaunchIntentForPackage(packageName);
-            if(launchIntent == null)
-            {
-                var dialog = Resolver.Resolve<IUserDialogs>();
-                dialog.Alert(string.Format(App.Resources.AppResources.CannotOpenApp, packageName));
-            }
-            else
-            {
-                StartActivity(launchIntent);
-            }
-        }
-
         private void ListenYubiKey(bool listen)
         {
             if(!Utilities.NfcEnabled())
@@ -403,16 +243,6 @@ namespace Bit.Android
                 var otp = otpMatch.Group(1);
                 MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", otp);
             }
-        }
-
-        private void DismissKeyboard()
-        {
-            try
-            {
-                var imm = (InputMethodManager)GetSystemService(InputMethodService);
-                imm.HideSoftInputFromWindow(CurrentFocus.WindowToken, 0);
-            }
-            catch { }
         }
 
         private AppOptions GetOptions()

@@ -12,9 +12,8 @@ namespace Bit.App.Abstractions
         bool UserIdChanged { get; }
         string Email { get; set; }
         string PIN { get; set; }
-
         bool BelongsToOrganization(string orgId);
-        void LogOut();
+        void LogOut(string logoutMessage = null);
         Task<FullLoginResult> TokenPostAsync(string email, string masterPassword);
         Task<LoginResult> TokenPostTwoFactorAsync(TwoFactorProviderType type, string token, bool remember, string email,
             string masterPasswordHash, SymmetricCryptoKey key);

@@ -7,6 +7,10 @@ using Plugin.Settings.Abstractions;
 using Bit.App.Models;
 using System.Linq;
 using Bit.App.Enums;
+using Xamarin.Forms;
+using Bit.App.Pages;
+using Bit.App.Controls;
+using Acr.UserDialogs;
 
 namespace Bit.App.Services
 {
@@ -25,6 +29,9 @@ namespace Bit.App.Services
         private readonly IAccountsApiRepository _accountsApiRepository;
         private readonly IAppIdService _appIdService;
         private readonly IDeviceInfoService _deviceInfoService;
+        private readonly IDeviceApiRepository _deviceApiRepository;
+        private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly IUserDialogs _userDialogs;
 
         private string _email;
         private string _userId;
@@ -39,7 +46,10 @@ namespace Bit.App.Services
             IConnectApiRepository connectApiRepository,
             IAccountsApiRepository accountsApiRepository,
             IAppIdService appIdService,
-            IDeviceInfoService deviceInfoService)
+            IDeviceInfoService deviceInfoService,
+            IDeviceApiRepository deviceApiRepository,
+            IGoogleAnalyticsService googleAnalyticsService,
+            IUserDialogs userDialogs)
         {
             _secureStorage = secureStorage;
             _tokenService = tokenService;
@@ -49,6 +59,9 @@ namespace Bit.App.Services
             _accountsApiRepository = accountsApiRepository;
             _appIdService = appIdService;
             _deviceInfoService = deviceInfoService;
+            _deviceApiRepository = deviceApiRepository;
+            _googleAnalyticsService = googleAnalyticsService;
+            _userDialogs = userDialogs;
         }
 
         public string UserId
@@ -194,7 +207,7 @@ namespace Bit.App.Services
             return !string.IsNullOrWhiteSpace(orgId) && (_cryptoService.OrgKeys?.ContainsKey(orgId) ?? false);
         }
 
-        public void LogOut()
+        public void LogOut(string logoutMessage = null)
         {
             _tokenService.Token = null;
             _tokenService.RefreshToken = null;
@@ -204,6 +217,16 @@ namespace Bit.App.Services
             _settings.Remove(Constants.SecurityStamp);
             _settings.Remove(Constants.PushLastRegistrationDate);
             _settings.Remove(Constants.Locked);
+
+            Task.Run(async () => await _deviceApiRepository.PutClearTokenAsync(_appIdService.AppId));
+
+            _googleAnalyticsService.TrackAppEvent("LoggedOut");
+
+            Device.BeginInvokeOnMainThread(() => Application.Current.MainPage = new ExtendedNavigationPage(new HomePage()));
+            if(!string.IsNullOrWhiteSpace(logoutMessage))
+            {
+                _userDialogs.Toast(logoutMessage);
+            }
         }
 
         public async Task<FullLoginResult> TokenPostAsync(string email, string masterPassword)
@@ -249,10 +272,10 @@ namespace Bit.App.Services
             return result;
         }
 
-        public async Task<LoginResult> TokenPostTwoFactorAsync(TwoFactorProviderType type, string token, bool remember,
+        public async Task<Models.LoginResult> TokenPostTwoFactorAsync(TwoFactorProviderType type, string token, bool remember,
             string email, string masterPasswordHash, SymmetricCryptoKey key)
         {
-            var result = new LoginResult();
+            var result = new Models.LoginResult();
 
             var request = new TokenRequest
             {

@@ -305,7 +305,7 @@ namespace Bit.App.Services
             if(Application.Current != null && (accountRevisionDate.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || accountRevisionDate.StatusCode == System.Net.HttpStatusCode.Unauthorized))
             {
-                MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                _authService.LogOut();
             }
 
             return false;
@@ -477,7 +477,7 @@ namespace Bit.App.Services
             }
 
             SyncInProgress = true;
-            MessagingCenter.Send(Application.Current, "SyncStarted");
+            MessagingCenter.Send(this, "SyncStarted");
         }
 
         private void SyncCompleted(bool successfully)
@@ -488,7 +488,7 @@ namespace Bit.App.Services
             }
 
             SyncInProgress = false;
-            MessagingCenter.Send(Application.Current, "SyncCompleted", successfully);
+            MessagingCenter.Send(this, "SyncCompleted", successfully);
         }
 
         private bool CheckSuccess<T>(ApiResult<T> result, bool logout = false)
@@ -501,7 +501,7 @@ namespace Bit.App.Services
                     result.StatusCode == System.Net.HttpStatusCode.Forbidden ||
                     result.StatusCode == System.Net.HttpStatusCode.Unauthorized))
                 {
-                    MessagingCenter.Send(Application.Current, "Logout", (string)null);
+                    _authService.LogOut();
                 }
 
                 return false;

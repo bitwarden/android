@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private IUserDialogs _userDialogs;
         private ISyncService _syncService;
         private IDeviceInfoService _deviceInfoService;
+        private IDeviceActionService _deviceActionService;
         private IGoogleAnalyticsService _googleAnalyticsService;
         private ITwoFactorApiRepository _twoFactorApiRepository;
         private IPushNotificationService _pushNotification;
@@ -45,6 +46,7 @@ namespace Bit.App.Pages
             _providers = result.TwoFactorProviders;
             _providerType = type ?? GetDefaultProvider();
 
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _authService = Resolver.Resolve<IAuthService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
@@ -266,7 +268,7 @@ namespace Bit.App.Pages
             InitEvents();
             if(TokenCell == null && Device.RuntimePlatform == Device.Android)
             {
-                MessagingCenter.Send(Application.Current, "DismissKeyboard");
+                _deviceActionService.DismissKeyboard();
             }
         }
 

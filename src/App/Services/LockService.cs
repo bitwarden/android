@@ -4,6 +4,10 @@ using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
 using Bit.App.Enums;
 using System.Threading.Tasks;
+using Bit.App.Controls;
+using Bit.App.Pages;
+using Xamarin.Forms;
+using System.Linq;
 
 namespace Bit.App.Services
 {
@@ -78,6 +82,59 @@ namespace Bit.App.Services
             {
                 return LockType.Password;
             }
+        }
+
+        public async Task CheckLockAsync(bool forceLock)
+        {
+            if(TopPageIsLock())
+            {
+                // already locked
+                return;
+            }
+
+            var lockType = await GetLockTypeAsync(forceLock);
+            if(lockType == LockType.None)
+            {
+                return;
+            }
+
+            _appSettings.Locked = true;
+            switch(lockType)
+            {
+                case LockType.Fingerprint:
+                    await Application.Current.MainPage.Navigation.PushModalAsync(
+                        new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
+                    break;
+                case LockType.PIN:
+                    await Application.Current.MainPage.Navigation.PushModalAsync(
+                        new ExtendedNavigationPage(new LockPinPage()), false);
+                    break;
+                case LockType.Password:
+                    await Application.Current.MainPage.Navigation.PushModalAsync(
+                        new ExtendedNavigationPage(new LockPasswordPage()), false);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public bool TopPageIsLock()
+        {
+            var currentPage = Application.Current.MainPage.Navigation.ModalStack.LastOrDefault() as ExtendedNavigationPage;
+            if((currentPage?.CurrentPage as LockFingerprintPage) != null)
+            {
+                return true;
+            }
+            if((currentPage?.CurrentPage as LockPinPage) != null)
+            {
+                return true;
+            }
+            if((currentPage?.CurrentPage as LockPasswordPage) != null)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

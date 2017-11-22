@@ -19,7 +19,8 @@ namespace Bit.App.Pages
         private readonly IFingerprint _fingerprint;
         private readonly IPushNotificationService _pushNotification;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
-        private readonly IDeviceInfoService _deviceInfoService;
+        private readonly IDeviceActionService _deviceActionService;
+        private readonly ILockService _lockService;
 
         // TODO: Model binding context?
 
@@ -31,7 +32,8 @@ namespace Bit.App.Pages
             _fingerprint = Resolver.Resolve<IFingerprint>();
             _pushNotification = Resolver.Resolve<IPushNotificationService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
-            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            _lockService = Resolver.Resolve<ILockService>();
 
             Init();
         }
@@ -327,22 +329,7 @@ namespace Bit.App.Pages
         private void RateCell_Tapped(object sender, EventArgs e)
         {
             _googleAnalyticsService.TrackAppEvent("OpenedSetting", "RateApp");
-            if(Device.RuntimePlatform == Device.iOS)
-            {
-                if(_deviceInfoService.Version < 11)
-                {
-                    Device.OpenUri(new Uri("itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews" +
-                        "?id=1137397744&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
-                }
-                else
-                {
-                    Device.OpenUri(new Uri("itms-apps://itunes.apple.com/us/app/id1137397744?action=write-review"));
-                }
-            }
-            else if(Device.RuntimePlatform == Device.Android)
-            {
-                MessagingCenter.Send(Application.Current, "RateApp");
-            }
+            _deviceActionService.RateApp();
         }
 
         private void HelpCell_Tapped(object sender, EventArgs e)
@@ -353,7 +340,7 @@ namespace Bit.App.Pages
         private void LockCell_Tapped(object sender, EventArgs e)
         {
             _googleAnalyticsService.TrackAppEvent("Locked");
-            MessagingCenter.Send(Application.Current, "Lock", true);
+            Device.BeginInvokeOnMainThread(async () => await _lockService.CheckLockAsync(true));
         }
 
         private async void LogOutCell_Tapped(object sender, EventArgs e)
@@ -363,7 +350,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            MessagingCenter.Send(Application.Current, "Logout", (string)null);
+            _authService.LogOut();
         }
 
         private async void ChangeMasterPasswordCell_Tapped(object sender, EventArgs e)

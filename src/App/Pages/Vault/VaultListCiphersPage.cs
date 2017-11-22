@@ -24,7 +24,7 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
-        private readonly IDeviceActionService _clipboardService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly ISyncService _syncService;
         private readonly IPushNotificationService _pushNotification;
         private readonly IDeviceInfoService _deviceInfoService;
@@ -42,7 +42,7 @@ namespace Bit.App.Pages
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _clipboardService = Resolver.Resolve<IDeviceActionService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _syncService = Resolver.Resolve<ISyncService>();
             _pushNotification = Resolver.Resolve<IPushNotificationService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
@@ -71,14 +71,6 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
-            {
-                if(success)
-                {
-                    _filterResultsCancellationTokenSource = FetchAndLoadVault();
-                }
-            });
-
             if(!_favorites)
             {
                 AddCipherItem = new AddCipherToolBarItem(this);
@@ -232,6 +224,14 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
+            MessagingCenter.Subscribe<ISyncService, bool>(_syncService, "SyncCompleted", (sender, success) =>
+            {
+                if(success)
+                {
+                    _filterResultsCancellationTokenSource = FetchAndLoadVault();
+                }
+            });
+
             ListView.ItemSelected += CipherSelected;
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
@@ -274,6 +274,8 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            MessagingCenter.Unsubscribe<ISyncService, bool>(_syncService, "SyncCompleted");
+
             ListView.ItemSelected -= CipherSelected;
             Search.TextChanged -= SearchBar_TextChanged;
             Search.SearchButtonPressed -= SearchBar_SearchButtonPressed;
@@ -288,7 +290,7 @@ namespace Bit.App.Pages
             }
 
             _googleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
-            MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Cipher)null);
+            _deviceActionService.CloseAutofill();
             return true;
         }
 
@@ -417,7 +419,7 @@ namespace Bit.App.Pages
                 {
                     _googleAnalyticsService.TrackExtensionEvent("AutoFilled", 
                         Uri.StartsWith("http") ? "Website" : "App");
-                    MessagingCenter.Send(Application.Current, "Autofill", cipher);
+                    _deviceActionService.Autofill(cipher);
                 }
             }
 
@@ -492,7 +494,7 @@ namespace Bit.App.Pages
 
         private void Copy(string copyText, string alertLabel)
         {
-            _clipboardService.CopyToClipboard(copyText);
+            _deviceActionService.CopyToClipboard(copyText);
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 

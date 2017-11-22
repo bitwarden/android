@@ -136,7 +136,7 @@ namespace Bit.App.Pages
                     {
                         if(Device.RuntimePlatform == Device.Android && Model.LoginUri.StartsWith("androidapp://"))
                         {
-                            MessagingCenter.Send(Application.Current, "LaunchApp", Model.LoginUri);
+                            _deviceActionService.LaunchApp(Model.LoginUri);
                         }
                         else if(Model.LoginUri.StartsWith("http://") || Model.LoginUri.StartsWith("https://"))
                         {

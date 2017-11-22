@@ -86,27 +86,20 @@ namespace Bit.App
                 MainPage = new ExtendedNavigationPage(new HomePage());
             }
 
-            MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
+            if(Device.RuntimePlatform == Device.iOS)
             {
-                Device.BeginInvokeOnMainThread(async () => await CheckLockAsync(args));
-                await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
-            });
-
-            MessagingCenter.Subscribe<Application, bool>(Current, "Lock", (sender, args) =>
-            {
-                Device.BeginInvokeOnMainThread(async () => await CheckLockAsync(args));
-            });
-
-            MessagingCenter.Subscribe<Application, string>(Current, "Logout", (sender, args) =>
-            {
-                Logout(args);
-            });
+                MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
+                {
+                    Device.BeginInvokeOnMainThread(async () => await _lockService.CheckLockAsync(args));
+                    await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
+                });
+            }
         }
 
         protected async override void OnStart()
         {
             // Handle when your app starts
-            await CheckLockAsync(false);
+            await _lockService.CheckLockAsync(false);
 
             if(string.IsNullOrWhiteSpace(_options.Uri))
             {
@@ -132,7 +125,7 @@ namespace Bit.App
 
             SetMainPageFromAutofill();
 
-            if(Device.RuntimePlatform == Device.Android && !TopPageIsLock())
+            if(Device.RuntimePlatform == Device.Android && !_lockService.TopPageIsLock())
             {
                 _lockService.UpdateLastActivity();
             }
@@ -151,7 +144,7 @@ namespace Bit.App
 
             if(Device.RuntimePlatform == Device.Android)
             {
-                await CheckLockAsync(false);
+                await _lockService.CheckLockAsync(false);
             }
 
             var lockPinPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as LockPinPage;
@@ -225,73 +218,6 @@ namespace Bit.App
             {
                 Debug.WriteLine("Not connected.");
             }
-        }
-
-        private void Logout(string logoutMessage)
-        {
-            _authService.LogOut();
-
-            var deviceApiRepository = Resolver.Resolve<IDeviceApiRepository>();
-            var appIdService = Resolver.Resolve<IAppIdService>();
-            Task.Run(async () => await deviceApiRepository.PutClearTokenAsync(appIdService.AppId));
-
-            _googleAnalyticsService.TrackAppEvent("LoggedOut");
-
-            Device.BeginInvokeOnMainThread(() => Current.MainPage = new ExtendedNavigationPage(new HomePage()));
-            if(!string.IsNullOrWhiteSpace(logoutMessage))
-            {
-                _userDialogs.Toast(logoutMessage);
-            }
-        }
-
-        private async Task CheckLockAsync(bool forceLock)
-        {
-            if(TopPageIsLock())
-            {
-                // already locked
-                return;
-            }
-
-            var lockType = await _lockService.GetLockTypeAsync(forceLock);
-            if(lockType == Enums.LockType.None)
-            {
-                return;
-            }
-
-            _appSettingsService.Locked = true;
-            switch(lockType)
-            {
-                case Enums.LockType.Fingerprint:
-                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockFingerprintPage(!forceLock)), false);
-                    break;
-                case Enums.LockType.PIN:
-                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPinPage()), false);
-                    break;
-                case Enums.LockType.Password:
-                    await Current.MainPage.Navigation.PushModalAsync(new ExtendedNavigationPage(new LockPasswordPage()), false);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        private bool TopPageIsLock()
-        {
-            var currentPage = Current.MainPage.Navigation.ModalStack.LastOrDefault() as ExtendedNavigationPage;
-            if((currentPage?.CurrentPage as LockFingerprintPage) != null)
-            {
-                return true;
-            }
-            if((currentPage?.CurrentPage as LockPinPage) != null)
-            {
-                return true;
-            }
-            if((currentPage?.CurrentPage as LockPasswordPage) != null)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private void SetStyles()

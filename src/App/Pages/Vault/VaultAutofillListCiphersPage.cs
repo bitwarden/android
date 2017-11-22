@@ -20,7 +20,7 @@ namespace Bit.App.Pages
     {
         private readonly ICipherService _cipherService;
         private readonly IDeviceInfoService _deviceInfoService;
-        private readonly IDeviceActionService _clipboardService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly ISettingsService _settingsService;
         private readonly IAppSettingsService _appSettingsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
@@ -44,7 +44,7 @@ namespace Bit.App.Pages
 
             _cipherService = Resolver.Resolve<ICipherService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _clipboardService = Resolver.Resolve<IDeviceActionService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _settingsService = Resolver.Resolve<ISettingsService>();
             UserDialogs = Resolver.Resolve<IUserDialogs>();
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
@@ -141,7 +141,7 @@ namespace Bit.App.Pages
         protected override bool OnBackButtonPressed()
         {
             GoogleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
-            MessagingCenter.Send(Application.Current, "Autofill", (VaultListPageModel.Cipher)null);
+            _deviceActionService.CloseAutofill();
             return true;
         }
 
@@ -243,7 +243,7 @@ namespace Bit.App.Pages
                 if(doAutofill)
                 {
                     GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
-                    MessagingCenter.Send(Application.Current, "Autofill", cipher as VaultListPageModel.Cipher);
+                    _deviceActionService.Autofill(cipher);
                 }
             }
 
@@ -322,7 +322,7 @@ namespace Bit.App.Pages
 
         private void Copy(string copyText, string alertLabel)
         {
-            _clipboardService.CopyToClipboard(copyText);
+            _deviceActionService.CopyToClipboard(copyText);
             UserDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 

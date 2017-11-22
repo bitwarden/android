@@ -9,16 +9,21 @@ using Xamarin.Forms;
 using Photos;
 using System.Net;
 using System.Threading.Tasks;
+using Bit.App.Models.Page;
 
 namespace Bit.iOS.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
         private readonly IAppSettingsService _appSettingsService;
+        private readonly IDeviceInfoService _deviceInfoService;
 
-        public DeviceActionService(IAppSettingsService appSettingsService)
+        public DeviceActionService(
+            IAppSettingsService appSettingsService,
+            IDeviceInfoService deviceInfoService)
         {
             _appSettingsService = appSettingsService;
+            _deviceInfoService = deviceInfoService;
         }
 
         public void CopyToClipboard(string text)
@@ -201,6 +206,49 @@ namespace Bit.iOS.Services
         {
             MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
                 new Tuple<byte[], string>(data, fileName));
+        }
+
+        public void Autofill(VaultListPageModel.Cipher cipher)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseAutofill()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Background()
+        {
+            // do nothing
+        }
+
+        public void RateApp()
+        {
+            if(_deviceInfoService.Version < 11)
+            {
+                Device.OpenUri(new Uri("itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews" +
+                    "?id=1137397744&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software"));
+            }
+            else
+            {
+                Device.OpenUri(new Uri("itms-apps://itunes.apple.com/us/app/id1137397744?action=write-review"));
+            }
+        }
+
+        public void DismissKeyboard()
+        {
+            // do nothing
+        }
+
+        public void OpenAccessibilitySettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LaunchApp(string appName)
+        {
+            throw new NotImplementedException();
         }
     }
 }

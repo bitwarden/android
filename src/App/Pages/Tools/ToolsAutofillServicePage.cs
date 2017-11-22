@@ -12,12 +12,14 @@ namespace Bit.App.Pages
     {
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IAppInfoService _appInfoService;
+        private readonly IDeviceActionService _deviceActionService;
         private bool _pageDisappeared = false;
 
         public ToolsAutofillServicePage()
         {
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _appInfoService = Resolver.Resolve<IAppInfoService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
 
             Init();
         }
@@ -221,7 +223,7 @@ namespace Bit.App.Pages
                 Command = new Command(() =>
                 {
                     _googleAnalyticsService.TrackAppEvent("OpenAccessibilitySettings");
-                    MessagingCenter.Send(Application.Current, "Accessibility");
+                    _deviceActionService.OpenAccessibilitySettings();
                 }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,

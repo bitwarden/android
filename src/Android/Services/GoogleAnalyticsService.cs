@@ -10,17 +10,13 @@ namespace Bit.Android.Services
     public class GoogleAnalyticsService : IGoogleAnalyticsService
     {
         private readonly GoogleAnalytics _instance;
-        private readonly IAuthService _authService;
         private readonly Tracker _tracker;
 
         public GoogleAnalyticsService(
             Context appContext,
             IAppIdService appIdService,
-            IAuthService authService,
             ISettings settings)
         {
-            _authService = authService;
-
             _instance = GoogleAnalytics.GetInstance(appContext.ApplicationContext);
             _instance.SetLocalDispatchPeriod(10);
 
