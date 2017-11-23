@@ -104,12 +104,13 @@ namespace Bit.App.Pages
 
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows) 
             {
+                var cancelToolbarItem = new ToolbarItem(AppResources.Cancel, "lock.png", async () =>
+                {
+                    await this.Navigation.PopModalAsync();
+                }, ToolbarItemOrder.Default, 0);
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 70;
-                ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel, () =>
-                {
-                    MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
-                }));
+                ToolbarItems.Add(cancelToolbarItem);
             }
 
             var loginToolbarItem = new ToolbarItem(AppResources.LogIn, "login.png", async () =>
