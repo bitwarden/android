@@ -20,6 +20,8 @@ namespace Bit.App.Services
         private readonly ISettingsApiRepository _settingsApiRepository;
         private readonly ISyncApiRepository _syncApiRepository;
         private readonly IFolderRepository _folderRepository;
+        private readonly ICollectionRepository _collectionRepository;
+        private readonly ICipherCollectionRepository _cipherCollectionRepository;
         private readonly ICipherService _cipherService;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly ISettingsRepository _settingsRepository;
@@ -35,6 +37,8 @@ namespace Bit.App.Services
             ISettingsApiRepository settingsApiRepository,
             ISyncApiRepository syncApiRepository,
             IFolderRepository folderRepository,
+            ICollectionRepository collectionRepository,
+            ICipherCollectionRepository cipherCollectionRepository,
             ICipherService cipherService,
             IAttachmentRepository attachmentRepository,
             ISettingsRepository settingsRepository,
@@ -49,6 +53,8 @@ namespace Bit.App.Services
             _settingsApiRepository = settingsApiRepository;
             _syncApiRepository = syncApiRepository;
             _folderRepository = folderRepository;
+            _collectionRepository = collectionRepository;
+            _cipherCollectionRepository = cipherCollectionRepository;
             _cipherService = cipherService;
             _attachmentRepository = attachmentRepository;
             _settingsRepository = settingsRepository;
@@ -258,9 +264,9 @@ namespace Bit.App.Services
             var now = DateTime.UtcNow;
 
             var syncResponse = await _syncApiRepository.Get();
-            if(!CheckSuccess(syncResponse, 
+            if(!CheckSuccess(syncResponse,
                 !string.IsNullOrWhiteSpace(_appSettingsService.SecurityStamp) &&
-                syncResponse.Result?.Profile != null && 
+                syncResponse.Result?.Profile != null &&
                 _appSettingsService.SecurityStamp != syncResponse.Result.Profile.SecurityStamp))
             {
                 return false;
@@ -268,15 +274,17 @@ namespace Bit.App.Services
 
             var ciphersDict = syncResponse.Result.Ciphers.ToDictionary(s => s.Id);
             var foldersDict = syncResponse.Result.Folders.ToDictionary(f => f.Id);
+            var collectionsDict = syncResponse.Result.Collections?.ToDictionary(c => c.Id);
 
             var cipherTask = SyncCiphersAsync(ciphersDict);
             var folderTask = SyncFoldersAsync(foldersDict);
+            var collectionsTask = SyncCollectionsAsync(collectionsDict);
             var domainsTask = SyncDomainsAsync(syncResponse.Result.Domains);
             var profileTask = SyncProfileKeysAsync(syncResponse.Result.Profile);
-            await Task.WhenAll(cipherTask, folderTask, domainsTask, profileTask).ConfigureAwait(false);
+            await Task.WhenAll(cipherTask, folderTask, collectionsTask, domainsTask, profileTask).ConfigureAwait(false);
 
-            if(folderTask.Exception != null || cipherTask.Exception != null || domainsTask.Exception != null ||
-                profileTask.Exception != null)
+            if(folderTask.Exception != null || cipherTask.Exception != null || collectionsTask.Exception != null ||
+                domainsTask.Exception != null || profileTask.Exception != null)
             {
                 SyncCompleted(false);
                 return false;
@@ -349,7 +357,48 @@ namespace Bit.App.Services
             }
         }
 
-        private async Task SyncCiphersAsync(IDictionary<string, CipherResponse> serviceCiphers)
+        private async Task SyncCollectionsAsync(IDictionary<string, CollectionResponse> serverCollections)
+        {
+            if(!_authService.IsAuthenticated)
+            {
+                return;
+            }
+
+            var localCollections = (await _collectionRepository.GetAllByUserIdAsync(_authService.UserId)
+                .ConfigureAwait(false))
+                .GroupBy(f => f.Id)
+                .Select(f => f.First())
+                .ToDictionary(f => f.Id);
+
+            if(serverCollections != null)
+            {
+                foreach(var serverCollection in serverCollections)
+                {
+                    if(!_authService.IsAuthenticated)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        var data = new CollectionData(serverCollection.Value, _authService.UserId);
+                        await _collectionRepository.UpsertAsync(data).ConfigureAwait(false);
+                    }
+                    catch(SQLite.SQLiteException) { }
+                }
+            }
+
+            foreach(var collection in localCollections.Where(lc => !serverCollections.ContainsKey(lc.Key)))
+            {
+                try
+                {
+                    await _collectionRepository.DeleteAsync(collection.Value.Id).ConfigureAwait(false);
+                }
+                catch(SQLite.SQLiteException) { }
+            }
+        }
+
+        private async Task SyncCiphersAsync(IDictionary<string, CipherResponse> serverCiphers)
         {
             if(!_authService.IsAuthenticated)
             {
@@ -367,16 +416,29 @@ namespace Bit.App.Services
                 .GroupBy(a => a.LoginId)
                 .ToDictionary(g => g.Key);
 
-            foreach(var serverCipher in serviceCiphers)
+            var cipherCollections = new List<CipherCollectionData>();
+            foreach(var serverCipher in serverCiphers)
             {
                 if(!_authService.IsAuthenticated)
                 {
                     return;
                 }
 
+                var collectionForThisCipher = serverCipher.Value.CollectionIds?.Select(cid => new CipherCollectionData
+                {
+                    CipherId = serverCipher.Value.Id,
+                    CollectionId = cid,
+                    UserId = _authService.UserId
+                }).ToList();
+
+                if(collectionForThisCipher != null && collectionForThisCipher.Any())
+                {
+                    cipherCollections.AddRange(collectionForThisCipher);
+                }
+
                 try
                 {
-                    var localCipher = localCiphers.ContainsKey(serverCipher.Value.Id) ? 
+                    var localCipher = localCiphers.ContainsKey(serverCipher.Value.Id) ?
                         localCiphers[serverCipher.Value.Id] : null;
 
                     var data = new CipherData(serverCipher.Value, _authService.UserId);
@@ -404,11 +466,26 @@ namespace Bit.App.Services
                 catch(SQLite.SQLiteException) { }
             }
 
-            foreach(var cipher in localCiphers.Where(local => !serviceCiphers.ContainsKey(local.Key)))
+            foreach(var cipher in localCiphers.Where(local => !serverCiphers.ContainsKey(local.Key)))
             {
                 try
                 {
                     await _cipherService.DeleteDataAsync(cipher.Value.Id).ConfigureAwait(false);
+                }
+                catch(SQLite.SQLiteException) { }
+            }
+
+            try
+            {
+                await _cipherCollectionRepository.DeleteByUserIdAsync(_authService.UserId).ConfigureAwait(false);
+            }
+            catch(SQLite.SQLiteException) { }
+
+            foreach(var cipherCollection in cipherCollections)
+            {
+                try
+                {
+                    await _cipherCollectionRepository.InsertAsync(cipherCollection).ConfigureAwait(false);
                 }
                 catch(SQLite.SQLiteException) { }
             }

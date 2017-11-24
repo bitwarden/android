@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
-using SQLite;
 
 namespace Bit.App.Repositories
 {
-    public abstract class Repository<T, TId> : IRepository<T, TId>
+    public abstract class Repository<T, TId> : BaseRepository, IRepository<T, TId>
         where TId : IEquatable<TId>
         where T : class, IDataObject<TId>, new()
     {
         public Repository(ISqlService sqlService)
-        {
-            Connection = sqlService.GetConnection();
-        }
-
-        protected SQLiteConnection Connection { get; private set; }
+            : base(sqlService)
+        { }
 
         public virtual Task<T> GetByIdAsync(TId id)
         {
@@ -39,6 +35,7 @@ namespace Bit.App.Repositories
             Connection.Update(obj);
             return Task.FromResult(0);
         }
+
         public virtual Task UpsertAsync(T obj)
         {
             Connection.InsertOrReplace(obj);

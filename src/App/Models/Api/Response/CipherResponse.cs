@@ -17,6 +17,7 @@ namespace Bit.App.Models.Api
         public bool OrganizationUseTotp { get; set; }
         public JObject Data { get; set; }
         public IEnumerable<AttachmentResponse> Attachments { get; set; }
+        public IEnumerable<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
     }
 }

@@ -32,10 +32,5 @@ namespace Bit.App.Models.Data
         public string UserId { get; set; }
         public string Name { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;
-
-        public Folder ToFolder()
-        {
-            return new Folder(this);
-        }
     }
 }

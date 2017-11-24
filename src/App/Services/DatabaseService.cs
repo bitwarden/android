@@ -17,7 +17,9 @@ namespace Bit.App.Services
         public void CreateTables()
         {
             _connection.CreateTable<FolderData>();
+            _connection.CreateTable<CollectionData>();
             _connection.CreateTable<CipherData>();
+            _connection.CreateTable<CipherCollectionData>();
             _connection.CreateTable<AttachmentData>();
             _connection.CreateTable<SettingsData>();
         }

@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Abstractions\Repositories\IAttachmentRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ICipherCollectionRepository.cs" />
+    <Compile Include="Abstractions\Repositories\ICollectionRepository.cs" />
     <Compile Include="Abstractions\Repositories\ISyncApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ITwoFactorApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ISettingsApiRepository.cs" />
@@ -107,6 +109,7 @@
     <Compile Include="Models\Api\FieldDataModel.cs" />
     <Compile Include="Models\Api\CardDataModel.cs" />
     <Compile Include="Models\Api\IdentityDataModel.cs" />
+    <Compile Include="Models\Api\Response\CollectionResponse.cs" />
     <Compile Include="Models\Api\SecureNoteDataModel.cs" />
     <Compile Include="Models\Api\Request\DeviceTokenRequest.cs" />
     <Compile Include="Models\Api\Request\FolderRequest.cs" />
@@ -134,7 +137,10 @@
     <Compile Include="Models\CipherString.cs" />
     <Compile Include="Models\Data\AttachmentData.cs" />
     <Compile Include="Models\Attachment.cs" />
+    <Compile Include="Models\Data\CipherCollectionData.cs" />
+    <Compile Include="Models\Data\CollectionData.cs" />
     <Compile Include="Models\Field.cs" />
+    <Compile Include="Models\Collection.cs" />
     <Compile Include="Models\Identity.cs" />
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\Page\VaultAttachmentsPageModel.cs" />
@@ -186,6 +192,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Abstractions\Repositories\ICipherRepository.cs" />
     <Compile Include="Repositories\AttachmentRepository.cs" />
+    <Compile Include="Repositories\BaseRepository.cs" />
+    <Compile Include="Repositories\CipherCollectionRepository.cs" />
+    <Compile Include="Repositories\CollectionRepository.cs" />
     <Compile Include="Repositories\SyncApiRepository.cs" />
     <Compile Include="Repositories\TwoFactorApiRepository.cs" />
     <Compile Include="Repositories\SettingsApiRepository.cs" />
