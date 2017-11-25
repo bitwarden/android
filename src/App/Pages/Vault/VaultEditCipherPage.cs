@@ -264,12 +264,12 @@ namespace Bit.App.Pages
                             option = "Other";
                         }
 
-                        i++;
                         if(option == brand)
                         {
                             CardBrandCell.Picker.SelectedIndex = i;
                             break;
                         }
+                        i++;
                     }
                 }
 
