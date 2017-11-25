@@ -255,6 +255,7 @@ namespace Bit.iOS
             container.RegisterSingleton<IKeyDerivationService, CommonCryptoKeyDerivationService>();
             container.RegisterSingleton<IAuthService, AuthService>();
             container.RegisterSingleton<IFolderService, FolderService>();
+            container.RegisterSingleton<ICollectionService, CollectionService>();
             container.RegisterSingleton<ICipherService, CipherService>();
             container.RegisterSingleton<ISyncService, SyncService>();
             container.RegisterSingleton<IDeviceActionService, DeviceActionService>();

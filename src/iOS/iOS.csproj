@@ -817,6 +817,15 @@
   <ItemGroup>
     <BundleResource Include="Resources\note%403x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cube.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cube%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cube%403x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

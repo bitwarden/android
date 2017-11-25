@@ -1,5 +1,4 @@
 ﻿using Bit.App.Models.Page;
-using FFImageLoading.Forms;
 using System;
 using Xamarin.Forms;
 

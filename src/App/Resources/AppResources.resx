@@ -1194,4 +1194,7 @@
   <data name="GoToMyVault" xml:space="preserve">
     <value>Go to my vault</value>
   </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
 </root>

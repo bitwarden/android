@@ -165,6 +165,52 @@ namespace Bit.App.Models.Page
             public string Name { get; set; } = AppResources.FolderNone;
         }
 
+        public class Section : List<Grouping>
+        {
+            public Section(List<Grouping> groupings, string name)
+            {
+                AddRange(groupings);
+                Name = name.ToUpperInvariant();
+                ItemCount = groupings.Count;
+            }
+
+            public string Name { get; set; }
+            public int ItemCount { get; set; }
+        }
+
+        public class Grouping
+        {
+            public Grouping(string name, int count)
+            {
+                Id = null;
+                Name = name;
+                Folder = true;
+                CipherCount = count;
+            }
+
+            public Grouping(Models.Folder folder, int count)
+            {
+                Id = folder.Id;
+                Name = folder.Name?.Decrypt();
+                Folder = true;
+                CipherCount = count;
+            }
+
+            public Grouping(Collection collection, int count)
+            {
+                Id = collection.Id;
+                Name = collection.Name?.Decrypt(collection.OrganizationId);
+                Collection = true;
+                CipherCount = count;
+            }
+
+            public string Id { get; set; }
+            public string Name { get; set; } = AppResources.FolderNone;
+            public int CipherCount { get; set; }
+            public bool Folder { get; set; }
+            public bool Collection { get; set; }
+        }
+
         public class AutofillGrouping : List<AutofillCipher>
         {
             public AutofillGrouping(List<AutofillCipher> logins, string name)

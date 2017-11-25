@@ -45,6 +45,7 @@
     <Compile Include="Abstractions\Repositories\IDeviceApiRepository.cs" />
     <Compile Include="Abstractions\Repositories\ISettingsRepository.cs" />
     <Compile Include="Abstractions\Services\IAppSettingsService.cs" />
+    <Compile Include="Abstractions\Services\ICollectionService.cs" />
     <Compile Include="Abstractions\Services\IMemoryService.cs" />
     <Compile Include="Abstractions\Services\IPushNotificationListener.cs" />
     <Compile Include="Abstractions\Services\IPushNotification.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Controls\ExtendedContentPage.cs" />
     <Compile Include="Controls\LabeledRightDetailCell.cs" />
     <Compile Include="Controls\MemoryContentView.cs" />
+    <Compile Include="Controls\SectionHeaderViewCell.cs" />
     <Compile Include="Controls\StepperCell.cs" />
     <Compile Include="Controls\ExtendedTableView.cs" />
     <Compile Include="Controls\ExtendedPicker.cs" />
@@ -90,6 +92,7 @@
     <Compile Include="Controls\FormEntryCell.cs" />
     <Compile Include="Controls\PinControl.cs" />
     <Compile Include="Controls\VaultAttachmentsViewCell.cs" />
+    <Compile Include="Controls\VaultGroupingViewCell.cs" />
     <Compile Include="Controls\VaultListViewCell.cs" />
     <Compile Include="Enums\DeviceType.cs" />
     <Compile Include="Enums\FieldType.cs" />
@@ -189,6 +192,7 @@
     <Compile Include="Pages\Vault\VaultCustomFieldsPage.cs" />
     <Compile Include="Pages\Vault\VaultAutofillListCiphersPage.cs" />
     <Compile Include="Pages\Vault\VaultAttachmentsPage.cs" />
+    <Compile Include="Pages\Vault\VaultListGroupingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Abstractions\Repositories\ICipherRepository.cs" />
     <Compile Include="Repositories\AttachmentRepository.cs" />
@@ -350,6 +354,7 @@
       <DependentUpon>AppResources.zh-Hant.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\AppSettingsService.cs" />
+    <Compile Include="Services\CollectionService.cs" />
     <Compile Include="Services\SettingsService.cs" />
     <Compile Include="Services\TokenService.cs" />
     <Compile Include="Services\AppIdService.cs" />

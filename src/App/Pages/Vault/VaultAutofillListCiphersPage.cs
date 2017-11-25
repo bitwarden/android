@@ -99,7 +99,8 @@ namespace Bit.App.Pages
                 IsGroupingEnabled = true,
                 ItemsSource = PresentationCiphersGroup,
                 HasUnevenRows = true,
-                GroupHeaderTemplate = new DataTemplate(() => new HeaderViewCell()),
+                GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
+                    nameof(VaultListPageModel.AutofillGrouping.Name))),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
                     (VaultListPageModel.Cipher l) => MoreClickedAsync(l)))
             };
@@ -357,30 +358,6 @@ namespace Bit.App.Pages
                 Application.Current.MainPage = new ExtendedNavigationPage(new VaultListCiphersPage(false, _page.Uri));
                 _page.UserDialogs.Toast(string.Format(AppResources.BitwardenAutofillServiceSearch, _page._name),
                     TimeSpan.FromSeconds(10));
-            }
-        }
-
-        private class HeaderViewCell : ExtendedViewCell
-        {
-            public HeaderViewCell()
-            {
-                var label = new Label
-                {
-                    FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                    Style = (Style)Application.Current.Resources["text-muted"],
-                    VerticalTextAlignment = TextAlignment.Center
-                };
-
-                label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.AutofillGrouping.Name));
-
-                var grid = new ContentView
-                {
-                    Padding = new Thickness(16, 8, 0, 8),
-                    Content = label
-                };
-
-                View = grid;
-                BackgroundColor = Color.FromHex("efeff4");
             }
         }
     }

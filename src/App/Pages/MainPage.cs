@@ -13,7 +13,7 @@ namespace Bit.App.Pages
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
             var favoritesNavigation = new ExtendedNavigationPage(new VaultListCiphersPage(true));
-            var vaultNavigation = new ExtendedNavigationPage(new VaultListCiphersPage(false));
+            var vaultNavigation = new ExtendedNavigationPage(new VaultListGroupingsPage());
             var toolsNavigation = new ExtendedNavigationPage(new ToolsPage());
 
             favoritesNavigation.Icon = "star.png";
