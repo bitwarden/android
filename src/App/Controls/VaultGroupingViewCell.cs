@@ -70,7 +70,7 @@ namespace Bit.App.Controls
         {
             if(BindingContext is VaultListPageModel.Grouping grouping)
             {
-                Icon.Source = grouping.Folder ? "folder.png" : "cube.png";
+                Icon.Source = grouping.Folder ? $"folder{(grouping.Id == null ? "_o" : string.Empty)}.png" : "cube.png";
             }
 
             base.OnBindingContextChanged();
