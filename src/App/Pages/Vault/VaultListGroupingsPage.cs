@@ -55,15 +55,16 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<VaultListPageModel.Section> PresentationSections { get; private set; }
             = new ExtendedObservableCollection<VaultListPageModel.Section>();
         public ListView ListView { get; set; }
-        public SearchBar Search { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
-        public StackLayout ResultsStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
         private AddCipherToolBarItem AddCipherItem { get; set; }
+        private SearchToolBarItem SearchItem { get; set; }
 
         private void Init()
         {
+            SearchItem = new SearchToolBarItem(this);
             AddCipherItem = new AddCipherToolBarItem(this);
+            ToolbarItems.Add(SearchItem);
             ToolbarItems.Add(AddCipherItem);
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
@@ -81,26 +82,6 @@ namespace Bit.App.Pages
             {
                 ListView.RowHeight = -1;
             }
-
-            Search = new SearchBar
-            {
-                Placeholder = AppResources.SearchVault,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
-                CancelButtonColor = Color.FromHex("3c8dbc")
-            };
-            // Bug with searchbar on android 7, ref https://bugzilla.xamarin.com/show_bug.cgi?id=43975
-            if(Device.RuntimePlatform == Device.Android && _deviceInfoService.Version >= 24)
-            {
-                Search.HeightRequest = 50;
-            }
-
-            Title = AppResources.MyVault;
-
-            ResultsStackLayout = new StackLayout
-            {
-                Children = { Search, ListView },
-                Spacing = 0
-            };
 
             var noDataLabel = new Label
             {
@@ -135,6 +116,7 @@ namespace Bit.App.Pages
             };
 
             Content = LoadingIndicator;
+            Title = AppResources.MyVault;
         }
 
         protected override void OnAppearing()
@@ -149,9 +131,8 @@ namespace Bit.App.Pages
             });
 
             ListView.ItemSelected += GroupingSelected;
-            //Search.TextChanged += SearchBar_TextChanged;
-            //Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
             AddCipherItem?.InitEvents();
+            SearchItem?.InitEvents();
 
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
         }
@@ -162,21 +143,8 @@ namespace Bit.App.Pages
             MessagingCenter.Unsubscribe<ISyncService, bool>(_syncService, "SyncCompleted");
 
             ListView.ItemSelected -= GroupingSelected;
-            //Search.TextChanged -= SearchBar_TextChanged;
-            //Search.SearchButtonPressed -= SearchBar_SearchButtonPressed;
             AddCipherItem?.Dispose();
-        }
-
-        private void AdjustContent()
-        {
-            if(PresentationSections.Count > 0 || !string.IsNullOrWhiteSpace(Search.Text))
-            {
-                Content = ResultsStackLayout;
-            }
-            else
-            {
-                Content = NoDataStackLayout;
-            }
+            SearchItem?.Dispose();
         }
 
         private CancellationTokenSource FetchAndLoadVault()
@@ -213,10 +181,7 @@ namespace Bit.App.Pages
                     .Select(f => new VaultListPageModel.Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0))
                     .OrderBy(g => g.Name).ToList();
                 folderGroupings.Add(new VaultListPageModel.Grouping(AppResources.FolderNone, folderCounts["none"]));
-                if(folderGroupings?.Any() ?? false)
-                {
-                    sections.Add(new VaultListPageModel.Section(folderGroupings, AppResources.Folders));
-                }
+                sections.Add(new VaultListPageModel.Section(folderGroupings, AppResources.Folders));
 
                 var collections = await _collectionService.GetAllAsync();
                 var collectionGroupings = collections?
@@ -235,7 +200,14 @@ namespace Bit.App.Pages
                         PresentationSections.ResetWithRange(sections);
                     }
 
-                    AdjustContent();
+                    if(PresentationSections.Count > 0)
+                    {
+                        Content = ListView;
+                    }
+                    else
+                    {
+                        Content = NoDataStackLayout;
+                    }
                 });
             }, cts.Token);
 
@@ -280,16 +252,29 @@ namespace Bit.App.Pages
             await Navigation.PushForDeviceAsync(page);
         }
 
+        private async void Search()
+        {
+            var page = new ExtendedNavigationPage(new VaultSearchCiphersPage());
+            await Navigation.PushModalAsync(page);
+        }
+
         private class AddCipherToolBarItem : ExtendedToolbarItem
         {
-            private readonly VaultListGroupingsPage _page;
-
             public AddCipherToolBarItem(VaultListGroupingsPage page)
                 : base(() => page.AddCipher())
             {
-                _page = page;
                 Text = AppResources.Add;
                 Icon = "plus.png";
+            }
+        }
+
+        private class SearchToolBarItem : ExtendedToolbarItem
+        {
+            public SearchToolBarItem(VaultListGroupingsPage page)
+                : base(() => page.Search())
+            {
+                Text = AppResources.Search;
+                Icon = "search.png";
             }
         }
     }

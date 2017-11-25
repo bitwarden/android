@@ -21,6 +21,23 @@ namespace Bit.App.Models.Page
                 Name = cipher.Name?.Decrypt(cipher.OrganizationId);
                 Type = cipher.Type;
 
+                if(string.IsNullOrWhiteSpace(Name) || Name.Length == 0)
+                {
+                    NameGroup = AppResources.Other;
+                }
+                else if(Char.IsLetter(Name[0]))
+                {
+                    NameGroup = Name[0].ToString();
+                }
+                else if(Char.IsDigit(Name[0]))
+                {
+                    NameGroup = "0 - 9";
+                }
+                else
+                {
+                    NameGroup = AppResources.Other;
+                }
+
                 switch(cipher.Type)
                 {
                     case CipherType.Login:
@@ -120,6 +137,7 @@ namespace Bit.App.Models.Page
             public bool Shared { get; set; }
             public bool HasAttachments { get; set; }
             public string FolderId { get; set; }
+            public string NameGroup { get; set; }
             public string Name { get; set; }
             public string Subtitle { get; set; }
             public CipherType Type { get; set; }
@@ -163,6 +181,17 @@ namespace Bit.App.Models.Page
 
             public string Id { get; set; }
             public string Name { get; set; } = AppResources.FolderNone;
+        }
+
+        public class NameGroup : List<Cipher>
+        {
+            public NameGroup(string nameGroup, List<Cipher> ciphers)
+            {
+                Name = nameGroup.ToUpperInvariant();
+                AddRange(ciphers);
+            }
+
+            public string Name { get; set; }
         }
 
         public class Section : List<Grouping>
