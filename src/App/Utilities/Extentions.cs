@@ -37,19 +37,19 @@ namespace Bit.App
             return !page.IsPortrait();
         }
 
-        public static void FocusWithDelay(this Entry entry, int delay = 1000)
+        public static void FocusWithDelay(this View view, int delay = 1000)
         {
             if(Device.RuntimePlatform == Device.Android)
             {
                 Task.Run(async () =>
                 {
                     await Task.Delay(delay);
-                    Device.BeginInvokeOnMainThread(() => entry.Focus());
+                    Device.BeginInvokeOnMainThread(() => view.Focus());
                 });
             }
             else
             {
-                entry.Focus();
+                view.Focus();
             }
         }
 

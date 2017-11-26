@@ -102,7 +102,7 @@ namespace Bit.App.Pages
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
                     nameof(VaultListPageModel.AutofillGrouping.Name))),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
-                    (VaultListPageModel.Cipher l) => MoreClickedAsync(l)))
+                    (VaultListPageModel.Cipher c) => Helpers.CipherMoreClickedAsync(this, c, true)))
             };
 
             if(Device.RuntimePlatform == Device.iOS)
@@ -229,7 +229,7 @@ namespace Bit.App.Pages
 
             if(_deviceInfoService.Version < 21)
             {
-                MoreClickedAsync(cipher);
+                Helpers.CipherMoreClickedAsync(this, cipher, true);
             }
             else
             {
@@ -262,69 +262,6 @@ namespace Bit.App.Pages
 
             var pageForLogin = new VaultAddCipherPage(CipherType.Login, Uri, _name, true);
             await Navigation.PushForDeviceAsync(pageForLogin);
-        }
-
-        private async void MoreClickedAsync(VaultListPageModel.Cipher cipher)
-        {
-            var buttons = new List<string> { AppResources.View, AppResources.Edit };
-
-            if(cipher.Type == CipherType.Login)
-            {
-                if(!string.IsNullOrWhiteSpace(cipher.LoginPassword.Value))
-                {
-                    buttons.Add(AppResources.CopyPassword);
-                }
-                if(!string.IsNullOrWhiteSpace(cipher.LoginUsername))
-                {
-                    buttons.Add(AppResources.CopyUsername);
-                }
-            }
-            else if(cipher.Type == CipherType.Card)
-            {
-                if(!string.IsNullOrWhiteSpace(cipher.CardNumber))
-                {
-                    buttons.Add(AppResources.CopyNumber);
-                }
-                if(!string.IsNullOrWhiteSpace(cipher.CardCode.Value))
-                {
-                    buttons.Add(AppResources.CopySecurityCode);
-                }
-            }
-
-            var selection = await DisplayActionSheet(cipher.Name, AppResources.Cancel, null, buttons.ToArray());
-
-            if(selection == AppResources.View)
-            {
-                var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
-                await Navigation.PushForDeviceAsync(page);
-            }
-            else if(selection == AppResources.Edit)
-            {
-                var page = new VaultEditCipherPage(cipher.Id);
-                await Navigation.PushForDeviceAsync(page);
-            }
-            else if(selection == AppResources.CopyPassword)
-            {
-                Copy(cipher.LoginPassword.Value, AppResources.Password);
-            }
-            else if(selection == AppResources.CopyUsername)
-            {
-                Copy(cipher.LoginUsername, AppResources.Username);
-            }
-            else if(selection == AppResources.CopyNumber)
-            {
-                Copy(cipher.CardNumber, AppResources.Number);
-            }
-            else if(selection == AppResources.CopySecurityCode)
-            {
-                Copy(cipher.CardCode.Value, AppResources.SecurityCode);
-            }
-        }
-
-        private void Copy(string copyText, string alertLabel)
-        {
-            _deviceActionService.CopyToClipboard(copyText);
-            UserDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private class AddCipherToolBarItem : ExtendedToolbarItem

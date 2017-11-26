@@ -1,8 +1,15 @@
-﻿using Bit.App.Abstractions;
+﻿using Acr.UserDialogs;
+using Bit.App.Abstractions;
+using Bit.App.Enums;
+using Bit.App.Models.Page;
+using Bit.App.Pages;
+using Bit.App.Resources;
 using Plugin.Settings.Abstractions;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using XLabs.Ioc;
 
 namespace Bit.App.Utilities
 {
@@ -65,6 +72,77 @@ namespace Bit.App.Utilities
             }
 
             return " ";
+        }
+        public static async void CipherMoreClickedAsync(Page page, VaultListPageModel.Cipher cipher, bool autofill)
+        {
+            var buttons = new List<string> { AppResources.View, AppResources.Edit };
+
+            if(cipher.Type == CipherType.Login)
+            {
+                if(!string.IsNullOrWhiteSpace(cipher.LoginPassword.Value))
+                {
+                    buttons.Add(AppResources.CopyPassword);
+                }
+                if(!string.IsNullOrWhiteSpace(cipher.LoginUsername))
+                {
+                    buttons.Add(AppResources.CopyUsername);
+                }
+                if(!autofill && !string.IsNullOrWhiteSpace(cipher.LoginUri) && (cipher.LoginUri.StartsWith("http://")
+                    || cipher.LoginUri.StartsWith("https://")))
+                {
+                    buttons.Add(AppResources.GoToWebsite);
+                }
+            }
+            else if(cipher.Type == CipherType.Card)
+            {
+                if(!string.IsNullOrWhiteSpace(cipher.CardNumber))
+                {
+                    buttons.Add(AppResources.CopyNumber);
+                }
+                if(!string.IsNullOrWhiteSpace(cipher.CardCode.Value))
+                {
+                    buttons.Add(AppResources.CopySecurityCode);
+                }
+            }
+
+            var selection = await page.DisplayActionSheet(cipher.Name, AppResources.Cancel, null, buttons.ToArray());
+
+            if(selection == AppResources.View)
+            {
+                var p = new VaultViewCipherPage(cipher.Type, cipher.Id);
+                await page.Navigation.PushForDeviceAsync(p);
+            }
+            else if(selection == AppResources.Edit)
+            {
+                var p = new VaultEditCipherPage(cipher.Id);
+                await page.Navigation.PushForDeviceAsync(p);
+            }
+            else if(selection == AppResources.CopyPassword)
+            {
+                CipherCopy(cipher.LoginPassword.Value, AppResources.Password);
+            }
+            else if(selection == AppResources.CopyUsername)
+            {
+                CipherCopy(cipher.LoginUsername, AppResources.Username);
+            }
+            else if(selection == AppResources.GoToWebsite)
+            {
+                Device.OpenUri(new Uri(cipher.LoginUri));
+            }
+            else if(selection == AppResources.CopyNumber)
+            {
+                CipherCopy(cipher.CardNumber, AppResources.Number);
+            }
+            else if(selection == AppResources.CopySecurityCode)
+            {
+                CipherCopy(cipher.CardCode.Value, AppResources.SecurityCode);
+            }
+        }
+
+        public static void CipherCopy(string copyText, string alertLabel)
+        {
+            Resolver.Resolve<IDeviceActionService>().CopyToClipboard(copyText);
+            Resolver.Resolve<IUserDialogs>().Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Page;
@@ -11,21 +10,15 @@ using XLabs.Ioc;
 using Bit.App.Utilities;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
-using System.Collections.Generic;
 using System.Threading;
-using Bit.App.Enums;
 
 namespace Bit.App.Pages
 {
     public class VaultSearchCiphersPage : ExtendedContentPage
     {
-        private readonly IFolderService _folderService;
         private readonly ICipherService _cipherService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
-        private readonly IDeviceActionService _deviceActionService;
         private readonly ISyncService _syncService;
-        private readonly IPushNotificationService _pushNotification;
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly ISettings _settings;
         private readonly IAppSettingsService _appSettingsService;
@@ -35,13 +28,9 @@ namespace Bit.App.Pages
         public VaultSearchCiphersPage()
             : base(true)
         {
-            _folderService = Resolver.Resolve<IFolderService>();
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _syncService = Resolver.Resolve<ISyncService>();
-            _pushNotification = Resolver.Resolve<IPushNotificationService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _settings = Resolver.Resolve<ISettings>();
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
@@ -67,7 +56,7 @@ namespace Bit.App.Pages
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
                     nameof(VaultListPageModel.NameGroup.Name), nameof(VaultListPageModel.NameGroup.Count))),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
-                    (VaultListPageModel.Cipher c) => MoreClickedAsync(c)))
+                    (VaultListPageModel.Cipher c) => Helpers.CipherMoreClickedAsync(this, c, false)))
             };
 
             if(Device.RuntimePlatform == Device.iOS)
@@ -186,8 +175,8 @@ namespace Bit.App.Pages
             ListView.ItemSelected += CipherSelected;
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
-
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
+            Search.FocusWithDelay();
         }
 
         protected override void OnDisappearing()
@@ -260,78 +249,6 @@ namespace Bit.App.Pages
             var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
             await Navigation.PushForDeviceAsync(page);
             ((ListView)sender).SelectedItem = null;
-        }
-
-        private async void MoreClickedAsync(VaultListPageModel.Cipher cipher)
-        {
-            var buttons = new List<string> { AppResources.View, AppResources.Edit };
-
-            if(cipher.Type == CipherType.Login)
-            {
-                if(!string.IsNullOrWhiteSpace(cipher.LoginPassword.Value))
-                {
-                    buttons.Add(AppResources.CopyPassword);
-                }
-                if(!string.IsNullOrWhiteSpace(cipher.LoginUsername))
-                {
-                    buttons.Add(AppResources.CopyUsername);
-                }
-                if(!string.IsNullOrWhiteSpace(cipher.LoginUri) && (cipher.LoginUri.StartsWith("http://")
-                    || cipher.LoginUri.StartsWith("https://")))
-                {
-                    buttons.Add(AppResources.GoToWebsite);
-                }
-            }
-            else if(cipher.Type == CipherType.Card)
-            {
-                if(!string.IsNullOrWhiteSpace(cipher.CardNumber))
-                {
-                    buttons.Add(AppResources.CopyNumber);
-                }
-                if(!string.IsNullOrWhiteSpace(cipher.CardCode.Value))
-                {
-                    buttons.Add(AppResources.CopySecurityCode);
-                }
-            }
-
-            var selection = await DisplayActionSheet(cipher.Name, AppResources.Cancel, null, buttons.ToArray());
-
-            if(selection == AppResources.View)
-            {
-                var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
-                await Navigation.PushForDeviceAsync(page);
-            }
-            else if(selection == AppResources.Edit)
-            {
-                var page = new VaultEditCipherPage(cipher.Id);
-                await Navigation.PushForDeviceAsync(page);
-            }
-            else if(selection == AppResources.CopyPassword)
-            {
-                Copy(cipher.LoginPassword.Value, AppResources.Password);
-            }
-            else if(selection == AppResources.CopyUsername)
-            {
-                Copy(cipher.LoginUsername, AppResources.Username);
-            }
-            else if(selection == AppResources.GoToWebsite)
-            {
-                Device.OpenUri(new Uri(cipher.LoginUri));
-            }
-            else if(selection == AppResources.CopyNumber)
-            {
-                Copy(cipher.CardNumber, AppResources.Number);
-            }
-            else if(selection == AppResources.CopySecurityCode)
-            {
-                Copy(cipher.CardCode.Value, AppResources.SecurityCode);
-            }
-        }
-
-        private void Copy(string copyText, string alertLabel)
-        {
-            _deviceActionService.CopyToClipboard(copyText);
-            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
     }
 }
