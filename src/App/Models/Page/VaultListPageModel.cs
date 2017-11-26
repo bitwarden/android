@@ -183,28 +183,23 @@ namespace Bit.App.Models.Page
             public string Name { get; set; } = AppResources.FolderNone;
         }
 
-        public class NameGroup : List<Cipher>
+        public class Section<T> : List<T>
         {
-            public NameGroup(string nameGroup, List<Cipher> ciphers)
+            public Section(List<T> groupItems, string name, bool doUpper = true)
             {
-                Name = nameGroup.ToUpperInvariant();
-                AddRange(ciphers);
+                AddRange(groupItems);
+
+                if(doUpper)
+                {
+                    Name = name.ToUpperInvariant();
+                }
+                else
+                {
+                    Name = name;
+                }
             }
 
             public string Name { get; set; }
-        }
-
-        public class Section : List<Grouping>
-        {
-            public Section(List<Grouping> groupings, string name)
-            {
-                AddRange(groupings);
-                Name = name.ToUpperInvariant();
-                ItemCount = groupings.Count;
-            }
-
-            public string Name { get; set; }
-            public int ItemCount { get; set; }
         }
 
         public class Grouping
@@ -238,17 +233,6 @@ namespace Bit.App.Models.Page
             public int CipherCount { get; set; }
             public bool Folder { get; set; }
             public bool Collection { get; set; }
-        }
-
-        public class AutofillGrouping : List<AutofillCipher>
-        {
-            public AutofillGrouping(List<AutofillCipher> logins, string name)
-            {
-                AddRange(logins);
-                Name = name;
-            }
-
-            public string Name { get; set; }
         }
     }
 }

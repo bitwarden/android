@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.App.Models.Page;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -11,6 +10,7 @@ using Bit.App.Utilities;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using System.Threading;
+using static Bit.App.Models.Page.VaultListPageModel;
 
 namespace Bit.App.Pages
 {
@@ -39,9 +39,9 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<VaultListPageModel.NameGroup> PresentationLetters { get; private set; }
-            = new ExtendedObservableCollection<VaultListPageModel.NameGroup>();
-        public VaultListPageModel.Cipher[] Ciphers { get; set; } = new VaultListPageModel.Cipher[] { };
+        public ExtendedObservableCollection<Section<Cipher>> PresentationLetters { get; private set; }
+            = new ExtendedObservableCollection<Section<Cipher>>();
+        public Cipher[] Ciphers { get; set; } = new Cipher[] { };
         public ListView ListView { get; set; }
         public SearchBar Search { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
@@ -53,10 +53,11 @@ namespace Bit.App.Pages
                 IsGroupingEnabled = true,
                 ItemsSource = PresentationLetters,
                 HasUnevenRows = true,
-                GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
-                    nameof(VaultListPageModel.NameGroup.Name), nameof(VaultListPageModel.NameGroup.Count))),
+                GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(nameof(Section<Cipher>.Name),
+                    nameof(Section<Cipher>.Count))),
+                GroupShortNameBinding = new Binding(nameof(Section<Cipher>.Name)),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
-                    (VaultListPageModel.Cipher c) => Helpers.CipherMoreClickedAsync(this, c, false)))
+                    (Cipher c) => Helpers.CipherMoreClickedAsync(this, c, false)))
             };
 
             if(Device.RuntimePlatform == Device.iOS)
@@ -70,7 +71,7 @@ namespace Bit.App.Pages
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
                 CancelButtonColor = Color.FromHex("3c8dbc")
             };
-            // Bug with searchbar on android 7, ref https://bugzilla.xamarin.com/show_bug.cgi?id=43975
+            // Bug with search bar on android 7, ref https://bugzilla.xamarin.com/show_bug.cgi?id=43975
             if(Device.RuntimePlatform == Device.Android && _deviceInfoService.Version >= 24)
             {
                 Search.HeightRequest = 50;
@@ -204,7 +205,7 @@ namespace Bit.App.Pages
                 var ciphers = await _cipherService.GetAllAsync();
 
                 Ciphers = ciphers
-                    .Select(s => new VaultListPageModel.Cipher(s, _appSettingsService))
+                    .Select(s => new Cipher(s, _appSettingsService))
                     .OrderBy(s =>
                     {
                         // Sort numbers and letters before special characters
@@ -225,11 +226,10 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private void LoadLetters(VaultListPageModel.Cipher[] ciphers, CancellationToken ct)
+        private void LoadLetters(Cipher[] ciphers, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
-            var letterGroups = ciphers.GroupBy(c => c.NameGroup)
-                .Select(g => new VaultListPageModel.NameGroup(g.Key, g.ToList()));
+            var letterGroups = ciphers.GroupBy(c => c.NameGroup).Select(g => new Section<Cipher>(g.ToList(), g.Key));
             ct.ThrowIfCancellationRequested();
             Device.BeginInvokeOnMainThread(() =>
             {
@@ -240,7 +240,7 @@ namespace Bit.App.Pages
 
         private async void CipherSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var cipher = e.SelectedItem as VaultListPageModel.Cipher;
+            var cipher = e.SelectedItem as Cipher;
             if(cipher == null)
             {
                 return;

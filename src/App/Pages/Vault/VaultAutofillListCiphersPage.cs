@@ -13,6 +13,7 @@ using System.Threading;
 using Bit.App.Models;
 using System.Collections.Generic;
 using Bit.App.Enums;
+using static Bit.App.Models.Page.VaultListPageModel;
 
 namespace Bit.App.Pages
 {
@@ -53,8 +54,8 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<VaultListPageModel.AutofillGrouping> PresentationCiphersGroup { get; private set; }
-            = new ExtendedObservableCollection<VaultListPageModel.AutofillGrouping>();
+        public ExtendedObservableCollection<Section<AutofillCipher>> PresentationCiphersGroup { get; private set; }
+            = new ExtendedObservableCollection<Section<AutofillCipher>>();
         public StackLayout NoDataStackLayout { get; set; }
         public ListView ListView { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
@@ -100,7 +101,7 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationCiphersGroup,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
-                    nameof(VaultListPageModel.AutofillGrouping.Name))),
+                    nameof(Section<AutofillCipher>.Name))),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
                     (VaultListPageModel.Cipher c) => Helpers.CipherMoreClickedAsync(this, c, true)))
             };
@@ -165,42 +166,42 @@ namespace Bit.App.Pages
 
             Task.Run(async () =>
             {
-                var autofillGroupings = new List<VaultListPageModel.AutofillGrouping>();
+                var autofillGroupings = new List<Section<AutofillCipher>>();
                 var ciphers = await _cipherService.GetAllAsync(Uri);
 
                 if(_appOptions.FillType.HasValue && _appOptions.FillType.Value != CipherType.Login)
                 {
                     var others = ciphers?.Item3.Where(c => c.Type == _appOptions.FillType.Value)
-                        .Select(c => new VaultListPageModel.AutofillCipher(c, _appSettingsService, false))
+                        .Select(c => new AutofillCipher(c, _appSettingsService, false))
                         .OrderBy(s => s.Name)
                         .ThenBy(s => s.Subtitle)
                         .ToList();
                     if(others?.Any() ?? false)
                     {
-                        autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(others, AppResources.Items));
+                        autofillGroupings.Add(new Section<AutofillCipher>(others, AppResources.Items));
                     }
                 }
                 else
                 {
                     var normalLogins = ciphers?.Item1
-                        .Select(l => new VaultListPageModel.AutofillCipher(l, _appSettingsService, false))
+                        .Select(l => new AutofillCipher(l, _appSettingsService, false))
                         .OrderBy(s => s.Name)
                         .ThenBy(s => s.Subtitle)
                         .ToList();
                     if(normalLogins?.Any() ?? false)
                     {
-                        autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(normalLogins,
+                        autofillGroupings.Add(new Section<AutofillCipher>(normalLogins,
                             AppResources.MatchingItems));
                     }
 
                     var fuzzyLogins = ciphers?.Item2
-                        .Select(l => new VaultListPageModel.AutofillCipher(l, _appSettingsService, true))
+                        .Select(l => new AutofillCipher(l, _appSettingsService, true))
                         .OrderBy(s => s.Name)
                         .ThenBy(s => s.Subtitle)
                         .ToList();
                     if(fuzzyLogins?.Any() ?? false)
                     {
-                        autofillGroupings.Add(new VaultListPageModel.AutofillGrouping(fuzzyLogins,
+                        autofillGroupings.Add(new Section<AutofillCipher>(fuzzyLogins,
                             AppResources.PossibleMatchingItems));
                     }
                 }
@@ -221,7 +222,7 @@ namespace Bit.App.Pages
 
         private async void CipherSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var cipher = e.SelectedItem as VaultListPageModel.AutofillCipher;
+            var cipher = e.SelectedItem as AutofillCipher;
             if(cipher == null)
             {
                 return;

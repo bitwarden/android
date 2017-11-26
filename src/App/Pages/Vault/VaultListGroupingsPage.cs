@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
-using Bit.App.Models.Page;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -14,6 +13,7 @@ using Plugin.Connectivity.Abstractions;
 using System.Collections.Generic;
 using System.Threading;
 using Bit.App.Enums;
+using static Bit.App.Models.Page.VaultListPageModel;
 
 namespace Bit.App.Pages
 {
@@ -52,8 +52,8 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<VaultListPageModel.Section> PresentationSections { get; private set; }
-            = new ExtendedObservableCollection<VaultListPageModel.Section>();
+        public ExtendedObservableCollection<Section<Grouping>> PresentationSections { get; private set; }
+            = new ExtendedObservableCollection<Section<Grouping>>();
         public ListView ListView { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
@@ -73,7 +73,7 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationSections,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
-                    nameof(VaultListPageModel.Section.Name), nameof(VaultListPageModel.Section.ItemCount),
+                    nameof(Section<Grouping>.Name), nameof(Section<Grouping>.Count),
                     new Thickness(16, Helpers.OnPlatform(20, 12, 12), 16, 12))),
                 ItemTemplate = new DataTemplate(() => new VaultGroupingViewCell())
             };
@@ -154,7 +154,7 @@ namespace Bit.App.Pages
 
             Task.Run(async () =>
             {
-                var sections = new List<VaultListPageModel.Section>();
+                var sections = new List<Section<Grouping>>();
                 var ciphers = await _cipherService.GetAllAsync();
                 var collectionsDict = (await _collectionService.GetAllCipherAssociationsAsync())
                     .GroupBy(c => c.Item2).ToDictionary(g => g.Key, v => v.ToList());
@@ -178,19 +178,19 @@ namespace Bit.App.Pages
 
                 var folders = await _folderService.GetAllAsync();
                 var folderGroupings = folders?
-                    .Select(f => new VaultListPageModel.Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0))
+                    .Select(f => new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0))
                     .OrderBy(g => g.Name).ToList();
-                folderGroupings.Add(new VaultListPageModel.Grouping(AppResources.FolderNone, folderCounts["none"]));
-                sections.Add(new VaultListPageModel.Section(folderGroupings, AppResources.Folders));
+                folderGroupings.Add(new Grouping(AppResources.FolderNone, folderCounts["none"]));
+                sections.Add(new Section<Grouping>(folderGroupings, AppResources.Folders));
 
                 var collections = await _collectionService.GetAllAsync();
                 var collectionGroupings = collections?
-                    .Select(c => new VaultListPageModel.Grouping(c,
+                    .Select(c => new Grouping(c,
                         collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0))
                    .OrderBy(g => g.Name).ToList();
                 if(collectionGroupings?.Any() ?? false)
                 {
-                    sections.Add(new VaultListPageModel.Section(collectionGroupings, AppResources.Collections));
+                    sections.Add(new Section<Grouping>(collectionGroupings, AppResources.Collections));
                 }
 
                 Device.BeginInvokeOnMainThread(() =>
@@ -216,7 +216,7 @@ namespace Bit.App.Pages
 
         private void GroupingSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var grouping = e.SelectedItem as VaultListPageModel.Grouping;
+            var grouping = e.SelectedItem as Grouping;
             if(grouping == null)
             {
                 return;
