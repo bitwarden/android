@@ -209,6 +209,7 @@ namespace Bit.App.Services
 
         public void LogOut(string logoutMessage = null)
         {
+            CipherService.CachedCiphers = null;
             _tokenService.Token = null;
             _tokenService.RefreshToken = null;
             UserId = null;

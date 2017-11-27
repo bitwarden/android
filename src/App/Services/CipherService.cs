@@ -6,13 +6,14 @@ using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Models.Api;
 using Bit.App.Models.Data;
-using Xamarin.Forms;
 using System.Net.Http;
 
 namespace Bit.App.Services
 {
     public class CipherService : ICipherService
     {
+        public static List<Cipher> CachedCiphers = null;
+
         private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android",
             "io", "co", "uk", "au", "nz", "fr", "de", "tv", "info", "app", "apps", "eu", "me", "dev", "jp", "mobile" };
         private readonly ICipherRepository _cipherRepository;
@@ -22,8 +23,6 @@ namespace Bit.App.Services
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly ISettingsService _settingsService;
         private readonly ICryptoService _cryptoService;
-
-        private List<Cipher> _cachedCiphers = null;
 
         public CipherService(
             ICipherRepository cipherRepository,
@@ -58,18 +57,18 @@ namespace Bit.App.Services
 
         public async Task<IEnumerable<Cipher>> GetAllAsync()
         {
-            if(_cachedCiphers != null)
+            if(CachedCiphers != null)
             {
-                return _cachedCiphers;
+                return CachedCiphers;
             }
 
             var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
             var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
             var data = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId);
-            _cachedCiphers = data
+            CachedCiphers = data
                 .Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null))
                 .ToList();
-            return _cachedCiphers;
+            return CachedCiphers;
         }
 
         public async Task<IEnumerable<Cipher>> GetAllAsync(bool favorites)
@@ -273,7 +272,7 @@ namespace Bit.App.Services
         public async Task UpsertDataAsync(CipherData cipher)
         {
             await _cipherRepository.UpsertAsync(cipher);
-            _cachedCiphers = null;
+            CachedCiphers = null;
         }
 
         public async Task<ApiResult> DeleteAsync(string id)
@@ -295,7 +294,7 @@ namespace Bit.App.Services
         public async Task DeleteDataAsync(string id)
         {
             await _cipherRepository.DeleteAsync(id);
-            _cachedCiphers = null;
+            CachedCiphers = null;
         }
 
         public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null)
@@ -360,7 +359,7 @@ namespace Bit.App.Services
             {
                 await _attachmentRepository.UpsertAsync(attachment);
             }
-            _cachedCiphers = null;
+            CachedCiphers = null;
         }
 
         public async Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId)
@@ -382,7 +381,7 @@ namespace Bit.App.Services
         public async Task DeleteAttachmentDataAsync(string attachmentId)
         {
             await _attachmentRepository.DeleteAsync(attachmentId);
-            _cachedCiphers = null;
+            CachedCiphers = null;
         }
 
         private Tuple<string, string[]> InfoFromMobileAppUri(string mobileAppUriString)
