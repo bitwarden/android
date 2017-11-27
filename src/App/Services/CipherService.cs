@@ -16,6 +16,7 @@ namespace Bit.App.Services
         private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android",
             "io", "co", "uk", "au", "nz", "fr", "de", "tv", "info", "app", "apps", "eu", "me", "dev", "jp", "mobile" };
         private readonly ICipherRepository _cipherRepository;
+        private readonly ICipherCollectionRepository _cipherCollectionRepository;
         private readonly IAttachmentRepository _attachmentRepository;
         private readonly IAuthService _authService;
         private readonly ICipherApiRepository _cipherApiRepository;
@@ -26,6 +27,7 @@ namespace Bit.App.Services
 
         public CipherService(
             ICipherRepository cipherRepository,
+            ICipherCollectionRepository cipherCollectionRepository,
             IAttachmentRepository attachmentRepository,
             IAuthService authService,
             ICipherApiRepository cipherApiRepository,
@@ -33,6 +35,7 @@ namespace Bit.App.Services
             ICryptoService cryptoService)
         {
             _cipherRepository = cipherRepository;
+            _cipherCollectionRepository = cipherCollectionRepository;
             _attachmentRepository = attachmentRepository;
             _authService = authService;
             _cipherApiRepository = cipherApiRepository;
@@ -71,11 +74,22 @@ namespace Bit.App.Services
 
         public async Task<IEnumerable<Cipher>> GetAllAsync(bool favorites)
         {
-            var attachmentData = await _attachmentRepository.GetAllByUserIdAsync(_authService.UserId);
-            var attachmentDict = attachmentData.GroupBy(a => a.LoginId).ToDictionary(g => g.Key, g => g.ToList());
-            var data = await _cipherRepository.GetAllByUserIdAsync(_authService.UserId, favorites);
-            var cipher = data.Select(f => new Cipher(f, attachmentDict.ContainsKey(f.Id) ? attachmentDict[f.Id] : null));
-            return cipher;
+            var ciphers = await GetAllAsync();
+            return ciphers.Where(c => c.Favorite == favorites);
+        }
+
+        public async Task<IEnumerable<Cipher>> GetAllByFolderAsync(string folderId)
+        {
+            var ciphers = await GetAllAsync();
+            return ciphers.Where(c => c.FolderId == folderId);
+        }
+
+        public async Task<IEnumerable<Cipher>> GetAllByCollectionAsync(string collectionId)
+        {
+            var assoc = await _cipherCollectionRepository.GetAllByUserIdCollectionAsync(_authService.UserId, collectionId);
+            var cipherIds = new HashSet<string>(assoc.Select(c => c.CipherId));
+            var ciphers = await GetAllAsync();
+            return ciphers.Where(c => cipherIds.Contains(c.Id));
         }
 
         public async Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString)

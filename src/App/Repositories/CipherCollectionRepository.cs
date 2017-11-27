@@ -19,6 +19,13 @@ namespace Bit.App.Repositories
             return Task.FromResult(cipherCollections);
         }
 
+        public Task<IEnumerable<CipherCollectionData>> GetAllByUserIdCollectionAsync(string userId, string collectionId)
+        {
+            var cipherCollections = Connection.Table<CipherCollectionData>().Where(
+                f => f.UserId == userId && f.CollectionId == collectionId).Cast<CipherCollectionData>();
+            return Task.FromResult(cipherCollections);
+        }
+
         public virtual Task InsertAsync(CipherCollectionData obj)
         {
             Connection.Insert(obj);

@@ -214,7 +214,7 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private void GroupingSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void GroupingSelected(object sender, SelectedItemChangedEventArgs e)
         {
             var grouping = e.SelectedItem as Grouping;
             if(grouping == null)
@@ -222,6 +222,17 @@ namespace Bit.App.Pages
                 return;
             }
 
+            Page page;
+            if(grouping.Folder)
+            {
+                page = new VaultSearchCiphersPage(folder: true, folderId: grouping.Id, groupingName: grouping.Name);
+            }
+            else
+            {
+                page = new VaultSearchCiphersPage(collectionId: grouping.Id, groupingName: grouping.Name);
+            }
+
+            await Navigation.PushAsync(page);
             ((ListView)sender).SelectedItem = null;
         }
 

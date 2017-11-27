@@ -11,6 +11,7 @@ using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using System.Threading;
 using static Bit.App.Models.Page.VaultListPageModel;
+using System.Collections.Generic;
 
 namespace Bit.App.Pages
 {
@@ -24,10 +25,22 @@ namespace Bit.App.Pages
         private readonly IAppSettingsService _appSettingsService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
+        private readonly bool _favorites = false;
+        private readonly bool _folder = false;
+        private readonly string _folderId = null;
+        private readonly string _collectionId = null;
+        private readonly string _groupingName = null;
 
-        public VaultSearchCiphersPage()
+        public VaultSearchCiphersPage(bool folder = false, string folderId = null,
+            string collectionId = null, string groupingName = null, bool favorites = false)
             : base(true)
         {
+            _folder = folder;
+            _folderId = folderId;
+            _collectionId = collectionId;
+            _favorites = favorites;
+            _groupingName = groupingName;
+
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _syncService = Resolver.Resolve<ISyncService>();
@@ -83,7 +96,19 @@ namespace Bit.App.Pages
                 Spacing = 0
             };
 
-            Title = AppResources.SearchVault;
+            if(!string.IsNullOrWhiteSpace(_groupingName))
+            {
+                Title = _groupingName;
+            }
+            else if(_favorites)
+            {
+                Title = AppResources.Favorites;
+            }
+            else
+            {
+                Title = AppResources.SearchVault;
+            }
+
             Content = new ActivityIndicator
             {
                 IsRunning = true,
@@ -177,7 +202,11 @@ namespace Bit.App.Pages
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
-            Search.FocusWithDelay();
+
+            if(!_folder && string.IsNullOrWhiteSpace(_folderId) && string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
+            {
+                Search.FocusWithDelay();
+            }
         }
 
         protected override void OnDisappearing()
@@ -202,7 +231,23 @@ namespace Bit.App.Pages
 
             Task.Run(async () =>
             {
-                var ciphers = await _cipherService.GetAllAsync();
+                IEnumerable<Models.Cipher> ciphers;
+                if(_folder || !string.IsNullOrWhiteSpace(_folderId))
+                {
+                    ciphers = await _cipherService.GetAllByFolderAsync(_folderId);
+                }
+                else if(!string.IsNullOrWhiteSpace(_collectionId))
+                {
+                    ciphers = await _cipherService.GetAllByCollectionAsync(_collectionId);
+                }
+                else if(_favorites)
+                {
+                    ciphers = await _cipherService.GetAllAsync(true);
+                }
+                else
+                {
+                    ciphers = await _cipherService.GetAllAsync();
+                }
 
                 Ciphers = ciphers
                     .Select(s => new Cipher(s, _appSettingsService))
