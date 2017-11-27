@@ -61,6 +61,7 @@ namespace Bit.App.Pages
         public Cipher[] Ciphers { get; set; } = new Cipher[] { };
         public ListView ListView { get; set; }
         public SearchBar Search { get; set; }
+        public ActivityIndicator LoadingIndicator { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
         private AddCipherToolBarItem AddCipherItem { get; set; }
@@ -156,12 +157,14 @@ namespace Bit.App.Pages
                 Title = AppResources.SearchVault;
             }
 
-            Content = new ActivityIndicator
+            LoadingIndicator = new ActivityIndicator
             {
                 IsRunning = true,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
+
+            Content = LoadingIndicator;
         }
 
         private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
@@ -249,7 +252,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MessagingCenter.Subscribe<ISyncService, bool>(_syncService, "SyncCompleted", (sender, success) =>
+            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
             {
                 if(success)
                 {
@@ -273,7 +276,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            MessagingCenter.Unsubscribe<ISyncService, bool>(_syncService, "SyncCompleted");
+            MessagingCenter.Unsubscribe<Application, bool>(Application.Current, "SyncCompleted");
 
             AddCipherItem?.Dispose();
             ListView.ItemSelected -= CipherSelected;
@@ -344,6 +347,10 @@ namespace Bit.App.Pages
                 if(PresentationSections.Count > 0 || !string.IsNullOrWhiteSpace(Search.Text))
                 {
                     Content = ResultsStackLayout;
+                }
+                else if(_syncService.SyncInProgress)
+                {
+                    Content = LoadingIndicator;
                 }
                 else
                 {

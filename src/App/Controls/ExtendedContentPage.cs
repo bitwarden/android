@@ -29,9 +29,9 @@ namespace Bit.App.Controls
         {
             if(_syncIndicator)
             {
-                MessagingCenter.Subscribe<ISyncService, bool>(_syncService, "SyncCompleted",
+                MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted",
                     (sender, success) => Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress));
-                MessagingCenter.Subscribe<ISyncService>(_syncService, "SyncStarted",
+                MessagingCenter.Subscribe<ISyncService>(Application.Current, "SyncStarted",
                     (sender) => Device.BeginInvokeOnMainThread(() => IsBusy = _syncService.SyncInProgress));
             }
 
@@ -48,8 +48,8 @@ namespace Bit.App.Controls
         {
             if(_syncIndicator)
             {
-                MessagingCenter.Unsubscribe<ISyncService, bool>(_syncService, "SyncCompleted");
-                MessagingCenter.Unsubscribe<ISyncService>(_syncService, "SyncStarted");
+                MessagingCenter.Unsubscribe<Application, bool>(Application.Current, "SyncCompleted");
+                MessagingCenter.Unsubscribe<Application>(Application.Current, "SyncStarted");
             }
 
             if(_syncIndicator)

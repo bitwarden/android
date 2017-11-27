@@ -554,7 +554,7 @@ namespace Bit.App.Services
             }
 
             SyncInProgress = true;
-            MessagingCenter.Send(this, "SyncStarted");
+            MessagingCenter.Send(Application.Current, "SyncStarted");
         }
 
         private void SyncCompleted(bool successfully)
@@ -565,7 +565,7 @@ namespace Bit.App.Services
             }
 
             SyncInProgress = false;
-            MessagingCenter.Send(this, "SyncCompleted", successfully);
+            MessagingCenter.Send(Application.Current, "SyncCompleted", successfully);
         }
 
         private bool CheckSuccess<T>(ApiResult<T> result, bool logout = false)

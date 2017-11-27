@@ -119,7 +119,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            MessagingCenter.Subscribe<ISyncService, bool>(_syncService, "SyncCompleted", (sender, success) =>
+            MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted", (sender, success) =>
             {
                 if(success)
                 {
@@ -168,7 +168,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            MessagingCenter.Unsubscribe<ISyncService, bool>(_syncService, "SyncCompleted");
+            MessagingCenter.Unsubscribe<Application, bool>(Application.Current, "SyncCompleted");
 
             ListView.ItemSelected -= GroupingSelected;
             AddCipherItem?.Dispose();
@@ -228,6 +228,10 @@ namespace Bit.App.Pages
                     if(ciphers.Any() || folders.Any())
                     {
                         Content = ListView;
+                    }
+                    else if(_syncService.SyncInProgress)
+                    {
+                        Content = LoadingIndicator;
                     }
                     else
                     {
