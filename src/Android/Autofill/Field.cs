@@ -25,6 +25,7 @@ namespace Bit.Android.Autofill
             Visible = node.Visibility == ViewStates.Visible;
             Hints = FilterForSupportedHints(node.GetAutofillHints());
             AutofillOptions = node.GetAutofillOptions()?.ToList();
+            Node = node;
 
             if(node.AutofillValue != null)
             {
@@ -76,6 +77,7 @@ namespace Bit.Android.Autofill
         public long? DateValue { get; set; }
         public int? ListValue { get; set; }
         public bool? ToggleValue { get; set; }
+        public ViewNode Node { get; private set; }
 
         private void UpdateSaveTypeFromHints()
         {

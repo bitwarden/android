@@ -59,11 +59,15 @@ namespace Bit.Android.Autofill
                 else
                 {
                     _passwordFields = Fields
-                        .Where(f =>
-                            f.InputType.HasFlag(InputTypes.TextVariationPassword) ||
-                            f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
-                            f.InputType.HasFlag(InputTypes.TextVariationWebPassword))
-                        .ToList();
+                        .Where(f => 
+                            !f.IdEntry.ToLowerInvariant().Contains("search") &&
+                            (!f.Node.Hint?.ToLowerInvariant().Contains("search") ?? true) &&
+                            (
+                                f.InputType.HasFlag(InputTypes.TextVariationPassword) ||
+                                f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
+                                f.InputType.HasFlag(InputTypes.TextVariationWebPassword)
+                            )
+                        ).ToList();
                     if(!_passwordFields.Any())
                     {
                         _passwordFields = Fields.Where(f => f.IdEntry?.ToLower().Contains("password") ?? false).ToList();
