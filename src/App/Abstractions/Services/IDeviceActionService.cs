@@ -16,6 +16,7 @@ namespace Bit.App.Abstractions
         void RateApp();
         void DismissKeyboard();
         void OpenAccessibilitySettings();
+        void OpenAutofillSettings();
         void LaunchApp(string appName);
     }
 }

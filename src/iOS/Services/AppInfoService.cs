@@ -8,6 +8,7 @@ namespace Bit.iOS.Services
     {
         public string Build => NSBundle.MainBundle.InfoDictionary["CFBundleVersion"].ToString();
         public string Version => NSBundle.MainBundle.InfoDictionary["CFBundleShortVersionString"].ToString();
+        public bool AutofillAccessibilityServiceEnabled => false;
         public bool AutofillServiceEnabled => false;
     }
 }

@@ -407,5 +407,13 @@ namespace Bit.Android.Services
             ActivityCompat.RequestPermissions(CrossCurrentActivity.Current.Activity, new string[] { permission },
                 Constants.SelectFilePermissionRequestCode);
         }
+
+        public void OpenAutofillSettings()
+        {
+            var activity = (MainActivity)Forms.Context;
+            var intent = new Intent(Settings.ActionRequestSetAutofillService);
+            intent.SetData(global::Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
+            activity.StartActivity(intent);
+        }
     }
 }

@@ -4,18 +4,17 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
-    public class ToolsAutofillServicePage : ExtendedContentPage
+    public class ToolsAutofillServicePage2 : ExtendedContentPage
     {
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IAppInfoService _appInfoService;
         private readonly IDeviceActionService _deviceActionService;
         private bool _pageDisappeared = false;
 
-        public ToolsAutofillServicePage()
+        public ToolsAutofillServicePage2()
         {
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _appInfoService = Resolver.Resolve<IAppInfoService>();
@@ -69,90 +68,9 @@ namespace Bit.App.Pages
                 TextColor = Color.Black
             };
 
-            var step1Label = new Label
-            {
-                Text = AppResources.BitwardenAutofillServiceStep1,
-                HorizontalTextAlignment = TextAlignment.Center,
-                LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                TextColor = Color.Black
-            };
-
-            var step1Image = new CachedImage
-            {
-                Source = "accessibility_step1",
-                HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, 20, 0, 0),
-                WidthRequest = 300,
-                HeightRequest = 98
-            };
-
-            var step2Label = new Label
-            {
-                Text = AppResources.BitwardenAutofillServiceStep2,
-                HorizontalTextAlignment = TextAlignment.Center,
-                LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                TextColor = Color.Black
-            };
-
-            var step2Image = new CachedImage
-            {
-                Source = "accessibility_step2",
-                HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, 20, 0, 0),
-                WidthRequest = 300,
-                HeightRequest = 67
-            };
-
-            var stepsStackLayout = new StackLayout
-            {
-                Children = { statusDisabledLabel, step1Image, step1Label, step2Image, step2Label },
-                Orientation = StackOrientation.Vertical,
-                Spacing = 10,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
-            };
-
-            var notificationsLabel = new Label
-            {
-                Text = AppResources.BitwardenAutofillServiceNotification,
-                HorizontalTextAlignment = TextAlignment.Center,
-                LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
-                TextColor = Color.Black
-            };
-
-            var tapNotificationImage = new CachedImage
-            {
-                Source = "accessibility_notification.png",
-                HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, 20, 0, 0),
-                WidthRequest = 300,
-                HeightRequest = 74
-            };
-
-            var tapNotificationIcon = new CachedImage
-            {
-                Source = "accessibility_notification_icon.png",
-                HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, 20, 0, 0),
-                WidthRequest = 300,
-                HeightRequest = 54
-            };
-
-            var notificationsStackLayout = new StackLayout
-            {
-                Children = { statusEnabledLabel, tapNotificationIcon, tapNotificationImage, notificationsLabel },
-                Orientation = StackOrientation.Vertical,
-                Spacing = 10,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
-            };
-
             DisabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), stepsStackLayout, BuildGoButton() },
+                Children = { BuildServiceLabel(), statusDisabledLabel, BuildGoButton() },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
@@ -161,7 +79,7 @@ namespace Bit.App.Pages
 
             EnabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), notificationsStackLayout, BuildGoButton() },
+                Children = { BuildServiceLabel(), statusEnabledLabel },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
@@ -177,7 +95,7 @@ namespace Bit.App.Pages
                 {
                     return false;
                 }
-                
+
                 UpdateEnabled();
                 return true;
             });
@@ -200,7 +118,7 @@ namespace Bit.App.Pages
 
         private void UpdateEnabled()
         {
-            ScrollView.Content = _appInfoService.AutofillAccessibilityServiceEnabled ? EnabledStackLayout : DisabledStackLayout;
+            ScrollView.Content = _appInfoService.AutofillServiceEnabled ? EnabledStackLayout : DisabledStackLayout;
         }
 
         private Label BuildServiceLabel()
@@ -222,8 +140,8 @@ namespace Bit.App.Pages
                 Text = AppResources.BitwardenAutofillServiceOpenSettings,
                 Command = new Command(() =>
                 {
-                    _googleAnalyticsService.TrackAppEvent("OpenAccessibilitySettings");
-                    _deviceActionService.OpenAccessibilitySettings();
+                    _googleAnalyticsService.TrackAppEvent("OpenAutofillSettings");
+                    _deviceActionService.OpenAutofillSettings();
                 }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,

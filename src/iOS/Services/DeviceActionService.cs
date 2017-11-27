@@ -250,5 +250,10 @@ namespace Bit.iOS.Services
         {
             throw new NotImplementedException();
         }
+
+        public void OpenAutofillSettings()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

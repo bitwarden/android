@@ -4,6 +4,7 @@
     {
         string Build { get; }
         string Version { get; }
+        bool AutofillAccessibilityServiceEnabled { get; }
         bool AutofillServiceEnabled { get; }
     }
 }

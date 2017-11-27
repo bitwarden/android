@@ -16,6 +16,7 @@ namespace Bit.UWP.Services
             }
         }
 
+        public bool AutofillAccessibilityServiceEnabled => false;
         public bool AutofillServiceEnabled => false;
     }
 }

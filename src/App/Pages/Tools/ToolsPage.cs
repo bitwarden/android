@@ -15,11 +15,13 @@ namespace Bit.App.Pages
     {
         private readonly IUserDialogs _userDialogs;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly IDeviceInfoService _deviceInfoService;
 
         public ToolsPage()
         {
             _userDialogs = Resolver.Resolve<IUserDialogs>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 
             Init();
         }
@@ -116,7 +118,14 @@ namespace Bit.App.Pages
 
         private void AutofillCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
+            if(_deviceInfoService.AutofillServiceSupported)
+            {
+                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage2()));
+            }
+            else
+            {
+                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
+            }
         }
 
         private void ExtensionCell_Tapped(object sender, EventArgs e)

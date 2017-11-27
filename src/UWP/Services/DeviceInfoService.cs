@@ -39,5 +39,7 @@ namespace Bit.UWP.Services
                 return cameraList?.Any() ?? false;
             }
         }
+        
+        public bool AutofillServiceSupported => false;
     }
 }

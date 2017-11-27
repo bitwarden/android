@@ -242,7 +242,7 @@ namespace Bit.App.Pages
                     DisplayAlert(AppResources.BitwardenAppExtension, AppResources.BitwardenAppExtensionAlert,
                         AppResources.Ok);
                 }
-                else if(Device.RuntimePlatform == Device.Android && !_appInfoService.AutofillServiceEnabled)
+                else if(Device.RuntimePlatform == Device.Android && !_appInfoService.AutofillAccessibilityServiceEnabled)
                 {
                     DisplayAlert(AppResources.BitwardenAutofillService, AppResources.BitwardenAutofillServiceAlert,
                         AppResources.Ok);

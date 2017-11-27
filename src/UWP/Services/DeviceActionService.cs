@@ -55,6 +55,11 @@ namespace Bit.UWP.Services
             }
         }
 
+        public void OpenAutofillSettings()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task SelectFileAsync()
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker
