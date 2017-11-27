@@ -227,7 +227,8 @@ namespace Bit.App.Pages
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
 
-            if(!_folder && string.IsNullOrWhiteSpace(_folderId) && string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
+            if(string.IsNullOrWhiteSpace(_uri) && !_folder && string.IsNullOrWhiteSpace(_folderId) &&
+                string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
             {
                 Search.FocusWithDelay();
             }

@@ -166,23 +166,6 @@ namespace Bit.App.Models.Page
             public bool Fuzzy { get; set; }
         }
 
-        public class Folder : List<Cipher>
-        {
-            public Folder(Models.Folder folder)
-            {
-                Id = folder.Id;
-                Name = folder.Name?.Decrypt();
-            }
-
-            public Folder(List<Cipher> ciphers)
-            {
-                AddRange(ciphers);
-            }
-
-            public string Id { get; set; }
-            public string Name { get; set; } = AppResources.FolderNone;
-        }
-
         public class Section<T> : List<T>
         {
             public Section(List<T> groupItems, string name, bool doUpper = true)

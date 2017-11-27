@@ -379,7 +379,6 @@
     <Compile Include="Pages\Vault\VaultAddCipherPage.cs" />
     <Compile Include="Pages\Vault\VaultViewCipherPage.cs" />
     <Compile Include="Pages\Vault\VaultEditCipherPage.cs" />
-    <Compile Include="Pages\Vault\VaultListCiphersPage.cs" />
     <Compile Include="Services\PasswordGenerationService.cs" />
     <Compile Include="Utilities\Base32.cs" />
     <Compile Include="Utilities\Crypto.cs" />
