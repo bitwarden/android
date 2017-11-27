@@ -56,11 +56,12 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<Section<Cipher>> PresentationLetters { get; private set; }
+        public ExtendedObservableCollection<Section<Cipher>> PresentationSections { get; private set; }
             = new ExtendedObservableCollection<Section<Cipher>>();
         public Cipher[] Ciphers { get; set; } = new Cipher[] { };
         public ListView ListView { get; set; }
         public SearchBar Search { get; set; }
+        public StackLayout NoDataStackLayout { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
         private AddCipherToolBarItem AddCipherItem { get; set; }
 
@@ -75,7 +76,7 @@ namespace Bit.App.Pages
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
-                ItemsSource = PresentationLetters,
+                ItemsSource = PresentationSections,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(nameof(Section<Cipher>.Name),
                     nameof(Section<Cipher>.Count))),
@@ -99,6 +100,41 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.Android && _deviceInfoService.Version >= 24)
             {
                 Search.HeightRequest = 50;
+            }
+
+            var noDataLabel = new Label
+            {
+                Text = _favorites ? AppResources.NoFavorites : AppResources.NoItems,
+                HorizontalTextAlignment = TextAlignment.Center,
+                FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
+                Style = (Style)Application.Current.Resources["text-muted"]
+            };
+
+            if(_folder || !string.IsNullOrWhiteSpace(_folderId))
+            {
+                noDataLabel.Text = AppResources.NoItemsFolder;
+            }
+            else if(!string.IsNullOrWhiteSpace(_collectionId))
+            {
+                noDataLabel.Text = AppResources.NoItemsCollection;
+            }
+
+            NoDataStackLayout = new StackLayout
+            {
+                Children = { noDataLabel },
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Padding = new Thickness(20, 0),
+                Spacing = 20
+            };
+
+            if(string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
+            {
+                NoDataStackLayout.Children.Add(new ExtendedButton
+                {
+                    Text = AppResources.AddAnItem,
+                    Command = new Command(() => Helpers.AddCipher(this, _folderId)),
+                    Style = (Style)Application.Current.Resources["btn-primaryAccent"]
+                });
             }
 
             ResultsStackLayout = new StackLayout
@@ -182,7 +218,7 @@ namespace Bit.App.Pages
 
             if(string.IsNullOrWhiteSpace(searchFilter))
             {
-                LoadLetters(Ciphers, ct);
+                LoadSections(Ciphers, ct);
             }
             else
             {
@@ -194,7 +230,7 @@ namespace Bit.App.Pages
                     .ToArray();
 
                 ct.ThrowIfCancellationRequested();
-                LoadLetters(filteredCiphers, ct);
+                LoadSections(filteredCiphers, ct);
             }
         }
 
@@ -248,7 +284,7 @@ namespace Bit.App.Pages
         private CancellationTokenSource FetchAndLoadVault()
         {
             var cts = new CancellationTokenSource();
-            if(PresentationLetters.Count > 0 && _syncService.SyncInProgress)
+            if(PresentationSections.Count > 0 && _syncService.SyncInProgress)
             {
                 return cts;
             }
@@ -281,7 +317,7 @@ namespace Bit.App.Pages
                     {
                         // Sort numbers and letters before special characters
                         return !string.IsNullOrWhiteSpace(s.Name) && s.Name.Length > 0 &&
-                            Char.IsLetterOrDigit(s.Name[0]) ? 0 : 1;
+                           Char.IsDigit(s.Name[0]) ? 0 : Char.IsLetter(s.Name[0]) ? 1 : 2;
                     })
                     .ThenBy(s => s.Name)
                     .ThenBy(s => s.Subtitle)
@@ -297,15 +333,22 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private void LoadLetters(Cipher[] ciphers, CancellationToken ct)
+        private void LoadSections(Cipher[] ciphers, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
-            var letterGroups = ciphers.GroupBy(c => c.NameGroup).Select(g => new Section<Cipher>(g.ToList(), g.Key));
+            var sections = ciphers.GroupBy(c => c.NameGroup).Select(g => new Section<Cipher>(g.ToList(), g.Key));
             ct.ThrowIfCancellationRequested();
             Device.BeginInvokeOnMainThread(() =>
             {
-                PresentationLetters.ResetWithRange(letterGroups);
-                Content = ResultsStackLayout;
+                PresentationSections.ResetWithRange(sections);
+                if(PresentationSections.Count > 0 || !string.IsNullOrWhiteSpace(Search.Text))
+                {
+                    Content = ResultsStackLayout;
+                }
+                else
+                {
+                    Content = NoDataStackLayout;
+                }
             });
         }
 

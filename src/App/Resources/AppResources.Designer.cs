@@ -2114,6 +2114,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no items in this collection..
+        /// </summary>
+        public static string NoItemsCollection {
+            get {
+                return ResourceManager.GetString("NoItemsCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There are no items in this folder..
+        /// </summary>
+        public static string NoItemsFolder {
+            get {
+                return ResourceManager.GetString("NoItemsFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no items in your vault for {0}..
         /// </summary>
         public static string NoItemsForUri {

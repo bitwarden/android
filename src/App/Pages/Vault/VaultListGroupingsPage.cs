@@ -90,14 +90,6 @@ namespace Bit.App.Pages
                 Style = (Style)Application.Current.Resources["text-muted"]
             };
 
-            NoDataStackLayout = new StackLayout
-            {
-                Children = { noDataLabel },
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                Padding = new Thickness(20, 0),
-                Spacing = 20
-            };
-
             var addCipherButton = new ExtendedButton
             {
                 Text = AppResources.AddAnItem,
@@ -105,7 +97,13 @@ namespace Bit.App.Pages
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
 
-            NoDataStackLayout.Children.Add(addCipherButton);
+            NoDataStackLayout = new StackLayout
+            {
+                Children = { noDataLabel, addCipherButton },
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Padding = new Thickness(20, 0),
+                Spacing = 20
+            };
 
             LoadingIndicator = new ActivityIndicator
             {
@@ -225,12 +223,9 @@ namespace Bit.App.Pages
 
                 Device.BeginInvokeOnMainThread(() =>
                 {
-                    if(sections.Any())
-                    {
-                        PresentationSections.ResetWithRange(sections);
-                    }
+                    PresentationSections.ResetWithRange(sections);
 
-                    if(PresentationSections.Count > 0)
+                    if(ciphers.Any() || folders.Any())
                     {
                         Content = ListView;
                     }
