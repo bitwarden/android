@@ -4,9 +4,9 @@ using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
-    public class AddCipherToolbarItem : ExtendedToolbarItem
+    public class AddCipherToolBarItem : ExtendedToolbarItem
     {
-        public AddCipherToolbarItem(Page page, string folderId)
+        public AddCipherToolBarItem(Page page, string folderId)
             : base(() => Helpers.AddCipher(page, folderId))
         {
             Text = AppResources.Add;

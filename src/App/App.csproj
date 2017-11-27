@@ -67,7 +67,7 @@
     <Compile Include="Abstractions\Services\ISecureStorageService.cs" />
     <Compile Include="Abstractions\Services\ISqlService.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controls\AddCipherToolbarItem.cs" />
+    <Compile Include="Controls\AddCipherToolbarItem2.cs" />
     <Compile Include="Controls\HybridWebView.cs" />
     <Compile Include="Controls\ExtendedToolbarItem.cs" />
     <Compile Include="Controls\DismissModalToolBarItem.cs" />
@@ -193,7 +193,7 @@
     <Compile Include="Pages\Vault\VaultCustomFieldsPage.cs" />
     <Compile Include="Pages\Vault\VaultAutofillListCiphersPage.cs" />
     <Compile Include="Pages\Vault\VaultAttachmentsPage.cs" />
-    <Compile Include="Pages\Vault\VaultSearchCiphersPage.cs" />
+    <Compile Include="Pages\Vault\VaultListCiphersPage.cs" />
     <Compile Include="Pages\Vault\VaultListGroupingsPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Abstractions\Repositories\ICipherRepository.cs" />

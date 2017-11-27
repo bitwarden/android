@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 namespace Bit.App.Pages
 {
-    public class VaultSearchCiphersPage : ExtendedContentPage
+    public class VaultListCiphersPage : ExtendedContentPage
     {
         private readonly ICipherService _cipherService;
         private readonly IConnectivity _connectivity;
@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         private readonly string _groupingName = null;
         private readonly string _uri = null;
 
-        public VaultSearchCiphersPage(bool folder = false, string folderId = null,
+        public VaultListCiphersPage(bool folder = false, string folderId = null,
             string collectionId = null, string groupingName = null, bool favorites = false, string uri = null)
             : base(true)
         {
@@ -62,13 +62,13 @@ namespace Bit.App.Pages
         public ListView ListView { get; set; }
         public SearchBar Search { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
-        private AddCipherToolbarItem AddCipherItem { get; set; }
+        private AddCipherToolBarItem AddCipherItem { get; set; }
 
         private void Init()
         {
             if(!string.IsNullOrWhiteSpace(_uri) || _folder || !string.IsNullOrWhiteSpace(_folderId))
             {
-                AddCipherItem = new AddCipherToolbarItem(this, _folderId);
+                AddCipherItem = new AddCipherToolBarItem(this, _folderId);
                 ToolbarItems.Add(AddCipherItem);
             }
 

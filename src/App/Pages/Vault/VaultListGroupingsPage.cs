@@ -56,13 +56,13 @@ namespace Bit.App.Pages
         public ListView ListView { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
-        private AddCipherToolbarItem AddCipherItem { get; set; }
+        private AddCipherToolBarItem AddCipherItem { get; set; }
         private SearchToolBarItem SearchItem { get; set; }
 
         private void Init()
         {
             SearchItem = new SearchToolBarItem(this);
-            AddCipherItem = new AddCipherToolbarItem(this, null);
+            AddCipherItem = new AddCipherToolBarItem(this, null);
             ToolbarItems.Add(SearchItem);
             ToolbarItems.Add(AddCipherItem);
 
@@ -255,11 +255,11 @@ namespace Bit.App.Pages
             Page page;
             if(grouping.Folder)
             {
-                page = new VaultSearchCiphersPage(folder: true, folderId: grouping.Id, groupingName: grouping.Name);
+                page = new VaultListCiphersPage(folder: true, folderId: grouping.Id, groupingName: grouping.Name);
             }
             else
             {
-                page = new VaultSearchCiphersPage(collectionId: grouping.Id, groupingName: grouping.Name);
+                page = new VaultListCiphersPage(collectionId: grouping.Id, groupingName: grouping.Name);
             }
 
             await Navigation.PushAsync(page);
@@ -268,7 +268,7 @@ namespace Bit.App.Pages
 
         private async void Search()
         {
-            var page = new ExtendedNavigationPage(new VaultSearchCiphersPage());
+            var page = new ExtendedNavigationPage(new VaultListCiphersPage());
             await Navigation.PushModalAsync(page);
         }
 

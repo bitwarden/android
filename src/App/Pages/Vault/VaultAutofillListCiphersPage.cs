@@ -293,7 +293,7 @@ namespace Bit.App.Pages
             {
                 _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch",
                     _page.Uri.StartsWith("http") ? "Website" : "App");
-                Application.Current.MainPage = new ExtendedNavigationPage(new VaultSearchCiphersPage(uri: _page.Uri));
+                Application.Current.MainPage = new ExtendedNavigationPage(new VaultListCiphersPage(uri: _page.Uri));
                 _page.UserDialogs.Toast(string.Format(AppResources.BitwardenAutofillServiceSearch, _page._name),
                     TimeSpan.FromSeconds(10));
             }

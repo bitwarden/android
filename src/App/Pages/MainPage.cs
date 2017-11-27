@@ -11,7 +11,7 @@ namespace Bit.App.Pages
             TintColor = Color.FromHex("3c8dbc");
 
             var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
-            var favoritesNavigation = new ExtendedNavigationPage(new VaultSearchCiphersPage(favorites: true));
+            var favoritesNavigation = new ExtendedNavigationPage(new VaultListCiphersPage(favorites: true));
             var vaultNavigation = new ExtendedNavigationPage(new VaultListGroupingsPage());
             var toolsNavigation = new ExtendedNavigationPage(new ToolsPage());
 
