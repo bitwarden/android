@@ -67,7 +67,7 @@
     <Compile Include="Abstractions\Services\ISecureStorageService.cs" />
     <Compile Include="Abstractions\Services\ISqlService.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Controls\AddCipherToolbarItem2.cs" />
+    <Compile Include="Controls\AddCipherToolBarItem.cs" />
     <Compile Include="Controls\HybridWebView.cs" />
     <Compile Include="Controls\ExtendedToolbarItem.cs" />
     <Compile Include="Controls\DismissModalToolBarItem.cs" />
