@@ -12,7 +12,6 @@ using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
 using System.Collections.Generic;
 using System.Threading;
-using Bit.App.Enums;
 using static Bit.App.Models.Page.VaultListPageModel;
 
 namespace Bit.App.Pages
@@ -57,13 +56,13 @@ namespace Bit.App.Pages
         public ListView ListView { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
-        private AddCipherToolBarItem AddCipherItem { get; set; }
+        private AddCipherToolbarItem AddCipherItem { get; set; }
         private SearchToolBarItem SearchItem { get; set; }
 
         private void Init()
         {
             SearchItem = new SearchToolBarItem(this);
-            AddCipherItem = new AddCipherToolBarItem(this);
+            AddCipherItem = new AddCipherToolbarItem(this, null);
             ToolbarItems.Add(SearchItem);
             ToolbarItems.Add(AddCipherItem);
 
@@ -102,7 +101,7 @@ namespace Bit.App.Pages
             var addCipherButton = new ExtendedButton
             {
                 Text = AppResources.AddAnItem,
-                Command = new Command(() => AddCipher()),
+                Command = new Command(() => Helpers.AddCipher(this, null)),
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"]
             };
 
@@ -135,6 +134,37 @@ namespace Bit.App.Pages
             SearchItem?.InitEvents();
 
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
+
+            if(_connectivity.IsConnected && Device.RuntimePlatform == Device.iOS)
+            {
+                var pushPromptShow = _settings.GetValueOrDefault(Constants.PushInitialPromptShown, false);
+                Action registerAction = () =>
+                {
+                    var lastPushRegistration =
+                        _settings.GetValueOrDefault(Constants.PushLastRegistrationDate, DateTime.MinValue);
+                    if(!pushPromptShow || DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                    {
+                        _pushNotification.Register();
+                    }
+                };
+
+                if(!pushPromptShow)
+                {
+                    _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
+                    _userDialogs.Alert(new AlertConfig
+                    {
+                        Message = AppResources.PushNotificationAlert,
+                        Title = AppResources.EnableAutomaticSyncing,
+                        OnAction = registerAction,
+                        OkText = AppResources.OkGotIt
+                    });
+                }
+                else
+                {
+                    // Check push registration once per day
+                    registerAction();
+                }
+            }
         }
 
         protected override void OnDisappearing()
@@ -236,47 +266,10 @@ namespace Bit.App.Pages
             ((ListView)sender).SelectedItem = null;
         }
 
-        private async void AddCipher()
-        {
-            var type = await _userDialogs.ActionSheetAsync(AppResources.SelectTypeAdd, AppResources.Cancel, null, null,
-                AppResources.TypeLogin, AppResources.TypeCard, AppResources.TypeIdentity, AppResources.TypeSecureNote);
-
-            var selectedType = CipherType.SecureNote;
-            if(type == AppResources.Cancel)
-            {
-                return;
-            }
-            else if(type == AppResources.TypeLogin)
-            {
-                selectedType = CipherType.Login;
-            }
-            else if(type == AppResources.TypeCard)
-            {
-                selectedType = CipherType.Card;
-            }
-            else if(type == AppResources.TypeIdentity)
-            {
-                selectedType = CipherType.Identity;
-            }
-
-            var page = new VaultAddCipherPage(selectedType);
-            await Navigation.PushForDeviceAsync(page);
-        }
-
         private async void Search()
         {
             var page = new ExtendedNavigationPage(new VaultSearchCiphersPage());
             await Navigation.PushModalAsync(page);
-        }
-
-        private class AddCipherToolBarItem : ExtendedToolbarItem
-        {
-            public AddCipherToolBarItem(VaultListGroupingsPage page)
-                : base(() => page.AddCipher())
-            {
-                Text = AppResources.Add;
-                Icon = "plus.png";
-            }
         }
 
         private class SearchToolBarItem : ExtendedToolbarItem

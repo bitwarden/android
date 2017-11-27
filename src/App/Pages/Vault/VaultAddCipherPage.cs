@@ -30,6 +30,7 @@ namespace Bit.App.Pages
         private readonly IAppInfoService _appInfoService;
         private readonly IDeviceInfoService _deviceInfo;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly string _defaultFolderId;
         private readonly string _defaultUri;
         private readonly string _defaultName;
         private readonly string _defaultUsername;
@@ -60,9 +61,10 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public VaultAddCipherPage(CipherType type, string defaultUri = null,
-            string defaultName = null, bool fromAutofill = false, bool doInit = true)
+        public VaultAddCipherPage(CipherType type, string defaultUri = null, string defaultName = null,
+            bool fromAutofill = false, bool doInit = true, string defaultFolderId = null)
         {
+            _defaultFolderId = defaultFolderId;
             _type = type;
             _defaultUri = defaultUri;
             _defaultName = defaultName;
@@ -146,11 +148,19 @@ namespace Bit.App.Pages
             var folderOptions = new List<string> { AppResources.FolderNone };
             Folders = _folderService.GetAllAsync().GetAwaiter().GetResult()
                 .OrderBy(f => f.Name?.Decrypt()).ToList();
+            var selectedIndex = 0;
+            var i = 1;
             foreach(var folder in Folders)
             {
+                if(folder.Id == _defaultFolderId)
+                {
+                    selectedIndex = i;
+                }
                 folderOptions.Add(folder.Name.Decrypt());
+                i++;
             }
             FolderCell = new FormPickerCell(AppResources.Folder, folderOptions.ToArray());
+            FolderCell.Picker.SelectedIndex = selectedIndex;
 
             // Favorite
             FavoriteCell = new ExtendedSwitchCell { Text = AppResources.Favorite };

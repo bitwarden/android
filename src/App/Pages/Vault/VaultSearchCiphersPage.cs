@@ -24,15 +24,17 @@ namespace Bit.App.Pages
         private readonly ISettings _settings;
         private readonly IAppSettingsService _appSettingsService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
+        private readonly IDeviceActionService _deviceActionService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly bool _favorites = false;
         private readonly bool _folder = false;
         private readonly string _folderId = null;
         private readonly string _collectionId = null;
         private readonly string _groupingName = null;
+        private readonly string _uri = null;
 
         public VaultSearchCiphersPage(bool folder = false, string folderId = null,
-            string collectionId = null, string groupingName = null, bool favorites = false)
+            string collectionId = null, string groupingName = null, bool favorites = false, string uri = null)
             : base(true)
         {
             _folder = folder;
@@ -40,6 +42,7 @@ namespace Bit.App.Pages
             _collectionId = collectionId;
             _favorites = favorites;
             _groupingName = groupingName;
+            _uri = uri;
 
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
@@ -48,6 +51,7 @@ namespace Bit.App.Pages
             _settings = Resolver.Resolve<ISettings>();
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
 
             Init();
         }
@@ -58,9 +62,16 @@ namespace Bit.App.Pages
         public ListView ListView { get; set; }
         public SearchBar Search { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
+        private AddCipherToolbarItem AddCipherItem { get; set; }
 
         private void Init()
         {
+            if(!string.IsNullOrWhiteSpace(_uri) || _folder || !string.IsNullOrWhiteSpace(_folderId))
+            {
+                AddCipherItem = new AddCipherToolbarItem(this, _folderId);
+                ToolbarItems.Add(AddCipherItem);
+            }
+
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
@@ -70,7 +81,7 @@ namespace Bit.App.Pages
                     nameof(Section<Cipher>.Count))),
                 GroupShortNameBinding = new Binding(nameof(Section<Cipher>.Name)),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
-                    (Cipher c) => Helpers.CipherMoreClickedAsync(this, c, false)))
+                    (Cipher c) => Helpers.CipherMoreClickedAsync(this, c, !string.IsNullOrWhiteSpace(_uri))))
             };
 
             if(Device.RuntimePlatform == Device.iOS)
@@ -187,6 +198,18 @@ namespace Bit.App.Pages
             }
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            if(string.IsNullOrWhiteSpace(_uri))
+            {
+                return false;
+            }
+
+            _googleAnalyticsService.TrackExtensionEvent("BackClosed", _uri.StartsWith("http") ? "Website" : "App");
+            _deviceActionService.CloseAutofill();
+            return true;
+        }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
@@ -198,6 +221,7 @@ namespace Bit.App.Pages
                 }
             });
 
+            AddCipherItem?.InitEvents();
             ListView.ItemSelected += CipherSelected;
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
@@ -214,6 +238,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             MessagingCenter.Unsubscribe<ISyncService, bool>(_syncService, "SyncCompleted");
 
+            AddCipherItem?.Dispose();
             ListView.ItemSelected -= CipherSelected;
             Search.TextChanged -= SearchBar_TextChanged;
             Search.SearchButtonPressed -= SearchBar_SearchButtonPressed;
@@ -291,8 +316,32 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
-            await Navigation.PushForDeviceAsync(page);
+            string selection = null;
+            if(!string.IsNullOrWhiteSpace(_uri))
+            {
+                selection = await DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
+                    AppResources.Autofill, AppResources.View);
+            }
+
+            if(selection == AppResources.View || string.IsNullOrWhiteSpace(_uri))
+            {
+                var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
+                await Navigation.PushForDeviceAsync(page);
+            }
+            else if(selection == AppResources.Autofill)
+            {
+                if(_deviceInfoService.Version < 21)
+                {
+                    Helpers.CipherMoreClickedAsync(this, cipher, !string.IsNullOrWhiteSpace(_uri));
+                }
+                else
+                {
+                    _googleAnalyticsService.TrackExtensionEvent("AutoFilled",
+                        _uri.StartsWith("http") ? "Website" : "App");
+                    _deviceActionService.Autofill(cipher);
+                }
+            }
+
             ((ListView)sender).SelectedItem = null;
         }
     }

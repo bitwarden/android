@@ -144,5 +144,33 @@ namespace Bit.App.Utilities
             Resolver.Resolve<IDeviceActionService>().CopyToClipboard(copyText);
             Resolver.Resolve<IUserDialogs>().Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
+
+        public static async void AddCipher(Page page, string folderId)
+        {
+            var type = await Resolver.Resolve<IUserDialogs>().ActionSheetAsync(
+                AppResources.SelectTypeAdd, AppResources.Cancel, null, null, AppResources.TypeLogin,
+                AppResources.TypeCard, AppResources.TypeIdentity, AppResources.TypeSecureNote);
+
+            var selectedType = CipherType.SecureNote;
+            if(type == AppResources.Cancel)
+            {
+                return;
+            }
+            else if(type == AppResources.TypeLogin)
+            {
+                selectedType = CipherType.Login;
+            }
+            else if(type == AppResources.TypeCard)
+            {
+                selectedType = CipherType.Card;
+            }
+            else if(type == AppResources.TypeIdentity)
+            {
+                selectedType = CipherType.Identity;
+            }
+
+            var addPage = new VaultAddCipherPage(selectedType, defaultFolderId: folderId);
+            await page.Navigation.PushForDeviceAsync(addPage);
+        }
     }
 }
