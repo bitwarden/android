@@ -1,6 +1,8 @@
 ﻿using System;
 using Bit.App.Controls;
 using Xamarin.Forms;
+using XLabs.Ioc;
+using Bit.App.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -25,7 +27,7 @@ namespace Bit.App.Pages
             Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
 
-            if(myVault)
+            if(myVault || Resolver.Resolve<IAppSettingsService>().DefaultPageVault)
             {
                 SelectedItem = vaultNavigation;
             }

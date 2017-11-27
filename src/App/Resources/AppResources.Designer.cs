@@ -881,6 +881,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default To &quot;My Vault&quot;.
+        /// </summary>
+        public static string DefaultPageVault {
+            get {
+                return ResourceManager.GetString("DefaultPageVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default to the &quot;My Vault&quot; page instead of &quot;Favorites&quot; whenever I open the app..
+        /// </summary>
+        public static string DefaultPageVaultDescription {
+            get {
+                return ResourceManager.GetString("DefaultPageVaultDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete.
         /// </summary>
         public static string Delete {
