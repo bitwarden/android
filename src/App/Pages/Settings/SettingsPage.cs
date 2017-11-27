@@ -89,7 +89,7 @@ namespace Bit.App.Pages
                 TwoStepCell
             };
 
-            if(false)
+            if((await _fingerprint.GetAvailabilityAsync()) == FingerprintAvailability.Available)
             {
                 var fingerprintName = Helpers.OnPlatform(iOS: AppResources.TouchID, Android: AppResources.Fingerprint,
                     WinPhone: AppResources.Fingerprint);
