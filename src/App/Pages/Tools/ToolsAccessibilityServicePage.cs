@@ -182,7 +182,7 @@ namespace Bit.App.Pages
                 return true;
             });
 
-            Title = AppResources.AutofillService;
+            Title = AppResources.AutofillAccessibilityService;
             Content = ScrollView;
         }
 
