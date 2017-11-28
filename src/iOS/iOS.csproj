@@ -313,11 +313,11 @@
     <Reference Include="Plugin.Connectivity.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.3.0.2\lib\Xamarin.iOS10\Plugin.Connectivity.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Fingerprint, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.6-beta3\lib\Xamarin.iOS10\Plugin.Fingerprint.dll</HintPath>
+    <Reference Include="Plugin.Fingerprint, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.5\lib\Xamarin.iOS10\Plugin.Fingerprint.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Fingerprint.Abstractions, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.6-beta3\lib\Xamarin.iOS10\Plugin.Fingerprint.Abstractions.dll</HintPath>
+    <Reference Include="Plugin.Fingerprint.Abstractions, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.5\lib\Xamarin.iOS10\Plugin.Fingerprint.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.Settings, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.0.1\lib\Xamarin.iOS10\Plugin.Settings.dll</HintPath>
