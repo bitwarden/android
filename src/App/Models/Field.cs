@@ -10,8 +10,8 @@ namespace Bit.App.Models
         public Field(FieldDataModel model)
         {
             Type = model.Type;
-            Name = new CipherString(model.Name);
-            Value = new CipherString(model.Value);
+            Name = model.Name != null ? new CipherString(model.Name) : null;
+            Value = model.Value != null ? new CipherString(model.Value) : null;
         }
 
         public FieldType Type { get; set; }
