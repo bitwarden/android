@@ -270,12 +270,6 @@ namespace Bit.App.Pages
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
-
-            if(string.IsNullOrWhiteSpace(_uri) && !_folder && string.IsNullOrWhiteSpace(_folderId) &&
-                string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
-            {
-                Search.FocusWithDelay(forceDelay: true);
-            }
         }
 
         protected override void OnDisappearing()
@@ -353,6 +347,12 @@ namespace Bit.App.Pages
                 if(PresentationSections.Count > 0 || !string.IsNullOrWhiteSpace(Search.Text))
                 {
                     Content = ResultsStackLayout;
+
+                    if(string.IsNullOrWhiteSpace(_uri) && !_folder && string.IsNullOrWhiteSpace(_folderId) &&
+                        string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
+                    {
+                        Search.Focus();
+                    }
                 }
                 else if(_syncService.SyncInProgress)
                 {
