@@ -19,7 +19,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = padding ?? new Thickness(16, Helpers.OnPlatform(2, 8, 8, 8)),
+                Padding = padding ?? new Thickness(16, 8),
                 Children = { label },
                 Orientation = StackOrientation.Horizontal
             };
