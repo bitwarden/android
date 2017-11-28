@@ -35,9 +35,9 @@ namespace Bit.App
             else
             {
                 //BaseAddress = new Uri("http://169.254.80.80:33656"); // Desktop from VS Android Emulator
-                //BaseAddress = new Uri("http://192.168.1.3:33656"); // Desktop
+                BaseAddress = new Uri("http://192.168.1.3:33656"); // Desktop
                 //BaseAddress = new Uri("https://preview-identity.bitwarden.com"); // Preview
-                BaseAddress = new Uri("https://identity.bitwarden.com"); // Production
+                //BaseAddress = new Uri("https://identity.bitwarden.com"); // Production
             }
         }
     }
