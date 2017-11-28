@@ -68,6 +68,11 @@ namespace Bit.App.Pages
 
         private void Init()
         {
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+            {
+                ToolbarItems.Add(new DismissModalToolBarItem(this));
+            }
+
             if(!string.IsNullOrWhiteSpace(_uri) || _folder || !string.IsNullOrWhiteSpace(_folderId))
             {
                 AddCipherItem = new AddCipherToolBarItem(this, _folderId);
