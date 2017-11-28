@@ -13,8 +13,10 @@ namespace Bit.iOS.Controls
         {
             base.OnElementChanged(e);
 
-            var view = e.NewElement as ListView;
-            if(view != null)
+            // primary color
+            Control.SectionIndexColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
+
+            if(e.NewElement is ListView view)
             {
                 SetMargin(view);
             }
