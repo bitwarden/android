@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Bit.App.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
@@ -18,7 +19,7 @@ namespace Bit.App.Controls
 
             var stackLayout = new StackLayout
             {
-                Padding = padding ?? new Thickness(16, 8),
+                Padding = padding ?? new Thickness(16, Helpers.OnPlatform(5, 8, 8, 8)),
                 Children = { label },
                 Orientation = StackOrientation.Horizontal
             };
@@ -30,7 +31,8 @@ namespace Bit.App.Controls
                     LineBreakMode = LineBreakMode.NoWrap,
                     FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                     Style = (Style)Application.Current.Resources["text-muted"],
-                    HorizontalOptions = LayoutOptions.End
+                    HorizontalOptions = LayoutOptions.End,
+                    VerticalTextAlignment = TextAlignment.Center
                 };
                 countLabel.SetBinding(Label.TextProperty, countBindingName);
                 stackLayout.Children.Add(countLabel);
