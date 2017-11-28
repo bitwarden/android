@@ -80,8 +80,7 @@ namespace Bit.App.Pages
                 }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
-                Style = (Style)Application.Current.Resources["btn-primary"],
-                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
+                Style = (Style)Application.Current.Resources["btn-primary"]
             };
 
             DisabledStackLayout = new StackLayout
