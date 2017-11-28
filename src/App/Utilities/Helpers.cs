@@ -68,7 +68,7 @@ namespace Bit.App.Utilities
         {
             if(Device.RuntimePlatform == Device.iOS)
             {
-                return null;
+                return string.Empty;
             }
 
             return " ";
