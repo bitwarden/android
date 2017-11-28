@@ -339,7 +339,8 @@ namespace Bit.App.Pages
         private void LoadSections(Cipher[] ciphers, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
-            var sections = ciphers.GroupBy(c => c.NameGroup).Select(g => new Section<Cipher>(g.ToList(), g.Key));
+            var sections = ciphers.GroupBy(c => c.NameGroup.ToUpperInvariant())
+                .Select(g => new Section<Cipher>(g.ToList(), g.Key));
             ct.ThrowIfCancellationRequested();
             Device.BeginInvokeOnMainThread(() =>
             {

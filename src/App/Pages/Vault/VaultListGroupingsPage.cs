@@ -72,8 +72,7 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationSections,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
-                    nameof(Section<Grouping>.Name), nameof(Section<Grouping>.Count),
-                    new Thickness(16, Helpers.OnPlatform(20, 12, 12), 16, 12))),
+                    nameof(Section<Grouping>.Name), nameof(Section<Grouping>.Count), new Thickness(16, 12))),
                 ItemTemplate = new DataTemplate(() => new VaultGroupingViewCell())
             };
 
