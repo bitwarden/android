@@ -37,7 +37,7 @@ namespace Bit.App.Controls
                 Style = (Style)Application.Current.Resources["text-muted"],
                 HorizontalOptions = LayoutOptions.End
             };
-            CountLabel.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Grouping.CipherCount));
+            CountLabel.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Grouping.Count));
 
             var stackLayout = new StackLayout
             {

@@ -31,7 +31,7 @@ namespace Bit.App.Models.Page
                 }
                 else if(Char.IsDigit(Name[0]))
                 {
-                    NameGroup = "0 - 9";
+                    NameGroup = "#";
                 }
                 else
                 {
@@ -192,15 +192,15 @@ namespace Bit.App.Models.Page
                 Id = null;
                 Name = name;
                 Folder = true;
-                CipherCount = count;
+                Count = count;
             }
 
-            public Grouping(Models.Folder folder, int count)
+            public Grouping(Folder folder, int count)
             {
                 Id = folder.Id;
                 Name = folder.Name?.Decrypt();
                 Folder = true;
-                CipherCount = count;
+                Count = count;
             }
 
             public Grouping(Collection collection, int count)
@@ -208,12 +208,12 @@ namespace Bit.App.Models.Page
                 Id = collection.Id;
                 Name = collection.Name?.Decrypt(collection.OrganizationId);
                 Collection = true;
-                CipherCount = count;
+                Count = count;
             }
 
             public string Id { get; set; }
             public string Name { get; set; } = AppResources.FolderNone;
-            public int CipherCount { get; set; }
+            public int Count { get; set; }
             public bool Folder { get; set; }
             public bool Collection { get; set; }
         }
