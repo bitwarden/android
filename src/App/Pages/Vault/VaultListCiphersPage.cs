@@ -274,7 +274,7 @@ namespace Bit.App.Pages
             if(string.IsNullOrWhiteSpace(_uri) && !_folder && string.IsNullOrWhiteSpace(_folderId) &&
                 string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
             {
-                Search.FocusWithDelay();
+                Search.FocusWithDelay(forceDelay: true);
             }
         }
 

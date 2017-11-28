@@ -37,9 +37,9 @@ namespace Bit.App
             return !page.IsPortrait();
         }
 
-        public static void FocusWithDelay(this View view, int delay = 1000)
+        public static void FocusWithDelay(this View view, int delay = 1000, bool forceDelay = false)
         {
-            if(Device.RuntimePlatform == Device.Android)
+            if(Device.RuntimePlatform == Device.Android || forceDelay)
             {
                 Task.Run(async () =>
                 {
