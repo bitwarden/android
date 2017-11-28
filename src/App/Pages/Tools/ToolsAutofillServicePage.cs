@@ -207,7 +207,7 @@ namespace Bit.App.Pages
         {
             return new Label
             {
-                Text = AppResources.AutofillDescription,
+                Text = AppResources.AutofillAccessibilityDescription,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
@@ -219,7 +219,7 @@ namespace Bit.App.Pages
         {
             return new ExtendedButton
             {
-                Text = AppResources.BitwardenAutofillServiceOpenSettings,
+                Text = AppResources.BitwardenAutofillServiceOpenAccessibilitySettings,
                 Command = new Command(() =>
                 {
                     _googleAnalyticsService.TrackAppEvent("OpenAccessibilitySettings");

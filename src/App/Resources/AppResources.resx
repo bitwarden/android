@@ -402,7 +402,7 @@
   <data name="AppExtension" xml:space="preserve">
     <value>App Extension</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
@@ -423,7 +423,7 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>bitwarden Auto-fill Service</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
@@ -764,7 +764,7 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tap this notification to auto-fill an item from your vault.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
@@ -1208,5 +1208,17 @@
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
     <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>

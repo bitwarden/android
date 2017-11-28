@@ -46,7 +46,8 @@ namespace Bit.App.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                TextColor = Color.Black
+                TextColor = Color.Black,
+                VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
             var disabledFs = new FormattedString();
@@ -65,12 +66,27 @@ namespace Bit.App.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                TextColor = Color.Black
+                TextColor = Color.Black,
+                VerticalOptions = LayoutOptions.CenterAndExpand
+            };
+
+            var goButton = new ExtendedButton
+            {
+                Text = AppResources.BitwardenAutofillServiceOpenAutofillSettings,
+                Command = new Command(() =>
+                {
+                    _googleAnalyticsService.TrackAppEvent("OpenAutofillSettings");
+                    _deviceActionService.OpenAutofillSettings();
+                }),
+                VerticalOptions = LayoutOptions.End,
+                HorizontalOptions = LayoutOptions.Fill,
+                Style = (Style)Application.Current.Resources["btn-primary"],
+                FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
 
             DisabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), statusDisabledLabel, BuildGoButton() },
+                Children = { BuildServiceLabel(), statusDisabledLabel, goButton, BuildAccessibilityButton() },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
@@ -79,7 +95,7 @@ namespace Bit.App.Pages
 
             EnabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), statusEnabledLabel },
+                Children = { BuildServiceLabel(), statusEnabledLabel, BuildAccessibilityButton() },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
@@ -125,7 +141,7 @@ namespace Bit.App.Pages
         {
             return new Label
             {
-                Text = AppResources.AutofillDescription,
+                Text = AppResources.AutofillServiceDescription,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
@@ -133,19 +149,20 @@ namespace Bit.App.Pages
             };
         }
 
-        private ExtendedButton BuildGoButton()
+        private ExtendedButton BuildAccessibilityButton()
         {
             return new ExtendedButton
             {
-                Text = AppResources.BitwardenAutofillServiceOpenSettings,
-                Command = new Command(() =>
+                Text = AppResources.AutofillAccessibilityService,
+                Command = new Command(async () =>
                 {
-                    _googleAnalyticsService.TrackAppEvent("OpenAutofillSettings");
-                    _deviceActionService.OpenAutofillSettings();
+                    await Navigation.PushAsync(new ToolsAutofillServicePage());
                 }),
                 VerticalOptions = LayoutOptions.End,
                 HorizontalOptions = LayoutOptions.Fill,
-                Style = (Style)Application.Current.Resources["btn-primary"],
+                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
+                Uppercase = false,
+                BackgroundColor = Color.Transparent,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
         }

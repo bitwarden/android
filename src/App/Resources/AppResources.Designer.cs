@@ -296,6 +296,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins across apps and the web..
+        /// </summary>
+        public static string AutofillAccessibilityDescription {
+            get {
+                return ResourceManager.GetString("AutofillAccessibilityDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-fill Accessibility Service.
+        /// </summary>
+        public static string AutofillAccessibilityService {
+            get {
+                return ResourceManager.GetString("AutofillAccessibilityService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Always Scan.
         /// </summary>
         public static string AutofillAlways {
@@ -310,15 +328,6 @@ namespace Bit.App.Resources {
         public static string AutofillAlwaysDescription {
             get {
                 return ResourceManager.GetString("AutofillAlwaysDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins across apps and the web..
-        /// </summary>
-        public static string AutofillDescription {
-            get {
-                return ResourceManager.GetString("AutofillDescription", resourceCulture);
             }
         }
         
@@ -373,6 +382,15 @@ namespace Bit.App.Resources {
         public static string AutofillService {
             get {
                 return ResourceManager.GetString("AutofillService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device..
+        /// </summary>
+        public static string AutofillServiceDescription {
+            get {
+                return ResourceManager.GetString("AutofillServiceDescription", resourceCulture);
             }
         }
         
@@ -449,6 +467,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins..
+        /// </summary>
+        public static string BitwardenAutofillAccessibilityServiceDescription {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillAccessibilityServiceDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to bitwarden Auto-fill Service.
         /// </summary>
         public static string BitwardenAutofillService {
@@ -467,7 +494,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins..
+        ///   Looks up a localized string similar to Use the bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps..
         /// </summary>
         public static string BitwardenAutofillServiceDescription {
             get {
@@ -514,9 +541,18 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to Open Accessibility Settings.
         /// </summary>
-        public static string BitwardenAutofillServiceOpenSettings {
+        public static string BitwardenAutofillServiceOpenAccessibilitySettings {
             get {
-                return ResourceManager.GetString("BitwardenAutofillServiceOpenSettings", resourceCulture);
+                return ResourceManager.GetString("BitwardenAutofillServiceOpenAccessibilitySettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Autofill Settings.
+        /// </summary>
+        public static string BitwardenAutofillServiceOpenAutofillSettings {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillServiceOpenAutofillSettings", resourceCulture);
             }
         }
         

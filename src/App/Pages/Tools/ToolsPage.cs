@@ -46,13 +46,15 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 ExtensionCell = new ToolsViewCell(AppResources.BitwardenAppExtension,
-                    AppResources.BitwardenAppExtensionDescription, "upload");
+                    AppResources.BitwardenAppExtensionDescription, "upload.png");
                 section.Add(ExtensionCell);
             }
             else
             {
-                AutofillCell = new ToolsViewCell(AppResources.BitwardenAutofillService,
-                    AppResources.BitwardenAutofillServiceDescription, "upload.png");
+                var desc = _deviceInfoService.AutofillServiceSupported ?
+                    AppResources.BitwardenAutofillServiceDescription :
+                    AppResources.BitwardenAutofillAccessibilityServiceDescription;
+                AutofillCell = new ToolsViewCell(AppResources.BitwardenAutofillService, desc, "upload.png");
                 section.Add(AutofillCell);
             }
 
