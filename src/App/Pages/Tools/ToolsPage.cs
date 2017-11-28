@@ -122,11 +122,11 @@ namespace Bit.App.Pages
         {
             if(_deviceInfoService.AutofillServiceSupported)
             {
-                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage2()));
+                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
             }
             else
             {
-                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillServicePage()));
+                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAccessibilityServicePage()));
             }
         }
 
