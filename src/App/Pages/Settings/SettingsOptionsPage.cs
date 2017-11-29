@@ -154,7 +154,7 @@ namespace Bit.App.Pages
                 {
                     Root = new TableRoot
                     {
-                        new TableSection(AppResources.AutofillService)
+                        new TableSection(AppResources.AutofillAccessibilityService)
                         {
                             AutofillAlwaysCell
                         }
