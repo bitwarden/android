@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
+using FFImageLoading.Forms;
 
 namespace Bit.App.Pages
 {
@@ -66,8 +67,25 @@ namespace Bit.App.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
-                TextColor = Color.Black,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                TextColor = Color.Black
+            };
+
+            var enableImage = new CachedImage
+            {
+                Source = "autofill_enable.png",
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                WidthRequest = 300,
+                HeightRequest = 118
+            };
+
+            var useImage = new CachedImage
+            {
+                Source = "autofill_use.png",
+                HorizontalOptions = LayoutOptions.Center,
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                WidthRequest = 300,
+                HeightRequest = 128
             };
 
             var goButton = new ExtendedButton
@@ -85,7 +103,7 @@ namespace Bit.App.Pages
 
             DisabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), statusDisabledLabel, goButton, BuildAccessibilityButton() },
+                Children = { BuildServiceLabel(), statusDisabledLabel, enableImage, goButton, BuildAccessibilityButton() },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
@@ -94,7 +112,7 @@ namespace Bit.App.Pages
 
             EnabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), statusEnabledLabel, BuildAccessibilityButton() },
+                Children = { BuildServiceLabel(), statusEnabledLabel, useImage, BuildAccessibilityButton() },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
