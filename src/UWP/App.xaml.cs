@@ -117,13 +117,15 @@ namespace Bit.UWP
             container.RegisterSingleton<ISettingsApiRepository, SettingsApiRepository>();
             container.RegisterSingleton<ITwoFactorApiRepository, TwoFactorApiRepository>();
             container.RegisterSingleton<ISyncApiRepository, SyncApiRepository>();
+            container.RegisterSingleton<ICollectionRepository, CollectionRepository>();
+            container.RegisterSingleton<ICipherCollectionRepository, CipherCollectionRepository>();
 
             // Other
             container.RegisterSingleton(CrossConnectivity.Current);
             container.RegisterSingleton(UserDialogs.Instance);
             container.RegisterSingleton(CrossFingerprint.Current);
 
-            container.RegisterSingleton<ISettings>(Plugin.Settings.CrossSettings.Current);
+            container.RegisterSingleton(Plugin.Settings.CrossSettings.Current);
 
             // Push
             var pushListener = new PushNotificationListener();

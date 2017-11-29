@@ -49,7 +49,7 @@ namespace Bit.App.Pages
                     AppResources.BitwardenAppExtensionDescription, "upload.png");
                 section.Add(ExtensionCell);
             }
-            else
+            if(Device.RuntimePlatform == Device.Android)
             {
                 var desc = _deviceInfoService.AutofillServiceSupported ?
                     AppResources.BitwardenAutofillServiceDescription :

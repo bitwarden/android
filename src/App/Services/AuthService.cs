@@ -211,7 +211,6 @@ namespace Bit.App.Services
         {
             CipherService.CachedCiphers = null;
             _tokenService.Token = null;
-            _tokenService.RefreshToken = null;
             UserId = null;
             Email = null;
             _cryptoService.ClearKeys();

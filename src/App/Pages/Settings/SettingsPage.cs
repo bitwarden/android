@@ -92,7 +92,7 @@ namespace Bit.App.Pages
             if((await _fingerprint.GetAvailabilityAsync()) == FingerprintAvailability.Available)
             {
                 var fingerprintName = Helpers.OnPlatform(iOS: AppResources.TouchID, Android: AppResources.Fingerprint,
-                    WinPhone: AppResources.Fingerprint);
+                    Windows: AppResources.Fingerprint, WinPhone: AppResources.Fingerprint);
                 FingerprintCell = new ExtendedSwitchCell
                 {
                     Text = string.Format(AppResources.UnlockWith, fingerprintName),
