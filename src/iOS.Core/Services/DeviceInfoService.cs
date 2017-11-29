@@ -1,4 +1,6 @@
 ﻿using Bit.App.Abstractions;
+using Foundation;
+using LocalAuthentication;
 using UIKit;
 
 namespace Bit.iOS.Core.Services
@@ -25,5 +27,19 @@ namespace Bit.iOS.Core.Services
         public bool NfcEnabled => false;
         public bool HasCamera => true;
         public bool AutofillServiceSupported => false;
+        public bool HasFaceIdSupport
+        {
+            get
+            {
+                if(Version < 11)
+                {
+                    return false;
+                }
+
+                var context = new LAContext();
+                return context.CanEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, out NSError e) &&
+                    context.BiometryType == LABiometryType.TypeFaceId;
+            }
+        }
     }
 }

@@ -15,6 +15,7 @@ namespace Bit.App.Pages
         private readonly IFingerprint _fingerprint;
         private readonly ISettings _settings;
         private readonly IAppSettingsService _appSettings;
+        private readonly IDeviceInfoService _deviceInfoService;
         private readonly bool _checkFingerprintImmediately;
         private DateTime? _lastAction;
 
@@ -24,6 +25,7 @@ namespace Bit.App.Pages
             _fingerprint = Resolver.Resolve<IFingerprint>();
             _settings = Resolver.Resolve<ISettings>();
             _appSettings = Resolver.Resolve<IAppSettingsService>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 
             Init();
         }
@@ -32,7 +34,7 @@ namespace Bit.App.Pages
         {
             var fingerprintIcon = new ExtendedButton
             {
-                Image = "fingerprint.png",
+                Image = _deviceInfoService.HasFaceIdSupport ? "smile.png" : "fingerprint.png",
                 BackgroundColor = Color.Transparent,
                 Command = new Command(async () => await CheckFingerprintAsync()),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -41,7 +43,8 @@ namespace Bit.App.Pages
 
             var fingerprintButton = new ExtendedButton
             {
-                Text = AppResources.UseFingerprintToUnlock,
+                Text = _deviceInfoService.HasFaceIdSupport ? AppResources.UseFaceIDToUnlock :
+                    AppResources.UseFingerprintToUnlock,
                 Command = new Command(async () => await CheckFingerprintAsync()),
                 VerticalOptions = LayoutOptions.EndAndExpand,
                 Style = (Style)Application.Current.Resources["btn-primary"]
@@ -64,7 +67,7 @@ namespace Bit.App.Pages
                 Children = { fingerprintIcon, fingerprintButton, logoutButton }
             };
 
-            Title = AppResources.VerifyFingerprint;
+            Title = _deviceInfoService.HasFaceIdSupport ? AppResources.VerifyFaceID : AppResources.VerifyFingerprint;
             Content = stackLayout;
         }
 

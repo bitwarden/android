@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly IPushNotificationService _pushNotification;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IDeviceInfoService _deviceInfoService;
         private readonly ILockService _lockService;
 
         // TODO: Model binding context?
@@ -33,6 +34,7 @@ namespace Bit.App.Pages
             _pushNotification = Resolver.Resolve<IPushNotificationService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _lockService = Resolver.Resolve<ILockService>();
 
             Init();
@@ -91,8 +93,9 @@ namespace Bit.App.Pages
 
             if((await _fingerprint.GetAvailabilityAsync()) == FingerprintAvailability.Available)
             {
-                var fingerprintName = Helpers.OnPlatform(iOS: AppResources.TouchID, Android: AppResources.Fingerprint,
-                    Windows: AppResources.Fingerprint, WinPhone: AppResources.Fingerprint);
+                var fingerprintName = Helpers.OnPlatform(
+                    iOS: _deviceInfoService.HasFaceIdSupport ? AppResources.FaceID : AppResources.TouchID,
+                    Android: AppResources.Fingerprint, Windows: AppResources.Fingerprint, WinPhone: AppResources.Fingerprint);
                 FingerprintCell = new ExtendedSwitchCell
                 {
                     Text = string.Format(AppResources.UnlockWith, fingerprintName),

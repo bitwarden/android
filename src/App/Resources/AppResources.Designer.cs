@@ -1304,6 +1304,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Face ID.
+        /// </summary>
+        public static string FaceID {
+            get {
+                return ResourceManager.GetString("FaceID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Face ID to verify..
+        /// </summary>
+        public static string FaceIDDirection {
+            get {
+                return ResourceManager.GetString("FaceIDDirection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Favorite.
         /// </summary>
         public static string Favorite {
@@ -2906,6 +2924,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Use Face ID To Unlock.
+        /// </summary>
+        public static string UseFaceIDToUnlock {
+            get {
+                return ResourceManager.GetString("UseFaceIDToUnlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use Fingerprint to Unlock.
         /// </summary>
         public static string UseFingerprintToUnlock {
@@ -2992,6 +3019,15 @@ namespace Bit.App.Resources {
         public static string VerificationEmailSent {
             get {
                 return ResourceManager.GetString("VerificationEmailSent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Verify Face ID.
+        /// </summary>
+        public static string VerifyFaceID {
+            get {
+                return ResourceManager.GetString("VerifyFaceID", resourceCulture);
             }
         }
         

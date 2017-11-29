@@ -8,5 +8,6 @@
         bool NfcEnabled { get; }
         bool HasCamera { get; }
         bool AutofillServiceSupported { get; }
+        bool HasFaceIdSupport { get; }
     }
 }

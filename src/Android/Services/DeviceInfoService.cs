@@ -46,7 +46,7 @@ namespace Bit.Android.Services
         public bool NfcEnabled => Utilities.NfcEnabled();
         public bool HasCamera => Xamarin.Forms.Forms.Context.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
         public bool AutofillServiceSupported => AutofillSupported();
-
+        public bool HasFaceIdSupport => false;
         private bool AutofillSupported()
         {
             if(Build.VERSION.SdkInt < BuildVersionCodes.O)

@@ -41,5 +41,6 @@ namespace Bit.UWP.Services
         }
         
         public bool AutofillServiceSupported => false;
+        public bool HasFaceIdSupport => false;
     }
 }
