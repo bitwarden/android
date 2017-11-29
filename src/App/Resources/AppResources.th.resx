@@ -402,7 +402,7 @@
   <data name="AppExtension" xml:space="preserve">
     <value>App Extension</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
@@ -423,7 +423,7 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>bitwarden Auto-fill Service</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
@@ -764,7 +764,7 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tap this notification to auto-fill a login from your vault.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
@@ -817,9 +817,6 @@
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Features</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scan When Password Field Focused</value>
@@ -1184,5 +1181,41 @@
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons Server URL</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>
