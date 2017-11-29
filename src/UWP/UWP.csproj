@@ -160,7 +160,7 @@
       <Version>2.0.147</Version>
     </PackageReference>
     <PackageReference Include="Plugin.Fingerprint">
-      <Version>1.4.5</Version>
+      <Version>1.4.6-beta3</Version>
     </PackageReference>
     <PackageReference Include="SimpleInjector">
       <Version>4.0.8</Version>
