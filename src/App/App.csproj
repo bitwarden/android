@@ -554,11 +554,11 @@
     <Reference Include="Plugin.Connectivity.Abstractions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.3.0.2\lib\netstandard1.0\Plugin.Connectivity.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Fingerprint, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.5\lib\portable-net45+win8+wpa81+wp8\Plugin.Fingerprint.dll</HintPath>
+    <Reference Include="Plugin.Fingerprint, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.6-beta3\lib\portable-net45+win8+wpa81+wp8\Plugin.Fingerprint.dll</HintPath>
     </Reference>
-    <Reference Include="Plugin.Fingerprint.Abstractions, Version=1.4.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.5\lib\portable-net45+win8+wpa81+wp8\Plugin.Fingerprint.Abstractions.dll</HintPath>
+    <Reference Include="Plugin.Fingerprint.Abstractions, Version=1.4.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Fingerprint.1.4.6-beta3\lib\portable-net45+win8+wpa81+wp8\Plugin.Fingerprint.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Plugin.Settings, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugins.Settings.3.0.1\lib\netstandard1.0\Plugin.Settings.dll</HintPath>
