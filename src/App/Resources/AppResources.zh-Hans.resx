@@ -128,7 +128,7 @@
     <value>添加文件夹</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>添加项目</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>项已被删除。</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,13 +397,13 @@
     <value>已经为您创建账号！您可以登录了。</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>添加项目</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App 扩展</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
-    <value>使用 bitwarden 无障碍服务在应用和网站自动填写您的登录项目。</value>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>自动填充</value>
@@ -423,8 +423,8 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>bitwarden 自动填充</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>使用 bitwarden 无障碍服务在应用和网站自动填写您的登录项目。</value>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>修改 Email</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>编辑项目</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>开启自动同步</value>
@@ -519,13 +519,13 @@
     <value>获取主密码提示</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>导入项目</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>您可以在 bitwarden.com 网页版密码库批量导入登录项目。您现在要访问这个网站吗？</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>快速从其他密码管理应用批量导入您的登录项目。</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>上次同步:</value>
@@ -597,16 +597,16 @@
     <value>从不</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>已新建项目。</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>你没有收藏任何网站。</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>您的密码库里没有登录项目。</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>您的密码库里没有此网站的登录项目。请添加一个。</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>此网站没有配置过用户名或者密码。</value>
@@ -680,10 +680,10 @@
     <value>输入一个 4 位的 PIN 码来解锁应用。</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>项目信息</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>项目已更新。</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>正在提交...</value>
@@ -726,19 +726,19 @@
     <value>验证码</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>查看项目</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden 网页版密码库</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>在任意浏览器管理您的登录信息。</value>
+    <value>使用 bitwarden 网页版可以从任何浏览器管理您的登录项目。</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>认证应用已丢失？</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>项目</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>译者</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>{0} 的项目</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>您的密码库里没有 {0} 的登录项目。</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -764,8 +764,8 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>点击此通知，以便从您的密码库自动登录。</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>打开辅助功能设置</value>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. 在 Android 的辅助功能设置屏幕上，触摸服务项下的 "bitwarden" 的标题。</value>
@@ -792,16 +792,16 @@
     <value>自动填充</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>你想要自动填充还是查看此登录信息？</value>
+    <value>你想要自动填充还是查看此登录项目？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>确定要自动登录？并不完全匹配 "{0}" 。</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>匹配项目</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>可能的匹配项</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜索</value>
@@ -813,13 +813,10 @@
     <value>分享你的密码库</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>创建一个组织来安全地分享您的登录信息。</value>
+    <value>创建一个组织来安全地分享您的登录项目。</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>我们使用 analytics 来帮助分析扩展的使用情况，以便我们改进扩展。所有的数据收集完全是匿名的。</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>功能</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>当焦点在密码字段时扫描</value>
@@ -1024,7 +1021,7 @@
     <value>Web 存储库服务器 URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>点击此通知，以便从您的密码库查看登录项目。</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>自定义字段</value>
@@ -1036,153 +1033,189 @@
     <value>没有自定义字段。你可以在网页版密码库，或者浏览器扩展来管理自定义字段。</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>复制号码</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>复制安全码</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>数字</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>安全码</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>要添加哪种类型的项目？</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>卡片</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>身份</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>登录</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>安全笔记</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>地址 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>地址 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>地址 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>四月</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>八月</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>品牌</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>持卡人姓名</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>市 / 镇</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>公司</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>国家</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>十二月</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dr</value>
+    <value>博士</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>到期月份</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>到期年份</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>二月</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>名</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>一月</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>七月</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>六月</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>姓</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>许可证编号</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>三月</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>五月</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>中间名</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>先生</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>夫人</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>女士</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>十一月</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>十月</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>护照号码</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>电话</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>九月</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>社会保险号码</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>州 / 省</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>称呼</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>邮编 / 邮政代码</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>地址</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>到期</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>禁用网站图标</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>在您密码库的每个登录项目旁边显示一个可识别的图标。</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>图标服务器 URL</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>使用 bitwarden 无障碍服务在应用和网站自动填写您的登录项目。</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>
