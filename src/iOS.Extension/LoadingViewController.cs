@@ -290,6 +290,7 @@ namespace Bit.iOS.Extension
             container.RegisterSingleton<ITokenService, TokenService>();
             container.RegisterSingleton<ISettingsService, SettingsService>();
             container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
+            container.RegisterSingleton<IDeviceActionService, NoopDeviceActionService>();
             container.RegisterSingleton<IAppSettingsService, AppSettingsService>();
 
             // Repositories
