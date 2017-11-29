@@ -11,6 +11,7 @@ using Xamarin.Forms;
 using Bit.App.Pages;
 using Bit.App.Controls;
 using Acr.UserDialogs;
+using XLabs.Ioc;
 
 namespace Bit.App.Services
 {
@@ -31,7 +32,6 @@ namespace Bit.App.Services
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly IDeviceApiRepository _deviceApiRepository;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
-        private readonly IUserDialogs _userDialogs;
 
         private string _email;
         private string _userId;
@@ -48,8 +48,7 @@ namespace Bit.App.Services
             IAppIdService appIdService,
             IDeviceInfoService deviceInfoService,
             IDeviceApiRepository deviceApiRepository,
-            IGoogleAnalyticsService googleAnalyticsService,
-            IUserDialogs userDialogs)
+            IGoogleAnalyticsService googleAnalyticsService)
         {
             _secureStorage = secureStorage;
             _tokenService = tokenService;
@@ -61,7 +60,6 @@ namespace Bit.App.Services
             _deviceInfoService = deviceInfoService;
             _deviceApiRepository = deviceApiRepository;
             _googleAnalyticsService = googleAnalyticsService;
-            _userDialogs = userDialogs;
         }
 
         public string UserId
@@ -225,7 +223,7 @@ namespace Bit.App.Services
             Device.BeginInvokeOnMainThread(() => Application.Current.MainPage = new ExtendedNavigationPage(new HomePage()));
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {
-                _userDialogs.Toast(logoutMessage);
+                Resolver.Resolve<IUserDialogs>()?.Toast(logoutMessage);
             }
         }
 
