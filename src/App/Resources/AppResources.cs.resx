@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Vypnout analytiku</value>
+    <value>Zakázat analytiku</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Heslo</value>
@@ -402,8 +402,8 @@
   <data name="AppExtension" xml:space="preserve">
     <value>Rozšíření aplikace</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů v aplikacích a na webových stránkách.</value>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Služba automatického vyplnění</value>
@@ -423,8 +423,8 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Služba automatického vyplnění</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Změnit email</value>
@@ -764,8 +764,8 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Klikněte pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Otevřít nastavení usnadnění</value>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. V menu v nastavení Usnadnění klikněte na "bitwarden" pod nadpisem Služby.</value>
@@ -816,10 +816,7 @@
     <value>Vytvořte organizaci pro bezpečné sdílení přihlašovacích údajů s dalšími uživateli.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>Analytiku používáme ke sběru informací o používání aplikace, abychom jí mohli i nadále vylepšovat. Veškerý sběr dat je zcela anonymní.</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Funkce</value>
+    <value>Analytiku používáme ke sběru informací jakým způsobem je aplikace používána, abychom ji mohli i nadále vylepšovat. Veškerý sběr dat je zcela anonymní.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Prohledávat jen při vybrání pole hesla</value>
@@ -953,7 +950,7 @@
     <value>Pokud mají vaše přihlašovací údaje přidán autentizační klíč pro TOTP, vygenerovaný ověřovací kód (TOTP) se automaticky zkopíruje do schránky při každém automatickém vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Vypnout automatické kopírování kódu TOTP</value>
+    <value>Zakázat automatické kopírování TOTP kódu</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Pro použití této funkce je potřebné prémiové členství.</value>
@@ -1180,9 +1177,45 @@
     <value>Zakázat ikonky webových stránek</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Skryje ikonky webových stránek zobrazujících se vedle jednotlivých položek přihlašovacích údajů.</value>
+    <value>Ikonky webových stránek zobrazí snadno rozeznatelný obrázek vedle každé položky ve vašem trezoru.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL serveru ikonek</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>

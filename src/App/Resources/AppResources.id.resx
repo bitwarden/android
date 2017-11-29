@@ -128,7 +128,7 @@
     <value>Tambah Folder</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Tambah Item</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Item telah dihapus.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,13 +397,13 @@
     <value>Akun baru Anda telah dibuat! Sekarang Anda bisa masuk.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Tambah Item</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Ekstensi Aplikasi</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
-    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda di seluruh aplikasi dan web.</value>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Layanan Pengisian Otomatis</value>
@@ -423,8 +423,8 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Layanan Pengisian Otomatis bitwarden</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda.</value>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Ubah Email</value>
@@ -519,13 +519,13 @@
     <value>Dapatkan petunjuk sandi utama Anda</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Impor Item</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Anda dapat mengimpor massal item dari brankas web bitwarden.com. Anda ingin mengunjungi situs web sekarang?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Mengimpor massal item Anda dari aplikasi pengelola sandi lainnya dengan cepat.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Sinkronisasi Terakhir:</value>
@@ -597,16 +597,16 @@
     <value>Jangan pernah</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Item baru telah dibuat.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Tidak ada favorit di brankas Anda.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Tidak ada item di brankas Anda.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Tidak ada item untuk situs ini di brankas Anda. Ketuk untuk menambahkan.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Info masuk ini tidak memiliki nama pengguna atau sandi yang dikonfigurasi.</value>
@@ -680,10 +680,10 @@
     <value>Masukkan 4 digit kode PIN untuk membuka aplikasi.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Informasi Item</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Item diperbarui.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Mengirim...</value>
@@ -726,7 +726,7 @@
     <value>Kode Verifikasi</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Lihat Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>Brankas Web bitwarden</value>
@@ -738,7 +738,7 @@
     <value>Kehilangan aplikasi autentikasi?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Item</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Terjemahan</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Item untuk {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Tidak ada item di brankas Anda untuk {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -764,8 +764,8 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Ketuk notifikasi ini untuk mengisi info masuk secara otomatis dari brankas Anda.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Buka Setelan Aksesibilitas</value>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Pada layar Setelan Aksesibilitas Android, sentuh "bitwarden" di bawah Layanan.</value>
@@ -798,16 +798,16 @@
     <value>Anda yakin ingin mengisi otomatis info masuk ini? Ini tidak sepenuhnya cocok untuk "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Item yang Cocok</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Item yang Mungkin Cocok</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Pencarian</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Anda mencari info masuk otomatis untuk {0}.</value>
+    <value>Anda mencari item pengisian otomatis untuk "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Bagikan Brankas Anda</value>
@@ -817,9 +817,6 @@
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Kami menggunakan analitik untuk mempelajari lebih baik bagaimana aplikasi sedang digunakan sehingga kami dapat membuatnya lebih baik. Semua pengumpulan data benar-benar anonim.</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Fitur</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Pindai Ketika Fokus ke Kolom Kata Sandi</value>
@@ -860,7 +857,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Akun ini mengaktifkan info masuk dua langkah, namun, tidak satupun dari penyedia dua langkah yang dikonfigurasi didukung oleh peranti ini. Silakan gunakan peranti yang didukung dan/atau tambahkan penyedia tambahan yang didukung di semua peranti (seperti aplikasi autentikasi).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Kode Pemulihan</value>
@@ -875,10 +872,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Pilihan Info Masuk Dua Langkah</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Gunakan metode masuk dua langkah lainnya</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Tidak dapat mengirim email verifikasi. Coba lagi.</value>
@@ -892,7 +889,7 @@
     <value>Hold your YubiKey NEO against the back of the device to continue.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>Kunci Keamanan YubiKey NEO</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -916,17 +913,17 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Kunci Autentikasi (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Kode Verifikasi (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Kunci autentikasi ditambahkan.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Tidak dapat membaca kunci autentikasi.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
     <value>Pemindaian akan terjadi secara otomatis.</value>
@@ -950,7 +947,7 @@
     <value>Salin TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>Jika info masuk Anda memiliki kunci autentikasi yang menyertainya, kode verifikasi TOTP akan disalin secara otomatis ke clipboard Anda setiap kali Anda mengisi info masuk secara otomatis.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Nonaktifkan salinan TOTP otomatis</value>
@@ -992,7 +989,7 @@
     <value>Pelajari Lebih Lanjut</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>URL Server API</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Custom Environment</value>
@@ -1004,11 +1001,11 @@
     <value>The environment URLs have been saved.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} tidak diformat dengan benar.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Identity Server URL</value>
+    <value>URL Server Identitas</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
@@ -1018,171 +1015,207 @@
     <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>URL Server</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Vault Server URL</value>
+    <value>URL Server Brankas Web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Ketuk notifikasi ini untuk melihat item dari brankas Anda.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>Kolom Ubahsuai</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>Kolom ubahsuai diperbarui.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>Tidak ada kolom ubahsuai. Anda dapat mengelola kolom ubahsuai dari brankas web atau ekstensi peramban.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Salin Nomor</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Salin Kode Keamanan</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Nomor</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Kode Keamanan</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
     <value>What type of item do you want to add?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Kartu</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identitas</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Info Masuk</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Secure Note</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Alamat 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Alamat 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Alamat 3</value>
   </data>
   <data name="April" xml:space="preserve">
     <value>April</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Agustus</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Merek</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Nama Pemilik Kartu</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Kota / Kabupaten</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Perusahaan</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Negara</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Desember</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Bulan Kedaluwarsa</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Tahun Kedaluwarsa</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Februari</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Nama Depan</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Januari</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Juli</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Juni</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Nama Belakang</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Nomor Lisensi</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Maret</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Mei</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Nama Tengah</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Tuan</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Nyonya</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Nona</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Oktober</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Nomor Paspor</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telepon</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Nomor Jaminan Sosial</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Negara Bagian / Provinsi</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Title</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Kode Pos</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Alamat</value>
   </data>
   <data name="Expiration" xml:space="preserve">
     <value>Expiration</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Nonaktifkan Ikon Situs Web</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Ikon Situs Web menyediakan gambar yang dikenali di sebelah item info masuk di brankas Anda.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL Server Ikon</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>

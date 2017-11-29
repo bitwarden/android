@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden Password Manager</value>
+    <value>bitwarden Menedżer Haseł</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
+    <value>bitwarden to najłatwiejszy i najbezpieczniejszy sposób przechowywania wszystkich Twoich loginów i haseł, umożliwiający ich wygodną synchronizację pomiędzy wszystkimi Twoimi urządzeniami. Rozszerzenie aplikacji bitwarden umożliwia Ci szybkie logowanie w Safari lub Chrome i jest wspierane przez setki innych popularnych aplikacji.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Kradzież hasła to poważny problem. Witryny i aplikacje, których używasz są atakowane każdego dnia. Twoje hasła mogą zostać skradzione w wyniku złamania zabezpieczeń. Gdy używasz tego samego hasła dla różnych aplikacji i stron internetowych, hakerzy mogą z łatwością uzyskać dostęp do twojego konta e-mail, banku i innych ważnych kont.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Eksperci od bezpieczeństwa zalecają używanie różnych, losowo wygenerowanych haseł dla każdego nowo tworzonego konta. Ale jak można zarządzać wszystkimi tymi hasłami? bitwarden sprawia, że tworzenie, przechowywanie i dostęp do Twoich haseł jest naprawdę łatwy. 
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, który jest synchronizowany pomiędzy wszystkimi Twoimi urządzeniami. Dzięki temu, że dane są w pełni zaszyfrowane zanim opuszczą Twoje urządzenie, tylko masz do nich dostęp. Nawet zespół bitwarden nie ma dostępu do Twoich danych. Dane są zabezpieczone za pomocą szyfrowania metodą AES-256, stosowania ciągów zaburzających i algorytmu PBKDF2 SHA-256.</value>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
+    <value>bitwarden,bit warden,8bit,hasło,login,darmowy menadżer haseł,menedżer haseł,menedżer logowania,password,free password manager,password manager,login manager</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Przechowuj wszystkie swoje loginy i hasła w bezpiecznym sejfie</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Automatycznie generuj silne, losowe i bezpieczne hasła</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Zabezpiecz swój skarbiec z użyciem Touch ID, kodu PIN lub głównego hasła</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Automatycznie wypełniaj dane logowania w Safari, Chrome i innych aplikacjach</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>Synchronizacja i dostęp do sejfu z różnych urządzeń</value>
   </data>
 </root>

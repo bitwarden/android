@@ -128,7 +128,7 @@
     <value>Adăugare dosar</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Adăugare articol</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Articolul a fost şters.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,13 +397,13 @@
     <value>Contul a fost creat! Acum vă puteţi autentifica.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Adăugare articol</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Extensie aplicaţie</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
-    <value>Utilizați serviciul de accesibilitate bitwarden pentru a completa automat datele de conectare între aplicații și web.</value>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Serviciul completare automată</value>
@@ -423,8 +423,8 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>serviciul de completare automată bitwarden</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilizați serviciul de accesibilitate bitwarden pentru a completa automat datele de conectare.</value>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Schimbați adresa de e-mail</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Editare articol</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Activaţi sincronizarea automată</value>
@@ -519,13 +519,13 @@
     <value>Obţineţi indiciul parolei principale</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Import articole</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Puteți să importați datele de conectare din seiful web bitwarden.com. Doriți să vizitați saitul acum?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Import rapid al datelor de conectare din alte aplicații de gestionare a parolelor.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Ultima sincronizare:</value>
@@ -597,16 +597,16 @@
     <value>Niciodată</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>A fost creat un nou articol.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Nu sunt favorite în seiful dvs.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Nu sunt articole în seiful dvs.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Nu sunt date de conectare în seif pentru acest sait. Atingeți pentru a adăuga un articol.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Această autentificare nu are un nume de utilizator sau parolă configurate.</value>
@@ -680,10 +680,10 @@
     <value>Introduceţi un cod PIN din 4 cifre pentru a debloca aplicaţia.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Informații de autentificare</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Articolul a fost actualizat.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Trimitere...</value>
@@ -726,7 +726,7 @@
     <value>Cod de verificare</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Vizualizare articol</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>seif Web bitwarden</value>
@@ -738,7 +738,7 @@
     <value>Ai pierdut aplicația de autentificare?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Articole</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Traduceri</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Autentificări pentru {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Nu sunt autentificări în seiful dvs. pentru {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -764,8 +764,8 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Atingeți această notificare pentru a completa automat o autentificare din seiful dvs.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Deschideţi setările de accesibilitate</value>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. În ecranul Accesibilitate din setările Android, atingeți "bitwarden" sub titlul Servicii.</value>
@@ -798,10 +798,10 @@
     <value>Sigur doriți să completați automat aceste date de conectare? Nu este o potrivire completă pentru "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Elemente concordante</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Elemente posibil concordante</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Căutare</value>
@@ -817,9 +817,6 @@
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Utilizăm datele analitice pentru a afla mai bine modul în care este folosită aplicația, astfel încât s-o putem face mai bună. Toate colectările de date sunt complet anonime.</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Caracteristici</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scanare atunci când câmpul pentru parole este focalizat</value>
@@ -1036,153 +1033,189 @@
     <value>Nu există câmpuri personalizate. Puteți gestiona complet câmpurile personalizate din seiful web sau din extensia browserului.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Copiere număr</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Copiere cod CVV2/CVC2</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Număr card</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Cod CVV2/CVC2</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Ce tip de articol doriți să adaugați?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Tip card</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identitate</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Autentificare</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Mențiune securizata</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Adresă 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Adresă 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Adresă 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>aprilie</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>august</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Tip card</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Deținător card</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Localitate</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Companie</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Țară</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>decembrie</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dr</value>
+    <value>Dr.</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Luna expirării</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Anul expirării</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>februarie</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Prenume</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>ianuarie</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>iulie</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>iunie</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Nume</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Număr licență</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>martie</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>mai</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Al doilea prenume</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Dl</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Dna</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Dra</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>noiembrie</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>octombrie</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Număr CI/pașaport</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefon</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>septembrie</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>CNP</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Județ</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titlu</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Cod poștal</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adresă</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Expirare</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Dezactivare pictograme</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Pictogramele oferă o imagine recognoscibilă alături de fiecare element de conectare din seiful dvs.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL server de pictograme</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Utilizați serviciul de accesibilitate bitwarden pentru a completa automat datele de conectare.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>

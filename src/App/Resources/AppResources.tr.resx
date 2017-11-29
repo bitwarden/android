@@ -128,7 +128,7 @@
     <value>Klasör Ekle</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Hesap Ekle</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Hesap silindi.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,13 +397,13 @@
     <value>Yeni hesabınız oluşturuldu! Şimdi giriş yapabilirsiniz.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Bir hesap ekle</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Uygulama uzantısı</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
-    <value>bitwarden erişilebilirlik hizmetini, uygulamalarınızdaki ve internetteki oturumlarınızı otomatik olarak doldurmak için kullanın.</value>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Otomatik doldurma servisi</value>
@@ -423,8 +423,8 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>bitwarden Otomatik doldurma Servisi</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Giriş bilgilerinizi otomatik olarak doldurmak için bitwarden erişim hizmetini kullanın.</value>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-postayı Değiştir</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Hesabı düzenle</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Otomatik Eşitlemeyi Etkinleştir</value>
@@ -504,7 +504,7 @@
     <value>Uzantıyı başlatmak için menüdeki bitwarden simgesine dokunun.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>bitwarden'ı Safari ve diğer uygulamalarda etkinleştirmek için menünün alt satırında "daha fazla" simgesine dokunun.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favori</value>
@@ -519,13 +519,13 @@
     <value>Ana parola ipucununuzu alın</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Hesapları İçe Aktar</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>bitwarden.com web kasasından topluca hesaplarınızı içe aktarabilirsiniz. Siteyi şimdi ziyaret etmek ister misiniz?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Diğer parola yöneticisi uygulamalardan hesaplarınızı topluca ve hızlıca içe aktarın.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Son Eşitleme:</value>
@@ -597,16 +597,16 @@
     <value>Asla</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Yeni hesap oluşturuldu.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Kasanızda hiç favoriniz yok.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Kasanızda hiç hesabınız yok.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Bu site için kasanızda hiç hesap yok. Eklemek için dokunun.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Bu hesap için bir kullanıcı adı veya parola yapılandırılmamış.</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>Ayarların varsayılan değerleri, ana bitwarden uygulamasının parola üreticisi aracından ayarlanır.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Seçenekler</value>
@@ -643,7 +643,7 @@
     <value>Mevcut parolanın üzerine kaydetmek istediğinize emin misiniz?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>bitwarden push bildirimleri kullanarak kasanızı otomatik olarak eşitlenmiş olarak saklar. En iyi kullanıcı deneyimi için push bildirimlerini aşağıda belirecek uyarıda "Tamam"ı seçerek etkinleştirin.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -653,7 +653,7 @@
     <value>Lütfen iyi bir yorum yazarak bize yardım edin!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>Uygulama Mağazası oylamaları yeni bitwarden sürümü yayınlandıktan sonra sıfırlanır. Lütfen güzel incelemeler yazarak gelişmemize katkı sağlayın!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Tekrar Parola Oluştur</value>
@@ -680,10 +680,10 @@
     <value>Uygulama kilidini açmak için 4 haneli bir PIN kodu girin.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Hesap Bilgisi</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Hesap güncellendi.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Gönderiliyor...</value>
@@ -726,7 +726,7 @@
     <value>Doğrulama Kodu</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Hesabı Görüntüle</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden Web Kasası</value>
@@ -738,7 +738,7 @@
     <value>Kimlik doğrulama uygulamanızı kayıp mı ettiniz?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Hesaplar</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,27 +751,27 @@
     <value>Çeviriler</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>{0} için hesaplar</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>{0} için kasanızda hiç hesap bulunmuyor.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>bitwarden oto-doldurma bildirmini gördüğünüzde otomatik doldurma servisini başlamak için bildirime dokunun.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tap this notification to auto-fill a login from your vault.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+    <value>1. Android erişilebilirlik ayarları ekranında, Servisler başlığı altında "bitwarden"a dokunun.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>2. Düğmeye değiştirin ve Tamam'a basarak onaylayın.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Devre Dışı</value>
@@ -786,7 +786,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>Kasaya yeni hesaplar eklemenin en kolay yolu bitwarden Otomatik doldurma hizmetidir. bitwarden otmatik doldurma servisinin kullanımı hakkında "Araçlar" ekranına giderek daha fazla bilgi edinin.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Otomatik doldur</value>
@@ -798,10 +798,10 @@
     <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Eşleşen Hesaplar</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Olası Eşleşen Hesaplar</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Ara</value>
@@ -818,49 +818,46 @@
   <data name="DisableGADescription" xml:space="preserve">
     <value>Uygulamanın nasıl kullanıldığını daha iyi öğrenmek için analitikleri kullanırız, böylece onu daha iyi hale getirebiliriz. Tüm veri toplama işlemi tamamen anonimdir.</value>
   </data>
-  <data name="Features" xml:space="preserve">
-    <value>Özellikler</value>
-  </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Scan When Password Field Focused</value>
+    <value>Parola alanına odaklanıldığında tara</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life.</value>
+    <value>Yalnızca parola alanını seçtiğinizde bir otomatik doldurma bildirimi sunar. Bu ayar batarya kullanımını azaltma konusunda faydalı olabilir.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Persist Notification</value>
+    <value>Kalıcı Bildirim</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life.</value>
+    <value>Her zaman otomatik doldurmayı öner ve yalnızca otomatik doldurmaya teşebbüs edilirse tara. Bu ayar batarya kullanımını azaltma konusunda faydalı olabilir.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
-    <value>Always Scan</value>
+    <value>Her zaman tara</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting.</value>
+    <value>Doldurma alanları için ekranı her zaman tara ve parola alanları bulunursa sadece otomatik doldurma önerisi göster. Bu varsayılan ayardır.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>"{0}" uygulaması açılamıyor.</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Kimlik doğrulayıcı uygulama</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Kimlik doğrulayıcı uygulamanızdaki 6 haneli doğrulama kodunu girin.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>{0} adresine e-postalanan 6 haneli doğrulama kodunu girin.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Oturum Açma Kullanılamıyor</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Bu hesab için iki adımlı giriş etkinleştirilmiş, ancak, yapılandırılmış iki adımlı sağlayıcıların hiçbiri bu aygıtta desteklenmiyor. Lütfen desteklenen bir cihaz kullanın ve/veya cihazlar arasında daha iyi desteklenen ek sağlayıcılar ekleyin (bir kimlik doğrulayıcı uygulaması gibi).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Kurtarma kodu</value>
@@ -889,44 +886,44 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>Devam etmek için YubiKey NEO anahtarınızı cihazınızın arkasına doğru tutun.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>YubiKey NEO Güvenlik Anahtarı</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Yeni bir ek ekle</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>Ekler</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>Dosya indirilemiyor.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>Cihazınız bu dosya türünü açamıyor.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>İndiriliyor...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>Bu ekin boyutu {0}. Dosyayı cihazınıza indirmek istediğinizden emin misiniz?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>Kimlik doğrulama anahtarı (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>Doğrulama kodu (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>Kimlik doğrulama anahtarı eklendi.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>Kimlik doğrulayıcı anahtar okunamıyor.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
     <value>Tarama otomatik olarak gerçekleşecek.</value>
@@ -1004,7 +1001,7 @@
     <value>Çevre URL'ler kaydedildi.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} doğru biçimlendirilmemiş.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
@@ -1027,162 +1024,198 @@
     <value>Tap this notification to view logins from your vault.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>Özel Alanlar</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>Özel alanlar güncelleştirildi.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>Özel alan yok. Özel alanları yönetmek için tarayıcı eklentisini veya web kasasını kullanabilirsiniz.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Numarayı Kopyala</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Güvenlik Kodunu Kopyala</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Numara</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Güvenlik Kodu</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Ne tür bir öğe eklemek istiyorsunuz?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Kart</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Kimlik</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Hesap</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Güvenli Not</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Adres 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Adres 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Adres 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Nisan</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Ağustos</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Marka</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Kart Sahibinin Adı</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Kent / Şehir</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Şirket</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Ülke</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Aralık</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Son Kullanma Ayı</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Son Kullanma Yılı</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Şubat</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>İlk Ad</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Ocak</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Temmuz</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Haziran</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Soyad</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Ehliyet Numarası</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Mart</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Mayıs</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>İkinci Ad</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Bay</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Bayan</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Bayan</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Kasım</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Ekim</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Pasaport Numarası</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefon</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Eylül</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Sosyal Güvenlik Numarası</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Eyalet / İl</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Başlık</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Posta Kodu</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adres</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Son Kullanma Tarihi</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Site simgelerini devre dışı bırak</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Web Sitesi Simgeleri, kasanızdaki her giriş bilgisinin yanında o siteyi tanımanıza yardımcı olacak bir görüntü verir.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>Sunucu URL simgeleri</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Giriş bilgilerinizi otomatik olarak doldurmak için bitwarden erişim hizmetini kullanın.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>

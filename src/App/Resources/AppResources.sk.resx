@@ -128,7 +128,7 @@
     <value>Pridať priečinok</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Pridať položku</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Položka bola odstránená.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,13 +397,13 @@
     <value>Váš nový účet bol vytvorený! Teraz sa môžete prihlásiť.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Pridať položku</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Rozšírenie aplikácie</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
-    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie v aplikáciach a na webe.</value>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Služba automatického vypĺňania</value>
@@ -423,8 +423,8 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Služba automatického vypĺňania bitwarden</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie.</value>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Zmeniť email</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Upraviť položku</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Zapnúť automatickú synchronizáciu</value>
@@ -519,7 +519,7 @@
     <value>Získať nápovedu pre hlavné heslo</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Importovať položky</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
     <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
@@ -764,8 +764,8 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Ťuknite na túto notifikáciu pre automatické vyplnenie prihlasovacích údajov z vášho trezora.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Otvoriť nastavenia zjednodušenia prístupu</value>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Otvorte obrazovku Uľahčenia prístupu, klepnite na "bitwarden" pod nadpisom Služby.</value>
@@ -817,9 +817,6 @@
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Používame analytiku, aby sme zistili, ako je aplikácia používaná, aby sme ju mohli vylepšiť. Všetky zhromaždené údaje sú kompletne anonymné.</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Funkcie</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skenovať ak je pole pre heslo označené</value>
@@ -1084,13 +1081,13 @@
     <value>Cardholder Name</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Mesto</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Spoločnosť</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Krajina</value>
   </data>
   <data name="December" xml:space="preserve">
     <value>December</value>
@@ -1184,5 +1181,41 @@
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons Server URL</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>

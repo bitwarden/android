@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>About</value>
+    <value>アプリ情報</value>
   </data>
   <data name="Add" xml:space="preserve">
-    <value>Add</value>
+    <value>追加</value>
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Add Folder</value>
+    <value>フォルダの追加</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>アイテムの追加</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>An error has occurred.</value>
+    <value>エラーが発生しました。</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Back</value>
+    <value>戻る</value>
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
@@ -144,203 +144,203 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>キャンセル</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>コピー</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Copy Password</value>
+    <value>パスワードをコピー</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Copy Username</value>
+    <value>ユーザー名をコピー</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>Credits</value>
+    <value>クレジット</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>削除</value>
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Deleting...</value>
+    <value>削除中…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Do you really want to delete? This cannot be undone.</value>
+    <value>本当に削除しますか？この操作は元に戻せません。</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>編集</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Edit Folder</value>
+    <value>フォルダの編集</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>メール</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Email Address</value>
+    <value>メールアドレス</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Email Us</value>
+    <value>メールでのお問い合わせ</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Email us directly to get help or leave feedback.</value>
+    <value>メールで直接ヘルプやフィードバックを送れます。</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Enter your PIN code.</value>
+    <value>PIN コードを入力してください。</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Favorites</value>
+    <value>お気に入り</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>File a Bug Report</value>
+    <value>バグレポートを送信</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open an issue at our GitHub repository.</value>
+    <value>GitHub リポジトリで Issue を作成してください。</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Use your fingerprint to verify.</value>
+    <value>指紋で認証します。</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>Folder</value>
+    <value>フォルダ</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>New folder created.</value>
+    <value>新しいフォルダを作成しました。</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Folder deleted.</value>
+    <value>フォルダを削除しました。</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>No Folder</value>
+    <value>フォルダーなし</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>Folders</value>
+    <value>フォルダ</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Folder updated.</value>
+    <value>フォルダを更新しました。</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>Go To Website</value>
+    <value>ウェブサイトを開く</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>Help and Feedback</value>
+    <value>ヘルプとフィードバック</value>
   </data>
   <data name="Hide" xml:space="preserve">
-    <value>Hide</value>
+    <value>隠す</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Please connect to the internet before continuing.</value>
+    <value>続行する前に、インターネットに接続してください。</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet Connection Required</value>
+    <value>インターネット接続が必要です</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Invalid Master Password. Try again.</value>
+    <value>マスターパスワードが間違っています。入力し直してください。</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Invalid PIN. Try again.</value>
+    <value>PIN が間違っています。入力し直してください。</value>
   </data>
   <data name="Launch" xml:space="preserve">
-    <value>Launch</value>
+    <value>開く</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Log In</value>
+    <value>ログイン</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>ログイン</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Log Out</value>
+    <value>ログアウト</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Are you sure you want to log out?</value>
+    <value>ログアウトしてもよろしいですか？</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Master Password</value>
+    <value>マスターパスワード</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>More</value>
+    <value>詳細</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>My Vault</value>
+    <value>保管庫</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Name</value>
+    <value>名前</value>
     <comment>Label for an entity name.</comment>
   </data>
   <data name="No" xml:space="preserve">
-    <value>No</value>
+    <value>いいえ</value>
   </data>
   <data name="Notes" xml:space="preserve">
-    <value>Notes</value>
+    <value>ノート</value>
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ok</value>
+    <value>OK</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Disable Analytics</value>
+    <value>解析の無効化</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>パスワード</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>保存</value>
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Saving...</value>
+    <value>保存中...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>設定</value>
     <comment>The title for the settings page.</comment>
   </data>
   <data name="Show" xml:space="preserve">
-    <value>Show</value>
+    <value>表示</value>
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>アイテムを削除しました。</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>送信</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Sync</value>
+    <value>同期</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Thank You</value>
+    <value>ありがとうございます</value>
   </data>
   <data name="Tools" xml:space="preserve">
-    <value>Tools</value>
+    <value>ツール</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
@@ -348,339 +348,339 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Use Fingerprint to Unlock</value>
+    <value>指紋認証でロック解除</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>ユーザー名</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>The {0} field is required.</value>
+    <value>{0} は必須です。</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} has been copied.</value>
+    <value>{0} をコピーしました。</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify Fingerprint</value>
+    <value>指紋の確認</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verify Master Password</value>
+    <value>マスターパスワードの確認</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Verify PIN</value>
+    <value>PIN の確認</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>Version</value>
+    <value>バージョン</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>View</value>
+    <value>表示</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Visit Our Website</value>
+    <value>ウェブサイトを開く</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use bitwarden.</value>
+    <value>私たちのウェブサイトでヘルプ、ニュース、問い合わせや bitwarden の詳しい使い方をチェックしてください。</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Website</value>
+    <value>ウェブサイト</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>はい</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Account</value>
+    <value>アカウント</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Your new account has been created! You may now log in.</value>
+    <value>新しいアカウントを作成しました！今すぐログインできます。</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>アイテムの追加</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App Extension</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>自動入力サービス</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>Avoid Ambiguous Characters</value>
+    <value>あいまいな文字を省く</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>bitwarden App Extension</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
+    <value>bitwarden App Extension から新しいログイン情報を保管庫に追加するのが一番簡単です。ツール画面で App Extension の詳細を確認できます。</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>Safari などのアプリで bitwarden を使ってログイン情報を自動入力します。</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden Auto-fill Service</value>
+    <value>bitwarden 自動入力サービス</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Change Email</value>
+    <value>メールアドレスの変更</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>メールアドレスは bitwarden.com ウェブ保管庫で変更できます。ウェブサイトを開きますか？</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Change Master Password</value>
+    <value>マスターパスワードの変更</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>You can change your master password on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>マスターパスワードは bitwarden.com ウェブ保管庫で変更できます。ウェブサイトを開きますか？</value>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Close</value>
+    <value>閉じる</value>
   </data>
   <data name="ComingSoon" xml:space="preserve">
-    <value>Coming Soon!</value>
+    <value>近日公開！</value>
   </data>
   <data name="Continue" xml:space="preserve">
-    <value>Continue</value>
+    <value>続行</value>
   </data>
   <data name="Copied" xml:space="preserve">
-    <value>Copied!</value>
+    <value>コピーしました！</value>
   </data>
   <data name="CopiedPassword" xml:space="preserve">
-    <value>Copied password!</value>
+    <value>パスワードをコピーしました！</value>
   </data>
   <data name="CopiedUsername" xml:space="preserve">
-    <value>Copied username!</value>
+    <value>ユーザー名をコピーしました！</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Create Account</value>
+    <value>アカウントの作成</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Creating account...</value>
+    <value>アカウントの作成中...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>アイテムの編集</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable Automatic Syncing</value>
+    <value>自動同期を有効化</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Enter your account email address to receive your master password hint.</value>
+    <value>マスターパスワードのヒントを受信するため、アカウントのメールアドレスを入力してください。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>アプリの拡張機能を再度有効化</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Almost done!</value>
+    <value>ほぼ完了！</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>アプリの拡張機能を有効化</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>Safari では、共有アイコンを使って bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>パスワードに素早くアクセスしましょう！</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>ログインする準備が出来ました！</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>See Supported Apps</value>
+    <value>対応アプリを表示</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
+    <value>Safari やChrome などの対応アプリでログイン情報に簡単にアクセスできます。</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>Safari と Chrome では、共有アイコンを使って bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the bitwarden icon in the menu to launch the extension.</value>
+    <value>メニューの bitwarden アイコンをタップして拡張機能を起動してください。</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>bitwarden を Safari などのアプリで開くには、メニューの一番下の行の「詳細」をタップしてください。</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>Favorite</value>
+    <value>お気に入り</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingerprint</value>
+    <value>指紋認証</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Generate Password</value>
+    <value>パスワードの自動生成</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Get your master password hint</value>
+    <value>マスターパスワードのヒントを取得</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>アイテムのインポート</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Bitwarden.com ウェブ保管庫から一括でインポートできます。ウェブサイトを開きますか？</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>他のパスワード管理アプリからアイテムを一括インポートします。</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Last Sync:</value>
+    <value>前回の同期：</value>
   </data>
   <data name="Length" xml:space="preserve">
-    <value>Length</value>
+    <value>長さ</value>
   </data>
   <data name="Lock" xml:space="preserve">
-    <value>Lock</value>
+    <value>ロック</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minutes</value>
+    <value>15分</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 hour</value>
+    <value>1時間</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1分</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 hours</value>
+    <value>4時間</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
-    <value>Immediately</value>
+    <value>すぐに</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Lock Options</value>
+    <value>ロックオプション</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Logging in...</value>
+    <value>ログイン中...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Log in or create a new account to access your secure vault.</value>
+    <value>安全なデータ保管庫へアクセスするためにログインまたはアカウントを作成してください。</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Manage</value>
+    <value>管理</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Password confirmation is not correct.</value>
+    <value>パスワードの確認が正しくありません。</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>The master password is the password you use to access your vault. It is very important that you do not forget your master password. There is no way to recover the password in the event that you forget it.</value>
+    <value>マスターパスワードは、パスワード保管庫へのアクセスに使用するパスワードです。マスターパスワードを忘れないように注意してください。忘れた場合、パスワードを回復する方法はありません。</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Master Password Hint (optional)</value>
+    <value>マスターパスワードのヒント (省略可能)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>A master password hint can help you remember your password if you forget it.</value>
+    <value>マスターパスワードのヒントは、パスワードを忘れた場合に役立ちます。</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Master password must be at least 8 characters long.</value>
+    <value>マスターパスワードは、少なくとも8文字以上で設定してください。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Minimum Numbers</value>
+    <value>数字の最小数</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Minimum Special</value>
+    <value>記号の最小数</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
-    <value>More Settings</value>
+    <value>その他の設定</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main bitwarden app before you can use the extension.</value>
+    <value>この拡張機能を使用する前に、メインの bitwarden アプリにログインしてください。</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>Never</value>
+    <value>ロックしない</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>新しいアイテムを作成しました。</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>保管庫にお気に入りはありません。</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>保管庫にアイテムはありません。</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>保管庫にこのウェブサイトのアイテムはありません。タップで追加します。</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>このログイン情報はユーザー名やパスワードが設定されていません。</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>分かりました!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+    <value>デフォルトのオプションはメインの bitwarden アプリのパスワード生成ツールから設定されます。</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>オプション</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>その他</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>パスワードを生成しました。</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Password Generator</value>
+    <value>パスワード生成ツール</value>
   </data>
   <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automatically generate strong, unique passwords for your logins.</value>
+    <value>強固なユニークパスワードを自動的に生成します。</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Password Hint</value>
+    <value>パスワードのヒント</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>We've sent you an email with your master password hint.</value>
+    <value>マスターパスワードのヒントを記載したメールを送信しました。</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Are you sure you want to overwrite the current password?</value>
+    <value>現在のパスワードを上書きしてよろしいですか?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>bitwarden はプッシュ通知を使って自動的に保管庫を同期します。プッシュ通知を有効化するかどうかプロンプトが出たら OK を押してください。</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>アプリを評価</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>良いレビューで私たちを助けてください！</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+    <value>App Store は bitwarden の新しいバージョンが公開される毎に評価をリセットします。良いレビューで私たちを助けてください！</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerate Password</value>
+    <value>パスワードの再生成</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-type Master Password</value>
+    <value>マスターパスワードを再入力</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Security</value>
+    <value>セキュリティ</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
+    <value>開発状況を表示</value>
   </data>
   <data name="Select" xml:space="preserve">
-    <value>Select</value>
+    <value>選択</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>Set PIN</value>
+    <value>PIN を設定</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>アプリのロック解除に使う4桁の PIN コードを入力してください。</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>アイテム情報</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
     <value>Item updated.</value>
@@ -764,7 +764,7 @@
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tap this notification to auto-fill a login from your vault.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
@@ -786,10 +786,10 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>bitwarden 自動入力サービスから新しいログイン情報を保管庫に追加するのが一番簡単です。ツール画面で自動入力サービスの詳細を確認できます。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>自動入力</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
     <value>Do you want to auto-fill or view this login?</value>
@@ -798,168 +798,165 @@
     <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>一致するアイテム</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>一致するかも知れないアイテム</value>
   </data>
   <data name="Search" xml:space="preserve">
-    <value>Search</value>
+    <value>検索</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
     <value>You are searching for an auto-fill login for "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>保管庫の共有</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Create an organization to securely share your logins with other users.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Features</value>
+    <value>アプリの使われ方を解析することでより使いやすくなるよう開発しています。収集されるデータはすべて匿名です。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Scan When Password Field Focused</value>
+    <value>パスワードフィールドをフォーカスしたときスキャン</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life.</value>
+    <value>パスワードフィールドを選択したときだけフィールドをスキャンして、自動入力通知を表示します。バッテリー消費を抑えられるかもしれません。</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Persist Notification</value>
+    <value>通知を常に表示</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life.</value>
+    <value>自動入力通知を常に表示して、自動入力しようとした時だけフィールドをスキャンします。バッテリー消費を抑えられるかもしれません。</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
-    <value>Always Scan</value>
+    <value>常にスキャン</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting.</value>
+    <value>常に画面をスキャンして、パスワードフィールドが見つかった時だけ自動入力通知を表示します。これがデフォルト設定です。</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>{0} を開けません。</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>認証アプリ</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>認証アプリに表示された6桁の認証コードを入力してください。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>{0} に送信された6桁の認証コードを入力してください。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>ログインができません。</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>このアカウントは2段階認証が有効ですが、この端末に対応した認証プロパイダが一つも設定されていません。対応端末を使用するか、より幅広い端末に対応した認証プロパイダを追加してください。</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>リカバリーコード</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>情報を保存する</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>確認コードをメールに再送</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>2段階認証オプション</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>他の2段階認証方法を使用</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>確認メールを送信できませんでした。やり直してください。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>確認メールを送信しました。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+    <value>端末の NFC ポートに YubiKey NEO を近づけたまま続行してください。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>YubiKey NEO セキュリティキー</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>添付ファイルを追加</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>添付ファイル</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>ファイルをダウンロードできません。</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>お使いの端末ではこの種類のファイルを開けません。</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>Downloading...</value>
+    <value>ダウンロード中...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>この添付ファイルのサイズは{0}です。本当に端末にダウンロードしますか？</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Authenticator Key (TOTP)</value>
+    <value>認証キー (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>Verification Code (TOTP)</value>
+    <value>認証コード (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>認証キーを追加しました。</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>認証キーを読み取れません。</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>自動的に読み取ります。</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>カメラで QR コードを写してください。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
-    <value>Scan QR Code</value>
+    <value>QR コードを読み取る</value>
   </data>
   <data name="Camera" xml:space="preserve">
-    <value>Camera</value>
+    <value>カメラ</value>
   </data>
   <data name="Photos" xml:space="preserve">
-    <value>Photos</value>
+    <value>写真</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP をコピーしました！</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>TOTP のコピー</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>ログイン情報に認証キーが添付されている場合、自動入力した時に認証コードが自動的にクリップボードへコピーされます。</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>認証コードの自動コピーを無効化</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>A premium membership is required to use this feature.</value>
+    <value>この機能を使うにはプレミアム会員になってください。</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>添付ファイルを追加しました</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
     <value>Attachment deleted</value>
@@ -1117,22 +1114,22 @@
     <value>July</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>6月</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>姓</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>免許証番号</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>3月</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>5月</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>ミドルネーム</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Mr</value>
@@ -1144,45 +1141,81 @@
     <value>Ms</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>11月</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>10月</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>パスポート番号</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>電話番号</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>9月</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>社会保障番号</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>都道府県</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>敬称</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>郵便番号</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>住所</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>有効期限</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>ウェブサイトアイコンの無効化</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>保管庫のアイテム毎にウェブサイトのアイコンを表示します。</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>アイコンのサーバー URL</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>
