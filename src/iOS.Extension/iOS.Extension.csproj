@@ -371,6 +371,9 @@
     <BundleResource Include="Resources\fingerprint.png" />
     <BundleResource Include="Resources\fingerprint%402x.png" />
     <BundleResource Include="Resources\fingerprint%403x.png" />
+    <BundleResource Include="Resources\smile.png" />
+    <BundleResource Include="Resources\smile%402x.png" />
+    <BundleResource Include="Resources\smile%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">

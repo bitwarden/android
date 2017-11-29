@@ -89,7 +89,8 @@ namespace Bit.App.Pages
             }
             _lastAction = DateTime.UtcNow;
 
-            var fingerprintRequest = new AuthenticationRequestConfiguration(AppResources.FingerprintDirection)
+            var fingerprintRequest = new AuthenticationRequestConfiguration(
+                _deviceInfoService.HasFaceIdSupport ? AppResources.FaceIDDirection : AppResources.FingerprintDirection)
             {
                 AllowAlternativeAuthentication = true,
                 CancelTitle = AppResources.Cancel,
