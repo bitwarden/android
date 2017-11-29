@@ -14,7 +14,6 @@ namespace Bit.UWP
             InitializeComponent();
             LoadApplication(new Bit.App.App(
                 null,
-                false,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
                 Resolver.Resolve<IUserDialogs>(),

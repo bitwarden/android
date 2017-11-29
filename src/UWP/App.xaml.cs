@@ -7,7 +7,6 @@ using FFImageLoading.Forms.WinUWP;
 using Plugin.Connectivity;
 using Plugin.Fingerprint;
 using Plugin.Settings.Abstractions;
-using PushNotification.Plugin;
 using SimpleInjector;
 using System;
 using Windows.ApplicationModel;

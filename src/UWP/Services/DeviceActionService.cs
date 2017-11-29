@@ -1,4 +1,5 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Models.Page;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -55,11 +56,6 @@ namespace Bit.UWP.Services
             }
         }
 
-        public void OpenAutofillSettings()
-        {
-            throw new NotImplementedException();
-        }
-
         public Task SelectFileAsync()
         {
             var picker = new Windows.Storage.Pickers.FileOpenPicker
@@ -84,6 +80,46 @@ namespace Bit.UWP.Services
             var buffer = await FileIO.ReadBufferAsync(file);
             MessagingCenter.Send(Application.Current, "SelectFileResult",
                 new Tuple<byte[], string>(buffer.ToArray(), file.Name));
+        }
+
+        public void Autofill(VaultListPageModel.Cipher cipher)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseAutofill()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Background()
+        {
+            // do nothing
+        }
+
+        public void RateApp()
+        {
+            // do nothing
+        }
+
+        public void DismissKeyboard()
+        {
+            // do nothing
+        }
+
+        public void LaunchApp(string appName)
+        {
+            // do nothing
+        }
+
+        public void OpenAccessibilitySettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenAutofillSettings()
+        {
+            throw new NotImplementedException();
         }
     }
 }
