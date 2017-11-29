@@ -14,6 +14,7 @@ namespace Bit.iOS.Extension
     {
         private IAppSettingsService _appSettingsService;
         private IFingerprint _fingerprint;
+        private IDeviceInfoService _deviceInfo;
 
         public LockFingerprintViewController(IntPtr handle) : base(handle)
         { }
@@ -32,17 +33,22 @@ namespace Bit.iOS.Extension
         {
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
+            _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
 
-            NavItem.Title = AppResources.VerifyFingerprint;
+            NavItem.Title = _deviceInfo.HasFaceIdSupport ? AppResources.VerifyFaceID : AppResources.VerifyFingerprint;
             CancelButton.Title = AppResources.Cancel;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
-            UseButton.SetTitle(AppResources.UseFingerprintToUnlock, UIControlState.Normal);
+            UseButton.SetTitle(_deviceInfo.HasFaceIdSupport ? AppResources.UseFaceIDToUnlock :
+                AppResources.UseFingerprintToUnlock, UIControlState.Normal);
             var descriptor = UIFontDescriptor.PreferredBody;
             UseButton.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
             UseButton.BackgroundColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
             UseButton.TintColor = UIColor.White;
             UseButton.TouchUpInside += UseButton_TouchUpInside;
+
+            FingerprintButton.SetImage(new UIImage(_deviceInfo.HasFaceIdSupport ? "smile.png" : "fingerprint.png"),
+                UIControlState.Normal);
 
             base.ViewDidLoad();
         }
@@ -70,7 +76,8 @@ namespace Bit.iOS.Extension
 
         public async Task CheckFingerprintAsync()
         {
-            var fingerprintRequest = new AuthenticationRequestConfiguration(AppResources.FingerprintDirection)
+            var fingerprintRequest = new AuthenticationRequestConfiguration(
+                _deviceInfo.HasFaceIdSupport ? AppResources.FaceIDDirection : AppResources.FingerprintDirection)
             {
                 AllowAlternativeAuthentication = true,
                 CancelTitle = AppResources.Cancel,
