@@ -93,7 +93,7 @@ namespace Bit.App.Pages
 
             Search = new SearchBar
             {
-                Placeholder = AppResources.SearchVault,
+                Placeholder = AppResources.Search,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Button)),
                 CancelButtonColor = Color.FromHex("3c8dbc")
             };

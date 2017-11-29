@@ -2492,7 +2492,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search vault.
+        ///   Looks up a localized string similar to Search Vault.
         /// </summary>
         public static string SearchVault {
             get {
