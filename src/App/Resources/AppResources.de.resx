@@ -128,7 +128,7 @@
     <value>Ordner hinzufügen</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Neuer Eintrag</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Eintrag wurde gelöscht.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,13 +397,13 @@
     <value>Ihr neue Konto wurde erstellt! Sie können sich jetzt anmelden.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Neuer Eintrag</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App Erweiterung</value>
   </data>
-  <data name="AutofillDescription" xml:space="preserve">
-    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</value>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Auto-Ausfüllen Funktion</value>
@@ -423,8 +423,8 @@
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>bitwarden Auto-Ausfüllen Funktion</value>
   </data>
-  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-Mail Adresse ändern</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Eintrag bearbeiten</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Automatische Synchronisierung aktivieren</value>
@@ -519,13 +519,13 @@
     <value>Hinweis zum Masterpasswort zusenden</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Einträge importieren</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Du kannst deine Logins über den bitwarden.com Web-Tresor importieren. Möchtest du die Seite jetzt öffnen?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Importieren Sie all Ihre Zugangsdaten schnell und einfach von anderen Passwortmanagern.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Zuletzt synchronisiert:</value>
@@ -597,16 +597,16 @@
     <value>Niemals</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Eintrag erstellt.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Es befinden sich keine Favoriten in Ihrem Tresor.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Keine Einträge in deinem Tresor.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Es befinden sich keine Zugangsdaten für diese Webseite in deinem Tresor. Zum Hinzufügen tippen.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Diese Zugangsdaten sind noch nicht konfiguriert.</value>
@@ -622,7 +622,7 @@
     <value>Optionen</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>Sonstige</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
     <value>Passwort generiert.</value>
@@ -680,10 +680,10 @@
     <value>Geben Sie Ihre 4-stellige PIN ein, um die App zu entsperren.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Eintrags-Information</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Eintrag aktualisiert.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Wird übermittelt...</value>
@@ -726,19 +726,19 @@
     <value>Bestätigungscode</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Eintrag anzeigen</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden Web-Tresor</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Manage your items from any web browser with the bitwarden web vault.</value>
+    <value>Verwalte deine Zugangsdaten in jedem Browser mit dem bitwarden Web-Tresor.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Authentifizierungs-App verloren?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Einträge</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,21 +751,21 @@
     <value>Übersetzungen</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Zugangsdaten für {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Es befinden sich keine Zugangsdaten für {0} in Ihrem Tresor.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>Sie können die bitwarden Auto-Ausfüllen Benachrichtigung antippen, um Ihre Zugangsdaten automatisch einfügen zu lassen.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill an item from your vault.</value>
+    <value>Tippen Sie auf diese Benachrichtigung um automatisch Zugangsdaten aus Ihrem Tresor einzufügen.</value>
   </data>
-  <data name="BitwardenAutofillServiceOpenSettings" xml:space="preserve">
-    <value>Einstellungen für Bedienungshilfen öffnen</value>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>Open Accessibility Settings</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Tippen Sie auf "bitwarden" unter "Heruntergeladene Dienste" in den Android Bedienungshilfen.</value>
@@ -792,10 +792,10 @@
     <value>Auto-Ausfüllen</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this item?</value>
+    <value>Möchten Sie diese Zugangsdaten automatisch einfügen oder ansehen?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>Sind Sie sicher, dass Sie die Zugangsdaten einfügen möchten? Sie stimmen nicht komplett mit "{0}" überein.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Matching Items</value>
@@ -817,9 +817,6 @@
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Wir verwenden Analytics um zu erfahren, wie die App genutzt wird, sodass wir sie verbessern können. Die Sammlung der Daten geschieht völlig anonym.</value>
-  </data>
-  <data name="Features" xml:space="preserve">
-    <value>Funktionen</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scan bei ausgewähltem Passwortfeld durchführen</value>
@@ -1184,5 +1181,41 @@
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons Server URL</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>Vault is locked</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>Go to my vault</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>Collections</value>
+  </data>
+  <data name="DefaultPageVault" xml:space="preserve">
+    <value>Default To "My Vault"</value>
+  </data>
+  <data name="DefaultPageVaultDescription" xml:space="preserve">
+    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>There are no items in this collection.</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>There are no items in this folder.</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>Auto-fill Accessibility Service</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>Open Autofill Settings</value>
   </data>
 </root>
