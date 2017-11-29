@@ -2,7 +2,7 @@
 using Bit.App.Abstractions;
 using Foundation;
 
-namespace Bit.iOS.Services
+namespace Bit.iOS.Core.Services
 {
     public class AppInfoService : IAppInfoService
     {

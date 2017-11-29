@@ -280,17 +280,18 @@ namespace Bit.iOS.Extension
             container.RegisterSingleton<ICollectionService, CollectionService>();
             container.RegisterSingleton<ICipherService, CipherService>();
             container.RegisterSingleton<ISyncService, SyncService>();
-            container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
+            container.RegisterSingleton<IDeviceActionService, NoopDeviceActionService>();
             container.RegisterSingleton<IAppIdService, AppIdService>();
+            container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
             container.RegisterSingleton<ILockService, LockService>();
+            container.RegisterSingleton<IAppInfoService, AppInfoService>();
             container.RegisterSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();
+            container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
             container.RegisterSingleton<ILocalizeService, LocalizeService>();
             container.RegisterSingleton<ILogService, LogService>();
             container.RegisterSingleton<IHttpService, HttpService>();
             container.RegisterSingleton<ITokenService, TokenService>();
             container.RegisterSingleton<ISettingsService, SettingsService>();
-            container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
-            container.RegisterSingleton<IDeviceActionService, NoopDeviceActionService>();
             container.RegisterSingleton<IAppSettingsService, AppSettingsService>();
 
             // Repositories
@@ -299,9 +300,12 @@ namespace Bit.iOS.Extension
             container.RegisterSingleton<ICipherRepository, CipherRepository>();
             container.RegisterSingleton<IAttachmentRepository, AttachmentRepository>();
             container.RegisterSingleton<IConnectApiRepository, ConnectApiRepository>();
-            container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
+            container.RegisterSingleton<IDeviceApiRepository, DeviceApiRepository>();
             container.RegisterSingleton<IAccountsApiRepository, AccountsApiRepository>();
             container.RegisterSingleton<ICipherApiRepository, CipherApiRepository>();
+            container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
+            container.RegisterSingleton<ISettingsApiRepository, SettingsApiRepository>();
+            container.RegisterSingleton<ITwoFactorApiRepository, TwoFactorApiRepository>();
             container.RegisterSingleton<ISyncApiRepository, SyncApiRepository>();
             container.RegisterSingleton<ICollectionRepository, CollectionRepository>();
             container.RegisterSingleton<ICipherCollectionRepository, CipherCollectionRepository>();
