@@ -1322,15 +1322,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Features.
-        /// </summary>
-        public static string Features {
-            get {
-                return ResourceManager.GetString("Features", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Feature Unavailable.
         /// </summary>
         public static string FeatureUnavailable {

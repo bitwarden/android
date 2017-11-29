@@ -9,13 +9,13 @@ using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
-    public class SettingsFeaturesPage : ExtendedContentPage
+    public class SettingsOptionsPage : ExtendedContentPage
     {
         private readonly ISettings _settings;
         private readonly IAppSettingsService _appSettings;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
-        public SettingsFeaturesPage()
+        public SettingsOptionsPage()
         {
             _settings = Resolver.Resolve<ISettings>();
             _appSettings = Resolver.Resolve<IAppSettingsService>();
@@ -231,7 +231,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }
 
-            Title = AppResources.Features;
+            Title = AppResources.Options;
             Content = scrollView;
         }
 

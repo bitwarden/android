@@ -51,7 +51,7 @@ namespace Bit.App.Pages
         private ExtendedTextCell AboutCell { get; set; }
         private ExtendedTextCell HelpCell { get; set; }
         private ExtendedTextCell RateCell { get; set; }
-        private ExtendedTextCell FeaturesCell { get; set; }
+        private ExtendedTextCell OptionsCell { get; set; }
         private LongDetailViewCell RateCellLong { get; set; }
         private ExtendedTableView Table { get; set; }
 
@@ -143,15 +143,15 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
-            FeaturesCell = new ExtendedTextCell
+            OptionsCell = new ExtendedTextCell
             {
-                Text = AppResources.Features,
+                Text = AppResources.Options,
                 ShowDisclousure = true
             };
 
             var otherSection = new TableSection(AppResources.Other)
             {
-                FeaturesCell,
+                OptionsCell,
                 AboutCell,
                 HelpCell
             };
@@ -218,7 +218,7 @@ namespace Bit.App.Pages
             LogOutCell.Tapped += LogOutCell_Tapped;
             AboutCell.Tapped += AboutCell_Tapped;
             HelpCell.Tapped += HelpCell_Tapped;
-            FeaturesCell.Tapped += FeaturesCell_Tapped;
+            OptionsCell.Tapped += OptionsCell_Tapped;
 
             if(RateCellLong != null)
             {
@@ -252,7 +252,7 @@ namespace Bit.App.Pages
             LogOutCell.Tapped -= LogOutCell_Tapped;
             AboutCell.Tapped -= AboutCell_Tapped;
             HelpCell.Tapped -= HelpCell_Tapped;
-            FeaturesCell.Tapped -= FeaturesCell_Tapped;
+            OptionsCell.Tapped -= OptionsCell_Tapped;
 
             if(RateCellLong != null)
             {
@@ -431,9 +431,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private void FeaturesCell_Tapped(object sender, EventArgs e)
+        private void OptionsCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new ExtendedNavigationPage(new SettingsFeaturesPage()));
+            Navigation.PushModalAsync(new ExtendedNavigationPage(new SettingsOptionsPage()));
         }
 
         private void FoldersCell_Tapped(object sender, EventArgs e)
