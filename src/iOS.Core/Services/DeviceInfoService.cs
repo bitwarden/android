@@ -37,8 +37,12 @@ namespace Bit.iOS.Core.Services
                 }
 
                 var context = new LAContext();
-                return context.CanEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, out NSError e) &&
-                    context.BiometryType == LABiometryType.TypeFaceId;
+                if(!context.CanEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, out NSError e))
+                {
+                    return false;
+                }
+
+                return context.BiometryType == LABiometryType.TypeFaceId;
             }
         }
     }
