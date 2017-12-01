@@ -572,7 +572,7 @@ namespace Bit.App.Pages
 
         private void InitSave()
         {
-            var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
+            var saveToolBarItem = new ToolbarItem(AppResources.Save, "folder.png", async () =>
             {
                 if(_lastAction.LastActionWasRecent())
                 {

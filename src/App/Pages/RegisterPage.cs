@@ -117,7 +117,7 @@ namespace Bit.App.Pages
                 Content = StackLayout
             };
 
-            var loginToolbarItem = new ToolbarItem(AppResources.Submit, null, async () =>
+            var loginToolbarItem = new ToolbarItem(AppResources.Submit, "ion_chevron_right.png", async () =>
             {
                 await Register();
             }, ToolbarItemOrder.Default, 0);

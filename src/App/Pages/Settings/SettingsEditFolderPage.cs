@@ -73,7 +73,7 @@ namespace Bit.App.Pages
                 mainTable.EstimatedRowHeight = 70;
             }
 
-            var saveToolBarItem = new ToolbarItem(AppResources.Save, null, async () =>
+            var saveToolBarItem = new ToolbarItem(AppResources.Save, "folder.png", async () =>
             {
                 if(_lastAction.LastActionWasRecent())
                 {

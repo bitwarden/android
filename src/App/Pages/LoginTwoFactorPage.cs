@@ -114,7 +114,7 @@ namespace Bit.App.Pages
             else if(_providerType.Value == TwoFactorProviderType.Authenticator ||
                 _providerType.Value == TwoFactorProviderType.Email)
             {
-                var continueToolbarItem = new ToolbarItem(AppResources.Continue, null, async () =>
+                var continueToolbarItem = new ToolbarItem(AppResources.Continue, "login.png", async () =>
                 {
                     var token = TokenCell?.Entry.Text.Trim().Replace(" ", "");
                     await LogInAsync(token);
