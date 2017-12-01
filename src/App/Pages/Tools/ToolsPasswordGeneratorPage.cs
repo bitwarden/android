@@ -112,7 +112,7 @@ namespace Bit.App.Pages
 
             if(_passwordValueAction != null)
             {
-                var selectToolBarItem = new ToolbarItem(AppResources.Select, null, async () =>
+                var selectToolBarItem = new ToolbarItem(AppResources.Select, "ion_chevron_right.png", async () =>
                 {
                     if(_fromAutofill)
                     {
