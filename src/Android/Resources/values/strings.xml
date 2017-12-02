@@ -1,9 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <string name="AutoFillServiceSummary">
+    bitwarden uses this accessibility service to aid in filling username and password fields in other apps and on the web.
+  </string>
   <string name="AutoFillServiceDescription">
-    To allow bitwarden to auto-fill into other Android apps and on the web through your browser, enable the bitwarden
-    accessibility service by tapping the toggle switch above, then press OK on the confirmation pop-up. You can then press
-    the back button twice to return to the main bitwarden app.
+    It can be difficult for users (especially those with disabilities) to switch back and forth between apps to copy and paste
+    username and password data from your bitwarden vault. The use of this accessibility service allows
+    bitwarden to read and detect input fields on your device's screen. Whenever bitwarden detects a passwords field on the
+    screen a notification will appear that allows you to easily access your bitwarden vault and select the correct
+    login information for those fields.
+    Once you select the login information from your vault, bitwarden will auto-fill the data into the app or website login
+    fields.
   </string>
   <string name="MyVault">
     My Vault
