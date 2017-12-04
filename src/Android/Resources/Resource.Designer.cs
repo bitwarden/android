@@ -3768,14 +3768,17 @@ namespace Bit.Android
 			// aapt resource value: 0x7f080047
 			public const int ApplicationName = 2131230791;
 			
+			// aapt resource value: 0x7f08009a
+			public const int AutoFillServiceDescription = 2131230874;
+			
 			// aapt resource value: 0x7f080099
-			public const int AutoFillServiceDescription = 2131230873;
+			public const int AutoFillServiceSummary = 2131230873;
 			
 			// aapt resource value: 0x7f080046
 			public const int Hello = 2131230790;
 			
-			// aapt resource value: 0x7f08009a
-			public const int MyVault = 2131230874;
+			// aapt resource value: 0x7f08009b
+			public const int MyVault = 2131230875;
 			
 			// aapt resource value: 0x7f08002e
 			public const int abc_action_bar_home_description = 2131230766;
