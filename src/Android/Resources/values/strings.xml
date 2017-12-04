@@ -4,11 +4,11 @@
     Use this accessibility service to aid in filling usernames and passwords in other apps and on the web.
   </string>
   <string name="AutoFillServiceDescription">
-    It can be difficult for users (especially those with disabilities) to switch back and forth between apps to copy/paste
+    It can be difficult for users (especially those with disabilities) to switch between apps and copy/paste
     username and password information from their bitwarden vault.\n\nThe use of this accessibility service allows bitwarden
-    to read and detect input fields on your device\'s screen. Whenever bitwarden detects a password field on the screen
+    to detect and read input fields on your device\'s screen. Whenever bitwarden detects a password field on the screen
     a notification will appear that allows you to easily access your bitwarden vault and automatically fill (auto-fill)
-    the correct login information for those fields.
+    the correct login information into the necessary fields.
   </string>
   <string name="MyVault">
     My Vault

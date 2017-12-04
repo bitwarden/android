@@ -122,7 +122,7 @@ namespace Bit.App.Pages
             ScrollView = new ScrollView { Content = DisabledStackLayout };
 
             UpdateEnabled();
-            Device.StartTimer(new TimeSpan(0, 0, 3), () =>
+            Device.StartTimer(new TimeSpan(0, 0, 2), () =>
             {
                 if(_pageDisappeared)
                 {
