@@ -120,10 +120,17 @@ namespace Bit.App.Pages
             };
 
             ScrollView = new ScrollView { Content = DisabledStackLayout };
+            Title = AppResources.AutofillService;
+            Content = ScrollView;
+        }
 
+        protected override void OnAppearing()
+        {
+            _pageDisappeared = false;
             UpdateEnabled();
             Device.StartTimer(new TimeSpan(0, 0, 2), () =>
             {
+                System.Diagnostics.Debug.WriteLine("Check timer on autofill");
                 if(_pageDisappeared)
                 {
                     return false;
@@ -133,13 +140,6 @@ namespace Bit.App.Pages
                 return true;
             });
 
-            Title = AppResources.AutofillService;
-            Content = ScrollView;
-        }
-
-        protected override void OnAppearing()
-        {
-            _pageDisappeared = false;
             base.OnAppearing();
         }
 

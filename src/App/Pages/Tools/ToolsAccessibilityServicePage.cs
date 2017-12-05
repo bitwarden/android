@@ -169,19 +169,6 @@ namespace Bit.App.Pages
             };
 
             ScrollView = new ScrollView { Content = DisabledStackLayout };
-
-            UpdateEnabled();
-            Device.StartTimer(new TimeSpan(0, 0, 3), () =>
-            {
-                if(_pageDisappeared)
-                {
-                    return false;
-                }
-                
-                UpdateEnabled();
-                return true;
-            });
-
             Title = AppResources.AutofillAccessibilityService;
             Content = ScrollView;
         }
@@ -189,6 +176,19 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             _pageDisappeared = false;
+            UpdateEnabled();
+            Device.StartTimer(new TimeSpan(0, 0, 3), () =>
+            {
+                System.Diagnostics.Debug.WriteLine("Check timer on accessibility");
+                if(_pageDisappeared)
+                {
+                    return false;
+                }
+
+                UpdateEnabled();
+                return true;
+            });
+
             base.OnAppearing();
         }
 
@@ -200,7 +200,8 @@ namespace Bit.App.Pages
 
         private void UpdateEnabled()
         {
-            ScrollView.Content = _appInfoService.AutofillAccessibilityServiceEnabled ? EnabledStackLayout : DisabledStackLayout;
+            ScrollView.Content = _appInfoService.AutofillAccessibilityServiceEnabled ?
+                EnabledStackLayout : DisabledStackLayout;
         }
 
         private Label BuildServiceLabel()

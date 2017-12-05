@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <string name="AutoFillServiceSummary">
-    Assist in filling username and password fields in other apps and on the web.
+    Assist with filling username and password fields in other apps and on the web.
   </string>
   <string name="AutoFillServiceDescription">
     It can be difficult for users (especially those with disabilities) to switch between apps and copy/paste
