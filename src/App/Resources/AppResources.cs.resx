@@ -403,7 +403,7 @@
     <value>Rozšíření aplikace</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů v aplikacích a na webových stránkách.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Služba automatického vyplnění</value>
@@ -424,7 +424,7 @@
     <value>Služba automatického vyplnění</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Změnit email</value>
@@ -765,7 +765,7 @@
     <value>Klikněte pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Otevřít nastavení usnadnění</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. V menu v nastavení Usnadnění klikněte na "bitwarden" pod nadpisem Služby.</value>
@@ -1183,39 +1183,52 @@
     <value>URL serveru ikonek</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Automatické vyplnění s aplikací bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Trezor je zamknutý</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Otevřít trezor</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Kolekce</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Výchozí stránka "Můj trezor"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Při otevření aplikace otevřít výchozí stránku "Můj trezor" místo "Oblíbené".</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>V této kolekci nejsou žádné položky.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>V této složce nejsou žádné položky.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Služba automatického vyplňování</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
+    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajům, karet nebo identit v ostatních aplikacích.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Otevřít nastavení automatického vyplňování</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>

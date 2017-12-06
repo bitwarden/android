@@ -403,7 +403,7 @@
     <value>Extensão da aplicação</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Utilize o serviço de acessibilidade para auto-preencher as suas credencias entre aplicações e a web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Serviço de auto-preenchimento</value>
@@ -424,7 +424,7 @@
     <value>Serviço de auto-preenchimento bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Utilize o serviço de acessibilidade para auto-preencher as suas credencias.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Alterar email</value>
@@ -603,7 +603,7 @@
     <value>Não existem favoritos no seu cofre.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Não existem itens no seus cofre.</value>
+    <value>Não existem itens no seu cofre.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
     <value>Não existem itens no seu cofre para este website. Toque para adicionar um.</value>
@@ -732,7 +732,7 @@
     <value>Cofre web bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gira as suas credenciais a partir de qualquer navegador web com o cofre web bitwarden.</value>
+    <value>Gira os seus itens a partir de qualquer navegador web com o cofre web bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Perdeu a aplicação do autenticador?</value>
@@ -762,10 +762,10 @@
     <value>Quando vê uma notificação de auto-preenchimento do bitwarden, pode toca na mesma para iniciar o serviço de auto-preenchimento.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Toque nesta notificação para auto-preencher uma credencial do seu cofre.</value>
+    <value>Toque nesta notificação para auto-preencher um item do seu cofre.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Abrir definições de acessibilidade</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. No ecrã de Definições de Acessibilidade do Android, toque em "bitwarden" debaixo do cabeçalho Serviços.</value>
@@ -792,10 +792,10 @@
     <value>Auto-preencher</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Pretende auto-preencher ou ver esta credencial?</value>
+    <value>Pretende auto-preencher ou ver este item?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Tem a certeza de que pretende auto-preencher esta credencial? Não é uma correspondência completa para "{0}".</value>
+    <value>Tem a certeza de que pretende auto-preencher este item? Não é uma correspondência completa para "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Itens correspondentes</value>
@@ -807,13 +807,13 @@
     <value>Pesquisar</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Está a pesquisar por uma credencial de auto-preenchimento para "{0}".</value>
+    <value>Está a pesquisar por um item de auto-preenchimento para "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Partilhe o seu cofre</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Crie uma organização para partilhar as suas credenciais em segurança com outros utilizadores.</value>
+    <value>Crie uma organização para partilhar os seus itens em segurança com outros utilizadores.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Utilizamos analítica para aprender melhor como a aplicação está a ser utilizada para que possamos torná-la melhor. Toda a recolha de dados é completamente anónima.</value>
@@ -1021,7 +1021,7 @@
     <value>URL do servidor do cofre web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Toque nesta notificação para ver itens do seu cofre.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Campos personalizados</value>
@@ -1054,19 +1054,19 @@
     <value>Identidade</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Credencial</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Nota segura</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Morada 1</value>
+    <value>Endereço 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Morada 2</value>
+    <value>Endereço 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Morada 3</value>
+    <value>Endereço 3</value>
   </data>
   <data name="April" xml:space="preserve">
     <value>Abril</value>
@@ -1096,16 +1096,16 @@
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Mês da validade</value>
+    <value>Mês de expiração</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Ano da validade</value>
+    <value>Ano de expiração</value>
   </data>
   <data name="February" xml:space="preserve">
     <value>Fevereiro</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>Nome Próprio</value>
+    <value>Primeiro nome</value>
   </data>
   <data name="January" xml:space="preserve">
     <value>Janeiro</value>
@@ -1117,7 +1117,7 @@
     <value>Junho</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Apelido</value>
+    <value>Último nome</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
     <value>Número da licença</value>
@@ -1135,10 +1135,10 @@
     <value>Sr</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Sr.ª</value>
+    <value>Sra</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Sr.ª</value>
+    <value>Sra</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Novembro</value>
@@ -1168,54 +1168,67 @@
     <value>Código postal</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Morada</value>
+    <value>Endereço</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Data de validade</value>
+    <value>Expiração</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
     <value>Desativar ícones de websites</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Os ícones em websites fornecem uma imagem identificável junto a cada item de login no seu cofre.</value>
+    <value>Os ícones de websites providenciam uma imagem reconhecível ao lado de cada item de credencial no seu cofre.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL do servidor de ícones</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Auto-preencher com o bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>O cofre está bloqueado</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Ir para o meu cofre</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Coleções</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Predefinir para "Meu cofre"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Predefina para a página "Meu cofre" em vez de "Favoritos" sempre que eu abrir a aplicação.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Não existem itens nesta coleção.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Não existem itens nesta pasta.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Serviço de acessibilidade de auto-preenchimento</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>O serviço de auto-preenchimento do bitwarden utiliza a Android Autofill Framework para assistir a preencher credenciais, cartões de crédito, e informação de identidade noutras aplicações do seu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilize o serviço de acessibilidade para auto-preencher as suas credencias.</value>
+    <value>Utilize o serviço de auto-preenchimento para preencher credenciais, cartões de crédito, e informação de identidade noutras aplicações.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Abrir definições de auto-preenchimento</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>

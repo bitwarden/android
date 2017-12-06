@@ -403,7 +403,7 @@
     <value>Apptillägg</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Använd bitwardens tillgänglighetstjänst för att automatiskt fylla i dina inloggningar i applikationer och på webben.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Hjälpmedelsservice för automatisk ifyllnad</value>
@@ -424,7 +424,7 @@
     <value>bitwardens hjälpmedelsservice för automatisk ifyllnad</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Använd bitwardens tillgänglighetstjänst för att automatiskt fylla i din inloggningsinformation.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Ändra e-postadress</value>
@@ -765,7 +765,7 @@
     <value>Tryck på den här aviseringen för att automatiskt fylla i en inloggning från ditt valv.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Öppna tillgänglighetsinställningar</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. I Androids tillgänglighetsinställningar trycker du på "bitwarden" under tjänster.</value>
@@ -1183,39 +1183,52 @@
     <value>Ikoner Server-URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Fyll i automatiskt med bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Valvet är låst</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Gå till mitt valv</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Samlingar</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Använd "mitt valv" som standard</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Ändra standardfliken till "mitt valv" istället för "favoriter" när jag öppnar appen.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Det finns inga objekt i samlingen.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Det finns inga objekt i den här mappen.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Tillgänglighetstjänst för automatisk ifyllnad</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Bitwardens tillgänglighetstjänst för automatisk ifyllnad använder Android Autofill Framework för att assistera med att fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar på din enhet.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Använd bitwardens hjälpmedelsservice för att automatiskt fylla i din inloggningsinformation.</value>
+    <value>Använd bitwardens tillgänglighetstjänst för att automatiskt fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Öppna inställningar för automatisk ifyllnad</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>

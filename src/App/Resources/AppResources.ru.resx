@@ -403,7 +403,7 @@
     <value>Расширение</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Используйте службу автозаполнения bitwarden для автоматического входа в приложения и на сайты.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Служба автозаполнения</value>
@@ -424,7 +424,7 @@
     <value>Служба автозаполнения bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Используйте службу автозаполнения bitwarden для автоматического входа.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Изменить email</value>
@@ -662,7 +662,7 @@
     <value>Введите мастер-пароль повторно</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Поиск</value>
+    <value>Поиск в хранилище</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Безопасность</value>
@@ -765,7 +765,7 @@
     <value>Коснитесь этого уведомления для автоматического заполнения.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Настройки специальных возможностей</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. На экране настроек специальных возможностей Android в разделе Службы коснитесь bitwarden.</value>
@@ -1183,39 +1183,52 @@
     <value>URL-адрес сервера значков</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Автозаполнение с помощью bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Хранилище заблокировано</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Перейти в мое хранилище</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Коллекции</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>По умолчанию "Мое хранилище"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Открывать "Мое хранилище" вместо "Избранного" при запуске приложения.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>В этой коллекции нет элементов.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>В этой папке нет элементов.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Служба автозаполнения</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Служба автозаполнения bitwarden использует Android Autofill Framework для заполнения логинов, номеров карт и личной информации в других приложениях на устройстве.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Используйте службу автозаполнения bitwarden для автоматического входа.</value>
+    <value>Используйте службу автозаполнения bitwarden для заполнения логинов, номеров карт и личной информации в других приложениях.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Открыть настройки автозаполнения</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>

@@ -403,7 +403,7 @@
     <value>Ekstensi Aplikasi</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda di seluruh aplikasi dan web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Layanan Pengisian Otomatis</value>
@@ -424,7 +424,7 @@
     <value>Layanan Pengisian Otomatis bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Ubah Email</value>
@@ -662,7 +662,7 @@
     <value>Ketik Ulang Sandi Utama</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Cari brankas</value>
+    <value>Cari Brankas</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Keamanan</value>
@@ -765,7 +765,7 @@
     <value>Ketuk notifikasi ini untuk mengisi info masuk secara otomatis dari brankas Anda.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Buka Setelan Aksesibilitas</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Pada layar Setelan Aksesibilitas Android, sentuh "bitwarden" di bawah Layanan.</value>
@@ -1183,39 +1183,52 @@
     <value>URL Server Ikon</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Isi otomatis dengan bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Brankas terkunci</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Buka brankas saya</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Koleksi</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Disetel ke "Brankas Saya"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
     <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Tidak ada item di koleksi ini.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Tidak ada item di folder ini.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Layanan Aksesibilitas Isi Otomatis</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Layanan pengisian otomatis bitwarden menggunakan Kerangka Kerja Pengisian Otomatis Android untuk membantu dalam mengisi info masuk, kartu kredit, dan informasi identitas ke aplikasi lain di perangkat Anda.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda.</value>
+    <value>Gunakan layanan pengisian otomatis bitwarden untuk mengisi info masuk, kartu kredit, dan informasi identitas ke aplikasi lainnya.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Buka Setelan Isi Otomatis</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>

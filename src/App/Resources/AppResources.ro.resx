@@ -403,7 +403,7 @@
     <value>Extensie aplicaţie</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Utilizați serviciul de accesibilitate bitwarden pentru a completa automat datele de autentificare între aplicații și pagini web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Serviciul completare automată</value>
@@ -424,7 +424,7 @@
     <value>serviciul de completare automată bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Utilizați serviciul bitwarden pentru a completa automat datele de autentificare.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Schimbați adresa de e-mail</value>
@@ -662,7 +662,7 @@
     <value>Reintroduceţi parola principală</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Căutaţi în seif</value>
+    <value>Căutare în seif</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Securitate</value>
@@ -765,7 +765,7 @@
     <value>Atingeți această notificare pentru a completa automat o autentificare din seiful dvs.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Deschidere setări de accesibilitate</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. În ecranul Accesibilitate din setările Android, atingeți "bitwarden" sub titlul Servicii.</value>
@@ -1183,39 +1183,52 @@
     <value>URL server de pictograme</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Completare automată cu bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Seiful este blocat</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Deschidere seif personal</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Colecții</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Implicit pentru "Seiful meu"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Deschidere implicită a paginii "Seiful meu" în loc de "Favorite" ori de câte ori pornește aplicația.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Nu există elemente în colecție.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Nu există imagini în acest dosar.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Serviciul de accesibilitate pentru completare automată</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Serviciul de completare automată bitwarden folosește Android Autofill Framework pentru a asista completarea informațiilor de autentificare și a celor asociate cardurilor și identităților în alte aplicații de pe dispozitivul dvs.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utilizați serviciul de accesibilitate bitwarden pentru a completa automat datele de conectare.</value>
+    <value>Serviciul de completare automată bitwarden se folosește pentru a completa informațiile de autentificare și cele asociate cardurilor și identităților în alte aplicații.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Setări de completare automată</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>
