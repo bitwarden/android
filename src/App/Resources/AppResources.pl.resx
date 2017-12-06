@@ -403,7 +403,7 @@
     <value>Rozszerzenie aplikacji</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Użyj usługi ułatwień dostępu bitwarden, aby korzystać z automatycznego wypełniania danych logowania w aplikacjach i na stronach internetowych.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Usługa automatycznego wypełniania</value>
@@ -424,7 +424,7 @@
     <value>usługa automatycznego wypełniania bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Użyj usługi ułatwień dostępu bitwarden do automatycznego wypełniania danych logowania.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Zmień adres e-mail</value>
@@ -662,7 +662,7 @@
     <value>Powtórz hasło główne</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>Znajdź w sejfie</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Zabezpieczenia</value>
@@ -765,7 +765,7 @@
     <value>Dotknij to powiadomienie, aby automatycznie wypełnić danymi z sejfu.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Otwórz ustawienia ułatwień dostępu</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Na ekranie ustawień ułatwień dostępu Android dotknij "bitwarden" na liście usług.</value>
@@ -1183,39 +1183,52 @@
     <value>URL serwera ikon</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Wypełnij pola automatycznie</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Sejf jest zablokowany</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Przejdź do mojego sejfu</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Kolekcje</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Domyślnie w "Moim Sejfie"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Po otwarciu aplikacji otwórz stronę "Mój sejf" zamiast w "Ulubione".</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>W tym folderze nic nie ma.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>W tym folderze nic nie ma.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>AutoUzupełnienie – ułatwienia dostępu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Usługa Autouzupełniania bitwarden wykorzystuje Androidowy Framework by pomóc wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na twoim urządzeniu.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Użyj usługi autouzupełniania bitwarden żeby wypełnić pola logowania, dane kart kredytowych i osobiste informacje w innych aplikacjach.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Otwórz ustawienia autouzupełniania</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>
