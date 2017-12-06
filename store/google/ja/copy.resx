@@ -118,44 +118,44 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Password Manager</value>
+    <value>bitwarden パスワードマネージャ</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden is a login and password manager that helps keep you safe while online.</value>
+    <value>bitwarden はオンラインでのログインやパスワード情報を安全に管理するマネージャです。</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden は、あらゆる端末間で同期しつつログイン情報やパスワードを保管しておける、最も簡単で安全なサービスです。
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+パスワードの盗難は深刻な問題になっています。ウェブサイトやアプリは毎日攻撃を受けており、もしセキュリティに問題があればパスワードが盗難されてしまいます。 同じパスワードを他のアプリでも再利用していると、クラッカーはメールや銀行口座など大切なアカウントに簡単に侵入できてしまいます。
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+セキュリティの専門家は、アカウント毎に別のランダムに生成したパスワードを使うことを推奨していますが、ランダムなパスワードをすべて覚えていられますか？bitwarden を使えば、わざわざ覚えなくても簡単にパスワードの生成、保管や利用ができます。
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden は端末間で同期できる、暗号化された保管庫にログイン情報を保管します。端末から送信される前に暗号化されるので、あなただけがそのデータにアクセスできるのです。bitwarden の開発者チームですら、あなたに頼まれたとしてもデータを読み取ることはできません。データは AES-256 bit 暗号化、ソルト化ハッシュ、PBKDF2 SHA-256 で保護されます。</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>あらゆる端末で使える、安全な無料パスワードマネージャ</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>安全な保管庫でログイン情報やパスワードを管理します</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>強固な、ランダムで安全なパスワードを自動生成</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>保管庫を指紋認証や PIN コード、マスターパスワードで保護</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>ウェブブラウザやアプリでログイン情報を素早く自動入力</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
+    <value>複数の端末で保管庫に同期・アクセスできます
 
-- Phone
-- Tablet
-- Desktop
-- Web</value>
+- スマートフォン
+- タブレット
+- デスクトップ端末
+- ウェブ</value>
   </data>
 </root>
