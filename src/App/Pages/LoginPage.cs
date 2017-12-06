@@ -45,12 +45,12 @@ namespace Bit.App.Pages
             var padding = Helpers.OnPlatform(
                 iOS: new Thickness(15, 20),
                 Android: new Thickness(15, 8),
-                WinPhone: new Thickness(15, 20));
+                Windows: new Thickness(10, 8));
 
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
-                useLabelAsPlaceholder: true, imageSource: "lock", containerPadding: padding);
+                useLabelAsPlaceholder: true, imageSource: "lock.png", containerPadding: padding);
             EmailCell = new FormEntryCell(AppResources.EmailAddress, nextElement: PasswordCell.Entry,
-                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope",
+                entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope.png",
                 containerPadding: padding);
 
             var lastLoginEmail = _settings.GetValueOrDefault(Constants.LastLoginEmail, string.Empty);
@@ -97,7 +97,7 @@ namespace Bit.App.Pages
             var layout = new StackLayout
             {
                 Children = { table, forgotPasswordButton },
-                Spacing = Helpers.OnPlatform(iOS: 0, Android: 10, WinPhone: 0)
+                Spacing = Helpers.OnPlatform(iOS: 0, Android: 10, Windows: 0)
             };
 
             var scrollView = new ScrollView { Content = layout };
