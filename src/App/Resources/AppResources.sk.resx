@@ -403,7 +403,7 @@
     <value>Rozšírenie aplikácie</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie v aplikáciách a na webe.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Služba automatického vypĺňania</value>
@@ -424,7 +424,7 @@
     <value>Služba automatického vypĺňania bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie prihlasovacích údajov.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Zmeniť email</value>
@@ -522,10 +522,10 @@
     <value>Importovať položky</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Môžete hromadne importovať položky z webového trezoru bitwarden.com. Chcete navštíviť túto stránku teraz?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Rýchlo hromadne importovať vaše prihlasovacie údaje z iných aplikácií na správu hesiel.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Posledná synchronizácia:</value>
@@ -597,16 +597,16 @@
     <value>Nikdy</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Nová položka vytvorená.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Vo vašom trezore nie sú žiadné obľúbené.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>V trezore sa nenachádzajú žiadne položky.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Pre túto stránku v trezore neexistujú žiadne prihlasovacie údaje. Kliknite pre pridanie.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Toto prihlásenie nemá nakonfigurované používateľské meno alebo heslo.</value>
@@ -680,10 +680,10 @@
     <value>Zadajte 4-ciferný PIN kód na odomknutie aplikácie.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Informácie o položke</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Položka bola aktualizovaná.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Odosielam...</value>
@@ -726,7 +726,7 @@
     <value>Overovací kód</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Zobraziť položku</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden webový trezor</value>
@@ -738,7 +738,7 @@
     <value>Stratili ste overovaciu aplikáciu?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Položky</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,11 +751,11 @@
     <value>Preklady</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Položky pre {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>V trezore sa nenachádzajú žiadne položky pre {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -765,7 +765,7 @@
     <value>Ťuknite na túto notifikáciu pre automatické vyplnenie prihlasovacích údajov z vášho trezora.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Otvoriť nastavenia zjednodušenia prístupu</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Otvorte obrazovku Uľahčenia prístupu, klepnite na "bitwarden" pod nadpisom Služby.</value>
@@ -798,10 +798,10 @@
     <value>Naozaj chcete automaticky vyplniť toto prihlásenie? Nie je to úplná zhoda pre {0}.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Zodpovedajúce položky</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Možné zodpovedajúce položky</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Hladať</value>
@@ -995,7 +995,7 @@
     <value>Vlastné prostredie</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Pre pokročilých používateľov. Možete špecifikovať základnú URL pre každú službu nezávisle.</value>
+    <value>Pre pokročilých používateľov. Môžete špecifikovať základnú URL pre každú službu nezávisle.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>URL prostredia boli uložené.</value>
@@ -1009,10 +1009,10 @@
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Vlastné prostredie hostu</value>
+    <value>Sebou hosťované prostredie</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Špecifikujte základnú URL hosta vašej bitwarden inštalácie.</value>
+    <value>Špecifikujte základnú URL lokálne hosťovanej inštalácie bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL servera</value>
@@ -1021,64 +1021,64 @@
     <value>URL servera webového trezora</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Kliknite na toto upozornenie pre zobrazenie položiek v trezore.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Vlastné polia</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Vlastné polia aktualizované.</value>
+    <value>Vlastné polia boli aktualizované.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
     <value>Žiadne vlastné polia. Vlastné polia môžete spravovať z vášho webového trezora alebo rozšírenia prehliadača.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Kopírovať číslo</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Kopírovať bezpečnostný kód</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Číslo</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Bezpečnostný kód</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Aký typ položky chcete pridať?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Karta</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identita</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Prihlásenie</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Zabezpečená poznámka</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Adresa 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Adresa 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Adresa 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Apríl</value>
   </data>
   <data name="August" xml:space="preserve">
     <value>August</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Značka</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Meno vlastníka karty</value>
   </data>
   <data name="CityTown" xml:space="preserve">
     <value>Mesto</value>
@@ -1096,126 +1096,139 @@
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Mesiac expirácie</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Rok expirácie</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Február</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Krstné meno</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Január</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Júl</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Jún</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Priezvisko</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Číslo vodičského preukazu</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Marec</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Máj</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Druhé meno</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Pán</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Pani</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Slečna</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Október</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Číslo pasu</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefón</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Číslo poistenca sociálnej poisťovne</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Región</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Oslovenie</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>PSČ</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adresa</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Expirácia</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Zakázať ikony webových stránok</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Ikony stránok poskytujú rozoznateľný obrázok vedľa každého prihlasovacieho údaju vo webovom trezore.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL servera ikôn</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Automaticky vyplniť s bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Trezor je uzamknutý</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Ísť do trezoru</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Zbierky</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Predvoliť "Môj trezor"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Predvoliť stránku "Môj trezor" namiesto "Obľúbené" pri každom otvorení aplikácie.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>V zbierke sa nenachádzajú žiadne položky.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>V tomto priečinku sa nenachádzajú žiadne položky.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Služba automatického vypĺňania pre zjednodušený prístup</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Bitwarden služba automatického vypĺňania využíva Android Autofill Framework pre zjednodušenie vypĺňania prihlasovacích údajov, kreditných kariet a identít v aplikáciách vo vašom zariadení.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Použite službu zjednodušenia prístupu bitwarden pre automatické vypĺňanie.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Otvoriť nastavenia automatického vypĺňania</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>
