@@ -403,7 +403,7 @@
     <value>Extensión de Aplicación</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Utiliza el servicio de Accesibilidad de bitwarden para autorellenar entradas entre aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Servicio de autorellenado</value>
@@ -424,7 +424,7 @@
     <value>bitwarden Servicio de Autorellenado</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Utiliza el servicio de Accesibilidad de bitwarden para autorellenar entradas.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Cambiar correo electrónico</value>
@@ -765,7 +765,7 @@
     <value>Pulsa en esta notificación para autorellenar una entrada desde tu bóveda.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Abrir ajustes de Accesibilidad</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. En los ajustes de Accesibilidad, pulsa en "bitwarden" bajo el menú Servicios.</value>
@@ -1183,39 +1183,52 @@
     <value>URL del servidor de iconos</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Autorellenar con bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Bóveda bloqueada</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Volver a mi bóveda</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Colecciones</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Mostrar "Mi bóveda" por defecto</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Muestra la página "Mi bóveda" en vez de "Favoritos" cuando abres la aplicación.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>No hay elementos en esta colección.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>No hay elementos en esta carpeta.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Servicio de accesibilidad de autorellenado</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>El servicio de autorellenado de bitwarden utiliza el "Android Autofill Framework" para ayudarte a rellenar entradas, tarjetas de crédito e identidades en otras aplicaciones de tu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Utiliza el servicio de Accesibilidad de bitwarden para autorellenar entradas.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Abrir opciones de autorellenado</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>
