@@ -403,7 +403,7 @@
     <value>Tiện ích mở rộng ứng dụng</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Sử dụng quyền truy cập sử dụng để bitwarden tự động điền thông tin đăng nhập của bạn trên các ứng dụng và web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Dịch vụ tự động điền</value>
@@ -424,7 +424,7 @@
     <value>Dịch vụ Tự động điền bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Sử dụng quyền truy cập sử dụng để bitwarden tự động điền thông tin đăng nhập của bạn.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Thay đổi Email</value>
@@ -662,7 +662,7 @@
     <value>Nhập lại mật khẩu chính</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Tìm kiếm kho tiền</value>
+    <value>Tìm kiếm trong Hầm</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Bảo mật</value>
@@ -765,7 +765,7 @@
     <value>Chạm vào thông báo này để tự động điền thông tin đăng nhập từ hầm của bạn.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Cài đặt trợ năng</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Trên màn hình Cài đặt Trợ năng, chạm vào 'bitwarden' dưới phần 'Các dịch vụ đã tải xuống'.</value>
@@ -1183,39 +1183,52 @@
     <value>Biểu tượng địa chỉ máy chủ</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Tự động điền với bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Hầm đã khóa</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Đến hầm của tôi</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Các Bộ Sưu Tập</value>
   </data>
   <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
+    <value>Mặc định là "Hầm của tôi"</value>
   </data>
   <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>Trang mặc định là 'Hầm của tôi' thay vì 'Yêu thích' bất cứ khi nào tôi mở ứng dụng.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Không có mục nào trong bộ sưu tập này.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Không có mục nào trong thư mục này.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Dịch vụ Trợ năng Tự động điền</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Dịch vụ tự động điền của bitwarden sử dụng Bộ khung Tự động điền của Android để hỗ trợ điền thông tin đăng nhập, thẻ tín dụng và thông tin danh tính vào các ứng dụng khác trên thiết bị của bạn.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Sử dụng dịch vụ tự động điền của bitwarden để điền thông tin đăng nhập, thẻ tín dụng và thông tin danh tính vào các ứng dụng khác.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Mở cài đặt Tự động điền</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>Use Face ID to verify.</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>Use Face ID To Unlock</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>Verify Face ID</value>
   </data>
 </root>
