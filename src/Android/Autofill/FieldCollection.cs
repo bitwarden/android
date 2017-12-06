@@ -59,9 +59,9 @@ namespace Bit.Android.Autofill
                 else
                 {
                     _passwordFields = Fields
-                        .Where(f => 
-                            !f.IdEntry.ToLowerInvariant().Contains("search") &&
-                            (!f.Node.Hint?.ToLowerInvariant().Contains("search") ?? true) &&
+                        .Where(f =>
+                            (!f.IdEntry?.ToLowerInvariant().Contains("search") ?? true) &&
+                            (!f.Node?.Hint?.ToLowerInvariant().Contains("search") ?? true) &&
                             (
                                 f.InputType.HasFlag(InputTypes.TextVariationPassword) ||
                                 f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
@@ -70,7 +70,8 @@ namespace Bit.Android.Autofill
                         ).ToList();
                     if(!_passwordFields.Any())
                     {
-                        _passwordFields = Fields.Where(f => f.IdEntry?.ToLower().Contains("password") ?? false).ToList();
+                        _passwordFields = Fields.Where(f =>
+                            f.IdEntry?.ToLowerInvariant().Contains("password") ?? false).ToList();
                     }
                 }
 
