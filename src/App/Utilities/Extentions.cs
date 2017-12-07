@@ -55,13 +55,24 @@ namespace Bit.App
 
         public static async Task PushForDeviceAsync(this INavigation navigation, Page page)
         {
-            await navigation.PushModalAsync(new ExtendedNavigationPage(page), true);
+            if (Device.RuntimePlatform != Device.Windows)
+            {
+                await navigation.PushModalAsync(new ExtendedNavigationPage(page), true);
+            }
+            else
+            {
+                await navigation.PushAsync(page, true);
+            }
         }
 
         public static async Task PopForDeviceAsync(this INavigation navigation)
         {
             if(navigation.ModalStack.Count < 1)
             {
+                if (navigation.NavigationStack.Count > 0 && Device.RuntimePlatform == Device.Windows)
+                {
+                    await navigation.PopAsync();
+                }
                 return;
             }
 

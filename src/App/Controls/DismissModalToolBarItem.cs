@@ -21,7 +21,8 @@ namespace Bit.App.Controls
         protected async override void ClickedItem(object sender, EventArgs e)
         {
             base.ClickedItem(sender, e);
-            await _page.Navigation.PopModalAsync();
+
+            await _page.Navigation.PopForDeviceAsync();
         }
     }
 }
