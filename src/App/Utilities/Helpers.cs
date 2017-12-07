@@ -73,6 +73,17 @@ namespace Bit.App.Utilities
 
             return " ";
         }
+
+        public static string ToolbarImage(string image)
+        {
+            if (Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
+            {
+                return null;
+            }
+
+            return image;
+        }
+
         public static async void CipherMoreClickedAsync(Page page, VaultListPageModel.Cipher cipher, bool autofill)
         {
             var buttons = new List<string> { AppResources.View, AppResources.Edit };
