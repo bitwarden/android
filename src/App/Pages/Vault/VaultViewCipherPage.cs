@@ -92,6 +92,7 @@ namespace Bit.App.Pages
             // Name
             var nameCell = new LabeledValueCell(AppResources.Name);
             nameCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.Name));
+            nameCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
             // Notes
             NotesCell = new LabeledValueCell();
