@@ -81,7 +81,7 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 70;
             }
 
-            var loginToolbarItem = new ToolbarItem(AppResources.Submit, null, async () =>
+            var loginToolbarItem = new ToolbarItem(AppResources.Submit, Helpers.ToolbarImage("login.png"), async () =>
             {
                 await CheckPasswordAsync();
             }, ToolbarItemOrder.Default, 0);
