@@ -2,6 +2,7 @@
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Acr.UserDialogs;
@@ -111,7 +112,7 @@ namespace Bit.App.Pages
                 Content = StackLayout
             };
 
-            var toolbarItem = new ToolbarItem(AppResources.Save, null, async () => await SaveAsync(),
+            var toolbarItem = new ToolbarItem(AppResources.Save, Helpers.ToolbarImage("envelope.png"), async () => await SaveAsync(),
                 ToolbarItemOrder.Default, 0);
 
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
