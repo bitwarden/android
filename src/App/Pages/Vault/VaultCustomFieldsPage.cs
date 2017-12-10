@@ -182,7 +182,7 @@ namespace Bit.App.Pages
                             if(hidden)
                             {
                                 textFieldCell.Entry.FontFamily = Helpers.OnPlatform(
-                                    iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                                    iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
                                 textFieldCell.Button.Image = "eye.png";
                                 textFieldCell.Button.Command = new Command(() =>
                                 {

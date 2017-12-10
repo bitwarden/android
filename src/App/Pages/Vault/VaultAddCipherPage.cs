@@ -388,7 +388,7 @@ namespace Bit.App.Pages
                 LoginTotpCell.Entry.DisableAutocapitalize = true;
                 LoginTotpCell.Entry.Autocorrect = false;
                 LoginTotpCell.Entry.FontFamily =
-                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
 
                 LoginPasswordCell = new FormEntryCell(AppResources.Password, isPassword: true, nextElement: LoginTotpCell.Entry,
                     useButton: true);
@@ -396,7 +396,7 @@ namespace Bit.App.Pages
                 LoginPasswordCell.Entry.DisableAutocapitalize = true;
                 LoginPasswordCell.Entry.Autocorrect = false;
                 LoginPasswordCell.Entry.FontFamily =
-                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
                 if(!string.IsNullOrWhiteSpace(_defaultPassword))
                 {
                     LoginPasswordCell.Entry.Text = _defaultPassword;

@@ -43,7 +43,7 @@ namespace Bit.App.Controls
                 Padding = Helpers.OnPlatform(
                     iOS: new Thickness(15, 8),
                     Android: new Thickness(15, 2),
-                    WinPhone: new Thickness(15, 8))
+                    Windows: new Thickness(15, 8))
             };
 
             if(Device.RuntimePlatform == Device.Android)

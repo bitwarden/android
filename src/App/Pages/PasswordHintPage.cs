@@ -33,7 +33,7 @@ namespace Bit.App.Pages
             var padding = Helpers.OnPlatform(
                 iOS: new Thickness(15, 20),
                 Android: new Thickness(15, 8),
-                WinPhone: new Thickness(15, 20));
+                Windows: new Thickness(10, 8));
 
             EmailCell = new FormEntryCell(AppResources.EmailAddress, entryKeyboard: Keyboard.Email,
                 useLabelAsPlaceholder: true, imageSource: "envelope.png", containerPadding: padding);

@@ -33,7 +33,7 @@ namespace Bit.App.Pages
             var padding = Helpers.OnPlatform(
                 iOS: new Thickness(15, 20),
                 Android: new Thickness(15, 8),
-                WinPhone: new Thickness(15, 20));
+                Windows: new Thickness(10, 8));
 
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
                 useLabelAsPlaceholder: true, imageSource: "lock.png", containerPadding: padding);

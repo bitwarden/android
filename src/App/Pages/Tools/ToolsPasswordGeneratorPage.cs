@@ -49,7 +49,7 @@ namespace Bit.App.Pages
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
                 Margin = new Thickness(15, 40, 15, 40),
                 HorizontalTextAlignment = TextAlignment.Center,
-                FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier"),
+                FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier"),
                 LineBreakMode = LineBreakMode.TailTruncation,
                 VerticalOptions = LayoutOptions.Start
             };
@@ -259,7 +259,7 @@ namespace Bit.App.Pages
                     Padding = Helpers.OnPlatform(
                         iOS: new Thickness(15, 8),
                         Android: new Thickness(16, 10),
-                        WinPhone: new Thickness(15, 8))
+                        Windows: new Thickness(15, 8))
                 };
 
                 stackLayout.AdjustPaddingForDevice();
