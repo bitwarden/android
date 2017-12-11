@@ -66,6 +66,11 @@ namespace Bit.Android.Controls
             {
                 Control.Typeface = Typeface.Monospace;
             }
+
+            if(_view.HideCursor)
+            {
+                Control.SetCursorVisible(false);
+            }
         }
 
         private void ToggleIsPassword(object sender, EventArgs e)

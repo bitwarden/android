@@ -41,6 +41,11 @@ namespace Bit.iOS.Controls
                     Control.AutocorrectionType = view.Autocorrect.Value ? UITextAutocorrectionType.Yes : UITextAutocorrectionType.No;
                 }
 
+                if(view.HideCursor)
+                {
+                    Control.TintColor = UIColor.Clear;
+                }
+
                 if(view.ReturnType.HasValue)
                 {
                     switch(view.ReturnType.Value)

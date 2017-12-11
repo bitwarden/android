@@ -87,6 +87,7 @@ namespace Bit.App.Pages
                 {
                     for(int i = 0; i < 5; i++)
                     {
+                        await Task.Delay(1000);
                         if(!PinControl.Entry.IsFocused)
                         {
                             Device.BeginInvokeOnMainThread(() => PinControl.Entry.Focus());
@@ -95,8 +96,6 @@ namespace Bit.App.Pages
                         {
                             break;
                         }
-
-                        await Task.Delay(1000);
                     }
                 });
             }

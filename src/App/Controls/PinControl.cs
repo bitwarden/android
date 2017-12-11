@@ -21,12 +21,18 @@ namespace Bit.App.Controls
             {
                 Keyboard = Keyboard.Numeric,
                 MaxLength = 4,
-                Margin = new Thickness(0, int.MaxValue, 0, 0)
+                HideCursor = true
             };
+
+            Entry.BackgroundColor = Entry.TextColor = Color.Transparent;
 
             if(Device.RuntimePlatform == Device.Android)
             {
                 Label.TextColor = Color.Black;
+            }
+            else
+            {
+                Entry.Margin = new Thickness(0, int.MaxValue, 0, 0);
             }
         }
 
