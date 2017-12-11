@@ -126,7 +126,7 @@ namespace Bit.App.Pages
                     LoginPasswordCell.Button2.Command =
                         new Command(() => Copy(Model.LoginPassword, AppResources.Password));
                     LoginPasswordCell.Value.FontFamily =
-                        Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                        Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
                     LoginPasswordCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
                     // URI
@@ -159,7 +159,7 @@ namespace Bit.App.Pages
                     LoginTotpCodeCell.Sub.SetBinding(Label.TextColorProperty,
                         nameof(VaultViewCipherPageModel.LoginTotpColor));
                     LoginTotpCodeCell.Value.FontFamily =
-                        Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", WinPhone: "Courier");
+                        Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
                     break;
                 case CipherType.Card:
                     CardNameCell = new LabeledValueCell(AppResources.CardholderName);
@@ -558,7 +558,7 @@ namespace Bit.App.Pages
                 : base(field.Name, field.MaskedValue, string.Empty, "clipboard.png")
             {
                 Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular",
-                    Android: "monospace", WinPhone: "Courier");
+                    Android: "monospace", Windows: "Courier");
                 if(Device.RuntimePlatform == Device.iOS)
                 {
                     Button1.Margin = new Thickness(10, 0);

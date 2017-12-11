@@ -69,7 +69,7 @@ Fingerprint by masterpage.com from the Noun Project")
                     Padding = Helpers.OnPlatform(
                         iOS: new Thickness(15, 20),
                         Android: new Thickness(16, 20),
-                        WinPhone: new Thickness(15, 20)),
+                        Windows: new Thickness(10, 8)),
                     BackgroundColor = Color.White
                 };
 

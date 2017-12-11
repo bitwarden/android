@@ -95,7 +95,7 @@ namespace Bit.App.Pages
             {
                 var fingerprintName = Helpers.OnPlatform(
                     iOS: _deviceInfoService.HasFaceIdSupport ? AppResources.FaceID : AppResources.TouchID,
-                    Android: AppResources.Fingerprint, Windows: AppResources.Fingerprint, WinPhone: AppResources.Fingerprint);
+                    Android: AppResources.Fingerprint, Windows: AppResources.Fingerprint);
                 FingerprintCell = new ExtendedSwitchCell
                 {
                     Text = string.Format(AppResources.UnlockWith, fingerprintName),
