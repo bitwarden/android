@@ -112,7 +112,7 @@ namespace Bit.App.Pages
                 }));
             }
 
-            var loginToolbarItem = new ToolbarItem(AppResources.LogIn, null, async () =>
+            var loginToolbarItem = new ToolbarItem(AppResources.LogIn, Helpers.ToolbarImage("login.png"), async () =>
             {
                 await LogIn();
             }, ToolbarItemOrder.Default, 0);

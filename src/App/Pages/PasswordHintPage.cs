@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 70;
             }
 
-            var submitToolbarItem = new ToolbarItem(AppResources.Submit, null, async () =>
+            var submitToolbarItem = new ToolbarItem(AppResources.Submit, Helpers.ToolbarImage("ion_chevron_right.png"), async () =>
             {
                 await SubmitAsync();
             }, ToolbarItemOrder.Default, 0);

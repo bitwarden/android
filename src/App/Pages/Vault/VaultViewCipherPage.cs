@@ -500,6 +500,7 @@ namespace Bit.App.Pages
                 _page = page;
                 _cipherId = cipherId;
                 Text = AppResources.Edit;
+                Icon = Helpers.ToolbarImage("cog.png");
                 ClickAction = async () => await ClickedItem();
             }
 
