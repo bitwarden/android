@@ -191,7 +191,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(saveToolBarItem);
             }
 
-            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ListView.RowHeight = -1;
                 NewTable.RowHeight = -1;

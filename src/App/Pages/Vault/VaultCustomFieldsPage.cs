@@ -159,7 +159,7 @@ namespace Bit.App.Pages
             {
                 Content = Table;
                 ToolbarItems.Add(SaveToolbarItem);
-                if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+                if(Device.RuntimePlatform == Device.iOS)
                 {
                     ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
                 }
@@ -211,7 +211,7 @@ namespace Bit.App.Pages
             else
             {
                 Content = NoDataLabel;
-                if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+                if(Device.RuntimePlatform == Device.iOS)
                 {
                     ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
                 }
