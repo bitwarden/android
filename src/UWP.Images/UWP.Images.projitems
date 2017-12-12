@@ -29,6 +29,7 @@
     <Content Include="$(MSBuildThisFileDirectory)globe.png" />
     <Content Include="$(MSBuildThisFileDirectory)icon.png" />
     <Content Include="$(MSBuildThisFileDirectory)id.png" />
+    <Content Include="$(MSBuildThisFileDirectory)ion_chevron_left.png" />
     <Content Include="$(MSBuildThisFileDirectory)ion_chevron_right.png" />
     <Content Include="$(MSBuildThisFileDirectory)launch.png" />
     <Content Include="$(MSBuildThisFileDirectory)lightbulb.png" />

@@ -1,4 +1,5 @@
 ﻿using Bit.App.Resources;
+using Bit.App.Utilities;
 using System;
 using Xamarin.Forms;
 
@@ -15,6 +16,7 @@ namespace Bit.App.Controls
             // TODO: init and dispose events from pages
             InitEvents();
             Text = text ?? AppResources.Close;
+            Icon = Helpers.ToolbarImage("ion_chevron_left.png");
             Priority = -1;
         }
 
