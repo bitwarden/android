@@ -76,7 +76,7 @@ namespace Bit.App.Pages
         {
             EditItem = new EditCipherToolBarItem(this, _cipherId);
             ToolbarItems.Add(EditItem);
-            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this));
             }
