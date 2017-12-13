@@ -35,6 +35,8 @@ namespace Bit.UWP
 
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            ZXing.Net.Mobile.Forms.WindowsUniversal.ZXingScannerViewRenderer.Init();
+
             var rootFrame = Window.Current.Content as Frame;
             if(rootFrame == null)
             {
