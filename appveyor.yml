@@ -17,4 +17,4 @@ branches:
   except:
     - l10n_master
 skip_tags: true
-image: Visual Studio 2017 Preview
+image: Visual Studio 2017
