@@ -76,7 +76,7 @@ namespace Bit.App.Utilities
 
         public static string ToolbarImage(string image)
         {
-            if (Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Android)
             {
                 return null;
             }
