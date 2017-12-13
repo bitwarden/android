@@ -91,7 +91,8 @@ namespace Bit.App.Pages
                 TwoStepCell
             };
 
-            if((await _fingerprint.GetAvailabilityAsync()) == FingerprintAvailability.Available)
+            if ((await _fingerprint.GetAvailabilityAsync()) == FingerprintAvailability.Available &&
+                Device.RuntimePlatform != Device.Windows)
             {
                 var fingerprintName = Helpers.OnPlatform(
                     iOS: _deviceInfoService.HasFaceIdSupport ? AppResources.FaceID : AppResources.TouchID,
