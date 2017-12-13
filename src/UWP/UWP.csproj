@@ -186,6 +186,9 @@
     <PackageReference Include="XLabs.IoC.SimpleInjector">
       <Version>2.0.5782</Version>
     </PackageReference>
+    <PackageReference Include="ZXing.Net.Mobile.Forms">
+      <Version>2.3.2</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
