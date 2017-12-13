@@ -127,9 +127,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="8bit.keystore.enc" />
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="increment-version.ps1" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
@@ -922,7 +919,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="SimpleInjector">
-      <Version>4.0.8</Version>
+      <Version>4.0.12</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Analytics">
       <Version>29.0.0.2</Version>

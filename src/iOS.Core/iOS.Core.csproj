@@ -65,9 +65,6 @@
     <Compile Include="Views\FormEntryTableViewCell.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
       <Project>{8a279ee4-4537-4656-9c93-44945e594556}</Project>
       <Name>App</Name>

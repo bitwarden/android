@@ -253,9 +253,6 @@
     <Compile Include="LoadingViewController.designer.cs">
       <DependentUpon>LoadingViewController.cs</DependentUpon>
     </Compile>
-    <None Include="app.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Models\CipherViewModel.cs" />
