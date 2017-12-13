@@ -11,8 +11,8 @@
     <AssemblyName>Bit.UWP</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.15063.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.16299.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -144,73 +144,33 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Acr.UserDialogs">
-      <Version>6.3.10</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.4.0</Version>
+      <Version>6.0.5</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp">
-      <Version>2.0.0</Version>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>9.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="PCLCrypto">
-      <Version>2.0.147</Version>
-    </PackageReference>
-    <PackageReference Include="Plugin.Fingerprint">
-      <Version>1.4.6-beta4</Version>
+      <Version>2.1.0</Version>
     </PackageReference>
     <PackageReference Include="SimpleInjector">
-      <Version>4.0.8</Version>
-    </PackageReference>
-    <PackageReference Include="sqlite-net-pcl">
-      <Version>1.5.166-beta</Version>
-    </PackageReference>
-    <PackageReference Include="Xam.Plugin.Connectivity">
-      <Version>3.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Xam.Plugins.Settings">
-      <Version>3.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.FFImageLoading.Forms">
-      <Version>2.2.9</Version>
-    </PackageReference>
-    <PackageReference Include="Xamarin.Forms">
-      <Version>2.3.4.267</Version>
-    </PackageReference>
-    <PackageReference Include="XLabs.IoC">
-      <Version>2.0.5782</Version>
+      <Version>4.0.12</Version>
     </PackageReference>
     <PackageReference Include="XLabs.IoC.SimpleInjector">
       <Version>2.0.5782</Version>
     </PackageReference>
-    <PackageReference Include="ZXing.Net.Mobile.Forms">
-      <Version>2.3.2</Version>
-    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="WindowsMobile, Version=10.0.16299.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
-      <Project>{b490c5da-639e-4994-abd2-54222b8a348e}</Project>
+      <Project>{8a279ee4-4537-4656-9c93-44945e594556}</Project>
       <Name>App</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="WindowsMobile, Version=10.0.15063.0">
-      <Name>Windows Mobile Extensions for the UWP</Name>
-    </SDKReference>
   </ItemGroup>
   <Import Project="..\UWP.Images\UWP.Images.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
