@@ -84,6 +84,24 @@ namespace Bit.App.Utilities
             return image;
         }
 
+        public static void DeviceToast(IUserDialogs dialog, string message)
+        {
+            if (Device.RuntimePlatform == Device.Windows)
+            {
+                var toastConfig = new ToastConfig(message);
+                // Hex colour value 0xD2D6DE
+                toastConfig.SetBackgroundColor(System.Drawing.Color.FromArgb(210, 214, 222));
+                // Hex colour value 0x3C8DBC
+                toastConfig.SetMessageTextColor(System.Drawing.Color.FromArgb(60, 141, 188));
+
+                dialog.Toast(toastConfig);
+            }
+            else
+            {
+                dialog.Toast(message);
+            }
+        }
+
         public static async void CipherMoreClickedAsync(Page page, VaultListPageModel.Cipher cipher, bool autofill)
         {
             var buttons = new List<string> { AppResources.View, AppResources.Edit };

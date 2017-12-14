@@ -205,7 +205,7 @@ namespace Bit.App.Pages
                 _googleAnalyticsService.TrackAppEvent("CopiedGeneratedPassword");
             }
             _clipboardService.CopyToClipboard(Password.Text);
-            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            Helpers.DeviceToast(_userDialogs, string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
 
         // TODO: move to standalone reusable control
