@@ -47,10 +47,10 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Resources\AppResources.Designer.cs">
+    <Compile Update="Resources\AppResources.en.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>AppResources.resx</DependentUpon>
+      <DependentUpon>AppResources.en.resx</DependentUpon>
     </Compile>
     <Compile Update="Resources\AppResources.es.Designer.cs">
       <DependentUpon>AppResources.es.resx</DependentUpon>
@@ -234,9 +234,9 @@
       <LastGenOutput>AppResources.pt-PT.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\AppResources.resx">
+    <EmbeddedResource Update="Resources\AppResources.en.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+      <LastGenOutput>AppResources.en.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\AppResources.ro.resx">
       <LastGenOutput>AppResources.ro.Designer.cs</LastGenOutput>
