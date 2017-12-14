@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="6.3.10" />
-    <PackageReference Include="HockeySDK.Xamarin" Version="4.1.5" />
+    <PackageReference Include="HockeySDK.Xamarin" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="PCLCrypto" Version="2.0.147" />
     <PackageReference Include="Plugin.Fingerprint" Version="1.4.6-beta4" />
