@@ -120,7 +120,7 @@ namespace Bit.App.Pages
             Title = AppResources.EditFolder;
             Content = mainTable;
             ToolbarItems.Add(saveToolBarItem);
-            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.UWP)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

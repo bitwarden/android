@@ -56,7 +56,7 @@ namespace Bit.App.Pages
             PinControl.Label.GestureRecognizers.Add(Tgr);
             instructionLabel.GestureRecognizers.Add(Tgr);
 
-            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.UWP)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
             }

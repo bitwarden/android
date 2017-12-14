@@ -55,7 +55,7 @@ namespace Bit.App
 
         public static async Task PushForDeviceAsync(this INavigation navigation, Page page)
         {
-            if (Device.RuntimePlatform != Device.Windows)
+            if (Device.RuntimePlatform != Device.UWP)
             {
                 await navigation.PushModalAsync(new ExtendedNavigationPage(page), true);
             }
@@ -69,7 +69,7 @@ namespace Bit.App
         {
             if(navigation.ModalStack.Count < 1)
             {
-                if (navigation.NavigationStack.Count > 0 && Device.RuntimePlatform == Device.Windows)
+                if (navigation.NavigationStack.Count > 0 && Device.RuntimePlatform == Device.UWP)
                 {
                     await navigation.PopAsync();
                 }
