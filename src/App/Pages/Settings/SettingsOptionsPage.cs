@@ -223,7 +223,7 @@ namespace Bit.App.Pages
                 Content = StackLayout
             };
 
-            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.UWP)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 analyticsTable.RowHeight = websiteIconsTable.RowHeight = totpTable.RowHeight = -1;
                 analyticsTable.EstimatedRowHeight = websiteIconsTable.EstimatedRowHeight =

@@ -68,7 +68,7 @@ namespace Bit.App.Pages
                 Children = { _zxing, _overlay }
             };
 
-            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.UWP)
+            if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.Windows)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }

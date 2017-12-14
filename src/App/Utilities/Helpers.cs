@@ -33,7 +33,7 @@ namespace Bit.App.Utilities
                     return Android;
                 case Device.WinPhone:
                     return WinPhone;
-                case Device.UWP:
+                case Device.Windows:
                     return Windows;
                 default:
                     throw new Exception("Unsupported platform.");
