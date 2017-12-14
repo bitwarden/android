@@ -7,14 +7,6 @@ files:
         zh-TW: zh-Hant
         pt-PT: pt-PT
         pt-BR: pt-BR
-  - source: /store/amazon/en/copy.resx
-    translation: /store/amazon/%two_letters_code%/copy.resx
-    languages_mapping:
-      two_letters_code:
-        zh-CN: zh-Hans
-        zh-TW: zh-Hant
-        pt-PT: pt-PT
-        pt-BR: pt-BR
   - source: /store/apple/en/copy.resx
     translation: /store/apple/%two_letters_code%/copy.resx
     languages_mapping:
