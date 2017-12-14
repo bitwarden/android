@@ -17,13 +17,13 @@
   <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="6.3.10" />
     <PackageReference Include="HockeySDK.Xamarin" Version="4.1.5" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="PCLCrypto" Version="2.0.147" />
     <PackageReference Include="Plugin.Fingerprint" Version="1.4.6-beta4" />
     <PackageReference Include="sqlite-net-pcl" Version="1.5.166-beta" />
     <PackageReference Include="System.Net.Http" Version="4.3.3" />
-    <PackageReference Include="Xam.Plugin.Connectivity" Version="3.0.2" />
-    <PackageReference Include="Xam.Plugins.Settings" Version="3.0.1" />
+    <PackageReference Include="Xam.Plugin.Connectivity" Version="3.0.3" />
+    <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.2.9" />
     <PackageReference Include="Xamarin.Forms" Version="2.3.4.267" />
     <PackageReference Include="XLabs.IoC" Version="2.0.5782" />
