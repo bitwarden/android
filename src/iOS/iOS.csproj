@@ -713,7 +713,7 @@
       <Version>4.0.12</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Google.iOS.Analytics">
-      <Version>3.17.0.2</Version>
+      <Version>3.17.0.1</Version>
     </PackageReference>
     <PackageReference Include="XLabs.IoC.SimpleInjector">
       <Version>2.0.5782</Version>
