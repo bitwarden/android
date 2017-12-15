@@ -2950,6 +2950,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unlock with Windows Hello.
+        /// </summary>
+        public static string UseWindowsHelloToUnlock {
+            get {
+                return ResourceManager.GetString("UseWindowsHelloToUnlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Validating.
         /// </summary>
         public static string Validating {
@@ -3058,6 +3067,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Verify with Windows Hello.
+        /// </summary>
+        public static string VerifyWindowsHello {
+            get {
+                return ResourceManager.GetString("VerifyWindowsHello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version.
         /// </summary>
         public static string Version {
@@ -3135,6 +3153,15 @@ namespace Bit.App.Resources {
         public static string WebVaultUrl {
             get {
                 return ResourceManager.GetString("WebVaultUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Hello.
+        /// </summary>
+        public static string WindowsHello {
+            get {
+                return ResourceManager.GetString("WindowsHello", resourceCulture);
             }
         }
         

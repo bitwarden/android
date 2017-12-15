@@ -7,6 +7,7 @@ using XLabs.Ioc;
 using Plugin.Fingerprint.Abstractions;
 using Plugin.Settings.Abstractions;
 using Bit.App.Abstractions;
+using Bit.App.Utilities;
 
 namespace Bit.App.Pages
 {
@@ -32,9 +33,23 @@ namespace Bit.App.Pages
 
         public void Init()
         {
+            var biometricIcon = Helpers.OnPlatform(
+                        iOS: _deviceInfoService.HasFaceIdSupport ? "smile.png" : "fingerprint.png",
+                        Android: "fingerprint.png",
+                        Windows: "smile.png");
+            var biometricText = Helpers.OnPlatform(
+                        iOS: _deviceInfoService.HasFaceIdSupport ? AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock,
+                        Android: AppResources.UseFingerprintToUnlock,
+                        Windows: AppResources.UseWindowsHelloToUnlock);
+            var biometricTitle = Helpers.OnPlatform(
+                        iOS: _deviceInfoService.HasFaceIdSupport ? AppResources.VerifyFaceID : AppResources.VerifyFingerprint,
+                        Android: AppResources.VerifyFingerprint,
+                        Windows: AppResources.VerifyWindowsHello);
+
+
             var fingerprintIcon = new ExtendedButton
             {
-                Image = _deviceInfoService.HasFaceIdSupport ? "smile.png" : "fingerprint.png",
+                Image = biometricIcon,
                 BackgroundColor = Color.Transparent,
                 Command = new Command(async () => await CheckFingerprintAsync()),
                 VerticalOptions = LayoutOptions.CenterAndExpand,
@@ -43,8 +58,7 @@ namespace Bit.App.Pages
 
             var fingerprintButton = new ExtendedButton
             {
-                Text = _deviceInfoService.HasFaceIdSupport ? AppResources.UseFaceIDToUnlock :
-                    AppResources.UseFingerprintToUnlock,
+                Text = biometricText,
                 Command = new Command(async () => await CheckFingerprintAsync()),
                 VerticalOptions = LayoutOptions.EndAndExpand,
                 Style = (Style)Application.Current.Resources["btn-primary"]
@@ -67,7 +81,7 @@ namespace Bit.App.Pages
                 Children = { fingerprintIcon, fingerprintButton, logoutButton }
             };
 
-            Title = _deviceInfoService.HasFaceIdSupport ? AppResources.VerifyFaceID : AppResources.VerifyFingerprint;
+            Title = biometricTitle;
             Content = stackLayout;
         }
 
