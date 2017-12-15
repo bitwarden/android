@@ -1,6 +1,8 @@
 ﻿using System.Net.Http;
 using System.Text;
 using Bit.App.Abstractions;
+using Bit.App.Enums;
+using Bit.App.Utilities;
 using Newtonsoft.Json;
 using XLabs.Ioc;
 
@@ -21,6 +23,9 @@ namespace Bit.App
             {
                 Headers.Add("Device-Identifier", appIdService.AppId);
             }
+
+            Headers.Add("Device-Type", ((int)Helpers.OnPlatform(iOS: DeviceType.iOS,
+                Android: DeviceType.Android, Windows: DeviceType.UWP)).ToString());
         }
 
         public TokenHttpRequestMessage(object requestObject)
