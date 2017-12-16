@@ -106,9 +106,7 @@ namespace Bit.App.Pages
 
             LoadingIndicator = new ActivityIndicator
             {
-                IsRunning = true,
-                VerticalOptions = LayoutOptions.CenterAndExpand,
-                HorizontalOptions = LayoutOptions.Center
+                IsRunning = true
             };
 
             Content = LoadingIndicator;
