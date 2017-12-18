@@ -8,6 +8,7 @@ using Plugin.Connectivity.Abstractions;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using Bit.App.Enums;
+using Bit.App.Utilities;
 
 namespace Bit.App.Repositories
 {
@@ -37,6 +38,9 @@ namespace Bit.App.Repositories
                     RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/token")),
                     Content = new FormUrlEncodedContent(requestObj.ToIdentityTokenRequest())
                 };
+
+                requestMessage.Headers.Add("Device-Type", ((int)Helpers.OnPlatform(iOS: DeviceType.iOS,
+                    Android: DeviceType.Android, Windows: DeviceType.UWP)).ToString());
 
                 try
                 {
