@@ -187,11 +187,12 @@ namespace Bit.App.Pages
             {
                 var sections = new List<Section<GroupingOrCipher>>();
                 var favoriteCipherGroupings = new List<GroupingOrCipher>();
+                var noFolderCipherGroupings = new List<GroupingOrCipher>();
                 var ciphers = await _cipherService.GetAllAsync();
                 var collectionsDict = (await _collectionService.GetAllCipherAssociationsAsync())
                     .GroupBy(c => c.Item2).ToDictionary(g => g.Key, v => v.ToList());
 
-                var folderCounts = new Dictionary<string, int> { ["none"] = 0 };
+                var folderCounts = new Dictionary<string, int>();
                 foreach(var cipher in ciphers)
                 {
                     if(cipher.Favorite)
@@ -209,7 +210,7 @@ namespace Bit.App.Pages
                     }
                     else
                     {
-                        folderCounts["none"]++;
+                        noFolderCipherGroupings.Add(new GroupingOrCipher(new Cipher(cipher, _appSettingsService)));
                     }
                 }
 
@@ -221,13 +222,23 @@ namespace Bit.App.Pages
                 }
 
                 var folders = await _folderService.GetAllAsync();
+                var collections = await _collectionService.GetAllAsync();
+
                 var folderGroupings = folders?
                     .Select(f => new GroupingOrCipher(new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0)))
                     .OrderBy(g => g.Grouping.Name).ToList();
-                folderGroupings.Add(new GroupingOrCipher(new Grouping(AppResources.FolderNone, folderCounts["none"])));
-                sections.Add(new Section<GroupingOrCipher>(folderGroupings, AppResources.Folders));
 
-                var collections = await _collectionService.GetAllAsync();
+                if(collections.Any())
+                {
+                    folderGroupings.Add(new GroupingOrCipher(new Grouping(AppResources.FolderNone, 
+                        noFolderCipherGroupings.Count)));
+                }
+
+                if(folderGroupings.Any())
+                {
+                    sections.Add(new Section<GroupingOrCipher>(folderGroupings, AppResources.Folders));
+                }
+
                 var collectionGroupings = collections?
                     .Select(c => new GroupingOrCipher(new Grouping(c,
                         collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0)))
@@ -235,6 +246,12 @@ namespace Bit.App.Pages
                 if(collectionGroupings?.Any() ?? false)
                 {
                     sections.Add(new Section<GroupingOrCipher>(collectionGroupings, AppResources.Collections));
+                }
+                else if(noFolderCipherGroupings?.Any() ?? false)
+                {
+                    sections.Add(new Section<GroupingOrCipher>(
+                        noFolderCipherGroupings.OrderBy(g => g.Cipher.Name).ThenBy(g => g.Cipher.Subtitle).ToList(),
+                        AppResources.FolderNone));
                 }
 
                 Device.BeginInvokeOnMainThread(() =>
