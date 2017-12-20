@@ -44,12 +44,11 @@
     <Content Include="$(MSBuildThisFileDirectory)photo.png" />
     <Content Include="$(MSBuildThisFileDirectory)plus.png" />
     <Content Include="$(MSBuildThisFileDirectory)refresh.png" />
+    <Content Include="$(MSBuildThisFileDirectory)refresh_selected.png" />
     <Content Include="$(MSBuildThisFileDirectory)search.png" />
     <Content Include="$(MSBuildThisFileDirectory)share.png" />
     <Content Include="$(MSBuildThisFileDirectory)share_tools.png" />
     <Content Include="$(MSBuildThisFileDirectory)smile.png" />
-    <Content Include="$(MSBuildThisFileDirectory)star.png" />
-    <Content Include="$(MSBuildThisFileDirectory)star_selected.png" />
     <Content Include="$(MSBuildThisFileDirectory)tools.png" />
     <Content Include="$(MSBuildThisFileDirectory)tools_selected.png" />
     <Content Include="$(MSBuildThisFileDirectory)trash.png" />

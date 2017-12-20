@@ -287,15 +287,6 @@
     <BundleResource Include="Resources\logo%403x.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\star.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\star%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <BundleResource Include="Resources\star%403x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\plus.png" />
   </ItemGroup>
   <ItemGroup>

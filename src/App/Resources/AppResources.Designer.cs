@@ -2311,15 +2311,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Automatically generate strong, unique passwords for your logins..
-        /// </summary>
-        public static string PasswordGeneratorDescription {
-            get {
-                return ResourceManager.GetString("PasswordGeneratorDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Password Hint.
         /// </summary>
         public static string PasswordHint {

@@ -12,15 +12,18 @@ namespace Bit.App.Pages
         {
             TintColor = Color.FromHex("3c8dbc");
 
-            var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
             var vaultNavigation = new ExtendedNavigationPage(new VaultListGroupingsPage());
+            var passwordGeneratorNavigation = new ExtendedNavigationPage(new ToolsPasswordGeneratorPage());
             var toolsNavigation = new ExtendedNavigationPage(new ToolsPage());
+            var settingsNavigation = new ExtendedNavigationPage(new SettingsPage());
 
             vaultNavigation.Icon = "fa_lock.png";
+            passwordGeneratorNavigation.Icon = "refresh.png";
             toolsNavigation.Icon = "tools.png";
             settingsNavigation.Icon = "cogs.png";
 
             Children.Add(vaultNavigation);
+            Children.Add(passwordGeneratorNavigation);
             Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
 

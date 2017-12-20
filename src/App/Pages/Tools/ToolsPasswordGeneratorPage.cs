@@ -130,7 +130,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(selectToolBarItem);
             }
 
-            Title = AppResources.GeneratePassword;
+            Title = AppResources.PasswordGenerator;
             Content = scrollView;
             BindingContext = Model;
         }

@@ -26,7 +26,6 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ToolsViewCell GeneratorCell { get; set; }
         public ToolsViewCell WebCell { get; set; }
         public ToolsViewCell ShareCell { get; set; }
         public ToolsViewCell ImportCell { get; set; }
@@ -35,13 +34,11 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            GeneratorCell = new ToolsViewCell(AppResources.PasswordGenerator, AppResources.PasswordGeneratorDescription,
-                "refresh.png");
             WebCell = new ToolsViewCell(AppResources.WebVault, AppResources.WebVaultDescription, "globe.png");
             ShareCell = new ToolsViewCell(AppResources.ShareVault, AppResources.ShareVaultDescription, "share_tools.png");
             ImportCell = new ToolsViewCell(AppResources.ImportItems, AppResources.ImportItemsDescription, "cloudup.png");
 
-            var section = new TableSection(Helpers.GetEmptyTableSectionTitle()) { GeneratorCell };
+            var section = new TableSection(Helpers.GetEmptyTableSectionTitle());
 
             if(Device.RuntimePlatform == Device.iOS)
             {
@@ -86,7 +83,6 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            GeneratorCell.Tapped += GeneratorCell_Tapped;
             WebCell.Tapped += WebCell_Tapped;
             ShareCell.Tapped += ShareCell_Tapped;
             ImportCell.Tapped += ImportCell_Tapped;
@@ -103,7 +99,6 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            GeneratorCell.Tapped -= GeneratorCell_Tapped;
             WebCell.Tapped -= WebCell_Tapped;
             ShareCell.Tapped -= ShareCell_Tapped;
             ImportCell.Tapped -= ImportCell_Tapped;
@@ -133,11 +128,6 @@ namespace Bit.App.Pages
         private void ExtensionCell_Tapped(object sender, EventArgs e)
         {
             Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
-        }
-
-        private async void GeneratorCell_Tapped(object sender, EventArgs e)
-        {
-            await Navigation.PushForDeviceAsync(new ToolsPasswordGeneratorPage());
         }
 
         private void WebCell_Tapped(object sender, EventArgs e)

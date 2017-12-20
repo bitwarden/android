@@ -2812,8 +2812,8 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0200f3
 			public const int notification_sm = 2130837747;
 			
-			// aapt resource value: 0x7f020106
-			public const int notification_template_icon_bg = 2130837766;
+			// aapt resource value: 0x7f020105
+			public const int notification_template_icon_bg = 2130837765;
 			
 			// aapt resource value: 0x7f0200f4
 			public const int paperclip = 2130837748;
@@ -2825,49 +2825,46 @@ namespace Bit.Android
 			public const int refresh = 2130837750;
 			
 			// aapt resource value: 0x7f0200f7
-			public const int roundedbg = 2130837751;
+			public const int refresh_selected = 2130837751;
 			
 			// aapt resource value: 0x7f0200f8
-			public const int roundedbgdark = 2130837752;
+			public const int roundedbg = 2130837752;
 			
 			// aapt resource value: 0x7f0200f9
-			public const int search = 2130837753;
+			public const int roundedbgdark = 2130837753;
 			
 			// aapt resource value: 0x7f0200fa
-			public const int share = 2130837754;
+			public const int search = 2130837754;
 			
 			// aapt resource value: 0x7f0200fb
-			public const int share_tools = 2130837755;
+			public const int share = 2130837755;
 			
 			// aapt resource value: 0x7f0200fc
-			public const int shield = 2130837756;
+			public const int share_tools = 2130837756;
 			
 			// aapt resource value: 0x7f0200fd
-			public const int splash_screen = 2130837757;
+			public const int shield = 2130837757;
 			
 			// aapt resource value: 0x7f0200fe
-			public const int star = 2130837758;
+			public const int splash_screen = 2130837758;
 			
 			// aapt resource value: 0x7f0200ff
-			public const int star_selected = 2130837759;
+			public const int tools = 2130837759;
 			
 			// aapt resource value: 0x7f020100
-			public const int tools = 2130837760;
+			public const int tools_selected = 2130837760;
 			
 			// aapt resource value: 0x7f020101
-			public const int tools_selected = 2130837761;
+			public const int trash = 2130837761;
 			
 			// aapt resource value: 0x7f020102
-			public const int trash = 2130837762;
+			public const int upload = 2130837762;
 			
 			// aapt resource value: 0x7f020103
-			public const int upload = 2130837763;
+			public const int user = 2130837763;
 			
 			// aapt resource value: 0x7f020104
-			public const int user = 2130837764;
-			
-			// aapt resource value: 0x7f020105
-			public const int yubikey = 2130837765;
+			public const int yubikey = 2130837764;
 			
 			static Drawable()
 			{
