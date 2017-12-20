@@ -57,7 +57,8 @@ namespace Bit.App.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier"),
                 LineBreakMode = LineBreakMode.TailTruncation,
-                VerticalOptions = LayoutOptions.Start
+                VerticalOptions = LayoutOptions.Start,
+                TextColor = Color.Black
             };
 
             Tgr = new TapGestureRecognizer();
