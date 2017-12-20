@@ -154,8 +154,11 @@ namespace Bit.App.Pages
             {
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 44;
-                ToolbarItems.Add(new DismissModalToolBarItem(this,
-                    _passwordValueAction == null ? AppResources.Close : AppResources.Cancel));
+
+                if(_passwordValueAction == null)
+                {
+                    ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+                }
             }
 
             var stackLayout = new StackLayout
