@@ -51,8 +51,8 @@ namespace Bit.App.Pages
             Init();
         }
 
-        public ExtendedObservableCollection<Section<Grouping>> PresentationSections { get; private set; }
-            = new ExtendedObservableCollection<Section<Grouping>>();
+        public ExtendedObservableCollection<Section<GroupingOrCipher>> PresentationSections { get; private set; }
+            = new ExtendedObservableCollection<Section<GroupingOrCipher>>();
         public ListView ListView { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
@@ -73,7 +73,7 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
                     nameof(Section<Grouping>.Name), nameof(Section<Grouping>.Count), new Thickness(16, 12))),
-                ItemTemplate = new DataTemplate(() => new VaultGroupingViewCell())
+                ItemTemplate = new GroupingOrCipherDataTemplateSelector(this)
             };
 
             if(Device.RuntimePlatform == Device.iOS)
@@ -130,7 +130,7 @@ namespace Bit.App.Pages
                 }
             });
 
-            ListView.ItemSelected += GroupingSelected;
+            ListView.ItemSelected += GroupingOrCipherSelected;
             AddCipherItem?.InitEvents();
             SearchItem?.InitEvents();
 
@@ -173,7 +173,7 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             MessagingCenter.Unsubscribe<Application, bool>(Application.Current, "SyncCompleted");
 
-            ListView.ItemSelected -= GroupingSelected;
+            ListView.ItemSelected -= GroupingOrCipherSelected;
             AddCipherItem?.Dispose();
             SearchItem?.Dispose();
         }
@@ -185,7 +185,8 @@ namespace Bit.App.Pages
 
             Task.Run(async () =>
             {
-                var sections = new List<Section<Grouping>>();
+                var sections = new List<Section<GroupingOrCipher>>();
+                var favoriteCipherGroupings = new List<GroupingOrCipher>();
                 var ciphers = await _cipherService.GetAllAsync();
                 var collectionsDict = (await _collectionService.GetAllCipherAssociationsAsync())
                     .GroupBy(c => c.Item2).ToDictionary(g => g.Key, v => v.ToList());
@@ -193,6 +194,11 @@ namespace Bit.App.Pages
                 var folderCounts = new Dictionary<string, int> { ["none"] = 0 };
                 foreach(var cipher in ciphers)
                 {
+                    if(cipher.Favorite)
+                    {
+                        favoriteCipherGroupings.Add(new GroupingOrCipher(new Cipher(cipher, _appSettingsService)));
+                    }
+
                     if(cipher.FolderId != null)
                     {
                         if(!folderCounts.ContainsKey(cipher.FolderId))
@@ -207,21 +213,28 @@ namespace Bit.App.Pages
                     }
                 }
 
+                if(favoriteCipherGroupings?.Any() ?? false)
+                {
+                    sections.Add(new Section<GroupingOrCipher>(
+                        favoriteCipherGroupings.OrderBy(g => g.Cipher.Name).ThenBy(g => g.Cipher.Subtitle).ToList(),
+                        AppResources.Favorites));
+                }
+
                 var folders = await _folderService.GetAllAsync();
                 var folderGroupings = folders?
-                    .Select(f => new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0))
-                    .OrderBy(g => g.Name).ToList();
-                folderGroupings.Add(new Grouping(AppResources.FolderNone, folderCounts["none"]));
-                sections.Add(new Section<Grouping>(folderGroupings, AppResources.Folders));
+                    .Select(f => new GroupingOrCipher(new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0)))
+                    .OrderBy(g => g.Grouping.Name).ToList();
+                folderGroupings.Add(new GroupingOrCipher(new Grouping(AppResources.FolderNone, folderCounts["none"])));
+                sections.Add(new Section<GroupingOrCipher>(folderGroupings, AppResources.Folders));
 
                 var collections = await _collectionService.GetAllAsync();
                 var collectionGroupings = collections?
-                    .Select(c => new Grouping(c,
-                        collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0))
-                   .OrderBy(g => g.Name).ToList();
+                    .Select(c => new GroupingOrCipher(new Grouping(c,
+                        collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0)))
+                   .OrderBy(g => g.Grouping.Name).ToList();
                 if(collectionGroupings?.Any() ?? false)
                 {
-                    sections.Add(new Section<Grouping>(collectionGroupings, AppResources.Collections));
+                    sections.Add(new Section<GroupingOrCipher>(collectionGroupings, AppResources.Collections));
                 }
 
                 Device.BeginInvokeOnMainThread(() =>
@@ -246,25 +259,36 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private async void GroupingSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void GroupingOrCipherSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var grouping = e.SelectedItem as Grouping;
-            if(grouping == null)
+            var groupingOrCipher = e.SelectedItem as GroupingOrCipher;
+            if(groupingOrCipher == null)
             {
                 return;
             }
 
-            Page page;
-            if(grouping.Folder)
+            if(groupingOrCipher.Grouping != null)
             {
-                page = new VaultListCiphersPage(folder: true, folderId: grouping.Id, groupingName: grouping.Name);
+                Page page;
+                if(groupingOrCipher.Grouping.Folder)
+                {
+                    page = new VaultListCiphersPage(folder: true,
+                        folderId: groupingOrCipher.Grouping.Id, groupingName: groupingOrCipher.Grouping.Name);
+                }
+                else
+                {
+                    page = new VaultListCiphersPage(collectionId: groupingOrCipher.Grouping.Id,
+                        groupingName: groupingOrCipher.Grouping.Name);
+                }
+
+                await Navigation.PushAsync(page);
             }
-            else
+            else if(groupingOrCipher.Cipher != null)
             {
-                page = new VaultListCiphersPage(collectionId: grouping.Id, groupingName: grouping.Name);
+                var page = new VaultViewCipherPage(groupingOrCipher.Cipher.Type, groupingOrCipher.Cipher.Id);
+                await Navigation.PushForDeviceAsync(page);
             }
 
-            await Navigation.PushAsync(page);
             ((ListView)sender).SelectedItem = null;
         }
 
@@ -281,6 +305,24 @@ namespace Bit.App.Pages
             {
                 Text = AppResources.Search;
                 Icon = "search.png";
+            }
+        }
+
+        public class GroupingOrCipherDataTemplateSelector : DataTemplateSelector
+        {
+            public GroupingOrCipherDataTemplateSelector(VaultListGroupingsPage page)
+            {
+                GroupingTemplate = new DataTemplate(() => new VaultGroupingViewCell());
+                CipherTemplate = new DataTemplate(() => new VaultListViewCell(
+                    (Cipher c) => Helpers.CipherMoreClickedAsync(page, c, false), true));
+            }
+
+            public DataTemplate GroupingTemplate { get; set; }
+            public DataTemplate CipherTemplate { get; set; }
+
+            protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+            {
+                return ((GroupingOrCipher)item).Cipher == null ? GroupingTemplate : CipherTemplate;
             }
         }
     }

@@ -185,6 +185,24 @@ namespace Bit.App.Models.Page
             public string Name { get; set; }
         }
 
+        public class GroupingOrCipher
+        {
+            public GroupingOrCipher(Grouping grouping)
+            {
+                Grouping = grouping;
+                Cipher = null;
+            }
+
+            public GroupingOrCipher(Cipher cipher)
+            {
+                Cipher = cipher;
+                Grouping = null;
+            }
+
+            public Grouping Grouping { get; set; }
+            public Cipher Cipher { get; set; }
+        }
+
         public class Grouping
         {
             public Grouping(string name, int count)

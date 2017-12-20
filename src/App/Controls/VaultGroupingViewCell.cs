@@ -28,7 +28,8 @@ namespace Bit.App.Controls
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                 HorizontalOptions = LayoutOptions.StartAndExpand
             };
-            Label.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Grouping.Name));
+            Label.SetBinding(Label.TextProperty, string.Format("{0}.{1}",
+                nameof(VaultListPageModel.GroupingOrCipher.Grouping), nameof(VaultListPageModel.Grouping.Name)));
 
             CountLabel = new Label
             {
@@ -37,7 +38,8 @@ namespace Bit.App.Controls
                 Style = (Style)Application.Current.Resources["text-muted"],
                 HorizontalOptions = LayoutOptions.End
             };
-            CountLabel.SetBinding(Label.TextProperty, nameof(VaultListPageModel.Grouping.Count));
+            CountLabel.SetBinding(Label.TextProperty, string.Format("{0}.{1}",
+                nameof(VaultListPageModel.GroupingOrCipher.Grouping), nameof(VaultListPageModel.Grouping.Count)));
 
             var stackLayout = new StackLayout
             {
@@ -68,9 +70,10 @@ namespace Bit.App.Controls
 
         protected override void OnBindingContextChanged()
         {
-            if(BindingContext is VaultListPageModel.Grouping grouping)
+            if(BindingContext is VaultListPageModel.GroupingOrCipher model)
             {
-                Icon.Source = grouping.Folder ? $"folder{(grouping.Id == null ? "_o" : string.Empty)}.png" : "cube.png";
+                Icon.Source = model.Grouping.Folder ?
+                    $"folder{(model.Grouping.Id == null ? "_o" : string.Empty)}.png" : "cube.png";
             }
 
             base.OnBindingContextChanged();
