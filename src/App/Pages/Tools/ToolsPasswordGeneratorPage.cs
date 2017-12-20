@@ -155,7 +155,7 @@ namespace Bit.App.Pages
                 table.RowHeight = -1;
                 table.EstimatedRowHeight = 44;
 
-                if(_passwordValueAction == null)
+                if(_passwordValueAction != null)
                 {
                     ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
                 }
