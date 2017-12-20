@@ -1194,12 +1194,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Collections</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>There are no items in this collection.</value>
   </data>

@@ -311,7 +311,7 @@ namespace Bit.App.Pages
         {
             if(_fromAutofillFramework)
             {
-                Application.Current.MainPage = new MainPage(true);
+                Application.Current.MainPage = new MainPage();
                 return true;
             }
 

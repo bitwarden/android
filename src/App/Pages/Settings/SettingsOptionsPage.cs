@@ -25,8 +25,6 @@ namespace Bit.App.Pages
         }
 
         private StackLayout StackLayout { get; set; }
-        private ExtendedSwitchCell DefaultPageVaultCell { get; set; }
-        private Label DefaultPageVaultLabel { get; set; }
         private ExtendedSwitchCell CopyTotpCell { get; set; }
         private Label CopyTotpLabel { get; set; }
         private ExtendedSwitchCell AnalyticsCell { get; set; }
@@ -42,30 +40,13 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            DefaultPageVaultCell = new ExtendedSwitchCell
-            {
-                Text = AppResources.DefaultPageVault,
-                On = _appSettings.DefaultPageVault
-            };
-
-            var defaultPageVaultTable = new FormTableView(true)
-            {
-                Root = new TableRoot
-                {
-                    new TableSection(Helpers.GetEmptyTableSectionTitle())
-                    {
-                        DefaultPageVaultCell
-                    }
-                }
-            };
-
             WebsiteIconsCell = new ExtendedSwitchCell
             {
                 Text = AppResources.DisableWebsiteIcons,
                 On = _appSettings.DisableWebsiteIcons
             };
 
-            var websiteIconsTable = new FormTableView
+            var websiteIconsTable = new FormTableView(true)
             {
                 Root = new TableRoot
                 {
@@ -110,11 +91,6 @@ namespace Bit.App.Pages
                 }
             };
 
-            DefaultPageVaultLabel = new FormTableLabel(this)
-            {
-                Text = AppResources.DefaultPageVaultDescription
-            };
-
             CopyTotpLabel = new FormTableLabel(this)
             {
                 Text = AppResources.DisableAutoTotpCopyDescription
@@ -134,7 +110,6 @@ namespace Bit.App.Pages
             {
                 Children =
                 {
-                    defaultPageVaultTable, DefaultPageVaultLabel,
                     websiteIconsTable, WebsiteIconsLabel,
                     totpTable, CopyTotpLabel,
                     analyticsTable, AnalyticsLabel
@@ -239,7 +214,6 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
 
-            DefaultPageVaultCell.OnChanged += DefaultPageVaultCell_Changed;
             AnalyticsCell.OnChanged += AnalyticsCell_Changed;
             WebsiteIconsCell.OnChanged += WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged += CopyTotpCell_OnChanged;
@@ -257,7 +231,6 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
 
-            DefaultPageVaultCell.OnChanged -= DefaultPageVaultCell_Changed;
             AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
             WebsiteIconsCell.OnChanged -= WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged -= CopyTotpCell_OnChanged;
@@ -273,7 +246,6 @@ namespace Bit.App.Pages
 
         private void Layout_LayoutChanged(object sender, EventArgs e)
         {
-            DefaultPageVaultLabel.WidthRequest = StackLayout.Bounds.Width - DefaultPageVaultLabel.Bounds.Left * 2;
             AnalyticsLabel.WidthRequest = StackLayout.Bounds.Width - AnalyticsLabel.Bounds.Left * 2;
             WebsiteIconsLabel.WidthRequest = StackLayout.Bounds.Width - WebsiteIconsLabel.Bounds.Left * 2;
             CopyTotpLabel.WidthRequest = StackLayout.Bounds.Width - CopyTotpLabel.Bounds.Left * 2;
@@ -293,17 +265,6 @@ namespace Bit.App.Pages
                 AutofillPersistNotificationLabel.WidthRequest =
                     StackLayout.Bounds.Width - AutofillPersistNotificationLabel.Bounds.Left * 2;
             }
-        }
-
-        private void DefaultPageVaultCell_Changed(object sender, ToggledEventArgs e)
-        {
-            var cell = sender as ExtendedSwitchCell;
-            if(cell == null)
-            {
-                return;
-            }
-
-            _appSettings.DefaultPageVault = cell.On;
         }
 
         private void WebsiteIconsCell_Changed(object sender, ToggledEventArgs e)

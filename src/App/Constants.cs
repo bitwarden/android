@@ -13,7 +13,6 @@
         public const string SettingDisableTotpCopy = "setting:disableAutoCopyTotp";
         public const string AutofillPersistNotification = "setting:persistNotification";
         public const string AutofillPasswordField = "setting:autofillPasswordField";
-        public const string SettingDefaultPageVault = "setting:defaultPageVault";
 
         public const string PasswordGeneratorLength = "pwGenerator:length";
         public const string PasswordGeneratorUppercase = "pwGenerator:uppercase";

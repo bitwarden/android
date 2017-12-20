@@ -14,18 +14,6 @@ namespace Bit.App.Services
             _settings = settings;
         }
 
-        public bool DefaultPageVault
-        {
-            get
-            {
-                return _settings.GetValueOrDefault(Constants.SettingDefaultPageVault, false);
-            }
-            set
-            {
-                _settings.AddOrUpdateValue(Constants.SettingDefaultPageVault, value);
-            }
-        }
-
         public bool Locked
         {
             get

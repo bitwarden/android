@@ -8,7 +8,7 @@ namespace Bit.App.Pages
 {
     public class MainPage : ExtendedTabbedPage
     {
-        public MainPage(bool myVault = false)
+        public MainPage()
         {
             TintColor = Color.FromHex("3c8dbc");
 
@@ -24,10 +24,7 @@ namespace Bit.App.Pages
             Children.Add(toolsNavigation);
             Children.Add(settingsNavigation);
 
-            if(myVault || Resolver.Resolve<IAppSettingsService>().DefaultPageVault)
-            {
-                SelectedItem = vaultNavigation;
-            }
+            SelectedItem = vaultNavigation;
         }
     }
 }

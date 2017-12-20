@@ -250,7 +250,7 @@ namespace Bit.Android
             var options = new AppOptions
             {
                 Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra("autofillFrameworkUri"),
-                MyVault = Intent.GetBooleanExtra("myVaultTile", false),
+                MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false)
             };
 

@@ -4,7 +4,6 @@ namespace Bit.App.Abstractions
 {
     public interface IAppSettingsService
     {
-        bool DefaultPageVault { get; set; }
         bool Locked { get; set; }
         DateTime LastActivity { get; set; }
         DateTime LastCacheClear { get; set; }

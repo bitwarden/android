@@ -4,7 +4,7 @@ namespace Bit.App.Models
 {
     public class AppOptions
     {
-        public bool MyVault { get; set; }
+        public bool MyVaultTile { get; set; }
         public bool FromAutofillFramework { get; set; }
         public CipherType? FillType { get; set; }
         public string Uri { get; set; }

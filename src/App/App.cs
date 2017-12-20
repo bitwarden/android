@@ -78,7 +78,7 @@ namespace Bit.App
                 }
                 else
                 {
-                    MainPage = new MainPage(myVault: _options.MyVault);
+                    MainPage = new MainPage();
                 }
             }
             else
