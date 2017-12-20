@@ -38,9 +38,15 @@ namespace Bit.App.Pages
         public Label Password { get; private set; }
         public SliderViewCell SliderCell { get; private set; }
         public TapGestureRecognizer Tgr { get; set; }
-        public ExtendedTextCell SettingsCell { get; set; }
         public ExtendedTextCell RegenerateCell { get; set; }
         public ExtendedTextCell CopyCell { get; set; }
+        public ExtendedSwitchCell UppercaseCell { get; set; }
+        public ExtendedSwitchCell LowercaseCell { get; set; }
+        public ExtendedSwitchCell SpecialCell { get; set; }
+        public ExtendedSwitchCell NumbersCell { get; set; }
+        public ExtendedSwitchCell AvoidAmbiguousCell { get; set; }
+        public StepperCell SpecialMinCell { get; set; }
+        public StepperCell NumbersMinCell { get; set; }
 
         public void Init()
         {
@@ -59,11 +65,56 @@ namespace Bit.App.Pages
             Password.SetBinding(Label.TextProperty, nameof(PasswordGeneratorPageModel.Password));
 
             SliderCell = new SliderViewCell(this, _passwordGenerationService, _settings);
-            SettingsCell = new ExtendedTextCell { Text = AppResources.MoreSettings, ShowDisclousure = true };
 
             var buttonColor = Color.FromHex("3c8dbc");
             RegenerateCell = new ExtendedTextCell { Text = AppResources.RegeneratePassword, TextColor = buttonColor };
             CopyCell = new ExtendedTextCell { Text = AppResources.CopyPassword, TextColor = buttonColor };
+
+            UppercaseCell = new ExtendedSwitchCell
+            {
+                Text = "A-Z",
+                On = _settings.GetValueOrDefault(Constants.PasswordGeneratorUppercase, true)
+            };
+
+            LowercaseCell = new ExtendedSwitchCell
+            {
+                Text = "a-z",
+                On = _settings.GetValueOrDefault(Constants.PasswordGeneratorLowercase, true)
+            };
+
+            SpecialCell = new ExtendedSwitchCell
+            {
+                Text = "!@#$%^&*",
+                On = _settings.GetValueOrDefault(Constants.PasswordGeneratorSpecial, true)
+            };
+
+            NumbersCell = new ExtendedSwitchCell
+            {
+                Text = "0-9",
+                On = _settings.GetValueOrDefault(Constants.PasswordGeneratorNumbers, true)
+            };
+
+            AvoidAmbiguousCell = new ExtendedSwitchCell
+            {
+                Text = AppResources.AvoidAmbiguousCharacters,
+                On = !_settings.GetValueOrDefault(Constants.PasswordGeneratorAmbiguous, false)
+            };
+
+            NumbersMinCell = new StepperCell(AppResources.MinNumbers,
+                _settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1), 0, 5, 1, () =>
+                {
+                    _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinNumbers,
+                        Convert.ToInt32(NumbersMinCell.Stepper.Value));
+                    Model.Password = _passwordGenerationService.GeneratePassword();
+                });
+
+            SpecialMinCell = new StepperCell(AppResources.MinSpecial,
+                _settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1), 0, 5, 1, () =>
+                {
+                    _settings.AddOrUpdateValue(Constants.PasswordGeneratorMinSpecial,
+                        Convert.ToInt32(SpecialMinCell.Stepper.Value));
+                    Model.Password = _passwordGenerationService.GeneratePassword();
+                });
 
             var table = new ExtendedTableView
             {
@@ -82,7 +133,19 @@ namespace Bit.App.Pages
                     new TableSection(AppResources.Options)
                     {
                         SliderCell,
-                        SettingsCell
+                        UppercaseCell,
+                        LowercaseCell,
+                        NumbersCell,
+                        SpecialCell
+                    },
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
+                    {
+                        NumbersMinCell,
+                        SpecialMinCell
+                    },
+                    new TableSection(Helpers.GetEmptyTableSectionTitle())
+                    {
+                        AvoidAmbiguousCell
                     }
                 }
             };
@@ -145,9 +208,15 @@ namespace Bit.App.Pages
             base.OnAppearing();
             Tgr.Tapped += Tgr_Tapped;
             RegenerateCell.Tapped += RegenerateCell_Tapped;
-            SettingsCell.Tapped += SettingsCell_Tapped;
             CopyCell.Tapped += CopyCell_Tapped;
             SliderCell.InitEvents();
+            SpecialCell.OnChanged += SpecialCell_OnChanged;
+            AvoidAmbiguousCell.OnChanged += AvoidAmbiguousCell_OnChanged;
+            UppercaseCell.OnChanged += UppercaseCell_OnChanged;
+            LowercaseCell.OnChanged += LowercaseCell_OnChanged;
+            NumbersCell.OnChanged += NumbersCell_OnChanged;
+            NumbersMinCell.InitEvents();
+            SpecialMinCell.InitEvents();
 
             if(_fromAutofill)
             {
@@ -166,7 +235,13 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             Tgr.Tapped -= Tgr_Tapped;
             RegenerateCell.Tapped -= RegenerateCell_Tapped;
-            SettingsCell.Tapped -= SettingsCell_Tapped;
+            SpecialCell.OnChanged -= SpecialCell_OnChanged;
+            AvoidAmbiguousCell.OnChanged -= AvoidAmbiguousCell_OnChanged;
+            UppercaseCell.OnChanged -= UppercaseCell_OnChanged;
+            LowercaseCell.OnChanged -= LowercaseCell_OnChanged;
+            NumbersCell.OnChanged -= NumbersCell_OnChanged;
+            NumbersMinCell.Dispose();
+            SpecialMinCell.Dispose();
             CopyCell.Tapped -= CopyCell_Tapped;
             SliderCell.Dispose();
         }
@@ -189,11 +264,6 @@ namespace Bit.App.Pages
             CopyPassword();
         }
 
-        private void SettingsCell_Tapped(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new ToolsPasswordGeneratorSettingsPage());
-        }
-
         private void CopyPassword()
         {
             if(_fromAutofill)
@@ -207,6 +277,70 @@ namespace Bit.App.Pages
             _clipboardService.CopyToClipboard(Password.Text);
             _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
+
+        private void AvoidAmbiguousCell_OnChanged(object sender, ToggledEventArgs e)
+        {
+            _settings.AddOrUpdateValue(Constants.PasswordGeneratorAmbiguous, !AvoidAmbiguousCell.On);
+            Model.Password = _passwordGenerationService.GeneratePassword();
+        }
+
+        private void NumbersCell_OnChanged(object sender, ToggledEventArgs e)
+        {
+            _settings.AddOrUpdateValue(Constants.PasswordGeneratorNumbers, NumbersCell.On);
+
+            if(InvalidState())
+            {
+                _settings.AddOrUpdateValue(Constants.PasswordGeneratorLowercase, true);
+                LowercaseCell.On = true;
+            }
+
+            Model.Password = _passwordGenerationService.GeneratePassword();
+        }
+
+        private void SpecialCell_OnChanged(object sender, ToggledEventArgs e)
+        {
+            _settings.AddOrUpdateValue(Constants.PasswordGeneratorSpecial, SpecialCell.On);
+
+            if(InvalidState())
+            {
+                _settings.AddOrUpdateValue(Constants.PasswordGeneratorLowercase, true);
+                LowercaseCell.On = true;
+            }
+
+            Model.Password = _passwordGenerationService.GeneratePassword();
+        }
+
+        private void LowercaseCell_OnChanged(object sender, ToggledEventArgs e)
+        {
+            _settings.AddOrUpdateValue(Constants.PasswordGeneratorLowercase, LowercaseCell.On);
+
+            if(InvalidState())
+            {
+                _settings.AddOrUpdateValue(Constants.PasswordGeneratorUppercase, true);
+                UppercaseCell.On = true;
+            }
+
+            Model.Password = _passwordGenerationService.GeneratePassword();
+        }
+
+        private void UppercaseCell_OnChanged(object sender, ToggledEventArgs e)
+        {
+            _settings.AddOrUpdateValue(Constants.PasswordGeneratorUppercase, UppercaseCell.On);
+
+            if(InvalidState())
+            {
+                _settings.AddOrUpdateValue(Constants.PasswordGeneratorLowercase, true);
+                LowercaseCell.On = true;
+            }
+
+            Model.Password = _passwordGenerationService.GeneratePassword();
+        }
+
+        private bool InvalidState()
+        {
+            return !LowercaseCell.On && !UppercaseCell.On && !NumbersCell.On && !SpecialCell.On;
+        }
+
 
         // TODO: move to standalone reusable control
         public class SliderViewCell : ExtendedViewCell, IDisposable

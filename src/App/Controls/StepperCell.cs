@@ -1,12 +1,17 @@
 ﻿using Bit.App.Utilities;
+using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
     public class StepperCell : ExtendedViewCell
     {
-        public StepperCell(string labelText, double value, double min, double max, double increment)
+        private Action _changedAction;
+
+        public StepperCell(string labelText, double value, double min, double max, double increment, Action changed = null)
         {
+            _changedAction = changed;
+
             Label = new Label
             {
                 Text = labelText,
@@ -62,6 +67,7 @@ namespace Bit.App.Controls
         private void Stepper_ValueChanged(object sender, ValueChangedEventArgs e)
         {
             StepperValueLabel.Text = e.NewValue.ToString();
+            _changedAction?.Invoke();
         }
 
         public void InitEvents()
