@@ -5,6 +5,7 @@ using Android.Views;
 using Android.Views.Autofill;
 using static Android.App.Assist.AssistStructure;
 using Android.Text;
+using static Android.Views.ViewStructure;
 
 namespace Bit.Android.Autofill
 {
@@ -24,7 +25,9 @@ namespace Bit.Android.Autofill
             Clickable = node.IsClickable;
             Visible = node.Visibility == ViewStates.Visible;
             Hints = FilterForSupportedHints(node.GetAutofillHints());
+            Hint = node.Hint;
             AutofillOptions = node.GetAutofillOptions()?.ToList();
+            HtmlInfo = node.HtmlInfo;
             Node = node;
 
             if(node.AutofillValue != null)
@@ -63,6 +66,7 @@ namespace Bit.Android.Autofill
                 UpdateSaveTypeFromHints();
             }
         }
+        public string Hint { get; set; }
         public int Id { get; private set; }
         public string IdEntry { get; set; }
         public AutofillId AutofillId { get; private set; }
@@ -77,6 +81,7 @@ namespace Bit.Android.Autofill
         public long? DateValue { get; set; }
         public int? ListValue { get; set; }
         public bool? ToggleValue { get; set; }
+        public HtmlInfo HtmlInfo { get; private set; }
         public ViewNode Node { get; private set; }
 
         private void UpdateSaveTypeFromHints()

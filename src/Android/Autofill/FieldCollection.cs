@@ -61,7 +61,7 @@ namespace Bit.Android.Autofill
                     _passwordFields = Fields
                         .Where(f =>
                             (!f.IdEntry?.ToLowerInvariant().Contains("search") ?? true) &&
-                            (!f.Node?.Hint?.ToLowerInvariant().Contains("search") ?? true) &&
+                            (!f.Hint?.ToLowerInvariant().Contains("search") ?? true) &&
                             (
                                 f.InputType.HasFlag(InputTypes.TextVariationPassword) ||
                                 f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
@@ -71,7 +71,8 @@ namespace Bit.Android.Autofill
                     if(!_passwordFields.Any())
                     {
                         _passwordFields = Fields.Where(f =>
-                            f.IdEntry?.ToLowerInvariant().Contains("password") ?? false).ToList();
+                            (f.IdEntry?.ToLowerInvariant().Contains("password") ?? false)
+                            || (f.Hint?.ToLowerInvariant().Contains("password") ?? false)).ToList();
                     }
                 }
 
@@ -104,7 +105,7 @@ namespace Bit.Android.Autofill
                 {
                     foreach(var passwordField in PasswordFields)
                     {
-                        var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
+                        var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId).LastOrDefault();
                         if(usernameField != null)
                         {
                             _usernameFields.Add(usernameField);
@@ -137,10 +138,14 @@ namespace Bit.Android.Autofill
 
             _passwordFields = _usernameFields = null;
 
-            Ids.Add(field.Id);
+            if(field.Id > -1)
+            {
+                Ids.Add(field.Id);
+                IdToFieldMap.Add(field.Id, field);
+            }
+
             Fields.Add(field);
             AutofillIds.Add(field.AutofillId);
-            IdToFieldMap.Add(field.Id, field);
 
             if(field.Hints != null)
             {
@@ -181,7 +186,7 @@ namespace Bit.Android.Autofill
                     }
                 };
 
-                var usernameField = Fields.TakeWhile(f => f.Id != passwordField.Id).LastOrDefault();
+                var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId).LastOrDefault();
                 savedItem.Login.Username = GetFieldValue(usernameField);
 
                 return savedItem;
