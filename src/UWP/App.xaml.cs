@@ -9,6 +9,8 @@ using Plugin.Fingerprint;
 using Plugin.Settings.Abstractions;
 using SimpleInjector;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -16,6 +18,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using XLabs.Ioc;
 using XLabs.Ioc.SimpleInjectorContainer;
+using FFImageLoading.Forms;
 
 namespace Bit.UWP
 {
@@ -42,7 +45,13 @@ namespace Bit.UWP
             {
                 rootFrame = new Frame();
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                Xamarin.Forms.Forms.Init(e);
+
+                var assembliesToInclude = new List<Assembly>()
+                {
+                    typeof(CachedImage).GetTypeInfo().Assembly,
+                    typeof(CachedImageRenderer).GetTypeInfo().Assembly
+                };
+                Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 
                 ((Style)Resources["TabbedPageStyle"]).Setters[0] = ((Style)Resources["TabbedPageStyle2"]).Setters[0];
 
