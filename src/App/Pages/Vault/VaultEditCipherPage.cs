@@ -643,9 +643,9 @@ namespace Bit.App.Pages
                 AlertNoConnection();
             }
 
-            NameCell.InitEvents();
-            NotesCell.InitEvents();
-            FolderCell.InitEvents();
+            NameCell?.InitEvents();
+            NotesCell?.InitEvents();
+            FolderCell?.InitEvents();
 
             if(AttachmentsCell != null)
             {
@@ -655,49 +655,58 @@ namespace Bit.App.Pages
             {
                 CustomFieldsCell.Tapped += CustomFieldsCell_Tapped;
             }
-            DeleteCell.Tapped += DeleteCell_Tapped;
+            if(DeleteCell != null)
+            {
+                DeleteCell.Tapped += DeleteCell_Tapped;
+            }
 
             switch(Cipher.Type)
             {
                 case CipherType.Login:
-                    LoginPasswordCell.InitEvents();
-                    LoginUsernameCell.InitEvents();
-                    LoginUriCell.InitEvents();
-                    LoginTotpCell.InitEvents();
-                    LoginPasswordCell.Button.Clicked += PasswordButton_Clicked;
-                    LoginGenerateCell.Tapped += GenerateCell_Tapped;
+                    LoginPasswordCell?.InitEvents();
+                    LoginUsernameCell?.InitEvents();
+                    LoginUriCell?.InitEvents();
+                    LoginTotpCell?.InitEvents();
+                    if(LoginPasswordCell?.Button != null)
+                    {
+                        LoginPasswordCell.Button.Clicked += PasswordButton_Clicked;
+                    }
+                    if(LoginGenerateCell != null)
+                    {
+                        LoginGenerateCell.Tapped += GenerateCell_Tapped;
+                    }
                     if(LoginTotpCell?.Button != null)
                     {
                         LoginTotpCell.Button.Clicked += TotpButton_Clicked;
                     }
                     break;
                 case CipherType.Card:
-                    CardBrandCell.InitEvents();
-                    CardCodeCell.InitEvents();
-                    CardExpMonthCell.InitEvents();
-                    CardExpYearCell.InitEvents();
-                    CardNameCell.InitEvents();
-                    CardNumberCell.InitEvents();
+                    CardBrandCell?.InitEvents();
+                    CardCodeCell?.InitEvents();
+                    CardExpMonthCell?.InitEvents();
+                    CardExpYearCell?.InitEvents();
+                    CardNameCell?.InitEvents();
+                    CardNumberCell?.InitEvents();
                     break;
                 case CipherType.Identity:
-                    IdTitleCell.InitEvents();
-                    IdFirstNameCell.InitEvents();
-                    IdMiddleNameCell.InitEvents();
-                    IdLastNameCell.InitEvents();
-                    IdUsernameCell.InitEvents();
-                    IdCompanyCell.InitEvents();
-                    IdSsnCell.InitEvents();
-                    IdPassportNumberCell.InitEvents();
-                    IdLicenseNumberCell.InitEvents();
-                    IdEmailCell.InitEvents();
-                    IdPhoneCell.InitEvents();
-                    IdAddress1Cell.InitEvents();
-                    IdAddress2Cell.InitEvents();
-                    IdAddress3Cell.InitEvents();
-                    IdCityCell.InitEvents();
-                    IdStateCell.InitEvents();
-                    IdPostalCodeCell.InitEvents();
-                    IdCountryCell.InitEvents();
+                    IdTitleCell?.InitEvents();
+                    IdFirstNameCell?.InitEvents();
+                    IdMiddleNameCell?.InitEvents();
+                    IdLastNameCell?.InitEvents();
+                    IdUsernameCell?.InitEvents();
+                    IdCompanyCell?.InitEvents();
+                    IdSsnCell?.InitEvents();
+                    IdPassportNumberCell?.InitEvents();
+                    IdLicenseNumberCell?.InitEvents();
+                    IdEmailCell?.InitEvents();
+                    IdPhoneCell?.InitEvents();
+                    IdAddress1Cell?.InitEvents();
+                    IdAddress2Cell?.InitEvents();
+                    IdAddress3Cell?.InitEvents();
+                    IdCityCell?.InitEvents();
+                    IdStateCell?.InitEvents();
+                    IdPostalCodeCell?.InitEvents();
+                    IdCountryCell?.InitEvents();
                     break;
                 default:
                     break;
@@ -708,9 +717,9 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
 
-            NameCell.Dispose();
-            NotesCell.Dispose();
-            FolderCell.Dispose();
+            NameCell?.Dispose();
+            NotesCell?.Dispose();
+            FolderCell?.Dispose();
 
             if(AttachmentsCell != null)
             {
@@ -720,49 +729,58 @@ namespace Bit.App.Pages
             {
                 CustomFieldsCell.Tapped -= CustomFieldsCell_Tapped;
             }
-            DeleteCell.Tapped -= DeleteCell_Tapped;
+            if(DeleteCell != null)
+            {
+                DeleteCell.Tapped -= DeleteCell_Tapped;
+            }
 
             switch(Cipher.Type)
             {
                 case CipherType.Login:
-                    LoginTotpCell.Dispose();
-                    LoginPasswordCell.Dispose();
-                    LoginUsernameCell.Dispose();
-                    LoginUriCell.Dispose();
-                    LoginPasswordCell.Button.Clicked -= PasswordButton_Clicked;
-                    LoginGenerateCell.Tapped -= GenerateCell_Tapped;
+                    LoginTotpCell?.Dispose();
+                    LoginPasswordCell?.Dispose();
+                    LoginUsernameCell?.Dispose();
+                    LoginUriCell?.Dispose();
+                    if(LoginPasswordCell?.Button != null)
+                    {
+                        LoginPasswordCell.Button.Clicked -= PasswordButton_Clicked;
+                    }
+                    if(LoginGenerateCell != null)
+                    {
+                        LoginGenerateCell.Tapped -= GenerateCell_Tapped;
+                    }
                     if(LoginTotpCell?.Button != null)
                     {
                         LoginTotpCell.Button.Clicked -= TotpButton_Clicked;
                     }
                     break;
                 case CipherType.Card:
-                    CardBrandCell.Dispose();
-                    CardCodeCell.Dispose();
-                    CardExpMonthCell.Dispose();
-                    CardExpYearCell.Dispose();
-                    CardNameCell.Dispose();
-                    CardNumberCell.Dispose();
+                    CardBrandCell?.Dispose();
+                    CardCodeCell?.Dispose();
+                    CardExpMonthCell?.Dispose();
+                    CardExpYearCell?.Dispose();
+                    CardNameCell?.Dispose();
+                    CardNumberCell?.Dispose();
                     break;
                 case CipherType.Identity:
-                    IdTitleCell.Dispose();
-                    IdFirstNameCell.Dispose();
-                    IdMiddleNameCell.Dispose();
-                    IdLastNameCell.Dispose();
-                    IdUsernameCell.Dispose();
-                    IdCompanyCell.Dispose();
-                    IdSsnCell.Dispose();
-                    IdPassportNumberCell.Dispose();
-                    IdLicenseNumberCell.Dispose();
-                    IdEmailCell.Dispose();
-                    IdPhoneCell.Dispose();
-                    IdAddress1Cell.Dispose();
-                    IdAddress2Cell.Dispose();
-                    IdAddress3Cell.Dispose();
-                    IdCityCell.Dispose();
-                    IdStateCell.Dispose();
-                    IdPostalCodeCell.Dispose();
-                    IdCountryCell.Dispose();
+                    IdTitleCell?.Dispose();
+                    IdFirstNameCell?.Dispose();
+                    IdMiddleNameCell?.Dispose();
+                    IdLastNameCell?.Dispose();
+                    IdUsernameCell?.Dispose();
+                    IdCompanyCell?.Dispose();
+                    IdSsnCell?.Dispose();
+                    IdPassportNumberCell?.Dispose();
+                    IdLicenseNumberCell?.Dispose();
+                    IdEmailCell?.Dispose();
+                    IdPhoneCell?.Dispose();
+                    IdAddress1Cell?.Dispose();
+                    IdAddress2Cell?.Dispose();
+                    IdAddress3Cell?.Dispose();
+                    IdCityCell?.Dispose();
+                    IdStateCell?.Dispose();
+                    IdPostalCodeCell?.Dispose();
+                    IdCountryCell?.Dispose();
                     break;
                 default:
                     break;
