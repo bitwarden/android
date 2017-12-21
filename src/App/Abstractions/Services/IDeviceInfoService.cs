@@ -2,6 +2,7 @@
 {
     public interface IDeviceInfoService
     {
+        string Type { get; }
         string Model { get; }
         int Version { get; }
         float Scale { get; }

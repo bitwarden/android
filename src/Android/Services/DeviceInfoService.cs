@@ -8,6 +8,7 @@ namespace Bit.Android.Services
 {
     public class DeviceInfoService : IDeviceInfoService
     {
+        public string Type => Xamarin.Forms.Device.Android;
         public string Model => Build.Model;
         public int Version => (int)Build.VERSION.SdkInt;
         public float Scale

@@ -13,6 +13,7 @@ namespace Bit.UWP.Services
     {
         private const string SmartCardEmulatorType = "Windows.Devices.SmartCards.SmartCardEmulator";
 
+        public string Type => Xamarin.Forms.Device.UWP;
         public string Model => SystemInformation.DeviceModel;
         public int Version => SystemInformation.OperatingSystemVersion.Build;
         public float Scale => (float)DisplayInformation.GetForCurrentView().RawPixelsPerViewPixel;

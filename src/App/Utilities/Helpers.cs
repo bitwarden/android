@@ -23,9 +23,14 @@ namespace Bit.App.Utilities
         }
 
         public static T OnPlatform<T>(T iOS = default(T), T Android = default(T),
-            T WinPhone = default(T), T Windows = default(T))
+            T WinPhone = default(T), T Windows = default(T), string platform = null)
         {
-            switch(Device.RuntimePlatform)
+            if(platform == null)
+            {
+                platform = Device.RuntimePlatform;
+            }
+
+            switch(platform)
             {
                 case Device.iOS:
                     return iOS;

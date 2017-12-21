@@ -7,14 +7,14 @@ namespace Bit.iOS.Core.Services
 {
     public class DeviceInfoService : IDeviceInfoService
     {
+        public string Type => Xamarin.Forms.Device.iOS;
         public string Model => UIDevice.CurrentDevice.Model;
         public int Version
         {
             get
             {
-                int version;
                 var versionParts = UIDevice.CurrentDevice.SystemVersion.Split('.');
-                if(versionParts.Length > 0 && int.TryParse(versionParts[0], out version))
+                if(versionParts.Length > 0 && int.TryParse(versionParts[0], out int version))
                 {
                     return version;
                 }

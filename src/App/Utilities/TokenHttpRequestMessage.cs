@@ -14,6 +14,7 @@ namespace Bit.App
         {
             var tokenService = Resolver.Resolve<ITokenService>();
             var appIdService = Resolver.Resolve<IAppIdService>();
+            var deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 
             if(!string.IsNullOrWhiteSpace(tokenService.Token))
             {
@@ -25,7 +26,7 @@ namespace Bit.App
             }
 
             Headers.Add("Device-Type", ((int)Helpers.OnPlatform(iOS: DeviceType.iOS,
-                Android: DeviceType.Android, Windows: DeviceType.UWP)).ToString());
+                Android: DeviceType.Android, Windows: DeviceType.UWP, platform: deviceInfoService.Type)).ToString());
         }
 
         public TokenHttpRequestMessage(object requestObject)
