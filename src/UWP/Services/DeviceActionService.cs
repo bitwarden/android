@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Models.Page;
+using Coding4Fun.Toolkit.Controls;
 using System;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -8,8 +9,10 @@ using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.System;
+using Windows.UI;
 using Windows.UI.Core;
-using Xamarin.Forms;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media;
 
 namespace Bit.UWP.Services
 {
@@ -78,7 +81,7 @@ namespace Bit.UWP.Services
         private async Task SelectFileResult(StorageFile file)
         {
             var buffer = await FileIO.ReadBufferAsync(file);
-            MessagingCenter.Send(Application.Current, "SelectFileResult",
+            Xamarin.Forms.MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
                 new Tuple<byte[], string>(buffer.ToArray(), file.Name));
         }
 
@@ -120,6 +123,25 @@ namespace Bit.UWP.Services
         public void OpenAutofillSettings()
         {
             throw new NotImplementedException();
+        }
+
+        public void Toast(string text, bool longDuration = false)
+        {
+            new ToastPrompt
+            {
+                Message = text,
+                TextWrapping = TextWrapping.Wrap,
+                MillisecondsUntilHidden = Convert.ToInt32(longDuration ? 5 : 2) * 1000,
+                Background = new SolidColorBrush(Color.FromArgb(255, 73, 73, 73)),
+                Foreground = new SolidColorBrush(Colors.White),
+                Margin = new Thickness(0, 0, 0, 100),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Bottom,
+                HorizontalContentAlignment = HorizontalAlignment.Center,
+                VerticalContentAlignment = VerticalAlignment.Center,
+                Stretch = Stretch.Uniform,
+                IsHitTestVisible = false
+            }.Show();
         }
     }
 }

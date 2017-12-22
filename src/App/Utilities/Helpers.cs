@@ -157,8 +157,9 @@ namespace Bit.App.Utilities
 
         public static void CipherCopy(string copyText, string alertLabel)
         {
-            Resolver.Resolve<IDeviceActionService>().CopyToClipboard(copyText);
-            Resolver.Resolve<IUserDialogs>().Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+            var daService = Resolver.Resolve<IDeviceActionService>();
+            daService.CopyToClipboard(copyText);
+            daService.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         public static async void AddCipher(Page page, string folderId)

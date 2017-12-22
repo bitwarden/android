@@ -26,6 +26,16 @@ namespace Bit.iOS.Services
             _deviceInfoService = deviceInfoService;
         }
 
+        public void Toast(string text, bool longDuration = false)
+        {
+            var snackbar = new TTGSnackBar.TTGSnackbar(text)
+            {
+                Duration = TimeSpan.FromSeconds(longDuration ? 5 : 2),
+                AnimationType = TTGSnackBar.TTGSnackbarAnimationType.FadeInFadeOut
+            };
+            snackbar.Show();
+        }
+
         public void CopyToClipboard(string text)
         {
             UIPasteboard clipboard = UIPasteboard.General;

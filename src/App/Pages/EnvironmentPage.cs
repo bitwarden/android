@@ -14,6 +14,7 @@ namespace Bit.App.Pages
     {
         private IAppSettingsService _appSettings;
         private IUserDialogs _userDialogs;
+        private IDeviceActionService _deviceActionService;
         private IGoogleAnalyticsService _googleAnalyticsService;
 
         public EnvironmentPage()
@@ -21,6 +22,7 @@ namespace Bit.App.Pages
         {
             _appSettings = Resolver.Resolve<IAppSettingsService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
@@ -238,7 +240,7 @@ namespace Bit.App.Pages
             _appSettings.IdentityUrl = IdentityUrlCell.Entry.Text;
             _appSettings.ApiUrl = ApiUrlCell.Entry.Text;
             _appSettings.WebVaultUrl = WebVaultUrlCell.Entry.Text;
-            _userDialogs.Toast(AppResources.EnvironmentSaved);
+            _deviceActionService.Toast(AppResources.EnvironmentSaved);
             _googleAnalyticsService.TrackAppEvent("SetEnvironmentUrls");
             await Navigation.PopForDeviceAsync();
         }

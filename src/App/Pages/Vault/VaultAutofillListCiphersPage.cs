@@ -21,7 +21,6 @@ namespace Bit.App.Pages
     {
         private readonly ICipherService _cipherService;
         private readonly IDeviceInfoService _deviceInfoService;
-        private readonly IDeviceActionService _deviceActionService;
         private readonly ISettingsService _settingsService;
         private readonly IAppSettingsService _appSettingsService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
@@ -45,7 +44,7 @@ namespace Bit.App.Pages
 
             _cipherService = Resolver.Resolve<ICipherService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            DeviceActionService = Resolver.Resolve<IDeviceActionService>();
             _settingsService = Resolver.Resolve<ISettingsService>();
             UserDialogs = Resolver.Resolve<IUserDialogs>();
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
@@ -63,6 +62,7 @@ namespace Bit.App.Pages
         private AddCipherToolBarItem AddCipherItem { get; set; }
         private IGoogleAnalyticsService GoogleAnalyticsService { get; set; }
         private IUserDialogs UserDialogs { get; set; }
+        private IDeviceActionService DeviceActionService { get; set; }
         private string Uri { get; set; }
 
         private void Init()
@@ -143,7 +143,7 @@ namespace Bit.App.Pages
         protected override bool OnBackButtonPressed()
         {
             GoogleAnalyticsService.TrackExtensionEvent("BackClosed", Uri.StartsWith("http") ? "Website" : "App");
-            _deviceActionService.CloseAutofill();
+            DeviceActionService.CloseAutofill();
             return true;
         }
 
@@ -245,7 +245,7 @@ namespace Bit.App.Pages
                 if(doAutofill)
                 {
                     GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
-                    _deviceActionService.Autofill(cipher);
+                    DeviceActionService.Autofill(cipher);
                 }
             }
 
@@ -294,8 +294,8 @@ namespace Bit.App.Pages
                 _page.GoogleAnalyticsService.TrackExtensionEvent("CloseToSearch",
                     _page.Uri.StartsWith("http") ? "Website" : "App");
                 Application.Current.MainPage = new ExtendedNavigationPage(new VaultListCiphersPage(uri: _page.Uri));
-                _page.UserDialogs.Toast(string.Format(AppResources.BitwardenAutofillServiceSearch, _page._name),
-                    TimeSpan.FromSeconds(10));
+                _page.DeviceActionService.Toast(string.Format(AppResources.BitwardenAutofillServiceSearch, _page._name),
+                    true);
             }
         }
     }

@@ -223,7 +223,7 @@ namespace Bit.App.Services
             Device.BeginInvokeOnMainThread(() => Application.Current.MainPage = new ExtendedNavigationPage(new HomePage()));
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {
-                Resolver.Resolve<IUserDialogs>()?.Toast(logoutMessage);
+                Resolver.Resolve<IDeviceActionService>()?.Toast(logoutMessage);
             }
         }
 

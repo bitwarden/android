@@ -16,6 +16,7 @@ namespace Bit.App.Pages
         private readonly string _folderId;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private DateTime? _lastAction;
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
             _folderId = folderId;
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
@@ -103,7 +105,7 @@ namespace Bit.App.Pages
 
                 if(saveResult.Succeeded)
                 {
-                    _userDialogs.Toast(AppResources.FolderUpdated);
+                    _deviceActionService.Toast(AppResources.FolderUpdated);
                     _googleAnalyticsService.TrackAppEvent("EditedFolder");
                     await Navigation.PopForDeviceAsync();
                 }
@@ -166,7 +168,7 @@ namespace Bit.App.Pages
 
             if(deleteTask.Succeeded)
             {
-                _userDialogs.Toast(AppResources.FolderDeleted);
+                _deviceActionService.Toast(AppResources.FolderDeleted);
                 await Navigation.PopForDeviceAsync();
             }
             else if(deleteTask.Errors.Count() > 0)

@@ -16,6 +16,7 @@ namespace Bit.App.Pages
     {
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private DateTime? _lastAction;
@@ -24,6 +25,7 @@ namespace Bit.App.Pages
         {
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
@@ -89,7 +91,7 @@ namespace Bit.App.Pages
 
                 if(saveResult.Succeeded)
                 {
-                    _userDialogs.Toast(AppResources.FolderCreated);
+                    _deviceActionService.Toast(AppResources.FolderCreated);
                     _googleAnalyticsService.TrackAppEvent("CreatedFolder");
                     await Navigation.PopForDeviceAsync();
                 }

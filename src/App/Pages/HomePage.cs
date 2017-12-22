@@ -14,15 +14,15 @@ namespace Bit.App.Pages
     public class HomePage : ExtendedContentPage
     {
         private readonly IAuthService _authService;
-        private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
+        private readonly IDeviceActionService _deviceActionService;
         private DateTime? _lastAction;
 
         public HomePage()
             : base(updateActivity: false)
         {
             _authService = Resolver.Resolve<IAuthService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _settings = Resolver.Resolve<ISettings>();
 
             Init();
@@ -130,7 +130,7 @@ namespace Bit.App.Pages
         {
             await Navigation.PopForDeviceAsync();
             await Navigation.PushForDeviceAsync(new LoginPage(email));
-            _userDialogs.Toast(AppResources.AccountCreated);
+            _deviceActionService.Toast(AppResources.AccountCreated);
         }
 
         public async Task SettingsAsync()

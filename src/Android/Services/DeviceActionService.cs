@@ -45,6 +45,12 @@ namespace Bit.Android.Services
 
         private Context CurrentContext => CrossCurrentActivity.Current.Activity;
 
+        public void Toast(string text, bool longDuration = false)
+        {
+            global::Android.Widget.Toast.MakeText(CurrentContext, text,
+                longDuration ? global::Android.Widget.ToastLength.Long : global::Android.Widget.ToastLength.Short).Show();
+        }
+
         public void CopyToClipboard(string text)
         {
             var clipboardManager = (ClipboardManager)CurrentContext.GetSystemService(Context.ClipboardService);

@@ -19,7 +19,7 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
-        private readonly IDeviceActionService _deviceActiveService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ITokenService _tokenService;
         private readonly ICryptoService _cryptoService;
@@ -36,7 +36,7 @@ namespace Bit.App.Pages
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
-            _deviceActiveService = Resolver.Resolve<IDeviceActionService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _tokenService = Resolver.Resolve<ITokenService>();
             _cryptoService = Resolver.Resolve<ICryptoService>();
@@ -61,7 +61,7 @@ namespace Bit.App.Pages
             var selectButton = new ExtendedButton
             {
                 Text = AppResources.ChooseFile,
-                Command = new Command(async () => await _deviceActiveService.SelectFileAsync()),
+                Command = new Command(async () => await _deviceActionService.SelectFileAsync()),
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                 FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Button))
             };
@@ -169,7 +169,7 @@ namespace Bit.App.Pages
                 {
                     _fileBytes = null;
                     FileLabel.Text = AppResources.NoFileChosen;
-                    _userDialogs.Toast(AppResources.AttachementAdded);
+                    _deviceActionService.Toast(AppResources.AttachementAdded);
                     _googleAnalyticsService.TrackAppEvent("AddedAttachment");
                     await LoadAttachmentsAsync();
                 }
@@ -272,7 +272,7 @@ namespace Bit.App.Pages
 
             if(saveTask.Succeeded)
             {
-                _userDialogs.Toast(AppResources.AttachmentDeleted);
+                _deviceActionService.Toast(AppResources.AttachmentDeleted);
                 _googleAnalyticsService.TrackAppEvent("DeletedAttachment");
                 await LoadAttachmentsAsync();
             }

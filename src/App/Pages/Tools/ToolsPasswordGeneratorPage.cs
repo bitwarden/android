@@ -13,20 +13,18 @@ namespace Bit.App.Pages
 {
     public class ToolsPasswordGeneratorPage : ExtendedContentPage
     {
-        private readonly IUserDialogs _userDialogs;
         private readonly IPasswordGenerationService _passwordGenerationService;
         private readonly ISettings _settings;
-        private readonly IDeviceActionService _clipboardService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly Action<string> _passwordValueAction;
         private readonly bool _fromAutofill;
 
         public ToolsPasswordGeneratorPage(Action<string> passwordValueAction = null, bool fromAutofill = false)
         {
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _passwordGenerationService = Resolver.Resolve<IPasswordGenerationService>();
             _settings = Resolver.Resolve<ISettings>();
-            _clipboardService = Resolver.Resolve<IDeviceActionService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _passwordValueAction = passwordValueAction;
             _fromAutofill = fromAutofill;
@@ -278,8 +276,8 @@ namespace Bit.App.Pages
             {
                 _googleAnalyticsService.TrackAppEvent("CopiedGeneratedPassword");
             }
-            _clipboardService.CopyToClipboard(Password.Text);
-            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+            _deviceActionService.CopyToClipboard(Password.Text);
+            _deviceActionService.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
 
         private void AvoidAmbiguousCell_OnChanged(object sender, ToggledEventArgs e)

@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
         private readonly IUserDialogs _userDialogs;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly IDeviceInfoService _deviceInfo;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
@@ -31,6 +32,7 @@ namespace Bit.App.Pages
             _cipherService = Resolver.Resolve<ICipherService>();
             _folderService = Resolver.Resolve<IFolderService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
@@ -618,7 +620,7 @@ namespace Bit.App.Pages
 
                 if(saveTask.Succeeded)
                 {
-                    _userDialogs.Toast(AppResources.ItemUpdated);
+                    _deviceActionService.Toast(AppResources.ItemUpdated);
                     _googleAnalyticsService.TrackAppEvent("EditedCipher");
                     await Navigation.PopForDeviceAsync();
                 }
@@ -804,7 +806,7 @@ namespace Bit.App.Pages
                     if(!string.IsNullOrWhiteSpace(key))
                     {
                         LoginTotpCell.Entry.Text = key;
-                        _userDialogs.Toast(AppResources.AuthenticatorKeyAdded);
+                        _deviceActionService.Toast(AppResources.AuthenticatorKeyAdded);
                     }
                     else
                     {
@@ -827,7 +829,7 @@ namespace Bit.App.Pages
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
                 LoginPasswordCell.Entry.Text = password;
-                _userDialogs.Toast(AppResources.PasswordGenerated);
+                _deviceActionService.Toast(AppResources.PasswordGenerated);
             });
             await Navigation.PushForDeviceAsync(page);
         }
@@ -863,7 +865,7 @@ namespace Bit.App.Pages
 
             if(deleteTask.Succeeded)
             {
-                _userDialogs.Toast(AppResources.ItemDeleted);
+                _deviceActionService.Toast(AppResources.ItemDeleted);
                 _googleAnalyticsService.TrackAppEvent("DeletedCipher");
                 await Navigation.PopForDeviceAsync();
             }

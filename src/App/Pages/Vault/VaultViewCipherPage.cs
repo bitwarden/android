@@ -475,7 +475,7 @@ namespace Bit.App.Pages
         private void Copy(string copyText, string alertLabel)
         {
             _deviceActionService.CopyToClipboard(copyText);
-            _userDialogs.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
+            _deviceActionService.Toast(string.Format(AppResources.ValueHasBeenCopied, alertLabel));
         }
 
         private void TotpTick(string totpKey)

@@ -373,7 +373,7 @@ namespace Bit.App.Pages
 
             if(response.Succeeded && doToast)
             {
-                _userDialogs.Toast(AppResources.VerificationEmailSent);
+                _deviceActionService.Toast(AppResources.VerificationEmailSent);
             }
             else if(!response.Succeeded)
             {

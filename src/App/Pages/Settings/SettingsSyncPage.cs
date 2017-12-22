@@ -15,6 +15,7 @@ namespace Bit.App.Pages
     {
         private readonly ISyncService _syncService;
         private readonly IUserDialogs _userDialogs;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly ISettings _settings;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
@@ -23,6 +24,7 @@ namespace Bit.App.Pages
         {
             _syncService = Resolver.Resolve<ISyncService>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
@@ -107,12 +109,12 @@ namespace Bit.App.Pages
             _userDialogs.HideLoading();
             if(succeeded)
             {
-                _userDialogs.Toast(AppResources.SyncingComplete);
+                _deviceActionService.Toast(AppResources.SyncingComplete);
                 _googleAnalyticsService.TrackAppEvent("Synced");
             }
             else
             {
-                _userDialogs.Toast(AppResources.SyncingFailed);
+                _deviceActionService.Toast(AppResources.SyncingFailed);
             }
 
             SetLastSync();

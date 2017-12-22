@@ -335,7 +335,7 @@ namespace Bit.App.Pages
                     if(!string.IsNullOrWhiteSpace(key))
                     {
                         LoginTotpCell.Entry.Text = key;
-                        _userDialogs.Toast(AppResources.AuthenticatorKeyAdded);
+                        _deviceActionService.Toast(AppResources.AuthenticatorKeyAdded);
                     }
                     else
                     {
@@ -352,7 +352,7 @@ namespace Bit.App.Pages
             var page = new ToolsPasswordGeneratorPage((password) =>
             {
                 LoginPasswordCell.Entry.Text = password;
-                _userDialogs.Toast(AppResources.PasswordGenerated);
+                _deviceActionService.Toast(AppResources.PasswordGenerated);
             }, _fromAutofill);
             await Navigation.PushForDeviceAsync(page);
         }
@@ -750,7 +750,7 @@ namespace Bit.App.Pages
 
                 if(saveTask.Succeeded)
                 {
-                    _userDialogs.Toast(AppResources.NewItemCreated);
+                    _deviceActionService.Toast(AppResources.NewItemCreated);
                     if(_fromAutofill)
                     {
                         _googleAnalyticsService.TrackExtensionEvent("CreatedCipher");

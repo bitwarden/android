@@ -18,6 +18,7 @@ namespace Bit.App.Pages
     {
         private readonly ICipherService _cipherService;
         private readonly IUserDialogs _userDialogs;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly string _cipherId;
@@ -31,6 +32,7 @@ namespace Bit.App.Pages
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
@@ -120,7 +122,7 @@ namespace Bit.App.Pages
 
                 if(saveTask.Succeeded)
                 {
-                    _userDialogs.Toast(AppResources.CustomFieldsUpdated);
+                    _deviceActionService.Toast(AppResources.CustomFieldsUpdated);
                     _googleAnalyticsService.TrackAppEvent("UpdatedCustomFields");
                     await Navigation.PopForDeviceAsync();
                 }
