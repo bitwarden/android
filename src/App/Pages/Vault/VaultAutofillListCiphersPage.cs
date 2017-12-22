@@ -178,7 +178,7 @@ namespace Bit.App.Pages
                         .ToList();
                     if(others?.Any() ?? false)
                     {
-                        autofillGroupings.Add(new Section<AutofillCipher>(others, AppResources.Items, false));
+                        autofillGroupings.Add(new Section<AutofillCipher>(others, AppResources.Items));
                     }
                 }
                 else
@@ -191,7 +191,7 @@ namespace Bit.App.Pages
                     if(normalLogins?.Any() ?? false)
                     {
                         autofillGroupings.Add(new Section<AutofillCipher>(normalLogins,
-                            AppResources.MatchingItems, false));
+                            AppResources.MatchingItems));
                     }
 
                     var fuzzyLogins = ciphers?.Item2
@@ -202,7 +202,7 @@ namespace Bit.App.Pages
                     if(fuzzyLogins?.Any() ?? false)
                     {
                         autofillGroupings.Add(new Section<AutofillCipher>(fuzzyLogins,
-                            AppResources.PossibleMatchingItems, false));
+                            AppResources.PossibleMatchingItems));
                     }
                 }
 
