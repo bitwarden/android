@@ -81,6 +81,7 @@
   <ItemGroup>
     <Compile Include="AutofillActivity.cs" />
     <Compile Include="AutofillCredentials.cs" />
+    <Compile Include="Controls\CustomSliderRenderer.cs" />
     <Compile Include="FirebaseInstanceIdService.cs" />
     <Compile Include="FirebaseMessagingService.cs" />
     <Compile Include="Autofill\Field.cs" />
@@ -134,6 +135,9 @@
     <None Include="increment-version.ps1" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
+    <AndroidResource Include="Resources\drawable\slider_thumb.xml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\tabs.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
