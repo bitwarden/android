@@ -44,7 +44,7 @@ namespace Bit.App.Controls
             var stackLayout = new StackLayout
             {
                 Spacing = 0,
-                Padding = new Thickness(16, 10, 27, 10),
+                Padding = new Thickness(16, 10),
                 Children = { Icon, Label, CountLabel },
                 Orientation = StackOrientation.Horizontal
             };
