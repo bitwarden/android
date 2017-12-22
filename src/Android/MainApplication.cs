@@ -61,55 +61,6 @@ namespace Bit.Android
 
             RegisterActivityLifecycleCallbacks(this);
             AppContext = ApplicationContext;
-            StartPushService();
-            HandlePushReregistration();
-        }
-
-        private void HandlePushReregistration()
-        {
-            var pushNotification = Resolver.Resolve<IPushNotificationService>();
-            var settings = Resolver.Resolve<ISettings>();
-
-            // Reregister for push token based on certain conditions
-            // ref https://github.com/rdelrosario/xamarin-plugins/issues/65
-
-            var reregister = false;
-
-            // 1. First time starting the app after a new install
-            if(settings.GetValueOrDefault(FirstLaunchKey, true))
-            {
-                settings.AddOrUpdateValue(FirstLaunchKey, false);
-                reregister = true;
-            }
-
-            // 2. App version changed (installed update)
-            var versionCode = Context.ApplicationContext.PackageManager.GetPackageInfo(Context.PackageName, 0).VersionCode;
-            if(settings.GetValueOrDefault(LastVersionCodeKey, -1) != versionCode)
-            {
-                settings.AddOrUpdateValue(LastVersionCodeKey, versionCode);
-                reregister = true;
-            }
-
-            // 3. In debug mode
-            if(App.Utilities.Helpers.InDebugMode())
-            {
-                reregister = true;
-            }
-
-            // 4. Doesn't have a push token currently
-            if(string.IsNullOrWhiteSpace(pushNotification.Token))
-            {
-                reregister = true;
-            }
-
-            if(reregister)
-            {
-                pushNotification.Unregister();
-                if(Resolver.Resolve<IAuthService>().IsAuthenticated)
-                {
-                    pushNotification.Register();
-                }
-            }
         }
 
         public override void OnTerminate()
@@ -147,30 +98,6 @@ namespace Bit.Android
 
         public void OnActivityStopped(Activity activity)
         {
-        }
-
-        public static void StartPushService()
-        {
-            AppContext.StartService(new Intent(AppContext, typeof(AndroidPushService)));
-            if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
-            {
-                PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
-                    typeof(AndroidPushService)), 0);
-                AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
-                alarm.Cancel(pintent);
-            }
-        }
-
-        public static void StopPushService()
-        {
-            AppContext.StopService(new Intent(AppContext, typeof(AndroidPushService)));
-            if(Build.VERSION.SdkInt >= BuildVersionCodes.Kitkat)
-            {
-                PendingIntent pintent = PendingIntent.GetService(AppContext, 0, new Intent(AppContext,
-                    typeof(AndroidPushService)), 0);
-                AlarmManager alarm = (AlarmManager)AppContext.GetSystemService(AlarmService);
-                alarm.Cancel(pintent);
-            }
         }
 
         public static void SetIoc(Application application)
@@ -237,10 +164,8 @@ namespace Bit.Android
             container.RegisterSingleton(CrossFingerprint.Current);
 
             // Push
-            var pushListener = new PushNotificationListener();
-            container.RegisterSingleton<IPushNotificationListener>(pushListener);
-            CrossPushNotification.Initialize(pushListener, "962181367620");
-            container.RegisterSingleton(CrossPushNotification.Current);
+            container.RegisterSingleton<IPushNotificationListener, PushNotificationListener>();
+            container.RegisterSingleton<IPushNotificationService, AndroidPushNotificationService>();
 
             container.Verify();
             Resolver.SetResolver(new SimpleInjectorResolver(container));

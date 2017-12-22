@@ -6,6 +6,7 @@ using Bit.App.Models;
 using Plugin.Settings.Abstractions;
 using System;
 using XLabs.Ioc;
+using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
@@ -52,13 +53,21 @@ namespace Bit.App.Services
                 return;
             }
 
-            JToken dataToken;
-            if(!value.TryGetValue("data", StringComparison.OrdinalIgnoreCase, out dataToken) || dataToken == null)
+            PushNotificationDataPayload data = null;
+            if(deviceType == Device.Android)
             {
-                return;
+                data = value.ToObject<PushNotificationDataPayload>();
+            }
+            else
+            {
+                if(!value.TryGetValue("data", StringComparison.OrdinalIgnoreCase, out JToken dataToken) ||
+                    dataToken == null)
+                {
+                    return;
+                }
+                data = dataToken.ToObject<PushNotificationDataPayload>();
             }
 
-            var data = dataToken.ToObject<PushNotificationDataPayload>();
             if(data?.Payload == null)
             {
                 return;
@@ -159,6 +168,10 @@ namespace Bit.App.Services
             {
                 Debug.WriteLine("Registered device with server.");
                 _settings.AddOrUpdateValue(Constants.PushLastRegistrationDate, DateTime.UtcNow);
+                if(deviceType == Device.Android)
+                {
+                    _settings.AddOrUpdateValue(Constants.PushCurrentToken, token);
+                }
             }
             else
             {

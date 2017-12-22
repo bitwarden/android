@@ -25,6 +25,8 @@
 
         public const string PushInitialPromptShown = "push:initialPromptShown";
         public const string PushLastRegistrationDate = "push:lastRegistrationDate";
+        public const string PushCurrentToken = "push:currentToken";
+        public const string PushRegisteredToken = "push:registeredToken";
 
         public const string ExtensionStarted = "extension:started";
         public const string ExtensionActivated = "extension:activated";
