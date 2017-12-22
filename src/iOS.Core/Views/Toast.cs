@@ -6,21 +6,17 @@ namespace Bit.iOS.Core.Views
 {
     public class Toast : UIView
     {
-        // Timer to dismiss the snack bar.
         private NSTimer _dismissTimer;
-
-        // Constraints.
         private NSLayoutConstraint _heightConstraint;
         private NSLayoutConstraint _leftMarginConstraint;
         private NSLayoutConstraint _rightMarginConstraint;
-        private NSLayoutConstraint _topMarginConstraint;
         private NSLayoutConstraint _bottomMarginConstraint;
 
         public Toast(string text) : base(CoreGraphics.CGRect.FromLTRB(0, 0, 320, 44))
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
             BackgroundColor = UIColor.DarkGray;
-            Layer.CornerRadius = 4;
+            Layer.CornerRadius = 8;
             Layer.MasksToBounds = true;
 
             MessageLabel = new UILabel
@@ -31,10 +27,13 @@ namespace Bit.iOS.Core.Views
                 BackgroundColor = UIColor.Clear,
                 LineBreakMode = UILineBreakMode.WordWrap,
                 TextAlignment = UITextAlignment.Center,
-                Lines = 0
+                Lines = 0,
+                Text = text
             };
 
-            var hConstraints = NSLayoutConstraint.FromVisualFormat("H:|-5-[messageLabel]-5-|", 0, new NSDictionary(),
+            AddSubview(MessageLabel);
+
+            var hMessageConstraints = NSLayoutConstraint.FromVisualFormat("H:|-5-[messageLabel]-5-|", 0, new NSDictionary(),
                 NSDictionary.FromObjectsAndKeys(new NSObject[] { MessageLabel },
                     new NSObject[] { new NSString("messageLabel") })
             );
@@ -44,18 +43,18 @@ namespace Bit.iOS.Core.Views
                     new NSObject[] { new NSString("messageLabel") })
             );
 
-            AddConstraints(hConstraints);
+            AddConstraints(hMessageConstraints);
             AddConstraints(vMessageConstraints);
-            AddSubview(MessageLabel);
+
+            AddGestureRecognizer(new UITapGestureRecognizer(() => Dismiss()));
         }
 
         public TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(3);
         public UILabel MessageLabel { get; set; }
-        public nfloat LeftMargin { get; set; } = 4;
-        public nfloat RightMargin { get; set; } = 4;
-        public nfloat BottomMargin { get; set; } = 4;
+        public nfloat LeftMargin { get; set; } = 5;
+        public nfloat RightMargin { get; set; } = 5;
+        public nfloat BottomMargin { get; set; } = 55;
         public nfloat Height { get; set; } = 44;
-        public nfloat TopMargin { get; set; } = 8;
 
         public void Show()
         {
@@ -94,7 +93,6 @@ namespace Bit.iOS.Core.Views
                 localSuperView.AddConstraint(_rightMarginConstraint);
                 localSuperView.AddConstraint(_bottomMarginConstraint);
 
-                // Show
                 ShowWithAnimation();
             }
             else
@@ -126,10 +124,12 @@ namespace Bit.iOS.Core.Views
 
         private void ShowWithAnimation()
         {
+            Alpha = 0;
+            SetNeedsLayout();
             _bottomMarginConstraint.Constant = -BottomMargin;
             _leftMarginConstraint.Constant = LeftMargin;
             _rightMarginConstraint.Constant = -RightMargin;
-            AnimateNotify(0.3f, 0, 0.7f, 5f, UIViewAnimationOptions.CurveEaseInOut, () => { Alpha = 0; }, null);
+            AnimateNotify(0.3f, 0, 0.7f, 5f, UIViewAnimationOptions.CurveEaseInOut, () => { Alpha = 1; }, null);
         }
     }
 }
