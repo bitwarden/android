@@ -3,7 +3,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Diagnostics;
-using System.Threading;
 using Windows.Networking.PushNotifications;
 using Xamarin.Forms;
 
@@ -12,10 +11,16 @@ namespace Bit.UWP.Services
     public class UwpPushNotificationService : IPushNotificationService
     {
         private PushNotificationChannel _channel;
-        private JsonSerializer serializer = new JsonSerializer()
+        private JsonSerializer _serializer = new JsonSerializer
         {
             ReferenceLoopHandling = ReferenceLoopHandling.Ignore
         };
+        private readonly IPushNotificationListener _pushNotificationListener;
+
+        public UwpPushNotificationService(IPushNotificationListener pushNotificationListener)
+        {
+            _pushNotificationListener = pushNotificationListener;
+        }
 
         public string Token => _channel?.Uri.ToString();
 
@@ -31,7 +36,7 @@ namespace Bit.UWP.Services
             Debug.WriteLine("Registering call back for Push Notification Channel");
             _channel.PushNotificationReceived += Channel_PushNotificationReceived;
 
-            CrossPushNotification.PushNotificationListener.OnRegistered(Token, Device.UWP);
+            _pushNotificationListener.OnRegistered(Token, Device.UWP);
         }
 
         private void Channel_PushNotificationReceived(PushNotificationChannel sender, PushNotificationReceivedEventArgs args)
@@ -42,24 +47,24 @@ namespace Bit.UWP.Services
             switch(args.NotificationType)
             {
                 case PushNotificationType.Badge:
-                    jobject = JObject.FromObject(args.BadgeNotification, serializer);
+                    jobject = JObject.FromObject(args.BadgeNotification, _serializer);
                     break;
                 case PushNotificationType.Raw:
-                    jobject = JObject.FromObject(args.RawNotification, serializer);
+                    jobject = JObject.FromObject(args.RawNotification, _serializer);
                     break;
                 case PushNotificationType.Tile:
-                    jobject = JObject.FromObject(args.TileNotification, serializer);
+                    jobject = JObject.FromObject(args.TileNotification, _serializer);
                     break;
                 case PushNotificationType.TileFlyout:
-                    jobject = JObject.FromObject(args.TileNotification, serializer);
+                    jobject = JObject.FromObject(args.TileNotification, _serializer);
                     break;
                 case PushNotificationType.Toast:
-                    jobject = JObject.FromObject(args.ToastNotification, serializer);
+                    jobject = JObject.FromObject(args.ToastNotification, _serializer);
                     break;
             }
 
             Debug.WriteLine("Sending JObject to PushNotificationListener " + args.NotificationType);
-            CrossPushNotification.PushNotificationListener.OnMessage(jobject, Device.UWP);
+            _pushNotificationListener.OnMessage(jobject, Device.UWP);
         }
 
         public void Unregister()
@@ -70,53 +75,7 @@ namespace Bit.UWP.Services
                 _channel = null;
             }
 
-            CrossPushNotification.PushNotificationListener.OnUnregistered(Device.UWP);
-        }
-    }
-
-    internal class CrossPushNotification
-    {
-        private static Lazy<IPushNotificationService> Implementation = new Lazy<IPushNotificationService>(
-            () => new UwpPushNotificationService(),
-            LazyThreadSafetyMode.PublicationOnly);
-        public static bool IsInitialized => PushNotificationListener != null;
-        public static IPushNotificationListener PushNotificationListener { get; private set; }
-
-        public static void Initialize<T>(T listener) where T : IPushNotificationListener
-        {
-            if(PushNotificationListener == null)
-            {
-                PushNotificationListener = listener;
-                Debug.WriteLine("PushNotification plugin initialized.");
-            }
-            else
-            {
-                Debug.WriteLine("PushNotification plugin already initialized.");
-            }
-        }
-
-        public static void Initialize<T>() where T : IPushNotificationListener, new()
-        {
-            Initialize(new T());
-        }
-
-        public static IPushNotificationService Current
-        {
-            get
-            {
-                if(!IsInitialized)
-                {
-                    throw new Exception("Not initialized.");
-                }
-
-                var ret = Implementation.Value;
-                if(ret == null)
-                {
-                    throw new Exception("Not in PCL");
-                }
-
-                return ret;
-            }
+            _pushNotificationListener.OnUnregistered(Device.UWP);
         }
     }
 }

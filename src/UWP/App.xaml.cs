@@ -140,12 +140,10 @@ namespace Bit.UWP
             container.RegisterSingleton(Plugin.Settings.CrossSettings.Current);
 
             // Push
-            var pushListener = new PushNotificationListener();
-            container.RegisterSingleton<IPushNotificationListener>(pushListener);
-            CrossPushNotification.Initialize(pushListener);
-            container.RegisterSingleton(CrossPushNotification.Current);
-            CachedImageRenderer.Init();
+            container.RegisterSingleton<IPushNotificationListener, PushNotificationListener>();
+            container.RegisterSingleton<IPushNotificationService, UwpPushNotificationService>();
 
+            CachedImageRenderer.Init();
             Resolver.SetResolver(new SimpleInjectorResolver(container));
         }
     }
