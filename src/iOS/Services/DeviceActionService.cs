@@ -10,6 +10,7 @@ using Photos;
 using System.Net;
 using System.Threading.Tasks;
 using Bit.App.Models.Page;
+using Bit.iOS.Core.Views;
 
 namespace Bit.iOS.Services
 {
@@ -28,12 +29,10 @@ namespace Bit.iOS.Services
 
         public void Toast(string text, bool longDuration = false)
         {
-            var snackbar = new TTGSnackBar.TTGSnackbar(text)
+            new Toast(text)
             {
-                Duration = TimeSpan.FromSeconds(longDuration ? 5 : 2),
-                AnimationType = TTGSnackBar.TTGSnackbarAnimationType.FadeInFadeOut
-            };
-            snackbar.Show();
+                Duration = TimeSpan.FromSeconds(longDuration ? 5 : 3)
+            }.Show();
         }
 
         public void CopyToClipboard(string text)

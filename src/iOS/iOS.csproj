@@ -704,9 +704,6 @@
     <PackageReference Include="SimpleInjector">
       <Version>4.0.12</Version>
     </PackageReference>
-    <PackageReference Include="TTGSnackbar">
-      <Version>1.3.4</Version>
-    </PackageReference>
     <PackageReference Include="Xamarin.Google.iOS.Analytics">
       <Version>3.17.0.1</Version>
     </PackageReference>

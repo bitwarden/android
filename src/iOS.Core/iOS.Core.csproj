@@ -63,6 +63,7 @@
     <Compile Include="Views\SliderTableViewCell.cs" />
     <Compile Include="Views\SwitchTableViewCell.cs" />
     <Compile Include="Views\FormEntryTableViewCell.cs" />
+    <Compile Include="Views\Toast.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">
