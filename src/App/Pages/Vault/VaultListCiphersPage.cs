@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationSections,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(nameof(Section<Cipher>.Name),
-                    nameof(Section<Cipher>.Count))),
+                    nameof(Section<Cipher>.Count), new Thickness(16, 8, 27, 8))),
                 GroupShortNameBinding = new Binding(nameof(Section<Cipher>.Name)),
                 ItemTemplate = new DataTemplate(() => new VaultListViewCell(
                     (Cipher c) => Helpers.CipherMoreClickedAsync(this, c, !string.IsNullOrWhiteSpace(_uri))))
