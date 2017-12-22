@@ -236,6 +236,7 @@
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\iOSPushNotificationHandler.cs" />
     <Compile Include="Services\iOSPushNotificationService.cs" />
     <Compile Include="Services\ReflectionService.cs" />
     <None Include="Entitlements.plist" />

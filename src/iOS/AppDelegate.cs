@@ -29,6 +29,7 @@ namespace Bit.iOS
     {
         private GaiCompletionHandler _dispatchHandler = null;
         private ILockService _lockService;
+        private iOSPushNotificationHandler _pushHandler = null;
 
         public ISettings Settings { get; set; }
 
@@ -42,7 +43,9 @@ namespace Bit.iOS
             }
 
             _lockService = Resolver.Resolve<ILockService>();
+            _pushHandler = new iOSPushNotificationHandler(Resolver.Resolve<IPushNotificationListener>());
             var appIdService = Resolver.Resolve<IAppIdService>();
+
             var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
                 appIdService, Resolver.Resolve<IAuthService>());
             var manager = BITHockeyManager.SharedHockeyManager;
@@ -201,18 +204,12 @@ namespace Bit.iOS
 
         public override void FailedToRegisterForRemoteNotifications(UIApplication application, NSError error)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler handler)
-            {
-                handler.OnErrorReceived(error);
-            }
+            _pushHandler?.OnErrorReceived(error);
         }
 
         public override void RegisteredForRemoteNotifications(UIApplication application, NSData deviceToken)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler handler)
-            {
-                handler.OnRegisteredSuccess(deviceToken);
-            }
+            _pushHandler?.OnRegisteredSuccess(deviceToken);
         }
 
         public override void DidRegisterUserNotificationSettings(UIApplication application,
@@ -224,18 +221,12 @@ namespace Bit.iOS
         public override void DidReceiveRemoteNotification(UIApplication application, NSDictionary userInfo,
             Action<UIBackgroundFetchResult> completionHandler)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler handler)
-            {
-                handler.OnMessageReceived(userInfo);
-            }
+            _pushHandler?.OnMessageReceived(userInfo);
         }
 
         public override void ReceivedRemoteNotification(UIApplication application, NSDictionary userInfo)
         {
-            if(CrossPushNotification.Current is IPushNotificationHandler handler)
-            {
-                handler.OnMessageReceived(userInfo);
-            }
+            _pushHandler?.OnMessageReceived(userInfo);
         }
 
         private void SendResumedMessage()
@@ -298,12 +289,10 @@ namespace Bit.iOS
             container.RegisterSingleton(Settings);
 
             // Push
-            var pushListener = new PushNotificationListener();
-            container.RegisterSingleton<IPushNotificationListener>(pushListener);
-            CrossPushNotification.Initialize(pushListener);
-            container.RegisterSingleton(CrossPushNotification.Current);
-            CachedImageRenderer.Init();
+            container.RegisterSingleton<IPushNotificationListener, PushNotificationListener>();
+            container.RegisterSingleton<IPushNotificationService, iOSPushNotificationService>();
 
+            CachedImageRenderer.Init();
             Resolver.SetResolver(new SimpleInjectorResolver(container));
         }
 
