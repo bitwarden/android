@@ -3,6 +3,7 @@ install:
 before_build:
   - nuget restore
   - IF DEFINED keystore_dec_secret nuget install secure-file -ExcludeVersion
+  - IF DEFINED google_services_dec_secret secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc -secret %google_services_dec_secret%
 after_build:
   - ps: IF($env:keystore_dec_secret) { .\src\Android\increment-version.ps1 $($env:APPVEYOR_BUILD_FOLDER) $($env:APPVEYOR_BUILD_NUMBER) }
   - IF DEFINED keystore_dec_secret secure-file\tools\secure-file -decrypt src\Android\8bit.keystore.enc -secret %keystore_dec_secret%
