@@ -6,12 +6,17 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Android.Text.Method;
 using Android.Views;
+using Android.Content;
 
 [assembly: ExportRenderer(typeof(ExtendedEditor), typeof(ExtendedEditorRenderer))]
 namespace Bit.Android.Controls
 {
     public class ExtendedEditorRenderer : EditorRenderer
     {
+        public ExtendedEditorRenderer(Context context)
+            : base(context)
+        { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);

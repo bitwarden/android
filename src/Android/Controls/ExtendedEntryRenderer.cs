@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Android.Content;
 using Android.Graphics;
 using Android.Text;
 using Android.Text.Method;
@@ -8,6 +9,7 @@ using Android.Widget;
 using Bit.Android.Controls;
 using Bit.App.Controls;
 using Bit.App.Enums;
+using Plugin.CurrentActivity;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -16,6 +18,10 @@ namespace Bit.Android.Controls
 {
     public class ExtendedEntryRenderer : EntryRenderer
     {
+        public ExtendedEntryRenderer(Context context)
+            : base(context)
+        { }
+
         private bool _isPassword;
         private bool _toggledPassword;
         private bool _isDisposed;
@@ -96,7 +102,7 @@ namespace Bit.Android.Controls
             }
 
             // show keyboard
-            var imm = Forms.Context.GetSystemService(global::Android.Content.Context.InputMethodService) as InputMethodManager;
+            var imm = CrossCurrentActivity.Current.Activity.GetSystemService(Context.InputMethodService) as InputMethodManager;
             imm.ShowSoftInput(Control, ShowFlags.Forced);
             imm.ToggleSoftInput(ShowFlags.Forced, HideSoftInputFlags.ImplicitOnly);
 

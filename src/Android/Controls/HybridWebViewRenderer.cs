@@ -6,6 +6,8 @@ using Xamarin.Forms.Platform.Android;
 using Android.Webkit;
 using AWebkit = Android.Webkit;
 using Java.Interop;
+using Android.Content;
+using Plugin.CurrentActivity;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
 namespace Bit.Android.Controls
@@ -14,13 +16,17 @@ namespace Bit.Android.Controls
     {
         private const string JSFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
 
+        public HybridWebViewRenderer(Context context)
+            : base(context)
+        { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
         {
             base.OnElementChanged(e);
 
             if(Control == null)
             {
-                var webView = new AWebkit.WebView(Forms.Context);
+                var webView = new AWebkit.WebView(CrossCurrentActivity.Current.Activity);
                 webView.Settings.JavaScriptEnabled = true;
                 SetNativeControl(webView);
             }

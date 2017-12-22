@@ -1,6 +1,7 @@
 using System;
 using Android.Content;
 using Bit.App.Abstractions;
+using Plugin.CurrentActivity;
 using Xamarin.Forms;
 
 namespace Bit.Android.Services
@@ -9,12 +10,12 @@ namespace Bit.Android.Services
     {
         public MemoryInfo GetInfo()
         {
-            return MemoryHelper.GetMemoryInfo(Forms.Context);
+            return MemoryHelper.GetMemoryInfo(CrossCurrentActivity.Current.Activity);
         }
 
         public void Check()
         {
-            MemoryHelper.MemoryCheck(Forms.Context);
+            MemoryHelper.MemoryCheck(CrossCurrentActivity.Current.Activity);
         }
 
         public static class MemoryHelper

@@ -7,6 +7,7 @@ using Android.Support.Design.Widget;
 using Xamarin.Forms.Platform.Android.AppCompat;
 using System.Reflection;
 using System.Linq;
+using Android.Content;
 
 [assembly: ExportRenderer(typeof(ExtendedTabbedPage), typeof(ExtendedTabbedPageRenderer))]
 namespace Bit.Android.Controls
@@ -14,6 +15,10 @@ namespace Bit.Android.Controls
     public class ExtendedTabbedPageRenderer : TabbedPageRenderer, TabLayout.IOnTabSelectedListener
     {
         private TabLayout _tabLayout;
+
+        public ExtendedTabbedPageRenderer(Context context)
+            : base(context)
+        { }
 
         protected override void OnElementChanged(ElementChangedEventArgs<TabbedPage> e)
         {

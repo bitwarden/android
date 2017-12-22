@@ -43,9 +43,11 @@ namespace Bit.Android.Services
             _userDialogs = userDialogs;
         }
 
+        private Context CurrentContext => CrossCurrentActivity.Current.Activity;
+
         public void CopyToClipboard(string text)
         {
-            var clipboardManager = (ClipboardManager)Forms.Context.GetSystemService(Context.ClipboardService);
+            var clipboardManager = (ClipboardManager)CurrentContext.GetSystemService(Context.ClipboardService);
             clipboardManager.Text = text;
         }
 
@@ -131,7 +133,7 @@ namespace Bit.Android.Services
             var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
 
             var additionalIntents = new List<IParcelable>();
-            if(Forms.Context.PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
+            if(CurrentContext.PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
             {
                 var hasCameraPermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.Camera);
 
@@ -181,7 +183,7 @@ namespace Bit.Android.Services
 
         public void Autofill(VaultListPageModel.Cipher cipher)
         {
-            var activity = (MainActivity)Forms.Context;
+            var activity = (MainActivity)CurrentContext;
             if(activity.Intent.GetBooleanExtra("autofillFramework", false))
             {
                 if(cipher == null)
@@ -259,7 +261,7 @@ namespace Bit.Android.Services
 
         public void Background()
         {
-            var activity = (MainActivity)Forms.Context;
+            var activity = (MainActivity)CurrentContext;
             if(activity.Intent.GetBooleanExtra("autofillFramework", false))
             {
                 activity.SetResult(Result.Canceled);
@@ -273,7 +275,7 @@ namespace Bit.Android.Services
 
         public void RateApp()
         {
-            var activity = (MainActivity)Forms.Context;
+            var activity = (MainActivity)CurrentContext;
             try
             {
                 var rateIntent = RateIntentForUrl("market://details", activity);
@@ -288,7 +290,7 @@ namespace Bit.Android.Services
 
         public void DismissKeyboard()
         {
-            var activity = (MainActivity)Forms.Context;
+            var activity = (MainActivity)CurrentContext;
             try
             {
                 var imm = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
@@ -299,14 +301,14 @@ namespace Bit.Android.Services
 
         public void OpenAccessibilitySettings()
         {
-            var activity = (MainActivity)Forms.Context;
+            var activity = (MainActivity)CurrentContext;
             var intent = new Intent(Settings.ActionAccessibilitySettings);
             activity.StartActivity(intent);
         }
 
         public void LaunchApp(string appName)
         {
-            var activity = (MainActivity)Forms.Context;
+            var activity = (MainActivity)CurrentContext;
             if(_lastAction.LastActionWasRecent())
             {
                 return;
@@ -410,7 +412,7 @@ namespace Bit.Android.Services
 
         public void OpenAutofillSettings()
         {
-            var activity = (MainActivity)Forms.Context;
+            var activity = (MainActivity)CurrentContext;
             var intent = new Intent(Settings.ActionRequestSetAutofillService);
             intent.SetData(global::Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
             activity.StartActivity(intent);

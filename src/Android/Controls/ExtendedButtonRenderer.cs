@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Android.Content;
 using Bit.Android.Controls;
 using Bit.App.Controls;
 using Xamarin.Forms;
@@ -10,6 +11,10 @@ namespace Bit.Android.Controls
 {
     public class ExtendedButtonRenderer : CustomButtonRenderer
     {
+        public ExtendedButtonRenderer(Context context)
+            : base(context)
+        { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<Button> e)
         {
             base.OnElementChanged(e);

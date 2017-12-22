@@ -1,4 +1,5 @@
-﻿using Bit.Android.Controls;
+﻿using Android.Content;
+using Bit.Android.Controls;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
@@ -7,6 +8,10 @@ namespace Bit.Android.Controls
 {
     public class CustomLabelRenderer : LabelRenderer
     {
+        public CustomLabelRenderer(Context context)
+            : base(context)
+        { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<Label> e)
         {
             base.OnElementChanged(e);

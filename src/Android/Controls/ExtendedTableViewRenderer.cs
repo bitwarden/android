@@ -14,6 +14,10 @@ namespace Bit.Android.Controls
 {
     public class ExtendedTableViewRenderer : TableViewRenderer
     {
+        public ExtendedTableViewRenderer(Context context)
+            : base(context)
+        { }
+
         protected override void OnElementChanged(ElementChangedEventArgs<TableView> e)
         {
             base.OnElementChanged(e);

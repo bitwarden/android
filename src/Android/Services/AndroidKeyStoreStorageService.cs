@@ -89,7 +89,7 @@ namespace Bit.Android.Services
             {
                 return App.Utilities.Crypto.AesCbcDecrypt(new App.Models.CipherString(cs), aesKey);
             }
-            catch(Exception e)
+            catch
             {
                 Console.WriteLine("Failed to decrypt from secure storage.");
                 _settings.Remove(formattedKey);
@@ -120,7 +120,7 @@ namespace Bit.Android.Services
                 var cipherString = App.Utilities.Crypto.AesCbcEncrypt(dataBytes, aesKey);
                 _settings.AddOrUpdateValue(formattedKey, cipherString.EncryptedString);
             }
-            catch(Exception e)
+            catch
             {
                 Console.WriteLine("Failed to encrypt to secure storage.");
                 //Utilities.SendCrashEmail(e);
@@ -224,7 +224,7 @@ namespace Bit.Android.Services
                     return new App.Models.SymmetricCryptoKey(key);
                 }
             }
-            catch(Exception e)
+            catch
             {
                 Console.WriteLine("Cannot get AesKey.");
                 _keyStore.DeleteEntry(KeyAlias);
