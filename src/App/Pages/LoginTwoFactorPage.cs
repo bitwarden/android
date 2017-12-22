@@ -415,13 +415,7 @@ namespace Bit.App.Pages
 
             _googleAnalyticsService.TrackAppEvent("LoggedIn From Two-step", _providerType.Value.ToString());
 
-            if(Device.RuntimePlatform == Device.Android)
-            {
-                _pushNotification.Register();
-            }
-
             var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
-
             Device.BeginInvokeOnMainThread(() =>
             {
                 Application.Current.MainPage = new MainPage();
