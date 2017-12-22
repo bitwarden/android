@@ -35,7 +35,7 @@ namespace Bit.Android.Services
 
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             var afm = (AutofillManager)activity.GetSystemService(Java.Lang.Class.FromType(typeof(AutofillManager)));
-            return afm.IsEnabled;
+            return afm.IsEnabled && afm.HasEnabledAutofillServices;
         }
     }
 }

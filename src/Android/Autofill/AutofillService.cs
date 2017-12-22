@@ -88,7 +88,10 @@ namespace Bit.Android.Autofill
             switch(savedItem.Type)
             {
                 case CipherType.Login:
-                    intent.PutExtra("autofillFrameworkName", parser.Uri.Replace(Constants.AndroidAppProtocol, string.Empty));
+                    intent.PutExtra("autofillFrameworkName", parser.Uri
+                        .Replace(Constants.AndroidAppProtocol, string.Empty)
+                        .Replace("https://", string.Empty)
+                        .Replace("http://", string.Empty));
                     intent.PutExtra("autofillFrameworkUri", parser.Uri);
                     intent.PutExtra("autofillFrameworkUsername", savedItem.Login.Username);
                     intent.PutExtra("autofillFrameworkPassword", savedItem.Login.Password);
