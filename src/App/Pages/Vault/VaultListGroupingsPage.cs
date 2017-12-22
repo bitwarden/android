@@ -136,34 +136,44 @@ namespace Bit.App.Pages
 
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
 
-            if(_connectivity.IsConnected && Device.RuntimePlatform == Device.iOS)
+            // Push registration
+            if(_connectivity.IsConnected)
             {
-                var pushPromptShow = _settings.GetValueOrDefault(Constants.PushInitialPromptShown, false);
-                Action registerAction = () =>
-                {
-                    var lastPushRegistration =
-                        _settings.GetValueOrDefault(Constants.PushLastRegistrationDate, DateTime.MinValue);
-                    if(!pushPromptShow || DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
-                    {
-                        _pushNotification.Register();
-                    }
-                };
+                var lastPushRegistration = _settings.GetValueOrDefault(Constants.PushLastRegistrationDate,
+                    DateTime.MinValue);
 
-                if(!pushPromptShow)
+                if(Device.RuntimePlatform == Device.iOS)
                 {
-                    _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
-                    _userDialogs.Alert(new AlertConfig
+                    var pushPromptShow = _settings.GetValueOrDefault(Constants.PushInitialPromptShown, false);
+                    Action registerAction = () =>
                     {
-                        Message = AppResources.PushNotificationAlert,
-                        Title = AppResources.EnableAutomaticSyncing,
-                        OnAction = registerAction,
-                        OkText = AppResources.OkGotIt
-                    });
+                        if(!pushPromptShow || DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                        {
+                            _pushNotification.Register();
+                        }
+                    };
+
+                    if(!pushPromptShow)
+                    {
+                        _settings.AddOrUpdateValue(Constants.PushInitialPromptShown, true);
+                        _userDialogs.Alert(new AlertConfig
+                        {
+                            Message = AppResources.PushNotificationAlert,
+                            Title = AppResources.EnableAutomaticSyncing,
+                            OnAction = registerAction,
+                            OkText = AppResources.OkGotIt
+                        });
+                    }
+                    else
+                    {
+                        // Check push registration once per day
+                        registerAction();
+                    }
                 }
-                else
+                else if(Device.RuntimePlatform == Device.Android &&
+                    DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
                 {
-                    // Check push registration once per day
-                    registerAction();
+                    _pushNotification.Register();
                 }
             }
         }
@@ -230,7 +240,7 @@ namespace Bit.App.Pages
 
                 if(collections.Any())
                 {
-                    folderGroupings.Add(new GroupingOrCipher(new Grouping(AppResources.FolderNone, 
+                    folderGroupings.Add(new GroupingOrCipher(new Grouping(AppResources.FolderNone,
                         noFolderCipherGroupings.Count)));
                 }
 

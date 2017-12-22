@@ -28,6 +28,10 @@ namespace Bit.Android.Services
             {
                 _pushNotificationListener.OnRegistered(registeredToken, Device.Android);
             }
+            else
+            {
+                _settings.AddOrUpdateValue(Constants.PushLastRegistrationDate, DateTime.UtcNow);
+            }
         }
 
         public void Unregister()
