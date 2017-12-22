@@ -71,5 +71,10 @@ namespace Bit.iOS.Core.Services
         {
             return Task.FromResult(0);
         }
+
+        public void Toast(string text, bool longDuration = false)
+        {
+            // do nothing
+        }
     }
 }
