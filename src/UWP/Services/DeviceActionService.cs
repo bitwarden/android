@@ -1,4 +1,5 @@
-﻿using Bit.App.Abstractions;
+﻿using Acr.UserDialogs;
+using Bit.App.Abstractions;
 using Bit.App.Models.Page;
 using Coding4Fun.Toolkit.Controls;
 using System;
@@ -18,6 +19,13 @@ namespace Bit.UWP.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        private readonly IUserDialogs _userDialogs;
+
+        public DeviceActionService(IUserDialogs userDialogs)
+        {
+            _userDialogs = userDialogs;
+        }
+
         public bool CanOpenFile(string fileName) => true;
 
         public void ClearCache()
@@ -142,6 +150,21 @@ namespace Bit.UWP.Services
                 Stretch = Stretch.Uniform,
                 IsHitTestVisible = false
             }.Show();
+        }
+
+        public void ShowLoading(string text)
+        {
+            _userDialogs.ShowLoading(text, MaskType.Black);
+        }
+
+        public void HideLoading()
+        {
+            _userDialogs.HideLoading();
+        }
+
+        public Task LaunchAppAsync(string appName, Xamarin.Forms.Page page)
+        {
+            throw new NotImplementedException();
         }
     }
 }
