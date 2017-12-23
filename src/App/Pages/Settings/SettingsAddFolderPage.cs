@@ -1,5 +1,4 @@
 ﻿using System;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models;
@@ -15,7 +14,6 @@ namespace Bit.App.Pages
     public class SettingsAddFolderPage : ExtendedContentPage
     {
         private readonly IFolderService _folderService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
@@ -24,7 +22,6 @@ namespace Bit.App.Pages
         public SettingsAddFolderPage()
         {
             _folderService = Resolver.Resolve<IFolderService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
@@ -84,9 +81,9 @@ namespace Bit.App.Pages
                     Name = NameCell.Entry.Text.Encrypt()
                 };
 
-                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
+                _deviceActionService.ShowLoading(AppResources.Saving);
                 var saveResult = await _folderService.SaveAsync(folder);
-                _userDialogs.HideLoading();
+                _deviceActionService.HideLoading();
 
                 if(saveResult.Succeeded)
                 {

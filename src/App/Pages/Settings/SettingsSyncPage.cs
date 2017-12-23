@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
@@ -14,7 +13,6 @@ namespace Bit.App.Pages
     public class SettingsSyncPage : ExtendedContentPage
     {
         private readonly ISyncService _syncService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly ISettings _settings;
@@ -23,7 +21,6 @@ namespace Bit.App.Pages
         public SettingsSyncPage()
         {
             _syncService = Resolver.Resolve<ISyncService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _settings = Resolver.Resolve<ISettings>();
@@ -104,9 +101,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading(AppResources.Syncing, MaskType.Black);
+            _deviceActionService.ShowLoading(AppResources.Syncing);
             var succeeded = await _syncService.FullSyncAsync(true);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
             if(succeeded)
             {
                 _deviceActionService.Toast(AppResources.SyncingComplete);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
@@ -19,7 +18,6 @@ namespace Bit.App.Pages
         private readonly string _cipherId;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly IDeviceInfoService _deviceInfo;
@@ -31,7 +29,6 @@ namespace Bit.App.Pages
             _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _folderService = Resolver.Resolve<IFolderService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _deviceInfo = Resolver.Resolve<IDeviceInfoService>();
@@ -613,9 +610,9 @@ namespace Bit.App.Pages
                     Cipher.FolderId = null;
                 }
 
-                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
+                _deviceActionService.ShowLoading(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(Cipher);
-                _userDialogs.HideLoading();
+                _deviceActionService.HideLoading();
 
                 if(saveTask.Succeeded)
                 {
@@ -860,9 +857,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
+            _deviceActionService.ShowLoading(AppResources.Deleting);
             var deleteTask = await _cipherService.DeleteAsync(_cipherId);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
 
             if(deleteTask.Succeeded)
             {

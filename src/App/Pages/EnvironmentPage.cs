@@ -5,7 +5,6 @@ using Bit.App.Resources;
 using Bit.App.Utilities;
 using Xamarin.Forms;
 using XLabs.Ioc;
-using Acr.UserDialogs;
 using System.Threading.Tasks;
 
 namespace Bit.App.Pages

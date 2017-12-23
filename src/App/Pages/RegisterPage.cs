@@ -6,7 +6,6 @@ using Bit.App.Models.Api;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
-using Acr.UserDialogs;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
 
@@ -15,7 +14,7 @@ namespace Bit.App.Pages
     public class RegisterPage : ExtendedContentPage
     {
         private ICryptoService _cryptoService;
-        private IUserDialogs _userDialogs;
+        private IDeviceActionService _deviceActionService;
         private IAccountsApiRepository _accountsApiRepository;
         private IGoogleAnalyticsService _googleAnalyticsService;
         private HomePage _homePage;
@@ -25,7 +24,7 @@ namespace Bit.App.Pages
         {
             _homePage = homePage;
             _cryptoService = Resolver.Resolve<ICryptoService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _accountsApiRepository = Resolver.Resolve<IAccountsApiRepository>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
@@ -213,9 +212,9 @@ namespace Bit.App.Pages
                 Key = encKey.EncryptedString
             };
 
-            _userDialogs.ShowLoading(AppResources.CreatingAccount, MaskType.Black);
+            _deviceActionService.ShowLoading(AppResources.CreatingAccount);
             var response = await _accountsApiRepository.PostRegisterAsync(request);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
 
             if(!response.Succeeded)
             {

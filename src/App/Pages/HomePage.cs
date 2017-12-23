@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Xamarin.Forms;

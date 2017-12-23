@@ -10,7 +10,6 @@ using Bit.App.Enums;
 using Xamarin.Forms;
 using Bit.App.Pages;
 using Bit.App.Controls;
-using Acr.UserDialogs;
 using XLabs.Ioc;
 
 namespace Bit.App.Services

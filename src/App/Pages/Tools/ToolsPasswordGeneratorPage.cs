@@ -1,5 +1,4 @@
 ﻿using System;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Page;

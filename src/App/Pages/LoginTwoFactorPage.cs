@@ -4,7 +4,6 @@ using Bit.App.Controls;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
-using Acr.UserDialogs;
 using System.Threading.Tasks;
 using Bit.App.Models;
 using Bit.App.Utilities;
@@ -19,7 +18,6 @@ namespace Bit.App.Pages
     {
         private DateTime? _lastAction;
         private IAuthService _authService;
-        private IUserDialogs _userDialogs;
         private ISyncService _syncService;
         private IDeviceInfoService _deviceInfoService;
         private IDeviceActionService _deviceActionService;
@@ -48,7 +46,6 @@ namespace Bit.App.Pages
 
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _authService = Resolver.Resolve<IAuthService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
@@ -402,10 +399,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading(string.Concat(AppResources.Validating, "..."), MaskType.Black);
+            _deviceActionService.ShowLoading(string.Concat(AppResources.Validating, "..."));
             var response = await _authService.TokenPostTwoFactorAsync(_providerType.Value, token, RememberCell.On,
                 _email, _masterPasswordHash, _key);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
 
             if(!response.Success)
             {

@@ -1,5 +1,4 @@
 using System;
-using Acr.UserDialogs;
 using Android.App;
 using Android.Content;
 using Android.OS;
@@ -102,7 +101,6 @@ namespace Bit.Android
 
         public static void SetIoc(Application application)
         {
-            UserDialogs.Init(application);
             CachedImageRenderer.Init();
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
@@ -160,7 +158,6 @@ namespace Bit.Android
             // Other
             container.RegisterSingleton(CrossSettings.Current);
             container.RegisterSingleton(CrossConnectivity.Current);
-            container.RegisterSingleton(UserDialogs.Instance);
             container.RegisterSingleton(CrossFingerprint.Current);
 
             // Push

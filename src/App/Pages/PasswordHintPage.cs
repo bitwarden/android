@@ -6,7 +6,6 @@ using Bit.App.Models.Api;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
-using Acr.UserDialogs;
 using System.Threading.Tasks;
 using Bit.App.Utilities;
 
@@ -14,15 +13,14 @@ namespace Bit.App.Pages
 {
     public class PasswordHintPage : ExtendedContentPage
     {
-        private IUserDialogs _userDialogs;
         private IAccountsApiRepository _accountApiRepository;
+        private IDeviceActionService _deviceActionService;
 
         public PasswordHintPage()
             : base(updateActivity: false)
         {
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _accountApiRepository = Resolver.Resolve<IAccountsApiRepository>();
-
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             Init();
         }
 
@@ -124,9 +122,9 @@ namespace Bit.App.Pages
                 Email = EmailCell.Entry.Text
             };
 
-            _userDialogs.ShowLoading(AppResources.Submitting, MaskType.Black);
+            _deviceActionService.ShowLoading(AppResources.Submitting);
             var response = await _accountApiRepository.PostPasswordHintAsync(request);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
 
             if(!response.Succeeded)
             {

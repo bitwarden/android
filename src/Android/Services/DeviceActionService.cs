@@ -32,6 +32,7 @@ namespace Bit.Android.Services
         private readonly IAppSettingsService _appSettingsService;
         private bool _cameraPermissionsDenied;
         private DateTime? _lastAction;
+        private ProgressDialog _progressDialog;
 
         public DeviceActionService(
             IAppSettingsService appSettingsService)
@@ -418,6 +419,32 @@ namespace Bit.Android.Services
             var intent = new Intent(Settings.ActionRequestSetAutofillService);
             intent.SetData(global::Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
             activity.StartActivity(intent);
+        }
+
+        public void ShowLoading(string text)
+        {
+            if(_progressDialog != null)
+            {
+                HideLoading();
+            }
+
+            var activity = (MainActivity)CurrentContext;
+            _progressDialog = new ProgressDialog(activity);
+            _progressDialog.SetMessage(text);
+            _progressDialog.SetCancelable(true);
+            _progressDialog.Show();
+        }
+
+        public void HideLoading()
+        {
+            if(_progressDialog == null)
+            {
+                return;
+            }
+
+            _progressDialog.Dismiss();
+            _progressDialog.Dispose();
+            _progressDialog = null;
         }
     }
 }

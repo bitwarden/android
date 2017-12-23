@@ -11,6 +11,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Bit.App.Models.Page;
 using Bit.iOS.Core.Views;
+using CoreGraphics;
 
 namespace Bit.iOS.Services
 {
@@ -18,6 +19,7 @@ namespace Bit.iOS.Services
     {
         private readonly IAppSettingsService _appSettingsService;
         private readonly IDeviceInfoService _deviceInfoService;
+        private UIAlertController _progressAlert;
 
         public DeviceActionService(
             IAppSettingsService appSettingsService,
@@ -261,6 +263,44 @@ namespace Bit.iOS.Services
         }
 
         public void OpenAutofillSettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowLoading(string text)
+        {
+            var loadingIndicator = new UIActivityIndicatorView(new CGRect(10, 5, 50, 50));
+            loadingIndicator.HidesWhenStopped = true;
+            loadingIndicator.ActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
+            loadingIndicator.StartAnimating();
+
+            _progressAlert = UIAlertController.Create(null, text, UIAlertControllerStyle.Alert);
+            _progressAlert.View.TintColor = UIColor.Black;
+            _progressAlert.View.Add(loadingIndicator);
+
+            var window = UIApplication.SharedApplication.KeyWindow;
+            var vc = window.RootViewController;
+            while(vc.PresentedViewController != null)
+            {
+                vc = vc.PresentedViewController;
+            }
+            vc.PresentViewController(_progressAlert, true, null);
+        }
+
+        public void HideLoading()
+        {
+            if(_progressAlert == null)
+            {
+                return;
+            }
+
+            _progressAlert.DismissViewController(true, () => { });
+            _progressAlert.Dispose();
+            _progressAlert = null;
+
+        }
+
+        public Task LaunchAppAsync(string appName, Page page)
         {
             throw new NotImplementedException();
         }

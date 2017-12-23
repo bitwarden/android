@@ -6,6 +6,8 @@ namespace Bit.App.Abstractions
 {
     public interface IDeviceActionService
     {
+        void ShowLoading(string text);
+        void HideLoading();
         void Toast(string text, bool longDuration = false);
         void CopyToClipboard(string text);
         bool OpenFile(byte[] fileData, string id, string fileName);

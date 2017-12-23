@@ -4,7 +4,6 @@ using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Controls;
-using Acr.UserDialogs;
 using Plugin.Settings.Abstractions;
 using Plugin.Fingerprint.Abstractions;
 using Bit.App.Utilities;

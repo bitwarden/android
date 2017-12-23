@@ -1,5 +1,4 @@
 ﻿using System;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Page;
@@ -20,7 +19,6 @@ namespace Bit.App.Pages
         private readonly CipherType _type;
         private readonly string _cipherId;
         private readonly ICipherService _cipherService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly ITokenService _tokenService;
         private bool _pageDisappeared = true;
@@ -30,7 +28,6 @@ namespace Bit.App.Pages
             _type = type;
             _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _tokenService = Resolver.Resolve<ITokenService>();
 
@@ -438,8 +435,8 @@ namespace Bit.App.Pages
             }
 
             // 10 MB warning
-            if(attachment.Size >= 10485760 && !(await _userDialogs.ConfirmAsync(
-                    string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
+            if(attachment.Size >= 10485760 && !(await DisplayAlert(
+                    null, string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName),
                     AppResources.Yes, AppResources.No)))
             {
                 return;
@@ -451,9 +448,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading(AppResources.Downloading, MaskType.Black);
+            _deviceActionService.ShowLoading(AppResources.Downloading);
             var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, cipher.OrganizationId);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
 
             if(data == null)
             {

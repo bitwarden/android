@@ -4,7 +4,6 @@ using Bit.App.Controls;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
-using Acr.UserDialogs;
 using System.Threading.Tasks;
 using Plugin.Settings.Abstractions;
 using Bit.App.Utilities;
@@ -14,8 +13,8 @@ namespace Bit.App.Pages
     public class LoginPage : ExtendedContentPage
     {
         private IAuthService _authService;
-        private IUserDialogs _userDialogs;
         private ISyncService _syncService;
+        private IDeviceActionService _deviceActionService;
         private ISettings _settings;
         private IGoogleAnalyticsService _googleAnalyticsService;
         private IPushNotificationService _pushNotification;
@@ -26,8 +25,8 @@ namespace Bit.App.Pages
         {
             _email = email;
             _authService = Resolver.Resolve<IAuthService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _syncService = Resolver.Resolve<ISyncService>();
+            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _pushNotification = Resolver.Resolve<IPushNotificationService>();
@@ -179,9 +178,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading(AppResources.LoggingIn, MaskType.Black);
+            _deviceActionService.ShowLoading(AppResources.LoggingIn);
             var result = await _authService.TokenPostAsync(EmailCell.Entry.Text, PasswordCell.Entry.Text);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
+
             if(!result.Success)
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, result.ErrorMessage, AppResources.Ok);

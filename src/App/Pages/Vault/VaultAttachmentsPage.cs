@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Page;
@@ -17,7 +16,6 @@ namespace Bit.App.Pages
     public class VaultAttachmentsPage : ExtendedContentPage
     {
         private readonly ICipherService _cipherService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
@@ -35,7 +33,6 @@ namespace Bit.App.Pages
             _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _tokenService = Resolver.Resolve<ITokenService>();
@@ -160,9 +157,9 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
+                _deviceActionService.ShowLoading(AppResources.Saving);
                 var saveTask = await _cipherService.EncryptAndSaveAttachmentAsync(_cipher, _fileBytes, FileLabel.Text);
-                _userDialogs.HideLoading();
+                _deviceActionService.HideLoading();
 
                 if(saveTask.Succeeded)
                 {
@@ -267,9 +264,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _userDialogs.ShowLoading(AppResources.Deleting, MaskType.Black);
+            _deviceActionService.ShowLoading(AppResources.Deleting);
             var saveTask = await _cipherService.DeleteAttachmentAsync(_cipher, attachment.Id);
-            _userDialogs.HideLoading();
+            _deviceActionService.HideLoading();
 
             if(saveTask.Succeeded)
             {

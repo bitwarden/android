@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models;
@@ -12,7 +11,6 @@ using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
 using Bit.App.Utilities;
 using Bit.App.Enums;
-using Bit.App.Models.Page;
 
 namespace Bit.App.Pages
 {
@@ -23,7 +21,6 @@ namespace Bit.App.Pages
         private readonly CipherType _type;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ISettings _settings;
@@ -72,7 +69,6 @@ namespace Bit.App.Pages
 
             _cipherService = Resolver.Resolve<ICipherService>();
             _folderService = Resolver.Resolve<IFolderService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _connectivity = Resolver.Resolve<IConnectivity>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _settings = Resolver.Resolve<ISettings>();
@@ -744,9 +740,9 @@ namespace Bit.App.Pages
                     cipher.FolderId = Folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
                 }
 
-                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
+                _deviceActionService.ShowLoading(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(cipher);
-                _userDialogs.HideLoading();
+                _deviceActionService.HideLoading();
 
                 if(saveTask.Succeeded)
                 {

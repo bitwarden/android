@@ -1,8 +1,6 @@
 ﻿using System;
 using Bit.App.Controls;
 using Xamarin.Forms;
-using XLabs.Ioc;
-using Bit.App.Abstractions;
 
 namespace Bit.App.Pages
 {

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Controls;
 using Bit.App.Models.Page;
 using Plugin.Settings.Abstractions;

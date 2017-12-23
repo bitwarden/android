@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
@@ -17,7 +16,6 @@ namespace Bit.App.Pages
     public class VaultCustomFieldsPage : ExtendedContentPage
     {
         private readonly ICipherService _cipherService;
-        private readonly IUserDialogs _userDialogs;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IConnectivity _connectivity;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
@@ -31,7 +29,6 @@ namespace Bit.App.Pages
             _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _connectivity = Resolver.Resolve<IConnectivity>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
@@ -115,9 +112,9 @@ namespace Bit.App.Pages
                     _cipher.Fields = null;
                 }
 
-                _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
+                _deviceActionService.ShowLoading(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(_cipher);
-                _userDialogs.HideLoading();
+                _deviceActionService.HideLoading();
 
                 if(saveTask.Succeeded)
                 {

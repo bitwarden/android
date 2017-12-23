@@ -1,5 +1,4 @@
-﻿using Acr.UserDialogs;
-using Bit.App.Abstractions;
+﻿using Bit.App.Abstractions;
 using Bit.App.Enums;
 using Bit.App.Models.Page;
 using Bit.App.Pages;

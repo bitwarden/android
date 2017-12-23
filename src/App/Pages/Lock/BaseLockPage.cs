@@ -1,8 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Controls;
 using Bit.App.Resources;
-using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
 
