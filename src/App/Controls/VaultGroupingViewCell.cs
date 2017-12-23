@@ -1,15 +1,11 @@
 ﻿using Bit.App.Models.Page;
 using FFImageLoading.Forms;
-using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
 {
     public class VaultGroupingViewCell : ExtendedViewCell
     {
-        public static readonly BindableProperty GroupingParameterProeprty = BindableProperty.Create(nameof(GroupingParameter),
-            typeof(VaultListPageModel.Grouping), typeof(VaultGroupingViewCell), null);
-
         public VaultGroupingViewCell()
         {
             Icon = new CachedImage
@@ -56,14 +52,8 @@ namespace Bit.App.Controls
 
             View = stackLayout;
             BackgroundColor = Color.White;
-            SetBinding(GroupingParameterProeprty, new Binding("."));
         }
 
-        public VaultListPageModel.Grouping GroupingParameter
-        {
-            get => GetValue(GroupingParameterProeprty) as VaultListPageModel.Grouping;
-            set { SetValue(GroupingParameterProeprty, value); }
-        }
         public CachedImage Icon { get; private set; }
         public Label Label { get; private set; }
         public Label CountLabel { get; private set; }
