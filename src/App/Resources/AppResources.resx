@@ -640,7 +640,7 @@
     <value>Are you sure you want to overwrite the current password?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">

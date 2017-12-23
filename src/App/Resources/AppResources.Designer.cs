@@ -2374,7 +2374,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Ok&quot; on the following prompt when asked to enable push notifications..
+        ///   Looks up a localized string similar to bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Allow&quot; on the following prompt when asked to enable push notifications..
         /// </summary>
         public static string PushNotificationAlert {
             get {
