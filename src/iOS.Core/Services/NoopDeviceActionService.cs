@@ -2,6 +2,7 @@
 using Bit.App.Abstractions;
 using System.Threading.Tasks;
 using Bit.App.Models.Page;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Core.Services
 {
@@ -42,9 +43,14 @@ namespace Bit.iOS.Core.Services
             // do nothing
         }
 
-        public void LaunchApp(string appName)
+        public void HideLoading()
         {
             // do nothing
+        }
+
+        public Task LaunchAppAsync(string appName, Page page)
+        {
+            return Task.FromResult(0);
         }
 
         public void OpenAccessibilitySettings()
@@ -70,6 +76,11 @@ namespace Bit.iOS.Core.Services
         public Task SelectFileAsync()
         {
             return Task.FromResult(0);
+        }
+
+        public void ShowLoading(string text)
+        {
+            // do nothing
         }
 
         public void Toast(string text, bool longDuration = false)
