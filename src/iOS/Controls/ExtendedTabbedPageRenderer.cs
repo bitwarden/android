@@ -35,8 +35,7 @@ namespace Bit.iOS.Controls
                 return;
             }
 
-            var tabs = Element as TabbedPage;
-            if(tabs != null)
+            if(Element is TabbedPage tabs)
             {
                 for(int i = 0; i < TabBar.Items.Length; i++)
                 {

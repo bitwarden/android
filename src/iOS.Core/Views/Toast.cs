@@ -12,7 +12,8 @@ namespace Bit.iOS.Core.Views
         private NSLayoutConstraint _rightMarginConstraint;
         private NSLayoutConstraint _bottomMarginConstraint;
 
-        public Toast(string text) : base(CoreGraphics.CGRect.FromLTRB(0, 0, 320, 44))
+        public Toast(string text) 
+            : base(CoreGraphics.CGRect.FromLTRB(0, 0, 320, 44))
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
             BackgroundColor = UIColor.DarkGray;
@@ -53,7 +54,7 @@ namespace Bit.iOS.Core.Views
         public UILabel MessageLabel { get; set; }
         public nfloat LeftMargin { get; set; } = 5;
         public nfloat RightMargin { get; set; } = 5;
-        public nfloat BottomMargin { get; set; } = 55;
+        public nfloat BottomMargin { get; set; } = 5;
         public nfloat Height { get; set; } = 44;
 
         public void Show()

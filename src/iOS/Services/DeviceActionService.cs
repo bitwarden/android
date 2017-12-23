@@ -31,10 +31,17 @@ namespace Bit.iOS.Services
 
         public void Toast(string text, bool longDuration = false)
         {
-            new Toast(text)
+            var t = new Toast(text)
             {
                 Duration = TimeSpan.FromSeconds(longDuration ? 5 : 3)
-            }.Show();
+            };
+
+            if(TabBarVisible())
+            {
+                t.BottomMargin = 55;
+            }
+
+            t.Show();
         }
 
         public void CopyToClipboard(string text)
@@ -278,13 +285,8 @@ namespace Bit.iOS.Services
             _progressAlert.View.TintColor = UIColor.Black;
             _progressAlert.View.Add(loadingIndicator);
 
-            var window = UIApplication.SharedApplication.KeyWindow;
-            var vc = window.RootViewController;
-            while(vc.PresentedViewController != null)
-            {
-                vc = vc.PresentedViewController;
-            }
-            vc.PresentViewController(_progressAlert, true, null);
+            var vc = GetPresentedViewController();
+            vc?.PresentViewController(_progressAlert, true, null);
         }
 
         public void HideLoading()
@@ -303,6 +305,24 @@ namespace Bit.iOS.Services
         public Task LaunchAppAsync(string appName, Page page)
         {
             throw new NotImplementedException();
+        }
+
+        private UIViewController GetPresentedViewController()
+        {
+            var window = UIApplication.SharedApplication.KeyWindow;
+            var vc = window.RootViewController;
+            while(vc.PresentedViewController != null)
+            {
+                vc = vc.PresentedViewController;
+            }
+
+            return vc;
+        }
+
+        private bool TabBarVisible()
+        {
+            var vc = GetPresentedViewController();
+            return vc?.TabBarController != null && !vc.TabBarController.TabBar.Hidden;
         }
     }
 }
