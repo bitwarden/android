@@ -6,7 +6,6 @@ using Bit.App.Abstractions;
 using Bit.App.Services;
 using Bit.iOS.Services;
 using Plugin.Connectivity;
-using Acr.UserDialogs;
 using Bit.App.Repositories;
 using Plugin.Fingerprint;
 using Plugin.Settings.Abstractions;
@@ -280,7 +279,6 @@ namespace Bit.iOS
 
             // Other
             container.RegisterSingleton(CrossConnectivity.Current);
-            container.RegisterSingleton(UserDialogs.Instance);
             container.RegisterSingleton(CrossFingerprint.Current);
 
             Settings = new Settings("group.com.8bit.bitwarden");
