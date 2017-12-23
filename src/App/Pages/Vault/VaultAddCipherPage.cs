@@ -339,7 +339,7 @@ namespace Bit.App.Pages
                     }
                     else
                     {
-                        _userDialogs.Alert(AppResources.AuthenticatorKeyReadError);
+                        await DisplayAlert(null, AppResources.AuthenticatorKeyReadError, AppResources.Ok);
                     }
                 });
             });
@@ -772,11 +772,11 @@ namespace Bit.App.Pages
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
-                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, saveTask.Errors.First().Message, AppResources.Ok);
                 }
                 else
                 {
-                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }, ToolbarItemOrder.Default, 0);
 

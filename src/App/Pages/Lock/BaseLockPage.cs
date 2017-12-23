@@ -15,12 +15,10 @@ namespace Bit.App.Pages
         public BaseLockPage()
             : base(false, false)
         {
-            UserDialogs = Resolver.Resolve<IUserDialogs>();
             AuthService = Resolver.Resolve<IAuthService>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
         }
 
-        protected IUserDialogs UserDialogs { get; set; }
         protected IAuthService AuthService { get; set; }
 
         protected override bool OnBackButtonPressed()
@@ -31,7 +29,8 @@ namespace Bit.App.Pages
 
         protected async Task LogoutAsync()
         {
-            if(!await UserDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
+            var confirmed = await DisplayAlert(null, AppResources.LogoutConfirmation, AppResources.Yes, AppResources.Cancel);
+            if(!confirmed)
             {
                 return;
             }

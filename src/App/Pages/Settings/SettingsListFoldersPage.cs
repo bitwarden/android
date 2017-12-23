@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Page;
@@ -16,12 +14,10 @@ namespace Bit.App.Pages
     public class SettingsListFoldersPage : ExtendedContentPage
     {
         private readonly IFolderService _folderService;
-        private readonly IUserDialogs _userDialogs;
+
         public SettingsListFoldersPage()
         {
             _folderService = Resolver.Resolve<IFolderService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
-
             Init();
         }
 

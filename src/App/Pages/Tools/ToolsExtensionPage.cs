@@ -14,13 +14,11 @@ namespace Bit.App.Pages
 {
     public class ToolsExtensionPage : ExtendedContentPage
     {
-        private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public ToolsExtensionPage()
         {
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             Model = new AppExtensionPageModel(_settings);

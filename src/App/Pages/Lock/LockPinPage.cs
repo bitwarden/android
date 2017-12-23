@@ -113,7 +113,7 @@ namespace Bit.App.Pages
             PinControl.Dispose();
         }
 
-        protected void PinEntered(object sender, EventArgs args)
+        protected async void PinEntered(object sender, EventArgs args)
         {
             if(_lastAction.LastActionWasRecent())
             {
@@ -125,13 +125,13 @@ namespace Bit.App.Pages
             {
                 _appSettingsService.Locked = false;
                 PinControl.Entry.Unfocus();
-                Navigation.PopModalAsync();
+                await Navigation.PopModalAsync();
             }
             else
             {
                 // TODO: keep track of invalid attempts and logout?
 
-                UserDialogs.Alert(AppResources.InvalidPIN);
+                await DisplayAlert(null, AppResources.InvalidPIN, AppResources.Ok);
                 Model.PIN = string.Empty;
                 PinControl.Entry.Focus();
             }

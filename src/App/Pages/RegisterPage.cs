@@ -216,6 +216,7 @@ namespace Bit.App.Pages
             _userDialogs.ShowLoading(AppResources.CreatingAccount, MaskType.Black);
             var response = await _accountsApiRepository.PostRegisterAsync(request);
             _userDialogs.HideLoading();
+
             if(!response.Succeeded)
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.FirstOrDefault()?.Message,

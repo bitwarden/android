@@ -117,7 +117,6 @@ namespace Bit.App.Pages
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveTask = await _cipherService.SaveAsync(_cipher);
-
                 _userDialogs.HideLoading();
 
                 if(saveTask.Succeeded)
@@ -128,11 +127,11 @@ namespace Bit.App.Pages
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
-                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, saveTask.Errors.First().Message, AppResources.Ok);
                 }
                 else
                 {
-                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }, ToolbarItemOrder.Default, 0);
 

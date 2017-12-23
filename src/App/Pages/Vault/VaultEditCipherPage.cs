@@ -615,7 +615,6 @@ namespace Bit.App.Pages
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveTask = await _cipherService.SaveAsync(Cipher);
-
                 _userDialogs.HideLoading();
 
                 if(saveTask.Succeeded)
@@ -626,11 +625,11 @@ namespace Bit.App.Pages
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
-                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, saveTask.Errors.First().Message, AppResources.Ok);
                 }
                 else
                 {
-                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }, ToolbarItemOrder.Default, 0);
 
@@ -810,7 +809,7 @@ namespace Bit.App.Pages
                     }
                     else
                     {
-                        _userDialogs.Alert(AppResources.AuthenticatorKeyReadError);
+                        await DisplayAlert(null, AppResources.AuthenticatorKeyReadError, AppResources.Ok);
                     }
                 });
             });
@@ -821,7 +820,7 @@ namespace Bit.App.Pages
         private async void GenerateCell_Tapped(object sender, EventArgs e)
         {
             if(!string.IsNullOrWhiteSpace(LoginPasswordCell.Entry.Text)
-                && !await _userDialogs.ConfirmAsync(AppResources.PasswordOverrideAlert, null, AppResources.Yes, AppResources.No))
+                && !(await DisplayAlert(null, AppResources.PasswordOverrideAlert, AppResources.Yes, AppResources.No)))
             {
                 return;
             }
@@ -854,7 +853,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
+            var confirmed = await DisplayAlert(null, AppResources.DoYouReallyWantToDelete, AppResources.Yes,
+                AppResources.No);
+            if(!confirmed)
             {
                 return;
             }
@@ -871,11 +872,11 @@ namespace Bit.App.Pages
             }
             else if(deleteTask.Errors.Count() > 0)
             {
-                await _userDialogs.AlertAsync(deleteTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, deleteTask.Errors.First().Message, AppResources.Ok);
             }
             else
             {
-                await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
             }
         }
 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Models.Page;
@@ -46,7 +45,6 @@ namespace Bit.App.Pages
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             DeviceActionService = Resolver.Resolve<IDeviceActionService>();
             _settingsService = Resolver.Resolve<ISettingsService>();
-            UserDialogs = Resolver.Resolve<IUserDialogs>();
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             GoogleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
@@ -61,7 +59,6 @@ namespace Bit.App.Pages
         private SearchToolBarItem SearchItem { get; set; }
         private AddCipherToolBarItem AddCipherItem { get; set; }
         private IGoogleAnalyticsService GoogleAnalyticsService { get; set; }
-        private IUserDialogs UserDialogs { get; set; }
         private IDeviceActionService DeviceActionService { get; set; }
         private string Uri { get; set; }
 
@@ -237,9 +234,9 @@ namespace Bit.App.Pages
                 bool doAutofill = true;
                 if(cipher.Fuzzy)
                 {
-                    doAutofill = await UserDialogs.ConfirmAsync(
+                    doAutofill = await DisplayAlert(null,
                         string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name),
-                        okText: AppResources.Yes, cancelText: AppResources.No);
+                        AppResources.Yes, AppResources.No);
                 }
 
                 if(doAutofill)

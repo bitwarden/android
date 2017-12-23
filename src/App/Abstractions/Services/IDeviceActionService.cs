@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Bit.App.Abstractions
 {
@@ -18,6 +19,6 @@ namespace Bit.App.Abstractions
         void DismissKeyboard();
         void OpenAccessibilitySettings();
         void OpenAutofillSettings();
-        void LaunchApp(string appName);
+        Task LaunchAppAsync(string appName, Page page);
     }
 }

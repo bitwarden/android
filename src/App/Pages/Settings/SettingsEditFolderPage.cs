@@ -100,7 +100,6 @@ namespace Bit.App.Pages
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveResult = await _folderService.SaveAsync(folder);
-
                 _userDialogs.HideLoading();
 
                 if(saveResult.Succeeded)
@@ -111,11 +110,11 @@ namespace Bit.App.Pages
                 }
                 else if(saveResult.Errors.Count() > 0)
                 {
-                    await _userDialogs.AlertAsync(saveResult.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, saveResult.Errors.First().Message, AppResources.Ok);
                 }
                 else
                 {
-                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }, ToolbarItemOrder.Default, 0);
 
@@ -157,7 +156,8 @@ namespace Bit.App.Pages
 
             // TODO: Validate the delete operation. ex. Cannot delete a folder that has ciphers in it?
 
-            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
+            var confirmed = await DisplayAlert(null, AppResources.DoYouReallyWantToDelete, AppResources.Yes, AppResources.No);
+            if(!confirmed)
             {
                 return;
             }
@@ -173,11 +173,11 @@ namespace Bit.App.Pages
             }
             else if(deleteTask.Errors.Count() > 0)
             {
-                await _userDialogs.AlertAsync(deleteTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, deleteTask.Errors.First().Message, AppResources.Ok);
             }
             else
             {
-                await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
             }
         }
 

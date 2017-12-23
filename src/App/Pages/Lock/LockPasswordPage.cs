@@ -159,7 +159,7 @@ namespace Bit.App.Pages
             {
                 // TODO: keep track of invalid attempts and logout?
 
-                UserDialogs.Alert(AppResources.InvalidMasterPassword);
+                await DisplayAlert(null, AppResources.InvalidMasterPassword, AppResources.Ok);
                 PasswordCell.Entry.Text = string.Empty;
                 PasswordCell.Entry.Focus();
             }

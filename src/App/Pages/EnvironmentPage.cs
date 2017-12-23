@@ -13,7 +13,6 @@ namespace Bit.App.Pages
     public class EnvironmentPage : ExtendedContentPage
     {
         private IAppSettingsService _appSettings;
-        private IUserDialogs _userDialogs;
         private IDeviceActionService _deviceActionService;
         private IGoogleAnalyticsService _googleAnalyticsService;
 
@@ -21,7 +20,6 @@ namespace Bit.App.Pages
             : base(updateActivity: false)
         {
             _appSettings = Resolver.Resolve<IAppSettingsService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
@@ -170,7 +168,8 @@ namespace Bit.App.Pages
                 BaseUrlCell.Entry.Text = FixUrl(BaseUrlCell.Entry.Text);
                 if(!Uri.TryCreate(BaseUrlCell.Entry.Text, UriKind.Absolute, out result))
                 {
-                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.ServerUrl));
+                    await DisplayAlert(null, string.Format(AppResources.FormattedIncorrectly, AppResources.ServerUrl),
+                        AppResources.Ok);
                     return;
                 }
             }
@@ -184,7 +183,8 @@ namespace Bit.App.Pages
                 WebVaultUrlCell.Entry.Text = FixUrl(WebVaultUrlCell.Entry.Text);
                 if(!Uri.TryCreate(WebVaultUrlCell.Entry.Text, UriKind.Absolute, out result))
                 {
-                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.WebVaultUrl));
+                    await DisplayAlert(null, string.Format(AppResources.FormattedIncorrectly, AppResources.WebVaultUrl),
+                        AppResources.Ok);
                     return;
                 }
             }
@@ -198,7 +198,8 @@ namespace Bit.App.Pages
                 ApiUrlCell.Entry.Text = FixUrl(ApiUrlCell.Entry.Text);
                 if(!Uri.TryCreate(ApiUrlCell.Entry.Text, UriKind.Absolute, out result))
                 {
-                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.ApiUrl));
+                    await DisplayAlert(null, string.Format(AppResources.FormattedIncorrectly, AppResources.ApiUrl),
+                        AppResources.Ok);
                     return;
                 }
             }
@@ -212,7 +213,8 @@ namespace Bit.App.Pages
                 IdentityUrlCell.Entry.Text = FixUrl(IdentityUrlCell.Entry.Text);
                 if(!Uri.TryCreate(IdentityUrlCell.Entry.Text, UriKind.Absolute, out result))
                 {
-                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.IdentityUrl));
+                    await DisplayAlert(null, string.Format(AppResources.FormattedIncorrectly, AppResources.IdentityUrl),
+                        AppResources.Ok);
                     return;
                 }
             }
@@ -226,7 +228,8 @@ namespace Bit.App.Pages
                 IconsUrlCell.Entry.Text = FixUrl(IconsUrlCell.Entry.Text);
                 if(!Uri.TryCreate(IconsUrlCell.Entry.Text, UriKind.Absolute, out result))
                 {
-                    _userDialogs.Alert(string.Format(AppResources.FormattedIncorrectly, AppResources.IconsUrl));
+                    await DisplayAlert(null, string.Format(AppResources.FormattedIncorrectly, AppResources.IconsUrl),
+                        AppResources.Ok);
                     return;
                 }
             }

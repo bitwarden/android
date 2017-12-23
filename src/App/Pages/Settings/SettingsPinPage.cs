@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
-using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Xamarin.Forms;
 using XLabs.Ioc;
@@ -13,14 +10,12 @@ namespace Bit.App.Pages
 {
     public class SettingsPinPage : ExtendedContentPage
     {
-        private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private Action<SettingsPinPage> _pinEnteredAction;
 
         public SettingsPinPage(Action<SettingsPinPage> pinEnteredAction)
         {
             _pinEnteredAction = pinEnteredAction;
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
 
             Init();

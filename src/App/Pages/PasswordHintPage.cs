@@ -127,6 +127,7 @@ namespace Bit.App.Pages
             _userDialogs.ShowLoading(AppResources.Submitting, MaskType.Black);
             var response = await _accountApiRepository.PostPasswordHintAsync(request);
             _userDialogs.HideLoading();
+
             if(!response.Succeeded)
             {
                 await DisplayAlert(AppResources.AnErrorHasOccurred, response.Errors.FirstOrDefault()?.Message, AppResources.Ok);

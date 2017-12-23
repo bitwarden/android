@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Controls;
 using Bit.App.Resources;
@@ -13,13 +11,11 @@ namespace Bit.App.Pages
 {
     public class ToolsPage : ExtendedContentPage
     {
-        private readonly IUserDialogs _userDialogs;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IDeviceInfoService _deviceInfoService;
 
         public ToolsPage()
         {
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 
@@ -144,8 +140,9 @@ namespace Bit.App.Pages
 
         private async void ImportCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(AppResources.ImportItemsConfirmation, null, AppResources.Yes,
-                AppResources.Cancel))
+            var confirmed = await DisplayAlert(null, AppResources.ImportItemsConfirmation, AppResources.Yes,
+                AppResources.Cancel);
+            if(!confirmed)
             {
                 return;
             }

@@ -7,7 +7,6 @@ using Bit.App.Abstractions;
 using XLabs.Ioc;
 using Plugin.Settings.Abstractions;
 using Plugin.Connectivity.Abstractions;
-using Acr.UserDialogs;
 using Android.Content;
 using System.Reflection;
 using Xamarin.Forms.Platform.Android;
@@ -77,12 +76,10 @@ namespace Bit.Android
                 _appOptions,
                 Resolver.Resolve<IAuthService>(),
                 Resolver.Resolve<IConnectivity>(),
-                Resolver.Resolve<IUserDialogs>(),
                 Resolver.Resolve<IDatabaseService>(),
                 Resolver.Resolve<ISyncService>(),
                 _settings,
                 Resolver.Resolve<ILockService>(),
-                Resolver.Resolve<IGoogleAnalyticsService>(),
                 Resolver.Resolve<ILocalizeService>(),
                 Resolver.Resolve<IAppInfoService>(),
                 Resolver.Resolve<IAppSettingsService>(),

@@ -164,9 +164,8 @@ namespace Bit.App.Utilities
 
         public static async void AddCipher(Page page, string folderId)
         {
-            var type = await Resolver.Resolve<IUserDialogs>().ActionSheetAsync(
-                AppResources.SelectTypeAdd, AppResources.Cancel, null, null, AppResources.TypeLogin,
-                AppResources.TypeCard, AppResources.TypeIdentity, AppResources.TypeSecureNote);
+            var type = await page.DisplayActionSheet(AppResources.SelectTypeAdd, AppResources.Cancel, null,
+                AppResources.TypeLogin, AppResources.TypeCard, AppResources.TypeIdentity, AppResources.TypeSecureNote);
 
             var selectedType = CipherType.SecureNote;
             if(type == AppResources.Cancel)

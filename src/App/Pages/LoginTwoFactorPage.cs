@@ -377,7 +377,7 @@ namespace Bit.App.Pages
             }
             else if(!response.Succeeded)
             {
-                _userDialogs.Alert(AppResources.VerificationEmailNotSent);
+                await DisplayAlert(null, AppResources.VerificationEmailNotSent, AppResources.Ok);
             }
         }
 
@@ -406,6 +406,7 @@ namespace Bit.App.Pages
             var response = await _authService.TokenPostTwoFactorAsync(_providerType.Value, token, RememberCell.On,
                 _email, _masterPasswordHash, _key);
             _userDialogs.HideLoading();
+
             if(!response.Success)
             {
                 ListenYubiKey(true);

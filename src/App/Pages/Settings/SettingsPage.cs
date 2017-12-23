@@ -14,7 +14,6 @@ namespace Bit.App.Pages
     public class SettingsPage : ExtendedContentPage
     {
         private readonly IAuthService _authService;
-        private readonly IUserDialogs _userDialogs;
         private readonly ISettings _settings;
         private readonly IFingerprint _fingerprint;
         private readonly IPushNotificationService _pushNotification;
@@ -28,7 +27,6 @@ namespace Bit.App.Pages
         public SettingsPage()
         {
             _authService = Resolver.Resolve<IAuthService>();
-            _userDialogs = Resolver.Resolve<IUserDialogs>();
             _settings = Resolver.Resolve<ISettings>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
             _pushNotification = Resolver.Resolve<IPushNotificationService>();
@@ -271,8 +269,9 @@ namespace Bit.App.Pages
 
         private async void TwoStepCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(AppResources.TwoStepLoginConfirmation, null, AppResources.Yes,
-                AppResources.Cancel))
+            var confirmed = await DisplayAlert(null, AppResources.TwoStepLoginConfirmation, AppResources.Yes,
+                AppResources.Cancel);
+            if(!confirmed)
             {
                 return;
             }
@@ -349,7 +348,9 @@ namespace Bit.App.Pages
 
         private async void LogOutCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(AppResources.LogoutConfirmation, null, AppResources.Yes, AppResources.Cancel))
+            var confirmed = await DisplayAlert(null, AppResources.LogoutConfirmation, AppResources.Yes,
+                AppResources.Cancel);
+            if(!confirmed)
             {
                 return;
             }
@@ -359,8 +360,9 @@ namespace Bit.App.Pages
 
         private async void ChangeMasterPasswordCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(AppResources.ChangePasswordConfirmation, null, AppResources.Yes,
-                AppResources.Cancel))
+            var confirmed = await DisplayAlert(null, AppResources.ChangePasswordConfirmation, AppResources.Yes,
+                AppResources.Cancel);
+            if(!confirmed)
             {
                 return;
             }
@@ -371,8 +373,9 @@ namespace Bit.App.Pages
 
         private async void ChangeEmailCell_Tapped(object sender, EventArgs e)
         {
-            if(!await _userDialogs.ConfirmAsync(AppResources.ChangeEmailConfirmation, null, AppResources.Yes,
-                AppResources.Cancel))
+            var confirmed = await DisplayAlert(null, AppResources.ChangeEmailConfirmation, AppResources.Yes,
+                AppResources.Cancel);
+            if(!confirmed)
             {
                 return;
             }

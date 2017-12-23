@@ -162,7 +162,6 @@ namespace Bit.App.Pages
 
                 _userDialogs.ShowLoading(AppResources.Saving, MaskType.Black);
                 var saveTask = await _cipherService.EncryptAndSaveAttachmentAsync(_cipher, _fileBytes, FileLabel.Text);
-
                 _userDialogs.HideLoading();
 
                 if(saveTask.Succeeded)
@@ -175,11 +174,11 @@ namespace Bit.App.Pages
                 }
                 else if(saveTask.Errors.Count() > 0)
                 {
-                    await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(AppResources.AnErrorHasOccurred, saveTask.Errors.First().Message, AppResources.Ok);
                 }
                 else
                 {
-                    await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                    await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }, ToolbarItemOrder.Default, 0);
 
@@ -261,7 +260,9 @@ namespace Bit.App.Pages
 
             ((ListView)sender).SelectedItem = null;
 
-            if(!await _userDialogs.ConfirmAsync(AppResources.DoYouReallyWantToDelete, null, AppResources.Yes, AppResources.No))
+            var confirmed = await DisplayAlert(null, AppResources.DoYouReallyWantToDelete, AppResources.Yes,
+                AppResources.No);
+            if(!confirmed)
             {
                 return;
             }
@@ -278,11 +279,11 @@ namespace Bit.App.Pages
             }
             else if(saveTask.Errors.Count() > 0)
             {
-                await _userDialogs.AlertAsync(saveTask.Errors.First().Message, AppResources.AnErrorHasOccurred);
+                await DisplayAlert(AppResources.AnErrorHasOccurred, saveTask.Errors.First().Message, AppResources.Ok);
             }
             else
             {
-                await _userDialogs.AlertAsync(AppResources.AnErrorHasOccurred);
+                await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
             }
         }
 
@@ -311,7 +312,7 @@ namespace Bit.App.Pages
 
         private async Task ShowUpdateKeyAsync()
         {
-            var confirmed = await _userDialogs.ConfirmAsync(AppResources.UpdateKey, AppResources.FeatureUnavailable,
+            var confirmed = await DisplayAlert(AppResources.FeatureUnavailable, AppResources.UpdateKey, 
                 AppResources.LearnMore, AppResources.Cancel);
             if(confirmed)
             {

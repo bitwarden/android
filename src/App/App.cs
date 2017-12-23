@@ -9,8 +9,6 @@ using Plugin.Settings.Abstractions;
 using Bit.App.Controls;
 using Plugin.Connectivity.Abstractions;
 using System.Net;
-using Acr.UserDialogs;
-using XLabs.Ioc;
 using System.Reflection;
 using Bit.App.Resources;
 using Bit.App.Utilities;
@@ -21,14 +19,12 @@ namespace Bit.App
     public class App : Application
     {
         private AppOptions _options;
+        private readonly IAuthService _authService;
         private readonly IDatabaseService _databaseService;
         private readonly IConnectivity _connectivity;
-        private readonly IUserDialogs _userDialogs;
         private readonly ISyncService _syncService;
-        private readonly IAuthService _authService;
         private readonly ISettings _settings;
         private readonly ILockService _lockService;
-        private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly ILocalizeService _localizeService;
         private readonly IAppInfoService _appInfoService;
         private readonly IAppSettingsService _appSettingsService;
@@ -38,26 +34,22 @@ namespace Bit.App
             AppOptions options,
             IAuthService authService,
             IConnectivity connectivity,
-            IUserDialogs userDialogs,
             IDatabaseService databaseService,
             ISyncService syncService,
             ISettings settings,
             ILockService lockService,
-            IGoogleAnalyticsService googleAnalyticsService,
             ILocalizeService localizeService,
             IAppInfoService appInfoService,
             IAppSettingsService appSettingsService,
             IDeviceActionService deviceActionService)
         {
             _options = options ?? new AppOptions();
+            _authService = authService;
             _databaseService = databaseService;
             _connectivity = connectivity;
-            _userDialogs = userDialogs;
             _syncService = syncService;
-            _authService = authService;
             _settings = settings;
             _lockService = lockService;
-            _googleAnalyticsService = googleAnalyticsService;
             _localizeService = localizeService;
             _appInfoService = appInfoService;
             _appSettingsService = appSettingsService;

@@ -133,11 +133,11 @@ namespace Bit.App.Pages
                     LoginUriCell = new LabeledValueCell(AppResources.Website, button1Image: "launch.png");
                     LoginUriCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.LoginUriHost));
                     LoginUriCell.Button1.SetBinding(IsVisibleProperty, nameof(VaultViewCipherPageModel.ShowLoginLaunch));
-                    LoginUriCell.Button1.Command = new Command(() =>
+                    LoginUriCell.Button1.Command = new Command(async () =>
                     {
                         if(Device.RuntimePlatform == Device.Android && Model.LoginUri.StartsWith("androidapp://"))
                         {
-                            _deviceActionService.LaunchApp(Model.LoginUri);
+                            await _deviceActionService.LaunchAppAsync(Model.LoginUri, this);
                         }
                         else if(Model.LoginUri.StartsWith("http://") || Model.LoginUri.StartsWith("https://"))
                         {
@@ -433,7 +433,7 @@ namespace Bit.App.Pages
         {
             if(!_tokenService.TokenPremium && !cipher.OrganizationUseTotp)
             {
-                _userDialogs.Alert(AppResources.PremiumRequired);
+                await DisplayAlert(null, AppResources.PremiumRequired, AppResources.Ok);
                 return;
             }
 
@@ -447,22 +447,23 @@ namespace Bit.App.Pages
 
             if(!_deviceActionService.CanOpenFile(attachment.Name))
             {
-                await _userDialogs.AlertAsync(AppResources.UnableToOpenFile, null, AppResources.Ok);
+                await DisplayAlert(null, AppResources.UnableToOpenFile, AppResources.Ok);
                 return;
             }
 
             _userDialogs.ShowLoading(AppResources.Downloading, MaskType.Black);
             var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, cipher.OrganizationId);
             _userDialogs.HideLoading();
+
             if(data == null)
             {
-                await _userDialogs.AlertAsync(AppResources.UnableToDownloadFile, null, AppResources.Ok);
+                await DisplayAlert(null, AppResources.UnableToDownloadFile, AppResources.Ok);
                 return;
             }
 
             if(!_deviceActionService.OpenFile(data, attachment.Id, attachment.Name))
             {
-                await _userDialogs.AlertAsync(AppResources.UnableToOpenFile, null, AppResources.Ok);
+                await DisplayAlert(null, AppResources.UnableToOpenFile, AppResources.Ok);
                 return;
             }
         }

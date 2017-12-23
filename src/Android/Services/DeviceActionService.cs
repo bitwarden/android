@@ -23,7 +23,6 @@ using Android.App.Assist;
 using Bit.Android.Autofill;
 using System.Linq;
 using Plugin.Settings.Abstractions;
-using Acr.UserDialogs;
 using Android.Views.InputMethods;
 
 namespace Bit.Android.Services
@@ -31,16 +30,13 @@ namespace Bit.Android.Services
     public class DeviceActionService : IDeviceActionService
     {
         private readonly IAppSettingsService _appSettingsService;
-        private readonly IUserDialogs _userDialogs;
         private bool _cameraPermissionsDenied;
         private DateTime? _lastAction;
 
         public DeviceActionService(
-            IAppSettingsService appSettingsService,
-            IUserDialogs userDialogs)
+            IAppSettingsService appSettingsService)
         {
             _appSettingsService = appSettingsService;
-            _userDialogs = userDialogs;
         }
 
         private Context CurrentContext => CrossCurrentActivity.Current.Activity;
@@ -312,7 +308,7 @@ namespace Bit.Android.Services
             activity.StartActivity(intent);
         }
 
-        public void LaunchApp(string appName)
+        public async Task LaunchAppAsync(string appName, Page page)
         {
             var activity = (MainActivity)CurrentContext;
             if(_lastAction.LastActionWasRecent())
@@ -325,7 +321,7 @@ namespace Bit.Android.Services
             var launchIntent = activity.PackageManager.GetLaunchIntentForPackage(appName);
             if(launchIntent == null)
             {
-                _userDialogs.Alert(string.Format(AppResources.CannotOpenApp, appName));
+                await page.DisplayAlert(null, string.Format(AppResources.CannotOpenApp, appName), AppResources.Ok);
             }
             else
             {
