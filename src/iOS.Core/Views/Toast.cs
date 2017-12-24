@@ -13,11 +13,11 @@ namespace Bit.iOS.Core.Views
         private NSLayoutConstraint _bottomMarginConstraint;
 
         public Toast(string text) 
-            : base(CoreGraphics.CGRect.FromLTRB(0, 0, 320, 44))
+            : base(CoreGraphics.CGRect.FromLTRB(0, 0, 320, 38))
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
-            BackgroundColor = UIColor.DarkGray;
-            Layer.CornerRadius = 8;
+            BackgroundColor = UIColor.DarkGray.ColorWithAlpha(0.9f);
+            Layer.CornerRadius = 15;
             Layer.MasksToBounds = true;
 
             MessageLabel = new UILabel
@@ -55,7 +55,7 @@ namespace Bit.iOS.Core.Views
         public nfloat LeftMargin { get; set; } = 5;
         public nfloat RightMargin { get; set; } = 5;
         public nfloat BottomMargin { get; set; } = 5;
-        public nfloat Height { get; set; } = 44;
+        public nfloat Height { get; set; } = 38;
 
         public void Show()
         {
@@ -106,12 +106,6 @@ namespace Bit.iOS.Core.Views
         {
             _dismissTimer?.Invalidate();
             _dismissTimer = null;
-            nfloat superViewWidth = 0;
-
-            if(Superview != null)
-            {
-                superViewWidth = Superview.Frame.Width;
-            }
 
             if(!animated)
             {
