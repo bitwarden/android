@@ -33,7 +33,7 @@ namespace Bit.iOS.Services
 
         public void Toast(string text, bool longDuration = false)
         {
-            if(_toast != null && !_toast.Dismissed)
+            if(!_toast?.Dismissed ?? false)
             {
                 _toast.Dismiss(false);
             }
