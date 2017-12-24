@@ -33,6 +33,7 @@ namespace Bit.Android.Services
         private bool _cameraPermissionsDenied;
         private DateTime? _lastAction;
         private ProgressDialog _progressDialog;
+        private global::Android.Widget.Toast _toast;
 
         public DeviceActionService(
             IAppSettingsService appSettingsService)
@@ -44,8 +45,16 @@ namespace Bit.Android.Services
 
         public void Toast(string text, bool longDuration = false)
         {
-            global::Android.Widget.Toast.MakeText(CurrentContext, text,
-                longDuration ? global::Android.Widget.ToastLength.Long : global::Android.Widget.ToastLength.Short).Show();
+            if(_toast != null)
+            {
+                _toast.Cancel();
+                _toast.Dispose();
+                _toast = null;
+            }
+
+            _toast = global::Android.Widget.Toast.MakeText(CurrentContext, text,
+                longDuration ? global::Android.Widget.ToastLength.Long : global::Android.Widget.ToastLength.Short);
+            _toast.Show();
         }
 
         public void CopyToClipboard(string text)
