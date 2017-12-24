@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Bit.App.Models.Page;
 using Bit.iOS.Core.Views;
 using CoreGraphics;
+using System.Linq;
 
 namespace Bit.iOS.Services
 {
@@ -322,7 +323,8 @@ namespace Bit.iOS.Services
         private bool TabBarVisible()
         {
             var vc = GetPresentedViewController();
-            return vc?.TabBarController != null && !vc.TabBarController.TabBar.Hidden;
+            return vc != null && (vc is UITabBarController ||
+                (vc.ChildViewControllers?.Any(c => c is UITabBarController) ?? false));
         }
     }
 }
