@@ -21,6 +21,7 @@ namespace Bit.iOS.Services
         private readonly IAppSettingsService _appSettingsService;
         private readonly IDeviceInfoService _deviceInfoService;
         private UIAlertController _progressAlert;
+        private Toast _toast;
 
         public DeviceActionService(
             IAppSettingsService appSettingsService,
@@ -32,17 +33,27 @@ namespace Bit.iOS.Services
 
         public void Toast(string text, bool longDuration = false)
         {
-            var t = new Toast(text)
+            if(_toast != null && !_toast.Dismissed)
+            {
+                _toast.Dismiss(false);
+            }
+
+            _toast = new Toast(text)
             {
                 Duration = TimeSpan.FromSeconds(longDuration ? 5 : 3)
             };
 
             if(TabBarVisible())
             {
-                t.BottomMargin = 55;
+                _toast.BottomMargin = 55;
             }
 
-            t.Show();
+            _toast.Show();
+            _toast.DismissCallback = () =>
+            {
+                _toast?.Dispose();
+                _toast = null;
+            };
         }
 
         public void CopyToClipboard(string text)
@@ -277,6 +288,11 @@ namespace Bit.iOS.Services
 
         public void ShowLoading(string text)
         {
+            if(_progressAlert != null)
+            {
+                HideLoading();
+            }
+
             var loadingIndicator = new UIActivityIndicatorView(new CGRect(10, 5, 50, 50));
             loadingIndicator.HidesWhenStopped = true;
             loadingIndicator.ActivityIndicatorViewStyle = UIActivityIndicatorViewStyle.Gray;
@@ -300,7 +316,6 @@ namespace Bit.iOS.Services
             _progressAlert.DismissViewController(true, () => { });
             _progressAlert.Dispose();
             _progressAlert = null;
-
         }
 
         public Task LaunchAppAsync(string appName, Page page)

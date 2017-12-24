@@ -12,7 +12,7 @@ namespace Bit.iOS.Core.Views
         private NSLayoutConstraint _rightMarginConstraint;
         private NSLayoutConstraint _bottomMarginConstraint;
 
-        public Toast(string text) 
+        public Toast(string text)
             : base(CoreGraphics.CGRect.FromLTRB(0, 0, 320, 38))
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
@@ -47,9 +47,11 @@ namespace Bit.iOS.Core.Views
             AddConstraints(hMessageConstraints);
             AddConstraints(vMessageConstraints);
 
-            AddGestureRecognizer(new UITapGestureRecognizer(() => Dismiss()));
+            AddGestureRecognizer(new UITapGestureRecognizer(() => Dismiss(false)));
         }
 
+        public bool Dismissed { get; set; }
+        public Action DismissCallback { get; set; }
         public TimeSpan Duration { get; set; } = TimeSpan.FromSeconds(3);
         public UILabel MessageLabel { get; set; }
         public nfloat LeftMargin { get; set; } = 5;
@@ -104,17 +106,28 @@ namespace Bit.iOS.Core.Views
 
         public void Dismiss(bool animated = true)
         {
+            if(Dismissed)
+            {
+                return;
+            }
+
+            Dismissed = true;
             _dismissTimer?.Invalidate();
             _dismissTimer = null;
 
             if(!animated)
             {
                 RemoveFromSuperview();
+                DismissCallback?.Invoke();
                 return;
             }
 
             SetNeedsLayout();
-            Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseIn, () => { Alpha = 0; }, RemoveFromSuperview);
+            Animate(0.3f, 0, UIViewAnimationOptions.CurveEaseIn, () => { Alpha = 0; }, () =>
+            {
+                RemoveFromSuperview();
+                DismissCallback?.Invoke();
+            });
         }
 
         private void ShowWithAnimation()
