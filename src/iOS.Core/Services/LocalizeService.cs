@@ -66,11 +66,6 @@ namespace Bit.iOS.Core.Services
             {
                 netLanguage = "zh-Hans";
             }
-            else if(iOSLanguage.StartsWith("pt"))
-            {
-                // only Portuguese Europe for now
-                netLanguage = "pt-PT";
-            }
             else
             {
                 //certain languages need to be converted to CultureInfo equivalent
