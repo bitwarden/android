@@ -18,6 +18,7 @@ namespace Bit.App.Services
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
         private bool _timerCreated = false;
+        private bool _firstLockCheck = true;
 
         public LockService(
             ISettings settings,
@@ -45,6 +46,10 @@ namespace Bit.App.Services
 
         public async Task<LockType> GetLockTypeAsync(bool forceLock)
         {
+            // Always locked if not already running in memory.
+            var firstlockCheck = _firstLockCheck;
+            _firstLockCheck = false;
+
             // Only lock if they are logged in
             if(!_authService.IsAuthenticated)
             {
@@ -52,7 +57,7 @@ namespace Bit.App.Services
             }
 
             // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
-            if(!forceLock && !_appSettings.Locked)
+            if(!firstlockCheck && !forceLock && !_appSettings.Locked)
             {
                 // Lock seconds tells if they want to lock the app or not
                 var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
