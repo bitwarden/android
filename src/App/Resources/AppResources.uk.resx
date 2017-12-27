@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Генератор паролів</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Автоматичне генерування стійких, унікальних паролів.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Підказка для пароля</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Збірки</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Типово "Моє сховище"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Відкривати сторінку "Моє сховище" замість "Обране" при запуску.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>В цій збірці немає записів.</value>
   </data>
@@ -1219,16 +1210,25 @@
     <value>Відкрити налаштування автозаповнення</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Face ID</value>
+    <value>Розпізнавання обличчя</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Використовувати розпізнавання обличчя для підтвердження.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Використовувати розпізнавання обличчя для розблокування</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Підтвердження розпізнавання обличчя</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>
