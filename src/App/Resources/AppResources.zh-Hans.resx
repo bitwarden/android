@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>密码生成器</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>自动生成安全可靠唯一的登录密码。</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>密码提示</value>
   </data>
@@ -703,7 +700,7 @@
     <value>立即同步</value>
   </data>
   <data name="TouchID" xml:space="preserve">
-    <value>Touch ID</value>
+    <value>触控 ID</value>
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>集合</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>默认为 "我的密码库"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>当我打开应用时，默认显示 "我的密码库" 页面，而不是 "收藏夹"。</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>此集合中没有登录项目。</value>
   </data>
@@ -1219,16 +1210,25 @@
     <value>打开自动填充设置</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Face ID</value>
+    <value>面容 ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>使用 "面容 ID" 进行验证。</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>使用 "面容 ID" 解锁</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>验证面容 ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>
