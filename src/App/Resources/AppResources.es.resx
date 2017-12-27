@@ -284,7 +284,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Mi bóveda</value>
+    <value>Mi caja fuerte</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -403,7 +403,7 @@
     <value>Extensión de Aplicación</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Utiliza el servicio de Accesibilidad de bitwarden para autorellenar entradas entre aplicaciones y sitios web.</value>
+    <value>Utiliza el servicio de accesibilidad de bitwarden para autorellenar entradas entre aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Servicio de autorellenado</value>
@@ -415,7 +415,7 @@
     <value>bitwarden Extensión de Aplicación</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>La forma mas fácil de añadir nuevas entradas a tu bóveda es con la Extensión de Aplicación de bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
+    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es con la extensión de la aplicación bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Usar bitwarden en Safari y otras aplicaciones para autorellenar tus entradas.</value>
@@ -424,19 +424,19 @@
     <value>bitwarden Servicio de Autorellenado</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Utiliza el servicio de Accesibilidad de bitwarden para autorellenar entradas.</value>
+    <value>Utiliza el servicio de accesibilidad de bitwarden para autorellenar entradas.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Cambiar correo electrónico</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Puedes cambiar tu correo electrónico en la bóveda web de bitwarden.com. ¿Quieres visitar ahora el sitio web?</value>
+    <value>Puedes cambiar tu correo electrónico en la caja fuerte web de bitwarden.com. ¿Quieres visitar ahora el sitio web?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Cambiar contraseña maestra</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Puedes cambiar tu contraseña maestra en la bóveda web de bitwarden.com. ¿Quieres visitar ahora el sitio web?</value>
+    <value>Puedes cambiar tu contraseña maestra en la caja fuerte web de bitwarden.com. ¿Quieres visitar ahora el sitio web?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Cerrar</value>
@@ -522,10 +522,10 @@
     <value>Importar elementos</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Puedes importar elementos desde la bóveda web de bitwarden.com. ¿Quieres visitar el sitio web ahora?</value>
+    <value>Puedes importar elementos desde la caja fuerte web de bitwarden.com. ¿Quieres visitar el sitio web ahora?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Importa masiva y rápidamente elemento desde otras aplicaciones gestores de contraseñas.</value>
+    <value>Importa rápida y masivamente elementos desde otras aplicaciones gestoras de contraseñas.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Última sincronización:</value>
@@ -559,7 +559,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Identifícate o crea una nueva cuenta para acceder a tu bóveda segura.</value>
+    <value>Identifícate o crea una nueva cuenta para acceder a tu caja fuerte.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Gestionar</value>
@@ -568,7 +568,7 @@
     <value>La confirmación de la contraseña no es correcta.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>La contraseña maestra es la clave que utilizas para acceder a tu bóveda. Es muy importante que no olvides tu contraseña maestra. No hay forma de recuperarla en el caso de que la hayas olvidado.</value>
+    <value>La contraseña maestra es la clave que utilizas para acceder a tu caja fuerte. Es muy importante que no olvides tu contraseña maestra. No hay forma de recuperarla si la olvidas.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Pista de contraseña maestra (opcional)</value>
@@ -600,13 +600,13 @@
     <value>Nuevo elemento creado.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>No hay favoritos en tu bóveda.</value>
+    <value>No hay favoritos en tu caja fuerte.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>No hay elementos en tu bóveda.</value>
+    <value>No hay elementos en tu caja fuerte.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>No hay elementos en tu bóveda para este sitio web. Pulsa para añadir uno.</value>
+    <value>No hay elementos en tu caja fuerte para este sitio web. Pulsa para añadir uno.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Esta entrada no tiene usuario y contraseña configurados.</value>
@@ -629,9 +629,6 @@
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Generador de contraseñas</value>
-  </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Genera contraseñas fuertes y únicas para tus accesos automáticamente.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Pista de contraseña</value>
@@ -662,7 +659,7 @@
     <value>Vuelve a escribir tu contraseña maestra</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Buscar en bóveda</value>
+    <value>Buscar en caja fuerte</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Seguridad</value>
@@ -700,7 +697,7 @@
     <value>Sincronizado fallida.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sincronizar bóveda ahora</value>
+    <value>Sincronizar caja fuerte ahora</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -710,7 +707,7 @@
     <value>Autenticación en dos pasos</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>La autenticación en dos pasos hace que tu cuenta sea mucho más segura requiriendo que introduzcas un código de seguridad de una aplicación de autenticación cada vez que accedes. La autenticación en dos pasos puede ser habilitada en la caja fuerte web de bitwarden.com. ¿Quieres visitar ahora el sitio web?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Desbloquear con {0}</value>
@@ -729,10 +726,10 @@
     <value>Ver elemento</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bóveda web de bitwarden</value>
+    <value>Caja fuerte web de bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gestiona las entradas de cualquier web con la bóveda web de bitwarden.</value>
+    <value>Gestiona las entradas de cualquier web con la caja fuerte web de bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>¿Has perdido la autenticación en dos pasos?</value>
@@ -755,14 +752,14 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>No hay elemento en tu bóveda para {0}.</value>
+    <value>No hay elementos en tu caja fuerte para {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>Cuando veas una notificación de autorellenado de bitwarden, puedes pulsar en ella para lanzar el servicio.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Pulsa en esta notificación para autorellenar una entrada desde tu bóveda.</value>
+    <value>Pulsa en esta notificación para autorellenar una entrada desde tu caja fuerte.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Abrir ajustes de Accesibilidad</value>
@@ -786,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>La forma mas fácil de añadir nuevas entradas a tu bóveda es con el Servicio de Autorellenado de bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
+    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es con el Servicio de Autorellenado de bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Autorellenar</value>
@@ -798,7 +795,7 @@
     <value>¿Estás seguro de que quieres autorellenar esta entrada? No es una coincidencia completa para "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Elemento coincidientes</value>
+    <value>Elementos coincidientes</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
     <value>Posibles elementos coincidientes</value>
@@ -810,7 +807,7 @@
     <value>Estás buscando una entrada para autorellenar "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Comparte tu bóveda</value>
+    <value>Comparte tu caja fuerte</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Crea una organización para compartir tus entradas de forma segura con otros usuarios.</value>
@@ -953,7 +950,7 @@
     <value>Deshabilitar copiado automático de códigos TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Una membresía Premium es requerida para utilizar esta característica.</value>
+    <value>Se quiere membrasía Premium para poder utilizar esta característica.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Adjunto añadido</value>
@@ -1018,10 +1015,10 @@
     <value>URL del servidor</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>URL del servidor de la bóveda web</value>
+    <value>URL del servidor de la caja fuerte web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Pulsa en esta notificación para ver las entradas de tu bóveda.</value>
+    <value>Pulsa en esta notificación para ver las entradas de tu caja fuerte.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Campos personalizados</value>
@@ -1030,7 +1027,7 @@
     <value>Campos personalizados actualizados.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No hay campos personalizados. Puedes gestionarlos desde la bóveda web o la extensión de navegador.</value>
+    <value>No hay campos personalizados. Puedes gestionarlos desde la caja fuerte web o la extensión de navegador.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Copiar número</value>
@@ -1177,7 +1174,7 @@
     <value>Deshabilitar iconos del sitio web</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Los iconos del sitio web añaden una imagen reconocible al lado de cada entrada de tu bóveda.</value>
+    <value>Los iconos del sitio web añaden una imagen reconocible al lado de cada entrada de tu caja fuerte.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL del servidor de iconos</value>
@@ -1186,19 +1183,13 @@
     <value>Autorellenar con bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Bóveda bloqueada</value>
+    <value>Caja fuerte bloqueada</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Volver a mi bóveda</value>
+    <value>Volver a mi caja fuerte</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Colecciones</value>
-  </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Mostrar "Mi bóveda" por defecto</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Muestra la página "Mi bóveda" en vez de "Favoritos" cuando abres la aplicación.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>No hay elementos en esta colección.</value>
@@ -1213,7 +1204,7 @@
     <value>El servicio de autorellenado de bitwarden utiliza el "Android Autofill Framework" para ayudarte a rellenar entradas, tarjetas de crédito e identidades en otras aplicaciones de tu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utiliza el servicio de Accesibilidad de bitwarden para autorellenar entradas.</value>
+    <value>Utiliza el servicio de accesibilidad de bitwarden para autorellenar entradas.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Abrir opciones de autorellenado</value>
@@ -1223,12 +1214,21 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Usar Face ID para verificar.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Usar Face ID para desbloquear</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Verificar Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

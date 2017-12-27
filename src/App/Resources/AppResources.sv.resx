@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Lösenordsgenerator</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Skapa starka och unika lösenord automatiskt för dina inloggningar.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Lösenordsledtråd</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Samlingar</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Använd "mitt valv" som standard</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Ändra standardfliken till "mitt valv" istället för "favoriter" när jag öppnar appen.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>Det finns inga objekt i samlingen.</value>
   </data>
@@ -1223,12 +1214,21 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Använd Face ID för att verifiera.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Använd Face ID för att låsa upp</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Verifiera Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

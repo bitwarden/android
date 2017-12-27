@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Generátor hesla</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automaticky generovať silné a unikátne heslá pre vaše prihlásenia.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Nápoveda pre heslo</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Zbierky</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Predvoliť "Môj trezor"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Predvoliť stránku "Môj trezor" namiesto "Obľúbené" pri každom otvorení aplikácie.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>V zbierke sa nenachádzajú žiadne položky.</value>
   </data>
@@ -1223,12 +1214,21 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Overiť pomocou Face ID.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Odomknúť pomocou Face ID</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Overiť Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

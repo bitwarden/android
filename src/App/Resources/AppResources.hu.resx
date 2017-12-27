@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Jelszó generátor</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automatikusan létrehoz erős, egyedi jelszavakat a bejelentkezéseidhez.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Jelszó emlékeztető</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Gyűjtemények</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Alapértelmezés a "széfem"-hez</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Amikor megnyitok egy alkalmazást a "Széfem" oldal legyen az alapértelmezett a "Kedvencek" helyett.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>Nincsenek elemek ebben a gyűjteményben.</value>
   </data>
@@ -1219,16 +1210,25 @@
     <value>Automatikus kitöltő beállítások megnyitása</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Face ID</value>
+    <value>Arc-azonosító</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Arc azonosítás használata az ellenőrzéshez.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Arc-azonosító használata a kinyitáshoz</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Arc-azonosító megerősítése</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

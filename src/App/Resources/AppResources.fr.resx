@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Générateur de mot de passe</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Générer automatiquement des mots de passe forts et uniques pour vos identifiants.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Indice du mot de passe</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Collections</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Par défaut sur "Mon coffre"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Aller par défaut sur "Mon coffre" plutôt que "Favoris" quand j'ouvre l'appli.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>Aucun élément dans cette collection.</value>
   </data>
@@ -1223,12 +1214,21 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Utiliser Face ID comme vérification.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Utiliser Face ID pour déverrouiller</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Vérifier Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

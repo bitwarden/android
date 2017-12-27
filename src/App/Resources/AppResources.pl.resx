@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Generator haseł</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Automatycznie wygeneruj silne, unikatowe hasła dla swoich loginów.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Podpowiedź do hasła</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Kolekcje</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Domyślnie w "Moim Sejfie"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Po otwarciu aplikacji otwórz stronę "Mój sejf" zamiast w "Ulubione".</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>W tym folderze nic nie ma.</value>
   </data>
@@ -1213,7 +1204,7 @@
     <value>Usługa Autouzupełniania bitwarden wykorzystuje Androidowy Framework by pomóc wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na twoim urządzeniu.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Użyj usługi autouzupełniania bitwarden żeby wypełnić pola logowania, dane kart kredytowych i osobiste informacje w innych aplikacjach.</value>
+    <value>Użyj usługi autouzupełniania bitwarden żeby wypełnić pola logowania, dane kart kredytowych i informacje osobiste w innych aplikacjach.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otwórz ustawienia autouzupełniania</value>
@@ -1223,12 +1214,21 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Użyj Face ID do weryfikacji.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Użyj Face ID do odblokowania</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Zweryfikuj Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

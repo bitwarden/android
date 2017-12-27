@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Generator de parole</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Generează automat parole puternice, unice pentru datele de conectare.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Indiciu parolă</value>
   </data>
@@ -1194,17 +1191,11 @@
   <data name="Collections" xml:space="preserve">
     <value>Colecții</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Implicit pentru "Seiful meu"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Deschidere implicită a paginii "Seiful meu" în loc de "Favorite" ori de câte ori pornește aplicația.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>Nu există elemente în colecție.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>Nu există imagini în acest dosar.</value>
+    <value>Nu există elemente în acest dosar.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>Serviciul de accesibilitate pentru completare automată</value>
@@ -1219,16 +1210,25 @@
     <value>Setări de completare automată</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>Face ID</value>
+    <value>ID facial</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Folosire ID facial pentru verificare</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Folosire ID facial pentru deblocare</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Verificare ID facial</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

@@ -222,7 +222,7 @@
     <value>Đã xóa thư mục.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Không có thư mục</value>
+    <value>Không được phân loại</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -284,7 +284,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Hầm của tôi</value>
+    <value>Kho của tôi</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -400,7 +400,7 @@
     <value>Thêm một mục</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>Tiện ích mở rộng ứng dụng</value>
+    <value>Phần mở rộng ứng dụng</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
     <value>Sử dụng quyền truy cập sử dụng để bitwarden tự động điền thông tin đăng nhập của bạn trên các ứng dụng và web.</value>
@@ -412,10 +412,10 @@
     <value>Tránh các ký tự không rõ ràng</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Tiện ích mở rộng ứng dụng bitwarden</value>
+    <value>Phần mở rộng bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Cách dễ nhất để thêm đăng nhập mới vào hầm của bạn là từ Tiện ích mở rộng ứng dụng bitwarden. Tìm hiểu thêm về cách sử dụng Tiện ích mở rộng ứng dụng bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
+    <value>Cách dễ nhất để thêm đăng nhập mới vào kho của bạn là từ Phần mở rộng bitwarden. Tìm hiểu thêm về cách sử dụng Phần mở rộng bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Sử dụng bitwarden trong Safari và các ứng dụng khác để tự động điền thông tin đăng nhập của bạn.</value>
@@ -430,13 +430,13 @@
     <value>Thay đổi Email</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Bạn có thể thay đổi địa chỉ email trên hầm bitwarden nền web. Bạn có muốn truy cập trang web bây giờ?</value>
+    <value>Bạn có thể thay đổi địa chỉ email trong kho bitwarden nền web. Bạn có muốn truy cập trang web bây giờ?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Thay đổi mật khẩu chính</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Bạn có thể thay đổi mật khẩu chính trên hầm bitwarden nền web. Bạn có muốn truy cập trang web bây giờ?</value>
+    <value>Bạn có thể thay đổi mật khẩu chính trong kho bitwarden nền web. Bạn có muốn truy cập trang web bây giờ?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Đóng</value>
@@ -473,13 +473,13 @@
     <value>Nhập địa chỉ email tài khoản của bạn để nhận gợi ý mật khẩu chính.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Bật lại tiện ích mở rộng ứng dụng</value>
+    <value>Bật lại phần mở rộng ứng dụng</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Sắp xong!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Bật tiện ích mở rộng ứng dụng</value>
+    <value>Bật phần mở rộng ứng dụng</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
     <value>Trong Safari, tìm bitwarden bằng cách sử dụng biểu tượng chia sẻ (gợi ý: di chuyển sang phải ở cuối cùng của trình đơn).</value>
@@ -522,7 +522,7 @@
     <value>Nhập mục</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Bạn có thể nhập mục đăng nhập hàng loạt trên hầm bitwarden nền web. Bạn có muốn truy cập trang web bây giờ?</value>
+    <value>Bạn có thể nhập các trường đăng nhập hàng loạt trên kho bitwarden nền web. Bạn có muốn truy cập trang web bây giờ?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Dễ dàng nhập toàn bộ mục đăng nhập của bạn từ các ứng dụng quản lý mật khẩu khác.</value>
@@ -559,7 +559,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Đăng nhập hoặc tạo tài khoản mới để truy cập hầm an toàn của bạn.</value>
+    <value>Đăng nhập hoặc tạo tài khoản mới để truy cập kho mật khẩu của bạn.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Quản lý</value>
@@ -568,7 +568,7 @@
     <value>Mật khẩu xác nhận không trùng khớp.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Mật khẩu chính là mật khẩu bạn sử dụng để truy cập hầm an toàn của bạn. Nó rất quan trọng nên không được quên mật khẩu chính của mình. Không có cách nào để khôi phục lại mật khẩu chính trong trường hợp bạn quên nó.</value>
+    <value>Mật khẩu chính là mật khẩu bạn sử dụng để truy cập kho mật khẩu của bạn. Nó rất quan trọng nên bạn không được quên mật khẩu chính của mình. Không có cách nào để khôi phục lại mật khẩu chính nếu bạn quên nó.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Gợi ý mật khẩu chính (tùy chọn)</value>
@@ -591,7 +591,7 @@
     <value>Cài đặt Khác</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Bạn phải đăng nhập vào ứng dụng bitwarden trước khi sử dụng tiện ích mở rộng.</value>
+    <value>Bạn phải đăng nhập vào ứng dụng bitwarden trước khi sử dụng phần mở rộng.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Không bao giờ</value>
@@ -600,13 +600,13 @@
     <value>Đã tạo mục mới.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>Không có mục yêu thích nào trong hầm của bạn.</value>
+    <value>Không có mục yêu thích nào trong kho của bạn.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>Không có mục nào trong hầm của bạn.</value>
+    <value>Không có mục nào trong kho của bạn.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Không có mục nào trong hầm của bạn cho trang web này. Nhấn để thêm.</value>
+    <value>Không có mục nào trong kho của bạn phù hợp với trang web này. Nhấn để thêm.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Thông tin đăng nhập này không có tên người dùng hoặc mật khẩu được định cấu hình.</value>
@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Tạo mật khẩu</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Tự động tạo mật khẩu mạnh mẽ, duy nhất cho đăng nhập của bạn.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Gợi ý mật khẩu</value>
   </data>
@@ -650,10 +647,10 @@
     <value>Đánh giá ứng dụng</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Xin hãy nhìn nhận và cho chúng tôi với một đánh giá tốt!</value>
+    <value>Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Xếp hạng App Store sẽ được đặt lại với mỗi bản cập nhật của bitwarden. Xin hãy nhìn nhận và cho chúng tôi với một đánh giá tốt!</value>
+    <value>Xếp hạng trên App Store sẽ được đặt lại với mỗi bản cập nhật của bitwarden. Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Tạo lại mật khẩu</value>
@@ -662,7 +659,7 @@
     <value>Nhập lại mật khẩu chính</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Tìm kiếm trong Hầm</value>
+    <value>Tìm kiếm trong Kho</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Bảo mật</value>
@@ -700,7 +697,7 @@
     <value>Đồng bộ thất bại.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Đồng bộ Hầm mật khẩu ngay</value>
+    <value>Đồng bộ Kho mật khẩu ngay</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -710,7 +707,7 @@
     <value>Xác thực hai lớp</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Xác thực hai lớp giúp cho tài khoản của bạn an toàn hơn bằng cách yêu cầu bạn xác minh thông tin đăng nhập của bạn bằng một thiết bị khác như khóa bảo mật, ứng dụng xác thực, SMS, cuộc gọi điện thoại hoặc email. Bạn có thể bật xác thực hai lớp trong hầm bitwarden nền web. Bạn có muốn ghé thăm trang web bây giờ?</value>
+    <value>Xác thực hai lớp giúp cho tài khoản của bạn an toàn hơn bằng cách yêu cầu bạn xác minh thông tin đăng nhập của bạn bằng một thiết bị khác như khóa bảo mật, ứng dụng xác thực, SMS, cuộc gọi điện thoại hoặc email. Bạn có thể bật xác thực hai lớp trong kho bitwarden nền web. Bạn có muốn ghé thăm trang web bây giờ?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Mở khóa với {0}</value>
@@ -729,10 +726,10 @@
     <value>Xem mục</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Hầm bitwarden trên Web</value>
+    <value>Kho bitwarden nền Web</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Quản lý các mục đặng nhập của bạn từ mọi trình duyệt web với hầm bitwarden nền web.</value>
+    <value>Quản lý các mục đăng nhập của bạn từ mọi trình duyệt web với kho bitwarden nền web.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Mất ứng dụng xác thực?</value>
@@ -742,7 +739,7 @@
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Đã kích hoạt Tiện ích mở rộng!</value>
+    <value>Đã kích hoạt Phần mở rộng!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>Biểu tượng</value>
@@ -755,14 +752,14 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>Không có mục nào trong hầm của bạn cho {0}.</value>
+    <value>Không có mục nào trong kho của bạn thích hợp với {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
     <value>Khi bạn thấy thông báo tự động điền của bitwarden, bạn có thể nhấn vào nó để khởi chạy dịch vụ tự động điền.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Chạm vào thông báo này để tự động điền thông tin đăng nhập từ hầm của bạn.</value>
+    <value>Chạm vào thông báo này để tự động điền thông tin đăng nhập từ kho của bạn.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Cài đặt trợ năng</value>
@@ -786,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Cách dễ nhất để thêm đăng nhập mới vào hầm của bạn là từ dịch vụ Tự động điền của bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
+    <value>Cách dễ nhất để thêm đăng nhập mới vào kho của bạn là từ dịch vụ Tự động điền của bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Tự động điền</value>
@@ -810,16 +807,16 @@
     <value>Bạn đang tìm kiếm một tự động đăng nhập cho '{0}'.</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Chia sẻ hầm an toàn của bạn</value>
+    <value>Chia sẻ kho mật khẩu của bạn</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Tạo một tổ chức để chia sẻ các thông tin đăng nhập của bạn một cách an toàn với những người dùng khác.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>Chúng tôi sử dụng phân tích để tìm hiểu rõ hơn cách bạn sử dụng ứng dụng để chúng tôi có thể làm cho nó tốt hơn. Tất cả dữ liệu sẽ được thu thập ẩn danh.</value>
+    <value>Chúng tôi sử dụng phân tích để hiểu rõ hơn cách bạn sử dụng ứng dụng, nó chúng tôi cải thiện ứng dụng ngày càng tốt hơn. Tất cả dữ liệu sẽ được thu thập ẩn danh.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Quét khi tập trung vào trường Mật khẩu</value>
+    <value>Quét khi bạn chọn trường Mật khẩu</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
     <value>Chỉ quét các trường trên màn hình và cung cấp thông báo tự động điền khi bạn chọn trường mật khẩu. Cài đặt này có thể giúp tiết kiệm pin.</value>
@@ -1018,10 +1015,10 @@
     <value>Địa chỉ máy chủ</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Địa chỉ hầm web máy chủ</value>
+    <value>Địa chỉ máy chủ kho web</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Chạm vào thông báo này để xem thông tin đăng nhập từ hầm của bạn.</value>
+    <value>Chạm vào thông báo này để xem thông tin đăng nhập từ kho của bạn.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Trường tùy chỉnh</value>
@@ -1030,7 +1027,7 @@
     <value>Đã cập nhật các trường tùy chỉnh.</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>Không có trường tùy chỉnh. Bạn hoàn toàn có thể quản lý các trường tùy chỉnh từ hầm nền Web hoặc tiện ích mở rộng trình duyệt.</value>
+    <value>Không có trường tùy chỉnh. Bạn hoàn toàn có thể quản lý các trường tùy chỉnh từ kho nền Web hoặc tiện ích mở rộng trình duyệt.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Chép số</value>
@@ -1177,7 +1174,7 @@
     <value>Vô hiệu hoá biểu tượng trang web</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Trang web biểu tượng cung cấp các biểu tượng nhận dạng trang web bên cạnh mỗi mục đăng nhập trong hầm an toàn của bạn.</value>
+    <value>Biểu tượng trang web cung cấp các biểu tượng nhận dạng trang web bên cạnh mỗi mục đăng nhập trong kho mật khẩu của bạn.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Biểu tượng địa chỉ máy chủ</value>
@@ -1186,19 +1183,13 @@
     <value>Tự động điền với bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Hầm đã khóa</value>
+    <value>Kho đã khóa</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Đến hầm của tôi</value>
+    <value>Đến kho của tôi</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>Các Bộ Sưu Tập</value>
-  </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Mặc định là "Hầm của tôi"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Trang mặc định là 'Hầm của tôi' thay vì 'Yêu thích' bất cứ khi nào tôi mở ứng dụng.</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>Không có mục nào trong bộ sưu tập này.</value>
@@ -1223,12 +1214,21 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Dùng Face ID để xác thực.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Dùng Face ID để mở khóa</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Xác thực Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

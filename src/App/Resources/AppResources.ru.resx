@@ -574,7 +574,7 @@
     <value>Подсказка к мастер-паролю (необяз.)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Подсказка к мастер-паролю может помочь вам вспомнить свой пароль, если вы его забудете.</value>
+    <value>Подсказка к мастер-паролю может помочь вам его вспомнить.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
     <value>Мастер-пароль должен содержать не менее 8 символов.</value>
@@ -629,9 +629,6 @@
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Генератор паролей</value>
-  </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Автоматическая генерация стойких и уникальных паролей для ваших аккаунтов.</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Подсказка к паролю</value>
@@ -1159,7 +1156,7 @@
     <value>Номер социального страхования</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>Страна / Область</value>
+    <value>Регион / Область</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Обращение</value>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Коллекции</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>По умолчанию "Мое хранилище"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Открывать "Мое хранилище" вместо "Избранного" при запуске приложения.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>В этой коллекции нет элементов.</value>
   </data>
@@ -1223,12 +1214,21 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Использовать Face ID для верификации.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Использовать Face ID для разблокировки</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Верификация Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>

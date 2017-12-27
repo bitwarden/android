@@ -121,7 +121,7 @@
     <value>Trình quản lý mật khẩu bitwarden</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden là cách dễ dàng và an toàn nhất để lưu trữ tất cả các thông tin đăng nhập và mật khẩu của bạn và giữ chúng được đồng bộ giữa tất cả các thiết bị của bạn.
+    <value>bitwarden là cách dễ dàng và an toàn nhất để lưu trữ tất cả các thông tin đăng nhập và mật khẩu của bạn và giữ chúng được đồng bộ giữa tất cả các thiết bị của bạn. Phần mở rộng ứng dụng bitwarden cho phép bạn nhanh chóng đăng nhập vào bất kỳ trang web nào thông qua Safari hoặc Chrome và được hỗ trợ bởi hàng trăm ứng dụng phổ biến khác.
 
 Rò rỉ mật khẩu là một vấn đề rất nghiêm trọng. Các trang web và ứng dụng mà bạn sử dụng đang bị tấn công mỗi ngày. Vi phạm an ninh mạng xảy ra khiến mật khẩu của bạn bị đánh cắp. Khi bạn sử dụng cùng một mật khẩu trên nhiều ứng dụng và trang web, tin tặc có thể dễ dàng truy cập vào email, tài khoản ngân hàng và các tài khoản quan trọng khác của bạn.
 
@@ -133,13 +133,13 @@ bitwarden lưu trữ tất cả các thông tin đăng nhập của bạn trong 
     <value>bitwarden, bit warden, 8bit, mật khẩu, đăng nhập, quản lý mật khẩu miễn phí, quản lý mật khẩu, quản lý đăng nhập,password,login,free password manager,password manager,login manager</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Quản lý tất cả đăng nhập và mật khẩu của bạn từ một hầm an toàn</value>
+    <value>Quản lý tất cả đăng nhập và mật khẩu của bạn từ một kho mật khẩu an toàn</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Tự động tạo mật khẩu mạnh, ngẫu nhiên và an toàn</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Bảo vệ hầm an toàn của bạn bằng Touch ID, Face ID, mã PIN hoặc mật khẩu chính</value>
+    <value>Bảo vệ kho mật khẩu của bạn bằng Touch ID, Face ID, mã PIN hoặc mật khẩu chính</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Tự động điền thông tin đăng nhập từ Safari, Chrome và hàng trăm ứng dụng khác</value>
