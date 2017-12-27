@@ -18,7 +18,7 @@ namespace Bit.App.Services
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
         private bool _timerCreated = false;
-        private bool _firstLockCheck = true;
+        private bool _firstLockCheck = false; // TODO: true when we want to support this
 
         public LockService(
             ISettings settings,
@@ -56,11 +56,12 @@ namespace Bit.App.Services
                 return LockType.None;
             }
 
+            // Lock seconds tells if they want to lock the app or not
+            var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
+
             // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
             if(!firstlockCheck && !forceLock && !_appSettings.Locked)
             {
-                // Lock seconds tells if they want to lock the app or not
-                var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
                 if(lockSeconds == -1)
                 {
                     return LockType.None;
@@ -72,6 +73,12 @@ namespace Bit.App.Services
                 {
                     return LockType.None;
                 }
+            }
+
+            // Skip first lock check if not using locking
+            if(firstlockCheck && lockSeconds == -1 && !forceLock && !_appSettings.Locked)
+            {
+                return LockType.None;
             }
 
             // What method are we using to unlock?
