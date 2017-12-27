@@ -17,6 +17,7 @@ namespace Bit.App.Services
         private readonly IAppSettingsService _appSettings;
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
+        private bool _timerCreated = false;
 
         public LockService(
             ISettings settings,
@@ -29,6 +30,8 @@ namespace Bit.App.Services
             _authService = authService;
             _fingerprint = fingerprint;
         }
+
+        public bool CheckForLockInBackground { get; set; } = true;
 
         public void UpdateLastActivity(DateTime? activityDate = null)
         {
@@ -135,6 +138,31 @@ namespace Bit.App.Services
             }
 
             return false;
+        }
+
+        public void StartLockTimer()
+        {
+            if(_timerCreated)
+            {
+                return;
+            }
+
+            _timerCreated = true;
+            Device.StartTimer(TimeSpan.FromMinutes(1), () =>
+            {
+                if(CheckForLockInBackground && !_appSettings.Locked)
+                {
+                    System.Diagnostics.Debug.WriteLine("Check lock from timer at " + DateTime.Now);
+                    var lockType = GetLockTypeAsync(false).GetAwaiter().GetResult();
+                    if(lockType != LockType.None)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Locked from timer at " + DateTime.Now);
+                        _appSettings.Locked = true;
+                    }
+                }
+
+                return true;
+            });
         }
     }
 }
