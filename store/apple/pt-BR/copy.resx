@@ -118,33 +118,33 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden – Free Password Manager</value>
+    <value>bitwarden - Gerenciador de Senhas Gratuito</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
+    <value>O bitwarden é a maneira mais fácil e segura de armazenar todas as suas credenciais e senhas mantendo-as convenientemente sincronizadas entre todos os seus dispositivos.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+O furto de senhas é um problema sério. Os sites e aplicativos que os utiliza estão sob ataque todos os dias. Quebras de segurança ocorrem e as suas senhas são furtadas. Quando você reutiliza as mesmas senhas entre aplicativos e sites, os hackers podem facilmente acessar o seu e-mail, banco, e outras contas importantes.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Os especialistas de segurança recomendam que utilize uma senha diferente e aleatoriamente gerada para todas as contas que você cria. Mas como gerenciar todas essas senhas? O bitwarden torna-lhe fácil criar, armazenar, e acessar as suas senhas.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+O bitwarden armazena todas as suas credenciais num cofre encriptado que sincroniza entre todos os seus dispositivos. Como são completamente encriptados antes de se quer sair do seu dispositivo, apenas você tem acesso aos seus dados. Nem se quer a equipe do bitwarden pode ler os seus dados, mesmo se quiséssemos. Os seus dados são selados com encriptação AES-256 bits, salted hashing, e PBKDF2 SHA-256.</value>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
+    <value>bitwarden,bit warden,8bit,senha,login,gerenciador de senha grátis,gerenciador de senha,gerenciador de credencial</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>Gerencie todas as suas credenciais e senhas a partir de um cofre seguro</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>Gera automaticamente senhas fortes, aleatórias e seguras</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>Proteja o seu cofre com Touch ID, código PIN, ou senha mestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>Auto-preenche credenciais do Safari, Chrome, e centenas de outros aplicativos.</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>Sincronize e acesse o seu cofre através de múltiplos dispositivos</value>
   </data>
 </root>
