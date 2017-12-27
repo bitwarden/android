@@ -125,14 +125,14 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>新增文件夾</value>
+    <value>新增資料夾</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>新增項目</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>錯誤</value>
+    <value>發生錯誤。</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -156,11 +156,11 @@
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>複製帳戶名稱</value>
+    <value>複製使用者名稱</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
-    <value>製作人員</value>
+    <value>銘謝</value>
     <comment>Title for page that we use to give credit to resources that we use.</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -168,7 +168,7 @@
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>刪除中...</value>
+    <value>正在刪除...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
@@ -179,34 +179,34 @@
     <value>編輯</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>編輯文件夾</value>
+    <value>編輯資料夾</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>電郵</value>
+    <value>電子郵件</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>電郵地址</value>
+    <value>電子郵件地址</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>電郵我們</value>
+    <value>傳送電子郵件給我們</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>電郵我們來獲得協助，或給我們意見。</value>
+    <value>傳送電子郵件給我們以取得協助或提供意見反應。</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>請輸入PIN。</value>
+    <value>請輸入 PIN 碼。</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>書籤</value>
+    <value>我的最愛</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>匯報程式錯誤</value>
+    <value>Bug 回報</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>在我們的 GitHub 庫匯報程式問題。</value>
+    <value>在我們的 GitHub 存放庫中新增問題。</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
     <value>請驗證你的指紋。</value>
@@ -314,7 +314,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>儲存中...</value>
+    <value>正在儲存...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>項目已被刪除。</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -351,7 +351,7 @@
     <value>使用指紋解鎖</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>帳戶名稱</value>
+    <value>使用者名稱</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
@@ -369,22 +369,22 @@
     <value>驗證主密碼</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>驗證 PIN</value>
+    <value>驗證 PIN 碼</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>版本</value>
   </data>
   <data name="View" xml:space="preserve">
-    <value>查看</value>
+    <value>檢視</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>前往我們的網頁</value>
+    <value>瀏覽我們的網站</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>前往我們的網頁以獲取協助、瀏覽新消息或了解如何使用 bitwarden。</value>
+    <value>瀏覽我們的網站以取得協助、了解新消息、傳送電子郵件給我們或瀏覽更多使用 bitwarden 的秘訣。</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>網頁</value>
+    <value>網站</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -397,25 +397,25 @@
     <value>已建立帳戶！你現在可以登入了。</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>新增項目</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App 小工具</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>使用 bitwarden 無障礙服務在應用程式和網站中自動填寫你的登入資料。</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>自動填寫</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>不使用易混淆的字符</value>
+    <value>避免易混淆的字元</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App 小工具</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Bitwarden App 小工具是添加新網頁的最簡單方法。请到 “工具” 分頁了解更多。</value>
+    <value>Bitwarden 小工具是新增登入資料最簡單的方法。請到 “工具” 分頁了解更多。</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>在 Safari 和其他程式中使用 bitwarden 自動填寫登入資料。</value>
@@ -424,19 +424,19 @@
     <value>Bitwarden 自動填寫</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>使用 bitwarden 無障礙服務自動填寫你的登入資料。</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>修改電郵</value>
+    <value>變更電子郵件</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>您可以在 bitwarden 網頁版密碼庫修改電郵。現在前往？</value>
+    <value>你可以在 bitwarden 網頁版變更電子郵件地址。現在前往？</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>修改主密碼</value>
+    <value>變更主密碼</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>您可以在 bitwarden 網頁版密碼庫修改主密碼。現在前往？</value>
+    <value>你可以在 bitwarden 網頁版密碼庫變更主密碼。現在前往？</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>關閉</value>
@@ -451,32 +451,32 @@
     <value>已複製！</value>
   </data>
   <data name="CopiedPassword" xml:space="preserve">
-    <value>密碼已複製！</value>
+    <value>已複製密碼！</value>
   </data>
   <data name="CopiedUsername" xml:space="preserve">
-    <value>帳戶名稱已複製！</value>
+    <value>已複製使用者名稱！</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>新增帳戶</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>新增帳戶中...</value>
+    <value>正在新增帳戶...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>編輯項目</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>開啟自動同步</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>請輸入帳戶電郵，已獲取密碼提示。</value>
+    <value>請輸入帳戶電子郵件地址以接收主密碼提示。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>重啟 App 小工具</value>
+    <value>重新啟動 App 小工具</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>差不多完成了！</value>
+    <value>快要完成了!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
     <value>啟用 App 小工具</value>
@@ -507,28 +507,28 @@
     <value>要在 Safari 或其他程式開啟 bitwarden ，請在最底行的最右邊按 "更多" 圖示。</value>
   </data>
   <data name="Favorite" xml:space="preserve">
-    <value>書籤</value>
+    <value>我的最愛</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
     <value>指紋</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>生成密碼</value>
+    <value>產生密碼</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>獲取主密碼提示</value>
+    <value>取得主密碼提示</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>匯入項目</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>你可以在 bitwarden.com 網頁版密碼庫批次匯入登入資料。現在要造訪網站嗎？</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>快速從其他密碼管理應用程式中批次匯入你的登入資料。</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>上次同步:</value>
+    <value>上次同步於：</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>長度</value>
@@ -552,10 +552,10 @@
     <value>即時</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>上鎖時間</value>
+    <value>自動上鎖時間</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>登入中...</value>
+    <value>正在登入...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
@@ -565,19 +565,19 @@
     <value>管理</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>兩次填寫的主密碼不一致。</value>
+    <value>兩次填寫的主密碼不相符。</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>主密碼是存取密碼庫的密碼。請勿忘記主密碼，沒有方法可以重置或恢復忘記了的主密碼。</value>
+    <value>主密碼是你存取密碼庫的密碼。請勿忘記主密碼，我們無法將你的主密碼復原或重設。</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>主密碼提示 (選填)</value>
+    <value>主密碼提示 (選用)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>主密碼提示可以在你忘記主密碼時幫你回憶。</value>
+    <value>主密碼提示可以在你忘記主密碼時幫助你回憶主密碼。</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>主密碼需要至少 8 個字符。</value>
+    <value>主密碼需要至少 8 個字元。</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>數字</value>
@@ -597,26 +597,26 @@
     <value>永不</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>已新增項目。</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>無網頁有書籤。</value>
+    <value>你沒有收藏任何網站。</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>你的密碼庫中沒有登入資料。</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>你的密碼庫中沒有此網站的登入資料。請新增一個。</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>此網頁無儲存帳戶名稱或密碼。</value>
+    <value>此網頁沒有儲存過使用者名稱或密碼。</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>好的！</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>選項預設值是由 bitwarden 裏面的密碼生成器設置。</value>
+    <value>選項預設值是由 bitwarden 中的密碼產生器設定的。</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>設定</value>
@@ -625,22 +625,19 @@
     <value>其他</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>已生成密碼。</value>
+    <value>密碼已產生。</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>密碼生成器</value>
-  </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>自動生成安全、獨特的強密碼。</value>
+    <value>密碼產生器</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>密碼提示</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>我們已經寄出包含主密碼提示的電郵給你。</value>
+    <value>已寄出包含你主密碼提示的電子郵件。</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>確定要改變當前的密碼嗎？</value>
+    <value>你確定要覆寫目前的密碼嗎？</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>bitwarden 使用推送通知來自動同步你的密碼庫。為了確保同步順暢，稍後系統將詢問你是否會開啟通知，請選擇“是”。</value>
@@ -656,7 +653,7 @@
     <value>App Store 評分會在 bitwarden 每次更新時重設。給我們留個好評吧！</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>重新生成密碼</value>
+    <value>重新產生密碼</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>重新輸入主密碼</value>
@@ -668,29 +665,29 @@
     <value>安全</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>查看開發進度</value>
+    <value>瀏覽開發進度</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>選擇</value>
   </data>
   <data name="SetPIN" xml:space="preserve">
-    <value>設定 PIN</value>
+    <value>設定 PIN 碼</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>輸入一個 4 位 PIN 作為程式密碼。</value>
+    <value>輸入一個 4 位數 PIN 碼作為程式密碼。</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>項目資訊</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>項目已更新。</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>提交中...</value>
+    <value>正在提交...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>同步中...</value>
+    <value>正在同步...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
@@ -716,29 +713,29 @@
     <value>用 {0} 解鎖</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>用 PIN 解鎖</value>
+    <value>用 PIN 碼解鎖</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>驗證中</value>
+    <value>正在驗證</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
     <value>驗證碼</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>檢視項目</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden 網頁版密碼庫</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>在任何瀏覽器管理你的登入資料。</value>
+    <value>使用 bitwarden 網頁版，從瀏覽器管理你的密碼。</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>違失驗證碼程式？</value>
+    <value>遺失了驗證碼程式？</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>項目</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -751,21 +748,21 @@
     <value>譯者</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>{0} 的項目</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>你的密碼庫裡沒有 {0} 的登入資料。</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>當你看見 bitwarden 的自動填寫通知時，可以一按啟動自動填寫服務。</value>
+    <value>當你看見 bitwarden 的自動填寫通知時，可以點擊它以啟用自動填寫服務。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>按此自動填寫來自密碼庫的登入資料。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>開啟無障礙設定</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. 在 Android 的協助工具設定中，按一下服務中的 "bitwarden" 。</value>
@@ -786,22 +783,22 @@
     <value>測試版</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Bitwarden 自動填寫服務是添加新網頁的最簡單方法。请到 “工具” 分頁了解更多。</value>
+    <value>Bitwarden 自動填寫服務是新增網頁的最簡單方法。請到 “工具” 分頁了解更多。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>自動填寫</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>你想自動填寫還是查看登入資料？</value>
+    <value>你想自動填寫還是檢視登入資料？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>確定要自動填寫此資料嗎？它和"{0}"不完全吻合。</value>
+    <value>確定要自動填寫此資料嗎？它和"{0}"不完全相符。</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>相符的項目</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>可能相符的項目</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>搜尋</value>
@@ -816,28 +813,28 @@
     <value>新增組織以安全地分享你的帳戶資料。</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>我們使用 analytics 協助分析程式的使用情況，以便我們繼續改善。所有資料均為匿名。</value>
+    <value>我们使用 analytics 協助分析擴充套件的使用情況，以便我們改善程式。所有資料均為匿名收集。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>選取密碼欄時掃描</value>
+    <value>選取密碼欄位時掃描</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>當你選取了密碼欄時才掃描屏幕和彈出自動輸入通知。這個設定可以延長電量。</value>
+    <value>當你選取了密碼欄位時才掃描螢幕和彈出自動輸入通知。這個設定可以減少電量消耗。</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>持續顯示通知</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>持續顯示自動輸入通知，選取了密碼欄時才掃描屏幕。這個設定可以延長電量。</value>
+    <value>持續顯示自動輸入通知，選取了密碼欄位時才掃描螢幕。這個設定可以減少電量消耗。</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>持續掃描</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>持續掃描屏幕，偵測到密碼欄時才彈出自動輸入通知。這個是預設設定。</value>
+    <value>持續掃描螢幕，偵測到密碼欄位時才彈出自動輸入通知。這是預設設定。</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>無法打開應用程式"{0}"。</value>
+    <value>無法開啟應用程式"{0}"。</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -845,11 +842,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>輸入驗證器應用程式提供的 6 位驗證碼。</value>
+    <value>輸入驗證器應用程式提供的 6 位數驗證碼。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>輸入已電郵至 {0} 的 6 位驗證碼</value>
+    <value>輸入已傳送至電子郵件地址 {0} 的 6 位數驗證碼</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -857,18 +854,18 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>此帳戶已啟用兩步驟登入，但是本設備不支援已設置的兩步驟登入方法。請使用受支援的設備，及／或新增可以更好地跨設備的兩步驟登入方法（例如驗證器應用程式）。</value>
+    <value>此帳戶已啟用兩步驟登入，但是本設備不支援已設定的兩步驟登入方式。請使用已支援的設備，及／或新增可以更好地跨設備的兩步驟登入方法（例如驗證器應用程式）。</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>復原密碼</value>
+    <value>復原代碼</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>記住登入</value>
+    <value>記住我的登入資訊</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>再次發送驗證碼電郵</value>
+    <value>再次傳送​​包含驗證碼的電子郵件</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -878,15 +875,15 @@
     <value>使用另一種兩步驟登入方法</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>無法發送驗證電郵。再試一次。</value>
+    <value>無法傳送​​驗證電子郵件。再試一次。</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>驗證電郵已發送</value>
+    <value>已傳送驗證電子郵件</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>將你的 YubiKey NEO 緊貼於裝置背後以繼續</value>
+    <value>將你的 YubiKey NEO 緊貼於裝置後以繼續</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey NEO 安全鑰匙</value>
@@ -902,14 +899,14 @@
     <value>無法下載檔案。</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>您的裝置無法打開這種類型的檔案。</value>
+    <value>你的裝置無法開啟這種類型的檔案。</value>
   </data>
   <data name="Downloading" xml:space="preserve">
-    <value>下載中...</value>
+    <value>正在下載...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>這個附件大小為 {0} 。決定要下載到你的裝置裏？</value>
+    <value>這個附件大小為 {0} 。確定要下載到你的裝置嗎？</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -920,7 +917,7 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>驗證器金鑰已添加。</value>
+    <value>驗證器金鑰已新增。</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>無法讀取驗證器金鑰。</value>
@@ -929,7 +926,7 @@
     <value>掃描會自動執行。</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>將相機瞄準 QR code 。</value>
+    <value>將相機對準 QR code 。</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>掃描 QR Code</value>
@@ -953,10 +950,10 @@
     <value>禁止自動複製 TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>高級會員才可使用此功能。</value>
+    <value>進階會員才可使用此功能。</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>附件已添加</value>
+    <value>附件已新增</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
     <value>附件已移除</value>
@@ -968,7 +965,7 @@
     <value>檔案</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>未選擇檔案</value>
+    <value>沒有選擇檔案</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
     <value>沒有附件。</value>
@@ -1024,112 +1021,112 @@
     <value>按此自動填寫來自密碼庫的登入資料。</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
-    <value>Custom Fields</value>
+    <value>自訂欄位</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Custom fields updated.</value>
+    <value>自訂欄位已更新</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>No custom fields. You can fully manage custom fields from the web vault or browser extension.</value>
+    <value>沒有自訂欄位。你可以在網頁版密碼庫，或是瀏覽器擴充套件中管理自訂欄位。</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>複製號碼</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>複製安全代碼</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>號碼</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>安全代碼</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>你要新增哪種類型的項目？</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>卡片</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>身分</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>登入</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>安全記事</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>地址 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>地址 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>地址 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>四月</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>八月</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>品牌</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>持卡人姓名</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>城市/城鎮</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>公司</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>國家</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>十二月</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>到期月份</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>到期年份</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>二月</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>名</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>一月</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>七月</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>六月</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>姓</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>許可證編號</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>三月</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>五月</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>中間名</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Mr</value>
@@ -1141,94 +1138,97 @@
     <value>Ms</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>十一月</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>十月</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>護照號碼</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>電話號碼</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>九月</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>社會保險號碼</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>州/省</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>稱呼</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>郵遞區號</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>地址</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>到期</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>停用網站圖示</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>在你密碼庫的每個登入資料旁顯示一個可辨識圖示。</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>圖示伺服器 URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>使用 bitwarden 自動填寫</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>密碼庫已上鎖</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>前往我的密碼庫</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
-  </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
+    <value>收藏</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>此收藏中沒有登入資料。</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>此資料夾中沒有登入資料。</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>自動填寫服務</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>bitwarden 自動填寫服務使用 Android 自動填寫框架來幫助你將登入、信用卡和身分資訊填寫到你裝置上的其他應用程式中。</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Bitwarden 使用無障礙服務，幫你在網頁和程式中自動填寫登入資料。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>開啟自動填寫設定</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>使用 Face ID 進行驗證</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>使用 Face ID 解鎖</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>驗證 Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>
