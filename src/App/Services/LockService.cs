@@ -46,10 +46,6 @@ namespace Bit.App.Services
 
         public async Task<LockType> GetLockTypeAsync(bool forceLock)
         {
-            // Always locked if not already running in memory.
-            var firstlockCheck = _firstLockCheck;
-            _firstLockCheck = false;
-
             // Only lock if they are logged in
             if(!_authService.IsAuthenticated)
             {
@@ -60,7 +56,7 @@ namespace Bit.App.Services
             var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
 
             // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
-            if(!firstlockCheck && !forceLock && !_appSettings.Locked)
+            if(!_firstLockCheck && !forceLock && !_appSettings.Locked)
             {
                 if(lockSeconds == -1)
                 {
@@ -76,7 +72,7 @@ namespace Bit.App.Services
             }
 
             // Skip first lock check if not using locking
-            if(firstlockCheck && lockSeconds == -1 && !forceLock && !_appSettings.Locked)
+            if(_firstLockCheck && lockSeconds == -1 && !forceLock && !_appSettings.Locked)
             {
                 return LockType.None;
             }
@@ -104,10 +100,12 @@ namespace Bit.App.Services
             if(TopPageIsLock())
             {
                 // already locked
+                _firstLockCheck = false;
                 return;
             }
 
             var lockType = await GetLockTypeAsync(forceLock);
+            _firstLockCheck = false;
             if(lockType == LockType.None)
             {
                 return;
