@@ -126,30 +126,30 @@
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden es la manera más fácil y segura de guardar todos usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos.
+    <value>bitwarden es la manera más fácil y segura de guardar todos tus usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos.
 
-El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas informáticos pueden acceder facilmente tu correo electrónico, cuenta bancaria y otras cuentas importantes.
+El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas informáticos pueden acceder fácilmente a tu correo electrónico, cuenta bancaria y otras cuentas importantes.
 
-bitwarden guarda todos tus usuarios es una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu data está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
+bitwarden guarda todos tus usuarios en una caja fuerte cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu información está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
     <value>Un gestor de contraseñas seguro y gratuito para todos tus dispositivos</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gestiona todos tus usuarios y contraseñas desde una bóveda segura</value>
+    <value>Gestiona todos tus usuarios y contraseñas desde una caja fuerte</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Genera contraseñas fuertes, aleatorias y seguras automáticamente</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protege tu bóveda con huella dactilar, código PIN o contraseña maestra</value>
+    <value>Protege tu caja fuerte con huella dactilar, código PIN o contraseña maestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Autorellena rápidamente entradas en tu navegador web u otras aplicaciones</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincroniza y accede a tu bóveda desde múltiples dispositivos
+    <value>Sincroniza y accede a tu caja fuerte desde múltiples dispositivos
 
 - Teléfono
 - Tablet
