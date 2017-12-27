@@ -125,24 +125,24 @@
 
 El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas informáticos pueden acceder facilmente tu correo electrónico, cuenta bancaria y otras cuentas importantes.
 
-bitwarden guarda todos tus usuarios es una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu data está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
+bitwarden guarda todos tus usuarios es una caja fuerte cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu información está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gestiona todos tus usuarios y contraseñas desde una bóveda segura</value>
+    <value>Gestiona todos tus usuarios y contraseñas desde una caja fuerte</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
     <value>Genera contraseñas fuertes, aleatorias y seguras automáticamente</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protege tu bóveda con Touch ID, código PIN o contraseña maestra</value>
+    <value>Protege tu caja fuerte con Touch ID, código PIN o contraseña maestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Autorellena entradas en Safari, Chrome y cientos de otras aplicaciones</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sincroniza y accede a tu bóveda desde múltiples dispositivos</value>
+    <value>Sincroniza y accede a tu caja fuerte desde múltiples dispositivos</value>
   </data>
 </root>
