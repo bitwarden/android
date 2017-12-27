@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Parola Oluşturucu</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Hesaplarınız için otomatik olarak güçlü, özel parolalar oluşturun.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Parola İpucu</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Collections</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Default To "My Vault"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Default to the "My Vault" page instead of "Favorites" whenever I open the app.</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>There are no items in this collection.</value>
   </data>
@@ -1230,5 +1221,14 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verify Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>
