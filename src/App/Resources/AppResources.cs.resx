@@ -630,9 +630,6 @@
   <data name="PasswordGenerator" xml:space="preserve">
     <value>Generátor hesla</value>
   </data>
-  <data name="PasswordGeneratorDescription" xml:space="preserve">
-    <value>Vygenerujte si silné a unikátní heslo pro přihlašovací údaje.</value>
-  </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Nápověda k heslu</value>
   </data>
@@ -1194,12 +1191,6 @@
   <data name="Collections" xml:space="preserve">
     <value>Kolekce</value>
   </data>
-  <data name="DefaultPageVault" xml:space="preserve">
-    <value>Výchozí stránka "Můj trezor"</value>
-  </data>
-  <data name="DefaultPageVaultDescription" xml:space="preserve">
-    <value>Při otevření aplikace otevřít výchozí stránku "Můj trezor" místo "Oblíbené".</value>
-  </data>
   <data name="NoItemsCollection" xml:space="preserve">
     <value>V této kolekci nejsou žádné položky.</value>
   </data>
@@ -1230,5 +1221,14 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verify Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>Unlock with Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>Verify with Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
   </data>
 </root>
