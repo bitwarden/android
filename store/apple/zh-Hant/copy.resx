@@ -118,31 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden 密碼管理器</value>
+    <value>bitwarden 密碼管理工具</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden 簡單易用，可以安全地儲存你所有的帳戶名稱和密碼，並在多部裝置之間同步。 bitwarden 小工具可以幫你在Safari或Chrome快速登入任何網頁，也支援數以百計的受歡迎程式。
 
-帳戶被盜是個嚴重的問題，你用的網頁和應用程式每天都遭受攻擊。安全漏洞時有發生，你的密碼就會被盜。當你在不同網頁和程式重用同一個密碼，黑客就可以一舉獲得你的電郵，甚至銀行戶口或其他重要服務。 
+帳戶被盜是個嚴重的問題，你用的網頁和應用程式每天都遭受攻擊。安全漏洞時有發生，你的密碼就會被盜。當你在不同網頁和程式用了同一個密碼，駭客就可以一舉獲得你的電子郵件帳號，甚至銀行帳戶或其他重要服務。
 
-保安專家建議你在每個帳戶使用不同、隨機生成的密碼。但要如何管理這些密碼呢？ bitwarden 讓你輕鬆建立、儲存、存取你的密碼。 
+安全專家建議你在每個帳戶使用不同、隨機產生的密碼。但要如何管理這些密碼呢？ Bitwarden 讓你輕鬆建立、儲存、存取你的密碼。
 
-bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至你所有的裝置上。由於資料發送前已經徹底加密，因此只有你可以存取這些資料，甚至連 bitwarden 的成員都無法讀取你的資料。所有資料均使用 AES-256 加密、加鹽雜湊加密以及 PBKDF2 SHA-256 函式加密。</value>
+bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至你所有的裝置上。由於資料傳送前已經徹底加密，因此只有你可以存取這些資料，甚至連 bitwarden 的開發者都無法讀取你的資料。所有資料均使用 AES-256 加密、加鹽雜湊加密以及 PBKDF2 SHA-256 函式加密。</value>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden, bit warden, 8 bit, 密碼, 登入, 免費密碼管理器, 密碼管理器, 登入管理器</value>
+    <value>bitwarden, bit warden, 8 bit, 密碼, 登入, 免費密碼管理工具, 密碼管理工具, 登入管理工具</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>在一個安全的密碼庫裏管理密碼</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>自動生成隨機、安全的強密碼</value>
+    <value>自動產生強力、隨機並安全的密碼</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>用 Touch ID 、PIN碼或主密碼保護你的密碼庫</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>在Safari，Chrome和數以百計的程式自動填寫登入資料</value>
+    <value>在 Safari，Chrome 和數以百計的程式自動填寫登入資料</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>在多部裝置上同步密碼庫</value>
