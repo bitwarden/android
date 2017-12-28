@@ -98,6 +98,12 @@ namespace Bit.iOS.Extension
                 return;
             }
 
+            if(_context.ProviderType == Constants.UTTypeAppExtensionSetup)
+            {
+                PerformSegue("setupSegue", this);
+                return;
+            }
+
             var lockService = Resolver.Resolve<ILockService>();
             var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
             switch(lockType)
