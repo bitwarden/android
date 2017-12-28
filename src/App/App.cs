@@ -87,8 +87,7 @@ namespace Bit.App
                 });
             }
 
-            // TODO: Still testing.
-            //_lockService.StartLockTimer();
+            _lockService.StartLockTimer();
         }
 
         protected async override void OnStart()

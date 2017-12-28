@@ -17,8 +17,7 @@ namespace Bit.App.Services
         private readonly IAppSettingsService _appSettings;
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
-        private bool _timerCreated = false;
-        private bool _firstLockCheck = false; // TODO: true when we want to support this
+        private string _timerId = null;
 
         public LockService(
             ISettings settings,
@@ -33,46 +32,52 @@ namespace Bit.App.Services
         }
 
         public bool CheckForLockInBackground { get; set; } = true;
+        public double CurrentLockTime { get; set; }
 
-        public void UpdateLastActivity(DateTime? activityDate = null)
+        public void UpdateLastActivity()
         {
             if(_appSettings.Locked)
             {
                 return;
             }
 
-            _appSettings.LastActivity = activityDate.GetValueOrDefault(DateTime.UtcNow);
+            _appSettings.LastActivityLockTime = CurrentLockTime;
         }
 
         public async Task<LockType> GetLockTypeAsync(bool forceLock)
         {
+            var returnNone = false;
+
             // Only lock if they are logged in
             if(!_authService.IsAuthenticated)
             {
-                return LockType.None;
+                returnNone = true;
             }
-
-            // Lock seconds tells if they want to lock the app or not
-            var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
-
             // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
-            if(!_firstLockCheck && !forceLock && !_appSettings.Locked)
+            else if(!forceLock && !_appSettings.Locked)
             {
+                // Lock seconds tells if they want to lock the app or not
+                var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
                 if(lockSeconds == -1)
                 {
-                    return LockType.None;
+                    returnNone = true;
                 }
-
-                // Has it been longer than lockSeconds since the last time the app was used?
-                var now = DateTime.UtcNow;
-                if(now > _appSettings.LastActivity && (now - _appSettings.LastActivity).TotalSeconds < lockSeconds)
+                // Validate timer instance
+                else if(_appSettings.LockTimerId != null && _timerId == _appSettings.LockTimerId)
                 {
-                    return LockType.None;
+                    // Has it been longer than lockSeconds since the last time the app was used?
+                    var now = CurrentLockTime;
+                    var elapsedSeconds = (now - _appSettings.LastActivityLockTime) / 1000;
+                    if(now >= _appSettings.LastActivityLockTime && elapsedSeconds < lockSeconds)
+                    {
+                        returnNone = true;
+                    }
                 }
             }
 
-            // Skip first lock check if not using locking
-            if(_firstLockCheck && lockSeconds == -1 && !forceLock && !_appSettings.Locked)
+            // Set the new lock timer id
+            _appSettings.LockTimerId = _timerId;
+            if(returnNone)
             {
                 return LockType.None;
             }
@@ -99,13 +104,10 @@ namespace Bit.App.Services
         {
             if(TopPageIsLock())
             {
-                // already locked
-                _firstLockCheck = false;
                 return;
             }
 
             var lockType = await GetLockTypeAsync(forceLock);
-            _firstLockCheck = false;
             if(lockType == LockType.None)
             {
                 return;
@@ -152,25 +154,16 @@ namespace Bit.App.Services
 
         public void StartLockTimer()
         {
-            if(_timerCreated)
+            if(_timerId != null)
             {
                 return;
             }
 
-            _timerCreated = true;
-            Device.StartTimer(TimeSpan.FromMinutes(1), () =>
+            _timerId = Guid.NewGuid().ToString();
+            var interval = TimeSpan.FromSeconds(10);
+            Device.StartTimer(interval, () =>
             {
-                if(CheckForLockInBackground && !_appSettings.Locked)
-                {
-                    System.Diagnostics.Debug.WriteLine("Check lock from timer at " + DateTime.Now);
-                    var lockType = GetLockTypeAsync(false).GetAwaiter().GetResult();
-                    if(lockType != LockType.None)
-                    {
-                        System.Diagnostics.Debug.WriteLine("Locked from timer at " + DateTime.Now);
-                        _appSettings.Locked = true;
-                    }
-                }
-
+                CurrentLockTime += interval.TotalMilliseconds;
                 return true;
             });
         }
