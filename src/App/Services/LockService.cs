@@ -31,7 +31,6 @@ namespace Bit.App.Services
             _fingerprint = fingerprint;
         }
 
-        public bool CheckForLockInBackground { get; set; } = true;
         public double CurrentLockTime { get; set; }
 
         public void UpdateLastActivity()

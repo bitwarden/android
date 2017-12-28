@@ -80,9 +80,9 @@ namespace Bit.App
 
             if(Device.RuntimePlatform == Device.iOS)
             {
-                MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, args) =>
+                MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, forceLock) =>
                 {
-                    Device.BeginInvokeOnMainThread(async () => await _lockService.CheckLockAsync(args));
+                    Device.BeginInvokeOnMainThread(async () => await _lockService.CheckLockAsync(forceLock));
                     await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
                 });
             }
@@ -93,7 +93,6 @@ namespace Bit.App
         protected async override void OnStart()
         {
             // Handle when your app starts
-            _lockService.CheckForLockInBackground = false;
             await _lockService.CheckLockAsync(false);
 
             if(string.IsNullOrWhiteSpace(_options.Uri))
@@ -116,7 +115,6 @@ namespace Bit.App
         protected override void OnSleep()
         {
             // Handle when your app sleeps
-            _lockService.CheckForLockInBackground = true;
             Debug.WriteLine("OnSleep");
 
             SetMainPageFromAutofill();
@@ -130,7 +128,6 @@ namespace Bit.App
         protected async override void OnResume()
         {
             base.OnResume();
-            _lockService.CheckForLockInBackground = false;
 
             // workaround for app compat bug
             // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
