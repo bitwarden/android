@@ -76,7 +76,11 @@ namespace Bit.App.Services
             }
 
             // Set the new lock timer id
-            _appSettings.LockTimerId = _timerId;
+            if(_timerId != null)
+            {
+                _appSettings.LockTimerId = _timerId;
+            }
+
             if(returnNone)
             {
                 return LockType.None;

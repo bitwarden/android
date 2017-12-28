@@ -31,7 +31,6 @@ namespace Bit.iOS.Extension
         private readonly JsonSerializerSettings _jsonSettings =
             new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
         private IGoogleAnalyticsService _googleAnalyticsService;
-        private ILockService _lockService;
 
         public LoadingViewController(IntPtr handle) : base(handle)
         { }
@@ -45,7 +44,6 @@ namespace Bit.iOS.Extension
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             _context.ExtContext = ExtensionContext;
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
-            _lockService = Resolver.Resolve<ILockService>();
 
             if(!_setupHockeyApp)
             {
@@ -176,8 +174,6 @@ namespace Bit.iOS.Extension
         private void ContinueOn()
         {
             Debug.WriteLine("BW Log, Segue to setup, login add or list.");
-            _lockService.UpdateLastActivity();
-
             if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)
             {
                 PerformSegue("newLoginSegue", this);
@@ -247,7 +243,6 @@ namespace Bit.iOS.Extension
 
             if(itemData != null)
             {
-                _lockService.UpdateLastActivity();
                 _googleAnalyticsService.TrackExtensionEvent("AutoFilled", _context.ProviderType);
             }
             else
