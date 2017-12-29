@@ -50,7 +50,7 @@ namespace Bit.App.Pages
             Password = new Label
             {
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                Margin = new Thickness(15, 40, 15, 40),
+                Margin = new Thickness(15, 30, 15, 30),
                 HorizontalTextAlignment = TextAlignment.Center,
                 FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier"),
                 LineBreakMode = LineBreakMode.TailTruncation,
