@@ -314,8 +314,15 @@ namespace Bit.Android.Controls
                 bottomNav.EnableItemShiftingMode(false);
                 bottomNav.EnableAnimation(false);
                 bottomNav.SetTextVisibility(false);
-                bottomNav.SetIconsMarginTop(30);
                 bottomNav.SetBackgroundResource(Resource.Drawable.bottom_nav_bg);
+                bottomNav.SetIconSize(24, 24);
+                bottomNav.SetIconsMarginTop(32);
+
+                if(element.Children.Count > 3)
+                {
+                    bottomNav.SetIconSizeAt(3, 29, 29);
+                    bottomNav.SetIconMarginTop(3, 28);
+                }
 
                 var stateList = new global::Android.Content.Res.ColorStateList(
                     new int[][] {
