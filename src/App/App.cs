@@ -86,8 +86,6 @@ namespace Bit.App
                     await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
                 });
             }
-
-            _lockService.StartLockTimer();
         }
 
         protected async override void OnStart()

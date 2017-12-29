@@ -10,6 +10,5 @@ namespace Bit.App.Abstractions
         Task<LockType> GetLockTypeAsync(bool forceLock);
         Task CheckLockAsync(bool forceLock);
         bool TopPageIsLock();
-        void StartLockTimer();
     }
 }

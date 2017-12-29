@@ -26,30 +26,6 @@ namespace Bit.App.Services
             }
         }
 
-        public string LockTimerId
-        {
-            get
-            {
-                return _settings.GetValueOrDefault(Constants.LockTimerId, null);
-            }
-            set
-            {
-                _settings.AddOrUpdateValue(Constants.LockTimerId, value);
-            }
-        }
-
-        public double LastActivityLockTime
-        {
-            get
-            {
-                return _settings.GetValueOrDefault(Constants.LastActivityLockTime, Double.MinValue);
-            }
-            set
-            {
-                _settings.AddOrUpdateValue(Constants.LastActivityLockTime, value);
-            }
-        }
-
         public DateTime LastActivity
         {
             get

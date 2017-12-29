@@ -8,6 +8,7 @@ using Bit.App.Controls;
 using Bit.App.Pages;
 using Xamarin.Forms;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Bit.App.Services
 {
@@ -17,7 +18,7 @@ namespace Bit.App.Services
         private readonly IAppSettingsService _appSettings;
         private readonly IAuthService _authService;
         private readonly IFingerprint _fingerprint;
-        private string _timerId = null;
+        private Stopwatch _stopwatch = null;
 
         public LockService(
             ISettings settings,
@@ -31,58 +32,31 @@ namespace Bit.App.Services
             _fingerprint = fingerprint;
         }
 
-        public double CurrentLockTime { get; set; }
-
         public void UpdateLastActivity()
         {
-            if(_appSettings.Locked)
-            {
-                return;
-            }
-
-            _appSettings.LastActivityLockTime = CurrentLockTime;
+            _stopwatch?.Restart();
         }
 
         public async Task<LockType> GetLockTypeAsync(bool forceLock)
         {
-            var returnNone = false;
-
             // Only lock if they are logged in
             if(!_authService.IsAuthenticated)
             {
-                returnNone = true;
+                return LockType.None;
             }
+
             // Are we forcing a lock? (i.e. clicking a button to lock the app manually, immediately)
-            else if(!forceLock && !_appSettings.Locked)
+            if(!forceLock && !_appSettings.Locked)
             {
                 // Lock seconds tells if they want to lock the app or not
                 var lockSeconds = _settings.GetValueOrDefault(Constants.SettingLockSeconds, 60 * 15);
-                if(lockSeconds == -1)
-                {
-                    returnNone = true;
-                }
-                // Validate timer instance
-                else if(_appSettings.LockTimerId != null && _timerId == _appSettings.LockTimerId)
-                {
-                    // Has it been longer than lockSeconds since the last time the app was used?
-                    var now = CurrentLockTime;
-                    var elapsedSeconds = (now - _appSettings.LastActivityLockTime) / 1000;
-                    if(now >= _appSettings.LastActivityLockTime && elapsedSeconds < lockSeconds)
-                    {
-                        returnNone = true;
-                    }
-                }
-            }
+                var neverLock = lockSeconds == -1;
 
-            // Set the new lock timer id
-            if(_timerId != null)
-            {
-                _appSettings.LockTimerId = _timerId;
-            }
-
-            if(returnNone)
-            {
-                return LockType.None;
+                // Has it been longer than lockSeconds since the last time the app was used?
+                if(neverLock || (_stopwatch != null && _stopwatch.Elapsed.TotalSeconds < lockSeconds))
+                {
+                    return LockType.None;
+                }
             }
 
             // What method are we using to unlock?
@@ -114,6 +88,11 @@ namespace Bit.App.Services
             if(lockType == LockType.None)
             {
                 return;
+            }
+
+            if(_stopwatch == null)
+            {
+                _stopwatch = Stopwatch.StartNew();
             }
 
             _appSettings.Locked = true;
@@ -153,22 +132,6 @@ namespace Bit.App.Services
             }
 
             return false;
-        }
-
-        public void StartLockTimer()
-        {
-            if(_timerId != null)
-            {
-                return;
-            }
-
-            _timerId = Guid.NewGuid().ToString();
-            var interval = TimeSpan.FromSeconds(10);
-            Device.StartTimer(interval, () =>
-            {
-                CurrentLockTime += interval.TotalMilliseconds;
-                return true;
-            });
         }
     }
 }
