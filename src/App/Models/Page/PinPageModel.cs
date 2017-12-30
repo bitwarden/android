@@ -15,7 +15,7 @@ namespace Bit.App.Models.Page
                 var newText = string.Empty;
                 for(int i = 0; i < 4; i++)
                 {
-                    newText += _pin.Length <= i ? "- " : "● ";
+                    newText += _pin.Length <= i ? "- " : "• ";
                 }
 
                 return newText.TrimEnd();

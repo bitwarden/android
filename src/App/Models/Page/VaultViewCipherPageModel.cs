@@ -112,7 +112,7 @@ namespace Bit.App.Models.Page
             }
         }
         public string MaskedLoginPassword => RevealLoginPassword ?
-            LoginPassword : LoginPassword == null ? null : new string('●', LoginPassword.Length);
+            LoginPassword : LoginPassword == null ? null : new string('•', LoginPassword.Length);
         public ImageSource LoginShowHideImage => RevealLoginPassword ?
             ImageSource.FromFile("eye_slash.png") : ImageSource.FromFile("eye.png");
 
@@ -656,7 +656,7 @@ namespace Bit.App.Models.Page
                 {
                     if(_maskedValue == null && Value != null)
                     {
-                        _maskedValue = new string('●', Value.Length);
+                        _maskedValue = new string('•', Value.Length);
                     }
 
                     return _maskedValue;

@@ -92,7 +92,7 @@ namespace Bit.iOS.Extension
             var newText = string.Empty;
             for(int i = 0; i < 4; i++)
             {
-                newText += PinTextField.Text.Length <= i ? "- " : "● ";
+                newText += PinTextField.Text.Length <= i ? "- " : "• ";
             }
 
             PinLabel.Text = newText.TrimEnd();
