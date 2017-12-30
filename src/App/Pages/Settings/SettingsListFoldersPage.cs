@@ -25,32 +25,44 @@ namespace Bit.App.Pages
             = new ExtendedObservableCollection<SettingsFolderPageModel>();
         public ListView ListView { get; set; }
         private AddFolderToolBarItem AddItem { get; set; }
+        public Fab Fab { get; set; }
 
         private void Init()
         {
-            AddItem = new AddFolderToolBarItem(this);
-            ToolbarItems.Add(AddItem);
-
             ListView = new ListView
             {
                 ItemsSource = Folders,
                 ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this))
             };
-             
+
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.UWP)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }
 
+            var fabLayout = new FabLayout(ListView);
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                Fab = new Fab(fabLayout, "plus.png", async (sender, args) =>
+                {
+                    await Navigation.PushForDeviceAsync(new SettingsAddFolderPage());
+                });
+            }
+            else
+            {
+                AddItem = new AddFolderToolBarItem(this);
+                ToolbarItems.Add(AddItem);
+            }
+
             Title = AppResources.Folders;
-            Content = ListView;
+            Content = fabLayout;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             ListView.ItemSelected += FolderSelected;
-            AddItem.InitEvents();
+            AddItem?.InitEvents();
             LoadFoldersAsync().Wait();
         }
 
@@ -58,7 +70,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             ListView.ItemSelected -= FolderSelected;
-            AddItem.Dispose();
+            AddItem?.Dispose();
         }
 
         private async Task LoadFoldersAsync()

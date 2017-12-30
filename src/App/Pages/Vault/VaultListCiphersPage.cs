@@ -65,15 +65,11 @@ namespace Bit.App.Pages
         public StackLayout NoDataStackLayout { get; set; }
         public StackLayout ResultsStackLayout { get; set; }
         private AddCipherToolBarItem AddCipherItem { get; set; }
+        public ContentView ContentView { get; set; }
+        public Fab Fab { get; set; }
 
         private void Init()
         {
-            if(!string.IsNullOrWhiteSpace(_uri) || _folder || !string.IsNullOrWhiteSpace(_folderId))
-            {
-                AddCipherItem = new AddCipherToolBarItem(this, _folderId);
-                ToolbarItems.Add(AddCipherItem);
-            }
-
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
@@ -173,7 +169,26 @@ namespace Bit.App.Pages
                 LoadingIndicator.HorizontalOptions = LayoutOptions.Center;
             }
 
-            Content = LoadingIndicator;
+            ContentView = new ContentView
+            {
+                Content = LoadingIndicator
+            };
+
+            var fabLayout = new FabLayout(ContentView);
+            if(!string.IsNullOrWhiteSpace(_uri) || _folder || !string.IsNullOrWhiteSpace(_folderId))
+            {
+                if(Device.RuntimePlatform == Device.Android)
+                {
+                    Fab = new Fab(fabLayout, "plus.png", (sender, args) => Helpers.AddCipher(this, _folderId));
+                }
+                else
+                {
+                    AddCipherItem = new AddCipherToolBarItem(this, _folderId);
+                    ToolbarItems.Add(AddCipherItem);
+                }
+            }
+
+            Content = fabLayout;
         }
 
         private void SearchBar_SearchButtonPressed(object sender, EventArgs e)
@@ -350,7 +365,7 @@ namespace Bit.App.Pages
                 PresentationSections.ResetWithRange(sections);
                 if(PresentationSections.Count > 0 || !string.IsNullOrWhiteSpace(Search.Text))
                 {
-                    Content = ResultsStackLayout;
+                    ContentView.Content = ResultsStackLayout;
 
                     if(string.IsNullOrWhiteSpace(_uri) && !_folder && string.IsNullOrWhiteSpace(_folderId) &&
                         string.IsNullOrWhiteSpace(_collectionId) && !_favorites)
@@ -360,11 +375,11 @@ namespace Bit.App.Pages
                 }
                 else if(_syncService.SyncInProgress)
                 {
-                    Content = LoadingIndicator;
+                    ContentView.Content = LoadingIndicator;
                 }
                 else
                 {
-                    Content = NoDataStackLayout;
+                    ContentView.Content = NoDataStackLayout;
                 }
             });
         }

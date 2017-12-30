@@ -101,6 +101,7 @@ namespace Bit.Android
 
         public static void SetIoc(Application application)
         {
+            Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             CachedImageRenderer.Init();
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);

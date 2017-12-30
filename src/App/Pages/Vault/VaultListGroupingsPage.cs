@@ -55,13 +55,13 @@ namespace Bit.App.Pages
         public ActivityIndicator LoadingIndicator { get; set; }
         private AddCipherToolBarItem AddCipherItem { get; set; }
         private SearchToolBarItem SearchItem { get; set; }
+        public ContentView ContentView { get; set; }
+        public Fab Fab { get; set; }
 
         private void Init()
         {
             SearchItem = new SearchToolBarItem(this);
-            AddCipherItem = new AddCipherToolBarItem(this, null);
             ToolbarItems.Add(SearchItem);
-            ToolbarItems.Add(AddCipherItem);
 
             ListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
@@ -112,7 +112,23 @@ namespace Bit.App.Pages
                 LoadingIndicator.HorizontalOptions = LayoutOptions.Center;
             }
 
-            Content = LoadingIndicator;
+            ContentView = new ContentView
+            {
+                Content = LoadingIndicator
+            };
+
+            var fabLayout = new FabLayout(ContentView);
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                Fab = new Fab(fabLayout, "plus.png", (sender, args) => Helpers.AddCipher(this, null));
+            }
+            else
+            {
+                AddCipherItem = new AddCipherToolBarItem(this, null);
+                ToolbarItems.Add(AddCipherItem);
+            }
+
+            Content = fabLayout;
             Title = AppResources.MyVault;
         }
 
@@ -254,15 +270,15 @@ namespace Bit.App.Pages
 
                     if(ciphers.Any() || folders.Any())
                     {
-                        Content = ListView;
+                        ContentView.Content = ListView;
                     }
                     else if(_syncService.SyncInProgress)
                     {
-                        Content = LoadingIndicator;
+                        ContentView.Content = LoadingIndicator;
                     }
                     else
                     {
-                        Content = NoDataStackLayout;
+                        ContentView.Content = NoDataStackLayout;
                     }
                 });
             }, cts.Token);

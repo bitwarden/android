@@ -34,6 +34,7 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public Fab Fab { get; set; }
         private VaultViewCipherPageModel Model { get; set; } = new VaultViewCipherPageModel();
         private ExtendedTableView Table { get; set; }
         private TableSection ItemInformationSection { get; set; }
@@ -71,16 +72,29 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            EditItem = new EditCipherToolBarItem(this, _cipherId);
-            ToolbarItems.Add(EditItem);
             if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(new DismissModalToolBarItem(this));
             }
 
             InitProps();
+
+            var fabLayout = new FabLayout(Table);
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                Fab = new Fab(fabLayout, "pencil.png", async (sender, args) =>
+                {
+                    await Navigation.PushForDeviceAsync(new VaultEditCipherPage(_cipherId));
+                });
+            }
+            else
+            {
+                EditItem = new EditCipherToolBarItem(this, _cipherId);
+                ToolbarItems.Add(EditItem);
+            }
+
+            Content = fabLayout;
             Title = AppResources.ViewItem;
-            Content = Table;
             BindingContext = Model;
         }
 
@@ -257,7 +271,7 @@ namespace Bit.App.Pages
         {
             _pageDisappeared = false;
             NotesCell.Tapped += NotesCell_Tapped;
-            EditItem.InitEvents();
+            EditItem?.InitEvents();
 
             var cipher = await _cipherService.GetByIdAsync(_cipherId);
             if(cipher == null)
@@ -275,7 +289,7 @@ namespace Bit.App.Pages
         {
             _pageDisappeared = true;
             NotesCell.Tapped -= NotesCell_Tapped;
-            EditItem.Dispose();
+            EditItem?.Dispose();
             CleanupAttachmentCells();
         }
 
