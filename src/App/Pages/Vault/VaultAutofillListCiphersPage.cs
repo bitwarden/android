@@ -51,13 +51,14 @@ namespace Bit.App.Pages
             Init();
         }
 
+        public ContentView ContentView { get; set; }
+        public Fab Fab { get; set; }
         public ExtendedObservableCollection<Section<AutofillCipher>> PresentationCiphersGroup { get; private set; }
             = new ExtendedObservableCollection<Section<AutofillCipher>>();
         public StackLayout NoDataStackLayout { get; set; }
-        public ListView ListView { get; set; }
+        public ExtendedListView ListView { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
         private SearchToolBarItem SearchItem { get; set; }
-        private AddCipherToolBarItem AddCipherItem { get; set; }
         private IGoogleAnalyticsService GoogleAnalyticsService { get; set; }
         private IDeviceActionService DeviceActionService { get; set; }
         private string Uri { get; set; }
@@ -87,12 +88,10 @@ namespace Bit.App.Pages
                 Spacing = 20
             };
 
-            AddCipherItem = new AddCipherToolBarItem(this);
-            ToolbarItems.Add(AddCipherItem);
             SearchItem = new SearchToolBarItem(this);
             ToolbarItems.Add(SearchItem);
 
-            ListView = new ListView(ListViewCachingStrategy.RecycleElement)
+            ListView = new ExtendedListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
                 ItemsSource = PresentationCiphersGroup,
@@ -117,14 +116,22 @@ namespace Bit.App.Pages
                 HorizontalOptions = LayoutOptions.Center
             };
 
-            Content = LoadingIndicator;
+            ContentView = new ContentView
+            {
+                Content = LoadingIndicator
+            };
+
+            var fabLayout = new FabLayout(ContentView);
+            Fab = new Fab(fabLayout, "plus.png", async (sender, args) => await AddCipherAsync());
+            ListView.BottomPadding = 170;
+
+            Content = fabLayout;
         }
 
         protected override void OnAppearing()
         {
             base.OnAppearing();
             ListView.ItemSelected += CipherSelected;
-            AddCipherItem.InitEvents();
             SearchItem.InitEvents();
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
         }
@@ -133,7 +140,6 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             ListView.ItemSelected -= CipherSelected;
-            AddCipherItem.Dispose();
             SearchItem.Dispose();
         }
 
@@ -148,11 +154,11 @@ namespace Bit.App.Pages
         {
             if(PresentationCiphersGroup.Count > 0)
             {
-                Content = ListView;
+                ContentView.Content = ListView;
             }
             else
             {
-                Content = NoDataStackLayout;
+                ContentView.Content = NoDataStackLayout;
             }
         }
 
@@ -249,7 +255,7 @@ namespace Bit.App.Pages
             ((ListView)sender).SelectedItem = null;
         }
 
-        private async void AddCipherAsync()
+        private async Task AddCipherAsync()
         {
             if(_appOptions.FillType.HasValue && _appOptions.FillType != CipherType.Login)
             {
@@ -260,17 +266,6 @@ namespace Bit.App.Pages
 
             var pageForLogin = new VaultAddCipherPage(CipherType.Login, Uri, _name, true);
             await Navigation.PushForDeviceAsync(pageForLogin);
-        }
-
-        private class AddCipherToolBarItem : ExtendedToolbarItem
-        {
-            public AddCipherToolBarItem(VaultAutofillListCiphersPage page)
-                : base(() => page.AddCipherAsync())
-            {
-                Text = AppResources.Add;
-                Icon = "plus.png";
-                Priority = 2;
-            }
         }
 
         private class SearchToolBarItem : ExtendedToolbarItem

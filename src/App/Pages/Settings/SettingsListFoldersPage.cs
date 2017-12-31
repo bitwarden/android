@@ -23,13 +23,13 @@ namespace Bit.App.Pages
 
         public ExtendedObservableCollection<SettingsFolderPageModel> Folders { get; private set; }
             = new ExtendedObservableCollection<SettingsFolderPageModel>();
-        public ListView ListView { get; set; }
+        public ExtendedListView ListView { get; set; }
         private AddFolderToolBarItem AddItem { get; set; }
         public Fab Fab { get; set; }
 
         private void Init()
         {
-            ListView = new ListView
+            ListView = new ExtendedListView
             {
                 ItemsSource = Folders,
                 ItemTemplate = new DataTemplate(() => new SettingsFolderListViewCell(this))
@@ -47,6 +47,7 @@ namespace Bit.App.Pages
                 {
                     await Navigation.PushForDeviceAsync(new SettingsAddFolderPage());
                 });
+                ListView.BottomPadding = 50;
             }
             else
             {

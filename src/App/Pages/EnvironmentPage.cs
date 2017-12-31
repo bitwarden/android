@@ -123,6 +123,10 @@ namespace Bit.App.Pages
                     MessagingCenter.Send(Application.Current, "ShowStatusBar", false);
                 }));
             }
+            else if(Device.RuntimePlatform == Device.Android)
+            {
+                table2.BottomPadding = 50;
+            }
 
             ToolbarItems.Add(toolbarItem);
             Title = AppResources.Settings;

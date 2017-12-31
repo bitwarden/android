@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Bit.App.Controls;
+using System;
 using System.ComponentModel;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(ListView), typeof(Bit.iOS.Controls.ListViewRenderer))]
+[assembly: ExportRenderer(typeof(ExtendedListView), typeof(Bit.iOS.Controls.ExtendedListViewRenderer))]
 namespace Bit.iOS.Controls
 {
-    public class ListViewRenderer : Xamarin.Forms.Platform.iOS.ListViewRenderer
+    public class ExtendedListViewRenderer : ListViewRenderer
     {
         protected override void OnElementChanged(ElementChangedEventArgs<ListView> e)
         {
@@ -16,7 +17,7 @@ namespace Bit.iOS.Controls
             // primary color
             Control.SectionIndexColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
 
-            if(e.NewElement is ListView view)
+            if(e.NewElement is ExtendedListView view)
             {
                 SetMargin(view);
             }
@@ -31,7 +32,7 @@ namespace Bit.iOS.Controls
             }
         }
 
-        private void SetMargin(ListView view)
+        private void SetMargin(ExtendedListView view)
         {
             Control.ContentInset = new UIEdgeInsets(
                 new nfloat(view.Margin.Top),

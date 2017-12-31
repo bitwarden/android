@@ -226,7 +226,7 @@
     <Compile Include="Controls\ExtendedEditorRenderer.cs" />
     <Compile Include="Controls\CustomSearchBarRenderer.cs" />
     <Compile Include="Controls\ExtendedSwitchCellRenderer.cs" />
-    <Compile Include="Controls\ListViewRenderer.cs" />
+    <Compile Include="Controls\ExtendedListViewRenderer.cs" />
     <Compile Include="Controls\ExtendedViewCellRenderer.cs" />
     <Compile Include="Controls\ExtendedTextCellRenderer.cs" />
     <Compile Include="Controls\ExtendedTableViewRenderer.cs" />

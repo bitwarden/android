@@ -59,7 +59,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<Section<Cipher>> PresentationSections { get; private set; }
             = new ExtendedObservableCollection<Section<Cipher>>();
         public Cipher[] Ciphers { get; set; } = new Cipher[] { };
-        public ListView ListView { get; set; }
+        public ExtendedListView ListView { get; set; }
         public SearchBar Search { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
@@ -70,7 +70,7 @@ namespace Bit.App.Pages
 
         private void Init()
         {
-            ListView = new ListView(ListViewCachingStrategy.RecycleElement)
+            ListView = new ExtendedListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
                 ItemsSource = PresentationSections,
@@ -179,6 +179,7 @@ namespace Bit.App.Pages
             {
                 if(Device.RuntimePlatform == Device.Android)
                 {
+                    ListView.BottomPadding = 170;
                     Fab = new Fab(fabLayout, "plus.png", (sender, args) => Helpers.AddCipher(this, _folderId));
                 }
                 else
@@ -186,6 +187,10 @@ namespace Bit.App.Pages
                     AddCipherItem = new AddCipherToolBarItem(this, _folderId);
                     ToolbarItems.Add(AddCipherItem);
                 }
+            }
+            else if(Device.RuntimePlatform == Device.Android)
+            {
+                ListView.BottomPadding = 50;
             }
 
             Content = fabLayout;

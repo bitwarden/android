@@ -71,6 +71,10 @@ namespace Bit.App.Pages
                 mainTable.RowHeight = -1;
                 mainTable.EstimatedRowHeight = 70;
             }
+            else if(Device.RuntimePlatform == Device.Android)
+            {
+                mainTable.BottomPadding = 50;
+            }
 
             var saveToolBarItem = new ToolbarItem(AppResources.Save, Helpers.ToolbarImage("envelope.png"), async () =>
             {

@@ -1,8 +1,4 @@
-﻿using System;
-using Xamarin.Forms;
-using System.Reflection;
-using System.Reflection.Emit;
-using System.Runtime.InteropServices;
+﻿using Xamarin.Forms;
 using XLabs.Ioc;
 using Bit.App.Abstractions;
 
@@ -18,6 +14,9 @@ namespace Bit.App.Controls
 
         public static readonly BindableProperty SeparatorColorProperty =
             BindableProperty.Create(nameof(SeparatorColor), typeof(Color), typeof(ExtendedTableView), Color.FromHex("d2d6de"));
+
+        public static readonly BindableProperty BottomPaddingProperty =
+            BindableProperty.Create(nameof(BottomPadding), typeof(int), typeof(ExtendedTableView), 0);
 
         public bool EnableScrolling
         {
@@ -40,6 +39,7 @@ namespace Bit.App.Controls
         public int EstimatedRowHeight { get; set; }
         public bool NoHeader { get; set; }
         public bool NoFooter { get; set; }
+        public int BottomPadding { get; set; }
 
         protected override SizeRequest OnSizeRequest(double widthConstraint, double heightConstraint)
         {

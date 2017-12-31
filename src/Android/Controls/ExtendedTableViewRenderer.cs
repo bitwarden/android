@@ -23,6 +23,16 @@ namespace Bit.Android.Controls
             base.OnElementChanged(e);
             Control.Divider = null;
             Control.DividerHeight = 0;
+
+            if(e.NewElement is ExtendedTableView tableView)
+            {
+                if(tableView.BottomPadding > 0)
+                {
+                    Control.SetPadding(0, 0, 0, tableView.BottomPadding);
+                    Control.SetClipToPadding(false);
+                    Control.ScrollBarStyle = ScrollbarStyles.OutsideOverlay;
+                }
+            }
         }
 
         protected override TableViewModelRenderer GetModelRenderer(AListView listView, TableView view)

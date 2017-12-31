@@ -140,6 +140,10 @@ namespace Bit.App.Pages
                 Table.RowHeight = -1;
                 Table.EstimatedRowHeight = 44;
             }
+            else if(Device.RuntimePlatform == Device.Android)
+            {
+                Table.BottomPadding = 50;
+            }
         }
 
         protected async override void OnAppearing()

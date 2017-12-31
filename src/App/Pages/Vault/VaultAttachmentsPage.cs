@@ -43,7 +43,7 @@ namespace Bit.App.Pages
 
         public ExtendedObservableCollection<VaultAttachmentsPageModel.Attachment> PresentationAttchments { get; private set; }
             = new ExtendedObservableCollection<VaultAttachmentsPageModel.Attachment>();
-        public ListView ListView { get; set; }
+        public ExtendedListView ListView { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
         public StackLayout AddNewStackLayout { get; set; }
         public Label FileLabel { get; set; }
@@ -101,7 +101,7 @@ namespace Bit.App.Pages
                 }
             };
 
-            ListView = new ListView(ListViewCachingStrategy.RecycleElement)
+            ListView = new ExtendedListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemsSource = PresentationAttchments,
                 HasUnevenRows = true,
@@ -195,6 +195,10 @@ namespace Bit.App.Pages
                 NewTable.HeightRequest = 180;
                 ListView.BackgroundColor = Color.Transparent;
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
+            }
+            else if(Device.RuntimePlatform == Device.Android)
+            {
+                ListView.BottomPadding = 50;
             }
         }
 

@@ -158,6 +158,10 @@ namespace Bit.App.Pages
                     ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
                 }
             }
+            else if(Device.RuntimePlatform == Device.Android)
+            {
+                table.BottomPadding = 50;
+            }
 
             var stackLayout = new StackLayout
             {

@@ -50,7 +50,7 @@ namespace Bit.App.Pages
 
         public ExtendedObservableCollection<Section<GroupingOrCipher>> PresentationSections { get; private set; }
             = new ExtendedObservableCollection<Section<GroupingOrCipher>>();
-        public ListView ListView { get; set; }
+        public ExtendedListView ListView { get; set; }
         public StackLayout NoDataStackLayout { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
         private AddCipherToolBarItem AddCipherItem { get; set; }
@@ -63,7 +63,7 @@ namespace Bit.App.Pages
             SearchItem = new SearchToolBarItem(this);
             ToolbarItems.Add(SearchItem);
 
-            ListView = new ListView(ListViewCachingStrategy.RecycleElement)
+            ListView = new ExtendedListView(ListViewCachingStrategy.RecycleElement)
             {
                 IsGroupingEnabled = true,
                 ItemsSource = PresentationSections,
@@ -121,6 +121,7 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.Android)
             {
                 Fab = new Fab(fabLayout, "plus.png", (sender, args) => Helpers.AddCipher(this, null));
+                ListView.BottomPadding = 170;
             }
             else
             {

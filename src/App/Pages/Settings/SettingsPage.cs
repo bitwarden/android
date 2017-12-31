@@ -488,6 +488,10 @@ namespace Bit.App.Pages
                     RowHeight = -1;
                     EstimatedRowHeight = 44;
                 }
+                else if(Device.RuntimePlatform == Device.Android)
+                {
+                    BottomPadding = 50;
+                }
             }
         }
 

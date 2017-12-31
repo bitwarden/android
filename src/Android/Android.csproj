@@ -86,6 +86,7 @@
     <Compile Include="AutofillActivity.cs" />
     <Compile Include="AutofillCredentials.cs" />
     <Compile Include="Controls\CustomSliderRenderer.cs" />
+    <Compile Include="Controls\ExtendedListViewRenderer.cs" />
     <Compile Include="FirebaseInstanceIdService.cs" />
     <Compile Include="FirebaseMessagingService.cs" />
     <Compile Include="Autofill\Field.cs" />
