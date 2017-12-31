@@ -283,7 +283,7 @@ namespace Bit.App
 
             // List View
 
-            Resources.Add(new Style(typeof(ListView))
+            Resources.Add(new Style(typeof(ExtendedListView))
             {
                 Setters = {
                     new Setter { Property = ListView.SeparatorColorProperty, Value = grayLighter }
