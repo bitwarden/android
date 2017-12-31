@@ -212,42 +212,42 @@
     <value>請驗證你的指紋。</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>文件夾</value>
+    <value>資料夾</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>已新增文件夾。</value>
+    <value>已新增資料夾。</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>已刪除文件夾。</value>
+    <value>已刪除資料夾。</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>（未分類）</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>文件夾</value>
+    <value>資料夾</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>已更新文件夾。</value>
+    <value>已更新資料夾。</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
-    <value>前往網頁</value>
+    <value>前往網站</value>
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>協助與回饋</value>
+    <value>協助與意見反應</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>隱藏</value>
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>請先連接互聯網再繼續。</value>
+    <value>請先連線到網際網路後再繼續。</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>需要連結互聯網</value>
+    <value>需要連線網際網路</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>你決定要登出嗎？</value>
+    <value>你確定要登出嗎？</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>主密碼</value>
@@ -337,7 +337,7 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>感謝</value>
+    <value>非常感謝</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>工具</value>
@@ -470,7 +470,7 @@
     <value>開啟自動同步</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>請輸入帳戶電子郵件地址以接收主密碼提示。</value>
+    <value>請輸入你的帳户電子郵件地址以接收主密碼提示。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>重新啟動 App 小工具</value>
@@ -619,7 +619,7 @@
     <value>選項預設值是由 bitwarden 中的密碼產生器設定的。</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>設定</value>
+    <value>進階選項</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>其他</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>當你看見 bitwarden 的自動填寫通知時，可以點擊它以啟用自動填寫服務。</value>
+    <value>當你看見 bitwarden 的自動填寫通知時，可以點選它以啟用自動填寫服務。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>按此自動填寫來自密碼庫的登入資料。</value>
@@ -810,7 +810,7 @@
     <value>分享你的密碼庫</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>新增組織以安全地分享你的帳戶資料。</value>
+    <value>新增組織以安全地分享你的登入資料。</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>我们使用 analytics 協助分析擴充套件的使用情況，以便我們改善程式。所有資料均為匿名收集。</value>
@@ -1006,7 +1006,7 @@
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>自我託管的環境</value>
+    <value>自我託管環境</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
     <value>指定自己設定、託管的 bitwarden 環境之基礎 URL。</value>
@@ -1015,7 +1015,7 @@
     <value>伺服器 URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web 保存庫伺服器 URL</value>
+    <value>Web 儲存庫伺服器 URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>按此自動填寫來自密碼庫的登入資料。</value>
@@ -1223,10 +1223,10 @@
     <value>驗證 Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>使用 Windows Hello 解鎖</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>使用 Windows Hello 驗證</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
