@@ -640,7 +640,7 @@
     <value>Tem a certeza de que pretende sobreescrever a palavra-passe atual?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>O bitwarden mantém o seu cofre sincronizado automaticamente utilizando notificações push. Para a melhor experiência possível, por favor selecione "Ok" na seguinte solicitação quando solicitado a ativar notificações push.</value>
+    <value>O bitwarden mantém o seu cofre sincronizado automaticamente utilizando notificações push. Para a melhor experiência possível, por favor selecione "Permitir" na seguinte solicitação quando solicitado para ativar notificações push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -956,7 +956,7 @@
     <value>Anexo adicionado</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Anexo apagado</value>
+    <value>Anexo eliminado</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
     <value>Escolher ficheiro</value>
@@ -1223,10 +1223,10 @@
     <value>Verificar Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Desbloquear com o Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Verificar com o Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
