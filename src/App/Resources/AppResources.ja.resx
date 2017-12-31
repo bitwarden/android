@@ -222,7 +222,7 @@
     <value>フォルダを削除しました。</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>フォルダーなし</value>
+    <value>フォルダなし</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -594,7 +594,7 @@
     <value>この拡張機能を使用する前に、メインの bitwarden アプリにログインしてください。</value>
   </data>
   <data name="Never" xml:space="preserve">
-    <value>ロックしない</value>
+    <value>なし</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
     <value>新しいアイテムを作成しました。</value>
@@ -816,7 +816,7 @@
     <value>アプリの使われ方を解析することでより使いやすくなるよう開発しています。収集されるデータはすべて匿名です。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>パスワードフィールドをフォーカスしたときスキャン</value>
+    <value>パスワードフィールドのフォーカス時にスキャン</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
     <value>パスワードフィールドを選択したときだけフィールドをスキャンして、自動入力通知を表示します。バッテリー消費を抑えられるかもしれません。</value>
@@ -1223,10 +1223,10 @@
     <value>Face ID で認証</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Windows Hello でロック解除</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Windows Hello で認証</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>

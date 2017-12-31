@@ -117,45 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title" xml:space="preserve">
-    <value>bitwarden 密碼管理工具</value>
-    <comment>Max 30 characters</comment>
+  <data name="Name" xml:space="preserve">
+    <value>bitwarden Password Manager</value>
   </data>
-  <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden 是一個帳戶和密碼的管理工具，有助保障你的網路安全。</value>
-    <comment>Max 80 characters</comment>
+  <data name="Description" xml:space="preserve">
+    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
+
+Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+
+Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+
+bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
   </data>
-  <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden 簡單易用，可以安全地儲存你所有的帳戶和密碼，並在多部裝置之間同步。
-
-帳戶被盜是個嚴重的問題，你用的網頁和應用程式每天都遭受攻擊。每當發生安全漏洞，你的密碼就會被盜取。當你在不同網頁和程式用了同一組密碼，駭客就可以一舉獲得你的電子郵件帳戶，甚至銀行帳戶或其他重要帳戶。
-
-安全專家建議你在每個帳戶使用不同、隨機產生的密碼。但要如何管理這些密碼呢？ Bitwarden 讓你輕鬆建立、儲存、存取你的密碼。
-
-bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至你所有的裝置上。由於資料傳送前已經徹底加密，因此只有你可以存取這些資料，甚至連 bitwarden 的開發者都無法讀取你的資料。所有資料均使用 AES-256 加密、加鹽雜湊加密以及 PBKDF2 SHA-256 函式加密。</value>
-    <comment>Max 4000 characters</comment>
-  </data>
-  <data name="FeatureGraphic" xml:space="preserve">
-    <value>安全、免費、跨平台的密碼管理工具</value>
+  <data name="Keywords" xml:space="preserve">
+    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>在一個安全的密碼庫裏管理密碼</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>自動產生強力、隨機並安全的密碼</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>用指紋、PIN碼或主密碼保護你的密碼庫</value>
+    <value>Protect your vault with Touch ID, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>幫你在網頁和程式中自動填寫帳戶和密碼</value>
+    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>從多部設備同步和存取你的密碼庫
-
-- 手機
-- 平板電腦
-- 電腦
-- 網頁</value>
+    <value>Sync and access your vault from multiple devices</value>
   </data>
 </root>
