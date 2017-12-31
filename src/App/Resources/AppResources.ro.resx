@@ -640,7 +640,7 @@
     <value>Sunteţi sigur că doriţi să suprascrieţi parola curentă?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden păstrează seiful dvs. sincronizat utilizând notificările push. Pentru cea mai bună experiență posibilă, selectați "Ok" la următorul mesaj când vi se solicită să activați notificările push.</value>
+    <value>bitwarden păstrează seiful dvs. sincronizat utilizând notificările "push". Pentru cele mai bune rezultate posibile, selectați "Ok" la următorul mesaj când vi se solicită să activați notificările "push".</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -1223,10 +1223,10 @@
     <value>Verificare ID facial</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Deblocare cu Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Verificare cu Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
