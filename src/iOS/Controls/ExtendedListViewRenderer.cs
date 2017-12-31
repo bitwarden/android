@@ -32,7 +32,7 @@ namespace Bit.iOS.Controls
             }
         }
 
-        private void SetMargin(ExtendedListView view)
+        private void SetMargin(ListView view)
         {
             Control.ContentInset = new UIEdgeInsets(
                 new nfloat(view.Margin.Top),
