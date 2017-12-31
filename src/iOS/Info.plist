@@ -89,6 +89,11 @@
 		<string>de</string>
 		<string>dk</string>
 		<string>cz</string>
+		<string>nb</string>
+		<string>ja</string>
+		<string>et</string>
+		<string>vi</string>
+		<string>pl</string>
 	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
