@@ -403,7 +403,7 @@
     <value>App Erweiterung</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Auto-Ausfüllen Funktion</value>
@@ -424,7 +424,7 @@
     <value>bitwarden Auto-Ausfüllen Funktion</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-Mail Adresse ändern</value>
@@ -762,7 +762,7 @@
     <value>Tippen Sie auf diese Benachrichtigung um automatisch Zugangsdaten aus Ihrem Tresor einzufügen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Einstellungen für Bedienungshilfen öffnen</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Tippen Sie auf "bitwarden" unter "Heruntergeladene Dienste" in den Android Bedienungshilfen.</value>
@@ -795,10 +795,10 @@
     <value>Sind Sie sicher, dass Sie die Zugangsdaten einfügen möchten? Sie stimmen nicht komplett mit "{0}" überein.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Passende Einträge</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Möglicherweise passende Einträge</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Durchsuchen</value>
@@ -810,7 +810,7 @@
     <value>Ihren Tresor teilen</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your items with other users.</value>
+    <value>Erstellen Sie eine Organisation um Ihre Einträge sicher für andere Benutzer freizugeben.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Wir verwenden Analytics um zu erfahren, wie die App genutzt wird, sodass wir sie verbessern können. Die Sammlung der Daten geschieht völlig anonym.</value>
@@ -1018,7 +1018,7 @@
     <value>Web-Tresor Server URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view items from your vault.</value>
+    <value>Tippen Sie auf diese Benachrichtigung um Einträge aus Ihrem Tresor anzusehen.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Benutzerdefinierte Felder</value>
@@ -1030,40 +1030,40 @@
     <value>Kein benutzerdefiniertes Feld. Sie können Ihre benutzerdefinierten Felder im Web-Tresor oder der Browser Erweiterung verwalten.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Nummer kopieren</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Sicherheitscode kopieren</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Nummer</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Sicherheitscode</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Welche Art Eintrag möchten Sie hinzufügen?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Karte</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
     <value>Identity</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Anmeldung</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Sichere Notiz</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Adresse 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Adresse 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Adresse 3</value>
   </data>
   <data name="April" xml:space="preserve">
     <value>April</value>
@@ -1072,115 +1072,115 @@
     <value>August</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Marke</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Name des Karteninhabers</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Stadt oder Ort</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Firma</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Land</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Dezember</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Ablaufmonat</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Ablaufjahr</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Februar</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Vorname</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Januar</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Juli</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Juni</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Nachname</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Führerscheinnummer</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>März</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Mai</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Zweiter Vorname</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Herr</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Frau</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Frau</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Oktober</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Reisepassnummer</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefon</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Sozialversicherungsnummer</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Bundesland</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titel</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Postleitzahl</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adresse</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Gültig bis</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Icons der Website deaktivieren</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Website-Symbole zeigen ein erkennbares Bild neben jedem Login in deinem Tresor.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Icons Server URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Mit bitwarden automatisch ausfüllen</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Vault is locked</value>
