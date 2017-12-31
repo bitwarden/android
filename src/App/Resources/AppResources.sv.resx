@@ -640,7 +640,7 @@
     <value>Är du säker på att du vill skriva över det nuvarande lösenordet?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-aviseringar. För den bästa möjliga upplevelsen var god välj "OK" på förfrågan om du vill aktivera push-aviseringar.</value>
+    <value>bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-aviseringar. För den bästa möjliga upplevelsen vänligen välj "Tillåt" på förfrågan om du vill aktivera push-aviseringar.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -1223,10 +1223,10 @@
     <value>Verifiera Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Lås upp med Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Verifiera med Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
