@@ -125,10 +125,10 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Lisa kaust</value>
+    <value>Kausta lisamine</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Lisa element</value>
+    <value>Kirje lisamine</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -193,7 +193,7 @@
     <value>Kirjuta meile</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Kirjuta meile e-kiri abi saamiseks või tagasiside jätmiseks.</value>
+    <value>Kirjuta meile abi saamiseks või tagasiside jätmiseks.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Sisesta PIN kood.</value>
@@ -251,7 +251,7 @@
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Vale Ülemparool. Proovi uuesti.</value>
+    <value>Vale ülemparool. Proovi uuesti.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
     <value>Vale PIN. Proovi uuesti.</value>
@@ -284,7 +284,7 @@
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
-    <value>Minu Hoidla</value>
+    <value>Minu hoidla</value>
     <comment>The title for the vault page.</comment>
   </data>
   <data name="Name" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Objekt on kustutatud.</value>
+    <value>Kirje on kustutatud.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -337,7 +337,7 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Täname!</value>
+    <value>Täname teid!</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Tööriistad</value>
@@ -366,7 +366,7 @@
     <value>Kinnita sõrmejäljega</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Kinnita Ülemparooliga</value>
+    <value>Kinnita ülemparooliga</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Kinnita PIN</value>
@@ -381,7 +381,7 @@
     <value>Külasta meie kodulehte</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Külasta meie kodulehte abi saamiseks, meiega kontakteerumiseks, uudiste lugemiseks või lihtsalt bitwardeni kohta rohkema teabe saamiseks.</value>
+    <value>Külasta kodulehte abi saamiseks, meiega kontakteerumiseks, uudiste lugemiseks või bitwardeni kohta rohkema teabe saamiseks.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Veebisait</value>
@@ -394,10 +394,10 @@
     <value>Konto</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Sinu konto on loodud! Saad nüüd sisse logida.</value>
+    <value>Sinu konto on loodud! Võid nüüd sisse logida.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Lisa objekt</value>
+    <value>Lisa kirje</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Rakenduse laiendus</value>
@@ -406,7 +406,7 @@
     <value>Kasuta bitwardeni juurdepääsetavuse teenust, et erinevatel veebilehtedel ja rakendustes kontoandmeid lihtsamini sisestada.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Autom. täitmise teenus</value>
+    <value>Automaatse täitmise teenus</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Väldi ebamääraseid kirjamärke</value>
@@ -421,7 +421,7 @@
     <value>Kasuta bitwardeni automaatset kontoandmete sisestamist Safaris ja teistes rakendustes.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwardeni Autom. täitmise teenus</value>
+    <value>bitwardeni autom. täitmise teenus</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Kasuta kontoandmete automaatseks sisestamiseks bitwardeni juurdepääsetavuse teenust.</value>
@@ -433,7 +433,7 @@
     <value>Saad oma e-posti aadressi muuta bitwarden.com veebihoidlas. Soovid seda kohe teha?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Muuda Ülemparooli</value>
+    <value>Muuda ülemparooli</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
     <value>Saad oma ülemparooli muuta bitwarden.com veebihoidlas. Soovid seda kohe teha?</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Muuda elementi</value>
+    <value>Kirje muutmine</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Aktiveeri automaatne sünkroonimine</value>
@@ -519,7 +519,7 @@
     <value>Tuleta ülemparooli vihjega meelde</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Impordi objektid</value>
+    <value>Impordi andmed</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
     <value>Saad suurema koguse kontoandmeid importida bitwardeni veebihoidlas. Soovid seda kohe teha?</value>
@@ -537,29 +537,29 @@
     <value>Lukusta</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>15 minutit</value>
+    <value>15 minuti pärast</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>1 tund</value>
+    <value>1 tunni pärast</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>1 minut</value>
+    <value>1 minuti pärast</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 tundi</value>
+    <value>4 tunni pärast</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>Koheselt</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Lukustamise valikud</value>
+    <value>Automaatne lukustamine</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Sisselogimine...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Logi oma turvalisse hoidlasse sisse või loo uus konto.</value>
+    <value>Logi oma olemasolevasse kontosse sisse või loo uus konto.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Halda</value>
@@ -571,7 +571,7 @@
     <value>Ülemparool on parool, millega pääsed oma kontole ligi. On äärmiselt tähtis, et ülemparool ei ununeks. Selle parooli taastamine ei ole mingil moel võimalik.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Ülemparooli vihje (mittekohutuslik)</value>
+    <value>Ülemparooli vihje (ei ole kohutuslik)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
     <value>Vihje võib abiks olla olukorras, kui oled ülemparooli unustanud.</value>
@@ -584,7 +584,7 @@
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Vähim spetsiaalmärke</value>
+    <value>Vähim arv spetsiaalmärke</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -597,7 +597,7 @@
     <value>Mitte kunagi</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Uus objekt on loodud.</value>
+    <value>Uus kirje on loodud.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Hoidlas ei ole lemmikuid.</value>
@@ -628,13 +628,13 @@
     <value>Parool on loodud.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>Parooli genereeria</value>
+    <value>Parooli genereerimine</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>Parooli vihje</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Saatsime ülemparooli vihje Sinu e-postile.</value>
+    <value>Ülemparooli vihje saadeti Sinu e-postile.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Oled kindel, et soovid olemasolevat parooli asendada?</value>
@@ -674,13 +674,13 @@
     <value>Määra PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Sisesta rakenduse lahtilukustamiseks 4 numbriline kood.</value>
+    <value>Kasuta lahtilukustamiseks 4 numbrilist koodi.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Objekti teave</value>
+    <value>Kirje teave</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Objekt uuendatud.</value>
+    <value>Kirje on uuendatud.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Saatmine...</value>
@@ -704,10 +704,10 @@
     <comment>What Apple calls their fingerprint reader.</comment>
   </data>
   <data name="TwoStepLogin" xml:space="preserve">
-    <value>Kahe-astmeline logimine</value>
+    <value>Kaheastmeline kinnitamine</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Kaheastmeline sisselogimine aitab konto turvalisust tõsta. Lisaks paroolile pead kontole ligipääsemiseks kinnitama sisselogimise päringu SMS-ga, telefonikõnega, autentimise rakendusega või e-postiga. Kaheastmelist kinnitust saab sisse lülitada bitwarden.com veebihoidlas. Soovid seda kohe avada?</value>
+    <value>Kaheastmeline kinnitamine aitab konto turvalisust tõsta. Lisaks paroolile pead kontole ligipääsemiseks kinnitama sisselogimise päringu SMS-ga, telefonikõnega, autentimise rakendusega või e-postiga. Kaheastmelist kinnitust saab sisse lülitada bitwarden.com veebihoidlas. Soovid seda kohe avada?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lukusta lahti {0}</value>
@@ -723,19 +723,19 @@
     <value>Kinnituskood</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Vaata objekti</value>
+    <value>Kirje vaatamine</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwardeni Veebihoidla</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Halda oma bitwardeni paroolihoidlat mistahes brauseris.</value>
+    <value>Halda oma bitwardeni kontot mistahes brauseris.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kaotasid autentiseerimise rakenduse?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Üksust</value>
+    <value>Kirjet</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -745,7 +745,7 @@
     <value>Ikoonid</value>
   </data>
   <data name="Translations" xml:space="preserve">
-    <value>Tõlkimine</value>
+    <value>Tõlkijad</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
     <value>{0} kontoandmed</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Kui näed bitwardeni automaatse täitmise teavitust, saad sellele vajutada ja käivitada autom. täitmise teenuse.</value>
+    <value>Kui näed bitwardeni automaatse täitmise märguannet, saad sellele vajutada ja oma kontoandmed automaatselt sisestada.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Vajuta sellele teavitusele, et hoidlast pärit informatsioon autom. sisestada.</value>
@@ -777,7 +777,7 @@
     <value>Lubatud</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>Staatus</value>
+    <value>Olek:</value>
   </data>
   <data name="Beta" xml:space="preserve">
     <value>Beeta</value>
@@ -813,7 +813,7 @@
     <value>Loo organisatsioon, et saaksid oma andmeid teiste inimestega turvaliselt jagada.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>Mõistmaks, kuidas rakendust kasutatakse ja kuidas seda parandada, kasutame me analüütikat. Kogu andmekorje on anonüümne.</value>
+    <value>Kasutame analüütikat, et rakenduse kasutamist paremini mõista ja seda paremaks muuta. Kogu andmekorje on anonüümne.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skanneeri kui parooliväli on fookuses</value>
@@ -872,7 +872,7 @@
     <value>Kaheastmelise sisselogimise valikud</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Kasuta teist kaheastmelist logimise meetodit</value>
+    <value>Kasuta teist kaheastmelist sisselogimise meetodit</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Kinnitus e-kirja saatmine ebaõnnestus. Proovi uuesti.</value>
@@ -1018,7 +1018,7 @@
     <value>Web Vault Server URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Vajuta sellele märguandele, et oma hoidla sisu näha.</value>
+    <value>Vajuta märguandele, et oma hoidla sisu näha.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Kohandatud väljad</value>
@@ -1042,10 +1042,10 @@
     <value>Turvakood</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Millist tüüpi üksuse soovid lisada?</value>
+    <value>Millist tüüpi kirjet soovid lisada?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Kaart</value>
+    <value>Pangakaart</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
     <value>Identiteet</value>
@@ -1126,7 +1126,7 @@
     <value>Mai</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Keskmine nimi</value>
+    <value>Teine eesnimi</value>
   </data>
   <data name="Mr" xml:space="preserve">
     <value>Hr</value>
@@ -1156,7 +1156,7 @@
     <value>Isikukood</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>Riik / maakond</value>
+    <value>Maakond / vald</value>
   </data>
   <data name="Title" xml:space="preserve">
     <value>Pealkiri</value>
@@ -1192,13 +1192,13 @@
     <value>Kogumikud</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>Selles kogumikus ei ole üksusi.</value>
+    <value>Selles kogumikus ei ole kirjeid.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>Selles kaustas ei ole üksusi.</value>
+    <value>Selles kaustas ei ole kirjeid.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Automaatse täitmise Juurdepääsetavuse teenus</value>
+    <value>Autom. täitm. Juurdepääsetavuse teenus</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Bitwardeni automaatse täitmise teenus kasutab Androidi Autofill raamistikku. See aitab telefonis olevatesse rakendustesse sisestada kontoandmeid, krediitkaardi andmeid ja muud personaalset infot.</value>
