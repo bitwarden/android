@@ -122,17 +122,17 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden on paroolihaldur kontoandmete turvaliseks hoidmiseks ja kasutamiseks.</value>
+    <value>bitwarden on paroolihaldur kontoandmete turvaliseks talletamiseks ja kasutamiseks.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices.
+    <value>bitwarden muudab kontoandmete ja teiste isiklike andmete kasutamise erinevate seadmete vahel lihtsaks ja turvaliseks.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
+Paroolivargustest on saamas järjest tõsisem probleem. Veebilehed ja rakendused, mida igapäevaselt kasutad, on pidevalt rünnakute all. Muuhulgas toimuvad alalõpmata andmelekked, millega koos saadakse ligipääs ka Sinu paroolidele. Kasutades erinevatel veebilehtedel ühesugust parooli, on häkkeritel lihtne ligi pääseda nii sinu e-postile, pangakontole või teistele tähtsatele kontodele.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? bitwarden makes it easy for you to create, store, and access your passwords.
+Turvaeksperdid soovitavad kasutada kõikides kasutajakontodes erinevaid, juhuslikult koostatud paroole. Kuidas aga kõiki neid paroole hallata? bitwarden muudab paroolide loomise, talletamise ja nendele ligipääsu lihtsaks ja turvaliseks.
 
-bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.</value>
+bitwarden talletab kõik Sinu andmed krüpteeritud hoidlas, mis sünkroniseeritakse kõikide Sinu poolt kasutatavate seadmete vahel. Kuna hoidla sisu krüpteeritakse enne selle enne seadmest lahkumist, omad andmetele ligipääsu ainult Sina. Ka bitwardeni meeskond ei saa Sinu andmeid vaadata, isegi kui neil selleks tahtmine oleks. Sinu andmed kaitsevad AES-256 bitine krüpteering, salted hashing ja PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
@@ -148,7 +148,7 @@ bitwarden stores all of your logins in an encrypted vault that syncs across all 
     <value>Kaitse oma paroolihoidlat sõrmejäljega, PIN koodiga või ülemparooliga</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Sisesta kontoandmed hõlpsasti nii brauserites kui ka teistes rakendustes</value>
+    <value>Sisesta kontoandmed hõlpsasti nii brauseris kui ka teistes rakendustes</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Sünkroniseeri hoidla sisu ja pääse sellele ligi erinevates seadmetes
