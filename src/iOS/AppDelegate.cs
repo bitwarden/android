@@ -249,7 +249,6 @@ namespace Bit.iOS
             container.RegisterSingleton<IDeviceActionService, DeviceActionService>();
             container.RegisterSingleton<IAppIdService, AppIdService>();
             container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
-            container.RegisterSingleton<IReflectionService, ReflectionService>();
             container.RegisterSingleton<ILockService, LockService>();
             container.RegisterSingleton<IAppInfoService, AppInfoService>();
             container.RegisterSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();

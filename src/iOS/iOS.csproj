@@ -238,7 +238,6 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Services\iOSPushNotificationHandler.cs" />
     <Compile Include="Services\iOSPushNotificationService.cs" />
-    <Compile Include="Services\ReflectionService.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
