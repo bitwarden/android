@@ -856,6 +856,9 @@
     <PackageReference Include="SimpleInjector">
       <Version>4.0.12</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat">
+      <Version>25.4.0.2</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>42.1021.1</Version>
     </PackageReference>
