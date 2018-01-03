@@ -63,14 +63,7 @@ namespace Bit.iOS.Controls
         private void SetSource()
         {
             var view = (ExtendedTableView)Element;
-            if(true || view.NoFooter || view.NoHeader)
-            {
-                Control.Source = new CustomTableViewModelRenderer(view);
-            }
-            else
-            {
-                Control.Source = Element.HasUnevenRows ? new UnEvenTableViewModelRenderer(Element) : new TableViewModelRenderer(Element);
-            }
+            Control.Source = new CustomTableViewModelRenderer(view);
         }
 
         private void SetScrolling(ExtendedTableView view)
