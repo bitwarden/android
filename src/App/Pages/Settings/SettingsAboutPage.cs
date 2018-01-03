@@ -73,11 +73,13 @@ namespace Bit.App.Pages
                 table.EstimatedRowHeight = 44;
             }
 
-            var stackLayout = new StackLayout
+            var stackLayout = new RedrawableStackLayout
             {
                 Children = { logoVersionStackLayout, table },
                 Spacing = 0
             };
+
+            table.WrappingStackLayout = () => stackLayout;
 
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.UWP)
             {

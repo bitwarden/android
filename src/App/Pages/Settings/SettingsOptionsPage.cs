@@ -24,7 +24,7 @@ namespace Bit.App.Pages
             Init();
         }
 
-        private StackLayout StackLayout { get; set; }
+        private RedrawableStackLayout StackLayout { get; set; }
         private ExtendedSwitchCell CopyTotpCell { get; set; }
         private Label CopyTotpLabel { get; set; }
         private ExtendedSwitchCell AnalyticsCell { get; set; }
@@ -46,7 +46,7 @@ namespace Bit.App.Pages
                 On = _appSettings.DisableWebsiteIcons
             };
 
-            var websiteIconsTable = new FormTableView(true)
+            var websiteIconsTable = new FormTableView(this, true)
             {
                 Root = new TableRoot
                 {
@@ -63,7 +63,7 @@ namespace Bit.App.Pages
                 On = _settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false)
             };
 
-            var totpTable = new FormTableView
+            var totpTable = new FormTableView(this)
             {
                 Root = new TableRoot
                 {
@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                 On = _settings.GetValueOrDefault(Constants.SettingGaOptOut, false)
             };
 
-            var analyticsTable = new FormTableView
+            var analyticsTable = new FormTableView(this)
             {
                 Root = new TableRoot
                 {
@@ -106,7 +106,7 @@ namespace Bit.App.Pages
                 Text = AppResources.DisableWebsiteIconsDescription
             };
 
-            StackLayout = new StackLayout
+            StackLayout = new RedrawableStackLayout
             {
                 Children =
                 {
@@ -125,7 +125,7 @@ namespace Bit.App.Pages
                     On = !_appSettings.AutofillPersistNotification && !_appSettings.AutofillPasswordField
                 };
 
-                var autofillAlwaysTable = new FormTableView(true)
+                var autofillAlwaysTable = new FormTableView(this, true)
                 {
                     Root = new TableRoot
                     {
@@ -147,7 +147,7 @@ namespace Bit.App.Pages
                     On = _appSettings.AutofillPersistNotification
                 };
 
-                var autofillPersistNotificationTable = new FormTableView
+                var autofillPersistNotificationTable = new FormTableView(this)
                 {
                     Root = new TableRoot
                     {
@@ -169,7 +169,7 @@ namespace Bit.App.Pages
                     On = _appSettings.AutofillPasswordField
                 };
 
-                var autofillPasswordFieldTable = new FormTableView
+                var autofillPasswordFieldTable = new FormTableView(this)
                 {
                     Root = new TableRoot
                     {
@@ -217,7 +217,6 @@ namespace Bit.App.Pages
             AnalyticsCell.OnChanged += AnalyticsCell_Changed;
             WebsiteIconsCell.OnChanged += WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged += CopyTotpCell_OnChanged;
-            StackLayout.LayoutChanged += Layout_LayoutChanged;
 
             if(Device.RuntimePlatform == Device.Android)
             {
@@ -234,36 +233,12 @@ namespace Bit.App.Pages
             AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
             WebsiteIconsCell.OnChanged -= WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged -= CopyTotpCell_OnChanged;
-            StackLayout.LayoutChanged -= Layout_LayoutChanged;
 
             if(Device.RuntimePlatform == Device.Android)
             {
                 AutofillAlwaysCell.OnChanged -= AutofillAlwaysCell_OnChanged;
                 AutofillPasswordFieldCell.OnChanged -= AutofillPasswordFieldCell_OnChanged;
                 AutofillPersistNotificationCell.OnChanged -= AutofillPersistNotificationCell_OnChanged;
-            }
-        }
-
-        private void Layout_LayoutChanged(object sender, EventArgs e)
-        {
-            AnalyticsLabel.WidthRequest = StackLayout.Bounds.Width - AnalyticsLabel.Bounds.Left * 2;
-            WebsiteIconsLabel.WidthRequest = StackLayout.Bounds.Width - WebsiteIconsLabel.Bounds.Left * 2;
-            CopyTotpLabel.WidthRequest = StackLayout.Bounds.Width - CopyTotpLabel.Bounds.Left * 2;
-
-            if(AutofillAlwaysLabel != null)
-            {
-                AutofillAlwaysLabel.WidthRequest = StackLayout.Bounds.Width - AutofillAlwaysLabel.Bounds.Left * 2;
-            }
-
-            if(AutofillPasswordFieldLabel != null)
-            {
-                AutofillPasswordFieldLabel.WidthRequest = StackLayout.Bounds.Width - AutofillPasswordFieldLabel.Bounds.Left * 2;
-            }
-
-            if(AutofillPersistNotificationLabel != null)
-            {
-                AutofillPersistNotificationLabel.WidthRequest =
-                    StackLayout.Bounds.Width - AutofillPersistNotificationLabel.Bounds.Left * 2;
             }
         }
 
@@ -352,7 +327,7 @@ namespace Bit.App.Pages
 
         private class FormTableView : ExtendedTableView
         {
-            public FormTableView(bool header = false)
+            public FormTableView(SettingsOptionsPage page, bool header = false)
             {
                 Intent = TableIntent.Settings;
                 EnableScrolling = false;
@@ -361,6 +336,7 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start;
                 NoFooter = true;
                 NoHeader = !header;
+                WrappingStackLayout = () => page.StackLayout;
             }
         }
 

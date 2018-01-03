@@ -67,11 +67,13 @@ namespace Bit.App.Pages
                 Uppercase = false
             };
 
-            var stackLayout = new StackLayout
+            var stackLayout = new RedrawableStackLayout
             {
                 Spacing = 10,
                 Children = { table, logoutButton }
             };
+
+            table.WrappingStackLayout = () => stackLayout;
 
             var scrollView = new ScrollView { Content = stackLayout };
 

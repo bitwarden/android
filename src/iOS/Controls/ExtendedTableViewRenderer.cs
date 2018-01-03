@@ -63,7 +63,7 @@ namespace Bit.iOS.Controls
         private void SetSource()
         {
             var view = (ExtendedTableView)Element;
-            if(view.NoFooter || view.NoHeader)
+            if(true || view.NoFooter || view.NoHeader)
             {
                 Control.Source = new CustomTableViewModelRenderer(view);
             }
@@ -116,11 +116,22 @@ namespace Bit.iOS.Controls
         public class CustomTableViewModelRenderer : UnEvenTableViewModelRenderer
         {
             private readonly ExtendedTableView _view;
+            private bool _didRedraw = false;
 
             public CustomTableViewModelRenderer(ExtendedTableView model)
                 : base(model)
             {
                 _view = model;
+            }
+
+            public override async void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
+            {
+                // ref https://stackoverflow.com/a/48076188/1090359
+                if(!_didRedraw && _view.WrappingStackLayout != null)
+                {
+                    _didRedraw = true;
+                    await _view.WrappingStackLayout()?.RedrawIfNeededAsync(10, false);
+                }
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)
@@ -143,6 +154,16 @@ namespace Bit.iOS.Controls
                 return base.GetHeightForHeader(tableView, section);
             }
 
+            public override UIView GetViewForHeader(UITableView tableView, nint section)
+            {
+                if(_view.NoHeader && section == 0)
+                {
+                    return new UIView(new CGRect(0, 0, 0, 0));
+                }
+
+                return null;
+            }
+
             public override nfloat GetHeightForFooter(UITableView tableView, nint section)
             {
                 if(_view.NoFooter && (section + 1) == NumberOfSections(tableView))
@@ -151,6 +172,16 @@ namespace Bit.iOS.Controls
                 }
 
                 return 10f;
+            }
+
+            public override UIView GetViewForFooter(UITableView tableView, nint section)
+            {
+                if(_view.NoFooter && (section + 1) == NumberOfSections(tableView))
+                {
+                    return new UIView(new CGRect(0, 0, 0, 0));
+                }
+
+                return null;
             }
         }
     }

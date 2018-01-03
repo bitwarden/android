@@ -44,7 +44,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<VaultAttachmentsPageModel.Attachment> PresentationAttchments { get; private set; }
             = new ExtendedObservableCollection<VaultAttachmentsPageModel.Attachment>();
         public ExtendedListView ListView { get; set; }
-        public StackLayout NoDataStackLayout { get; set; }
+        public RedrawableStackLayout NoDataStackLayout { get; set; }
         public StackLayout AddNewStackLayout { get; set; }
         public Label FileLabel { get; set; }
         public ExtendedTableView NewTable { get; set; }
@@ -88,6 +88,7 @@ namespace Bit.App.Pages
                 EnableSelection = false,
                 VerticalOptions = LayoutOptions.Start,
                 Margin = new Thickness(0, Helpers.OnPlatform(iOS: 10, Android: 30), 0, 0),
+                WrappingStackLayout = () => NoDataStackLayout,
                 Root = new TableRoot
                 {
                     new TableSection(AppResources.AddNewAttachment)
@@ -122,7 +123,7 @@ namespace Bit.App.Pages
                 Style = (Style)Application.Current.Resources["text-muted"]
             };
 
-            NoDataStackLayout = new StackLayout
+            NoDataStackLayout = new RedrawableStackLayout
             {
                 VerticalOptions = LayoutOptions.Start,
                 Spacing = 0,

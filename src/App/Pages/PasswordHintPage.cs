@@ -64,12 +64,13 @@ namespace Bit.App.Pages
                 Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
             };
 
-            var layout = new StackLayout
+            var layout = new RedrawableStackLayout
             {
                 Children = { table, hintLabel },
                 Spacing = 0
             };
 
+            table.WrappingStackLayout = () => layout;
             var scrollView = new ScrollView { Content = layout };
 
             if(Device.RuntimePlatform == Device.iOS)

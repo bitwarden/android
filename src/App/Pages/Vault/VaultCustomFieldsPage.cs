@@ -36,6 +36,7 @@ namespace Bit.App.Pages
         }
 
         public ToolbarItem SaveToolbarItem { get; set; }
+        public ToolbarItem CloseToolbarItem { get; set; }
         public Label NoDataLabel { get; set; }
         public TableSection FieldsSection { get; set; }
         public ExtendedTableView Table { get; set; }
@@ -131,12 +132,16 @@ namespace Bit.App.Pages
                     await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
                 }
             }, ToolbarItemOrder.Default, 0);
+            ToolbarItems.Add(SaveToolbarItem);
 
             Title = AppResources.CustomFields;
             Content = Table;
 
             if(Device.RuntimePlatform == Device.iOS)
             {
+                CloseToolbarItem = new DismissModalToolBarItem(this, AppResources.Close);
+                ToolbarItems.Add(CloseToolbarItem);
+
                 Table.RowHeight = -1;
                 Table.EstimatedRowHeight = 44;
             }
@@ -157,13 +162,14 @@ namespace Bit.App.Pages
                 return;
             }
 
-            if(_cipher.Fields != null && _cipher.Fields.Any())
+            var hasFields = _cipher.Fields?.Any() ?? false;
+
+            if(hasFields)
             {
                 Content = Table;
-                ToolbarItems.Add(SaveToolbarItem);
-                if(Device.RuntimePlatform == Device.iOS)
+                if(CloseToolbarItem != null)
                 {
-                    ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Cancel));
+                    CloseToolbarItem.Text = AppResources.Cancel;
                 }
 
                 foreach(var field in _cipher.Fields)
@@ -189,7 +195,7 @@ namespace Bit.App.Pages
                                 textFieldCell.Button.Command = new Command(() =>
                                 {
                                     textFieldCell.Entry.InvokeToggleIsPassword();
-                                    textFieldCell.Button.Image = 
+                                    textFieldCell.Button.Image =
                                         "eye" + (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
                                 });
                             }
@@ -213,9 +219,9 @@ namespace Bit.App.Pages
             else
             {
                 Content = NoDataLabel;
-                if(Device.RuntimePlatform == Device.iOS)
+                if(ToolbarItems.Count > 0)
                 {
-                    ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
+                    ToolbarItems.RemoveAt(0);
                 }
             }
         }

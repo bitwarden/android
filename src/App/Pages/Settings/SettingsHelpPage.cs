@@ -22,7 +22,7 @@ namespace Bit.App.Pages
         public ExtendedTextCell EmailCell { get; set; }
         public ExtendedTextCell WebsiteCell { get; set; }
         public ExtendedTextCell BugCell { get; set; }
-        public StackLayout StackLayout { get; set; }
+        public RedrawableStackLayout StackLayout { get; set; }
         private CustomLabel EmailLabel { get; set; }
         private CustomLabel WebsiteLabel { get; set; }
         private CustomLabel BugLabel { get; set; }
@@ -35,7 +35,7 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
-            var emailTable = new CustomTableView
+            var emailTable = new CustomTableView(this)
             {
                 Root = new TableRoot
                 {
@@ -57,7 +57,7 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
-            var websiteTable = new CustomTableView
+            var websiteTable = new CustomTableView(this)
             {
                 NoHeader = true,
                 Root = new TableRoot
@@ -80,7 +80,7 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
-            var bugTable = new CustomTableView
+            var bugTable = new CustomTableView(this)
             {
                 NoHeader = true,
                 Root = new TableRoot
@@ -97,7 +97,7 @@ namespace Bit.App.Pages
                 Text = AppResources.FileBugReportDescription
             };
 
-            StackLayout = new StackLayout
+            StackLayout = new RedrawableStackLayout
             {
                 Children = { emailTable, EmailLabel, websiteTable, WebsiteLabel, bugTable, BugLabel },
                 Spacing = 0
@@ -118,7 +118,6 @@ namespace Bit.App.Pages
             EmailCell.Tapped += EmailCell_Tapped;
             WebsiteCell.Tapped += WebsiteCell_Tapped;
             BugCell.Tapped += BugCell_Tapped;
-            StackLayout.LayoutChanged += StackLayout_LayoutChanged;
         }
 
         protected override void OnDisappearing()
@@ -127,14 +126,6 @@ namespace Bit.App.Pages
             EmailCell.Tapped -= EmailCell_Tapped;
             WebsiteCell.Tapped -= WebsiteCell_Tapped;
             BugCell.Tapped -= BugCell_Tapped;
-            StackLayout.LayoutChanged -= StackLayout_LayoutChanged;
-        }
-
-        private void StackLayout_LayoutChanged(object sender, EventArgs e)
-        {
-            WebsiteLabel.WidthRequest = StackLayout.Bounds.Width - WebsiteLabel.Bounds.Left * 2;
-            EmailLabel.WidthRequest = StackLayout.Bounds.Width - EmailLabel.Bounds.Left * 2;
-            BugLabel.WidthRequest = StackLayout.Bounds.Width - BugLabel.Bounds.Left * 2;
         }
 
         private void EmailCell_Tapped(object sender, EventArgs e)
@@ -157,7 +148,7 @@ namespace Bit.App.Pages
 
         private class CustomTableView : ExtendedTableView
         {
-            public CustomTableView()
+            public CustomTableView(SettingsHelpPage page)
             {
                 Intent = TableIntent.Settings;
                 EnableScrolling = false;
@@ -165,6 +156,7 @@ namespace Bit.App.Pages
                 EnableSelection = true;
                 VerticalOptions = LayoutOptions.Start;
                 NoFooter = true;
+                WrappingStackLayout = () => page.StackLayout;
 
                 if(Device.RuntimePlatform == Device.iOS)
                 {

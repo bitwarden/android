@@ -50,9 +50,7 @@ namespace Bit.App.Pages
             var mainTable = new ExtendedTableView
             {
                 Intent = TableIntent.Settings,
-                EnableScrolling = false,
                 HasUnevenRows = true,
-                VerticalOptions = LayoutOptions.Start,
                 Root = new TableRoot
                 {
                     new TableSection(Helpers.GetEmptyTableSectionTitle())

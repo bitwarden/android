@@ -1,6 +1,4 @@
 ﻿using Xamarin.Forms;
-using XLabs.Ioc;
-using Bit.App.Abstractions;
 using System;
 using System.Reflection;
 
@@ -42,6 +40,7 @@ namespace Bit.App.Controls
         public bool NoHeader { get; set; }
         public bool NoFooter { get; set; }
         public int BottomPadding { get; set; }
+        public Func<RedrawableStackLayout> WrappingStackLayout { get; set; }
 
         protected override SizeRequest OnSizeRequest(double widthConstraint, double heightConstraint)
         {

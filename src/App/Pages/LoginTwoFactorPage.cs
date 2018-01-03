@@ -135,12 +135,13 @@ namespace Bit.App.Pages
                         RememberCell
                     });
 
-                var layout = new StackLayout
+                var layout = new RedrawableStackLayout
                 {
                     Children = { instruction, table },
                     Spacing = 0
                 };
 
+                table.WrappingStackLayout = () => layout;
                 scrollView.Content = layout;
 
                 switch(_providerType.Value)
@@ -213,12 +214,13 @@ namespace Bit.App.Pages
                         RememberCell
                     });
 
-                var layout = new StackLayout
+                var layout = new RedrawableStackLayout
                 {
                     Children = { webView, table, anotherMethodButton },
                     Spacing = 0
                 };
 
+                table.WrappingStackLayout = () => layout;
                 scrollView.Content = layout;
 
                 Title = "Duo";
@@ -244,12 +246,13 @@ namespace Bit.App.Pages
                         RememberCell
                     });
 
-                var layout = new StackLayout
+                var layout = new RedrawableStackLayout
                 {
                     Children = { instruction, image, table, anotherMethodButton },
                     Spacing = 0
                 };
 
+                table.WrappingStackLayout = () => layout;
                 scrollView.Content = layout;
 
                 Title = AppResources.YubiKeyTitle;
@@ -524,7 +527,7 @@ namespace Bit.App.Pages
                 NoFooter = true;
                 NoHeader = true;
                 VerticalOptions = LayoutOptions.Start;
-                Root = Root = new TableRoot
+                Root = new TableRoot
                 {
                     section
                 };

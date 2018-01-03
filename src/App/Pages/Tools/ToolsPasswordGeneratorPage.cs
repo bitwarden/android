@@ -163,13 +163,15 @@ namespace Bit.App.Pages
                 table.BottomPadding = 50;
             }
 
-            var stackLayout = new StackLayout
+            var stackLayout = new RedrawableStackLayout
             {
                 Orientation = StackOrientation.Vertical,
                 Children = { Password, table },
                 VerticalOptions = LayoutOptions.FillAndExpand,
                 Spacing = 0
             };
+
+            table.WrappingStackLayout = () => stackLayout;
 
             var scrollView = new ScrollView
             {

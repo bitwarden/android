@@ -71,7 +71,6 @@ namespace Bit.App.Pages
                 HasUnevenRows = true,
                 EnableSelection = true,
                 NoFooter = true,
-                //NoHeader = true,
                 VerticalOptions = LayoutOptions.Start,
                 Root = new TableRoot
                 {
@@ -87,17 +86,19 @@ namespace Bit.App.Pages
             {
                 Text = AppResources.GetPasswordHint,
                 Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                Margin = new Thickness(15, 0, 15, 25),
                 Command = new Command(async () => await ForgotPasswordAsync()),
+                VerticalOptions = LayoutOptions.End,
                 Uppercase = false,
                 BackgroundColor = Color.Transparent
             };
 
-            var layout = new StackLayout
+            var layout = new RedrawableStackLayout
             {
                 Children = { table, forgotPasswordButton },
-                Spacing = Helpers.OnPlatform(iOS: 0, Android: 10, Windows: 0)
+                Spacing = 10
             };
+
+            table.WrappingStackLayout = () => layout;
 
             var scrollView = new ScrollView { Content = layout };
 

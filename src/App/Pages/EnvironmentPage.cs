@@ -30,7 +30,7 @@ namespace Bit.App.Pages
         public FormEntryCell ApiUrlCell { get; set; }
         public FormEntryCell IdentityUrlCell { get; set; }
         public FormEntryCell IconsUrlCell { get; set; }
-        public StackLayout StackLayout { get; set; }
+        public RedrawableStackLayout StackLayout { get; set; }
         public Label SelfHostLabel { get; set; }
         public Label CustomLabel { get; set; }
 
@@ -57,7 +57,7 @@ namespace Bit.App.Pages
                 entryKeyboard: Keyboard.Url);
             BaseUrlCell.Entry.Text = _appSettings.BaseUrl;
 
-            var table = new FormTableView
+            var table = new FormTableView(this)
             {
                 Root = new TableRoot
                 {
@@ -74,10 +74,10 @@ namespace Bit.App.Pages
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"],
-                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
+                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 5)
             };
 
-            var table2 = new FormTableView
+            var table2 = new FormTableView(this)
             {
                 Root = new TableRoot
                 {
@@ -97,10 +97,10 @@ namespace Bit.App.Pages
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)),
                 Style = (Style)Application.Current.Resources["text-muted"],
-                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 25)
+                Margin = new Thickness(15, (this.IsLandscape() ? 5 : 0), 15, 5)
             };
 
-            StackLayout = new StackLayout
+            StackLayout = new RedrawableStackLayout
             {
                 Children = { table, SelfHostLabel, table2, CustomLabel },
                 Spacing = 0
@@ -138,7 +138,6 @@ namespace Bit.App.Pages
             IdentityUrlCell.InitEvents();
             ApiUrlCell.InitEvents();
             WebVaultUrlCell.InitEvents();
-            StackLayout.LayoutChanged += Layout_LayoutChanged;
             BaseUrlCell.Entry.FocusWithDelay();
         }
         protected override void OnDisappearing()
@@ -149,13 +148,6 @@ namespace Bit.App.Pages
             IdentityUrlCell.Dispose();
             ApiUrlCell.Dispose();
             WebVaultUrlCell.Dispose();
-            StackLayout.LayoutChanged -= Layout_LayoutChanged;
-        }
-
-        private void Layout_LayoutChanged(object sender, EventArgs e)
-        {
-            SelfHostLabel.WidthRequest = StackLayout.Bounds.Width - SelfHostLabel.Bounds.Left * 2;
-            CustomLabel.WidthRequest = StackLayout.Bounds.Width - CustomLabel.Bounds.Left * 2;
         }
 
         private async Task SaveAsync()
@@ -259,7 +251,7 @@ namespace Bit.App.Pages
 
         private class FormTableView : ExtendedTableView
         {
-            public FormTableView()
+            public FormTableView(EnvironmentPage page)
             {
                 Intent = TableIntent.Settings;
                 EnableScrolling = false;
@@ -267,6 +259,7 @@ namespace Bit.App.Pages
                 EnableSelection = true;
                 VerticalOptions = LayoutOptions.Start;
                 NoFooter = true;
+                WrappingStackLayout = () => page.StackLayout;
             }
         }
     }
