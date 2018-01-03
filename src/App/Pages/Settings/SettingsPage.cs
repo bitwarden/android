@@ -285,7 +285,7 @@ namespace Bit.App.Pages
                 AppResources.LockOptionImmediately, AppResources.LockOption1Minute, AppResources.LockOption15Minutes,
                 AppResources.LockOption1Hour, AppResources.LockOption4Hours, AppResources.Never);
 
-            if(selection == AppResources.Cancel)
+            if(selection == null || selection == AppResources.Cancel)
             {
                 return;
             }
@@ -313,6 +313,10 @@ namespace Bit.App.Pages
             else if(selection == AppResources.Never)
             {
                 _settings.AddOrUpdateValue(Constants.SettingLockSeconds, -1);
+            }
+            else
+            {
+                return;
             }
 
             LockOptionsCell.Detail = selection;

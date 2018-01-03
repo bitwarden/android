@@ -167,7 +167,7 @@ namespace Bit.App.Utilities
                 AppResources.TypeLogin, AppResources.TypeCard, AppResources.TypeIdentity, AppResources.TypeSecureNote);
 
             var selectedType = CipherType.SecureNote;
-            if(type == AppResources.Cancel)
+            if(type == null || type == AppResources.Cancel)
             {
                 return;
             }
@@ -182,6 +182,10 @@ namespace Bit.App.Utilities
             else if(type == AppResources.TypeIdentity)
             {
                 selectedType = CipherType.Identity;
+            }
+            else
+            {
+                return;
             }
 
             var addPage = new VaultAddCipherPage(selectedType, defaultFolderId: folderId);
