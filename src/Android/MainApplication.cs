@@ -13,7 +13,6 @@ using Plugin.Fingerprint;
 using Plugin.Settings;
 using XLabs.Ioc;
 using System.Threading.Tasks;
-using Plugin.Settings.Abstractions;
 using FFImageLoading.Forms.Droid;
 using XLabs.Ioc.SimpleInjectorContainer;
 using SimpleInjector;
@@ -102,7 +101,7 @@ namespace Bit.Android
         public static void SetIoc(Application application)
         {
             Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
-            CachedImageRenderer.Init();
+            CachedImageRenderer.Init(true);
             ZXing.Net.Mobile.Forms.Android.Platform.Init();
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
 
