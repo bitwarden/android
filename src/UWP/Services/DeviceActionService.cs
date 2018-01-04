@@ -143,8 +143,6 @@ namespace Bit.UWP.Services
                 Background = new SolidColorBrush(Color.FromArgb(240, 210, 214, 222)),
                 Foreground = new SolidColorBrush(Color.FromArgb(240, 60, 141, 188)),
                 Margin = new Thickness(0, 0, 0, 100),
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Bottom,
                 HorizontalContentAlignment = HorizontalAlignment.Center,
                 VerticalContentAlignment = VerticalAlignment.Center,
                 Stretch = Stretch.Uniform,
