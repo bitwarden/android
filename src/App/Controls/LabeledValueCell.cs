@@ -114,6 +114,19 @@ namespace Bit.App.Controls
 
                 containerStackLayout.AdjustPaddingForDevice();
             }
+            else if(Device.RuntimePlatform == Device.UWP)
+            {
+                buttonStackLayout.Spacing = 0;
+
+                if(Button1 != null)
+                {
+                    Button1.BackgroundColor = Color.Transparent;
+                }
+                if(Button2 != null)
+                {
+                    Button2.BackgroundColor = Color.Transparent;
+                }
+            }
 
             if(Sub != null && Button1 != null)
             {
