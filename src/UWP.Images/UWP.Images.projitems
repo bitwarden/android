@@ -24,7 +24,6 @@
     <Content Include="$(MSBuildThisFileDirectory)eye_slash.png" />
     <Content Include="$(MSBuildThisFileDirectory)fa_lock.png" />
     <Content Include="$(MSBuildThisFileDirectory)fa_lock_selected.png" />
-    <Content Include="$(MSBuildThisFileDirectory)fingerprint.png" />
     <Content Include="$(MSBuildThisFileDirectory)folder.png" />
     <Content Include="$(MSBuildThisFileDirectory)globe.png" />
     <Content Include="$(MSBuildThisFileDirectory)icon.png" />
