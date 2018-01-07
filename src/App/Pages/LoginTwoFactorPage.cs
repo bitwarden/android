@@ -323,7 +323,7 @@ namespace Bit.App.Pages
             {
                 var nfcKey = _providers[TwoFactorProviderType.YubiKey].ContainsKey("Nfc") &&
                     (bool)_providers[TwoFactorProviderType.YubiKey]["Nfc"];
-                if(_deviceInfoService.NfcEnabled && nfcKey)
+                if(_deviceInfoService.NfcEnabled && nfcKey || Device.RuntimePlatform == Device.UWP)
                 {
                     options.Add(AppResources.YubiKeyTitle);
                 }
@@ -464,7 +464,7 @@ namespace Bit.App.Pages
                             break;
                         case TwoFactorProviderType.YubiKey:
                             var nfcKey = p.Value.ContainsKey("Nfc") && (bool)p.Value["Nfc"];
-                            if(!_deviceInfoService.NfcEnabled || !nfcKey)
+                            if((!_deviceInfoService.NfcEnabled || !nfcKey) && Device.RuntimePlatform != Device.UWP)
                             {
                                 continue;
                             }
