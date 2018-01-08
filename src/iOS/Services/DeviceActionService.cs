@@ -303,7 +303,7 @@ namespace Bit.iOS.Services
             _progressAlert.View.Add(loadingIndicator);
 
             var vc = GetPresentedViewController();
-            vc?.PresentViewController(_progressAlert, true, null);
+            vc?.PresentViewController(_progressAlert, false, null);
         }
 
         public void HideLoading()
@@ -313,7 +313,7 @@ namespace Bit.iOS.Services
                 return;
             }
 
-            _progressAlert.DismissViewController(true, () => { });
+            _progressAlert.DismissViewController(false, null);
             _progressAlert.Dispose();
             _progressAlert = null;
         }
