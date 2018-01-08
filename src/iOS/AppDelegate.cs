@@ -287,10 +287,6 @@ namespace Bit.iOS
             container.RegisterSingleton<IPushNotificationListener, PushNotificationListener>();
             container.RegisterSingleton<IPushNotificationService, iOSPushNotificationService>();
 
-            FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
-            {
-                AnimateGifs = false
-            });
             CachedImageRenderer.Init();
             Resolver.SetResolver(new SimpleInjectorResolver(container));
         }
