@@ -18,6 +18,7 @@ namespace Bit.App.Pages
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly Action<string> _passwordValueAction;
         private readonly bool _fromAutofill;
+        private readonly MainPage _mainPage;
 
         public ToolsPasswordGeneratorPage(Action<string> passwordValueAction = null, bool fromAutofill = false)
         {
@@ -29,6 +30,12 @@ namespace Bit.App.Pages
             _fromAutofill = fromAutofill;
 
             Init();
+        }
+
+        public ToolsPasswordGeneratorPage(MainPage mainPage)
+            : this()
+        {
+            _mainPage = mainPage;
         }
 
         public PasswordGeneratorPageModel Model { get; private set; } = new PasswordGeneratorPageModel();
@@ -251,6 +258,17 @@ namespace Bit.App.Pages
             SpecialMinCell.Dispose();
             CopyCell.Tapped -= CopyCell_Tapped;
             SliderCell.Dispose();
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if(Device.RuntimePlatform == Device.Android && _mainPage != null)
+            {
+                _mainPage.ResetToVaultPage();
+                return true;
+            }
+
+            return base.OnBackButtonPressed();
         }
 
         private void RegenerateCell_Tapped(object sender, EventArgs e)

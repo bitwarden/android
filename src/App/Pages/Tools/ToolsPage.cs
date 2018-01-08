@@ -13,9 +13,11 @@ namespace Bit.App.Pages
     {
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IDeviceInfoService _deviceInfoService;
+        private readonly MainPage _mainPage;
 
-        public ToolsPage()
+        public ToolsPage(MainPage mainPage)
         {
+            _mainPage = mainPage;
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 
@@ -111,6 +113,17 @@ namespace Bit.App.Pages
                 AutofillCell.Tapped -= AutofillCell_Tapped;
             }
 
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if(Device.RuntimePlatform == Device.Android && _mainPage != null)
+            {
+                _mainPage.ResetToVaultPage();
+                return true;
+            }
+
+            return base.OnBackButtonPressed();
         }
 
         private void AutofillCell_Tapped(object sender, EventArgs e)

@@ -20,11 +20,13 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly ILockService _lockService;
+        private readonly MainPage _mainPage;
 
         // TODO: Model binding context?
 
-        public SettingsPage()
+        public SettingsPage(MainPage mainPage)
         {
+            _mainPage = mainPage;
             _authService = Resolver.Resolve<IAuthService>();
             _settings = Resolver.Resolve<ISettings>();
             _fingerprint = Resolver.Resolve<IFingerprint>();
@@ -264,6 +266,17 @@ namespace Bit.App.Pages
             {
                 RateCell.Tapped -= RateCell_Tapped;
             }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if(Device.RuntimePlatform == Device.Android && _mainPage != null)
+            {
+                _mainPage.ResetToVaultPage();
+                return true;
+            }
+
+            return base.OnBackButtonPressed();
         }
 
         private async void TwoStepCell_Tapped(object sender, EventArgs e)
