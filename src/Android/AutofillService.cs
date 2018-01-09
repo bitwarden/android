@@ -46,6 +46,7 @@ namespace Bit.Android
             new Browser("org.mozilla.firefox", "url_bar_title"),
             new Browser("org.mozilla.firefox_beta", "url_bar_title"),
             new Browser("org.mozilla.focus", "display_url"),
+            new Browser("org.mozilla.klar", "display_url"),
             new Browser("com.ghostery.android.ghostery", "search_field"),
             new Browser("org.adblockplus.browser", "url_bar_title"),
             new Browser("com.htc.sense.browser", "title"),
