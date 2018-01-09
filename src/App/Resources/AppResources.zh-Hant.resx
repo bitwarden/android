@@ -522,7 +522,7 @@
     <value>匯入項目</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>你可以在 bitwarden.com 網頁版密碼庫批次匯入登入資料。現在要造訪網站嗎？</value>
+    <value>你可以在 bitwarden 網頁版批次匯入登入資料。現在前往？</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>快速從其他密碼管理應用程式中批次匯入你的登入資料。</value>
@@ -783,7 +783,7 @@
     <value>測試版</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Bitwarden 自動填寫服務是新增網頁的最簡單方法。請到 “工具” 分頁了解更多。</value>
+    <value>Bitwarden 自動填寫服務是新增登入資料的最簡單方法。請到 “工具” 分頁了解更多。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>自動填寫</value>

@@ -457,7 +457,7 @@
     <value>Kasutajanimi on kopeeritud!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
-    <value>Konto loomine</value>
+    <value>Loo konto</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
     <value>Konto loomine...</value>
@@ -510,7 +510,7 @@
     <value>Lemmik</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Sõrmejälg</value>
+    <value>sõrmejälge</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>Loo parool</value>
@@ -525,7 +525,7 @@
     <value>Saad suurema koguse kontoandmeid importida bitwardeni veebihoidlas. Soovid seda kohe teha?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Kiire võimalus oma konto- ja muude andmete importimiseks teistest paroolihalduritest.</value>
+    <value>Kiire viis oma konto- ja muude andmete importimiseks teistest paroolihalduritest.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Viimane sünkronisatsioon:</value>
@@ -759,7 +759,7 @@
     <value>Kui näed bitwardeni automaatse täitmise märguannet, saad sellele vajutada ja oma kontoandmed automaatselt sisestada.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Vajuta sellele teavitusele, et hoidlast pärit informatsioon autom. sisestada.</value>
+    <value>Vajuta andmete automaatseks sisestamiseks.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Ava Juurdepääsetavuse seaded</value>
@@ -816,10 +816,10 @@
     <value>Kasutame analüütikat, et rakenduse kasutamist paremini mõista ja seda paremaks muuta. Kogu andmekorje on anonüümne.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Skanneeri kui parooliväli on fookuses</value>
+    <value>Paku täitmist, kui valitud on parooliväli</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Skanneeri ekraani täitmiseks mõeldud väljade suhtes ning kuva automaatse täitmise teavitus ainult siis, kui valitud on parooli väli. See valik võib aidata akut säästa.</value>
+    <value>Otsi ekraanilt täitmiseks mõeldud välju ning näita automaatse täitmise teavitust ainult siis, kui valitud on parooli väli. See valik võib aidata akut säästa.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>Püsiv märguanne</value>
@@ -828,10 +828,10 @@
     <value>Paku alati automaatse täitmise märguannet ning kontrolli välju alles pärast automaatse täitmise valiku kasutamist. See valik võib aidata akut säästa.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
-    <value>Skanneeri alati</value>
+    <value>Otsi alati</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Skanneeri ekraani sisselogimise väljade suhtes ning paku automaatset täitmise teenust paroolivälja leidmisel. See on vaikeseade.</value>
+    <value>Otsi ekraanilt sisselogimise välju ning näita automaatse täitmise teavitust paroolivälja leidmisel. See on vaikeseade.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Rakendust "{0}" ei ole võimalik avada.</value>
@@ -923,7 +923,7 @@
     <value>Autentiseerimise võtme lugemine nurjus.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Skanneering toimub automaatselt.</value>
+    <value>Skaneering toimub automaatselt.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
     <value>Suuna telefoni kaamera QR koodile.</value>
@@ -1051,7 +1051,7 @@
     <value>Identiteet</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Sisselogimine</value>
+    <value>Kasutajakonto andmed</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Turvaline märkus</value>
@@ -1147,7 +1147,7 @@
     <value>Passi number</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Telefon</value>
+    <value>Telefoninumber</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>

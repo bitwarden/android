@@ -128,7 +128,7 @@
     <value>Map toevoegen</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Item toevoegen</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Item is verwijderd.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,13 +397,13 @@
     <value>Uw account is gecreëerd! U kunt nu inloggen.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Voeg een item toe</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>App-extensie</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Gebruik de bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen in de apps en op het internet.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Auto-invullen-dienst</value>
@@ -424,7 +424,7 @@
     <value>bitwarden auto-invullen-dienst</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Gebruik de bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-mailadres wijzigen</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Item Bewerken</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Automatische synchronisatie inschakelen</value>
@@ -519,13 +519,13 @@
     <value>Verkrijg hoofdwachtwoord-hint</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Items Importeren</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>U kunt een bulk import van items doen vanuit de bitwarden.com webkluis. Wilt u de website nu bezoeken?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Importeer snel meerdere items uit andere wachtwoordbeheer-apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Laatste synchronisatie:</value>
@@ -597,16 +597,16 @@
     <value>Nooit</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Nieuw item gecreëerd.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Er zijn geen favorieten in uw kluis.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Er zijn geen items in uw kluis.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Er zijn geen items in uw kluis voor deze website. Klik om gegevens toe te voegen.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Deze login bevat geen gebruikersnaam of wachtwoord.</value>
@@ -677,10 +677,10 @@
     <value>Voer een PIN-code in van 4 tekens om de app mee te ontgrendelen.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Item-informatie</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Item geüpdatet.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Bezig met versturen...</value>
@@ -723,7 +723,7 @@
     <value>Verificatiecode</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Item Bekijken</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden-webkluis</value>
@@ -748,11 +748,11 @@
     <value>Vertalingen</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Items voor {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Er zijn geen items in uw kluis voor {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -762,7 +762,7 @@
     <value>Raak deze melding aan om een login automatisch in te vullen d.m.v. uw kluis.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Toegankelijkheidsinstellingen openen</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Raak op het Android-toegankelijkheidsinstellingen-scherm "bitwarden" aan onder de kop Diensten.</value>
@@ -795,10 +795,10 @@
     <value>Weet u zeker dat u deze login automatisch wilt invullen? Het is geen volledige overeenkomst voor "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Overeenkomende items</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Mogelijke overeenkomende items</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Zoeken</value>
@@ -995,7 +995,7 @@
     <value>Voor gevorderde gebruikers. U kunt de basis-URL van elke service afzonderlijk opgeven.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>Het omgeving URL's zijn opgeslagen.</value>
+    <value>De omgeving URL's zijn opgeslagen.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} is niet correct opgemaakt.</value>
@@ -1030,203 +1030,203 @@
     <value>Geen aangepaste velden. U kunt aangepaste velden volledig beheren vanuit de webservice kluis of browser-extensie.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Nummer Kopiëren</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Kopieer Beveiligingscode</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Nummer</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Beveiligingscode</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Wat voor type item wilt u toevoegen?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Kaart</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identiteit</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Veilige Notitie</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Adres 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Adres 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Adres 3</value>
   </data>
   <data name="April" xml:space="preserve">
     <value>April</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Augustus</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Merk</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Naam Kaarthouder</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Stad</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Bedrijf</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Land</value>
   </data>
   <data name="December" xml:space="preserve">
     <value>December</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Dr</value>
+    <value>Dr.</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Vervalmaand</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Vervaljaar</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Februari</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Voornaam</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Januari</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Juli</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Juni</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Achternaam</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Rijbewijsnummer</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Maart</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Mei</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Tweede voornaam</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Dhr.</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>mevr.</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>mevr.</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Oktober</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Paspoortnummer</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefoonnummer</value>
   </data>
   <data name="September" xml:space="preserve">
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Burgerservicenummer (BSN)</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Staat / Provincie</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titel</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>Postcode</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Adres</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Vervaldatum</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Schakel Website Icoontjes Uit</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Website Icons provides a recognizable icon next to each login item in your vault.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>Icoontjes-server URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Automatisch invullen met bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Kluis zit op slot</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Ga naar mijn kluis</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Verzamelingen</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Er zijn geen items in deze verzameling.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Er zijn geen items in deze map.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Automatisch invullen door Toegankelijkheidsservice</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>De bitwarden automatische invulservice gebruikt Android Autofill Framework om u te helpen bij het invullen van inloggegevens, creditcards en identiteitsgegevens in andere apps op uw apparaat.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Gebruik de bitwarden-toegankelijkheidsdienst om uw inloggevens automatisch in te laten vullen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Open instellingen voor automatisch invullen</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Gebruik Face ID om te verifiëren.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Gebruik Face ID om te ontgrendelen</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Verifieer Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Ontgrendelen met Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Verifiëren met Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
