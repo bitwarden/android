@@ -232,7 +232,7 @@ namespace Bit.App.Pages
 
                 var image = new CachedImage
                 {
-                    Source = "yubikey",
+                    Source = "yubikey.png",
                     VerticalOptions = LayoutOptions.Start,
                     HorizontalOptions = LayoutOptions.Center,
                     WidthRequest = 266,
