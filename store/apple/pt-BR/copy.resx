@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden - Gerenciador de Senhas Gratuito</value>
+    <value>bitwarden - Gerenciador de Senhas</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>O bitwarden é a maneira mais fácil e segura de armazenar todas as suas credenciais e senhas mantendo-as convenientemente sincronizadas entre todos os seus dispositivos.

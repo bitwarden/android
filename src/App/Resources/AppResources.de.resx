@@ -804,7 +804,7 @@
     <value>Durchsuchen</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill item for "{0}".</value>
+    <value>Sie suchen nach einem Auto-Fill Objekt für "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Ihren Tresor teilen</value>
@@ -1048,7 +1048,7 @@
     <value>Karte</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identität</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
     <value>Anmeldung</value>
@@ -1183,50 +1183,50 @@
     <value>Mit bitwarden automatisch ausfüllen</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Tresor ist gesperrt</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Zum Tresor gehen</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Sammlungen</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Es sind keine Objekte in dieser Sammlung.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Es sind keine Objekte in diesem Ordner.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Auto-Fill Barrierefreiheitsservice</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Der Bitwarden Auto-Fill Service benutzt das Android Autofill Framework um Logins, Kreditkarten und Identitätsinformationen in anderen Apps auf Ihrem Gerät zu befüllen.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Öffne Auto-Fill Einstellungen</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Verwende Face ID zum Verifizieren.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Verwende Face ID zum Entsperren</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Überprüfe Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Mit Windows Hello entsperren</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Mit Windows Hello überprüfen</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>

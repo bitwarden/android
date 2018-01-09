@@ -209,7 +209,7 @@
     <value>Ouvrir un ticket dans notre dépôt Github.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Utiliser votre empreinte pour vous identifier.</value>
+    <value>Utiliser votre empreinte pour vous authentifier.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Dossier</value>
@@ -363,13 +363,13 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Vérifiez l'empreinte</value>
+    <value>S'authentifier avec l'empreinte</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Vérifiez le mot de passe maître</value>
+    <value>S'authentifier avec le mot de passe maître</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>Vérifiez le PIN</value>
+    <value>S'authentifier avec un code PIN</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>Version</value>
@@ -1214,19 +1214,19 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Utiliser Face ID comme vérification.</value>
+    <value>Utiliser Face ID pour vous authentifier.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
     <value>Utiliser Face ID pour déverrouiller</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Vérifier Face ID</value>
+    <value>S'authentifier avec Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Déverouiller avec Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>S'authentifier avec Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
