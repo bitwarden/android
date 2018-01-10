@@ -183,6 +183,10 @@ namespace Bit.App.Utilities
             {
                 selectedType = CipherType.Identity;
             }
+            else if(type == AppResources.TypeSecureNote)
+            {
+                selectedType = CipherType.SecureNote;
+            }
             else
             {
                 return;
