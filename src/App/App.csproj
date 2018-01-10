@@ -25,6 +25,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="HockeySDK.Xamarin" Version="5.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="PCLCrypto" Version="2.0.147" />
     <PackageReference Include="Plugin.Fingerprint" Version="1.4.6-beta4" />
@@ -37,10 +38,6 @@
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.121934" />
     <PackageReference Include="XLabs.IoC" Version="2.0.5782" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.1.47" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(Configuration)|$(Platform)' != 'FDroid|AnyCPU'">
-    <PackageReference Include="HockeySDK.Xamarin" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
