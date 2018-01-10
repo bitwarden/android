@@ -33,4 +33,3 @@ $hockeyNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include=
 $hockeyNode.ParentNode.RemoveChild($hockeyNode);
 
 $xml.Save($appPath);
-

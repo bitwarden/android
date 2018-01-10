@@ -1,3 +1,5 @@
+init:
+  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 install:
   - appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 before_build:
@@ -10,13 +12,16 @@ after_build:
   - IF DEFINED keystore_password msbuild "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=%keystore_password%" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=%keystore_password%" "src\Android\Android.csproj"
   - ps: IF($env:keystore_dec_secret) { copy-item src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk .\com.x8bit.bitwarden-$($env:APPVEYOR_BUILD_NUMBER).apk }
   - ps: IF($env:keystore_dec_secret) { .\src\Android\fdroid-remove-libs.ps1 $($env:APPVEYOR_BUILD_FOLDER) }
-  - IF DEFINED keystore_password msbuild ".\bitwarden-mobile.sln" "/t:Clean"
+  - IF DEFINED keystore_password msbuild ".\src\Android\Android.csproj" "/t:Clean"
+  - IF DEFINED keystore_password msbuild ".\src\App\App.csproj" "/t:Clean"
   - IF DEFINED keystore_password msbuild ".\src\Android\Android.csproj" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" "/p:Configuration=FDroid"
   - IF DEFINED keystore_password msbuild "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=%keystore_password%" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=%keystore_password%" "src\Android\Android.csproj"
   - ps: IF($env:keystore_dec_secret) { copy-item src\Android\bin\FDroid\com.x8bit.bitwarden-Signed.apk .\com.x8bit.bitwarden-fdroid-$($env:APPVEYOR_BUILD_NUMBER).apk }
 on_success:
   - IF DEFINED play_dec_secret secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %play_dec_secret%
   - IF DEFINED play_dec_secret dotnet store\google\Publisher\bin\Debug\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 artifacts:
   - path: com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk
   - path: com.x8bit.bitwarden-fdroid-%APPVEYOR_BUILD_NUMBER%.apk
