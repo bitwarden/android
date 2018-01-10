@@ -8,8 +8,12 @@
     <Configurations>Debug;Release;FDroid</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FDroid|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)' == 'FDroid|netstandard2.0|AnyCPU'">
     <DefineConstants>TRACE;FDROID;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)' == 'FDroid|net471|AnyCPU'">
+    <DefineConstants>TRACE;FDROID;NET471</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
