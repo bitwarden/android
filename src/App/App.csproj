@@ -5,6 +5,11 @@
     <RootNamespace>Bit.App</RootNamespace>
     <AssemblyName>BitwardenApp</AssemblyName>
     <NeutralLanguage>en-US</NeutralLanguage>
+    <Configurations>Debug;Release;FDroid</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='FDroid|netstandard2.0|AnyCPU'">
+    <DefineConstants>TRACE;FDROID;NETSTANDARD2_0</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
