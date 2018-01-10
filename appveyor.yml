@@ -10,6 +10,7 @@ after_build:
   - IF DEFINED keystore_password msbuild "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=%keystore_password%" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=%keystore_password%" "src\Android\Android.csproj"
   - ps: IF($env:keystore_dec_secret) { copy-item src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk .\com.x8bit.bitwarden-$($env:APPVEYOR_BUILD_NUMBER).apk }
   - ps: IF($env:keystore_dec_secret) { .\src\Android\fdroid-remove-libs.ps1 $($env:APPVEYOR_BUILD_FOLDER) }
+  - IF DEFINED keystore_password msbuild "C:\projects\mobile\bitwarden-mobile.sln" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" "/p:Configuration=FDroid"
   - IF DEFINED keystore_password msbuild "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=%keystore_password%" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=%keystore_password%" "src\Android\Android.csproj"
   - ps: IF($env:keystore_dec_secret) { copy-item src\Android\bin\FDroid\com.x8bit.bitwarden-Signed.apk .\com.x8bit.bitwarden-fdroid-$($env:APPVEYOR_BUILD_NUMBER).apk }
 on_success:
