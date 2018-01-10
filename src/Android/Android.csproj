@@ -155,7 +155,7 @@
   <ItemGroup>
     <None Include="8bit.keystore.enc" />
     <GoogleServicesJson Include="google-services.json" />
-    <None Include="fdroid-remove-libs.ps1" />
+    <None Include="fdroid-build.ps1" />
     <None Include="google-services.json.enc" />
     <None Include="increment-version.ps1" />
     <None Include="Resources\AboutResources.txt" />
