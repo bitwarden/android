@@ -1,3 +1,4 @@
+#if !FDROID
 using System;
 using Android.App;
 using Android.Content;
@@ -40,3 +41,4 @@ namespace Bit.Android
         }
     }
 }
+#endif

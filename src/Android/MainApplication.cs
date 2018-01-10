@@ -128,7 +128,11 @@ namespace Bit.Android
             container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
             container.RegisterSingleton<ILockService, LockService>();
             container.RegisterSingleton<IAppInfoService, AppInfoService>();
+#if FDROID
+            container.RegisterSingleton<IGoogleAnalyticsService, NoopGoogleAnalyticsService>();
+#else
             container.RegisterSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();
+#endif
             container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
             container.RegisterSingleton<ILocalizeService, LocalizeService>();
             container.RegisterSingleton<ILogService, LogService>();
@@ -159,8 +163,13 @@ namespace Bit.Android
             container.RegisterSingleton(CrossFingerprint.Current);
 
             // Push
+#if FDROID
+            container.RegisterSingleton<IPushNotificationListener, NoopPushNotificationListener>();
+            container.RegisterSingleton<IPushNotificationService, NoopPushNotificationService>();
+#else
             container.RegisterSingleton<IPushNotificationListener, PushNotificationListener>();
             container.RegisterSingleton<IPushNotificationService, AndroidPushNotificationService>();
+#endif
 
             container.Verify();
             Resolver.SetResolver(new SimpleInjectorResolver(container));

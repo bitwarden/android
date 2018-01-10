@@ -876,15 +876,17 @@
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat">
       <Version>25.4.0.2</Version>
     </PackageReference>
+    <PackageReference Include="XLabs.IoC.SimpleInjector" Version="2.0.5782" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.1.3" />
+    <PackageReference Include="Plugin.CurrentActivity" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)' != 'FDroid|AnyCPU'">
     <PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>42.1021.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Analytics">
       <Version>42.1021.1</Version>
     </PackageReference>
-    <PackageReference Include="XLabs.IoC.SimpleInjector" Version="2.0.5782" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.8.1.3" />
-    <PackageReference Include="Plugin.CurrentActivity" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\bottom_nav_bg.xml" />

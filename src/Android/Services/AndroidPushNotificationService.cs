@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !FDROID
+using System;
 using Bit.App;
 using Bit.App.Abstractions;
 using Plugin.Settings.Abstractions;
@@ -40,3 +41,4 @@ namespace Bit.Android.Services
         }
     }
 }
+#endif

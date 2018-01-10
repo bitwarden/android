@@ -1,3 +1,4 @@
+#if !FDROID
 using HockeyApp.Android;
 using Bit.App.Abstractions;
 using Newtonsoft.Json;
@@ -52,3 +53,4 @@ namespace Bit.Android
         }
     }
 }
+#endif

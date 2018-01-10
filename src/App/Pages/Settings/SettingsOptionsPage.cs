@@ -112,7 +112,9 @@ namespace Bit.App.Pages
                 {
                     websiteIconsTable, WebsiteIconsLabel,
                     totpTable, CopyTotpLabel,
+#if !FDROID
                     analyticsTable, AnalyticsLabel
+#endif
                 },
                 Spacing = 0
             };

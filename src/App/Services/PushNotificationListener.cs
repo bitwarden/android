@@ -1,3 +1,4 @@
+#if !FDROID
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -195,3 +196,4 @@ namespace Bit.App.Services
         }
     }
 }
+#endif

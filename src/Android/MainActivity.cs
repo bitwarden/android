@@ -61,8 +61,10 @@ namespace Bit.Android
             var appIdService = Resolver.Resolve<IAppIdService>();
             var authService = Resolver.Resolve<IAuthService>();
 
+#if !FDROID
             HockeyApp.Android.CrashManager.Register(this, HockeyAppId,
                 new HockeyAppCrashManagerListener(appIdService, authService));
+#endif
 
             Forms.Init(this, bundle);
 
