@@ -34,25 +34,3 @@ $hockeyNode.ParentNode.RemoveChild($hockeyNode);
 
 $xml.Save($appPath);
 
-# Clean project directories
-
-$androidBinDir = $($rootPath + "\src\Android\bin");
-$androidObjDir = $($rootPath + "\src\Android\obj");
-$appBinDir = $($rootPath + "\src\App\bin");
-$appObjDir = $($rootPath + "\src\App\obj");
-
-if((Test-Path -Path $androidBinDir)) {
-    Remove-Item -Recurse -Force $androidBinDir;
-}
-
-if((Test-Path -Path $androidObjDir)) {
-    Remove-Item -Recurse -Force $androidObjDir;
-}
-
-if((Test-Path -Path $appBinDir)) {
-    Remove-Item -Recurse -Force $appBinDir;
-}
-
-if((Test-Path -Path $appObjDir)) {
-    Remove-Item -Recurse -Force $appObjDir;
-}
