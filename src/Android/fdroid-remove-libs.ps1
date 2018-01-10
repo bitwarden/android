@@ -1,9 +1,17 @@
 ﻿$rootPath = $args[0];
 
+$androidPath = $($rootPath + "\src\Android\Android.csproj");
+$appPath = $($rootPath + "\src\App\App.csproj");
+
+# Backup files
+
+Copy-Item $androidPath $($androidPath + ".original");
+Copy-Item $appPath $($appPath + ".original");
+
 # Android.csproj
 
 $xml=New-Object XML;
-$xml.Load($rootPath + "\src\Android\Android.csproj");
+$xml.Load($androidPath);
 
 $ns=New-Object System.Xml.XmlNamespaceManager($xml.NameTable);
 $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
@@ -14,14 +22,37 @@ $firebaseNode.ParentNode.RemoveChild($firebaseNode);
 $playServiceNode=$xml.SelectSingleNode("/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.Analytics']", $ns);
 $playServiceNode.ParentNode.RemoveChild($playServiceNode);
 
-$xml.Save($rootPath + "\src\Android\Android.csproj");
+$xml.Save($androidPath);
 
 # App.csproj
 
 $xml=New-Object XML;
-$xml.Load($rootPath + "\src\App\App.csproj");
+$xml.Load($appPath);
 
 $hockeyNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='HockeySDK.Xamarin']");
 $hockeyNode.ParentNode.RemoveChild($hockeyNode);
 
-$xml.Save($rootPath + "\src\App\App.csproj");
+$xml.Save($appPath);
+
+# Clean project directories
+
+$androidBinDir = $($rootPath + "\src\Android\bin");
+$androidObjDir = $($rootPath + "\src\Android\obj");
+$appBinDir = $($rootPath + "\src\App\bin");
+$appObjDir = $($rootPath + "\src\App\obj");
+
+if((Test-Path -Path $androidBinDir)) {
+    Remove-Item -Recurse -Force $androidBinDir;
+}
+
+if((Test-Path -Path $androidObjDir)) {
+    Remove-Item -Recurse -Force $androidObjDir;
+}
+
+if((Test-Path -Path $appBinDir)) {
+    Remove-Item -Recurse -Force $appBinDir;
+}
+
+if((Test-Path -Path $appObjDir)) {
+    Remove-Item -Recurse -Force $appObjDir;
+}
