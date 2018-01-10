@@ -71,6 +71,7 @@
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <AndroidTlsProvider>btls</AndroidTlsProvider>
+    <AndroidApkSigningAlgorithm>SHA1withRSA</AndroidApkSigningAlgorithm>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FDroid|AnyCPU'">
     <OutputPath>bin\FDroid\</OutputPath>
@@ -88,6 +89,7 @@
     <AndroidTlsProvider>btls</AndroidTlsProvider>
     <AndroidSupportedAbis>armeabi;armeabi-v7a;x86;x86_64;arm64-v8a</AndroidSupportedAbis>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
+    <AndroidApkSigningAlgorithm>SHA1withRSA</AndroidApkSigningAlgorithm>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
