@@ -8,7 +8,7 @@ after_build:
   - ps: IF($env:keystore_dec_secret) { .\src\Android\ci-build-apks.ps1 }
 on_success:
   - IF DEFINED play_dec_secret secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %play_dec_secret%
-  - IF DEFINED play_dec_secret dotnet store\google\Publisher\bin\Debug\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
+  - IF DEFINED play_dec_secret dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
 artifacts:
   - path: com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk
   - path: com.x8bit.bitwarden-fdroid-%APPVEYOR_BUILD_NUMBER%.apk
@@ -16,4 +16,5 @@ branches:
   except:
     - l10n_master
 skip_tags: true
+configuration: Release
 image: Visual Studio 2017
