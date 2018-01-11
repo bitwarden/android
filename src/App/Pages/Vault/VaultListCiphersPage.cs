@@ -343,7 +343,7 @@ namespace Bit.App.Pages
                     {
                         // Sort numbers and letters before special characters
                         return !string.IsNullOrWhiteSpace(s.Name) && s.Name.Length > 0 &&
-                           Char.IsDigit(s.Name[0]) ? 0 : Char.IsLetter(s.Name[0]) ? 1 : 2;
+                           Char.IsDigit(s.Name[0]) ? 0 : (Char.IsLetter(s.Name[0]) ? 1 : 2);
                     })
                     .ThenBy(s => s.Name)
                     .ThenBy(s => s.Subtitle)
