@@ -1,6 +1,5 @@
 ﻿$rootPath = $env:APPVEYOR_BUILD_FOLDER;
 $androidPath = $($rootPath + "\src\Android\Android.csproj");
-$appPath = $($rootPath + "\src\App\App.csproj");
 
 echo "##### Increment Version"
 
@@ -32,14 +31,8 @@ $signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-" + $env:APPVEYOR_BUILD
 
 Copy-Item $signedApkPath $signedApkDestPath
 
-echo "##### Clean Android and App"
-
-msbuild "$($androidPath)" "/t:Clean" "/p:Configuration=FDroid"
-msbuild "$($appPath)" "/t:Clean" "/p:Configuration=FDroid"
-
 echo "##### Build and Sign FDroid Configuration"
 
-msbuild "$($androidPath)" "/logger:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" "/p:Configuration=FDroid"
 msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:keystore_password)" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=$($env:keystore_password)" "/v:quiet"
 
 echo "##### Copy FDroid apk to project root"
