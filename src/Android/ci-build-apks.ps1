@@ -18,13 +18,13 @@ $xml.Save($androidManifest);
 echo "##### Decrypt Keystore"
 
 $encKeystorePath = $($rootPath + "\src\Android\8bit.keystore.enc");
-$secureFilePath = $($rootPath + "\secure-file\tools\secure-file");
+$secureFilePath = $($rootPath + "\secure-file\tools\secure-file.exe");
 
-Invoke-Expression "& `"$secureFilePath`" -decrypt $($encKeystorePath) -secret $($env:keystore_password)"
+Invoke-Expression "& `"$secureFilePath`" -decrypt $($encKeystorePath) -secret $($env:keystore_dec_secret)"
 
 echo "##### Sign Release Configuration"
 
-msbuild "Android.csproj" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:keystore_password)" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=$($env:keystore_password)"
+msbuild "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:keystore_password)" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=$($env:keystore_password)" "Android.csproj"
 
 echo "##### Copy Release apk to project root"
 
@@ -78,7 +78,7 @@ Invoke-Expression "& `"$nugetPath`" restore"
 echo "##### Build and Sign FDroid Configuration"
 
 msbuild "Android.csproj" "/logger:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" "/p:Configuration=FDroid"
-msbuild "Android.csproj" "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:keystore_password)" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=$($env:keystore_password)"
+msbuild "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=$($env:keystore_password)" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=$($env:keystore_password)" "Android.csproj"
 
 echo "##### Copy FDroid apk to project root"
 
