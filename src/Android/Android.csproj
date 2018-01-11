@@ -872,6 +872,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Xamarin.Firebase.Messaging">
+      <Version>42.1021.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.GooglePlayServices.Analytics">
+      <Version>42.1021.1</Version>
+    </PackageReference>
     <PackageReference Include="SimpleInjector">
       <Version>4.0.12</Version>
     </PackageReference>
@@ -882,18 +888,6 @@
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.1.3" />
     <PackageReference Include="Plugin.CurrentActivity" Version="1.0.1" />
   </ItemGroup>
-  <Choose>
-    <When Condition="'$(Configuration)' != 'FDroid'">
-      <ItemGroup>
-        <PackageReference Include="Xamarin.Firebase.Messaging">
-          <Version>42.1021.1</Version>
-        </PackageReference>
-        <PackageReference Include="Xamarin.GooglePlayServices.Analytics">
-          <Version>42.1021.1</Version>
-        </PackageReference>
-      </ItemGroup>
-    </When>
-  </Choose>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\bottom_nav_bg.xml" />
   </ItemGroup>
