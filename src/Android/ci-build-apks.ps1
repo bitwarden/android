@@ -18,7 +18,9 @@ $xml.Save($androidManifest);
 echo "##### Decrypt Keystore"
 
 $encKeystorePath = $($rootPath + "\src\Android\8bit.keystore.enc");
-..\..\secure-file\tools\secure-file -decrypt $($encKeystorePath) -secret $($env:keystore_password)
+$secureFilePath = $($rootPath + "\secure-file\tools\secure-file");
+
+Invoke-Expression "& `"$secureFilePath`" -decrypt $($encKeystorePath) -secret $($env:keystore_password)"
 
 echo "##### Sign Release Configuration"
 
@@ -69,7 +71,9 @@ $xml.Save($appPath);
 
 echo "##### Restore NuGet"
 
-..\..\nuget.exe restore
+$nugetPath = $($rootPath + "\nuget.exe");
+
+Invoke-Expression "& `"$nugetPath`" restore"
 
 echo "##### Build and Sign FDroid Configuration"
 
