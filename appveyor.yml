@@ -5,11 +5,7 @@ before_build:
   - IF DEFINED keystore_dec_secret nuget install secure-file -ExcludeVersion
   - IF DEFINED google_services_dec_secret secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc -secret %google_services_dec_secret%
 after_build:
-  - ps: IF($env:keystore_dec_secret) { .\src\Android\increment-version.ps1 $($env:APPVEYOR_BUILD_FOLDER) $($env:APPVEYOR_BUILD_NUMBER) }
-  - IF DEFINED keystore_dec_secret secure-file\tools\secure-file -decrypt src\Android\8bit.keystore.enc -secret %keystore_dec_secret%
-  - IF DEFINED keystore_password msbuild "/t:SignAndroidPackage" "/p:Configuration=Release" "/p:AndroidKeyStore=true" "/p:AndroidSigningKeyAlias=bitwarden" "/p:AndroidSigningKeyPass=%keystore_password%" "/p:AndroidSigningKeyStore=8bit.keystore" "/p:AndroidSigningStorePass=%keystore_password%" "src\Android\Android.csproj"
-  - ps: IF($env:keystore_dec_secret) { copy-item src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk .\com.x8bit.bitwarden-$($env:APPVEYOR_BUILD_NUMBER).apk }
-  - ps: IF($env:keystore_dec_secret) { .\src\Android\fdroid-build.ps1 }
+  - ps: IF($env:keystore_dec_secret) { .\src\Android\ci-build-apks.ps1 }
 on_success:
   - IF DEFINED play_dec_secret secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %play_dec_secret%
   - IF DEFINED play_dec_secret dotnet store\google\Publisher\bin\Debug\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha

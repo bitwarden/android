@@ -155,9 +155,8 @@
   <ItemGroup>
     <None Include="8bit.keystore.enc" />
     <GoogleServicesJson Include="google-services.json" />
-    <None Include="fdroid-build.ps1" />
+    <None Include="ci-build-apks.ps1" />
     <None Include="google-services.json.enc" />
-    <None Include="increment-version.ps1" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
     <AndroidResource Include="Resources\drawable\slider_thumb.xml">
