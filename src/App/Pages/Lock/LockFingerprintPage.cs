@@ -38,11 +38,13 @@ namespace Bit.App.Pages
                         Android: "fingerprint.png",
                         Windows: "smile.png");
             var biometricText = Helpers.OnPlatform(
-                        iOS: _deviceInfoService.HasFaceIdSupport ? AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock,
+                        iOS: _deviceInfoService.HasFaceIdSupport ? 
+                            AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock,
                         Android: AppResources.UseFingerprintToUnlock,
                         Windows: AppResources.UseWindowsHelloToUnlock);
             var biometricTitle = Helpers.OnPlatform(
-                        iOS: _deviceInfoService.HasFaceIdSupport ? AppResources.VerifyFaceID : AppResources.VerifyFingerprint,
+                        iOS: _deviceInfoService.HasFaceIdSupport ?
+                            AppResources.VerifyFaceID : AppResources.VerifyFingerprint,
                         Android: AppResources.VerifyFingerprint,
                         Windows: AppResources.VerifyWindowsHello);
 
@@ -103,8 +105,10 @@ namespace Bit.App.Pages
             }
             _lastAction = DateTime.UtcNow;
 
-            var fingerprintRequest = new AuthenticationRequestConfiguration(
-                _deviceInfoService.HasFaceIdSupport ? AppResources.FaceIDDirection : AppResources.FingerprintDirection)
+            var direction = _deviceInfoService.HasFaceIdSupport ? 
+                AppResources.FaceIDDirection : AppResources.FingerprintDirection;
+
+            var fingerprintRequest = new AuthenticationRequestConfiguration(direction)
             {
                 AllowAlternativeAuthentication = true,
                 CancelTitle = AppResources.Cancel,
