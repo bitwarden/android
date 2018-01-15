@@ -6,15 +6,15 @@
 
 <a href="https://play.google.com/store/apps/details?id=com.x8bit.bitwarden" target="_blank"><img alt="Get it on Google Play" src="https://imgur.com/YQzmZi9.png" width="153" height="46"></a> <a href="https://itunes.apple.com/us/app/bitwarden-free-password-manager/id1137397744?mt=8" target="_blank"><img src="https://imgur.com/GdGqPMY.png" width="135" height="40"></a>
 
-The bitwarden mobile application is written in C# with Xamarin Android, Xamarin iOS, and Xamarin Forms.
+The bitwarden mobile application is written in C# with Xamarin Android, Xamarin iOS, UWP, and Xamarin Forms.
 
-<img src="https://i.imgur.com/Ty8wkSO.png" alt="" width="300" height="533" /> <img src="https://i.imgur.com/BYb4gVc.png" alt="" width="300" height="533" />
+<img src="https://i.imgur.com/R7H2tkQ.png" alt="" width="300" height="533" /> <img src="https://i.imgur.com/3BO1Wcg.png" alt="" width="300" height="533" />
 
 # Build/Run
 
 **Requirements**
 
-- [Visual Studio w/ Xamarin -or- Xamarin Studio](https://store.xamarin.com/)
+- [Visual Studio](https://store.xamarin.com/)
 
 By default the app is targeting the production API. If you are running the [Core](https://github.com/bitwarden/core) API locally,
 you'll need to switch the app to target your local instance. Open `src/App/Utilities/ApiHttpClient.cs` and `src/App/Utilities/IdentityHttpClient.cs` and set the `BaseAddress` to your local
