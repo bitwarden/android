@@ -82,6 +82,11 @@ namespace Bit.App.Utilities
                 throw new ArgumentNullException(nameof(iv));
             }
 
+            if(key.MacKey != null && mac == null)
+            {
+                throw new ArgumentNullException(nameof(mac));
+            }
+
             if(key.EncryptionType != type)
             {
                 throw new InvalidOperationException(nameof(type));
