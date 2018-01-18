@@ -93,7 +93,8 @@ namespace Bit.App.Pages
                 On = false
             };
 
-            var continueToolbarItem = new ToolbarItem(AppResources.Continue, Helpers.ToolbarImage("ion_chevron_right.png"), async () =>
+            var continueToolbarItem = new ToolbarItem(AppResources.Continue,
+                Helpers.ToolbarImage("ion_chevron_right.png"), async () =>
             {
                 var token = TokenCell?.Entry.Text.Trim().Replace(" ", "");
                 await LogInAsync(token);
@@ -240,8 +241,7 @@ namespace Bit.App.Pages
                     Margin = new Thickness(0, 0, 0, 25)
                 };
 
-                TokenCell = new FormEntryCell("", imageSource: "lock");
-
+                TokenCell = new FormEntryCell("", isPassword: true, imageSource: "lock", useLabelAsPlaceholder: true);
                 TokenCell.Entry.ReturnType = ReturnType.Go;
 
                 var table = new TwoFactorTable(
