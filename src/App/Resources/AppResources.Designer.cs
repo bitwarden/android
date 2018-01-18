@@ -3148,7 +3148,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hold your YubiKey NEO against the back of the device to continue..
+        ///   Looks up a localized string similar to To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device&apos;s USB port, then touch its button..
         /// </summary>
         public static string YubiKeyInstruction {
             get {
@@ -3157,7 +3157,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to YubiKey NEO Security Key.
+        ///   Looks up a localized string similar to YubiKey Security Key.
         /// </summary>
         public static string YubiKeyTitle {
             get {

@@ -93,6 +93,12 @@ namespace Bit.App.Pages
                 On = false
             };
 
+            var continueToolbarItem = new ToolbarItem(AppResources.Continue, Helpers.ToolbarImage("ion_chevron_right.png"), async () =>
+            {
+                var token = TokenCell?.Entry.Text.Trim().Replace(" ", "");
+                await LogInAsync(token);
+            }, ToolbarItemOrder.Default, 0);
+
             if(!_providerType.HasValue)
             {
                 instruction.Text = AppResources.NoTwoStepAvailable;
@@ -111,12 +117,6 @@ namespace Bit.App.Pages
             else if(_providerType.Value == TwoFactorProviderType.Authenticator ||
                 _providerType.Value == TwoFactorProviderType.Email)
             {
-                var continueToolbarItem = new ToolbarItem(AppResources.Continue, Helpers.ToolbarImage("login.png"), async () =>
-                {
-                    var token = TokenCell?.Entry.Text.Trim().Replace(" ", "");
-                    await LogInAsync(token);
-                }, ToolbarItemOrder.Default, 0);
-
                 var padding = Helpers.OnPlatform(
                     iOS: new Thickness(15, 20),
                     Android: new Thickness(15, 8),
@@ -232,7 +232,7 @@ namespace Bit.App.Pages
 
                 var image = new CachedImage
                 {
-                    Source = "yubikey",
+                    Source = "yubikey.png",
                     VerticalOptions = LayoutOptions.Start,
                     HorizontalOptions = LayoutOptions.Center,
                     WidthRequest = 266,
@@ -240,9 +240,14 @@ namespace Bit.App.Pages
                     Margin = new Thickness(0, 0, 0, 25)
                 };
 
+                TokenCell = new FormEntryCell("", imageSource: "lock");
+
+                TokenCell.Entry.ReturnType = ReturnType.Go;
+
                 var table = new TwoFactorTable(
                     new TableSection(Helpers.GetEmptyTableSectionTitle())
                     {
+                        TokenCell,
                         RememberCell
                     });
 
@@ -254,6 +259,7 @@ namespace Bit.App.Pages
 
                 table.WrappingStackLayout = () => layout;
                 scrollView.Content = layout;
+                ToolbarItems.Add(continueToolbarItem);
 
                 Title = AppResources.YubiKeyTitle;
                 Content = scrollView;
@@ -269,6 +275,11 @@ namespace Bit.App.Pages
             if(TokenCell == null && Device.RuntimePlatform == Device.Android)
             {
                 _deviceActionService.DismissKeyboard();
+            }
+
+            if(TokenCell != null)
+            {
+                TokenCell.Entry.FocusWithDelay();
             }
         }
 
@@ -312,7 +323,7 @@ namespace Bit.App.Pages
             {
                 var nfcKey = _providers[TwoFactorProviderType.YubiKey].ContainsKey("Nfc") &&
                     (bool)_providers[TwoFactorProviderType.YubiKey]["Nfc"];
-                if(_deviceInfoService.NfcEnabled && nfcKey)
+                if(_deviceInfoService.NfcEnabled && nfcKey || Device.RuntimePlatform == Device.UWP)
                 {
                     options.Add(AppResources.YubiKeyTitle);
                 }
@@ -453,7 +464,7 @@ namespace Bit.App.Pages
                             break;
                         case TwoFactorProviderType.YubiKey:
                             var nfcKey = p.Value.ContainsKey("Nfc") && (bool)p.Value["Nfc"];
-                            if(!_deviceInfoService.NfcEnabled || !nfcKey)
+                            if((!_deviceInfoService.NfcEnabled || !nfcKey) && Device.RuntimePlatform != Device.UWP)
                             {
                                 continue;
                             }
