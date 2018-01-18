@@ -302,6 +302,9 @@ namespace Bit.App.Pages
                 TokenCell.Dispose();
                 TokenCell.Entry.Completed -= Entry_Completed;
             }
+
+            MessagingCenter.Unsubscribe<Application, string>(Application.Current, "GotYubiKeyOTP");
+            MessagingCenter.Unsubscribe<Application>(Application.Current, "ResumeYubiKey");
         }
 
         private async void AnotherMethodAsync()
