@@ -386,7 +386,7 @@ namespace Bit.App.Services
             if(EncKey?.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
             {
                 var computedMacBytes = Crypto.ComputeMac(encyptedValue.CipherTextBytes, EncKey.MacKey);
-                if(!Crypto.MacsEqual(EncKey.MacKey, computedMacBytes, encyptedValue.MacBytes))
+                if(!Crypto.MacsEqual(computedMacBytes, encyptedValue.MacBytes))
                 {
                     throw new InvalidOperationException("MAC failed.");
                 }

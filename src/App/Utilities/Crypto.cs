@@ -95,7 +95,7 @@ namespace Bit.App.Utilities
             if(key.MacKey != null && mac != null)
             {
                 var computedMacBytes = ComputeMac(ct, iv, key.MacKey);
-                if(!MacsEqual(key.MacKey, computedMacBytes, mac))
+                if(!MacsEqual(computedMacBytes, mac))
                 {
                     throw new InvalidOperationException("MAC failed.");
                 }
@@ -148,10 +148,11 @@ namespace Bit.App.Utilities
 
         // Safely compare two MACs in a way that protects against timing attacks (Double HMAC Verification).
         // ref: https://www.nccgroup.trust/us/about-us/newsroom-and-events/blog/2011/february/double-hmac-verification/
-        public static bool MacsEqual(byte[] macKey, byte[] mac1, byte[] mac2)
+        // ref: https://paragonie.com/blog/2015/11/preventing-timing-attacks-on-string-comparison-with-double-hmac-strategy
+        public static bool MacsEqual(byte[] mac1, byte[] mac2)
         {
             var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
-            var hasher = algorithm.CreateHash(macKey);
+            var hasher = algorithm.CreateHash(RandomBytes(32));
 
             hasher.Append(mac1);
             mac1 = hasher.GetValueAndReset();
