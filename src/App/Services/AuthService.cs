@@ -24,6 +24,7 @@ namespace Bit.App.Services
         private readonly ISecureStorageService _secureStorage;
         private readonly ITokenService _tokenService;
         private readonly ISettings _settings;
+        private readonly IAppSettingsService _appSettingsService;
         private readonly ICryptoService _cryptoService;
         private readonly IConnectApiRepository _connectApiRepository;
         private readonly IAccountsApiRepository _accountsApiRepository;
@@ -41,6 +42,7 @@ namespace Bit.App.Services
             ISecureStorageService secureStorage,
             ITokenService tokenService,
             ISettings settings,
+            IAppSettingsService appSettingsService,
             ICryptoService cryptoService,
             IConnectApiRepository connectApiRepository,
             IAccountsApiRepository accountsApiRepository,
@@ -52,6 +54,7 @@ namespace Bit.App.Services
             _secureStorage = secureStorage;
             _tokenService = tokenService;
             _settings = settings;
+            _appSettingsService = appSettingsService;
             _cryptoService = cryptoService;
             _connectApiRepository = connectApiRepository;
             _accountsApiRepository = accountsApiRepository;
@@ -269,10 +272,10 @@ namespace Bit.App.Services
             return result;
         }
 
-        public async Task<Models.LoginResult> TokenPostTwoFactorAsync(TwoFactorProviderType type, string token, bool remember,
+        public async Task<LoginResult> TokenPostTwoFactorAsync(TwoFactorProviderType type, string token, bool remember,
             string email, string masterPasswordHash, SymmetricCryptoKey key)
         {
-            var result = new Models.LoginResult();
+            var result = new LoginResult();
 
             var request = new TokenRequest
             {
@@ -315,6 +318,7 @@ namespace Bit.App.Services
             UserId = _tokenService.TokenUserId;
             Email = _tokenService.TokenEmail;
             _settings.AddOrUpdateValue(Constants.LastLoginEmail, Email);
+            _appSettingsService.FailedPinAttempts = 0;
 
             if(response.PrivateKey != null)
             {

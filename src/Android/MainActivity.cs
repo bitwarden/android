@@ -139,7 +139,14 @@ namespace Bit.Android
 
             if(Utilities.NfcEnabled())
             {
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "ResumeYubiKey");
+                try
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "ResumeYubiKey");
+                }
+                catch(Exception e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e);
+                }
             }
         }
 

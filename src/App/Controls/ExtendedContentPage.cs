@@ -1,4 +1,5 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Pages;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -10,23 +11,33 @@ namespace Bit.App.Controls
         private IGoogleAnalyticsService _googleAnalyticsService;
         private ILockService _lockService;
         private IDeviceActionService _deviceActionService;
+        private IAuthService _authService;
         private bool _syncIndicator;
         private bool _updateActivity;
+        private bool _requireAuth;
 
-        public ExtendedContentPage(bool syncIndicator = false, bool updateActivity = true)
+        public ExtendedContentPage(bool syncIndicator = false, bool updateActivity = true, bool requireAuth = true)
         {
             _syncIndicator = syncIndicator;
             _updateActivity = updateActivity;
+            _requireAuth = requireAuth;
             _syncService = Resolver.Resolve<ISyncService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _lockService = Resolver.Resolve<ILockService>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            _authService = Resolver.Resolve<IAuthService>();
 
             BackgroundColor = Color.FromHex("efeff4");
         }
 
         protected override void OnAppearing()
         {
+            if(_requireAuth && !_authService.IsAuthenticated)
+            {
+                Device.BeginInvokeOnMainThread(
+                    () => Application.Current.MainPage = new ExtendedNavigationPage(new HomePage()));
+            }
+
             if(_syncIndicator)
             {
                 MessagingCenter.Subscribe<Application, bool>(Application.Current, "SyncCompleted",

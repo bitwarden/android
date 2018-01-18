@@ -16,7 +16,7 @@ namespace Bit.App.Pages
         private IGoogleAnalyticsService _googleAnalyticsService;
 
         public EnvironmentPage()
-            : base(updateActivity: false)
+            : base(updateActivity: false, requireAuth: false)
         {
             _appSettings = Resolver.Resolve<IAppSettingsService>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();

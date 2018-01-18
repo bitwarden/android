@@ -124,12 +124,19 @@ namespace Bit.App.Pages
             if(Model.PIN == _authService.PIN)
             {
                 _appSettingsService.Locked = false;
+                _appSettingsService.FailedPinAttempts = 0;
                 PinControl.Entry.Unfocus();
                 await Navigation.PopModalAsync();
             }
             else
             {
-                // TODO: keep track of invalid attempts and logout?
+                _appSettingsService.FailedPinAttempts++;
+                if(_appSettingsService.FailedPinAttempts >= 5)
+                {
+                    PinControl.Entry.Unfocus();
+                    AuthService.LogOut();
+                    return;
+                }
 
                 await DisplayAlert(null, AppResources.InvalidPIN, AppResources.Ok);
                 Model.PIN = string.Empty;

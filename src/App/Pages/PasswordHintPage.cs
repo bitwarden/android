@@ -17,7 +17,7 @@ namespace Bit.App.Pages
         private IDeviceActionService _deviceActionService;
 
         public PasswordHintPage()
-            : base(updateActivity: false)
+            : base(updateActivity: false, requireAuth: false)
         {
             _accountApiRepository = Resolver.Resolve<IAccountsApiRepository>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();

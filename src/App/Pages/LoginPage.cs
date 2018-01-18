@@ -21,7 +21,7 @@ namespace Bit.App.Pages
         private readonly string _email;
 
         public LoginPage(string email = null)
-            : base(updateActivity: false)
+            : base(updateActivity: false, requireAuth: false)
         {
             _email = email;
             _authService = Resolver.Resolve<IAuthService>();

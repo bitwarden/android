@@ -18,7 +18,7 @@ namespace Bit.App.Pages
         private DateTime? _lastAction;
 
         public HomePage()
-            : base(updateActivity: false)
+            : base(updateActivity: false, requireAuth: false)
         {
             _authService = Resolver.Resolve<IAuthService>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();

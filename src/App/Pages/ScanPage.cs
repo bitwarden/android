@@ -14,7 +14,7 @@ namespace Bit.App.Pages
         private bool _pageDisappeared = true;
 
         public ScanPage(Action<string> callback)
-            : base(updateActivity: false)
+            : base(updateActivity: false, requireAuth: false)
         {
             _zxing = new ZXingScannerView
             {

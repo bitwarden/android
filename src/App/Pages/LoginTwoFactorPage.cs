@@ -33,7 +33,7 @@ namespace Bit.App.Pages
         private readonly FullLoginResult _result;
 
         public LoginTwoFactorPage(string email, FullLoginResult result, TwoFactorProviderType? type = null)
-            : base(updateActivity: false)
+            : base(updateActivity: false, requireAuth: false)
         {
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 

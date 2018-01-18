@@ -26,6 +26,18 @@ namespace Bit.App.Services
             }
         }
 
+        public int FailedPinAttempts
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.FailedPinAttempts, 0);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.FailedPinAttempts, value);
+            }
+        }
+
         public DateTime LastActivity
         {
             get
