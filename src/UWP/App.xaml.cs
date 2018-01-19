@@ -49,7 +49,8 @@ namespace Bit.UWP
                 var assembliesToInclude = new List<Assembly>()
                 {
                     typeof(CachedImage).GetTypeInfo().Assembly,
-                    typeof(CachedImageRenderer).GetTypeInfo().Assembly
+                    typeof(CachedImageRenderer).GetTypeInfo().Assembly,
+                    typeof(Controls.ExtendedTableViewRenderer).GetTypeInfo().Assembly
                 };
                 Xamarin.Forms.Forms.Init(e, assembliesToInclude);
 
