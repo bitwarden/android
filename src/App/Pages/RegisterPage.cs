@@ -187,7 +187,7 @@ namespace Bit.App.Pages
 
             if(ConfirmPasswordCell.Entry.Text != PasswordCell.Entry.Text)
             {
-                await DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.MasterPasswordLengthValMessage,
+                await DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.MasterPasswordConfirmationValMessage,
                     AppResources.Ok);
                 return;
             }
