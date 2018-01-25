@@ -42,7 +42,7 @@ namespace Bit.Android
             new Browser("com.sec.android.app.sbrowser", "location_bar_edit_text"),
             new Browser("com.sec.android.app.sbrowser.beta", "location_bar_edit_text"),
             new Browser("com.yandex.browser", "bro_omnibar_address_title_text",
-                (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regualr Space, 1 = No-break space (00A0)
+                (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
             new Browser("org.mozilla.firefox", "url_bar_title"),
             new Browser("org.mozilla.firefox_beta", "url_bar_title"),
             new Browser("org.mozilla.focus", "display_url"),
