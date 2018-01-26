@@ -23,7 +23,7 @@ namespace Bit.App.Models.Page
 
                 if(string.IsNullOrWhiteSpace(Name) || Name.Length == 0)
                 {
-                    NameGroup = AppResources.Other;
+                    NameGroup = "-";
                 }
                 else if(Char.IsLetter(Name[0]))
                 {
@@ -35,7 +35,7 @@ namespace Bit.App.Models.Page
                 }
                 else
                 {
-                    NameGroup = AppResources.Other;
+                    NameGroup = "-";
                 }
 
                 switch(cipher.Type)

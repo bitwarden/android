@@ -341,9 +341,12 @@ namespace Bit.App.Pages
                     .Select(s => new Cipher(s, _appSettingsService))
                     .OrderBy(s =>
                     {
-                        // Sort numbers and letters before special characters
-                        return !string.IsNullOrWhiteSpace(s.Name) && s.Name.Length > 0 &&
-                           Char.IsDigit(s.Name[0]) ? 0 : (Char.IsLetter(s.Name[0]) ? 1 : 2);
+                        if(string.IsNullOrWhiteSpace(s.Name))
+                        {
+                            return 2;
+                        }
+
+                        return s.Name.Length > 0 && Char.IsDigit(s.Name[0]) ? 0 : (Char.IsLetter(s.Name[0]) ? 1 : 2);
                     })
                     .ThenBy(s => s.Name)
                     .ThenBy(s => s.Subtitle)
