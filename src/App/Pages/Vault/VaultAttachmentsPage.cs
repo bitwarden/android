@@ -49,6 +49,7 @@ namespace Bit.App.Pages
         public Label FileLabel { get; set; }
         public ExtendedTableView NewTable { get; set; }
         public Label NoDataLabel { get; set; }
+        public ToolbarItem SaveToolbarItem { get; set; }
 
         private void Init()
         {
@@ -110,11 +111,6 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
-            if(_tokenService.TokenPremium)
-            {
-                ListView.Footer = NewTable;
-            }
-
             NoDataLabel = new Label
             {
                 Text = AppResources.NoAttachments,
@@ -130,7 +126,7 @@ namespace Bit.App.Pages
                 Margin = new Thickness(0, 40, 0, 0)
             };
 
-            var saveToolBarItem = new ToolbarItem(AppResources.Save, Helpers.ToolbarImage("envelope.png"), async () =>
+            SaveToolbarItem = new ToolbarItem(AppResources.Save, Helpers.ToolbarImage("envelope.png"), async () =>
             {
                 if(_lastAction.LastActionWasRecent() || _cipher == null)
                 {
@@ -183,11 +179,6 @@ namespace Bit.App.Pages
             Title = AppResources.Attachments;
             Content = ListView;
 
-            if(_tokenService.TokenPremium)
-            {
-                ToolbarItems.Add(saveToolBarItem);
-            }
-
             if(Device.RuntimePlatform == Device.iOS)
             {
                 ListView.RowHeight = -1;
@@ -209,10 +200,18 @@ namespace Bit.App.Pages
             ListView.ItemSelected += AttachmentSelected;
             await LoadAttachmentsAsync();
 
-            if(_tokenService.TokenPremium && !_canUseAttachments)
+            if(_cipher != null && (_tokenService.TokenPremium || _cipher.OrganizationId != null))
             {
-                await ShowUpdateKeyAsync();
+                ToolbarItems.Add(SaveToolbarItem);
+                ListView.Footer = NewTable;
+
+                if(!_canUseAttachments)
+                {
+                    await ShowUpdateKeyAsync();
+                }
             }
+
+            // TODO: else show alert about needing premium membership
         }
 
         protected override void OnDisappearing()
@@ -314,7 +313,7 @@ namespace Bit.App.Pages
 
         private async Task ShowUpdateKeyAsync()
         {
-            var confirmed = await DisplayAlert(AppResources.FeatureUnavailable, AppResources.UpdateKey, 
+            var confirmed = await DisplayAlert(AppResources.FeatureUnavailable, AppResources.UpdateKey,
                 AppResources.LearnMore, AppResources.Cancel);
             if(confirmed)
             {
