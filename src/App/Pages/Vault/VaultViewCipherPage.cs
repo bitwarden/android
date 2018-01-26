@@ -314,7 +314,7 @@ namespace Bit.App.Pages
             {
                 Table.Root.Remove(AttachmentsSection);
             }
-            if(Model.ShowAttachments && _tokenService.TokenPremium)
+            if(Model.ShowAttachments && (_tokenService.TokenPremium || cipher.OrganizationId != null))
             {
                 AttachmentsSection = new TableSection(AppResources.Attachments);
                 AttachmentCells = new List<AttachmentViewCell>();
