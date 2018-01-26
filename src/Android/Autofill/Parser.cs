@@ -17,6 +17,11 @@ namespace Bit.Android.Autofill
             "com.amazon.cloud9","org.mozilla.klar", "com.duckduckgo.mobile.android"
         };
 
+        public static HashSet<string> ExcludedPackageIds = new HashSet<string>
+        {
+            "android"
+        };
+
         private readonly AssistStructure _structure;
         private string _uri;
         private string _packageName;
@@ -96,34 +101,34 @@ namespace Bit.Android.Autofill
 
         private void ParseNode(ViewNode node)
         {
+            SetPackageAndDomain(node);
             var hints = node.GetAutofillHints();
             var isEditText = node.ClassName == "android.widget.EditText" || node?.HtmlInfo?.Tag == "input";
             if(isEditText || (hints?.Length ?? 0) > 0)
             {
-                if(string.IsNullOrWhiteSpace(PackageName))
-                {
-                    PackageName = node.IdPackage;
-                }
-                if(string.IsNullOrWhiteSpace(WebDomain))
-                {
-                    WebDomain = node.WebDomain;
-                }
-
                 FieldCollection.Add(new Field(node));
             }
             else
             {
-                if(string.IsNullOrWhiteSpace(WebDomain))
-                {
-                    WebDomain = node.WebDomain;
-                }
-
                 FieldCollection.IgnoreAutofillIds.Add(node.AutofillId);
             }
 
             for(var i = 0; i < node.ChildCount; i++)
             {
                 ParseNode(node.GetChildAt(i));
+            }
+        }
+
+        private void SetPackageAndDomain(ViewNode node)
+        {
+            if(string.IsNullOrWhiteSpace(PackageName) && !string.IsNullOrWhiteSpace(node.IdPackage) &&
+                !ExcludedPackageIds.Contains(node.IdPackage))
+            {
+                PackageName = node.IdPackage;
+            }
+            if(string.IsNullOrWhiteSpace(WebDomain) && !string.IsNullOrWhiteSpace(node.WebDomain))
+            {
+                WebDomain = node.WebDomain;
             }
         }
     }
