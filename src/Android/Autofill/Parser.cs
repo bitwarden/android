@@ -14,7 +14,7 @@ namespace Bit.Android.Autofill
             "com.opera.browser.beta","com.opera.mini.native","com.chrome.dev","com.chrome.canary",
             "com.google.android.apps.chrome","com.google.android.apps.chrome_dev","com.yandex.browser",
             "com.sec.android.app.sbrowser","com.sec.android.app.sbrowser.beta","org.codeaurora.swe.browser",
-            "com.amazon.cloud9","org.mozilla.klar"
+            "com.amazon.cloud9","org.mozilla.klar", "com.duckduckgo.mobile.android"
         };
 
         private readonly AssistStructure _structure;
@@ -87,6 +87,11 @@ namespace Bit.Android.Autofill
                 var node = _structure.GetWindowNodeAt(i);
                 ParseNode(node.RootViewNode);
             }
+
+            if(!TrustedBrowsers.Contains(PackageName))
+            {
+                WebDomain = null;
+            }
         }
 
         private void ParseNode(ViewNode node)
@@ -95,11 +100,11 @@ namespace Bit.Android.Autofill
             var isEditText = node.ClassName == "android.widget.EditText" || node?.HtmlInfo?.Tag == "input";
             if(isEditText || (hints?.Length ?? 0) > 0)
             {
-                if(PackageName == null)
+                if(string.IsNullOrWhiteSpace(PackageName))
                 {
                     PackageName = node.IdPackage;
                 }
-                if(WebDomain == null && TrustedBrowsers.Contains(node.IdPackage))
+                if(string.IsNullOrWhiteSpace(WebDomain))
                 {
                     WebDomain = node.WebDomain;
                 }
@@ -108,7 +113,7 @@ namespace Bit.Android.Autofill
             }
             else
             {
-                if(WebDomain == null && TrustedBrowsers.Contains(node.IdPackage))
+                if(string.IsNullOrWhiteSpace(WebDomain))
                 {
                     WebDomain = node.WebDomain;
                 }
