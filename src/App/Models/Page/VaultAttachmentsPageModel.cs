@@ -12,10 +12,10 @@ namespace Bit.App.Models.Page
             public long Size { get; set; }
             public string Url { get; set; }
 
-            public Attachment(Models.Attachment attachment)
+            public Attachment(Models.Attachment attachment, string orgId)
             {
                 Id = attachment.Id;
-                Name = attachment.FileName?.Decrypt();
+                Name = attachment.FileName?.Decrypt(orgId);
                 SizeName = attachment.SizeName;
                 Size = attachment.Size;
                 Url = attachment.Url;

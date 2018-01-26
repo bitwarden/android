@@ -231,7 +231,7 @@ namespace Bit.App.Pages
             }
 
             var attachmentsToAdd = _cipher.Attachments
-                .Select(a => new VaultAttachmentsPageModel.Attachment(a))
+                .Select(a => new VaultAttachmentsPageModel.Attachment(a, _cipher.OrganizationId))
                 .OrderBy(s => s.Name);
             PresentationAttchments.ResetWithRange(attachmentsToAdd);
             AdjustContent();
