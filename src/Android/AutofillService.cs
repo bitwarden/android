@@ -23,7 +23,6 @@ namespace Bit.Android
         private const string SystemUiPackage = "com.android.systemui";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "bitwarden.com";
-        private const string BitwardenAccessibilityTag = "bw_access";
 
         private static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
@@ -67,10 +66,15 @@ namespace Bit.Android
 
         private static HashSet<string> FilteredPackageNames => new HashSet<string>
         {
+            SystemUiPackage,
             "com.google.android.googlequicksearchbox",
             "com.google.android.apps.nexuslauncher",
             "com.google.android.launcher",
-            SystemUiPackage
+            "com.computer.desktop.ui.launcher",
+            "com.launcher.notelauncher",
+            "com.anddoes.launcher",
+            "com.actionlauncher.playstore",
+            "ch.deletescape.lawnchair.plah"
         };
 
         private readonly IAppSettingsService _appSettings;
@@ -80,12 +84,6 @@ namespace Bit.Android
         public AutofillService()
         {
             _appSettings = Resolver.Resolve<IAppSettingsService>();
-        }
-
-        private void Log(string message)
-        {
-            global::Android.Util.Log.WriteLine(global::Android.Util.LogPriority.Info,
-                BitwardenAccessibilityTag, message);
         }
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
@@ -102,19 +100,11 @@ namespace Bit.Android
 
             try
             {
-                if(e.PackageName.Contains("logcat"))
-                {
-                    return;
-                }
-
                 if(string.IsNullOrWhiteSpace(e?.PackageName) || FilteredPackageNames.Contains(e.PackageName) ||
                     e.PackageName.Contains("launcher"))
                 {
-                    Log("FILTERED - " + e.PackageName + " fired event " + e.EventType);
                     return;
                 }
-
-                Log(e.PackageName + " fired event " + e.EventType);
 
                 var root = RootInActiveWindow;
                 if(root == null || root.PackageName != e.PackageName)
@@ -122,7 +112,6 @@ namespace Bit.Android
                     return;
                 }
 
-                /*
                 //var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
                 //var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
                 //testNodes.Dispose();
@@ -230,13 +219,9 @@ namespace Bit.Android
                 notificationManager?.Dispose();
                 root.Dispose();
                 e.Dispose();
-                */
             }
             // Suppress exceptions so that service doesn't crash
-            catch(Exception ex)
-            {
-                Log("Exception occurred: " + ex.Message);
-            }
+            catch { }
         }
 
         public override void OnInterrupt()
