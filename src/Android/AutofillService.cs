@@ -24,7 +24,7 @@ namespace Bit.Android
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "bitwarden.com";
 
-        private static Dictionary<string, Browser> SupportedBrowsers;/* => new List<Browser>
+        private static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
             new Browser("com.android.chrome", "url_bar"),
             new Browser("com.chrome.beta", "url_bar"),
@@ -62,7 +62,7 @@ namespace Bit.Android
             new Browser("acr.browser.barebones", "search"),
             new Browser("com.microsoft.emmx", "url_bar"),
             new Browser("com.duckduckgo.mobile.android", "omnibarTextInput")
-        }.ToDictionary(n => n.PackageName);*/
+        }.ToDictionary(n => n.PackageName);
 
         private readonly IAppSettingsService _appSettings;
         private long _lastNotificationTime = 0;
@@ -70,14 +70,11 @@ namespace Bit.Android
 
         public AutofillService()
         {
-            //_appSettings = Resolver.Resolve<IAppSettingsService>();
+            _appSettings = Resolver.Resolve<IAppSettingsService>();
         }
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
-            return;
-
-            /*
             var powerManager = (PowerManager)GetSystemService(PowerService);
             if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch && !powerManager.IsInteractive)
             {
@@ -88,6 +85,7 @@ namespace Bit.Android
                 return;
             }
 
+            /*
             try
             {
                 var root = RootInActiveWindow;
