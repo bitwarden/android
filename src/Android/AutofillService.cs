@@ -84,8 +84,7 @@ namespace Bit.Android
             {
                 return;
             }
-
-            /*
+            
             try
             {
                 var root = RootInActiveWindow;
@@ -95,6 +94,8 @@ namespace Bit.Android
                 {
                     return;
                 }
+
+                /*
 
                 //var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
                 //var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
@@ -203,10 +204,10 @@ namespace Bit.Android
                 notificationManager?.Dispose();
                 root.Dispose();
                 e.Dispose();
+                */
             }
             // Suppress exceptions so that service doesn't crash
             catch { }
-            */
         }
 
         public override void OnInterrupt()
