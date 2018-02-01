@@ -74,7 +74,12 @@ namespace Bit.Android
             "com.launcher.notelauncher",
             "com.anddoes.launcher",
             "com.actionlauncher.playstore",
-            "ch.deletescape.lawnchair.plah"
+            "ch.deletescape.lawnchair.plah",
+            "com.microsoft.launcher",
+            "com.teslacoilsw.launcher",
+            "is.shortcut",
+            "me.craftsapp.nlauncher",
+            "com.ss.squarehome2"
         };
 
         private readonly IAppSettingsService _appSettings;
