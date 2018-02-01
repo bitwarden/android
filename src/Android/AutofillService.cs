@@ -88,14 +88,14 @@ namespace Bit.Android
             try
             {
                 var root = RootInActiveWindow;
+
+                /*
                 if(e == null || root == null || string.IsNullOrWhiteSpace(e.PackageName) ||
                     e.PackageName == SystemUiPackage || e.PackageName.Contains("launcher") ||
                     root.PackageName != e.PackageName)
                 {
                     return;
                 }
-
-                /*
 
                 //var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
                 //var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
