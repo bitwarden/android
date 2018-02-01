@@ -75,6 +75,9 @@ namespace Bit.Android
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
+            return;
+
+            /*
             var powerManager = (PowerManager)GetSystemService(PowerService);
             if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch && !powerManager.IsInteractive)
             {
@@ -205,6 +208,7 @@ namespace Bit.Android
             }
             // Suppress exceptions so that service doesn't crash
             catch { }
+            */
         }
 
         public override void OnInterrupt()
