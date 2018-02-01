@@ -20,7 +20,6 @@ namespace Bit.Android
         private NotificationChannel _notificationChannel;
 
         private const int AutoFillNotificationId = 34573;
-        private const string SystemUiPackage = "com.android.systemui";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "bitwarden.com";
         private const string BitwardenAccessibilityTag = "bw_access";
@@ -65,6 +64,14 @@ namespace Bit.Android
             new Browser("com.duckduckgo.mobile.android", "omnibarTextInput")
         }.ToDictionary(n => n.PackageName);
 
+        private static HashSet<string> FilteredPackageNames => new HashSet<string>
+        {
+            "com.google.android.googlequicksearchbox",
+            "com.google.android.apps.nexuslauncher",
+            "com.google.android.launcher",
+            "com.android.systemui"
+        };
+
         private readonly IAppSettingsService _appSettings;
         private long _lastNotificationTime = 0;
         private string _lastNotificationUri = null;
@@ -94,13 +101,19 @@ namespace Bit.Android
 
             try
             {
-                Log(e.PackageName + " fired event " + e.EventType);
-
-                if(string.IsNullOrWhiteSpace(e?.PackageName) || e.PackageName == SystemUiPackage ||
-                    e.PackageName.Contains("launcher"))
+                if(e.PackageName.Contains("logcat"))
                 {
                     return;
                 }
+
+                if(string.IsNullOrWhiteSpace(e?.PackageName) || FilteredPackageNames.Contains(e.PackageName) ||
+                    e.PackageName.Contains("launcher"))
+                {
+                    Log("FILTERED - " + e.PackageName + " fired event " + e.EventType);
+                    return;
+                }
+
+                Log(e.PackageName + " fired event " + e.EventType);
 
                 var root = RootInActiveWindow;
                 if(root == null || root.PackageName != e.PackageName)
