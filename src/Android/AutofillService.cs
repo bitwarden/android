@@ -23,6 +23,7 @@ namespace Bit.Android
         private const string SystemUiPackage = "com.android.systemui";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
         private const string BitwardenWebsite = "bitwarden.com";
+        private const string BitwardenAccessibilityTag = "bw_access";
 
         private static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
@@ -73,6 +74,12 @@ namespace Bit.Android
             _appSettings = Resolver.Resolve<IAppSettingsService>();
         }
 
+        private void Log(string message)
+        {
+            global::Android.Util.Log.WriteLine(global::Android.Util.LogPriority.Info,
+                BitwardenAccessibilityTag, message);
+        }
+
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
             var powerManager = (PowerManager)GetSystemService(PowerService);
@@ -84,7 +91,7 @@ namespace Bit.Android
             {
                 return;
             }
-            
+
             try
             {
                 var root = RootInActiveWindow;
@@ -207,7 +214,10 @@ namespace Bit.Android
                 */
             }
             // Suppress exceptions so that service doesn't crash
-            catch { }
+            catch(Exception ex)
+            {
+                Log("Exception occurred: " + ex.Message);
+            }
         }
 
         public override void OnInterrupt()
