@@ -94,6 +94,8 @@ namespace Bit.Android
 
             try
             {
+                Log(e.PackageName + " fired event " + e.EventType);
+
                 if(string.IsNullOrWhiteSpace(e?.PackageName) || e.PackageName == SystemUiPackage ||
                     e.PackageName.Contains("launcher"))
                 {
