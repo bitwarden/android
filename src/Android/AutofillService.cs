@@ -77,6 +77,7 @@ namespace Bit.Android
             "ch.deletescape.lawnchair.plah",
             "com.microsoft.launcher",
             "com.teslacoilsw.launcher",
+            "com.teslacoilsw.launcher.prime",
             "is.shortcut",
             "me.craftsapp.nlauncher",
             "com.ss.squarehome2"
