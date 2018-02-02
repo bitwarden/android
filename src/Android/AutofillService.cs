@@ -64,6 +64,7 @@ namespace Bit.Android
             new Browser("com.duckduckgo.mobile.android", "omnibarTextInput")
         }.ToDictionary(n => n.PackageName);
 
+        // Known packages to skip
         private static HashSet<string> FilteredPackageNames => new HashSet<string>
         {
             SystemUiPackage,
@@ -86,6 +87,9 @@ namespace Bit.Android
         private readonly IAppSettingsService _appSettings;
         private long _lastNotificationTime = 0;
         private string _lastNotificationUri = null;
+        private HashSet<string> _launcherPackageNames = null;
+        private DateTime? _lastLauncherSetBuilt = null;
+        private TimeSpan _rebuildLauncherSpan = TimeSpan.FromHours(1);
 
         public AutofillService()
         {
@@ -106,8 +110,7 @@ namespace Bit.Android
 
             try
             {
-                if(string.IsNullOrWhiteSpace(e?.PackageName) || FilteredPackageNames.Contains(e.PackageName) ||
-                    e.PackageName.Contains("launcher"))
+                if(SkipPackage(e?.PackageName))
                 {
                     return;
                 }
@@ -463,6 +466,28 @@ namespace Bit.Android
             }
 
             return nodes;
+        }
+
+        private bool SkipPackage(string eventPackageName)
+        {
+            if(string.IsNullOrWhiteSpace(eventPackageName) || FilteredPackageNames.Contains(eventPackageName)
+                || eventPackageName.Contains("launcher"))
+            {
+                return true;
+            }
+
+            if(_launcherPackageNames == null || _lastLauncherSetBuilt == null ||
+                (DateTime.Now - _lastLauncherSetBuilt.Value) > _rebuildLauncherSpan)
+            {
+                // refresh launcher list every now and then
+                _lastLauncherSetBuilt = DateTime.Now;
+                var intent = new Intent(Intent.ActionMain);
+                intent.AddCategory(Intent.CategoryHome);
+                var resolveInfo = PackageManager.QueryIntentActivities(intent, 0);
+                _launcherPackageNames = resolveInfo.Select(ri => ri.ActivityInfo.PackageName).ToHashSet();
+            }
+
+            return _launcherPackageNames.Contains(eventPackageName);
         }
 
         public class Browser
