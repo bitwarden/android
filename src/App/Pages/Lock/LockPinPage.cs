@@ -126,7 +126,10 @@ namespace Bit.App.Pages
                 _appSettingsService.Locked = false;
                 _appSettingsService.FailedPinAttempts = 0;
                 PinControl.Entry.Unfocus();
-                await Navigation.PopModalAsync();
+                if(Navigation.ModalStack.Count > 0)
+                {
+                    await Navigation.PopModalAsync();
+                }
             }
             else
             {

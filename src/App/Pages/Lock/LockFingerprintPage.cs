@@ -119,7 +119,10 @@ namespace Bit.App.Pages
             if(result.Authenticated)
             {
                 _appSettings.Locked = false;
-                await Navigation.PopModalAsync();
+                if(Navigation.ModalStack.Count > 0)
+                {
+                    await Navigation.PopModalAsync();
+                }
             }
             else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
             {

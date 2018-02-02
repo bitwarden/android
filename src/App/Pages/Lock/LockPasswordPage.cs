@@ -155,7 +155,10 @@ namespace Bit.App.Pages
             if(key.Key.SequenceEqual(_cryptoService.Key.Key))
             {
                 _appSettingsService.Locked = false;
-                await Navigation.PopModalAsync();
+                if(Navigation.ModalStack.Count > 0)
+                {
+                    await Navigation.PopModalAsync();
+                }
             }
             else
             {
