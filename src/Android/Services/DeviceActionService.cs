@@ -302,9 +302,9 @@ namespace Bit.Android.Services
 
         public void DismissKeyboard()
         {
-            var activity = (MainActivity)CurrentContext;
             try
             {
+                var activity = (MainActivity)CurrentContext;
                 var imm = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
                 imm.HideSoftInputFromWindow(activity.CurrentFocus.WindowToken, 0);
             }

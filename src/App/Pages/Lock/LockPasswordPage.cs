@@ -93,9 +93,9 @@ namespace Bit.App.Pages
             Content = scrollView;
         }
 
-        private void Entry_Completed(object sender, EventArgs e)
+        private async void Entry_Completed(object sender, EventArgs e)
         {
-            var task = CheckPasswordAsync();
+            await CheckPasswordAsync();
         }
 
         protected override void OnAppearing()
