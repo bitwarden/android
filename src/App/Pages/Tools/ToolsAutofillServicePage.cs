@@ -13,7 +13,8 @@ namespace Bit.App.Pages
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IAppInfoService _appInfoService;
         private readonly IDeviceActionService _deviceActionService;
-        private bool _pageDisappeared = false;
+        private DateTime? _timerStarted = null;
+        private TimeSpan _timerMaxLength = TimeSpan.FromMinutes(5);
 
         public ToolsAutofillServicePage()
         {
@@ -126,12 +127,12 @@ namespace Bit.App.Pages
 
         protected override void OnAppearing()
         {
-            _pageDisappeared = false;
             UpdateEnabled();
+            _timerStarted = DateTime.Now;
             Device.StartTimer(new TimeSpan(0, 0, 2), () =>
             {
                 System.Diagnostics.Debug.WriteLine("Check timer on autofill");
-                if(_pageDisappeared)
+                if(_timerStarted == null || (DateTime.Now - _timerStarted) > _timerMaxLength)
                 {
                     return false;
                 }
@@ -145,7 +146,7 @@ namespace Bit.App.Pages
 
         protected override void OnDisappearing()
         {
-            _pageDisappeared = true;
+            _timerStarted = null;
             base.OnDisappearing();
         }
 

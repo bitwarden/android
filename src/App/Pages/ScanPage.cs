@@ -11,7 +11,8 @@ namespace Bit.App.Pages
     {
         private readonly ZXingScannerView _zxing;
         private readonly OverlayGrid _overlay;
-        private bool _pageDisappeared = true;
+        private DateTime? _timerStarted = null;
+        private TimeSpan _timerMaxLength = TimeSpan.FromMinutes(3);
 
         public ScanPage(Action<string> callback)
             : base(updateActivity: false, requireAuth: false)
@@ -79,12 +80,12 @@ namespace Bit.App.Pages
 
         protected override void OnAppearing()
         {
-            _pageDisappeared = false;
             base.OnAppearing();
             _zxing.IsScanning = true;
+            _timerStarted = DateTime.Now;
             Device.StartTimer(new TimeSpan(0, 0, 2), () =>
             {
-                if(_pageDisappeared)
+                if(_timerStarted == null || (DateTime.Now - _timerStarted) > _timerMaxLength)
                 {
                     return false;
                 }
@@ -96,7 +97,7 @@ namespace Bit.App.Pages
 
         protected override void OnDisappearing()
         {
-            _pageDisappeared = true;
+            _timerStarted = null;
             _zxing.IsScanning = false;
             base.OnDisappearing();
         }
