@@ -3,8 +3,6 @@ init:
 install:
   - appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
   - appveyor DownloadFile https://aka.ms/vs/15/release/vs_community.exe
-  - vs_community.exe --update --wait --quiet
-  - echo "done update installer!"
   - vs_community.exe update --wait --quiet --norestart --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
   - echo "done update vs!"
 before_build:
