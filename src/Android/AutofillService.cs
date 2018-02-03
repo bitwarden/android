@@ -90,6 +90,9 @@ namespace Bit.Android
         private HashSet<string> _launcherPackageNames = null;
         private DateTime? _lastLauncherSetBuilt = null;
         private TimeSpan _rebuildLauncherSpan = TimeSpan.FromHours(1);
+        private DateTime? _lastFocusEvent = null;
+        private DateTime? _lastWindowEvent = null;
+        private TimeSpan _eventSpan = TimeSpan.FromMilliseconds(500);
 
         public AutofillService()
         {
@@ -114,6 +117,8 @@ namespace Bit.Android
                 {
                     return;
                 }
+                
+                //global::Android.Util.Log.Info("bw_access", e.PackageName + " fired event " + e.EventType);
 
                 var root = RootInActiveWindow;
                 if(root == null || root.PackageName != e.PackageName)
@@ -136,6 +141,12 @@ namespace Bit.Android
                             break;
                         }
 
+                        if(_lastFocusEvent != null && (DateTime.Now - _lastFocusEvent.Value) < _eventSpan)
+                        {
+                            break;
+                        }
+                        _lastFocusEvent = DateTime.Now;
+
                         if(e.PackageName == BitwardenPackage)
                         {
                             CancelNotification(notificationManager);
@@ -153,7 +164,14 @@ namespace Bit.Android
                         {
                             break;
                         }
-                        else if(_appSettings.AutofillPasswordField && AutofillActivity.LastCredentials == null)
+
+                        if(_lastWindowEvent != null && (DateTime.Now - _lastWindowEvent.Value) < _eventSpan)
+                        {
+                            break;
+                        }
+                        _lastWindowEvent = DateTime.Now;
+
+                        if(_appSettings.AutofillPasswordField && AutofillActivity.LastCredentials == null)
                         {
                             if(string.IsNullOrWhiteSpace(_lastNotificationUri))
                             {
