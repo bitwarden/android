@@ -270,6 +270,7 @@ namespace Bit.Android
         {
             LogInfo("13");
             var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
+            LogInfo("50");
             if(passwordNodes.Count > 0)
             {
                 var uri = GetUri(root);
@@ -475,6 +476,7 @@ namespace Bit.Android
         private NodeList GetWindowNodes(AccessibilityNodeInfo n, AccessibilityEvent e,
             Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null)
         {
+            LogInfo("51");
             if(nodes == null)
             {
                 nodes = new NodeList();
@@ -482,24 +484,33 @@ namespace Bit.Android
 
             if(n != null)
             {
+                LogInfo("52: " + n.WindowId + ", " + n.ViewIdResourceName + ", " + n.Password);
                 var dispose = disposeIfUnused;
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
                 {
+                    LogInfo("53");
                     dispose = false;
                     nodes.Add(n);
                 }
 
+                LogInfo("54: " + n.ChildCount);
                 for(var i = 0; i < n.ChildCount; i++)
                 {
-                    GetWindowNodes(n.GetChild(i), e, condition, true, nodes);
+                    LogInfo("55.1");
+                    var c = n.GetChild(i);
+                    LogInfo("55.2");
+                    GetWindowNodes(c, e, condition, true, nodes);
+                    LogInfo("55.3");
                 }
 
                 if(dispose)
                 {
+                    LogInfo("56");
                     n.Dispose();
                 }
             }
 
+            LogInfo("57");
             return nodes;
         }
 
