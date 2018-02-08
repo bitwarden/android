@@ -132,7 +132,7 @@ namespace Bit.Android
                 switch(e.EventType)
                 {
                     case EventTypes.ViewFocused:
-                        if(!e.Source.Password || !_appSettings.AutofillPasswordField)
+                        if(e.Source == null || !e.Source.Password || !_appSettings.AutofillPasswordField)
                         {
                             break;
                         }
