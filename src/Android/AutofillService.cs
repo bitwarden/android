@@ -128,6 +128,7 @@ namespace Bit.Android
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 var cancelNotification = true;
 
+                LogInfo(e.PackageName + " fires event " + e.EventType);
                 switch(e.EventType)
                 {
                     case EventTypes.ViewFocused:
