@@ -230,7 +230,21 @@ namespace Bit.Android
                 e.Dispose();
             }
             // Suppress exceptions so that service doesn't crash
-            catch { }
+            catch(Exception ex)
+            {
+                LogError(ex.Message);
+                throw ex;
+            }
+        }
+
+        private void LogInfo(string msg)
+        {
+            global::Android.Util.Log.Info("bw_access", msg);
+        }
+
+        private void LogError(string msg)
+        {
+            global::Android.Util.Log.Error("bw_access", msg);
         }
 
         public override void OnInterrupt()
