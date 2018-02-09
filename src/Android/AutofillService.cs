@@ -438,7 +438,8 @@ namespace Bit.Android
         }
 
         private NodeList GetWindowNodes(AccessibilityNodeInfo n, AccessibilityEvent e,
-            Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null, int j = 0)
+            Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null,
+            int recursiveIterations = 0)
         {
             if(nodes == null)
             {
@@ -456,8 +457,9 @@ namespace Bit.Android
 
                 for(var i = 0; i < n.ChildCount; i++)
                 {
-                    var c = n.GetChild(i);
-                    GetWindowNodes(c, e, condition, true, nodes, j++);
+                    System.Threading.Thread.Sleep(10);
+                    var childNode = n.GetChild(i);
+                    GetWindowNodes(childNode, e, condition, true, nodes, recursiveIterations++);
                 }
 
                 if(dispose)
