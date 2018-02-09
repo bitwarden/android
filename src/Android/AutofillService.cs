@@ -446,7 +446,7 @@ namespace Bit.Android
                 nodes = new NodeList();
             }
 
-            if(n != null)
+            if(n != null && recursiveIterations < 100)
             {
                 var dispose = disposeIfUnused;
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
@@ -457,7 +457,6 @@ namespace Bit.Android
 
                 for(var i = 0; i < n.ChildCount; i++)
                 {
-                    System.Threading.Thread.Sleep(10);
                     var childNode = n.GetChild(i);
                     GetWindowNodes(childNode, e, condition, true, nodes, recursiveIterations++);
                 }
