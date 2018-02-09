@@ -128,7 +128,6 @@ namespace Bit.Android
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 var cancelNotification = true;
 
-                LogInfo(e.PackageName + " fires event " + e.EventType);
                 switch(e.EventType)
                 {
                     case EventTypes.ViewFocused:
@@ -156,40 +155,31 @@ namespace Bit.Android
                         }
                         else if(_appSettings.AutofillPasswordField && AutofillActivity.LastCredentials == null)
                         {
-                            LogInfo("1");
                             if(string.IsNullOrWhiteSpace(_lastNotificationUri))
                             {
-                                LogInfo("2");
                                 CancelNotification(notificationManager);
                                 break;
                             }
 
-                            LogInfo("3");
                             var uri = GetUri(root);
-                            LogInfo("4");
                             if(uri != _lastNotificationUri)
                             {
-                                LogInfo("5");
                                 CancelNotification(notificationManager);
                             }
                             else if(uri.StartsWith(App.Constants.AndroidAppProtocol))
                             {
-                                LogInfo("6");
                                 CancelNotification(notificationManager, 30000);
                             }
 
                             break;
                         }
 
-                        LogInfo("7");
                         if(e.PackageName == BitwardenPackage)
                         {
-                            LogInfo("8");
                             CancelNotification(notificationManager);
                             break;
                         }
 
-                        LogInfo("9");
                         if(_appSettings.AutofillPersistNotification)
                         {
                             var uri = GetUri(root);
@@ -223,13 +213,11 @@ namespace Bit.Android
                         }
                         else
                         {
-                            LogInfo("10");
                             cancelNotification = ScanAndAutofill(root, e, notificationManager, cancelNotification);
                         }
 
                         if(cancelNotification)
                         {
-                            LogInfo("11");
                             CancelNotification(notificationManager);
                         }
                         break;
@@ -237,27 +225,12 @@ namespace Bit.Android
                         break;
                 }
 
-                LogInfo("12");
                 notificationManager?.Dispose();
                 root.Dispose();
                 e.Dispose();
             }
             // Suppress exceptions so that service doesn't crash
-            catch(Exception ex)
-            {
-                LogError(ex.Message);
-                throw ex;
-            }
-        }
-
-        private void LogInfo(string msg)
-        {
-            global::Android.Util.Log.Info("bw_access", msg);
-        }
-
-        private void LogError(string msg)
-        {
-            global::Android.Util.Log.Error("bw_access", msg);
+            catch { }
         }
 
         public override void OnInterrupt()
@@ -268,9 +241,7 @@ namespace Bit.Android
         public bool ScanAndAutofill(AccessibilityNodeInfo root, AccessibilityEvent e,
             NotificationManager notificationManager, bool cancelNotification)
         {
-            LogInfo("13");
             var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
-            LogInfo("500000000000");
             if(passwordNodes.Count > 0)
             {
                 var uri = GetUri(root);
@@ -278,18 +249,15 @@ namespace Bit.Android
                 {
                     if(NeedToAutofill(AutofillActivity.LastCredentials, uri))
                     {
-                        LogInfo("14");
                         var allEditTexts = GetWindowNodes(root, e, n => EditText(n), false);
                         var usernameEditText = allEditTexts.TakeWhile(n => !n.Password).LastOrDefault();
                         FillCredentials(usernameEditText, passwordNodes);
 
-                        LogInfo("15");
                         allEditTexts.Dispose();
                         usernameEditText.Dispose();
                     }
                     else
                     {
-                        LogInfo("16");
                         NotifyToAutofill(uri, notificationManager);
                         cancelNotification = false;
                     }
@@ -299,17 +267,13 @@ namespace Bit.Android
             }
             else if(AutofillActivity.LastCredentials != null)
             {
-                LogInfo("17");
                 System.Threading.Tasks.Task.Run(async () =>
                 {
-                    LogInfo("18");
                     await System.Threading.Tasks.Task.Delay(1000);
-                    LogInfo("19");
                     AutofillActivity.LastCredentials = null;
                 });
             }
 
-            LogInfo("20");
             passwordNodes.Dispose();
             return cancelNotification;
         }
@@ -476,7 +440,6 @@ namespace Bit.Android
         private NodeList GetWindowNodes(AccessibilityNodeInfo n, AccessibilityEvent e,
             Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null, int j = 0)
         {
-            LogInfo("51");
             if(nodes == null)
             {
                 nodes = new NodeList();
@@ -484,34 +447,25 @@ namespace Bit.Android
 
             if(n != null)
             {
-                LogInfo("52: " + n.ChildCount + ", " + n.WindowId + ", " + n.ViewIdResourceName + ", " + n.Password + ", " + j);
                 var dispose = disposeIfUnused;
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
                 {
-                    LogInfo("53");
                     dispose = false;
                     nodes.Add(n);
-                    LogInfo("53.1: " + nodes.Count);
                 }
 
-                LogInfo("54: " + n.ChildCount);
                 for(var i = 0; i < n.ChildCount; i++)
                 {
-                    LogInfo("55.1");
                     var c = n.GetChild(i);
-                    LogInfo("55.2");
                     GetWindowNodes(c, e, condition, true, nodes, j++);
-                    LogInfo("55.3: " + i + ", " + n.ChildCount + ", " + n.WindowId + ", " + n.ViewIdResourceName + ", " + n.Password + ", " + j);
                 }
 
                 if(dispose)
                 {
-                    LogInfo("56");
                     n.Dispose();
                 }
             }
 
-            LogInfo("57: " + nodes.Count);
             return nodes;
         }
 
