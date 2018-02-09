@@ -270,7 +270,7 @@ namespace Bit.Android
         {
             LogInfo("13");
             var passwordNodes = GetWindowNodes(root, e, n => n.Password, false);
-            LogInfo("50");
+            LogInfo("500000000000");
             if(passwordNodes.Count > 0)
             {
                 var uri = GetUri(root);
@@ -474,7 +474,7 @@ namespace Bit.Android
         }
 
         private NodeList GetWindowNodes(AccessibilityNodeInfo n, AccessibilityEvent e,
-            Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null)
+            Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null, int j = 0)
         {
             LogInfo("51");
             if(nodes == null)
@@ -484,13 +484,14 @@ namespace Bit.Android
 
             if(n != null)
             {
-                LogInfo("52: " + n.WindowId + ", " + n.ViewIdResourceName + ", " + n.Password);
+                LogInfo("52: " + n.ChildCount + ", " + n.WindowId + ", " + n.ViewIdResourceName + ", " + n.Password + ", " + j);
                 var dispose = disposeIfUnused;
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
                 {
                     LogInfo("53");
                     dispose = false;
                     nodes.Add(n);
+                    LogInfo("53.1: " + nodes.Count);
                 }
 
                 LogInfo("54: " + n.ChildCount);
@@ -499,8 +500,8 @@ namespace Bit.Android
                     LogInfo("55.1");
                     var c = n.GetChild(i);
                     LogInfo("55.2");
-                    GetWindowNodes(c, e, condition, true, nodes);
-                    LogInfo("55.3");
+                    GetWindowNodes(c, e, condition, true, nodes, j++);
+                    LogInfo("55.3: " + i + ", " + n.ChildCount + ", " + n.WindowId + ", " + n.ViewIdResourceName + ", " + n.Password + ", " + j);
                 }
 
                 if(dispose)
@@ -510,7 +511,7 @@ namespace Bit.Android
                 }
             }
 
-            LogInfo("57");
+            LogInfo("57: " + nodes.Count);
             return nodes;
         }
 
