@@ -439,14 +439,23 @@ namespace Bit.Android
 
         private NodeList GetWindowNodes(AccessibilityNodeInfo n, AccessibilityEvent e,
             Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null,
-            int recursiveIterations = 0)
+            int recursionDepth = 0, AccessibilityNodeInfo parentNode = null)
         {
             if(nodes == null)
             {
                 nodes = new NodeList();
             }
 
-            if(n != null && recursiveIterations < 100)
+            //global::Android.Util.Log.Info("bw_access", "node: " + n.ToString());
+            //global::Android.Util.Log.Info("bw_access", "recursiveIterations = " + recursiveIterations);
+
+            var sameAsParent = n?.GetHashCode() == parentNode?.GetHashCode();
+            if(sameAsParent)
+            {
+                global::Android.Util.Log.Info("bw_access", "child is same as parent!");
+            }
+
+            if(n != null && recursionDepth < 50 && !sameAsParent)
             {
                 var dispose = disposeIfUnused;
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
@@ -455,10 +464,11 @@ namespace Bit.Android
                     nodes.Add(n);
                 }
 
+                //global::Android.Util.Log.Info("bw_access", "ChildCount " + n.ChildCount);
                 for(var i = 0; i < n.ChildCount; i++)
                 {
                     var childNode = n.GetChild(i);
-                    GetWindowNodes(childNode, e, condition, true, nodes, recursiveIterations++);
+                    GetWindowNodes(childNode, e, condition, true, nodes, recursionDepth++, n);
                 }
 
                 if(dispose)
