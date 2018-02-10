@@ -29,8 +29,8 @@ namespace Bit.App.Services
             int? minNumbers = null,
             int? minSpecial = null)
         {
-            int minUppercaseValue = minUppercase.GetValueOrDefault(1),
-                minLowercaseValue = minLowercase.GetValueOrDefault(1),
+            int minUppercaseValue = minUppercase.GetValueOrDefault(0),
+                minLowercaseValue = minLowercase.GetValueOrDefault(0),
                 minNumbersValue = minNumbers.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorMinNumbers, 1)),
                 minSpecialValue = minSpecial.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorMinSpecial, 1)),
                 lengthValue = length.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10));
@@ -42,19 +42,19 @@ namespace Bit.App.Services
                 ambiguousValue = ambiguous.GetValueOrDefault(_settings.GetValueOrDefault(Constants.PasswordGeneratorAmbiguous, false));
 
             // Sanitize
-            if(uppercaseValue && minUppercaseValue < 0)
+            if(uppercaseValue && minUppercaseValue <= 0)
             {
                 minUppercaseValue = 1;
             }
-            if(lowercaseValue && minLowercaseValue < 0)
+            if(lowercaseValue && minLowercaseValue <= 0)
             {
                 minLowercaseValue = 1;
             }
-            if(numbersValue && minNumbersValue < 0)
+            if(numbersValue && minNumbersValue <= 0)
             {
                 minNumbersValue = 1;
             }
-            if(specialValue && minSpecialValue < 0)
+            if(specialValue && minSpecialValue <= 0)
             {
                 minSpecialValue = 1;
             }
