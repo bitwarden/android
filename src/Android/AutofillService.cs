@@ -462,6 +462,7 @@ namespace Bit.Android
                     if(i > 100)
                     {
                         global::Android.Util.Log.Info(BitwardenTag, "Too many child iterations.");
+                        break;
                     }
                     else if(childNode.GetHashCode() == n.GetHashCode())
                     {
