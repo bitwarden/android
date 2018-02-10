@@ -19,6 +19,7 @@ namespace Bit.Android
     {
         private NotificationChannel _notificationChannel;
 
+        private const string BitwardenTag = "bw_access";
         private const int AutoFillNotificationId = 34573;
         private const string SystemUiPackage = "com.android.systemui";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
@@ -439,42 +440,44 @@ namespace Bit.Android
 
         private NodeList GetWindowNodes(AccessibilityNodeInfo n, AccessibilityEvent e,
             Func<AccessibilityNodeInfo, bool> condition, bool disposeIfUnused, NodeList nodes = null,
-            int recursionDepth = 0, AccessibilityNodeInfo parentNode = null)
+            int recursionDepth = 0)
         {
             if(nodes == null)
             {
                 nodes = new NodeList();
             }
 
-            //global::Android.Util.Log.Info("bw_access", "node: " + n.ToString());
-            //global::Android.Util.Log.Info("bw_access", "recursiveIterations = " + recursiveIterations);
-
-            var sameAsParent = n?.GetHashCode() == parentNode?.GetHashCode();
-            if(sameAsParent)
+            var dispose = disposeIfUnused;
+            if(n != null && recursionDepth < 50)
             {
-                global::Android.Util.Log.Info("bw_access", "child is same as parent!");
-            }
-
-            if(n != null && recursionDepth < 50 && !sameAsParent)
-            {
-                var dispose = disposeIfUnused;
                 if(n.WindowId == e.WindowId && !(n.ViewIdResourceName?.StartsWith(SystemUiPackage) ?? false) && condition(n))
                 {
                     dispose = false;
                     nodes.Add(n);
                 }
 
-                //global::Android.Util.Log.Info("bw_access", "ChildCount " + n.ChildCount);
                 for(var i = 0; i < n.ChildCount; i++)
                 {
                     var childNode = n.GetChild(i);
-                    GetWindowNodes(childNode, e, condition, true, nodes, recursionDepth++, n);
+                    if(i > 100)
+                    {
+                        global::Android.Util.Log.Info(BitwardenTag, "Too many child iterations.");
+                    }
+                    else if(childNode.GetHashCode() == n.GetHashCode())
+                    {
+                        global::Android.Util.Log.Info(BitwardenTag,
+                            "Child node is the same as parent for some reason.");
+                    }
+                    else
+                    {
+                        GetWindowNodes(childNode, e, condition, true, nodes, recursionDepth++);
+                    }
                 }
+            }
 
-                if(dispose)
-                {
-                    n.Dispose();
-                }
+            if(dispose)
+            {
+                n?.Dispose();
             }
 
             return nodes;
