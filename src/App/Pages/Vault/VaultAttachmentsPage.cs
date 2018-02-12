@@ -200,6 +200,16 @@ namespace Bit.App.Pages
             ListView.ItemSelected += AttachmentSelected;
             await LoadAttachmentsAsync();
 
+            // Prevent from adding multiple save buttons
+            if(Device.RuntimePlatform == Device.iOS && ToolbarItems.Count > 1)
+            {
+                ToolbarItems.RemoveAt(1);
+            }
+            else if(Device.RuntimePlatform != Device.iOS && ToolbarItems.Count > 0)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
+
             if(_cipher != null && (_tokenService.TokenPremium || _cipher.OrganizationId != null))
             {
                 ToolbarItems.Add(SaveToolbarItem);
@@ -210,8 +220,10 @@ namespace Bit.App.Pages
                     await ShowUpdateKeyAsync();
                 }
             }
-
-            // TODO: else show alert about needing premium membership
+            else
+            {
+                await DisplayAlert(null, AppResources.PremiumRequired, AppResources.Ok);
+            }
         }
 
         protected override void OnDisappearing()
