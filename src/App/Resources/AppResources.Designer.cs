@@ -475,6 +475,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service..
+        /// </summary>
+        public static string BitwardenAutofillGoToSettings {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillGoToSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to bitwarden Auto-fill Service.
         /// </summary>
         public static string BitwardenAutofillService {

@@ -424,10 +424,24 @@ namespace Bit.Android.Services
 
         public void OpenAutofillSettings()
         {
-            var activity = (MainActivity)CurrentContext;
-            var intent = new Intent(Settings.ActionRequestSetAutofillService);
-            intent.SetData(global::Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
-            activity.StartActivity(intent);
+            try
+            {
+                var activity = (MainActivity)CurrentContext;
+                var intent = new Intent(Settings.ActionRequestSetAutofillService);
+                intent.SetData(global::Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
+                activity.StartActivity(intent);
+            }
+            catch(ActivityNotFoundException)
+            {
+                var alertBuilder = new AlertDialog.Builder((MainActivity)CurrentContext);
+                alertBuilder.SetMessage(AppResources.BitwardenAutofillGoToSettings);
+                alertBuilder.SetCancelable(true);
+                alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
+                {
+                    (sender as AlertDialog)?.Cancel();
+                });
+                alertBuilder.Create().Show();
+            }
         }
 
         public void ShowLoading(string text)
