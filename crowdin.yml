@@ -1,6 +1,7 @@
 files:
   - source: /src/App/Resources/AppResources.resx
     translation: /src/App/Resources/AppResources.%two_letters_code%.resx
+    update_option: update_as_unapproved
     languages_mapping:
       two_letters_code:
         zh-CN: zh-Hans
@@ -9,6 +10,7 @@ files:
         pt-BR: pt-BR
   - source: /store/apple/en/copy.resx
     translation: /store/apple/%two_letters_code%/copy.resx
+    update_option: update_as_unapproved
     languages_mapping:
       two_letters_code:
         zh-CN: zh-Hans
@@ -17,6 +19,7 @@ files:
         pt-BR: pt-BR
   - source: /store/google/en/copy.resx
     translation: /store/google/%two_letters_code%/copy.resx
+    update_option: update_as_unapproved
     languages_mapping:
       two_letters_code:
         zh-CN: zh-Hans
