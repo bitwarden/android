@@ -57,6 +57,7 @@ namespace Bit.App.Pages
         private SearchToolBarItem SearchItem { get; set; }
         public ContentView ContentView { get; set; }
         public Fab Fab { get; set; }
+        private static Object lastTappedItem { get; set; }
 
         private void Init()
         {
@@ -148,7 +149,14 @@ namespace Bit.App.Pages
             AddCipherItem?.InitEvents();
             SearchItem?.InitEvents();
 
-            _filterResultsCancellationTokenSource = FetchAndLoadVault();
+            if(lastTappedItem != null)
+            {
+                ListView.ScrollTo(lastTappedItem, ScrollToPosition.Center, false);
+            }
+            else
+            {
+                _filterResultsCancellationTokenSource = FetchAndLoadVault();
+            }
 
             // Push registration
             if(_connectivity.IsConnected)
@@ -317,6 +325,7 @@ namespace Bit.App.Pages
                 await Navigation.PushForDeviceAsync(page);
             }
 
+            lastTappedItem = e.SelectedItem;
             ((ListView)sender).SelectedItem = null;
         }
 
