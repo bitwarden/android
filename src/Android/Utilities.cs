@@ -38,7 +38,7 @@ namespace Bit.Android
 
             emailIntent.SetType("plain/text");
             emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
-            emailIntent.PutExtra(Intent.ExtraSubject, "bitwarden Crash Report");
+            emailIntent.PutExtra(Intent.ExtraSubject, "Bitwarden Crash Report");
             emailIntent.PutExtra(Intent.ExtraText, FormatText(text, includeSecurityProviders));
 
             Application.Context.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
@@ -50,7 +50,7 @@ namespace Bit.Android
 
             emailIntent.SetType("plain/text");
             emailIntent.PutExtra(Intent.ExtraEmail, new String[] { "hello@bitwarden.com" });
-            emailIntent.PutExtra(Intent.ExtraSubject, "bitwarden Crash Report");
+            emailIntent.PutExtra(Intent.ExtraSubject, "Bitwarden Crash Report");
             emailIntent.PutExtra(Intent.ExtraText, FormatText(text, includeSecurityProviders));
 
             act.StartActivity(Intent.CreateChooser(emailIntent, "Send mail..."));
@@ -68,7 +68,7 @@ namespace Bit.Android
 
         private static string FormatText(string text, bool includeSecurityProviders = true)
         {
-            var crashMessage = "bitwarden has crashed. Please send this email to our support team so that we can help " +
+            var crashMessage = "Bitwarden has crashed. Please send this email to our support team so that we can help " +
                 "resolve the problem for you. Thank you.";
 
             text = crashMessage + "\n\n =============================================== \n\n" + text;

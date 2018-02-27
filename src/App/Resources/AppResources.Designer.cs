@@ -295,7 +295,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins across apps and the web..
+        ///   Looks up a localized string similar to Use the Bitwarden accessibility service to auto-fill your logins across apps and the web..
         /// </summary>
         public static string AutofillAccessibilityDescription {
             get {
@@ -385,7 +385,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device..
+        ///   Looks up a localized string similar to The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device..
         /// </summary>
         public static string AutofillServiceDescription {
             get {
@@ -394,7 +394,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Auto-fill with bitwarden.
+        ///   Looks up a localized string similar to Auto-fill with Bitwarden.
         /// </summary>
         public static string AutofillWithBitwarden {
             get {
@@ -430,7 +430,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bitwarden.
+        ///   Looks up a localized string similar to Bitwarden.
         /// </summary>
         public static string Bitwarden {
             get {
@@ -439,7 +439,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bitwarden App Extension.
+        ///   Looks up a localized string similar to Bitwarden App Extension.
         /// </summary>
         public static string BitwardenAppExtension {
             get {
@@ -448,7 +448,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the &quot;Tools&quot; screen..
+        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the &quot;Tools&quot; screen..
         /// </summary>
         public static string BitwardenAppExtensionAlert {
             get {
@@ -457,7 +457,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use bitwarden in Safari and other apps to auto-fill your logins..
+        ///   Looks up a localized string similar to Use Bitwarden in Safari and other apps to auto-fill your logins..
         /// </summary>
         public static string BitwardenAppExtensionDescription {
             get {
@@ -466,7 +466,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the bitwarden accessibility service to auto-fill your logins..
+        ///   Looks up a localized string similar to Use the Bitwarden accessibility service to auto-fill your logins..
         /// </summary>
         public static string BitwardenAutofillAccessibilityServiceDescription {
             get {
@@ -484,7 +484,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bitwarden Auto-fill Service.
+        ///   Looks up a localized string similar to Bitwarden Auto-fill Service.
         /// </summary>
         public static string BitwardenAutofillService {
             get {
@@ -493,7 +493,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the &quot;Tools&quot; screen..
+        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the &quot;Tools&quot; screen..
         /// </summary>
         public static string BitwardenAutofillServiceAlert {
             get {
@@ -502,7 +502,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use the bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps..
+        ///   Looks up a localized string similar to Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps..
         /// </summary>
         public static string BitwardenAutofillServiceDescription {
             get {
@@ -520,7 +520,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service..
+        ///   Looks up a localized string similar to When you see a Bitwarden auto-fill notification, you can tap it to launch the auto-fill service..
         /// </summary>
         public static string BitwardenAutofillServiceNotification {
             get {
@@ -574,7 +574,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1. On the Android Accessibility Settings screen, touch &quot;bitwarden&quot; under the Services heading..
+        ///   Looks up a localized string similar to 1. On the Android Accessibility Settings screen, touch &quot;Bitwarden&quot; under the Services heading..
         /// </summary>
         public static string BitwardenAutofillServiceStep1 {
             get {
@@ -1222,7 +1222,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu)..
+        ///   Looks up a localized string similar to In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu)..
         /// </summary>
         public static string ExtensionInSafari {
             get {
@@ -1267,7 +1267,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu)..
+        ///   Looks up a localized string similar to In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu)..
         /// </summary>
         public static string ExtensionSetup2 {
             get {
@@ -1276,7 +1276,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Tap the bitwarden icon in the menu to launch the extension..
+        ///   Looks up a localized string similar to Tap the Bitwarden icon in the menu to launch the extension..
         /// </summary>
         public static string ExtensionTapIcon {
             get {
@@ -1285,7 +1285,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To turn on bitwarden in Safari and other apps, tap the &quot;more&quot; icon on the bottom row of the menu..
+        ///   Looks up a localized string similar to To turn on Bitwarden in Safari and other apps, tap the &quot;more&quot; icon on the bottom row of the menu..
         /// </summary>
         public static string ExtensionTurnOn {
             get {
@@ -2050,7 +2050,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must log into the main bitwarden app before you can use the extension..
+        ///   Looks up a localized string similar to You must log into the main Bitwarden app before you can use the extension..
         /// </summary>
         public static string MustLogInMainApp {
             get {
@@ -2257,7 +2257,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Option defaults are set from the main bitwarden app&apos;s password generator tool..
+        ///   Looks up a localized string similar to Option defaults are set from the main Bitwarden app&apos;s password generator tool..
         /// </summary>
         public static string OptionDefaults {
             get {
@@ -2383,7 +2383,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Allow&quot; on the following prompt when asked to enable push notifications..
+        ///   Looks up a localized string similar to Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select &quot;Allow&quot; on the following prompt when asked to enable push notifications..
         /// </summary>
         public static string PushNotificationAlert {
             get {
@@ -2410,7 +2410,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!.
+        ///   Looks up a localized string similar to App Store ratings are reset with every new version of Bitwarden. Please consider helping us out with a good review!.
         /// </summary>
         public static string RateTheAppDescriptionAppStore {
             get {
@@ -2554,7 +2554,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify the base URL of your on-premise hosted bitwarden installation..
+        ///   Looks up a localized string similar to Specify the base URL of your on-premise hosted Bitwarden installation..
         /// </summary>
         public static string SelfHostedEnvironmentFooter {
             get {
@@ -3094,7 +3094,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Visit our website to get help, news, email us, and/or learn more about how to use bitwarden..
+        ///   Looks up a localized string similar to Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden..
         /// </summary>
         public static string VisitOurWebsiteDescription {
             get {
@@ -3112,7 +3112,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to bitwarden Web Vault.
+        ///   Looks up a localized string similar to Bitwarden Web Vault.
         /// </summary>
         public static string WebVault {
             get {
@@ -3121,7 +3121,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Manage your items from any web browser with the bitwarden web vault..
+        ///   Looks up a localized string similar to Manage your items from any web browser with the Bitwarden web vault..
         /// </summary>
         public static string WebVaultDescription {
             get {

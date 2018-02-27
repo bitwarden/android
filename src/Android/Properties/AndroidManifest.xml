@@ -12,7 +12,7 @@
   <uses-feature android:name="android.hardware.camera" android:required="false" />
   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
-  <application android:label="bitwarden" android:theme="@style/BitwardenTheme" android:allowBackup="false">
+  <application android:label="Bitwarden" android:theme="@style/BitwardenTheme" android:allowBackup="false">
     <provider
         android:name="android.support.v4.content.FileProvider"
         android:authorities="com.x8bit.bitwarden.fileprovider"

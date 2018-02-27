@@ -7,7 +7,7 @@ using Android.Views;
 namespace Bit.Android
 {
     [Activity(Theme = "@style/BitwardenTheme.Splash",
-        Label = "bitwarden",
+        Label = "Bitwarden",
         Icon = "@drawable/icon",
         WindowSoftInputMode = SoftInput.StateHidden)]
     public class AutofillActivity : Activity

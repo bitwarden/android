@@ -5,9 +5,9 @@
   </string>
   <string name="AutoFillServiceDescription">
     It can be difficult and insecure for users to switch between apps to copy/paste username and password information
-    from their bitwarden vault.\n\nUsing this accessibility service allows bitwarden to detect and read input fields on
-    your device\'s screen. Whenever bitwarden detects a password field on the screen a notification will appear that allows
-    you to quickly access your bitwarden vault and automatically fill (auto-fill) the correct login information into the
+    from their Bitwarden vault.\n\nUsing this accessibility service allows Bitwarden to detect and read input fields on
+    your device\'s screen. Whenever Bitwarden detects a password field on the screen a notification will appear that allows
+    you to quickly access your Bitwarden vault and automatically fill (auto-fill) the correct login information into the
     necessary fields.
   </string>
   <string name="MyVault">

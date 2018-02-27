@@ -14,7 +14,7 @@ using XLabs.Ioc;
 
 namespace Bit.Android.Autofill
 {
-    [Service(Permission = Manifest.Permission.BindAutofillService, Label = "bitwarden")]
+    [Service(Permission = Manifest.Permission.BindAutofillService, Label = "Bitwarden")]
     [IntentFilter(new string[] { "android.service.autofill.AutofillService" })]
     [MetaData("android.autofill", Resource = "@xml/autofillservice")]
     [Register("com.x8bit.bitwarden.Autofill.AutofillService")]

@@ -21,7 +21,7 @@ using Bit.App.Enums;
 
 namespace Bit.Android
 {
-    [Activity(Label = "bitwarden",
+    [Activity(Label = "Bitwarden",
         Icon = "@drawable/icon",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         Exported = false)]

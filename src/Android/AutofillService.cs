@@ -12,7 +12,7 @@ using Bit.App.Resources;
 
 namespace Bit.Android
 {
-    [Service(Permission = global::Android.Manifest.Permission.BindAccessibilityService, Label = "bitwarden")]
+    [Service(Permission = global::Android.Manifest.Permission.BindAccessibilityService, Label = "Bitwarden")]
     [IntentFilter(new string[] { "android.accessibilityservice.AccessibilityService" })]
     [MetaData("android.accessibilityservice", Resource = "@xml/accessibilityservice")]
     public class AutofillService : AccessibilityService
