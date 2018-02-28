@@ -412,10 +412,10 @@
     <value>Tránh các ký tự không rõ ràng</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Phần mở rộng bitwarden</value>
+    <value>Tiện ích mở rộng ứng dụng bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Cách dễ nhất để thêm đăng nhập mới vào kho của bạn là từ Phần mở rộng bitwarden. Tìm hiểu thêm về cách sử dụng Phần mở rộng bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
+    <value>Cách dễ nhất để thêm đăng nhập mới vào hầm của bạn là từ Tiện ích mở rộng ứng dụng bitwarden. Tìm hiểu thêm về cách sử dụng Tiện ích mở rộng ứng dụng bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Sử dụng bitwarden trong Safari và các ứng dụng khác để tự động điền thông tin đăng nhập của bạn.</value>
@@ -591,7 +591,7 @@
     <value>Cài đặt Khác</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Bạn phải đăng nhập vào ứng dụng bitwarden trước khi sử dụng phần mở rộng.</value>
+    <value>Bạn phải đăng nhập vào ứng dụng bitwarden trước khi sử dụng tiện ích mở rộng.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Không bao giờ</value>
@@ -650,7 +650,7 @@
     <value>Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Xếp hạng trên App Store sẽ được đặt lại với mỗi bản cập nhật của bitwarden. Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</value>
+    <value>Xếp hạng App Store sẽ được đặt lại với mỗi bản cập nhật của bitwarden. Xin hãy nhìn nhận và cho chúng tôi với một đánh giá tốt!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Tạo lại mật khẩu</value>
@@ -726,10 +726,10 @@
     <value>Xem mục</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Kho bitwarden nền Web</value>
+    <value>Hầm bitwarden trên Web</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Quản lý các mục đăng nhập của bạn từ mọi trình duyệt web với kho bitwarden nền web.</value>
+    <value>Quản lý các mục đặng nhập của bạn từ mọi trình duyệt web với hầm bitwarden nền web.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Mất ứng dụng xác thực?</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Cách dễ nhất để thêm đăng nhập mới vào kho của bạn là từ dịch vụ Tự động điền của bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
+    <value>Cách dễ nhất để thêm đăng nhập mới vào hầm của bạn là từ dịch vụ Tự động điền của bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Tự động điền</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>
