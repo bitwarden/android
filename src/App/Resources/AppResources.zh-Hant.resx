@@ -209,7 +209,7 @@
     <value>在我們的 GitHub 儲存庫中新增問題。</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>請驗證你的指紋。</value>
+    <value>請驗證您的指紋。</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>資料夾</value>
@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>你確定要登出嗎？</value>
+    <value>您確定要登出嗎？</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>主密碼</value>
@@ -394,7 +394,7 @@
     <value>帳戶</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>已建立帳戶！你現在可以登入了。</value>
+    <value>帳戶已建立！現在可以登入了。</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>新增項目</value>
@@ -403,7 +403,7 @@
     <value>App 小工具</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>使用 bitwarden 無障礙服務在應用程式和網站中自動填寫你的登入資料。</value>
+    <value>使用 bitwarden 無障礙服務在應用程式和網站中自動填寫您的登入資料。</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>自動填寫</value>
@@ -430,13 +430,13 @@
     <value>變更電子郵件</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>你可以在 bitwarden 網頁版變更電子郵件地址。現在前往？</value>
+    <value>您可以在 bitwarden 網頁版變更電子郵件地址。現在前往？</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>變更主密碼</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>你可以在 bitwarden 網頁版密碼庫變更主密碼。現在前往？</value>
+    <value>您可以在 bitwarden 網頁版密碼庫變更主密碼。現在前往？</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>關閉</value>
@@ -470,7 +470,7 @@
     <value>開啟自動同步</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>請輸入你的帳户電子郵件地址以接收主密碼提示。</value>
+    <value>請輸入您的帳户電子郵件地址以接收主密碼提示。</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>重新啟動 App 小工具</value>
@@ -486,16 +486,16 @@
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>即時存取你的密碼！</value>
+    <value>即時存取您的密碼！</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>你已經準備好登入了！</value>
+    <value>您已經準備好登入了！</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
     <value>支援的程式</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>現在可以在 Safari、Chrome 以及其他支援的程式中方便地存取你的登入資料了。</value>
+    <value>現在可以在 Safari、Chrome 以及其他支援的程式中方便地存取您的登入資料了。</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>在 Safari 或 Chrome 中的分享功能尋找 bitwarden 圖示(提示：在最底行的最右邊)。</value>
@@ -522,10 +522,10 @@
     <value>匯入項目</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>你可以在 bitwarden 網頁版批次匯入登入資料。現在前往？</value>
+    <value>您可以在 bitwarden 網頁版批次匯入登入資料。現在前往？</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>快速從其他密碼管理應用程式中批次匯入你的登入資料。</value>
+    <value>快速從其他密碼管理應用程式中批次匯入您的登入資料。</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>上次同步於：</value>
@@ -549,17 +549,17 @@
     <value>4 小時</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
-    <value>即時</value>
+    <value>立即</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>自動上鎖時間</value>
+    <value>自動鎖定時間</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>正在登入...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>登入或新增帳戶來存取你的安全密碼庫。</value>
+    <value>登入或新增帳戶來存取您的安全密碼庫。</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>管理</value>
@@ -568,13 +568,13 @@
     <value>兩次填寫的主密碼不相符。</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>主密碼是你存取密碼庫的密碼。請勿忘記主密碼，我們無法將你的主密碼復原或重設。</value>
+    <value>主密碼是您存取密碼庫的密碼。請勿忘記主密碼，我們無法將您的主密碼復原或重設。</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>主密碼提示 (選用)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>主密碼提示可以在你忘記主密碼時幫助你回憶主密碼。</value>
+    <value>主密碼提示可以在您忘記主密碼時幫助您回憶主密碼。</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
     <value>主密碼需要至少 8 個字元。</value>
@@ -591,7 +591,7 @@
     <value>更多設定</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>你必須先登入 bitwarden 才可使用小工具。</value>
+    <value>您必須先登入 bitwarden 才可使用小工具。</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>永不</value>
@@ -600,13 +600,13 @@
     <value>已新增項目。</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>你沒有收藏任何網站。</value>
+    <value>您沒有收藏任何網站。</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>你的密碼庫中沒有登入資料。</value>
+    <value>您的密碼庫中沒有登入資料。</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>你的密碼庫中沒有此網站的登入資料。請新增一個。</value>
+    <value>您的密碼庫中沒有此網站的登入資料。請新增一個。</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>此網頁沒有儲存過使用者名稱或密碼。</value>
@@ -634,13 +634,13 @@
     <value>密碼提示</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>已寄出包含你主密碼提示的電子郵件。</value>
+    <value>已寄出包含您主密碼提示的電子郵件。</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>你確定要覆寫目前的密碼嗎？</value>
+    <value>您確定要覆寫目前的密碼嗎？</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden 使用推送通知來自動同步你的密碼庫。為了確保同步順暢，稍後系統將詢問你是否會開啟通知，請選擇“是”。</value>
+    <value>bitwarden 使用推送通知來自動同步您的密碼庫。為了確保同步順暢，稍後系統將詢問您是否會開啟通知，請選擇“是”。</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -707,7 +707,7 @@
     <value>兩步驟登入</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>兩步驟登入需要你登入時輸入一個由驗證碼程式產生的安全碼，為你的帳戶增加一層保障。兩步驟登入可以在 bitwarden 網頁版啟用。現在前往？</value>
+    <value>兩步驟登入需要您登入時輸入一個由驗證碼程式產生的安全碼，為您的帳戶增加一層保障。兩步驟登入可以在 bitwarden 網頁版啟用。現在前往？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>用 {0} 解鎖</value>
@@ -726,10 +726,10 @@
     <value>檢視項目</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden 網頁版密碼庫</value>
+    <value>bitwarden 網路版密碼庫</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>使用 bitwarden 網頁版，從瀏覽器管理你的密碼。</value>
+    <value>使用 bitwarden 網頁版，從瀏覽器管理您的密碼。</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>遺失了驗證碼程式？</value>
@@ -752,11 +752,11 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>你的密碼庫裡沒有 {0} 的登入資料。</value>
+    <value>您的密碼庫裡沒有 {0} 的登入資料。</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>當你看見 bitwarden 的自動填寫通知時，可以點選它以啟用自動填寫服務。</value>
+    <value>當您看見 bitwarden 的自動填寫通知時，可以點選它以啟用自動填寫服務。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>按此自動填寫來自密碼庫的登入資料。</value>
@@ -789,7 +789,7 @@
     <value>自動填寫</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>你想自動填寫還是檢視登入資料？</value>
+    <value>您想自動填寫還是檢視登入資料？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>確定要自動填寫此資料嗎？它和"{0}"不完全相符。</value>
@@ -804,22 +804,22 @@
     <value>搜尋</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>你正在搜尋用於"{0}"的登入資料。</value>
+    <value>您正在搜尋用於"{0}"的登入資料。</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>分享你的密碼庫</value>
+    <value>分享您的密碼庫</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>新增組織以安全地分享你的登入資料。</value>
+    <value>新增組織以安全地分享您的登入資料。</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>我们使用 analytics 協助分析擴充套件的使用情況，以便我們改善程式。所有資料均為匿名收集。</value>
+    <value>我们使用 analytics 協助分析應用程式的使用情況，以便我們改善程式。所有資料均為匿名收集。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>選取密碼欄位時掃描</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>當你選取了密碼欄位時才掃描螢幕和彈出自動輸入通知。這個設定可以減少電量消耗。</value>
+    <value>當您選取了密碼欄位時才掃描螢幕和彈出自動輸入通知。這個設定可以減少電量消耗。</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>持續顯示通知</value>
@@ -883,7 +883,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>將你的 YubiKey NEO 緊貼於裝置後以繼續</value>
+    <value>將您的 YubiKey NEO 緊貼於裝置後以繼續</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey NEO 安全鑰匙</value>
@@ -899,14 +899,14 @@
     <value>無法下載檔案。</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>你的裝置無法開啟這種類型的檔案。</value>
+    <value>您的裝置無法開啟這種類型的檔案。</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>正在下載...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>這個附件大小為 {0} 。確定要下載到你的裝置嗎？</value>
+    <value>這個附件大小為 {0} 。確定要下載到您的裝置嗎？</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -944,7 +944,7 @@
     <value>複製 TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>如果你的登入資料已有驗證器金鑰，TOTP 驗證碼會在你自動輸入時自動複製到你的剪貼簿。</value>
+    <value>如果您的登入資料已有驗證器金鑰，TOTP 驗證碼會在您自動輸入時自動複製到您的剪貼簿。</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>禁止自動複製 TOTP</value>
@@ -992,7 +992,7 @@
     <value>自訂環境</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>適用於進階使用者。你可以單獨指定各個服務的基礎 URL。</value>
+    <value>適用於進階使用者。您可以單獨指定各個服務的基礎 URL。</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>環境 URL 已儲存。</value>
@@ -1015,7 +1015,7 @@
     <value>伺服器 URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web 儲存庫伺服器 URL</value>
+    <value>網路版密碼庫伺服器 URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
     <value>按此自動填寫來自密碼庫的登入資料。</value>
@@ -1027,7 +1027,7 @@
     <value>自訂欄位已更新</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
-    <value>沒有自訂欄位。你可以在網頁版密碼庫，或是瀏覽器擴充套件中管理自訂欄位。</value>
+    <value>沒有自訂欄位。您可以在網頁版密碼庫，或是瀏覽器擴充套件中管理自訂欄位。</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>複製號碼</value>
@@ -1042,10 +1042,10 @@
     <value>安全代碼</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>你要新增哪種類型的項目？</value>
+    <value>您要新增哪種類型的項目？</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>卡片</value>
+    <value>信用卡</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
     <value>身分</value>
@@ -1054,7 +1054,7 @@
     <value>登入</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>安全記事</value>
+    <value>安全筆記</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>地址 1</value>
@@ -1174,7 +1174,7 @@
     <value>停用網站圖示</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>在你密碼庫的每個登入資料旁顯示一個可辨識圖示。</value>
+    <value>在您密碼庫的每個登入資料旁顯示一個可辨識圖示。</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>圖示伺服器 URL</value>
@@ -1183,7 +1183,7 @@
     <value>使用 bitwarden 自動填寫</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>密碼庫已上鎖</value>
+    <value>密碼庫已鎖定</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
     <value>前往我的密碼庫</value>
@@ -1201,10 +1201,10 @@
     <value>自動填寫服務</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>bitwarden 自動填寫服務使用 Android 自動填寫框架來幫助你將登入、信用卡和身分資訊填寫到你裝置上的其他應用程式中。</value>
+    <value>Bitwarden 自動填寫服務使用 Android 自動填寫框架來幫助您將登入、信用卡和身分資訊填寫到您裝置上的其他應用程式中。</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden 使用無障礙服務，幫你在網頁和程式中自動填寫登入資料。</value>
+    <value>Bitwarden 使用無障礙服務，幫您在網頁和程式中自動填寫登入資料。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>開啟自動填寫設定</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>
