@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden - Bezplatný správce hesel</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden je nejjednodušší a nejbezpečnější způsob, jak uchovávat veškeré své přihlašovací údaje a zároveň je mít pohodlně synchronizované mezi všemi svými zařízeními. Rozšíření bitwarden umožňuje rychle přihlašování na libovolné webové stránce v prohlížeči Safari nebo Chrom a také ve stovkách populárních aplikací přímo ve vašem zařízení.
@@ -128,9 +129,11 @@ Krádež hesla je velice vážný problém. Stránky a aplikace, které každode
 Bezpečnostní experti proto doporučují používat různá, silná a náhodně generovaná hesla pro každý účet zvlášť. Ale jak tato všechna hesla spravovat? bitwarden vám ulehčí jejich správu, ale také jejich generování nebo sdílení.
 
 bitwarden uchovává veškeré vaše přihlašovací údaje v zašifrovaném trezoru, který se synchronizuje mezi všemi vašimi zařízeními. Jelikož jsou zašifrována ještě před opuštěním vašeho zařízení, máte přístup ke svým datům pouze vy. Dokonce ani tým v bitwardenu nemůže číst vaše data a to ani kdybychom chtěli. Vaše data jsou totiž zakódována pomocí šifrovávání AES-256, náhodným hashem a PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,8bit,heslo,přihlašovací údaje,bezplatný správce hesel,správce hesel,správce přihlášení</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Spravujte veškeré své přihlašovací údaje z bezpečného trezoru</value>
