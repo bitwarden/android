@@ -216,10 +216,10 @@
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>Nová složka byla vytvořena.</value>
+    <value>Složka byla přidána</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Složka byla smazána.</value>
+    <value>Složka byla smazána</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>Žádná složka</value>
@@ -229,7 +229,7 @@
     <value>Složky</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Složka byla upravena.</value>
+    <value>Složka byla upravena</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>Otevřít webovou stránku</value>
@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Přihlášení</value>
+    <value>Přihlašovací údaje</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Položka byla odstraněna.</value>
+    <value>Položka byla smazána</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -421,7 +421,7 @@
     <value>Použijte bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Služba automatického vyplnění</value>
+    <value>Služba automatického vyplňování</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
@@ -597,7 +597,7 @@
     <value>Nikdy</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>Nová položka byla vytvořena.</value>
+    <value>Položka byla přidána</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Žádné oblíbené přihlašovací údaje.</value>
@@ -662,7 +662,7 @@
     <value>Vyhledat v trezoru</value>
   </data>
   <data name="Security" xml:space="preserve">
-    <value>Bezpečnost</value>
+    <value>Zabezpečení</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
     <value>Viz vývoj aplikace</value>
@@ -680,7 +680,7 @@
     <value>Informace o položce</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Položka byla upravena.</value>
+    <value>Položka byla upravena</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Odesílání...</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je prostřednictvím služby automatického vyplnění bitwarden. Přečtěte si další informace o použití této služby na obrazovce "Nástroje".</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je služba automatického vyplňování bitwarden. Přečtěte si další informace o použití této služby na obrazovce "Nástroje".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatické vyplnění</value>
@@ -917,7 +917,7 @@
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Autentizační klíč byl přidán.</value>
+    <value>Autentizační klíč byl přidán</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
     <value>Nelze přečíst ověřovací klíč.</value>
@@ -953,10 +953,10 @@
     <value>Pro použití této funkce je potřebné prémiové členství.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Příloha byla přidána.</value>
+    <value>Příloha byla přidána</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Příloha byla smazána.</value>
+    <value>Příloha byla smazána</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
     <value>Vybrat soubor</value>
@@ -1024,7 +1024,7 @@
     <value>Vlastní pole</value>
   </data>
   <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Vlastní pole upravena.</value>
+    <value>Vlastní pole byla upravena</value>
   </data>
   <data name="NoCustomFields" xml:space="preserve">
     <value>Žádná vlastní pole. Vlastní pole můžete spravovat z webového aplikace nebo rozšíření prohlížeče.</value>
@@ -1054,7 +1054,7 @@
     <value>Přihlášení</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Zabezpečená poznámka</value>
+    <value>Poznámka</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Adresa 1</value>
@@ -1214,21 +1214,24 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Použít Face ID k ověření.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Použít Face ID k odemknutí</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Ověření Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Odemknout pomocí Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Ověřit pomocí Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>
