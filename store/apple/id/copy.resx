@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden - Pengelola Sandi</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden adalah cara termudah dan teraman untuk menyimpan semua info masuk dan sandi Anda sambil tetap menjaga mereka disinkronkan di antara semua perangkat Anda. Ekstensi aplikasi bitwarden memungkinkan Anda untuk masuk ke situs web dengan cepat melalui Safari atau Chrome dan didukung oleh ratusan aplikasi populer lainnya.
@@ -128,9 +129,11 @@ Pencurian sandi adalah masalah serius. Situs web dan aplikasi yang Anda gunakan 
 Pakar keamanan merekomendasikan agar Anda menggunakan sandi yang berbeda dan dibuat secara acak untuk setiap akun yang Anda buat. Tapi bagaimana mengelola semua sandi tersebut? bitwarden membuatnya menjadi mudah untuk Anda membuat, menyimpan dan mengakses sandi Anda.
 
 bitwarden menyimpan semua info masuk Anda di brankas terenkripsi yang disinkronkan di semua perangkat Anda. Karena sepenuhnya dienkripsi sebelum meninggalkan perangkat Anda, hanya Anda yang memiliki akses ke data Anda. Bahkan tim di bitwarden tidak dapat membaca data Anda, bahkan jika kami mau. Data Anda disegel dengan ekripsi AES-256 bit, hash yang di-salt, dan PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,sandi,info masuk,pengelola sandi gratis,pengelola sandi,pengelola info masuk</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Kelola semua info masuk dan sandi Anda dari brankas yang aman</value>
