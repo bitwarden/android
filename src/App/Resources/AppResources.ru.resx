@@ -199,7 +199,7 @@
     <value>Введите PIN-код.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>Избранное</value>
+    <value>Избранные</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
@@ -209,7 +209,7 @@
     <value>Откройте проблему в нашем репозитории на GitHub.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Приложите палец к датчику.</value>
+    <value>Приложите палец к датчику</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Папка</value>
@@ -299,7 +299,7 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>Ок</value>
+    <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
@@ -344,7 +344,7 @@
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URL</value>
+    <value>URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -378,10 +378,10 @@
     <value>Просмотр</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Перейти на наш сайт</value>
+    <value>Посетите наш сайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Посетите наш веб-сайт, чтобы получить помощь, прочесть новости, связаться с нами или узнать больше о том, как использовать bitwarden.</value>
+    <value>Посетите наш веб-сайт, чтобы получить помощь, прочесть новости, связаться с нами и/или узнать больше о том, как использовать bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Веб-сайт</value>
@@ -394,7 +394,7 @@
     <value>Аккаунт</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Ваш аккаунт был создан! Теперь вы можете войти в систему.</value>
+    <value>Ваш аккаунт создан! Теперь вы можете войти в систему.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>Добавить элемент</value>
@@ -421,7 +421,7 @@
     <value>Используйте bitwarden в Safari и других приложениях для автозаполнения логинов.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Служба автозаполнения bitwarden</value>
+    <value>сервис автозаполнения bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Используйте службу автозаполнения bitwarden для автоматического входа.</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Редактировать элемент</value>
+    <value>Изменить элемент</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Включить автоматическую синхронизацию</value>
@@ -504,7 +504,7 @@
     <value>Нажмите на иконку bitwarden в меню, чтобы запустить расширение.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Чтобы включить bitwarden в Safari и других приложениях, нажмите "больше" в нижней строке меню.</value>
+    <value>Чтобы включить bitwarden в Safari и других приложениях, нажмите Еще в нижней строке меню.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Избранный</value>
@@ -552,7 +552,7 @@
     <value>Немедленно</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Настройки блокировки</value>
+    <value>Параметры блокировки</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Вход...</value>
@@ -612,7 +612,7 @@
     <value>У логина не заданы имя пользователя и пароль.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ок, понятно!</value>
+    <value>Ok, понятно!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
@@ -622,7 +622,7 @@
     <value>Опции</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Другое</value>
+    <value>Прочее</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
     <value>Пароль сгенерирован.</value>
@@ -634,10 +634,10 @@
     <value>Подсказка к паролю</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Мы отправили вам электронное письмо с подсказкой.</value>
+    <value>Мы отправили вам email с подсказкой к мастер-паролю.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Вы действительно хотите перезаписать текущий пароль?</value>
+    <value>Вы хотите перезаписать текущий пароль?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
     <value>bitwarden обеспечивает автоматическую синхронизацию хранилища при помощи push-уведомлений. Для вашего максимального удобства, пожалуйста, выберите "Разрешить" при появлении предложения включить push-уведомления.</value>
@@ -650,7 +650,7 @@
     <value>Пожалуйста, подумайте о том, чтобы помочь нам хорошим отзывом!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Рейтинги App Store обновляются с каждой новой версией bitwarden. Пожалуйста, подумайте о том, чтобы помочь нам хорошим отзывом!</value>
+    <value>Рейтинги App Store обновляются с каждой новой версией bitwarden. Просим помочь нам хорошим отзывом!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Создать новый пароль</value>
@@ -707,7 +707,7 @@
     <value>Двухфакторная аутентификация</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двухфакторная аутентификация делает ваш аккаунт более защищенным, требуя ввода кода безопасности из приложения-аутентификатора при каждом входе в систему. Двухфакторная аутентификация включается на сайте bitwarden.com. Перейти на сайт сейчас?</value>
+    <value>Двухфакторная аутентификация делает ваш аккаунт более защищенным, требуя подтверждения входа на другом устройстве, например, ключом безопасности, приложением-аутентификатором, SMS, телефонным звонком или email. Двухфакторная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Разблокировать {0}</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Увидев уведомление bitwarden нажмите на него, чтобы запустить службу автозаполнения.</value>
+    <value>Увидев уведомление bitwarden нажмите на него, чтобы запустить сервис автозаполнения.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Коснитесь этого уведомления для автоматического заполнения.</value>
@@ -765,7 +765,7 @@
     <value>Настройки специальных возможностей</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. На экране настроек специальных возможностей Android в разделе Службы коснитесь bitwarden.</value>
+    <value>1. На экране настроек специальных возможностей Android коснитесь bitwarden в разделе Службы.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Активируйте переключатель и нажмите OK для подтверждения.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Самый простой способ добавить новые логины в ваше хранилище это служба автозаполнения bitwarden. Дополнительные сведения об использовании службы автозаполнения bitwarden в разделе Инструменты.</value>
+    <value>Самый простой способ добавить новые учетные записи в Ваше хранилище это сервис автозаполнения bitwarden. Дополнительные сведения об использовании сервиса автозаполнения bitwarden в разделе Инструменты.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Автозаполнение</value>
@@ -846,7 +846,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Введите 6-значный код подтверждения, который был отправлен на {0}.</value>
+    <value>Введите 6-значный код подтверждения, который был отправлен на email {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -1090,7 +1090,7 @@
     <value>Декабрь</value>
   </data>
   <data name="Dr" xml:space="preserve">
-    <value>Д-р</value>
+    <value>Тов.</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
     <value>Месяц</value>
@@ -1135,7 +1135,7 @@
     <value>Г-жа</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Г-жа</value>
+    <value>Проф.</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>Ноябрь</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>
