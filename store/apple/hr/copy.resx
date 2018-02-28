@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden - Besplatni upravitelj lozinki</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden je najlakši i najsigurniji način pohranjivanja svih vaših prijava i lozinki, dok su iste sinkronizirane među svim vašim uređajima. Proširenje aplikacije bitwarden omogućuje vam brzo prijavljivanje na bilo koju web stranicu putem Safaria ili Chromea i podržava stotine drugih popularnih aplikacija.
@@ -128,9 +129,11 @@ Krađa lozinki ozbiljan je problem. Web-lokacije i aplikacije koje upotrebljavat
 Sigurnosni stručnjaci preporučuju da koristite različitu, nasumično generiranu lozinku za svaki račun koji stvorite. Ali kako upravljati svim tim lozinkama? Bitwarden vam olakšava stvaranje, pohranu i pristup lozinkama.
 
 bitwarden pohranjuje sve vaše prijave u šifrirani trezor koji se sinkronizira na svim vašim uređajima. Budući da je potpuno šifriran prije nego ikada napusti uređaj, samo vi imate pristup podacima. Čak ni tim u bitwardenu ne može vidjeti vaše podatke. Vaši su podaci zapečaćeni s AES-256 bitnim šifriranjem, salt hashom i PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden, bit warden, 8bit, lozinka, prijava, besplatni upravitelj lozinki, upravitelj lozinki, pravitelj za prijavu</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Upravljajte svim svojim prijavama i lozinkama iz sigurnog trezora</value>
