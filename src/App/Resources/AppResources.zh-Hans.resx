@@ -418,13 +418,13 @@
     <value>最简单的添加网站的方法是 bitwarden App 扩展。请到 “工具” 页面获得更多信息。</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>在 Safari 和其他应用使用 bitwarden 来自动填充登录项目。</value>
+    <value>在 Safari 和其他应用中使用 bitwarden 来自动填写登录信息。</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden 自动填充</value>
+    <value>bitwarden 自动填写服务</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>使用 bitwarden 无障碍服务自动填写您的登录项目。</value>
+    <value>使用 bitwarden 无障碍服务自动填写您的登录信息。</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>修改 Email</value>
@@ -482,7 +482,7 @@
     <value>开启 App 扩展</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>在 Safari 中，使用共享图标寻找 bitwarden (提示: 在菜单最下面一行的右边)。</value>
+    <value>在 Safari 中，使用共享图标寻找 bitwarden（提示：在菜单最下面一行的右边）。</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>选项默认值是由 bitwarden 应用的密码生成工具设置的。</value>
+    <value>选项默认值是由 bitwarden 应用的密码生成工具设置。</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>选项</value>
@@ -640,7 +640,7 @@
     <value>您确定要覆盖当前密码吗？</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden 使用推送通知来自动同步您的密码库。为了获得最佳体验，接下来询问是否开启通知时，请选择“是”。</value>
+    <value>bitwarden 使用推送通知来自动同步您的密码库。为了获得最佳体验，接下来询问是否开启通知时，请选择 “允许”。</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>当你看到一个 bitwarden 自动填充通知时，您可以利用它来启动自动填充服务。</value>
+    <value>当你看到一个 bitwarden 自动填写通知时，您可以用它来启动自动填写服务。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>点击此通知，以便从您的密码库自动登录。</value>
@@ -783,7 +783,7 @@
     <value>测试版</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>向您的密码库中添加新的登录项目最简单的方法，是 bitwarden 自动填充服务。要了解更多有关使用 bitwarden 自动填充服务，请转到 "工具" 屏幕。</value>
+    <value>向您的密码库中添加新登录项目的最简单方法，就是 bitwarden 自动填写服务。转到“工具”屏幕了解更多有关使用 bitwarden 自动填写服务的方法。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>自动填充</value>
@@ -1180,7 +1180,7 @@
     <value>图标服务器 URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>使用 bitwarden 自动填充</value>
+    <value>使用 bitwarden 自动填写</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>密码库已锁定</value>
@@ -1201,10 +1201,10 @@
     <value>自动填充服务</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>bitwarden 自动填充服务使用 Android 自动填充框架来帮助您将登录、信用卡和身份信息填充到您的设备上的其他应用程序中。</value>
+    <value>bitwarden 自动填写服务使用 Android 自动填写框架来帮助您将登录、身份等信息填写到在的设备上的其他应用程序。</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>使用 bitwarden 自动填充服务在应用和网站自动填写您的登录项目。</value>
+    <value>使用 bitwarden 自动填写服务在应用和网站自动填写您的登录项目。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>打开自动填充设置</value>
@@ -1223,12 +1223,15 @@
     <value>验证面容 ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>使用 Windows Hello 解锁。</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>使用 Windows Hello 验证。</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>

@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden Adgangskode Administrator</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden er den letteste og sikreste måde at opbevare alle dine login og adgangskoder samtidig med at de er synkronisere mellem alle dine enheder.
@@ -128,9 +129,11 @@ Tyveri af adgangskoder er et seriøst problem. Hjemmesider og apps du bruger er 
 Sikkerhedseksperter anbefaler at man bruger et unikt, tilfældig genreret adgangskode for hver konto man opretter. Men hvordan administrere man alle disse adganskoder? bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
 
 bitwarden gemmer alle dine login i en kryptere boks der synkroniseres over alle dine enheder. Siden det er komplet krypteret før det forlader dine enheder, er det kun dig der har adgang til din data. Ikke engang de ansatte ved bitwarden can få adgang til data, også selvom de prøvede. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,adgangskode,login,gratis adgangskode administrator,adgangskode-administrator,login administrator</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Administrer alle din logins og adgangskoder fra en sikker boks</value>

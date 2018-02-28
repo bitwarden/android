@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden - Gratis wachtwoordbeheerder</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden is de makkelijkste en veiligste manier om al uw logins en wachtwoorden op te slaan en ze te synchroniseren tussen al uw apparaten.
@@ -128,9 +129,11 @@ Diefstal van wachtwoorden is een ernstig probleem. De websites en apps die u geb
 Beveiligingsexperts bevelen aan dat u een verschillend, willekeurig gegenereerd wachtwoord gebruikt voor ieder account. Maar hoe beheer je al die wachtwoorden? bitwarden maakt het voor u gemakkelijk om ze te genereren, op te slaan en te gebruiken.
 
 bitwarden slaat al uw logins op in een versleutelde kluis die gesynchroniseerd wordt tussen al uw apparaten. Omdat het volledig versleuteld is voor het zelfs maar het internet opgaat, heeft alleen u toegang tot uw gegevens. Zelfs het bitwarden-team kan niets uitlezen, zelfs al zouden we dat willen. Uw gegevens zijn beveiligd met AES-256 bit encryptie, salted hashing en PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,wachtwoord,login,gratis wachtwoordbeheerder,wachtwoordbeheerder,inlogbeheerder</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Beheer al uw logins en wachtwoorden vanuit een beveiligde kluis</value>

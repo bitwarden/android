@@ -182,11 +182,11 @@
     <value>Редагувати теку</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Електронна пошта</value>
+    <value>Е-пошта</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Адреса електронної пошти</value>
+    <value>Адреса е-пошти</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
@@ -427,10 +427,10 @@
     <value>Використовуйте службу автозаповнення bitwarden, щоб автоматично вводити паролі.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Змінити адресу електронної пошти</value>
+    <value>Змінити адресу е-пошти</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Ви можете змінити адресу електронної пошти в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Ви можете змінити адресу е-пошти в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Змінити головний пароль</value>
@@ -470,7 +470,7 @@
     <value>Увімкнути автоматичну синхронізацію</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Введіть свою адресу електронної пошти, щоб отримати підказку для головного пароля.</value>
+    <value>Введіть свою адресу е-пошти, щоб отримати підказку для головного пароля.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Повторно увімкнути розширення</value>
@@ -707,7 +707,7 @@
     <value>Двоетапна авторизація</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двоетапна авторизація робить ваш обліковий запис більш захищеним, вимагаючи підтвердження вашого входу за допомогою іншого пристрою, наприклад, код безпеки, програма авторизації, SMS, телефонний дзвінок, або електронна пошта. Ви можете увімкнути двоетапну авторизацію в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Двоетапна авторизація робить ваш обліковий запис більш захищеним, вимагаючи підтвердження вашого входу за допомогою іншого пристрою, наприклад, код безпеки, програма авторизації, SMS, телефонний дзвінок, або е-пошта. Ви можете увімкнути двоетапну авторизацію в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Розблокувати з {0}</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>

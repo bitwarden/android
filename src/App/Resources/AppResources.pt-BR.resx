@@ -403,7 +403,7 @@
     <value>Extensão de App</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Utilize o serviço de acessibilidade do bitwarden para auto-preencher as suas credenciais entre aplicativos e a web.</value>
+    <value>Utilize o serviço de acessibilidade do bitwarden para autopreencher as suas credenciais entre aplicativos e a web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Serviço de autopreenchimento</value>
@@ -412,25 +412,25 @@
     <value>Evite caracteres ambíguos</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>extensão da aplicação bitwarden</value>
+    <value>Extensão do Aplicativo bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
     <value>A maneira mais fácil de adicionar novas credenciais ao seu cofre é a partir da extensão bitwarden. Saiba mais sobre como utilizar a extensão bitwarden navegando para a tela de "Ferramentas".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use bitwarden no Safari e outros apps para preencher automaticamente seus logins.</value>
+    <value>Use bitwarden no Safari e em outros aplicativos para preencher automaticamente suas credenciais.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Serviço de auto-preenchimento bitwarden</value>
+    <value>Serviço de Autopreenchimento bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Utilize o serviço de acessibilidade bitwarden para auto-preencher as suas credenciais.</value>
+    <value>Utilize o serviço de acessibilidade bitwarden para autopreencher as suas credenciais.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Alterar email</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Você pode alterar o seu endereço de e-mail no cofre web bitwarden.com. Você deseja visitar o website agora?</value>
+    <value>Você pode alterar o seu endereço de e-mail no cofre web bitwarden.com. Você deseja visitar o site agora?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Alterar senha mestra</value>
@@ -498,10 +498,10 @@
     <value>Seus logins são agora facilmente acessíveis do Safari, Chrome e outros aplicativos com suporte.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>No Safari e Chrome, encontrar usando o ícone de compartilhamento de bitwarden (dica: rolar para a direita na linha de fundo do menu compartilhar).</value>
+    <value>No Safari e Chrome, encontre o bitwarden usando o ícone de compartilhamento (dica: role para a direita na linha de fundo do menu de compartilhamento).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Toque no ícone de bitwarden no menu para iniciar a extensão.</value>
+    <value>Toque no ícone do bitwarden no menu para iniciar a extensão.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
     <value>Para ativar o bitwarden no Safari e outros apps, toque no ícone "mais" no final do menu.</value>
@@ -591,7 +591,7 @@
     <value>Mais configurações</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Você deve entrar o app bitwarden principal antes que você pode usar a extensão.</value>
+    <value>Você deve entrar no aplicativo bitwarden principal antes de poder usar a extensão.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nunca</value>
@@ -650,7 +650,7 @@
     <value>Por favor considere ajudar-nos com uma boa crítica!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>As avaliações da App Store são repostas a cada nova versão do bitwarden. Por favor considere ajudar-nos com uma boa análise!</value>
+    <value>As avaliações da App Store são redefinidas a cada nova versão do bitwarden. Por favor considere ajudar-nos com uma boa análise!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Gerar Nova Senha</value>
@@ -726,10 +726,10 @@
     <value>Ver Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>cofre web bitwarden</value>
+    <value>Cofre Web bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gerencie suas credenciais de qualquer navegador da web com o cofre de web bitwarden.</value>
+    <value>Gerencie os seus itens a partir de qualquer navegador com o cofre web bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>App autenticador perdido?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Quando você ver uma notificação de auto-preenchimento do bitwarden, você pode tocar na mesma para iniciar o serviço de auto-preenchimento.</value>
+    <value>Quando você ver uma notificação de autopreenchimento do bitwarden, você pode tocá-la para iniciar o serviço de autopreenchimento.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Toque nesta notificação para auto-preencher a credencial a partir de seu cofre.</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>

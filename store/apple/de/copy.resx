@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden Passwortmanager</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden bietet Ihnen die einfachste und sicherste Möglichkeit, alle Ihre Benutzernamen und Passwörter zu speichern und zwischen Ihren Geräten zu synchronisieren.
@@ -128,9 +129,11 @@ Passwortdiebstahl ist ein echtes Problem. Die von Ihnen verwendeten Webseiten un
 Sicherheitsexperten empfehlen daher, dass Sie für jeden Account ein anderes, zufällig generiertes Passwort verwenden. Aber wie sollen Sie sich all diese Passwörter merken? bitwarden hilft Ihnen dabei, Ihre Passwörter zu erstellen, speichern und zu verwalten.
 
 bitwarden speichert all Ihre Zugangsdaten in einem verschlüsselten Tresor, der mit allen Geräten synchronisiert wird. Da er komplett verschlüsselt ist, bevor er überhaupt Ihr Gerät verlässt, haben nur Sie Zugriff auf Ihre Daten. Nicht einmal bitwarden kann Ihre Daten lesen, selbst, wenn wir es wollten. Ihre Daten sind mit einer AES-256-Bit-Verschlüsselung, sowie Salted Hashing und PBKDR2 SHA-256 abgesichert.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager,passwort,passwörter,anmeldung,kostenlos</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Verwalten Sie alle Benutzernamen und Passwörter in einem sicheren Tresor</value>

@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden Jelszókezelő</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>A bitwarden a legegyszerűbb és legbiztonságosabb módja a bejelentkezések és jelszavak tárolására, miközben kényelmet nyújtva tartja szinkronizálva az adatokat az összes eszköz között. A bitwarden alkalmazásbővítmény lehetővé teszi, hogy gyorsan bejelentkezz bármely webhelyre a Safari vagy a Chrome segítségével, és több száz népszerű alkalmazás is támogatja.
@@ -128,9 +129,11 @@ Manapság a jelszó lopás a legnagyobb gond. A weboldalak és alkalmazások mel
 A biztonsági szakemberek azt javasolják, hogy mindig használj eltérő, véletleszerűen generált jelszót minden fiókhoz, amit használsz. De hogyan kezelhetnéd ezeket a jelszavakat? A bitwaren segítségével könnyedén tudsz létrehozni, tárolni jelszavakat és könnyű hozzáférést biztosít a tárolt jelszavaidhoz.
 
 A bitwaren minden bejelentkezési adatodat titkosított széfben tárolja és titkosítva szinkronizálja eszközeid között. Mivel teljesen titkosított, csak te férhetsz hozzá az adataidhoz. Még a bitwarden csapata sem tudja olvasni az adataidat, még ha akarná se tudná. Adataidat AES 256 bites titkosítással és SHA-256 PBKDF2-vel zárjuk le.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,jelszó,bejelentkezés,ingyenes jelszókezelő,jelszókezelő,bejelentkezés kezelő</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Kezeld az összes bejelentkezésedet és jelszavadat egy biztonságos széfből</value>

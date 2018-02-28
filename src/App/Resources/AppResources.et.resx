@@ -510,7 +510,7 @@
     <value>Lemmik</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>sõrmejälge</value>
+    <value>sõrmejäljega</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>Loo parool</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>

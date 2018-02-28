@@ -139,23 +139,23 @@ bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoid
     <value>Turvallinen ja ilmainen salasananhallintapalvelu kaikille laitteillesi</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Hallitse kirjautumistietojasi turvallisesta holvista</value>
+    <value>Hallitse käyttäjätunnuksiasi salatusta holvista</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Luo automaattiseti vahvoja, satunnaisia ja turvallisia salasanoja</value>
+    <value>Luo automaattisesti vahvoja, satunnaisia ja turvallisia salasanoja</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Suojaa holvisi sormenjäljellä, PIN-koodilla tai pääsalasanalla</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Täydennä automaattisesti kentät selaimessasi tai muissa sovelluksissa</value>
+    <value>Täytä automaattisesti kir­jau­tu­mis­ken­tät se­lai­mes­sa­si tai muissa so­vel­luk­sis­sa</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synkronoi ja hallitse holviasi eri laitteilla
 
-- Puhelin
-- Tabletti
-- Tietokone
-- Verkko</value>
+– Puhelin
+– Tabletti
+– Tietokone
+– Verkko</value>
   </data>
 </root>

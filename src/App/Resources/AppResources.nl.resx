@@ -729,7 +729,7 @@
     <value>bitwarden-webkluis</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Beheer uw logins vanuit elke webbrowser met de bitwarden-webkluis.</value>
+    <value>Beheer je items vanuit elke browser met de bitwarden webkluis.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Authenticatie-app kwijt?</value>
@@ -992,7 +992,7 @@
     <value>Aangepaste omgeving</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Voor gevorderde gebruikers. U kunt de basis-URL van elke service afzonderlijk opgeven.</value>
+    <value>Voor gevorderde gebruikers. Je kan de basis-URL van iedere service afzonderlijk instellen.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>De omgeving URL's zijn opgeslagen.</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>

@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden – Gestionnaire de mots de passe gratuit</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden est le moyen le plus facile et sécurisé pour stocker tous vos identifiants et mots de passe tout en les synchronisant entre vos appareils. L'extension de l'application bitwarden vous permet de vous identifier rapidement sur n'importe quel site web sur Safari ou Chrome et est supporté par des centaines d'autres applications populaires.
@@ -128,9 +129,11 @@ Le vol de mot de passe est un problème sérieux. Les sites web et applications 
 Les experts en sécurité recommendent l'utilisation de mots de passe différents et aléatoires pour chaque compte que vous créez. Mais comment gérez-vous tous ces mots de passe ? bitwarden vous facilite le travaile en créant, stockant et utilisant vos pots de passe.
 
 bitwarden stocke tous les identifiants dans un coffre chiffré qui est synchronisé sur tous vos appareils. Puisqu'il est entièrement chiffré avant même de quitter votre appareil, vous êtes la seule personne à pouvoir accéder à vos données. Même l'équipe de bitwarden ne peut lire vos données, même si nous le voudrions. Vos données sont scellées par un chiffrement AES-256 bit, un salage et hachage ainsi que par un PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,mot de passe,identifiant,gestionnaire de mots de passe gratuit, gestionnaire de mots de passe,gestionnaire d'identifiants</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Gérer tous vos identifiants et mots de passe depuis un coffre sécurisé</value>

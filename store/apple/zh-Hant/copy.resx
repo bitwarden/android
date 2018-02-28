@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden 密碼管理工具</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden 簡單易用，可以安全地儲存你所有的帳戶和密碼，並在多部裝置之間同步。
@@ -128,9 +129,11 @@
 安全專家建議你在每個帳戶使用不同、隨機產生的密碼。但要如何管理這些密碼呢？ Bitwarden 讓你輕鬆建立、儲存、存取你的密碼。
 
 bitwarden 將你所有登入資料儲存在加密的密碼庫中，並同步至你所有的裝置上。由於資料傳送前已經徹底加密，因此只有你可以存取這些資料，甚至連 bitwarden 的開發者都無法讀取你的資料。所有資料均使用 AES-256 加密、加鹽雜湊加密以及 PBKDF2 SHA-256 函式加密。</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden, bit warden, 8 bit, 密碼, 登入, 免費密碼管理工具, 密碼管理工具, 登入管理工具</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>在一個安全的密碼庫裏管理密碼</value>
