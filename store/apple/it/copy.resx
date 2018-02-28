@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden – Gestore di Password Gratuito</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden è il modo più semplice e sicuro per salvare tutti i tuoi login e password tenendoli contemporantemente sincronizzati su tutti i tuoi dispositivi. L'estensione app di bitwarden ti permette di loggarti velocemente in ogni sito attraverso Safari o Chrome ed è supportata da centinaia di altre popolari app.
@@ -128,9 +129,11 @@ Il furto di password è un problema serio. I siti e le app che utilizzi sono sot
 Gli esperti di sicurezza raccomandano di utilizzare password casuali e diverse per ogni account che crei. Ma come gestire tutte quelle password? bitwarden ti rende facile creare, salvare e accedere alle tue password.
 
 bitwarden salva tutti i tuoi login in una cassaforte criptata che si sincronizza su tutti i tuoi dispositivi. Poichè è completamente criptata ancora prima di lasciare il tuo dispositivo, solo tu puoi accedere ai tuoi dati. Nemmeno il team di bitwarden può leggere i tuoi dati, anche se volessero. I tuoi dati sono criptati con algoritmo AES-256, salted hashing, e PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager,password manager gratis,password manager gratuito</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Gestisci tutte le tue password ed i tuoi login da una cassaforte sicura</value>
