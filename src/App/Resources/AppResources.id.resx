@@ -415,10 +415,10 @@
     <value>ekstensi Aplikasi bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Cara termudah untuk menambahkan info masuk baru ke brankas Anda adalah dari Ekstensi Aplikasi bitwarden. Pelajari lebih lanjut tentang menggunakan Ekstensi Aplikasi bitwarden dengan menavigasi ke layar "Alat".</value>
+    <value>Cara termudah untuk menambahkan log masuk baru ke brankas Anda adalah dari Ekstensi Aplikasi bitwarden. Pelajari lebih lanjut tentang menggunakan Ekstensi Aplikasi bitwarden dengan menavigasi ke layar "Alat".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Gunakan bitwarden di Safari dan aplikasi lainnya untuk mengisi otomatis info masuk Anda.</value>
+    <value>Gunakan bitwarden di Safari dan aplikasi lainnya untuk mengisi otomatis log masuk Anda.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Layanan Pengisian Otomatis bitwarden</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Cara termudah untuk menambahkan info masuk baru ke brankas Anda adalah dari Layanan Pengisian Otomatis bitwarden. Pelajari lebih lanjut tentang menggunakan Layanan Pengisian Otomatis bitwarden dengan menavigasi ke layar "Alat".</value>
+    <value>Cara termudah untuk menambahkan log masuk baru ke brankas Anda adalah dari Layanan Pengisian Otomatis bitwarden. Pelajari lebih lanjut tentang menggunakan Layanan Pengisian Otomatis bitwarden dengan menavigasi ke layar "Alat".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Isi otomatis</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>
