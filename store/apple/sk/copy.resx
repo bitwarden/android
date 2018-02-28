@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden - Bezplatný správca hesiel</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden je najjednoduchší a najbezpečnejší spôsob, ako skladovať všetky vaše prihlasovacie údaje a heslá a zároveň ich mať pohodlne synchronizované medzi všetkými vašimi zariadeniami.
@@ -128,9 +129,11 @@ Krádež hesla je vážny problém. Stránky a aplikácie, ktoré použiváte, s
 Bezpečnostní experti odporúčajú používať rozdielne, náhodne vygenerované heslo pre každý účet, ktorý vytvoríte. Ale ako spravovať všetky tieto heslá? bitwarden vám uľahčí vytvárať, uskladniť a pristupovať k vašim heslám.
 
 bitwarden skladuje všetky vaše prihlasovacie údaje v zašifrovanom trezore, ktorý sa synchronizuje medzi všetkými vašimi zariadeniami. Keďže sú plne zašifrované ešte predtým, ako opustia vaše zariadenie, iba vy máte prístup k svojim dátam. Ani tím bitwarden nevie prečítať vaše dáta, aj keby chceli. Vaše dáta su zapečatené AES-256 bitovým šifrovaním a PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,heslo,prihlásenie,bezplatný správca hesiel,správca hesiel,správca prihlásení</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Spravujte všetky vaše prihlasovacie mená a heslá z bezpečného trezoru</value>
