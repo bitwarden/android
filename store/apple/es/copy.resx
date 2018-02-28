@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden – Gestor de contraseñas</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden es la manera más fácil y segura de guardar todos usuarios y contraseñas mientras se mantienen sincronizados entre todos tus dispositivos. La aplicación de bitwarden permite que te identifiques rápidamente en cualquier sitio web a través de Safari o Chrome and es soportada por cientos de otras aplicaciones populares.
@@ -126,9 +127,11 @@
 El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas informáticos pueden acceder facilmente tu correo electrónico, cuenta bancaria y otras cuentas importantes.
 
 bitwarden guarda todos tus usuarios es una caja fuerte cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de bitwarden podrían leer tu información aunque quisieran. Tu información está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Gestiona todos tus usuarios y contraseñas desde una caja fuerte</value>
