@@ -1217,7 +1217,7 @@
     <value>Verwende Face ID zum Verifizieren.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Verwende Face ID zum Entsperren</value>
+    <value>Face ID zum Entsperren verwenden</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Überprüfe Face ID</value>
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>
