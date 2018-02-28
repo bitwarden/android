@@ -128,7 +128,7 @@
     <value>Lisää kansio</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Lisää kohde</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>Kohde poistettu.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -397,7 +397,7 @@
     <value>Uusi tilisi on luotu! Voit nyt kirjautua sisään.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Lisää kohde</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Sovelluslaajennus</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Muokkaa kohdetta</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Käytä automaattista synkronointia</value>
@@ -519,13 +519,13 @@
     <value>Pyydä salasanavihjettäsi</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Tuo kohteita</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Voit tuoda kerralla kaikki kohteesi bitwarden.com-verkkoholvissa. Haluatko käydä sivustolla nyt?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Tuo kerralla kohteitasi muista salasananhallintapalveluista.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Viimeisin synkronointi:</value>
@@ -597,16 +597,16 @@
     <value>Ei koskaan</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Uusi kohde luotu.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Holvissasi ei ole suosikkeja.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Holvissasi ei ole kohteita.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Holvissasi ei ole kohteita tälle sivustolle. Napauta lisätäksesi kohteen.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Tälle kohteelle ei ole määritetty käyttäjänimeä tai salasanaa.</value>
@@ -677,10 +677,10 @@
     <value>Aseta 4-numeroinen PIN-koodi, jonka avulla voit avata sovelluksen.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Kohteen tiedot</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Kohde päivitetty.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Käsitellään...</value>
@@ -716,14 +716,14 @@
     <value>Avaa PIN-koodilla</value>
   </data>
   <data name="Validating" xml:space="preserve">
-    <value>Validating</value>
+    <value>Vahvistetaan</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
     <value>Tunnistautumiskoodi</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Näytä kohde</value>
   </data>
   <data name="WebVault" xml:space="preserve">
     <value>bitwardenin verkkoholvi</value>
@@ -735,7 +735,7 @@
     <value>Etkö pääse tunnistautumispalveluun?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Kohteet</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -748,11 +748,11 @@
     <value>Käännökset</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Kohteet palvelulle {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Holvissasi ei ole kohteita palvelulle {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
@@ -762,7 +762,7 @@
     <value>Napauta tätä ilmoitusta täydentääksesi kohteen automaattisesti.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Avaa esteettömyysasetukset</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. Esteettömyysasetuksissa valitse Palvelut-otsikon alta "bitwarden".</value>
@@ -795,10 +795,10 @@
     <value>Haluatko varmasti täyttää tällä kohteella? Se ei täsmää täysin osoitteeseen "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Täsmäävät kohteet</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Mahdollisesti täsmäävät kohteet</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Hae</value>
@@ -813,7 +813,7 @@
     <value>Luo organisaatio jakaaksesi kirjautumistiedot turvallisesti muiden käyttäjien kanssa.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
+    <value>Hyödynnämme analytiikkaa saadaksemme tietoa siitä, kuinka sovellusta käytetään. Näin voimme kehittää sitä paremmaksi. Kaikki tiedonkeruu on täysin nimetöntä.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skannaa, kun salasanakenttä on aktiivinen</value>
@@ -838,44 +838,44 @@
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
-    <value>Authenticator App</value>
+    <value>Todennussovellus</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Enter the 6 digit verification code from your authenticator app.</value>
+    <value>Syötä 6-numeroinen vahvistuskoodi todennussovelluksestasi.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>Syötä 6-numeroinen vahvistuskoodi, joka lähetettiin osoitteeseen {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
-    <value>Login Unavailable</value>
+    <value>Kirjautuminen epäonnistui</value>
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>Tällä tilillä on kaksivaiheinen kirjautuminen käytössä, mutta tämä laite ei tue yhtäkään määritetyistä kaksivaihekirjautumisen menetelmistä. Käytä tuettua laitetta ja/tai ota käyttöön paremmin tuettu todennusmenetelmä (kuten todennussovellus).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
-    <value>Recovery Code</value>
+    <value>Palautuskoodi</value>
     <comment>For 2FA</comment>
   </data>
   <data name="RememberMe" xml:space="preserve">
-    <value>Remember me</value>
+    <value>Muista minut</value>
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Send verification code email again</value>
+    <value>Lähetä vahvistuskoodisähköposti uudestaan</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Two-step Login Options</value>
+    <value>Kaksivaiheisen kirjautumisen asetukset</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Use another two-step login method</value>
+    <value>Käytä toista menetelmää kaksivaiheiseen kirjautumiseen</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>Vahvistussähköpostin lähetys epäonnistui. Yritä uudelleen.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
@@ -1230,5 +1230,8 @@
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
   </data>
 </root>
