@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden lösenordshanterare</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden är det lättaste och säkraste sättet att lagra alla dina inloggningar och lösenord samtidigt som de hålls synkroniserade mellan alla dina enheter.
@@ -128,9 +129,11 @@ Lösenordsstöld är ett allvarligt problem. Webbplatser och program som du anv�
 Säkerhetsexperter rekommenderar att du använder ett annorlunda, slumpmässigt genererat lösenord för varenda konto du skapar. Men hur ska du hantera alla dessa lösenord? bitwarden gör det enkelt för dig att skapa, lagra och komma åt dina lösenord.
 
 bitwarden lagrar alla dina inloggningar i ett krypterat valv som synkroniseras mellan alla dina enheter. Eftersom din data är helt krypterad innan den någonsin lämnar din enhet så är det endast du som har åtkomst till din data. Inte ens teamet på bitwarden kan läsa din data. Din data är sluten med AES-256 bitars kryptering, saltad hash, och PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,password,lösenordshanterare,gratis lösenordshanterare,inloggningshanterare,lösenord</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Hantera alla dina inloggningar och lösenord från ett säkert valv</value>
