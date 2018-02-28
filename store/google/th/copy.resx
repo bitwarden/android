@@ -136,26 +136,21 @@ bitwarden stores all of your logins in an encrypted vault that syncs across all 
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>A secure and free password manager for all of your devices</value>
+    <value>จัดการรหัสผ่านที่ปลอดภัยและไม่เสียค่าใช้จ่ายสำหรับอุปกรณ์ทั้งหมดของคุณ</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>จัดการการเข้าสู่ระบบและรหัสผ่านทั้งหมดของคุณจากห้องนิรภัยที่ปลอดภัย</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>สุ่มสร้างรหัสผ่านที่แข็งแกร่งและปลอดภัยโดยอัตโนมัติ</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with fingerprint, PIN code, or master password</value>
+    <value>ปกป้องห้องนิรภัยของคุณด้วยลายนิ้วมือ, รหัส PIN, หรือรหัสผ่านหลัก</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Quickly auto-fill logins from within your web browser and other apps</value>
+    <value>ป้อนข้อมูลการเข้าสู่ระบบอัตโนมัติจากภายในเว็บเบราเซอร์และแอปอื่น ๆ ได้อย่างรวดเร็ว</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices
-
-- Phone
-- Tablet
-- Desktop
-- Web</value>
+    <value>ซิงค์และเข้าถึงห้องนิรภัยของคุณจากหลายอุปกรณ์</value>
   </data>
 </root>
