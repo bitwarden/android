@@ -119,6 +119,7 @@
   </resheader>
   <data name="Name" xml:space="preserve">
     <value>bitwarden Paroolihaldur</value>
+    <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
     <value>bitwarden muudab kontoandmete ja teiste isiklike andmete kasutamise erinevate seadmete vahel lihtsaks ja turvaliseks. Bitwardeni rakenduse lisa võimaldab Safaris või Chromes kiiresti ja turvaliselt erinevatesse kontodesse sisse logida. Lisaks toetavad bitwardenit sajad teised populaarsed rakendused.
@@ -128,9 +129,11 @@ Paroolivargustest on saamas järjest tõsisem probleem. Veebilehed ja rakendused
 Turvaeksperdid soovitavad kasutada kõikides kasutajakontodes erinevaid, juhuslikult koostatud paroole. Kuidas aga kõiki neid paroole hallata? bitwarden muudab paroolide loomise, talletamise ja nendele ligipääsu lihtsaks ja turvaliseks.
 
 bitwarden talletab kõik Sinu andmed krüpteeritud hoidlas, mis sünkroniseeritakse kõikide Sinu poolt kasutatavate seadmete vahel. Kuna hoidla sisu krüpteeritakse enne selle enne seadmest lahkumist, omad andmetele ligipääsu ainult Sina. Ka bitwardeni meeskond ei saa Sinu andmeid vaadata, isegi kui neil selleks tahtmine oleks. Sinu andmed kaitsevad AES-256 bitine krüpteering, salted hashing ja PBKDF2 SHA-256.</value>
+    <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
     <value>bitwarden,bit warden,8bit,parool,sisselogimine,tasuta paroolihaldur,paroolihaldur,paroolid</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Halda kõiki kontoandmeid turvalises paroolihoidlas</value>
