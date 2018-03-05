@@ -1,6 +1,6 @@
-﻿using Bit.App.Models.Api;
-using Bit.App.Models.Data;
+﻿using Bit.App.Models.Data;
 using Newtonsoft.Json;
+using System;
 
 namespace Bit.App.Models
 {
@@ -10,7 +10,19 @@ namespace Bit.App.Models
 
         public Identity(CipherData data)
         {
-            var deserializedData = JsonConvert.DeserializeObject<IdentityDataModel>(data.Data);
+            IdentityDataModel deserializedData;
+            if(data.Card != null)
+            {
+                deserializedData = JsonConvert.DeserializeObject<IdentityDataModel>(data.Card);
+            }
+            else if(data.Data != null)
+            {
+                deserializedData = JsonConvert.DeserializeObject<IdentityDataModel>(data.Data);
+            }
+            else
+            {
+                throw new ArgumentNullException(nameof(data.Identity));
+            }
 
             Title = deserializedData.Title != null ? new CipherString(deserializedData.Title) : null;
             FirstName = deserializedData.FirstName != null ? new CipherString(deserializedData.FirstName) : null;

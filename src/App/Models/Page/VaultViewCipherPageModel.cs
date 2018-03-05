@@ -3,6 +3,7 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using System.Collections.Generic;
 using Bit.App.Enums;
+using System.Linq;
 
 namespace Bit.App.Models.Page
 {
@@ -600,7 +601,7 @@ namespace Bit.App.Models.Page
                 case CipherType.Login:
                     LoginUsername = cipher.Login.Username?.Decrypt(cipher.OrganizationId);
                     LoginPassword = cipher.Login.Password?.Decrypt(cipher.OrganizationId);
-                    LoginUri = cipher.Login.Uri?.Decrypt(cipher.OrganizationId);
+                    LoginUri = cipher.Login.Uris?.FirstOrDefault()?.Uri?.Decrypt(cipher.OrganizationId);
                     break;
                 case CipherType.Card:
                     CardName = cipher.Card.CardholderName?.Decrypt(cipher.OrganizationId);

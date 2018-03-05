@@ -1,5 +1,5 @@
 ﻿using Bit.App.Enums;
-using Bit.App.Models.Api;
+using Bit.App.Models.Data;
 
 namespace Bit.App.Models
 {

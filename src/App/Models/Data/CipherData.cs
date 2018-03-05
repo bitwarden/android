@@ -1,10 +1,10 @@
 ﻿using System;
 using SQLite;
 using Bit.App.Abstractions;
-using Bit.App.Models.Api;
 using Newtonsoft.Json;
 using System.Linq;
 using Bit.App.Enums;
+using Bit.App.Models.Api;
 
 namespace Bit.App.Models.Data
 {
@@ -26,46 +26,38 @@ namespace Bit.App.Models.Data
             OrganizationUseTotp = cipher.OrganizationUseTotp;
             RevisionDateTime = cipher.RevisionDate;
             Type = cipher.Type;
-            Data = JsonConvert.SerializeObject(cipher.Data);
+            Data = null;
 
-            CipherDataModel cipherData = null;
             switch(cipher.Type)
             {
                 case CipherType.Login:
-                    var loginData = cipher.Data.ToObject<LoginDataModel>();
-                    cipherData = loginData;
-
-                    Uri = loginData.Uri;
-                    Username = loginData.Username;
-                    Password = loginData.Password;
-                    Totp = loginData.Totp;
+                    var loginData = new LoginDataModel(cipher);
+                    Login = JsonConvert.SerializeObject(loginData);
                     break;
                 case CipherType.SecureNote:
-                    var noteData = cipher.Data.ToObject<SecureNoteDataModel>();
-                    cipherData = noteData;
-
-                    SecureNoteType = noteData.Type;
+                    var noteData = new SecureNoteDataModel(cipher);
+                    SecureNote = JsonConvert.SerializeObject(noteData);
                     break;
                 case CipherType.Card:
-                    var cardData = cipher.Data.ToObject<CardDataModel>();
-                    cipherData = cardData;
+                    var cardData = new CardDataModel(cipher);
+                    Card = JsonConvert.SerializeObject(cardData);
                     break;
                 case CipherType.Identity:
-                    var idData = cipher.Data.ToObject<IdentityDataModel>();
-                    cipherData = idData;
+                    var idData = new IdentityDataModel(cipher);
+                    Identity = JsonConvert.SerializeObject(idData);
                     break;
                 default:
                     throw new ArgumentException(nameof(cipher.Type));
             }
 
-            Name = cipherData.Name;
-            Notes = cipherData.Notes;
+            Name = cipher.Name;
+            Notes = cipher.Notes;
 
-            if(cipherData.Fields != null && cipherData.Fields.Any())
+            if(cipher.Fields != null && cipher.Fields.Any())
             {
                 try
                 {
-                    Fields = JsonConvert.SerializeObject(cipherData.Fields);
+                    Fields = JsonConvert.SerializeObject(cipher.Fields.Select(f => new FieldDataModel(f)));
                 }
                 catch(JsonSerializationException) { }
             }
@@ -80,21 +72,17 @@ namespace Bit.App.Models.Data
         public string Name { get; set; }
         public string Notes { get; set; }
         public string Fields { get; set; }
+        public string Login { get; set; }
+        public string Card { get; set; }
+        public string Identity { get; set; }
+        public string SecureNote { get; set; }
         public bool Favorite { get; set; }
         public bool Edit { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public DateTime RevisionDateTime { get; set; } = DateTime.UtcNow;
         [Indexed]
         public CipherType Type { get; set; } = CipherType.Login;
+        [Obsolete]
         public string Data { get; set; }
-
-        // Login metadata
-        public string Uri { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Totp { get; set; }
-
-        // Secure Note metadata
-        public SecureNoteType? SecureNoteType { get; set; }
     }
 }

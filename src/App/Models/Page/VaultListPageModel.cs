@@ -42,7 +42,7 @@ namespace Bit.App.Models.Page
                 {
                     case CipherType.Login:
                         LoginUsername = cipher.Login?.Username?.Decrypt(cipher.OrganizationId) ?? " ";
-                        LoginUri = cipher.Login?.Uri?.Decrypt(cipher.OrganizationId) ?? " ";
+                        LoginUri = cipher.Login.Uris?.FirstOrDefault()?.Uri?.Decrypt(cipher.OrganizationId) ?? " ";
                         LoginPassword = new Lazy<string>(() => cipher.Login?.Password?.Decrypt(cipher.OrganizationId));
                         LoginTotp = new Lazy<string>(() => cipher.Login?.Totp?.Decrypt(cipher.OrganizationId));
 

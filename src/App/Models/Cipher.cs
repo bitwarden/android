@@ -1,5 +1,4 @@
 ﻿using Bit.App.Enums;
-using Bit.App.Models.Api;
 using Bit.App.Models.Data;
 using Newtonsoft.Json;
 using System.Collections.Generic;
