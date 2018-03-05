@@ -898,20 +898,20 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom Field Name.
+        /// </summary>
+        public static string CustomFieldName {
+            get {
+                return ResourceManager.GetString("CustomFieldName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Custom Fields.
         /// </summary>
         public static string CustomFields {
             get {
                 return ResourceManager.GetString("CustomFields", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Custom fields updated..
-        /// </summary>
-        public static string CustomFieldsUpdated {
-            get {
-                return ResourceManager.GetString("CustomFieldsUpdated", resourceCulture);
             }
         }
         
@@ -1344,6 +1344,33 @@ namespace Bit.App.Resources {
         public static string February {
             get {
                 return ResourceManager.GetString("February", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Boolean.
+        /// </summary>
+        public static string FieldTypeBoolean {
+            get {
+                return ResourceManager.GetString("FieldTypeBoolean", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hidden.
+        /// </summary>
+        public static string FieldTypeHidden {
+            get {
+                return ResourceManager.GetString("FieldTypeHidden", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Text.
+        /// </summary>
+        public static string FieldTypeText {
+            get {
+                return ResourceManager.GetString("FieldTypeText", resourceCulture);
             }
         }
         
@@ -2086,6 +2113,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Custom Field.
+        /// </summary>
+        public static string NewCustomField {
+            get {
+                return ResourceManager.GetString("NewCustomField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New item created..
         /// </summary>
         public static string NewItemCreated {
@@ -2109,15 +2145,6 @@ namespace Bit.App.Resources {
         public static string NoAttachments {
             get {
                 return ResourceManager.GetString("NoAttachments", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No custom fields. You can fully manage custom fields from the web vault or browser extension..
-        /// </summary>
-        public static string NoCustomFields {
-            get {
-                return ResourceManager.GetString("NoCustomFields", resourceCulture);
             }
         }
         
@@ -2446,6 +2473,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string Remove {
+            get {
+                return ResourceManager.GetString("Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Re-type Master Password.
         /// </summary>
         public static string RetypeMasterPassword {
@@ -2541,6 +2577,15 @@ namespace Bit.App.Resources {
         public static string SelectTypeAdd {
             get {
                 return ResourceManager.GetString("SelectTypeAdd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What type of custom field do you want to add?.
+        /// </summary>
+        public static string SelectTypeField {
+            get {
+                return ResourceManager.GetString("SelectTypeField", resourceCulture);
             }
         }
         

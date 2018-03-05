@@ -71,9 +71,12 @@ namespace Bit.App.Pages
 
             SliderCell = new SliderViewCell(this, _passwordGenerationService, _settings);
 
-            var buttonColor = Color.FromHex("3c8dbc");
-            RegenerateCell = new ExtendedTextCell { Text = AppResources.RegeneratePassword, TextColor = buttonColor };
-            CopyCell = new ExtendedTextCell { Text = AppResources.CopyPassword, TextColor = buttonColor };
+            RegenerateCell = new ExtendedTextCell
+            {
+                Text = AppResources.RegeneratePassword,
+                TextColor = Colors.Primary
+            };
+            CopyCell = new ExtendedTextCell { Text = AppResources.CopyPassword, TextColor = Colors.Primary };
 
             UppercaseCell = new ExtendedSwitchCell
             {

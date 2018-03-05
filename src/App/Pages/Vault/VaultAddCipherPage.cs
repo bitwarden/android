@@ -86,12 +86,14 @@ namespace Bit.App.Pages
         public TableRoot TableRoot { get; set; }
         public TableSection TopSection { get; set; }
         public TableSection MiddleSection { get; set; }
+        public TableSection FieldsSection { get; set; }
         public ExtendedTableView Table { get; set; }
 
         public FormEntryCell NameCell { get; private set; }
         public FormEditorCell NotesCell { get; private set; }
         public FormPickerCell FolderCell { get; private set; }
         public ExtendedSwitchCell FavoriteCell { get; set; }
+        public ExtendedTextCell AddFieldCell { get; private set; }
 
         // Login
         public FormEntryCell LoginPasswordCell { get; private set; }
@@ -184,6 +186,11 @@ namespace Bit.App.Pages
             NotesCell.InitEvents();
             FolderCell.InitEvents();
 
+            if(AddFieldCell != null)
+            {
+                AddFieldCell.Tapped += AddFieldCell_Tapped;
+            }
+
             switch(_type)
             {
                 case CipherType.Login:
@@ -256,6 +263,11 @@ namespace Bit.App.Pages
             NotesCell.Dispose();
             FolderCell.Dispose();
 
+            if(AddFieldCell != null)
+            {
+                AddFieldCell.Tapped -= AddFieldCell_Tapped;
+            }
+
             switch(_type)
             {
                 case CipherType.Login:
@@ -300,6 +312,17 @@ namespace Bit.App.Pages
                     break;
                 default:
                     break;
+            }
+
+            if(FieldsSection != null && FieldsSection.Count > 0)
+            {
+                foreach(var cell in FieldsSection)
+                {
+                    if(cell is FormEntryCell entrycell)
+                    {
+                        entrycell.Dispose();
+                    }
+                }
             }
         }
 
@@ -540,6 +563,14 @@ namespace Bit.App.Pages
                 NameCell.NextElement = NotesCell.Editor;
             }
 
+            FieldsSection = new TableSection(AppResources.CustomFields);
+            AddFieldCell = new ExtendedTextCell
+            {
+                Text = AppResources.NewCustomField,
+                TextColor = Colors.Primary
+            };
+            FieldsSection.Add(AddFieldCell);
+
             // Make table
             TableRoot = new TableRoot
             {
@@ -548,7 +579,8 @@ namespace Bit.App.Pages
                 new TableSection(AppResources.Notes)
                 {
                     NotesCell
-                }
+                },
+                FieldsSection
             };
 
             Table = new ExtendedTableView
@@ -744,6 +776,8 @@ namespace Bit.App.Pages
                     cipher.FolderId = Folders.ElementAt(FolderCell.Picker.SelectedIndex - 1).Id;
                 }
 
+                Helpers.ProcessFieldsSectionForSave(FieldsSection, cipher);
+
                 _deviceActionService.ShowLoading(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(cipher);
                 _deviceActionService.HideLoading();
@@ -782,6 +816,10 @@ namespace Bit.App.Pages
 
             ToolbarItems.Add(saveToolBarItem);
         }
+
+        private async void AddFieldCell_Tapped(object sender, EventArgs e)
+        {
+            await Helpers.AddField(this, FieldsSection);
+        }
     }
 }
-

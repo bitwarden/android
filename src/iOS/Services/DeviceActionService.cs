@@ -323,6 +323,27 @@ namespace Bit.iOS.Services
             throw new NotImplementedException();
         }
 
+        public Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
+        {
+            var result = new TaskCompletionSource<string>();
+            var alert = UIAlertController.Create(title ?? string.Empty, description, UIAlertControllerStyle.Alert);
+            UITextField input = null;
+            alert.AddAction(UIAlertAction.Create(AppResources.Cancel, UIAlertActionStyle.Cancel, x =>
+            {
+                result.TrySetResult(null);
+            }));
+            alert.AddAction(UIAlertAction.Create(AppResources.Ok, UIAlertActionStyle.Default, x =>
+            {
+                result.TrySetResult(input.Text ?? string.Empty);
+            }));
+            alert.AddTextField(x =>
+            {
+                input = x;
+                input.Text = text ?? string.Empty;
+            });
+            return result.Task;
+        }
+
         private UIViewController GetPresentedViewController()
         {
             var window = UIApplication.SharedApplication.KeyWindow;

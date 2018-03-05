@@ -24,6 +24,7 @@ using Bit.Android.Autofill;
 using System.Linq;
 using Plugin.Settings.Abstractions;
 using Android.Views.InputMethods;
+using Android.Widget;
 
 namespace Bit.Android.Services
 {
@@ -468,6 +469,45 @@ namespace Bit.Android.Services
             _progressDialog.Dismiss();
             _progressDialog.Dispose();
             _progressDialog = null;
+        }
+
+        public Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
+        {
+            var activity = (MainActivity)CurrentContext;
+            var alertBuilder = new AlertDialog.Builder(activity);
+            alertBuilder.SetTitle(title);
+            alertBuilder.SetMessage(description);
+
+            var input = new EditText(activity)
+            {
+                InputType = global::Android.Text.InputTypes.ClassText
+            };
+            if(text != null)
+            {
+                input.Text = text;
+                input.SetSelection(text.Length);
+            }
+            else
+            {
+                input.FocusedByDefault = true;
+            }
+            alertBuilder.SetView(input);
+
+            var result = new TaskCompletionSource<string>();
+            alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
+            {
+                result.TrySetResult(input.Text ?? string.Empty);
+            });
+
+            alertBuilder.SetNegativeButton(AppResources.Cancel, (sender, args) =>
+            {
+                result.TrySetResult(null);
+            });
+
+            var alert = alertBuilder.Create();
+            alert.Window.SetSoftInputMode(global::Android.Views.SoftInput.StateVisible);
+            alert.Show();
+            return result.Task;
         }
     }
 }

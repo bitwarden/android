@@ -22,5 +22,6 @@ namespace Bit.App.Abstractions
         void OpenAccessibilitySettings();
         void OpenAutofillSettings();
         Task LaunchAppAsync(string appName, Page page);
+        Task<string> DisplayPromptAync(string title = null, string description = null, string text = null);
     }
 }

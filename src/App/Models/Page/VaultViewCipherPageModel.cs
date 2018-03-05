@@ -592,7 +592,7 @@ namespace Bit.App.Models.Page
             }
             else
             {
-                cipher.Fields = null;
+                Fields = null;
             }
 
             switch(cipher.Type)

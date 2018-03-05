@@ -42,6 +42,7 @@ namespace Bit.App.Pages
         public TableRoot TableRoot { get; set; }
         public TableSection TopSection { get; set; }
         public TableSection MiddleSection { get; set; }
+        public TableSection FieldsSection { get; set; }
         public ExtendedTableView Table { get; set; }
 
         public FormEntryCell NameCell { get; private set; }
@@ -49,8 +50,8 @@ namespace Bit.App.Pages
         public FormPickerCell FolderCell { get; private set; }
         public ExtendedSwitchCell FavoriteCell { get; set; }
         public ExtendedTextCell AttachmentsCell { get; private set; }
-        public ExtendedTextCell CustomFieldsCell { get; private set; }
         public ExtendedTextCell DeleteCell { get; private set; }
+        public ExtendedTextCell AddFieldCell { get; private set; }
 
         // Login
         public FormEntryCell LoginPasswordCell { get; private set; }
@@ -152,12 +153,6 @@ namespace Bit.App.Pages
                 ShowDisclousure = true
             };
 
-            CustomFieldsCell = new ExtendedTextCell
-            {
-                Text = AppResources.CustomFields,
-                ShowDisclousure = true
-            };
-
             // Sections
             TopSection = new TableSection(AppResources.ItemInformation)
             {
@@ -168,8 +163,7 @@ namespace Bit.App.Pages
             {
                 FolderCell,
                 FavoriteCell,
-                AttachmentsCell,
-                CustomFieldsCell
+                AttachmentsCell
             };
 
             // Types
@@ -405,6 +399,27 @@ namespace Bit.App.Pages
                 NameCell.NextElement = NotesCell.Editor;
             }
 
+            FieldsSection = new TableSection(AppResources.CustomFields);
+            if(Cipher.Fields != null)
+            {
+                foreach(var field in Cipher.Fields)
+                {
+                    var label = field.Name?.Decrypt(Cipher.OrganizationId) ?? string.Empty;
+                    var value = field.Value?.Decrypt(Cipher.OrganizationId);
+                    var cell = Helpers.MakeFieldCell(field.Type, label, value, FieldsSection);
+                    if(cell != null)
+                    {
+                        FieldsSection.Add(cell);
+                    }
+                }
+            }
+            AddFieldCell = new ExtendedTextCell
+            {
+                Text = AppResources.NewCustomField,
+                TextColor = Colors.Primary
+            };
+            FieldsSection.Add(AddFieldCell);
+
             // Make table
             TableRoot = new TableRoot
             {
@@ -414,6 +429,7 @@ namespace Bit.App.Pages
                 {
                     NotesCell
                 },
+                FieldsSection,
                 new TableSection(Helpers.GetEmptyTableSectionTitle())
                 {
                     DeleteCell
@@ -614,6 +630,8 @@ namespace Bit.App.Pages
                     Cipher.FolderId = null;
                 }
 
+                Helpers.ProcessFieldsSectionForSave(FieldsSection, Cipher);
+
                 _deviceActionService.ShowLoading(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(Cipher);
                 _deviceActionService.HideLoading();
@@ -653,13 +671,13 @@ namespace Bit.App.Pages
             {
                 AttachmentsCell.Tapped += AttachmentsCell_Tapped;
             }
-            if(CustomFieldsCell != null)
-            {
-                CustomFieldsCell.Tapped += CustomFieldsCell_Tapped;
-            }
             if(DeleteCell != null)
             {
                 DeleteCell.Tapped += DeleteCell_Tapped;
+            }
+            if(AddFieldCell != null)
+            {
+                AddFieldCell.Tapped += AddFieldCell_Tapped;
             }
 
             switch(Cipher.Type)
@@ -713,6 +731,17 @@ namespace Bit.App.Pages
                 default:
                     break;
             }
+
+            if(FieldsSection != null && FieldsSection.Count > 0)
+            {
+                foreach(var cell in FieldsSection)
+                {
+                    if(cell is FormEntryCell entrycell)
+                    {
+                        entrycell.InitEvents();
+                    }
+                }
+            }
         }
 
         protected override void OnDisappearing()
@@ -727,13 +756,13 @@ namespace Bit.App.Pages
             {
                 AttachmentsCell.Tapped -= AttachmentsCell_Tapped;
             }
-            if(CustomFieldsCell != null)
-            {
-                CustomFieldsCell.Tapped -= CustomFieldsCell_Tapped;
-            }
             if(DeleteCell != null)
             {
                 DeleteCell.Tapped -= DeleteCell_Tapped;
+            }
+            if(AddFieldCell != null)
+            {
+                AddFieldCell.Tapped -= AddFieldCell_Tapped;
             }
 
             switch(Cipher.Type)
@@ -786,6 +815,17 @@ namespace Bit.App.Pages
                     break;
                 default:
                     break;
+            }
+
+            if(FieldsSection != null && FieldsSection.Count > 0)
+            {
+                foreach(var cell in FieldsSection)
+                {
+                    if(cell is FormEntryCell entrycell)
+                    {
+                        entrycell.Dispose();
+                    }
+                }
             }
         }
 
@@ -840,12 +880,6 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(page);
         }
 
-        private async void CustomFieldsCell_Tapped(object sender, EventArgs e)
-        {
-            var page = new ExtendedNavigationPage(new VaultCustomFieldsPage(_cipherId));
-            await Navigation.PushModalAsync(page);
-        }
-
         private async void DeleteCell_Tapped(object sender, EventArgs e)
         {
             if(!_connectivity.IsConnected)
@@ -879,6 +913,11 @@ namespace Bit.App.Pages
             {
                 await DisplayAlert(null, AppResources.AnErrorHasOccurred, AppResources.Ok);
             }
+        }
+
+        private async void AddFieldCell_Tapped(object sender, EventArgs e)
+        {
+            await Helpers.AddField(this, FieldsSection);
         }
 
         private void AlertNoConnection()

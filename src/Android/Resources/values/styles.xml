@@ -13,5 +13,6 @@
     <item name="android:windowBackground">@color/lightgray</item>
     <item name="windowActionModeOverlay">true</item>
     <item name="android:navigationBarColor">@color/darkaccent</item>
+    <item name="android:actionModeBackground">@color/darkaccent</item>
   </style>
 </resources>

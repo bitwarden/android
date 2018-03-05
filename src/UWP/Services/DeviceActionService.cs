@@ -1,6 +1,7 @@
 ﻿using Acr.UserDialogs;
 using Bit.App.Abstractions;
 using Bit.App.Models.Page;
+using Bit.App.Resources;
 using Coding4Fun.Toolkit.Controls;
 using System;
 using System.Linq;
@@ -163,6 +164,21 @@ namespace Bit.UWP.Services
         public Task LaunchAppAsync(string appName, Xamarin.Forms.Page page)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
+        {
+            var result = await _userDialogs.PromptAsync(new PromptConfig
+            {
+                Title = title,
+                InputType = InputType.Default,
+                OkText = AppResources.Ok,
+                CancelText = AppResources.Cancel,
+                Message = description,
+                Text = text
+            });
+
+            return result.Ok ? result.Value ?? string.Empty : null;
         }
     }
 }
