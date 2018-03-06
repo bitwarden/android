@@ -9,6 +9,8 @@ namespace Bit.App.Models.Page
 {
     public class VaultViewCipherPageModel : INotifyPropertyChanged
     {
+        private const string MaskedPasswordString = "••••••••";
+
         private string _name, _notes;
         private List<Attachment> _attachments;
         private List<Field> _fields;
@@ -114,7 +116,7 @@ namespace Bit.App.Models.Page
             }
         }
         public string MaskedLoginPassword => RevealLoginPassword ?
-            LoginPassword : LoginPassword == null ? null : new string('•', 8);
+            LoginPassword : LoginPassword == null ? null : MaskedPasswordString;
         public ImageSource LoginShowHideImage => RevealLoginPassword ?
             ImageSource.FromFile("eye_slash.png") : ImageSource.FromFile("eye.png");
 
@@ -616,18 +618,7 @@ namespace Bit.App.Models.Page
 
             public string Name { get; set; }
             public string Value { get; set; }
-            public string MaskedValue
-            {
-                get
-                {
-                    if(_maskedValue == null && Value != null)
-                    {
-                        _maskedValue = new string('•', 8);
-                    }
-
-                    return _maskedValue;
-                }
-            }
+            public string MaskedValue => MaskedPasswordString;
             public FieldType Type { get; set; }
             public bool Revealed { get; set; }
         }
