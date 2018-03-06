@@ -17,7 +17,7 @@ namespace Bit.App.Models.Page
         private List<LoginUri> _loginUris;
 
         // Login
-        private string _loginUsername, _loginPassword, _loginUri, _loginTotpCode;
+        private string _loginUsername, _loginPassword, _loginTotpCode;
         private int _loginTotpSec = 30;
         private bool _loginRevealPassword;
 
