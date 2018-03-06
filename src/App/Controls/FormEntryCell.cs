@@ -1,6 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using FFImageLoading.Forms;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 using XLabs.Ioc;
 
@@ -150,6 +151,7 @@ namespace Bit.App.Controls
                 }
             }
         }
+        public Dictionary<string, object> MetaData { get; set; }
 
         public void InitEvents()
         {

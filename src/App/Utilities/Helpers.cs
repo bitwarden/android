@@ -18,6 +18,15 @@ namespace Bit.App.Utilities
     public static class Helpers
     {
         public static readonly DateTime Epoc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        public static IDictionary<UriMatchType?, string> UriMatchOptionsMap = new Dictionary<UriMatchType?, string>
+        {
+            [UriMatchType.Domain] = AppResources.BaseDomain,
+            [UriMatchType.Host] = AppResources.Host,
+            [UriMatchType.StartsWith] = AppResources.StartsWith,
+            [UriMatchType.RegularExpression] = AppResources.RegEx,
+            [UriMatchType.Exact] = AppResources.Exact,
+            [UriMatchType.Never] = AppResources.Never
+        };
 
         public static long EpocUtcNow()
         {
@@ -374,13 +383,14 @@ namespace Bit.App.Utilities
             }
         }
 
-        public static FormEntryCell MakeUriCell(string value, TableSection urisSection)
+        public static FormEntryCell MakeUriCell(string value, UriMatchType? match, TableSection urisSection, Page page)
         {
             var label = string.Format(AppResources.URIPosition, urisSection.Count);
             var cell = new FormEntryCell(label, entryKeyboard: Keyboard.Url);
             cell.Entry.Text = value;
             cell.Entry.DisableAutocapitalize = true;
             cell.Entry.Autocorrect = false;
+            cell.MetaData = new Dictionary<string, object> { ["match"] = match };
 
             var deleteAction = new MenuItem { Text = AppResources.Remove, IsDestructive = true };
             deleteAction.Clicked += (sender, e) =>
@@ -407,7 +417,28 @@ namespace Bit.App.Utilities
             var optionsAction = new MenuItem { Text = AppResources.Options };
             optionsAction.Clicked += async (sender, e) =>
             {
+                var options = UriMatchOptionsMap.Select(v => v.Value).ToList();
+                options.Insert(0, AppResources.Default);
+                var exactingMatchVal = cell.MetaData["match"] as UriMatchType?;
 
+                var matchIndex = exactingMatchVal.HasValue ?
+                    Array.IndexOf(UriMatchOptionsMap.Keys.ToArray(), exactingMatchVal) + 1 : 0;
+                options[matchIndex] = $"✓ {options[matchIndex]}";
+
+                var optionsArr = options.ToArray();
+                var val = await page.DisplayActionSheet(AppResources.URIMatchDetection, AppResources.Cancel,
+                    null, options.ToArray());
+
+                UriMatchType? selectedVal = null;
+                if(val == AppResources.Cancel)
+                {
+                    selectedVal = exactingMatchVal;
+                }
+                else if(val != AppResources.Default)
+                {
+                    selectedVal = UriMatchOptionsMap.ElementAt(Array.IndexOf(optionsArr, val) - 1).Key;
+                }
+                cell.MetaData["match"] = selectedVal;
             };
 
             cell.ContextActions.Add(optionsAction);
@@ -424,10 +455,11 @@ namespace Bit.App.Utilities
                 {
                     if(cell is FormEntryCell entryCell && !string.IsNullOrWhiteSpace(entryCell.Entry.Text))
                     {
+                        var match = entryCell?.MetaData["match"] as UriMatchType?;
                         uris.Add(new LoginUri
                         {
                             Uri = entryCell.Entry.Text.Encrypt(cipher.OrganizationId),
-                            Match = null
+                            Match = match
                         });
                     }
                 }

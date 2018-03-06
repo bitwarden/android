@@ -452,7 +452,7 @@ namespace Bit.App.Pages
                     TextColor = Colors.Primary
                 };
                 UrisSection.Add(AddUriCell);
-                UrisSection.Insert(0, Helpers.MakeUriCell(string.Empty, UrisSection));
+                UrisSection.Insert(0, Helpers.MakeUriCell(string.Empty, null, UrisSection, this));
             }
             else if(_type == CipherType.Card)
             {
@@ -833,7 +833,7 @@ namespace Bit.App.Pages
 
         private void AddUriCell_Tapped(object sender, EventArgs e)
         {
-            var cell = Helpers.MakeUriCell(string.Empty, UrisSection);
+            var cell = Helpers.MakeUriCell(string.Empty, null, UrisSection, this);
             if(cell != null)
             {
                 UrisSection.Insert(UrisSection.Count - 1, cell);

@@ -223,7 +223,8 @@ namespace Bit.App.Pages
                     foreach(var uri in Cipher.Login.Uris)
                     {
                         var value = uri.Uri?.Decrypt(Cipher.OrganizationId);
-                        UrisSection.Insert(UrisSection.Count - 1, Helpers.MakeUriCell(value, UrisSection));
+                        UrisSection.Insert(UrisSection.Count - 1, 
+                            Helpers.MakeUriCell(value, uri.Match, UrisSection, this));
                     }
                 }
             }
@@ -930,7 +931,7 @@ namespace Bit.App.Pages
 
         private void AddUriCell_Tapped(object sender, EventArgs e)
         {
-            var cell = Helpers.MakeUriCell(string.Empty, UrisSection);
+            var cell = Helpers.MakeUriCell(string.Empty, null, UrisSection, this);
             if(cell != null)
             {
                 UrisSection.Insert(UrisSection.Count - 1, cell);
