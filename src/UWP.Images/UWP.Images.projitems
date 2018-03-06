@@ -43,6 +43,7 @@
     <Content Include="$(MSBuildThisFileDirectory)photo.png" />
     <Content Include="$(MSBuildThisFileDirectory)plus.png" />
     <Content Include="$(MSBuildThisFileDirectory)refresh.png" />
+    <Content Include="$(MSBuildThisFileDirectory)refresh_alt.png" />
     <Content Include="$(MSBuildThisFileDirectory)refresh_selected.png" />
     <Content Include="$(MSBuildThisFileDirectory)search.png" />
     <Content Include="$(MSBuildThisFileDirectory)share.png" />

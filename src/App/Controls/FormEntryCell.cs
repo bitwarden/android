@@ -11,6 +11,7 @@ namespace Bit.App.Controls
     {
         private VisualElement _nextElement;
         private TapGestureRecognizer _tgr;
+        private StackLayout _buttonStackLayout = null;
 
         public FormEntryCell(
             string labelText,
@@ -20,7 +21,8 @@ namespace Bit.App.Controls
             bool useLabelAsPlaceholder = false,
             string imageSource = null,
             Thickness? containerPadding = null,
-            bool useButton = false)
+            string button1 = null,
+            string button2 = null)
         {
             if(!useLabelAsPlaceholder)
             {
@@ -83,8 +85,57 @@ namespace Bit.App.Controls
                 VerticalOptions = LayoutOptions.CenterAndExpand
             };
 
+            if(!useLabelAsPlaceholder)
+            {
+                formStackLayout.Children.Add(Label);
+            }
+
+            formStackLayout.Children.Add(Entry);
+            imageStackLayout.Children.Add(formStackLayout);
+
+            if(!string.IsNullOrWhiteSpace(button1) || !string.IsNullOrWhiteSpace(button2))
+            {
+                _buttonStackLayout = new StackLayout
+                {
+                    Orientation = StackOrientation.Horizontal,
+                    VerticalOptions = LayoutOptions.CenterAndExpand
+                };
+                imageStackLayout.Children.Add(_buttonStackLayout);
+
+                if(!string.IsNullOrWhiteSpace(button1))
+                {
+                    Button1 = new ExtendedButton { Image = button1 };
+                    _buttonStackLayout.Children.Add(Button1);
+
+                    if(Device.RuntimePlatform == Device.Android)
+                    {
+                        Button1.Padding = new Thickness(0);
+                        Button1.BackgroundColor = Color.Transparent;
+                        Button1.WidthRequest = 40;
+                    }
+                }
+
+                if(!string.IsNullOrWhiteSpace(button2))
+                {
+                    Button2 = new ExtendedButton { Image = button2 };
+                    _buttonStackLayout.Children.Add(Button2);
+
+                    if(Device.RuntimePlatform == Device.Android)
+                    {
+                        Button2.Padding = new Thickness(0);
+                        Button2.BackgroundColor = Color.Transparent;
+                        Button2.WidthRequest = 40;
+                    }
+                }
+            }
+
             if(Device.RuntimePlatform == Device.Android)
             {
+                if(_buttonStackLayout != null)
+                {
+                    _buttonStackLayout.Spacing = 5;
+                }
+
                 var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
                 if(useLabelAsPlaceholder)
                 {
@@ -107,25 +158,11 @@ namespace Bit.App.Controls
                     imageStackLayout.AdjustPaddingForDevice();
                 }
             }
-
-            if(!useLabelAsPlaceholder)
+            else if(Device.RuntimePlatform == Device.UWP)
             {
-                formStackLayout.Children.Add(Label);
-            }
-
-            formStackLayout.Children.Add(Entry);
-            imageStackLayout.Children.Add(formStackLayout);
-
-            if(useButton)
-            {
-                Button = new ExtendedButton();
-                imageStackLayout.Children.Add(Button);
-
-                if(Device.RuntimePlatform == Device.Android)
+                if(_buttonStackLayout != null)
                 {
-                    Button.Padding = new Thickness(0);
-                    Button.BackgroundColor = Color.Transparent;
-                    Button.WidthRequest = 40;
+                    _buttonStackLayout.Spacing = 0;
                 }
             }
 
@@ -134,7 +171,8 @@ namespace Bit.App.Controls
 
         public Label Label { get; private set; }
         public ExtendedEntry Entry { get; private set; }
-        public ExtendedButton Button { get; private set; }
+        public ExtendedButton Button1 { get; private set; }
+        public ExtendedButton Button2 { get; private set; }
         public VisualElement NextElement
         {
             get => _nextElement;

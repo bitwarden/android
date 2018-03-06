@@ -257,7 +257,8 @@ namespace Bit.App.Utilities
                 case FieldType.Text:
                 case FieldType.Hidden:
                     var hidden = type == FieldType.Hidden;
-                    var textFieldCell = new FormEntryCell(label, isPassword: hidden, useButton: hidden);
+                    var textFieldCell = new FormEntryCell(label, isPassword: hidden,
+                        button1: hidden ? "eye.png" : null);
                     textFieldCell.Entry.Text = value;
                     textFieldCell.Entry.DisableAutocapitalize = true;
                     textFieldCell.Entry.Autocorrect = false;
@@ -266,11 +267,10 @@ namespace Bit.App.Utilities
                     {
                         textFieldCell.Entry.FontFamily = Helpers.OnPlatform(
                             iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
-                        textFieldCell.Button.Image = "eye.png";
-                        textFieldCell.Button.Command = new Command(() =>
+                        textFieldCell.Button1.Command = new Command(() =>
                         {
                             textFieldCell.Entry.InvokeToggleIsPassword();
-                            textFieldCell.Button.Image =
+                            textFieldCell.Button1.Image =
                                 "eye" + (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
                         });
                     }

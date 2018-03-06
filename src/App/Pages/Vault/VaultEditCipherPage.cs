@@ -59,7 +59,6 @@ namespace Bit.App.Pages
         public FormEntryCell LoginPasswordCell { get; private set; }
         public FormEntryCell LoginUsernameCell { get; private set; }
         public FormEntryCell LoginTotpCell { get; private set; }
-        public ExtendedTextCell LoginGenerateCell { get; private set; }
 
         // Card
         public FormEntryCell CardNameCell { get; private set; }
@@ -170,11 +169,8 @@ namespace Bit.App.Pages
             // Types
             if(Cipher.Type == CipherType.Login)
             {
-                LoginTotpCell = new FormEntryCell(AppResources.AuthenticatorKey, useButton: _deviceInfo.HasCamera);
-                if(_deviceInfo.HasCamera)
-                {
-                    LoginTotpCell.Button.Image = "camera.png";
-                }
+                LoginTotpCell = new FormEntryCell(AppResources.AuthenticatorKey, 
+                    button1: _deviceInfo.HasCamera ? "camera.png" : null);
                 LoginTotpCell.Entry.Text = Cipher.Login?.Totp?.Decrypt(Cipher.OrganizationId);
                 LoginTotpCell.Entry.DisableAutocapitalize = true;
                 LoginTotpCell.Entry.Autocorrect = false;
@@ -182,19 +178,12 @@ namespace Bit.App.Pages
                     Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
 
                 LoginPasswordCell = new FormEntryCell(AppResources.Password, isPassword: true,
-                    nextElement: LoginTotpCell.Entry, useButton: true);
+                    nextElement: LoginTotpCell.Entry, button1: "eye.png", button2: "refresh_alt.png");
                 LoginPasswordCell.Entry.Text = Cipher.Login?.Password?.Decrypt(Cipher.OrganizationId);
-                LoginPasswordCell.Button.Image = "eye.png";
                 LoginPasswordCell.Entry.DisableAutocapitalize = true;
                 LoginPasswordCell.Entry.Autocorrect = false;
                 LoginPasswordCell.Entry.FontFamily =
                     Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
-
-                LoginGenerateCell = new ExtendedTextCell
-                {
-                    Text = AppResources.GeneratePassword,
-                    ShowDisclousure = true
-                };
 
                 LoginUsernameCell = new FormEntryCell(AppResources.Username, nextElement: LoginPasswordCell.Entry);
                 LoginUsernameCell.Entry.Text = Cipher.Login?.Username?.Decrypt(Cipher.OrganizationId);
@@ -207,7 +196,6 @@ namespace Bit.App.Pages
                 // Build sections
                 TopSection.Add(LoginUsernameCell);
                 TopSection.Add(LoginPasswordCell);
-                TopSection.Add(LoginGenerateCell);
                 TopSection.Add(LoginTotpCell);
 
                 // Uris
@@ -709,17 +697,17 @@ namespace Bit.App.Pages
                     LoginPasswordCell?.InitEvents();
                     LoginUsernameCell?.InitEvents();
                     LoginTotpCell?.InitEvents();
-                    if(LoginPasswordCell?.Button != null)
+                    if(LoginPasswordCell?.Button1 != null)
                     {
-                        LoginPasswordCell.Button.Clicked += PasswordButton_Clicked;
+                        LoginPasswordCell.Button1.Clicked += PasswordButton_Clicked;
                     }
-                    if(LoginGenerateCell != null)
+                    if(LoginPasswordCell?.Button2 != null)
                     {
-                        LoginGenerateCell.Tapped += GenerateCell_Tapped;
+                        LoginPasswordCell.Button2.Clicked += PasswordButton2_Clicked;
                     }
-                    if(LoginTotpCell?.Button != null)
+                    if(LoginTotpCell?.Button1 != null)
                     {
-                        LoginTotpCell.Button.Clicked += TotpButton_Clicked;
+                        LoginTotpCell.Button1.Clicked += TotpButton_Clicked;
                     }
                     break;
                 case CipherType.Card:
@@ -789,17 +777,17 @@ namespace Bit.App.Pages
                     LoginTotpCell?.Dispose();
                     LoginPasswordCell?.Dispose();
                     LoginUsernameCell?.Dispose();
-                    if(LoginPasswordCell?.Button != null)
+                    if(LoginPasswordCell?.Button1 != null)
                     {
-                        LoginPasswordCell.Button.Clicked -= PasswordButton_Clicked;
+                        LoginPasswordCell.Button1.Clicked -= PasswordButton_Clicked;
                     }
-                    if(LoginGenerateCell != null)
+                    if(LoginPasswordCell?.Button2 != null)
                     {
-                        LoginGenerateCell.Tapped -= GenerateCell_Tapped;
+                        LoginPasswordCell.Button2.Clicked -= PasswordButton2_Clicked;
                     }
-                    if(LoginTotpCell?.Button != null)
+                    if(LoginTotpCell?.Button1 != null)
                     {
-                        LoginTotpCell.Button.Clicked -= TotpButton_Clicked;
+                        LoginTotpCell.Button1.Clicked -= TotpButton_Clicked;
                     }
                     break;
                 case CipherType.Card:
@@ -841,8 +829,24 @@ namespace Bit.App.Pages
         private void PasswordButton_Clicked(object sender, EventArgs e)
         {
             LoginPasswordCell.Entry.InvokeToggleIsPassword();
-            LoginPasswordCell.Button.Image =
+            LoginPasswordCell.Button1.Image =
                 "eye" + (!LoginPasswordCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
+        }
+
+        private async void PasswordButton2_Clicked(object sender, EventArgs e)
+        {
+            if(!string.IsNullOrWhiteSpace(LoginPasswordCell.Entry.Text)
+                && !(await DisplayAlert(null, AppResources.PasswordOverrideAlert, AppResources.Yes, AppResources.No)))
+            {
+                return;
+            }
+
+            var page = new ToolsPasswordGeneratorPage((password) =>
+            {
+                LoginPasswordCell.Entry.Text = password;
+                _deviceActionService.Toast(AppResources.PasswordGenerated);
+            });
+            await Navigation.PushForDeviceAsync(page);
         }
 
         private async void TotpButton_Clicked(object sender, EventArgs e)
@@ -865,22 +869,6 @@ namespace Bit.App.Pages
             });
 
             await Navigation.PushModalAsync(new ExtendedNavigationPage(scanPage));
-        }
-
-        private async void GenerateCell_Tapped(object sender, EventArgs e)
-        {
-            if(!string.IsNullOrWhiteSpace(LoginPasswordCell.Entry.Text)
-                && !(await DisplayAlert(null, AppResources.PasswordOverrideAlert, AppResources.Yes, AppResources.No)))
-            {
-                return;
-            }
-
-            var page = new ToolsPasswordGeneratorPage((password) =>
-            {
-                LoginPasswordCell.Entry.Text = password;
-                _deviceActionService.Toast(AppResources.PasswordGenerated);
-            });
-            await Navigation.PushForDeviceAsync(page);
         }
 
         private async void AttachmentsCell_Tapped(object sender, EventArgs e)
