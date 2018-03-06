@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using System.Linq;
 using Bit.App.Enums;
 using Bit.App.Models.Api;
+using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Models.Data
 {
@@ -31,8 +32,10 @@ namespace Bit.App.Models.Data
             switch(cipher.Type)
             {
                 case CipherType.Login:
-                    var loginData = new LoginDataModel(cipher);
-                    Login = JsonConvert.SerializeObject(loginData);
+                    var loginObj = JObject.FromObject(new LoginDataModel(cipher),
+                        new JsonSerializer { NullValueHandling = NullValueHandling.Ignore });
+                    loginObj[nameof(LoginDataModel.Uri)]?.Parent?.Remove();
+                    Login = loginObj.ToString(Formatting.None);
                     break;
                 case CipherType.SecureNote:
                     var noteData = new SecureNoteDataModel(cipher);

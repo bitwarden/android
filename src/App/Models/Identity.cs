@@ -11,9 +11,9 @@ namespace Bit.App.Models
         public Identity(CipherData data)
         {
             IdentityDataModel deserializedData;
-            if(data.Card != null)
+            if(data.Identity != null)
             {
-                deserializedData = JsonConvert.DeserializeObject<IdentityDataModel>(data.Card);
+                deserializedData = JsonConvert.DeserializeObject<IdentityDataModel>(data.Identity);
             }
             else if(data.Data != null)
             {
