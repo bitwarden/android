@@ -467,5 +467,37 @@ namespace Bit.App.Utilities
                 }
             }
         }
+
+        public static string GetUrlHost(string url)
+        {
+            if(string.IsNullOrWhiteSpace(url))
+            {
+                return null;
+            }
+
+            url = url.Trim();
+            if(url == string.Empty)
+            {
+                return null;
+            }
+
+            if(!url.Contains("://"))
+            {
+                url = $"http://{url}";
+            }
+
+            if(!Uri.TryCreate(url, UriKind.Absolute, out Uri u))
+            {
+                return null;
+            }
+
+            var host = u.Host;
+            if(!u.IsDefaultPort)
+            {
+                host = $"{host}:{u.Port}";
+            }
+
+            return host;
+        }
     }
 }

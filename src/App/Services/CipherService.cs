@@ -7,6 +7,8 @@ using Bit.App.Models;
 using Bit.App.Models.Api;
 using Bit.App.Models.Data;
 using System.Net.Http;
+using Bit.App.Utilities;
+using System.Text.RegularExpressions;
 
 namespace Bit.App.Services
 {
@@ -158,80 +160,65 @@ namespace Bit.App.Services
                     continue;
                 }
 
-                if(cipher.Type != Enums.CipherType.Login || cipher.Login?.Uri == null)
+                if(cipher.Login?.Uris == null || !cipher.Login.Uris.Any())
                 {
                     continue;
                 }
 
-                var loginUriString = cipher.Login.Uri.Decrypt(cipher.OrganizationId);
-                if(string.IsNullOrWhiteSpace(loginUriString))
+                foreach(var u in cipher.Login.Uris)
                 {
-                    continue;
-                }
-
-                if(Array.IndexOf(matchingDomainsArray, loginUriString) >= 0)
-                {
-                    matchingLogins.Add(cipher);
-                    continue;
-                }
-                else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
-                {
-                    matchingFuzzyLogins.Add(cipher);
-                    continue;
-                }
-                else if(!mobileApp)
-                {
-                    var info = InfoFromMobileAppUri(loginUriString);
-                    if(info?.Item1 != null && Array.IndexOf(matchingDomainsArray, info.Item1) >= 0)
+                    var loginUriString = u.Uri?.Decrypt(cipher.OrganizationId);
+                    if(string.IsNullOrWhiteSpace(loginUriString))
                     {
-                        matchingFuzzyLogins.Add(cipher);
-                        continue;
+                        break;
                     }
-                }
 
-                string loginDomainName = null;
-                if(Uri.TryCreate(loginUriString, UriKind.Absolute, out Uri loginUri)
-                    && DomainName.TryParseBaseDomain(loginUri.Host, out loginDomainName))
-                {
-                    loginDomainName = loginDomainName.ToLowerInvariant();
-
-                    if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
+                    var added = false;
+                    switch(u.Match)
                     {
-                        matchingLogins.Add(cipher);
-                        continue;
-                    }
-                    else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
-                    {
-                        matchingFuzzyLogins.Add(cipher);
-                        continue;
-                    }
-                }
-
-                if(mobileApp && mobileAppSearchTerms != null && mobileAppSearchTerms.Length > 0)
-                {
-                    var addedFromSearchTerm = false;
-                    var loginNameString = cipher.Name == null ? null :
-                        cipher.Name.Decrypt(cipher.OrganizationId)?.ToLowerInvariant();
-                    foreach(var term in mobileAppSearchTerms)
-                    {
-                        addedFromSearchTerm = (loginDomainName != null && loginDomainName.Contains(term)) ||
-                            (loginNameString != null && loginNameString.Contains(term));
-                        if(!addedFromSearchTerm)
-                        {
-                            addedFromSearchTerm = (loginDomainName != null && term.Contains(loginDomainName.Split('.')[0]))
-                                || (loginNameString != null && term.Contains(loginNameString));
-                        }
-
-                        if(addedFromSearchTerm)
-                        {
-                            matchingFuzzyLogins.Add(cipher);
+                        case null:
+                        case Enums.UriMatchType.Domain:
+                            added = CheckDefaultUriMatch(cipher, loginUriString, matchingLogins, matchingFuzzyLogins,
+                                matchingDomainsArray, matchingFuzzyDomainsArray, mobileApp, mobileAppSearchTerms);
                             break;
-                        }
+                        case Enums.UriMatchType.Host:
+                            var urlHost = Helpers.GetUrlHost(uriString);
+                            added = urlHost != null && urlHost == Helpers.GetUrlHost(loginUriString);
+                            if(added)
+                            {
+                                matchingLogins.Add(cipher);
+                            }
+                            break;
+                        case Enums.UriMatchType.Exact:
+                            added = uriString == loginUriString;
+                            if(added)
+                            {
+                                matchingLogins.Add(cipher);
+                            }
+                            break;
+                        case Enums.UriMatchType.StartsWith:
+                            added = uriString.StartsWith(loginUriString);
+                            if(added)
+                            {
+                                matchingLogins.Add(cipher);
+                            }
+                            break;
+                        case Enums.UriMatchType.RegularExpression:
+                            var regex = new Regex(loginUriString, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
+                            added = regex.IsMatch(uriString);
+                            if(added)
+                            {
+                                matchingLogins.Add(cipher);
+                            }
+                            break;
+                        case Enums.UriMatchType.Never:
+                        default:
+                            break;
                     }
 
-                    if(addedFromSearchTerm)
+                    if(added)
                     {
-                        continue;
+                        break;
                     }
                 }
             }
@@ -441,6 +428,74 @@ namespace Bit.App.Services
         private bool UriIsiOSApp(string uriString)
         {
             return uriString.StartsWith(Constants.iOSAppProtocol);
+        }
+
+        private bool CheckDefaultUriMatch(Cipher cipher, string loginUriString, List<Cipher> matchingLogins,
+            List<Cipher> matchingFuzzyLogins, string[] matchingDomainsArray, string[] matchingFuzzyDomainsArray,
+            bool mobileApp, string[] mobileAppSearchTerms)
+        {
+            if(Array.IndexOf(matchingDomainsArray, loginUriString) >= 0)
+            {
+                matchingLogins.Add(cipher);
+                return true;
+            }
+            else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
+            {
+                matchingFuzzyLogins.Add(cipher);
+                return true;
+            }
+            else if(!mobileApp)
+            {
+                var info = InfoFromMobileAppUri(loginUriString);
+                if(info?.Item1 != null && Array.IndexOf(matchingDomainsArray, info.Item1) >= 0)
+                {
+                    matchingFuzzyLogins.Add(cipher);
+                    return true;
+                }
+            }
+
+            string loginDomainName = null;
+            if(Uri.TryCreate(loginUriString, UriKind.Absolute, out Uri loginUri)
+                && DomainName.TryParseBaseDomain(loginUri.Host, out loginDomainName))
+            {
+                loginDomainName = loginDomainName.ToLowerInvariant();
+
+                if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
+                {
+                    matchingLogins.Add(cipher);
+                    return true;
+                }
+                else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
+                {
+                    matchingFuzzyLogins.Add(cipher);
+                    return true;
+                }
+            }
+
+            if(mobileApp && mobileAppSearchTerms != null && mobileAppSearchTerms.Length > 0)
+            {
+                var addedFromSearchTerm = false;
+                var loginNameString = cipher.Name == null ? null :
+                    cipher.Name.Decrypt(cipher.OrganizationId)?.ToLowerInvariant();
+                foreach(var term in mobileAppSearchTerms)
+                {
+                    addedFromSearchTerm = (loginDomainName != null && loginDomainName.Contains(term)) ||
+                        (loginNameString != null && loginNameString.Contains(term));
+                    if(!addedFromSearchTerm)
+                    {
+                        addedFromSearchTerm = (loginDomainName != null && term.Contains(loginDomainName.Split('.')[0]))
+                            || (loginNameString != null && term.Contains(loginNameString));
+                    }
+
+                    if(addedFromSearchTerm)
+                    {
+                        matchingFuzzyLogins.Add(cipher);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
