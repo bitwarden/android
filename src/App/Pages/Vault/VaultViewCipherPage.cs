@@ -308,29 +308,6 @@ namespace Bit.App.Pages
                 Table.Root.Add(NotesSection);
             }
 
-            // Attachments
-            CleanupAttachmentCells();
-            if(Table.Root.Contains(AttachmentsSection))
-            {
-                Table.Root.Remove(AttachmentsSection);
-            }
-            if(Model.ShowAttachments && (_tokenService.TokenPremium || cipher.OrganizationId != null))
-            {
-                AttachmentsSection = new TableSection(AppResources.Attachments);
-                AttachmentCells = new List<AttachmentViewCell>();
-                foreach(var attachment in Model.Attachments.OrderBy(s => s.Name))
-                {
-                    var attachmentCell = new AttachmentViewCell(attachment, async () =>
-                    {
-                        await OpenAttachmentAsync(cipher, attachment);
-                    });
-                    AttachmentCells.Add(attachmentCell);
-                    AttachmentsSection.Add(attachmentCell);
-                    attachmentCell.InitEvents();
-                }
-                Table.Root.Add(AttachmentsSection);
-            }
-
             // Fields
             if(Table.Root.Contains(FieldsSection))
             {
@@ -359,6 +336,29 @@ namespace Bit.App.Pages
                     FieldsSection.Add(fieldCell);
                 }
                 Table.Root.Add(FieldsSection);
+            }
+
+            // Attachments
+            CleanupAttachmentCells();
+            if(Table.Root.Contains(AttachmentsSection))
+            {
+                Table.Root.Remove(AttachmentsSection);
+            }
+            if(Model.ShowAttachments && (_tokenService.TokenPremium || cipher.OrganizationId != null))
+            {
+                AttachmentsSection = new TableSection(AppResources.Attachments);
+                AttachmentCells = new List<AttachmentViewCell>();
+                foreach(var attachment in Model.Attachments.OrderBy(s => s.Name))
+                {
+                    var attachmentCell = new AttachmentViewCell(attachment, async () =>
+                    {
+                        await OpenAttachmentAsync(cipher, attachment);
+                    });
+                    AttachmentCells.Add(attachmentCell);
+                    AttachmentsSection.Add(attachmentCell);
+                    attachmentCell.InitEvents();
+                }
+                Table.Root.Add(AttachmentsSection);
             }
 
             // Various types
