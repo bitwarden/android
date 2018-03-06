@@ -39,6 +39,7 @@ namespace Bit.App.Pages
         private VaultViewCipherPageModel Model { get; set; } = new VaultViewCipherPageModel();
         private ExtendedTableView Table { get; set; }
         private TableSection ItemInformationSection { get; set; }
+        public TableSection UrisSection { get; set; }
         private TableSection NotesSection { get; set; }
         private TableSection AttachmentsSection { get; set; }
         private TableSection FieldsSection { get; set; }
@@ -50,7 +51,6 @@ namespace Bit.App.Pages
         // Login
         public LabeledValueCell LoginUsernameCell { get; set; }
         public LabeledValueCell LoginPasswordCell { get; set; }
-        public LabeledValueCell LoginUriCell { get; set; }
         public LabeledValueCell LoginTotpCodeCell { get; set; }
 
         // Card
@@ -140,22 +140,6 @@ namespace Bit.App.Pages
                     LoginPasswordCell.Value.FontFamily =
                         Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
                     LoginPasswordCell.Value.LineBreakMode = LineBreakMode.WordWrap;
-
-                    // URI
-                    LoginUriCell = new LabeledValueCell(AppResources.Website, button1Image: "launch.png");
-                    LoginUriCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.LoginUriHost));
-                    LoginUriCell.Button1.SetBinding(IsVisibleProperty, nameof(VaultViewCipherPageModel.ShowLoginLaunch));
-                    LoginUriCell.Button1.Command = new Command(async () =>
-                    {
-                        if(Device.RuntimePlatform == Device.Android && Model.LoginUri.StartsWith("androidapp://"))
-                        {
-                            await _deviceActionService.LaunchAppAsync(Model.LoginUri, this);
-                        }
-                        else if(Model.LoginUri.StartsWith("http://") || Model.LoginUri.StartsWith("https://"))
-                        {
-                            Device.OpenUri(new Uri(Model.LoginUri));
-                        }
-                    });
 
                     // Totp
                     LoginTotpCodeCell = new LabeledValueCell(
@@ -299,6 +283,22 @@ namespace Bit.App.Pages
 
         private void BuildTable(Cipher cipher)
         {
+            // URIs
+            if(UrisSection != null && Table.Root.Contains(UrisSection))
+            {
+                Table.Root.Remove(UrisSection);
+            }
+            if(Model.ShowLoginUris)
+            {
+                UrisSection = new TableSection(Helpers.GetEmptyTableSectionTitle());
+                foreach(var uri in Model.LoginUris)
+                {
+                    UrisSection.Add(new UriViewCell(this, uri));
+                }
+                Table.Root.Add(UrisSection);
+            }
+
+            // Notes
             if(Table.Root.Contains(NotesSection))
             {
                 Table.Root.Remove(NotesSection);
@@ -365,7 +365,6 @@ namespace Bit.App.Pages
             switch(cipher.Type)
             {
                 case CipherType.Login:
-                    AddSectionCell(LoginUriCell, Model.ShowLoginUri);
                     AddSectionCell(LoginUsernameCell, Model.ShowLoginUsername);
                     AddSectionCell(LoginPasswordCell, Model.ShowLoginPassword);
 
@@ -575,8 +574,7 @@ namespace Bit.App.Pages
             public FieldViewCell(VaultViewCipherPage page, VaultViewCipherPageModel.Field field, bool? a, bool? b)
                 : base(field.Name, field.MaskedValue, string.Empty, "clipboard.png")
             {
-                Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular",
-                    Android: "monospace", Windows: "Courier");
+                Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
                 if(Device.RuntimePlatform == Device.iOS)
                 {
                     Button1.Margin = new Thickness(10, 0);
@@ -608,6 +606,30 @@ namespace Bit.App.Pages
                 {
                     copyButton.Command = new Command(() => page.Copy(field.Value, field.Name));
                 }
+            }
+        }
+
+        public class UriViewCell : LabeledValueCell
+        {
+            public UriViewCell(VaultViewCipherPage page, VaultViewCipherPageModel.LoginUri uri)
+                : base(uri.Label, uri.Host, uri.ShowLaunch ? "launch.png" : null, "clipboard.png")
+            {
+                Value.LineBreakMode = LineBreakMode.TailTruncation;
+                if(Button1 != null)
+                {
+                    Button1.Command = new Command(async () =>
+                    {
+                        if(Device.RuntimePlatform == Device.Android && uri.IsApp)
+                        {
+                            await page._deviceActionService.LaunchAppAsync(uri.Value, page);
+                        }
+                        else if(uri.IsWebsite)
+                        {
+                            Device.OpenUri(new Uri(uri.Value));
+                        }
+                    });
+                }
+                Button2.Command = new Command(() => page.Copy(uri.Value, AppResources.URI));
             }
         }
     }

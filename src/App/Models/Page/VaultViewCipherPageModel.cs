@@ -3,7 +3,7 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using System.Collections.Generic;
 using Bit.App.Enums;
-using System.Linq;
+using Bit.App.Resources;
 
 namespace Bit.App.Models.Page
 {
@@ -12,6 +12,7 @@ namespace Bit.App.Models.Page
         private string _name, _notes;
         private List<Attachment> _attachments;
         private List<Field> _fields;
+        private List<LoginUri> _loginUris;
 
         // Login
         private string _loginUsername, _loginPassword, _loginUri, _loginTotpCode;
@@ -117,69 +118,17 @@ namespace Bit.App.Models.Page
         public ImageSource LoginShowHideImage => RevealLoginPassword ?
             ImageSource.FromFile("eye_slash.png") : ImageSource.FromFile("eye.png");
 
-        public string LoginUri
+        public List<LoginUri> LoginUris
         {
-            get => _loginUri;
+            get => _loginUris;
             set
             {
-                _loginUri = value;
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(LoginUri)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(LoginUriHost)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowLoginUri)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowLoginLaunch)));
+                _loginUris = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(LoginUris)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowLoginUris)));
             }
         }
-        public bool ShowLoginUri => !string.IsNullOrWhiteSpace(LoginUri);
-        public bool ShowLoginLaunch
-        {
-            get
-            {
-                if(!ShowLoginUri)
-                {
-                    return false;
-                }
-
-                if(Device.RuntimePlatform == Device.Android && !LoginUri.StartsWith("http") &&
-                    !LoginUri.StartsWith("androidapp://"))
-                {
-                    return false;
-                }
-
-                if(Device.RuntimePlatform != Device.Android && !LoginUri.StartsWith("http"))
-                {
-                    return false;
-                }
-
-                if(!Uri.TryCreate(LoginUri, UriKind.Absolute, out Uri uri))
-                {
-                    return false;
-                }
-
-                return true;
-            }
-        }
-        public string LoginUriHost
-        {
-            get
-            {
-                if(!ShowLoginUri)
-                {
-                    return null;
-                }
-
-                if(!Uri.TryCreate(LoginUri, UriKind.Absolute, out Uri uri))
-                {
-                    return LoginUri;
-                }
-
-                if(DomainName.TryParseBaseDomain(uri.Host, out string domain))
-                {
-                    return domain;
-                }
-
-                return uri.Host;
-            }
-        }
+        public bool ShowLoginUris => (LoginUris?.Count ?? 0) > 0;
 
         public string LoginTotpCode
         {
@@ -601,7 +550,23 @@ namespace Bit.App.Models.Page
                 case CipherType.Login:
                     LoginUsername = cipher.Login.Username?.Decrypt(cipher.OrganizationId);
                     LoginPassword = cipher.Login.Password?.Decrypt(cipher.OrganizationId);
-                    LoginUri = cipher.Login.Uris?.FirstOrDefault()?.Uri?.Decrypt(cipher.OrganizationId);
+
+                    if(cipher.Login.Uris != null)
+                    {
+                        var uris = new List<LoginUri>();
+                        foreach(var uri in cipher.Login.Uris)
+                        {
+                            uris.Add(new LoginUri
+                            {
+                                Value = uri.Uri?.Decrypt(cipher.OrganizationId)
+                            });
+                        }
+                        LoginUris = uris;
+                    }
+                    else
+                    {
+                        LoginUris = null;
+                    }
                     break;
                 case CipherType.Card:
                     CardName = cipher.Card.CardholderName?.Decrypt(cipher.OrganizationId);
@@ -665,6 +630,63 @@ namespace Bit.App.Models.Page
             }
             public FieldType Type { get; set; }
             public bool Revealed { get; set; }
+        }
+
+        public class LoginUri
+        {
+            public string Value { get; set; }
+            public bool ShowLaunch
+            {
+                get
+                {
+                    if(string.IsNullOrWhiteSpace(Value))
+                    {
+                        return false;
+                    }
+
+                    if(Device.RuntimePlatform == Device.Android && !IsWebsite && !IsApp)
+                    {
+                        return false;
+                    }
+
+                    if(Device.RuntimePlatform != Device.Android && !IsWebsite)
+                    {
+                        return false;
+                    }
+
+                    if(!Uri.TryCreate(Value, UriKind.Absolute, out Uri uri))
+                    {
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+            public string Host
+            {
+                get
+                {
+                    if(string.IsNullOrWhiteSpace(Value))
+                    {
+                        return null;
+                    }
+
+                    if(!Uri.TryCreate(Value, UriKind.Absolute, out Uri uri))
+                    {
+                        return Value;
+                    }
+
+                    if(DomainName.TryParseBaseDomain(uri.Host, out string domain))
+                    {
+                        return domain;
+                    }
+
+                    return uri.Host;
+                }
+            }
+            public string Label => IsWebsite ? AppResources.Website : AppResources.URI;
+            public bool IsWebsite => Value.StartsWith("http://") || Value.StartsWith("https://");
+            public bool IsApp => Value.StartsWith(Constants.AndroidAppProtocol);
         }
     }
 }

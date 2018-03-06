@@ -373,5 +373,99 @@ namespace Bit.App.Utilities
                 cipher.Fields = null;
             }
         }
+
+        public static FormEntryCell MakeUriCell(string value, TableSection urisSection)
+        {
+            var label = string.Format(AppResources.URIPosition, urisSection.Count);
+            var cell = new FormEntryCell(label, entryKeyboard: Keyboard.Url);
+            cell.Entry.Text = value;
+            cell.Entry.DisableAutocapitalize = true;
+            cell.Entry.Autocorrect = false;
+
+            var deleteAction = new MenuItem { Text = AppResources.Remove, IsDestructive = true };
+            deleteAction.Clicked += (sender, e) =>
+            {
+                if(urisSection.Contains(cell))
+                {
+                    urisSection.Remove(cell);
+                    if(cell is FormEntryCell feCell)
+                    {
+                        feCell.Dispose();
+                    }
+                    cell = null;
+
+                    for(int i = 0; i < urisSection.Count; i++)
+                    {
+                        if(urisSection[i] is FormEntryCell uriCell)
+                        {
+                            uriCell.Label.Text = string.Format(AppResources.URIPosition, i + 1);
+                        }
+                    }
+                }
+            };
+
+            var optionsAction = new MenuItem { Text = AppResources.Options };
+            optionsAction.Clicked += async (sender, e) =>
+            {
+
+            };
+
+            cell.ContextActions.Add(optionsAction);
+            cell.ContextActions.Add(deleteAction);
+            return cell;
+        }
+
+        public static void ProcessUrisSectionForSave(TableSection urisSection, Cipher cipher)
+        {
+            if(urisSection != null && urisSection.Count > 0)
+            {
+                var uris = new List<LoginUri>();
+                foreach(var cell in urisSection)
+                {
+                    if(cell is FormEntryCell entryCell && !string.IsNullOrWhiteSpace(entryCell.Entry.Text))
+                    {
+                        uris.Add(new LoginUri
+                        {
+                            Uri = entryCell.Entry.Text.Encrypt(cipher.OrganizationId),
+                            Match = null
+                        });
+                    }
+                }
+                cipher.Login.Uris = uris;
+            }
+
+            if(!cipher.Login.Uris?.Any() ?? true)
+            {
+                cipher.Login.Uris = null;
+            }
+        }
+
+        public static void InitSectionEvents(TableSection section)
+        {
+            if(section != null && section.Count > 0)
+            {
+                foreach(var cell in section)
+                {
+                    if(cell is FormEntryCell entrycell)
+                    {
+                        entrycell.InitEvents();
+                    }
+                }
+            }
+        }
+
+        public static void DisposeSectionEvents(TableSection section)
+        {
+            if(section != null && section.Count > 0)
+            {
+                foreach(var cell in section)
+                {
+                    if(cell is FormEntryCell entrycell)
+                    {
+                        entrycell.Dispose();
+                    }
+                }
+            }
+        }
     }
 }

@@ -2131,6 +2131,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New URI.
+        /// </summary>
+        public static string NewUri {
+            get {
+                return ResourceManager.GetString("NewUri", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
@@ -2937,6 +2946,15 @@ namespace Bit.App.Resources {
         public static string URI {
             get {
                 return ResourceManager.GetString("URI", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URI {0}.
+        /// </summary>
+        public static string URIPosition {
+            get {
+                return ResourceManager.GetString("URIPosition", resourceCulture);
             }
         }
         
