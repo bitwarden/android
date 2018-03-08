@@ -23,7 +23,7 @@ namespace Bit.Android
         private const int AutoFillNotificationId = 34573;
         private const string SystemUiPackage = "com.android.systemui";
         private const string BitwardenPackage = "com.x8bit.bitwarden";
-        private const string BitwardenWebsite = "bitwarden.com";
+        private const string BitwardenWebsite = "vault.bitwarden.com";
 
         private static Dictionary<string, Browser> SupportedBrowsers => new List<Browser>
         {
