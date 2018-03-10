@@ -424,7 +424,7 @@ namespace Bit.App.Services
                 throw new ArgumentNullException(nameof(salt));
             }
 
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var passwordBytes = Encoding.UTF8.GetBytes(NormalizePassword(password));
             var saltBytes = Encoding.UTF8.GetBytes(salt);
 
             var keyBytes = _keyDerivationService.DeriveKey(passwordBytes, saltBytes, 5000);
@@ -449,7 +449,7 @@ namespace Bit.App.Services
                 throw new ArgumentNullException(nameof(password));
             }
 
-            var passwordBytes = Encoding.UTF8.GetBytes(password);
+            var passwordBytes = Encoding.UTF8.GetBytes(NormalizePassword(password));
             var hash = _keyDerivationService.DeriveKey(key.Key, passwordBytes, 1);
             return hash;
         }
@@ -464,6 +464,18 @@ namespace Bit.App.Services
         {
             var bytes = Crypto.RandomBytes(512 / 8);
             return Encrypt(bytes, key);
+        }
+
+        // Some users like to copy/paste passwords from external files. Sometimes this can lead to two different
+        // values on mobiles apps vs the web. For example, on Android an EditText will accept a new line character
+        // (\n), whereas whenever you paste a new line character on the web in a HTML input box it is converted
+        // to a space ( ). Normalize those values so that they are the same on all platforms.
+        private string NormalizePassword(string password)
+        {
+            return password
+                .Replace("\r\n", " ") // Windows-style new line => space
+                .Replace("\n", " ") // New line => space
+                .Replace(" ", " "); // No-break space (00A0) => space
         }
     }
 }
