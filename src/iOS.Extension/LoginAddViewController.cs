@@ -160,11 +160,22 @@ namespace Bit.iOS.Extension
                 Type = App.Enums.CipherType.Login,
                 Login = new Login
                 {
-                    Uri = string.IsNullOrWhiteSpace(UriCell.TextField.Text) ? null : UriCell.TextField.Text.Encrypt(),
+                    Uris = null,
                     Username = string.IsNullOrWhiteSpace(UsernameCell.TextField.Text) ? null : UsernameCell.TextField.Text.Encrypt(),
                     Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ? null : PasswordCell.TextField.Text.Encrypt()
                 }
             };
+
+            if(!string.IsNullOrWhiteSpace(UriCell.TextField.Text))
+            {
+                cipher.Login.Uris = new List<LoginUri>
+                {
+                    new LoginUri
+                    {
+                        Uri = UriCell.TextField.Text.Encrypt()
+                    }
+                };
+            }
 
             var saveTask = _cipherService.SaveAsync(cipher);
             var loadingAlert = Dialogs.CreateLoadingAlert(AppResources.Saving);
