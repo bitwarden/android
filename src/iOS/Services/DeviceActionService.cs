@@ -341,6 +341,8 @@ namespace Bit.iOS.Services
                 input = x;
                 input.Text = text ?? string.Empty;
             });
+            var vc = GetPresentedViewController();
+            vc?.PresentViewController(alert, true, null);
             return result.Task;
         }
 
