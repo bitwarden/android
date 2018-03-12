@@ -43,6 +43,11 @@ namespace Bit.iOS.Core.Services
             // do nothing
         }
 
+        public Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
+        {
+            // do nothing
+        }
+
         public void HideLoading()
         {
             // do nothing
