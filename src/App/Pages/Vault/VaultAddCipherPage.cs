@@ -436,7 +436,7 @@ namespace Bit.App.Pages
                 UrisSection = new TableSection(Helpers.GetEmptyTableSectionTitle());
                 AddUriCell = new ExtendedTextCell
                 {
-                    Text = AppResources.NewUri,
+                    Text = $"+ {AppResources.NewUri}",
                     TextColor = Colors.Primary
                 };
                 UrisSection.Add(AddUriCell);
@@ -558,7 +558,7 @@ namespace Bit.App.Pages
             FieldsSection = new TableSection(AppResources.CustomFields);
             AddFieldCell = new ExtendedTextCell
             {
-                Text = AppResources.NewCustomField,
+                Text = $"+ {AppResources.NewCustomField}",
                 TextColor = Colors.Primary
             };
             FieldsSection.Add(AddFieldCell);

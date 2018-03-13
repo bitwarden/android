@@ -202,7 +202,7 @@ namespace Bit.App.Pages
                 UrisSection = new TableSection(Helpers.GetEmptyTableSectionTitle());
                 AddUriCell = new ExtendedTextCell
                 {
-                    Text = AppResources.NewUri,
+                    Text = $"+ {AppResources.NewUri}",
                     TextColor = Colors.Primary
                 };
                 UrisSection.Add(AddUriCell);
@@ -408,7 +408,7 @@ namespace Bit.App.Pages
                 {
                     var label = field.Name?.Decrypt(Cipher.OrganizationId) ?? string.Empty;
                     var value = field.Value?.Decrypt(Cipher.OrganizationId);
-                    var cell = Helpers.MakeFieldCell(field.Type, label, value, FieldsSection);
+                    var cell = Helpers.MakeFieldCell(field.Type, label, value, FieldsSection, this);
                     if(cell != null)
                     {
                         FieldsSection.Add(cell);
@@ -417,7 +417,7 @@ namespace Bit.App.Pages
             }
             AddFieldCell = new ExtendedTextCell
             {
-                Text = AppResources.NewCustomField,
+                Text = $"+ {AppResources.NewCustomField}",
                 TextColor = Colors.Primary
             };
             FieldsSection.Add(AddFieldCell);

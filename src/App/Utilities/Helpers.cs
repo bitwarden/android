@@ -238,7 +238,7 @@ namespace Bit.App.Utilities
                 return;
             }
 
-            var cell = MakeFieldCell(fieldType, label, string.Empty, fieldsSection);
+            var cell = MakeFieldCell(fieldType, label, string.Empty, fieldsSection, page);
             if(cell != null)
             {
                 fieldsSection.Insert(fieldsSection.Count - 1, cell);
@@ -249,7 +249,8 @@ namespace Bit.App.Utilities
             }
         }
 
-        public static Cell MakeFieldCell(FieldType type, string label, string value, TableSection fieldsSection)
+        public static Cell MakeFieldCell(FieldType type, string label, string value,
+            TableSection fieldsSection, Page page)
         {
             Cell cell;
             switch(type)
@@ -258,7 +259,7 @@ namespace Bit.App.Utilities
                 case FieldType.Hidden:
                     var hidden = type == FieldType.Hidden;
                     var textFieldCell = new FormEntryCell(label, isPassword: hidden,
-                        button1: hidden ? "eye.png" : null);
+                        button1: hidden ? "eye.png" : "cog.png", button2: hidden ? "cog.png" : null);
                     textFieldCell.Entry.Text = value;
                     textFieldCell.Entry.DisableAutocapitalize = true;
                     textFieldCell.Entry.Autocorrect = false;
@@ -289,56 +290,55 @@ namespace Bit.App.Utilities
                     break;
             }
 
-            if(cell != null)
+            if(cell is FormEntryCell feCell)
             {
-                var deleteAction = new MenuItem { Text = AppResources.Remove, IsDestructive = true };
-                deleteAction.Clicked += (sender, e) =>
+                var optionsButton = feCell.Button2 ?? feCell.Button1;
+                optionsButton.Command = new Command(async () =>
                 {
-                    if(fieldsSection.Contains(cell))
+                    var optionsVal = await page.DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+                        null, AppResources.Edit, AppResources.Remove);
+                    if(optionsVal == AppResources.Remove)
                     {
-                        fieldsSection.Remove(cell);
-                    }
+                        if(fieldsSection.Contains(cell))
+                        {
+                            fieldsSection.Remove(cell);
+                        }
 
-                    if(cell is FormEntryCell feCell)
-                    {
-                        feCell.Dispose();
+                        if(cell is IDisposable disposableCell)
+                        {
+                            disposableCell.Dispose();
+                        }
+                        cell = feCell = null;
                     }
-                    cell = null;
-                };
-
-                var editNameAction = new MenuItem { Text = AppResources.Edit };
-                editNameAction.Clicked += async (sender, e) =>
-                {
-                    string existingLabel = null;
-                    var feCell = cell as FormEntryCell;
-                    var esCell = cell as ExtendedSwitchCell;
-                    if(feCell != null)
+                    else if(optionsVal == AppResources.Edit)
                     {
-                        existingLabel = feCell.Label.Text;
-                    }
-                    else if(esCell != null)
-                    {
-                        existingLabel = esCell.Text;
-                    }
-
-                    var daService = Resolver.Resolve<IDeviceActionService>();
-                    var editLabel = await daService.DisplayPromptAync(AppResources.CustomFieldName,
-                        null, existingLabel);
-                    if(editLabel != null)
-                    {
+                        string existingLabel = null;
+                        var esCell = cell as ExtendedSwitchCell;
                         if(feCell != null)
                         {
-                            feCell.Label.Text = editLabel;
+                            existingLabel = feCell.Label.Text;
                         }
                         else if(esCell != null)
                         {
-                            esCell.Text = editLabel;
+                            existingLabel = esCell.Text;
+                        }
+
+                        var daService = Resolver.Resolve<IDeviceActionService>();
+                        var editLabel = await daService.DisplayPromptAync(AppResources.CustomFieldName,
+                            null, existingLabel);
+                        if(editLabel != null)
+                        {
+                            if(feCell != null)
+                            {
+                                feCell.Label.Text = editLabel;
+                            }
+                            else if(esCell != null)
+                            {
+                                esCell.Text = editLabel;
+                            }
                         }
                     }
-                };
-
-                cell.ContextActions.Add(editNameAction);
-                cell.ContextActions.Add(deleteAction);
+                });
             }
 
             return cell;
@@ -386,63 +386,64 @@ namespace Bit.App.Utilities
         public static FormEntryCell MakeUriCell(string value, UriMatchType? match, TableSection urisSection, Page page)
         {
             var label = string.Format(AppResources.URIPosition, urisSection.Count);
-            var cell = new FormEntryCell(label, entryKeyboard: Keyboard.Url);
+            var cell = new FormEntryCell(label, entryKeyboard: Keyboard.Url, button1: "cog.png");
             cell.Entry.Text = value;
             cell.Entry.DisableAutocapitalize = true;
             cell.Entry.Autocorrect = false;
             cell.MetaData = new Dictionary<string, object> { ["match"] = match };
 
-            var deleteAction = new MenuItem { Text = AppResources.Remove, IsDestructive = true };
-            deleteAction.Clicked += (sender, e) =>
+            cell.Button1.Command = new Command(async () =>
             {
-                if(urisSection.Contains(cell))
-                {
-                    urisSection.Remove(cell);
-                    if(cell is FormEntryCell feCell)
-                    {
-                        feCell.Dispose();
-                    }
-                    cell = null;
+                var optionsVal = await page.DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+                    null, AppResources.Edit, AppResources.Remove);
 
-                    for(int i = 0; i < urisSection.Count; i++)
+                if(optionsVal == AppResources.Edit)
+                {
+                    var options = UriMatchOptionsMap.Select(v => v.Value).ToList();
+                    options.Insert(0, AppResources.Default);
+                    var exactingMatchVal = cell.MetaData["match"] as UriMatchType?;
+
+                    var matchIndex = exactingMatchVal.HasValue ?
+                        Array.IndexOf(UriMatchOptionsMap.Keys.ToArray(), exactingMatchVal) + 1 : 0;
+                    options[matchIndex] = $"✓ {options[matchIndex]}";
+
+                    var optionsArr = options.ToArray();
+                    var val = await page.DisplayActionSheet(AppResources.URIMatchDetection, AppResources.Cancel,
+                        null, options.ToArray());
+
+                    UriMatchType? selectedVal = null;
+                    if(val == AppResources.Cancel)
                     {
-                        if(urisSection[i] is FormEntryCell uriCell)
+                        selectedVal = exactingMatchVal;
+                    }
+                    else if(val != AppResources.Default)
+                    {
+                        selectedVal = UriMatchOptionsMap.ElementAt(Array.IndexOf(optionsArr, val) - 1).Key;
+                    }
+                    cell.MetaData["match"] = selectedVal;
+                }
+                else if(optionsVal == AppResources.Remove)
+                {
+                    if(urisSection.Contains(cell))
+                    {
+                        urisSection.Remove(cell);
+                        if(cell is FormEntryCell feCell)
                         {
-                            uriCell.Label.Text = string.Format(AppResources.URIPosition, i + 1);
+                            feCell.Dispose();
+                        }
+                        cell = null;
+
+                        for(int i = 0; i < urisSection.Count; i++)
+                        {
+                            if(urisSection[i] is FormEntryCell uriCell)
+                            {
+                                uriCell.Label.Text = string.Format(AppResources.URIPosition, i + 1);
+                            }
                         }
                     }
                 }
-            };
+            });
 
-            var optionsAction = new MenuItem { Text = AppResources.Options };
-            optionsAction.Clicked += async (sender, e) =>
-            {
-                var options = UriMatchOptionsMap.Select(v => v.Value).ToList();
-                options.Insert(0, AppResources.Default);
-                var exactingMatchVal = cell.MetaData["match"] as UriMatchType?;
-
-                var matchIndex = exactingMatchVal.HasValue ?
-                    Array.IndexOf(UriMatchOptionsMap.Keys.ToArray(), exactingMatchVal) + 1 : 0;
-                options[matchIndex] = $"✓ {options[matchIndex]}";
-
-                var optionsArr = options.ToArray();
-                var val = await page.DisplayActionSheet(AppResources.URIMatchDetection, AppResources.Cancel,
-                    null, options.ToArray());
-
-                UriMatchType? selectedVal = null;
-                if(val == AppResources.Cancel)
-                {
-                    selectedVal = exactingMatchVal;
-                }
-                else if(val != AppResources.Default)
-                {
-                    selectedVal = UriMatchOptionsMap.ElementAt(Array.IndexOf(optionsArr, val) - 1).Key;
-                }
-                cell.MetaData["match"] = selectedVal;
-            };
-
-            cell.ContextActions.Add(optionsAction);
-            cell.ContextActions.Add(deleteAction);
             return cell;
         }
 

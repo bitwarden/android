@@ -1257,7 +1257,7 @@
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base Domain</value>
+    <value>Base domain</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>Default</value>

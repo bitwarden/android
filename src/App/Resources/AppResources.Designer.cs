@@ -421,7 +421,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Base Domain.
+        ///   Looks up a localized string similar to Base domain.
         /// </summary>
         public static string BaseDomain {
             get {
