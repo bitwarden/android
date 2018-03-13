@@ -6,10 +6,10 @@ namespace Bit.App.Controls
     public class ExtendedViewCell : ViewCell
     {
         public static readonly BindableProperty BackgroundColorProperty =
-            BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ExtendedTextCell), Color.White);
+            BindableProperty.Create(nameof(BackgroundColor), typeof(Color), typeof(ExtendedViewCell), Color.White);
 
         public static readonly BindableProperty ShowDisclousureProperty =
-            BindableProperty.Create(nameof(ShowDisclousure), typeof(bool), typeof(ExtendedTextCell), false);
+            BindableProperty.Create(nameof(ShowDisclousure), typeof(bool), typeof(ExtendedViewCell), false);
 
         public Color BackgroundColor
         {
