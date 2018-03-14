@@ -719,5 +719,14 @@
   <ItemGroup>
     <BundleResource Include="Resources\refresh_alt%403x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog_alt.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog_alt%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\cog_alt%403x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

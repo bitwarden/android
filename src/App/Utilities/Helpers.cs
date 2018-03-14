@@ -259,20 +259,20 @@ namespace Bit.App.Utilities
                 case FieldType.Hidden:
                     var hidden = type == FieldType.Hidden;
                     var textFieldCell = new FormEntryCell(label, isPassword: hidden,
-                        button1: hidden ? "eye.png" : "cog.png", button2: hidden ? "cog.png" : null);
+                        button1: hidden ? "eye.png" : "cog_alt.png", button2: hidden ? "cog_alt.png" : null);
                     textFieldCell.Entry.Text = value;
                     textFieldCell.Entry.DisableAutocapitalize = true;
                     textFieldCell.Entry.Autocorrect = false;
 
                     if(hidden)
                     {
-                        textFieldCell.Entry.FontFamily = Helpers.OnPlatform(
-                            iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
+                        textFieldCell.Entry.FontFamily = OnPlatform(iOS: "Menlo-Regular", Android: "monospace",
+                            Windows: "Courier");
                         textFieldCell.Button1.Command = new Command(() =>
                         {
                             textFieldCell.Entry.InvokeToggleIsPassword();
-                            textFieldCell.Button1.Image =
-                                "eye" + (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
+                            textFieldCell.Button1.Image = "eye" +
+                                (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
                         });
                     }
                     cell = textFieldCell;
@@ -386,7 +386,7 @@ namespace Bit.App.Utilities
         public static FormEntryCell MakeUriCell(string value, UriMatchType? match, TableSection urisSection, Page page)
         {
             var label = string.Format(AppResources.URIPosition, urisSection.Count);
-            var cell = new FormEntryCell(label, entryKeyboard: Keyboard.Url, button1: "cog.png");
+            var cell = new FormEntryCell(label, entryKeyboard: Keyboard.Url, button1: "cog_alt.png");
             cell.Entry.Text = value;
             cell.Entry.DisableAutocapitalize = true;
             cell.Entry.Autocorrect = false;
