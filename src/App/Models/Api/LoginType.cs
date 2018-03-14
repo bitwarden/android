@@ -10,7 +10,7 @@ namespace Bit.App.Models.Api
 
         public LoginType(Cipher cipher)
         {
-            Uris = cipher.Login.Uris.Select(u => new LoginUriType(u));
+            Uris = cipher.Login.Uris?.Select(u => new LoginUriType(u));
             Username = cipher.Login.Username?.EncryptedString;
             Password = cipher.Login.Password?.EncryptedString;
             Totp = cipher.Login.Totp?.EncryptedString;
