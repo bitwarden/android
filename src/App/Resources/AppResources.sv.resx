@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Besök vår webbplats</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besök vår webbplats för att få hjälp, nyheter, mejla oss och/eller lära er mer om hur man använder bitwarden.</value>
+    <value>Besök vår webbplats för att få hjälp, nyheter, mejla oss och/eller lära er mer om hur man använder Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webbsida</value>
@@ -403,7 +403,7 @@
     <value>Apptillägg</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Använd bitwardens tillgänglighetstjänst för att automatiskt fylla i dina inloggningar i applikationer och på webben.</value>
+    <value>Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i dina inloggningar i applikationer och på webben.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Hjälpmedelsservice för automatisk ifyllnad</value>
@@ -412,19 +412,19 @@
     <value>Undvik tvetydiga tecken</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden apptillägg</value>
+    <value>Bitwarden apptillägg</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Det enklaste sättet att lägga till nya inloggningar i ditt valv är genom apptillägget. Läs mer om bitwardens apptillägg genom att navigera till "Verktyg"-skärmen.</value>
+    <value>Det enklaste sättet att lägga till nya inloggningar i ditt valv är genom apptillägget. Läs mer om Bitwardens apptillägg genom att navigera till "Verktyg"-skärmen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Använd bitwarden i Safari och andra applikationer för att automatiskt fylla i din inloggningsinformation.</value>
+    <value>Använd Bitwarden i Safari och andra applikationer för att automatiskt fylla i din inloggningsinformation.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwardens hjälpmedelsservice för automatisk ifyllnad</value>
+    <value>Bitwardens hjälpmedelsservice för automatisk ifyllnad</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Använd bitwardens tillgänglighetstjänst för att automatiskt fylla i din inloggningsinformation.</value>
+    <value>Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i din inloggningsinformation.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Ändra e-postadress</value>
@@ -482,7 +482,7 @@
     <value>Aktivera apptillägg</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>Inuti Safari hittar du bitwarden genom att trycka på dela-ikonen (scrolla till höger på den nedersta raden i dela-menyn).</value>
+    <value>Inuti Safari hittar du Bitwarden genom att trycka på dela-ikonen (scrolla till höger på den nedersta raden i dela-menyn).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Dina inloggningar är nu enkelt tillgängliga från Safari, Chrome och andra appar som stöds.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>Inuti Safari och Chrome hittar du bitwarden genom att trycka på dela-ikonen (hjälp: skrolla till höger på den nedersta raden i dela-menyn).</value>
+    <value>Inuti Safari och Chrome hittar du Bitwarden genom att trycka på dela-ikonen (hjälp: skrolla till höger på den nedersta raden i dela-menyn).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tryck på bitwarden-ikonen i menyn för att öppna tillägget.</value>
+    <value>Tryck på Bitwarden-ikonen i menyn för att öppna tillägget.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>För att starta bitwarden i Safari och andra appar, tryck på "mer"-ikonen i den nedersta raden på menyn.</value>
+    <value>För att starta Bitwarden i Safari och andra appar, tryck på "mer"-ikonen i den nedersta raden på menyn.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
@@ -591,7 +591,7 @@
     <value>Fler inställningar</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Du måste logga in i bitwarden-appen innan du kan använda tillägget.</value>
+    <value>Du måste logga in i Bitwarden-appen innan du kan använda tillägget.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Aldrig</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Standardinställningar ställs in genom bitwarden-appens lösenordsgenerator-verktyg.</value>
+    <value>Standardinställningar ställs in genom Bitwarden-appens lösenordsgenerator-verktyg.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Alternativ</value>
@@ -640,7 +640,7 @@
     <value>Är du säker på att du vill skriva över det nuvarande lösenordet?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-aviseringar. För den bästa möjliga upplevelsen vänligen välj "Tillåt" på förfrågan om du vill aktivera push-aviseringar.</value>
+    <value>Bitwarden håller ditt valv uppdaterat automatiskt genom att använda push-aviseringar. För den bästa möjliga upplevelsen vänligen välj "Tillåt" på förfrågan om du vill aktivera push-aviseringar.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Överväg gärna att hjälpa oss genom att ge oss en bra recension!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store-betyg återställs för varje ny version av bitwarden. Överväg gärna att hjälpa oss genom att ge oss en bra recension!</value>
+    <value>App Store-betyg återställs för varje ny version av Bitwarden. Överväg gärna att hjälpa oss genom att ge oss en bra recension!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Skapa nytt lösenord</value>
@@ -726,10 +726,10 @@
     <value>Visa objekt</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden webbvalv</value>
+    <value>Bitwarden webbvalv</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Hantera dina inloggningar från valfri webbläsare med bitwardens webbvalv.</value>
+    <value>Hantera dina inloggningar från valfri webbläsare med Bitwardens webbvalv.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Förlorat autentiseringsapp?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>När du ser en avisering från bitwarden för automatisk ifyllnad så kan du trycka på den för att öppna tjänsten.</value>
+    <value>När du ser en avisering från Bitwarden för automatisk ifyllnad så kan du trycka på den för att öppna tjänsten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tryck på den här aviseringen för att automatiskt fylla i en inloggning från ditt valv.</value>
@@ -765,7 +765,7 @@
     <value>Öppna tillgänglighetsinställningar</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. I Androids tillgänglighetsinställningar trycker du på "bitwarden" under tjänster.</value>
+    <value>1. I Androids tillgänglighetsinställningar trycker du på "Bitwarden" under tjänster.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Växla till på-läget och tryck på OK för att acceptera.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är från bitwardens hjälpmedelsservice för automatisk ifyllnad. Läs mer om hur man använder bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till "Verktyg"-skärmen.</value>
+    <value>Det lättaste sättet att lägga till nya inloggningar till ditt valv är från Bitwardens hjälpmedelsservice för automatisk ifyllnad. Läs mer om hur man använder Bitwardens hjälpmedelsservice för automatisk ifyllnad genom att navigera till "Verktyg"-skärmen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatisk ifyllnad</value>
@@ -883,10 +883,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Håll din YubiKey NEO mot baksidan av enheten för att fortsätta.</value>
+    <value>För att fortsätta, håll din YubiKey NEO mot baksidan av enheten eller sätt i din YubiKey i USB-porten på din enhet, rör sedan knappen.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO säkerhetsnyckel</value>
+    <value>YubiKey säkerhetsnyckel</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -1009,7 +1009,7 @@
     <value>Egen-hostad miljö</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Ange bas-URL:en för din "on-premise"-hostade bitwarden-installation.</value>
+    <value>Ange bas-URL:en för din "on-premise"-hostade Bitwarden-installation.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Server-URL</value>
@@ -1022,12 +1022,6 @@
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Anpassade fält</value>
-  </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Anpassade fält uppdaterade.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>Inga anpassade fält. Du kan hantera anpassade fält från webbvalvet eller genom webbläsartillägget.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Kopiera nummer</value>
@@ -1180,7 +1174,7 @@
     <value>Ikoner Server-URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Fyll i automatiskt med bitwarden</value>
+    <value>Fyll i automatiskt med Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Valvet är låst</value>
@@ -1204,7 +1198,7 @@
     <value>Bitwardens tillgänglighetstjänst för automatisk ifyllnad använder Android Autofill Framework för att assistera med att fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar på din enhet.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Använd bitwardens tillgänglighetstjänst för att automatiskt fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar.</value>
+    <value>Använd Bitwardens tillgänglighetstjänst för att automatiskt fylla i inloggningar, kreditkort och identitetsinformation inuti andra appar.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Öppna inställningar för automatisk ifyllnad</value>
@@ -1232,6 +1226,61 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Det gick inte att automatiskt öppna inställningsmenyn för Android automatisk ifyllnad. Du kan navigera till menyn manuellt från Android inställningar &gt; System &gt; Språk och inmatning &gt; Avancerat &gt; Tjänsten autofyll.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>
