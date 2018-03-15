@@ -118,25 +118,25 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Upravitelj Lozinki</value>
+    <value>Bitwarden Upravitelj Lozinki</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden je upravitelj prijava i lozinki koji pomaže da ste zaštićeni online.</value>
+    <value>Bitwarden je upravitelj prijava i lozinki koji pomaže da ste zaštićeni online.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden je najlakši i najsigurniji način pohranjivanja svih vaših prijava i lozinki, dok su iste sinkronizirane među svim vašim uređajima.
+    <value>Bitwarden je najlakši i najsigurniji način pohranjivanja svih Vaših prijava i lozinki, dok su iste sinkronizirane među svim Vašim uređajima.
 
-Krađa lozinki ozbiljan je problem. Web-lokacije i aplikacije koje upotrebljavate svakodnevno su napadnute. Pojavljuju se sigurnosne povrede, a vaše lozinke su ukradene. Ako ponovno upotrebljavate iste zaporke u aplikacijama i web-lokacijama, hakeri mogu lako pristupiti vašoj e-pošti, banci i drugim važnim računima.
+Krađa lozinki ozbiljan je problem. Web-lokacije i aplikacije koje upotrebljavate svakodnevno su napadnute. Pojavljuju se sigurnosne povrede, a Vaše lozinke su ukradene. Ako ponovno upotrebljavate iste zaporke u aplikacijama i web-lokacijama, hakeri mogu lako pristupiti Vašoj e-pošti, banci i drugim važnim računima.
 
 Sigurnosni stručnjaci preporučuju da koristite različitu, nasumično generiranu lozinku za svaki račun koji stvorite. Ali kako upravljati svim tim lozinkama? Bitwarden vam olakšava stvaranje, pohranu i pristup lozinkama.
 
-bitwarden pohranjuje sve vaše prijave u šifrirani trezor koji se sinkronizira na svim vašim uređajima. Budući da je potpuno šifriran prije nego ikada napusti uređaj, samo vi imate pristup podacima. Čak ni tim u bitwardenu ne može vidjeti vaše podatke. Vaši su podaci zapečaćeni s AES-256 bitnim šifriranjem, salt hashom i PBKDF2 SHA-256.</value>
+Bitwarden pohranjuje sve Vaše prijave u šifrirani trezor koji se sinkronizira na svim Vašim uređajima. Budući da je potpuno šifriran prije nego ikada napusti uređaj, samo Vi imate pristup podacima. Čak ni tim u Bitwardenu ne može vidjeti Vaše podatke. Vaši su podaci zapečaćeni s AES-256 bitnim šifriranjem, salt hashom i PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>Siguran i besplatan upravitelj lozinki za sve vaše uređaje</value>
+    <value>Siguran i besplatan upravitelj lozinki za sve Vaše uređaje</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Upravljajte svim svojim prijavama i lozinkama iz sigurnog trezora</value>
