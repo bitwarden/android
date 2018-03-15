@@ -384,9 +384,9 @@ namespace Bit.App.Utilities
             cell.Button1.Command = new Command(async () =>
             {
                 var optionsVal = await page.DisplayActionSheet(AppResources.Options, AppResources.Cancel,
-                    null, AppResources.Edit, AppResources.Remove);
+                    null, AppResources.MatchDetection, AppResources.Remove);
 
-                if(optionsVal == AppResources.Edit)
+                if(optionsVal == AppResources.MatchDetection)
                 {
                     var options = UriMatchOptionsMap.Select(v => v.Value).ToList();
                     options.Insert(0, AppResources.Default);

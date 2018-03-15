@@ -2014,6 +2014,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Match Detection.
+        /// </summary>
+        public static string MatchDetection {
+            get {
+                return ResourceManager.GetString("MatchDetection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Matching Items.
         /// </summary>
         public static string MatchingItems {

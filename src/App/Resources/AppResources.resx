@@ -1279,4 +1279,8 @@
   <data name="URIMatchDetection" xml:space="preserve">
     <value>URI Match Detection</value>
   </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
 </root>
