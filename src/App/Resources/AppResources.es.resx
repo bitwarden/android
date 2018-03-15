@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Visita nuestro sitio web</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visita nuestro sitio web para recibir ayuda, noticias, contactarnos por correo y/o aprender más sobre como utilizar bitwarden.</value>
+    <value>Visita nuestro sitio web para recibir ayuda, noticias, contactarnos por correo y/o aprender más sobre como utilizar Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Web</value>
@@ -403,28 +403,28 @@
     <value>Extensión de Aplicación</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Utiliza el servicio de accesibilidad de bitwarden para autorellenar entradas entre aplicaciones y sitios web.</value>
+    <value>Utiliza el servicio de accesibilidad de Bitwarden para autorellenar entradas entre aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Servicio de autorellenado</value>
+    <value>Servicio de autocompletado</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Evitar caracteres ambiguos</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden Extensión de Aplicación</value>
+    <value>Extensión de Aplicación de Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es con la extensión de la aplicación bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
+    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es con la Extensión de Aplicación de Bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Usar bitwarden en Safari y otras aplicaciones para autorellenar tus entradas.</value>
+    <value>Utiliza Bitwarden en Safari y otras aplicaciones para autorellenar tus entradas.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Servicio de Autorellenado de bitwarden</value>
+    <value>Servicio de Autorellenado de Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Utiliza el servicio de accesibilidad de bitwarden para autorellenar entradas.</value>
+    <value>Utiliza el servicio de accesibilidad de Bitwarden para autorellenar entradas.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Cambiar correo electrónico</value>
@@ -482,7 +482,7 @@
     <value>Activar Extensión de Aplicación</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>En Safari, busca bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
+    <value>En Safari, busca Bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Tus entradas ahora son facilmente accesibles desde Safari, Chrome y otras aplicaciones soportadas.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>En Safari y Chrome, busca bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
+    <value>En Safari y Chrome, busca Bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Pulsa en el icono de bitwarden del menú para iniciar la extensión.</value>
+    <value>Pulsa en el icono de Bitwarden del menú para iniciar la extensión.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Para activar bitwarden en Safari y otras aplicaciones, pulsa en el icono "más" de la última fila del menú.</value>
+    <value>Para activar Bitwarden en Safari y otras aplicaciones, pulsa en el icono "más" de la última fila del menú.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorito</value>
@@ -591,7 +591,7 @@
     <value>Más ajustes</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Debes identificarte en la aplicación principal de bitwarden antes de poder uitilizar la extensión.</value>
+    <value>Debes identificarte en la aplicación principal de Bitwarden antes de poder uitilizar la extensión.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nunca</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Lo valores por defecto se establecen desde la aplicación principal de bitwarden en la herramienta de generador de contraseñas.</value>
+    <value>Lo valores por defecto se establecen desde la aplicación principal de Bitwarden en la herramienta de generador de contraseñas.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Ajustes</value>
@@ -640,7 +640,7 @@
     <value>¿Estás seguro de que quieres sobreescribir la contraseña actual?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden mantiene tu caja fuerte automáticamente sincronizada utilizando notificaciones push. Para tener la mejor experiencia posible, por favor, pulsa "Permitir" en la próxima notificación donde se te pregunta si quieres habilitar las notificaciones push.</value>
+    <value>Bitwarden mantiene tu caja fuerte automáticamente sincronizada utilizando notificaciones push. Para tener la mejor experiencia posible, por favor, pulsa "Permitir" en la próxima notificación donde se te pregunta si quieres habilitar las notificaciones push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>¡Por favor, considera ayudarnos con una buena valoración!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Las valoraciones de la App Store son reiniciadas con cada nueva versión de bitwarden. ¡Por favor, considera apoyarnos con una buena valoración!</value>
+    <value>Las valoraciones de la App Store son reiniciadas con cada nueva versión de Bitwarden. ¡Por favor, considera apoyarnos con una buena valoración!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerar contraseña</value>
@@ -726,10 +726,10 @@
     <value>Ver elemento</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Caja fuerte web de bitwarden</value>
+    <value>Caja fuerte web de Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gestiona las entradas de cualquier web con la caja fuerte web de bitwarden.</value>
+    <value>Gestiona las entradas de cualquier web con la caja fuerte web de Bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>¿Has perdido la autenticación en dos pasos?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Cuando veas una notificación de autorellenado de bitwarden, puedes pulsar en ella para lanzar el servicio.</value>
+    <value>Cuando veas una notificación de autorellenado de Bitwarden, puedes pulsar en ella para lanzar el servicio.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Pulsa en esta notificación para autorellenar una entrada desde tu caja fuerte.</value>
@@ -765,7 +765,7 @@
     <value>Abrir ajustes de Accesibilidad</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. En los ajustes de Accesibilidad, pulsa en "bitwarden" bajo el menú Servicios.</value>
+    <value>1. En los ajustes de Accesibilidad, pulsa en "Bitwarden" bajo el menú Servicios.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Activa el interruptor y pulsar en OK para aceptar.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es con el Servicio de Autorellenado de bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
+    <value>La forma mas fácil de añadir nuevas entradas a tu caja fuerte es con el Servicio de Autorellenado de Bitwarden. Aprende más sobre como utilizar este servicio yendo a la sección "Herramientas".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Autorellenar</value>
@@ -883,10 +883,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Mantén tu YubiKey NEO contra la parte trasera de tu dispositivo para continuar.</value>
+    <value>Para continuar, mantén tu YubiKey NEO contra la parte trasera de tu dispositivo o inserta tu YubiKey en el puerto USB de tu dispositivo y luego pulsa su butón.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>Llave de seguridad YubiKey NEO</value>
+    <value>Llave de Seguridad YubiKey</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -1009,7 +1009,7 @@
     <value>Entorno de alojamiento propio</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Especifica la URL base de tu instalación de bitwarden de alojamiento propio.</value>
+    <value>Especifica la URL base de tu instalación de Bitwarden de alojamiento propio.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL del servidor</value>
@@ -1022,12 +1022,6 @@
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Campos personalizados</value>
-  </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Campos personalizados actualizados.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>No hay campos personalizados. Puedes gestionarlos desde la caja fuerte web o la extensión de navegador.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Copiar número</value>
@@ -1180,7 +1174,7 @@
     <value>URL del servidor de iconos</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Autorellenar con bitwarden</value>
+    <value>Autorellenar con Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Caja fuerte bloqueada</value>
@@ -1201,10 +1195,10 @@
     <value>Servicio de accesibilidad de autorellenado</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>El servicio de autorellenado de bitwarden utiliza el "Android Autofill Framework" para ayudarte a rellenar entradas, tarjetas de crédito e identidades en otras aplicaciones de tu dispositivo.</value>
+    <value>El servicio de autorellenado de Bitwarden utiliza el marco de autocompletado de Android para ayudarte a rellenar entradas, tarjetas de crédito e identidades en otras aplicaciones de tu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Utiliza el servicio de accesibilidad de bitwarden para autorellenar entradas.</value>
+    <value>Utiliza el servicio de accesibilidad de Bitwarden para autorellenar entradas.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Abrir opciones de autorellenado</value>
@@ -1232,6 +1226,61 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>No hemos podido abrir automáticamente las opciones de autorellenado de Android. Puedes ir al menú de opciones de autorellenado manualmente desde Ajustes de Android &gt; Sistema &gt; Idiomas y entradas &gt; Avanzado &gt; Servicio autocompletar.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>
