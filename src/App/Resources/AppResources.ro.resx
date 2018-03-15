@@ -381,7 +381,7 @@
     <value>Vizitați-ne site-ul web</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Vizitaţi site-ul nostru pentru a primi ajutor, ştiri, pentru a trimite e-mail, şi/sau aflaţi mai multe despre cum să utilizaţi bitwarden.</value>
+    <value>Vizitaţi site-ul nostru pentru a primi ajutor, ştiri, pentru a trimite e-mail, şi/sau aflaţi mai multe despre cum să utilizaţi Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Site web</value>
@@ -403,7 +403,7 @@
     <value>Extensie aplicaţie</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Utilizați serviciul de accesibilitate bitwarden pentru a completa automat datele de autentificare între aplicații și pagini web.</value>
+    <value>Utilizați serviciul de accesibilitate Bitwarden pentru a completa automat datele de autentificare între aplicații și pagini web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Serviciul completare automată</value>
@@ -412,19 +412,19 @@
     <value>Evitați caracterele ambigue</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>extensia aplicaţiei bitwarden</value>
+    <value>Extensia aplicaţiei Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Cea mai ușoară modalitate de a adăuga noi intrări în seif este din extensia aplicaţiei bitwarden. Aflați mai multe despre utilizarea extensiei aplicaţiei bitwarden accesând ecranul "Instrumente".</value>
+    <value>Cea mai ușoară modalitate de a adăuga noi intrări în seif este din extensia aplicaţiei Bitwarden. Aflați mai multe despre utilizarea extensiei aplicaţiei Bitwarden accesând ecranul "Instrumente".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Utilizați Bitwarden în Safari și în alte aplicații pentru a completa automat datele de autentificare.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>serviciul de completare automată bitwarden</value>
+    <value>Serviciul de completare automată Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Utilizați serviciul bitwarden pentru a completa automat datele de autentificare.</value>
+    <value>Utilizați serviciul Bitwarden pentru a completa automat datele de autentificare.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Schimbați adresa de e-mail</value>
@@ -482,7 +482,7 @@
     <value>Activați extensia aplicației</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>În Safari, găsiţi bitwarden utilizând pictograma de partajare (indiciu: derulaţi la dreapta pe rândul de jos al meniului).</value>
+    <value>În Safari, găsiţi Bitwarden utilizând pictograma de partajare (indiciu: derulaţi la dreapta pe rândul de jos al meniului).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Datele dvs. de conectare sunt acum uşor accesibile din Safari, Chrome şi alte aplicaţii suportate.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>În Safari şi Chrome, găsiţi bitwarden utilizând pictograma de partajare (indiciu: derulaţi la dreapta pe rândul de jos al meniului partajare).</value>
+    <value>În Safari şi Chrome, găsiţi Bitwarden utilizând pictograma de partajare (indiciu: derulaţi la dreapta pe rândul de jos al meniului partajare).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Atingeţi pictograma bitwarden din meniu pentru a lansa extensia.</value>
+    <value>Atingeţi pictograma Bitwarden din meniu pentru a lansa extensia.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Pentru a activa bitwarden în Safari şi alte aplicaţii, atingeţi pictograma "mai multe" pe randul de jos al meniului.</value>
+    <value>Pentru a activa Bitwarden în Safari şi alte aplicaţii, atingeţi pictograma "mai multe" pe rândul de jos al meniului.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
@@ -591,7 +591,7 @@
     <value>Mai multe setări</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Tu trebuie să vă autentificaţi în aplicaţia principală bitwarden înainte de a utiliza extensia.</value>
+    <value>Tu trebuie să vă autentificaţi în aplicaţia principală Bitwarden înainte de a utiliza extensia.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Niciodată</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Opțiunile implicite sunt setate de instrumentul principal al generatorului de parole al aplicației bitwarden.</value>
+    <value>Opțiunile implicite sunt setate de instrumentul principal al generatorului de parole al aplicației Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opțiuni</value>
@@ -640,7 +640,7 @@
     <value>Sunteţi sigur că doriţi să suprascrieţi parola curentă?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden păstrează seiful dvs. sincronizat utilizând notificările "push". Pentru cele mai bune rezultate posibile, selectați "Ok" la următorul mesaj când vi se solicită să activați notificările "push".</value>
+    <value>Bitwarden păstrează seiful dvs. sincronizat utilizând notificările "push". Pentru cele mai bune rezultate posibile, selectați "Ok" la următorul mesaj când vi se solicită să activați notificările "push".</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Vă rugăm să luați în considerare să ne ajutați cu o recenzie bună!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Statisticile App Store sunt resetate cu fiecare nouă versiune bitwarden. Vă rugăm să luați în considerare să ne ajutați cu o recenzie bună!</value>
+    <value>Statisticile App Store sunt resetate cu fiecare nouă versiune Bitwarden. Vă rugăm să luați în considerare să ne ajutați cu o recenzie bună!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerare parolă</value>
@@ -726,10 +726,10 @@
     <value>Vizualizare articol</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>seif Web bitwarden</value>
+    <value>Seif Web Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gestionați datele de conectare din orice browser web cu seiful web bitwarden.</value>
+    <value>Gestionați datele de conectare din orice browser web cu seiful web Bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Ai pierdut aplicația de autentificare?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Atunci când vedeți o notificare de completare automată bitwarden, puteți s-o atingeți pentru a lansa serviciul de completare automată.</value>
+    <value>Atunci când vedeți o notificare de completare automată Bitwarden, puteți s-o atingeți pentru a lansa serviciul de completare automată.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Atingeți această notificare pentru a completa automat o autentificare din seiful dvs.</value>
@@ -765,7 +765,7 @@
     <value>Deschidere setări de accesibilitate</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. În ecranul Accesibilitate din setările Android, atingeți "bitwarden" sub titlul Servicii.</value>
+    <value>1. În ecranul Accesibilitate din setările Android, atingeți "Bitwarden" sub titlul Servicii.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Activați comutatorul și apăsați OK pentru a accepta.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Cea mai ușoară modalitate de a adăuga noi intrări în seif este din Serviciul de completare automată bitwarden. Aflați mai multe despre utilizarea Serviciului de completare automată bitwarden accesând ecranul "Instrumente".</value>
+    <value>Cea mai ușoară modalitate de a adăuga noi intrări în seif este din Serviciul de completare automată Bitwarden. Aflați mai multe despre utilizarea Serviciului de completare automată Bitwarden accesând ecranul "Instrumente".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Completare automată</value>
@@ -883,7 +883,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Ţineţi apăsat NEO YubiKey din partea din spate a dispozitivului pentru a continua.</value>
+    <value>Pentru a continua, țineți apăsat YubiKey NEO din partea din spate a dispozitivului sau introduceți YubiKey în portul USB al dispozitivului dvs., apoi atingeți butonul acestuia.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>Cheie de securitate YubiKey NEO</value>
@@ -1009,7 +1009,7 @@
     <value>Mediu găzduit în mod automat</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specificați adresa URL de bază a instalării bitwarden.</value>
+    <value>Specificați adresa URL de bază a instalării Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL-ul serverului</value>
@@ -1022,12 +1022,6 @@
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Câmpuri particularizate</value>
-  </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Câmpuri particularizate actualizate.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>Nu există câmpuri personalizate. Puteți gestiona complet câmpurile personalizate din seiful web sau din extensia browserului.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Copiere număr</value>
@@ -1180,7 +1174,7 @@
     <value>URL server de pictograme</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Completare automată cu bitwarden</value>
+    <value>Completare automată cu Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Seiful este blocat</value>
@@ -1201,10 +1195,10 @@
     <value>Serviciul de accesibilitate pentru completare automată</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Serviciul de completare automată bitwarden folosește Android Autofill Framework pentru a asista completarea informațiilor de autentificare și a celor asociate cardurilor și identităților în alte aplicații de pe dispozitivul dvs.</value>
+    <value>Serviciul de completare automată Bitwarden folosește Android Autofill Framework pentru a asista completarea informațiilor de autentificare și a celor asociate cardurilor și identităților în alte aplicații de pe dispozitivul dvs.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Serviciul de completare automată bitwarden se folosește pentru a completa informațiile de autentificare și cele asociate cardurilor și identităților în alte aplicații.</value>
+    <value>Serviciul de completare automată Bitwarden se folosește pentru a completa informațiile de autentificare și cele asociate cardurilor și identităților în alte aplicații.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Setări de completare automată</value>
@@ -1232,6 +1226,61 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Nu am reușit să deschidem automat meniul setărilor pentru completare automată. Puteți să navigați manual la meniul setărilor pentru completarea automată din Setările Android &gt; Sistem &gt; Limbi și introducerea textului &gt; Avansate &gt; Serviciu de completare automată.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>
