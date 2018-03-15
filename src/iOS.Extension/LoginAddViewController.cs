@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Bit.App.Abstractions;
 using Bit.App.Models;
@@ -32,10 +31,10 @@ namespace Bit.iOS.Extension
         public LoginListViewController LoginListController { get; set; }
         public LoadingViewController LoadingController { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
-        public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username);
         public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password);
         public UITableViewCell GeneratePasswordCell { get; set; } = new UITableViewCell(UITableViewCellStyle.Subtitle, "GeneratePasswordCell");
+        public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell(AppResources.Favorite);
         public FormEntryTableViewCell NotesCell { get; set; } = new FormEntryTableViewCell(useTextView: true, height: 180);
         public PickerTableViewCell FolderCell { get; set; } = new PickerTableViewCell(AppResources.Folder);
@@ -63,15 +62,6 @@ namespace Bit.iOS.Extension
             NameCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
             NameCell.TextField.ShouldReturn += (UITextField tf) =>
             {
-                UriCell.TextField.BecomeFirstResponder();
-                return true;
-            };
-
-            UriCell.TextField.Text = Context?.UrlString ?? string.Empty;
-            UriCell.TextField.KeyboardType = UIKeyboardType.Url;
-            UriCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
-            UriCell.TextField.ShouldReturn += (UITextField tf) =>
-            {
                 UsernameCell.TextField.BecomeFirstResponder();
                 return true;
             };
@@ -90,12 +80,21 @@ namespace Bit.iOS.Extension
             PasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
             PasswordCell.TextField.ShouldReturn += (UITextField tf) =>
             {
-                NotesCell.TextView.BecomeFirstResponder();
+                UriCell.TextField.BecomeFirstResponder();
                 return true;
             };
 
             GeneratePasswordCell.TextLabel.Text = AppResources.GeneratePassword;
             GeneratePasswordCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
+
+            UriCell.TextField.Text = Context?.UrlString ?? string.Empty;
+            UriCell.TextField.KeyboardType = UIKeyboardType.Url;
+            UriCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
+            UriCell.TextField.ShouldReturn += (UITextField tf) =>
+            {
+                NotesCell.TextView.BecomeFirstResponder();
+                return true;
+            };
 
             _folders = _folderService.GetAllAsync().GetAwaiter().GetResult();
             var folderNames = _folders.Select(s => s.Name.Decrypt()).OrderBy(s => s).ToList();
@@ -250,22 +249,22 @@ namespace Bit.iOS.Extension
                     }
                     else if(indexPath.Row == 1)
                     {
-                        return _controller.UriCell;
+                        return _controller.UsernameCell;
                     }
                     else if(indexPath.Row == 2)
                     {
-                        return _controller.UsernameCell;
-                    }
-                    else if(indexPath.Row == 3)
-                    {
                         return _controller.PasswordCell;
                     }
-                    else if(indexPath.Row == 4)
+                    else if(indexPath.Row == 3)
                     {
                         return _controller.GeneratePasswordCell;
                     }
                 }
                 else if(indexPath.Section == 1)
+                {
+                    return _controller.UriCell;
+                }
+                else if(indexPath.Section == 2)
                 {
                     if(indexPath.Row == 0)
                     {
@@ -276,7 +275,7 @@ namespace Bit.iOS.Extension
                         return _controller.FavoriteCell;
                     }
                 }
-                else if(indexPath.Section == 2)
+                else if(indexPath.Section == 3)
                 {
                     return _controller.NotesCell;
                 }
@@ -291,16 +290,20 @@ namespace Bit.iOS.Extension
 
             public override nint NumberOfSections(UITableView tableView)
             {
-                return 3;
+                return 4;
             }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
                 if(section == 0)
                 {
-                    return 5;
+                    return 4;
                 }
                 else if(section == 1)
+                {
+                    return 1;
+                }
+                else if(section == 2)
                 {
                     return 2;
                 }
@@ -312,7 +315,7 @@ namespace Bit.iOS.Extension
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
             {
-                return UITableView.AutomaticDimension;
+                return section == 0 || section == 3 ? UITableView.AutomaticDimension : 0.00001f;
             }
 
             public override string TitleForHeader(UITableView tableView, nint section)
@@ -321,12 +324,12 @@ namespace Bit.iOS.Extension
                 {
                     return AppResources.ItemInformation;
                 }
-                else if(section == 2)
+                else if(section == 3)
                 {
                     return AppResources.Notes;
                 }
 
-                return null;
+                return string.Empty;
             }
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
@@ -334,7 +337,7 @@ namespace Bit.iOS.Extension
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
 
-                if(indexPath.Section == 0 && indexPath.Row == 4)
+                if(indexPath.Section == 0 && indexPath.Row == 3)
                 {
                     _controller.PerformSegue("passwordGeneratorSegue", this);
                 }
