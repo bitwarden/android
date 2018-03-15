@@ -253,46 +253,43 @@ namespace Bit.App.Utilities
             TableSection fieldsSection, Page page)
         {
             Cell cell;
+            FormEntryCell feCell = null;
+            FormSwitchCell fsCell = null;
             switch(type)
             {
                 case FieldType.Text:
                 case FieldType.Hidden:
                     var hidden = type == FieldType.Hidden;
-                    var textFieldCell = new FormEntryCell(label, isPassword: hidden,
+                    cell = feCell = new FormEntryCell(label, isPassword: hidden,
                         button1: hidden ? "eye.png" : "cog_alt.png", button2: hidden ? "cog_alt.png" : null);
-                    textFieldCell.Entry.Text = value;
-                    textFieldCell.Entry.DisableAutocapitalize = true;
-                    textFieldCell.Entry.Autocorrect = false;
+                    feCell.Entry.Text = value;
+                    feCell.Entry.DisableAutocapitalize = true;
+                    feCell.Entry.Autocorrect = false;
 
                     if(hidden)
                     {
-                        textFieldCell.Entry.FontFamily = OnPlatform(iOS: "Menlo-Regular", Android: "monospace",
+                        feCell.Entry.FontFamily = OnPlatform(iOS: "Menlo-Regular", Android: "monospace",
                             Windows: "Courier");
-                        textFieldCell.Button1.Command = new Command(() =>
+                        feCell.Button1.Command = new Command(() =>
                         {
-                            textFieldCell.Entry.InvokeToggleIsPassword();
-                            textFieldCell.Button1.Image = "eye" +
-                                (!textFieldCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
+                            feCell.Entry.InvokeToggleIsPassword();
+                            feCell.Button1.Image = "eye" +
+                                (!feCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
                         });
                     }
-                    cell = textFieldCell;
                     break;
                 case FieldType.Boolean:
-                    var switchFieldCell = new ExtendedSwitchCell
-                    {
-                        Text = label,
-                        On = value == "true"
-                    };
-                    cell = switchFieldCell;
+                    cell = fsCell = new FormSwitchCell(label, "cog_alt.png");
+                    fsCell.Switch.IsToggled = value == "true";
                     break;
                 default:
                     cell = null;
                     break;
             }
 
-            if(cell is FormEntryCell feCell)
+            if(cell != null)
             {
-                var optionsButton = feCell.Button2 ?? feCell.Button1;
+                var optionsButton = feCell != null ? feCell.Button2 ?? feCell.Button1 : fsCell.Button1;
                 optionsButton.Command = new Command(async () =>
                 {
                     var optionsVal = await page.DisplayActionSheet(AppResources.Options, AppResources.Cancel,
@@ -304,25 +301,17 @@ namespace Bit.App.Utilities
                             fieldsSection.Remove(cell);
                         }
 
-                        if(cell is IDisposable disposableCell)
+                        if(feCell != null)
                         {
-                            disposableCell.Dispose();
+                            feCell.Dispose();
                         }
-                        cell = feCell = null;
+                        cell = null;
+                        feCell = null;
+                        fsCell = null;
                     }
                     else if(optionsVal == AppResources.Edit)
                     {
-                        string existingLabel = null;
-                        var esCell = cell as ExtendedSwitchCell;
-                        if(feCell != null)
-                        {
-                            existingLabel = feCell.Label.Text;
-                        }
-                        else if(esCell != null)
-                        {
-                            existingLabel = esCell.Text;
-                        }
-
+                        var existingLabel = feCell?.Label.Text ?? fsCell?.Label.Text;
                         var daService = Resolver.Resolve<IDeviceActionService>();
                         var editLabel = await daService.DisplayPromptAync(AppResources.CustomFieldName,
                             null, existingLabel);
@@ -332,9 +321,9 @@ namespace Bit.App.Utilities
                             {
                                 feCell.Label.Text = editLabel;
                             }
-                            else if(esCell != null)
+                            else if(fsCell != null)
                             {
-                                esCell.Text = editLabel;
+                                fsCell.Label.Text = editLabel;
                             }
                         }
                     }
@@ -362,13 +351,13 @@ namespace Bit.App.Utilities
                             Type = entryCell.Entry.IsPassword ? FieldType.Hidden : FieldType.Text
                         });
                     }
-                    else if(cell is ExtendedSwitchCell switchCell)
+                    else if(cell is FormSwitchCell switchCell)
                     {
-                        var value = switchCell.On ? "true" : "false";
+                        var value = switchCell.Switch.IsToggled ? "true" : "false";
                         fields.Add(new Field
                         {
-                            Name = string.IsNullOrWhiteSpace(switchCell.Text) ? null :
-                                switchCell.Text.Encrypt(cipher.OrganizationId),
+                            Name = string.IsNullOrWhiteSpace(switchCell.Label.Text) ? null :
+                                switchCell.Label.Text.Encrypt(cipher.OrganizationId),
                             Value = value.Encrypt(cipher.OrganizationId),
                             Type = FieldType.Boolean
                         });

@@ -54,7 +54,8 @@ namespace Bit.App.Controls
             var buttonStackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Horizontal,
-                VerticalOptions = LayoutOptions.CenterAndExpand
+                VerticalOptions = LayoutOptions.CenterAndExpand,
+                Spacing = 5
             };
 
             if(subText != null)
@@ -75,8 +76,11 @@ namespace Bit.App.Controls
                 {
                     Image = button1Image,
                     HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0)
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    Margin = new Thickness(0),
+                    Padding = new Thickness(0),
+                    BackgroundColor = Color.Transparent,
+                    WidthRequest = 40
                 };
 
                 buttonStackLayout.Children.Add(Button1);
@@ -88,8 +92,11 @@ namespace Bit.App.Controls
                 {
                     Image = button2Image,
                     HorizontalOptions = LayoutOptions.End,
-                    VerticalOptions = LayoutOptions.Center,
-                    Margin = new Thickness(0)
+                    VerticalOptions = LayoutOptions.FillAndExpand,
+                    Margin = new Thickness(0),
+                    Padding = new Thickness(0),
+                    BackgroundColor = Color.Transparent,
+                    WidthRequest = 40
                 };
 
                 buttonStackLayout.Children.Add(Button2);
@@ -97,21 +104,6 @@ namespace Bit.App.Controls
 
             if(Device.RuntimePlatform == Device.Android)
             {
-                buttonStackLayout.Spacing = 5;
-
-                if(Button1 != null)
-                {
-                    Button1.Padding = new Thickness(0);
-                    Button1.BackgroundColor = Color.Transparent;
-                    Button1.WidthRequest = 40;
-                }
-                if(Button2 != null)
-                {
-                    Button2.Padding = new Thickness(0);
-                    Button2.BackgroundColor = Color.Transparent;
-                    Button2.WidthRequest = 40;
-                }
-
                 containerStackLayout.AdjustPaddingForDevice();
             }
             else if(Device.RuntimePlatform == Device.UWP)

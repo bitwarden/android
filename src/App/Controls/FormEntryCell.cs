@@ -98,7 +98,8 @@ namespace Bit.App.Controls
                 _buttonStackLayout = new StackLayout
                 {
                     Orientation = StackOrientation.Horizontal,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    Spacing = 5
                 };
                 imageStackLayout.Children.Add(_buttonStackLayout);
 
@@ -106,36 +107,25 @@ namespace Bit.App.Controls
                 {
                     Button1 = new ExtendedButton { Image = button1 };
                     _buttonStackLayout.Children.Add(Button1);
-
-                    if(Device.RuntimePlatform == Device.Android)
-                    {
-                        Button1.Padding = new Thickness(0);
-                        Button1.BackgroundColor = Color.Transparent;
-                        Button1.WidthRequest = 40;
-                    }
+                    Button1.Padding = new Thickness(0);
+                    Button1.BackgroundColor = Color.Transparent;
+                    Button1.WidthRequest = 40;
+                    Button1.VerticalOptions = LayoutOptions.FillAndExpand;
                 }
 
                 if(!string.IsNullOrWhiteSpace(button2))
                 {
                     Button2 = new ExtendedButton { Image = button2 };
                     _buttonStackLayout.Children.Add(Button2);
-
-                    if(Device.RuntimePlatform == Device.Android)
-                    {
-                        Button2.Padding = new Thickness(0);
-                        Button2.BackgroundColor = Color.Transparent;
-                        Button2.WidthRequest = 40;
-                    }
+                    Button2.Padding = new Thickness(0);
+                    Button2.BackgroundColor = Color.Transparent;
+                    Button2.WidthRequest = 40;
+                    Button2.VerticalOptions = LayoutOptions.FillAndExpand;
                 }
             }
 
             if(Device.RuntimePlatform == Device.Android)
             {
-                if(_buttonStackLayout != null)
-                {
-                    _buttonStackLayout.Spacing = 5;
-                }
-
                 var deviceInfo = Resolver.Resolve<IDeviceInfoService>();
                 if(useLabelAsPlaceholder)
                 {

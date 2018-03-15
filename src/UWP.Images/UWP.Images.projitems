@@ -56,4 +56,7 @@
     <Content Include="$(MSBuildThisFileDirectory)user.png" />
     <Content Include="$(MSBuildThisFileDirectory)yubikey.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)cog_alt.png" />
+  </ItemGroup>
 </Project>

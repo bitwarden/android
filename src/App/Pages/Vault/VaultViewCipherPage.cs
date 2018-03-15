@@ -129,10 +129,6 @@ namespace Bit.App.Pages
                         nameof(VaultViewCipherPageModel.MaskedLoginPassword));
                     LoginPasswordCell.Button1.SetBinding(Button.ImageProperty,
                         nameof(VaultViewCipherPageModel.LoginShowHideImage));
-                    if(Device.RuntimePlatform == Device.iOS)
-                    {
-                        LoginPasswordCell.Button1.Margin = new Thickness(10, 0);
-                    }
                     LoginPasswordCell.Button1.Command =
                         new Command(() => Model.RevealLoginPassword = !Model.RevealLoginPassword);
                     LoginPasswordCell.Button2.Command =
@@ -575,11 +571,6 @@ namespace Bit.App.Pages
                 : base(field.Name, field.MaskedValue, string.Empty, "clipboard.png")
             {
                 Value.FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
-                if(Device.RuntimePlatform == Device.iOS)
-                {
-                    Button1.Margin = new Thickness(10, 0);
-                }
-
                 Button1.Image = "eye";
                 Button1.Command = new Command(() =>
                 {
