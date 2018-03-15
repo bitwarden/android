@@ -118,28 +118,28 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden - Ilmainen salasananhallintapalvelu</value>
+    <value>Bitwarden – Salasananhallinta</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden on helpoin ja turvallisin tapa säilöä käyttäjänimesi ja salasanasi, kätevästi synkronoituna kaikille laitteillesi.
+    <value>Bitwarden on helpoin ja turvallisin tapa säilöä käyttäjänimesi ja salasanasi, kätevästi synkronoituna kaikille laitteillesi.
 
-Salasanavarkaudet ovat vakava ongelma. Käyttämäsi verkkosivustot ja sovellukset ovat hyökkäyksen kohteena päivittäin. Tietoturvavuotoja tapahtuu ja salasanoja varastetaan. Jos käytät samoja salasanoja eri sivustoilla ja sovelluksissa, voivat hakkerit mahdollisesti päästä helposti käsiksi sähköpostiisi, pankkiisi tai muihin tärkeisiin tileihin.
+Salasanavarkaudet ovat vakava ongelma. Käyttämäsi verkkosivustot ja sovellukset ovat hyökkäyksen kohteena päivittäin. Tietoturvavuotoja tapahtuu ja salasanoja varastetaan. Jos käytät samoja salasanoja eri sivustoilla ja sovelluksissa, voivat hakkerit päästä helposti käsiksi sähköpostiisi, pankkiisi tai muihin tärkeisiin tileihin.
 
-Tietoturvaekspertit suosittelevat uniikkien, satunnaisesti luotujen salasanojen käyttämistä kaikilla tileilläsi. Mutta kuinka hallitset kaikkia noita salasanoja? bitwarden tekee salasanojen luomisesta, säilömisestä ja käyttämisestä helppoa.
+Tietoturvaekspertit suosittelevat uniikkien, satunnaisesti luotujen salasanojen käyttämistä kaikilla tileilläsi. Mutta kuinka hallitset kaikkia noita salasanoja? Bitwarden tekee salasanojen luomisesta, säilömisestä ja käyttämisestä helppoa.
 
-bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoidaan kaikille laitteillesi. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset käsiksi niihin. Edes bitwardenin kehittäjätiimi ei voisi lukea tietojasi, vaikka haluaisi. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2- ja SHA-256-menetelmillä.</value>
+Bitwarden säilöö kaikki kirjautumistietosi salattuun holviin, joka synkronoidaan kaikille laitteillesi. Koska tietosi ovat täysin salattuja jo ennen kuin ne edes lähtevät laitteeltasi, vain sinä pääset käsiksi niihin. Edes Bitwardenin kehittäjätiimi ei voisi lukea tietojasi, vaikka haluaisi. Tietosi suojataan 256-bittisellä AES-salauksella, suolatulla hajautuksella sekä PBKDF2- ja SHA-256-menetelmillä.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,salasana,kirjautuminen,ilmainen salasananhallinta,salasananhallintapalvelu</value>
+    <value>bit warden,8bit,salasana,ilmainen salasananhallinta,salasananhallintapalvelu,käyttäjätunnusten hallinta</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Hallitse käyttäjätunnuksiasi salatusta holvista</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Luo automaattiseti vahvoja, satunnaisia ja turvallisia salasanoja</value>
+    <value>Luo automaattisesti vahvoja, satunnaisia ja turvallisia salasanoja</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Suojaa holvisi Touch ID:llä, PIN-koodilla tai pääsalasanalla</value>

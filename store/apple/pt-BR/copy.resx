@@ -118,17 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden - Gerenciador de Senhas</value>
+    <value>Bitwarden - Gerenciador de Senhas</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>O bitwarden é a maneira mais fácil e segura de armazenar todas as suas credenciais e senhas mantendo-as convenientemente sincronizadas entre todos os seus dispositivos.
+    <value>O Bitwarden é a maneira mais fácil e segura de armazenar todas as suas credenciais, mantendo-as convenientemente sincronizadas entre todos os seus dispositivos. A extensão do aplicativo Bitwarden permite que você entre rapidamente em qualquer site pelo Safari ou Chrome e é suportada por centenas de outros aplicativos populares.
 
-O furto de senhas é um problema sério. Os sites e aplicativos que os utiliza estão sob ataque todos os dias. Quebras de segurança ocorrem e as suas senhas são furtadas. Quando você reutiliza as mesmas senhas entre aplicativos e sites, os hackers podem facilmente acessar o seu e-mail, banco, e outras contas importantes.
+O furto de senhas é um problema sério. Os sites e aplicativos que você utiliza estão sob ataque todos os dias. Brechas de segurança ocorrem e as suas senhas são furtadas. Quando você reutiliza as mesmas senhas entre aplicativos e sites, os hackers podem facilmente acessar o seu e-mail, banco, e outras contas importantes.
 
-Os especialistas de segurança recomendam que utilize uma senha diferente e aleatoriamente gerada para todas as contas que você cria. Mas como gerenciar todas essas senhas? O bitwarden torna-lhe fácil criar, armazenar, e acessar as suas senhas.
+Os especialistas de segurança recomendam que utilize uma senha diferente e gerada aleatoriamente para todas as contas que você cria. Mas como você gerencia todas essas senhas? O Bitwarden torna isso fácil para você criar, armazenar, e acessar as suas senhas.
 
-O bitwarden armazena todas as suas credenciais num cofre encriptado que sincroniza entre todos os seus dispositivos. Como são completamente encriptados antes de se quer sair do seu dispositivo, apenas você tem acesso aos seus dados. Nem se quer a equipe do bitwarden pode ler os seus dados, mesmo se quiséssemos. Os seus dados são selados com encriptação AES-256 bits, salted hashing, e PBKDF2 SHA-256.</value>
+O Bitwarden armazena todas as suas credenciais num cofre encriptado que sincroniza entre todos os seus dispositivos. Como elas são completamente encriptadas antes de sair do seu dispositivo, apenas você tem acesso aos seus dados. Nem sequer a equipe do Bitwarden pode ler os seus dados, mesmo se quiséssemos. Os seus dados são selados com encriptação AES-256 bits, salted hashing, e PBKDF2 SHA-256.
+
+Bitwarden é um software 100% código aberto. O código-fonte do Bitwarden está hospedado no GitHub e todos são livres para revisar, auditar e contribuir com a base de códigos do Bitwarden.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
@@ -136,16 +138,16 @@ O bitwarden armazena todas as suas credenciais num cofre encriptado que sincroni
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Gerencie todas as suas credenciais e senhas a partir de um cofre seguro</value>
+    <value>Gerencie todas as suas credenciais a partir de um cofre seguro</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Gera automaticamente senhas fortes, aleatórias e seguras</value>
+    <value>Gere automaticamente senhas fortes, aleatórias e seguras</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Proteja o seu cofre com Touch ID, código PIN, ou senha mestra</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-preenche credenciais do Safari, Chrome, e centenas de outros aplicativos.</value>
+    <value>Autopreencha credenciais a partir do Safari, Chrome, e centenas de outros aplicativos</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Sincronize e acesse o seu cofre através de múltiplos dispositivos</value>

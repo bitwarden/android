@@ -128,7 +128,7 @@
     <value>Aggiungi Cartella</value>
   </data>
   <data name="AddItem" xml:space="preserve">
-    <value>Add Item</value>
+    <value>Aggiungi elemento</value>
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -326,7 +326,7 @@
     <comment>Reveal a hidden value (password).</comment>
   </data>
   <data name="ItemDeleted" xml:space="preserve">
-    <value>Item has been deleted.</value>
+    <value>L'elemento è stato eliminato.</value>
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Visita il nostro Sito</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visita il nostro sito per ottenere aiuto, notizie, mandarci una email e/o imparare di più su come usare bitwarden.</value>
+    <value>Visita il nostro sito per ottenere aiuto, notizie, mandarci una email e/o imparare di più su come usare Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Sito</value>
@@ -397,13 +397,13 @@
     <value>Il tuo nuovo account è stato creato! Ora puoi fare il login.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Add an Item</value>
+    <value>Aggiungi un elemento</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
     <value>Estensione App</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Usa il servizio di accessibilità Bitwarden per l'auto-completamento dei tuoi login su app e web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Servizio di Auto-Riempimento</value>
@@ -412,19 +412,19 @@
     <value>Evita Caratteri Ambigui</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Estensione App bitwarden</value>
+    <value>Estensione App Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Il metodo più sempice per aggiungere nuovi login alla tua cassaforte dall è dall'Estensione App bitwarden. Scopri di più su come usarela andando nella schermata "Strumenti".</value>
+    <value>Il metodo più sempice per aggiungere nuovi login alla tua cassaforte è dall'Estensione App Bitwarden. Scopri di più su come utilizzarla nella schermata "Strumenti".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Usa bitwarden su Safari e altre app per auto-completare i tuoi login.</value>
+    <value>Usa Bitwarden su Safari e altre app per auto-completare i tuoi login.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Servizio Auto-Completamento bitwarden</value>
+    <value>Servizio Auto-Completamento Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Usa il servizio di accessibilità Bitwarden per auto-completare i tuoi login.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Cambia Email</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Edit Item</value>
+    <value>Modifica elemento</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Abilita la Sincronizzazione Automatica</value>
@@ -482,7 +482,7 @@
     <value>Abilita l'Estensione App</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, trova bitwarden utilizzando l'icona di condivisione (suggerimento: scorri sulla destra sulla riga inferiore del menu).</value>
+    <value>Su Safari, trova Bitwarden utilizzando l'icona di condivisione (suggerimento: scorri a destra sulla riga inferiore del menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>I tuoi login sono ora facilmente accessibile da Safari, Chrome e altre applicazioni supportate.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari e Chrome, trova bitwarden utilizzando l'icona di condivisione (suggerimento: scorri verso destra sulla riga in basso del menu Condividi).</value>
+    <value>In Safari e Chrome, trova Bitwarden utilizzando l'icona di condivisione (suggerimento: scorri a destra sulla riga in basso del menu Condividi).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tocca l'icona di bitwarden nel menu per avviare l'estensione.</value>
+    <value>Tocca l'icona di Bitwarden nel menu per avviare l'estensione.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Per attivare bitwarden in Safari e altre applicazioni, tocca l'icona "altro" sulla riga in basso del menu.</value>
+    <value>Per attivare Bitwarden su Safari e altre applicazioni, tocca l'icona "altro" sull'ultima riga del menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Preferito</value>
@@ -519,13 +519,13 @@
     <value>Ottenere il suggerimento per la password principale</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>Importa elementi</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>Puoi importare in massa gli elementi dal vault web bitwarden.com. Vuoi visitare ora il sito?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>Importa rapidamente i tuoi elementi da altre app di gestione password.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Ultima Sincronizzazione:</value>
@@ -591,22 +591,22 @@
     <value>Altre impostazioni</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>È necessario accedere all'app di bitwarden principale prima di poter utilizzare l'estensione.</value>
+    <value>È necessario accedere all'app di Bitwarden principale prima di poter utilizzare l'estensione.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Mai</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>Nuovo elemento creato.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
     <value>Non ci sono preferiti nella tua cassaforte.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>Non ci sono elementi nella tua cassaforte.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>Non ci sono elementi nella tua cassaforte per questo sito web. Clicca per aggiungerne uno.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Questo login non dispone di un nome utente o password configurata.</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Le impostazioni predefinite delle opzioni vengono impostate dal generatore di password dell'app principale bitwarden.</value>
+    <value>Le opzioni predefinite sono impostate dal generatore di password dell'app principale Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opzioni</value>
@@ -640,7 +640,7 @@
     <value>Sei sicuro di voler sovrascrivere la password corrente?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden mantiene la tua cassaforte automaticamente sincronizzati utilizzando le notifiche push. Per la migliore esperienza possibile, si prega di selezionare "Ok" sul menu seguente quando viene richiesto di abilitare le notifiche push.</value>
+    <value>Bitwarden mantiene la tua cassaforte automaticamente sincronizzata utilizzando le notifiche push. Per la migliore esperienza possibile, si prega di selezionare "Consenti" sul menu seguente quando viene richiesto di abilitare le notifiche push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Per favore prendi in considerazione l'idea di lasciarci una buona recensione!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>I voti dell'App Store vengono reimpostati con ogni nuova versione di bitwarden. Aiutaci con una buona recensione!</value>
+    <value>I voti dell'App Store vengono reimpostati con ogni nuova versione di Bitwarden. Aiutaci con una buona recensione!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Rigenera Password</value>
@@ -677,10 +677,10 @@
     <value>Immetti un codice PIN a 4 cifre con cui sbloccare l'applicazione.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Informazioni elemento</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>Elemento aggiornato.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>Invio in corso...</value>
@@ -707,7 +707,7 @@
     <value>Verifica in due passaggi</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>L'autenticazione in due passaggi rende il tuo account più sicuro richiedendo di verificare il login con un altro dispositivo come una chiave di sicurezza, app di autenticazione, SMS, telefonata o email. Può essere abilitata su bitwarden.com. Vuoi visitare il sito ora?</value>
+    <value>L'autenticazione in due passaggi rende il tuo account più sicuro, richiedendo di verificare il login con un altro dispositivo come una chiave di sicurezza, app di autenticazione, SMS, telefonata o email. Può essere abilitata su bitwarden.com. Vuoi visitare il sito ora?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Sblocca con {0}</value>
@@ -723,19 +723,19 @@
     <value>Codice di Verifica</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>View Item</value>
+    <value>Visualizza Elemento</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Cassaforte Web bitwarden</value>
+    <value>Cassaforte Web Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gestisci i tuoi login da qualunque browser con la cassaforte web bitwarden.</value>
+    <value>Gestisci i tuoi login da qualunque browser con la cassaforte web Bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Perso l'app di autenticazione?</value>
   </data>
   <data name="Items" xml:space="preserve">
-    <value>Items</value>
+    <value>Elementi</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
@@ -748,24 +748,24 @@
     <value>Traduzioni</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>Elementi per {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>Non ci sono elementi nella tua cassaforte per {0}.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Quando vedi una notifica di compilazione automatica di bitwarden, puoi toccarla per avviare il servizio di compilazione automatica.</value>
+    <value>Quando vedi una notifica di completamento automatico Bitwarden, puoi toccarla per avviare il servizio di completamento automatico.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tocca questa notifica per auto-completare un login dal tuo vault.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>Apri impostazioni d'accessibilità</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Nella schermata impostazioni di accessibilità di Android, tocca "bitwarden".</value>
+    <value>1. Nella schermata impostazioni di accessibilità di Android, tocca "Bitwarden".</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Attiva l'interruttore e premi OK per accettare.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Il modo più semplice per aggiungere nuovi login al tuo vault è dal servizio di completamento automatico bitwarden. Trova altre informazioni sull'utilizzo del servizio di auto-completamnto accedendo alla schermata "Strumenti".</value>
+    <value>Il modo più semplice per aggiungere nuovi login al tuo vault è dal servizio di completamento automatico Bitwarden. Trova altre informazioni sull'utilizzo del servizio di auto-completamnto accedendo alla schermata "Strumenti".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-completamento</value>
@@ -795,25 +795,25 @@
     <value>Sei sicuro di voler completare automaticamente questo login? Non si tratta di una corrispondenza completa per "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>Elementi corrispondenti</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>Possibili elementi corrispondenti</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Cerca</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Stai cercando un login di riempimento automatico per "{0}".</value>
+    <value>Stai cercando un login di completamento automatico per "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Condividi La Tua Cassaforte</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Crea un'organizzazione per condividere in sicurezza i tuoi login con gli altri utenti.</value>
+    <value>Crea un'organizzazione per condividere in sicurezza i tuoi login con altri utenti.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>Usiamo analytics per capire meglio come l'estensione viene usata in modo da migliorarla. Tutti i dati collezionati sono completamente anonimi.</value>
+    <value>Usiamo analytics per capire meglio come l'estensione viene utilizzata in modo da migliorarla. Tutti i dati collezionati sono completamente anonimi.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Rileva quando un campo password è selezionato</value>
@@ -883,10 +883,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Apoggia la tua YubiKey NEO sul retro del dispositivo per continuare.</value>
+    <value>Per continuare, apoggia la tua YubiKey NEO sul retro del dispositivo o inserisci la tua Yubikey nell porta USB, poi tocca il suo bottone.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>Chiave di Sicurezza YubiKey NEO</value>
+    <value>Chiave di Sicurezza YubiKey</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -1018,220 +1018,269 @@
     <value>URL della Cassaforte Online</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Premi us questa notifica per visualizzare elementi dalla tua cassaforte.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Campi Personalizzati</value>
   </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Campi personalizzati aggiornati.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>Nessun campo personalizzato. È possibile gestire i campi personalizzati dall'estensione del vault o browser web.</value>
-  </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Copy Number</value>
+    <value>Copia numero</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Copy Security Code</value>
+    <value>Copia codice di sicurezza</value>
   </data>
   <data name="Number" xml:space="preserve">
-    <value>Number</value>
+    <value>Numero</value>
   </data>
   <data name="SecurityCode" xml:space="preserve">
-    <value>Security Code</value>
+    <value>Codice di sicurezza</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Che tipo di elemento vuoi aggiungere?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Carta</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
-    <value>Identity</value>
+    <value>Identità</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Accesso</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Nota sicura</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Indirizzo 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Indirizzo 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Indirizzo 3</value>
   </data>
   <data name="April" xml:space="preserve">
-    <value>April</value>
+    <value>Aprile</value>
   </data>
   <data name="August" xml:space="preserve">
-    <value>August</value>
+    <value>Agosto</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Marca</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Titolare Carta</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>City / Town</value>
+    <value>Città / Comune</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>Compagnia</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>Country</value>
+    <value>Nazione</value>
   </data>
   <data name="December" xml:space="preserve">
-    <value>December</value>
+    <value>Dicembre</value>
   </data>
   <data name="Dr" xml:space="preserve">
     <value>Dr</value>
   </data>
   <data name="ExpirationMonth" xml:space="preserve">
-    <value>Expiration Month</value>
+    <value>Mese di scadenza</value>
   </data>
   <data name="ExpirationYear" xml:space="preserve">
-    <value>Expiration Year</value>
+    <value>Anno di scadenza</value>
   </data>
   <data name="February" xml:space="preserve">
-    <value>February</value>
+    <value>Febbraio</value>
   </data>
   <data name="FirstName" xml:space="preserve">
-    <value>First Name</value>
+    <value>Nome</value>
   </data>
   <data name="January" xml:space="preserve">
-    <value>January</value>
+    <value>Gennaio</value>
   </data>
   <data name="July" xml:space="preserve">
-    <value>July</value>
+    <value>Luglio</value>
   </data>
   <data name="June" xml:space="preserve">
-    <value>June</value>
+    <value>Giugno</value>
   </data>
   <data name="LastName" xml:space="preserve">
-    <value>Last Name</value>
+    <value>Cognome</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Numero di licenza</value>
   </data>
   <data name="March" xml:space="preserve">
-    <value>March</value>
+    <value>Marzo</value>
   </data>
   <data name="May" xml:space="preserve">
-    <value>May</value>
+    <value>Maggio</value>
   </data>
   <data name="MiddleName" xml:space="preserve">
-    <value>Middle Name</value>
+    <value>Secondo Nome</value>
   </data>
   <data name="Mr" xml:space="preserve">
-    <value>Mr</value>
+    <value>Sig</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Mrs</value>
+    <value>Sig. ri</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Ms</value>
+    <value>Sig. ra</value>
   </data>
   <data name="November" xml:space="preserve">
-    <value>November</value>
+    <value>Novembre</value>
   </data>
   <data name="October" xml:space="preserve">
-    <value>October</value>
+    <value>Ottobre</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Numero di passaporto</value>
   </data>
   <data name="Phone" xml:space="preserve">
-    <value>Phone</value>
+    <value>Telefono</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>September</value>
+    <value>Settembre</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Codice Fiscale</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
-    <value>State / Province</value>
+    <value>Stato / Provincia</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Titolo</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
-    <value>Zip / Postal Code</value>
+    <value>CAP</value>
   </data>
   <data name="Address" xml:space="preserve">
-    <value>Address</value>
+    <value>Indirizzo</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Scadenza</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Disabilita icone Siti Web</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Le icone del sito web fornisce un'immagine riconoscibile accanto ad ogni elemento di accesso nella tua cassaforte.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>URL del Server Icone</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Auto-completamento con Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>La cassaforte è bloccata</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>Vai alla mia cassaforte</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>Collections</value>
+    <value>Collezioni</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>Non ci sono elementi in questa collezione.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>Non ci sono elementi in questa cartella.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>Servizio di accessibilità dell'auto riempimento</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Il servizio di auto-completamento Bitwarden usa l'Android Autofill Framework per assistenza nel completare informazioni su login, carte di credito e identità su altre app nel tuo dispositivo.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Usa il servizio di accessibilità bitwarden per auto-completare i tuoi login.</value>
+    <value>Usa il servizio di auto-completamento Bitwarden per riempire le informazioni su login, carte di credito e identità su altre app.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>Apri impostazioni di auto-riempimento</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Usa Face ID per verificare.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Usa Face ID per sbloccare</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Verifica Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Sblocca con Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Verifica con Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Non è stato possibile aprire il menu di impostazioni di auto-riempimento per te. Puoi navigare manualmente al menu delle impostazioni di auto-riempimento dalle Impostazioni Android &gt; Accessibilità &gt; Servizi &gt; Bitwarden.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>

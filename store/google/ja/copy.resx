@@ -118,25 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden パスワードマネージャ</value>
+    <value>Bitwarden パスワードマネージャー</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden はオンラインでのログインやパスワード情報を安全に管理するマネージャです。</value>
+    <value>Bitwarden はオンラインでのログインやパスワード情報を安全に管理するマネージャーです。</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden は、あらゆる端末間で同期しつつログイン情報やパスワードを保管しておける、最も簡単で安全なサービスです。
+    <value>Bitwarden は、あらゆる端末間で同期しつつログイン情報やパスワードを保管しておける、最も簡単で安全なサービスです。
 
-パスワードの盗難は深刻な問題になっています。ウェブサイトやアプリは毎日攻撃を受けており、もしセキュリティに問題があればパスワードが盗難されてしまいます。 同じパスワードを他のアプリでも再利用していると、クラッカーはメールや銀行口座など大切なアカウントに簡単に侵入できてしまいます。
+パスワードの盗難は深刻な問題になっています。ウェブサイトやアプリは毎日攻撃を受けており、もしセキュリティに問題があればパスワードが盗難されてしまいます。 同じパスワードを他のアプリでも再利用していると、攻撃者はメールや銀行口座など大切なアカウントに簡単に侵入できてしまいます。
 
-セキュリティの専門家は、アカウント毎に別のランダムに生成したパスワードを使うことを推奨していますが、ランダムなパスワードをすべて覚えていられますか？bitwarden を使えば、わざわざ覚えなくても簡単にパスワードの生成、保管や利用ができます。
+セキュリティの専門家は、アカウント毎に別のランダムに生成したパスワードを使うことを推奨していますが、ランダムなパスワードをすべて覚えていられますか？　Bitwarden を使えば、わざわざパスワードを覚えなくても簡単にパスワードの生成、保管や利用ができます。
 
-bitwarden は端末間で同期できる、暗号化された保管庫にログイン情報を保管します。端末から送信される前に暗号化されるので、あなただけがそのデータにアクセスできるのです。bitwarden の開発者チームですら、あなたに頼まれたとしてもデータを読み取ることはできません。データは AES-256 bit 暗号化、ソルト化ハッシュ、PBKDF2 SHA-256 で保護されます。</value>
+Bitwarden は端末間で同期できる、暗号化された保管庫にログイン情報を保管します。端末から送信される前に暗号化されるので、あなただけがそのデータにアクセスできるのです。Bitwarden の開発者チームですら、あなたに頼まれたとしてもデータを読み取ることはできません。データは AES-256 bit 暗号化、ソルト化ハッシュ、PBKDF2 SHA-256 で保護されます。
+
+Bitwarden は100%オープンソースソフトウェアです。Bitwarden のソースコードは GitHub にホストされており、誰でもBitwardenのコードを自由にレビュー、監査、貢献できます。</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>あらゆる端末で使える、安全な無料パスワードマネージャ</value>
+    <value>あらゆる端末で使える、安全な無料パスワードマネージャー</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>安全な保管庫でログイン情報やパスワードを管理します</value>

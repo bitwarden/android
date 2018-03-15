@@ -381,7 +381,7 @@
     <value>Odwiedź naszą stronę</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Odwiedź naszą stronę, aby uzyskać pomoc, zobaczyć aktualności, napisać do nas i/lub dowiedzieć się, jak używać bitwarden.</value>
+    <value>Odwiedź naszą stronę, aby uzyskać pomoc, zobaczyć aktualności, napisać do nas i/lub dowiedzieć się, jak używać Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Strona</value>
@@ -403,7 +403,7 @@
     <value>Rozszerzenie aplikacji</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Użyj usługi ułatwień dostępu bitwarden, aby korzystać z automatycznego wypełniania danych logowania w aplikacjach i na stronach internetowych.</value>
+    <value>Użyj usługi ułatwień dostępu Bitwarden, aby korzystać z automatycznego wypełniania danych logowania w aplikacjach i na stronach internetowych.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Usługa automatycznego wypełniania</value>
@@ -412,19 +412,19 @@
     <value>Unikaj niejednoznacznych znaków</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>rozszerzenie aplikacji bitwarden</value>
+    <value>Rozszerzenie aplikacji Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Najprostszym sposobem dodania nowych danych logowania do sejfu jest Rozszerzenie Aplikacji bitwarden. Więcej informacji o używaniu Rozszerzenia Aplikacji bitwarden znajdziesz w widoku "Narzędzia".</value>
+    <value>Najprostszym sposobem dodania nowych danych logowania do sejfu jest Rozszerzenie Aplikacji Bitwarden. Więcej informacji o używaniu Rozszerzenia Aplikacji Bitwarden znajdziesz w widoku "Narzędzia".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Użyj bitwarden w Safari i innych aplikacjach do automatycznego wypełniania danych logowania.</value>
+    <value>Użyj Bitwarden w Safari i innych aplikacjach do automatycznego wypełniania danych logowania.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>usługa automatycznego wypełniania bitwarden</value>
+    <value>Usługa automatycznego wypełniania Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Użyj usługi ułatwień dostępu bitwarden do automatycznego wypełniania danych logowania.</value>
+    <value>Użyj usługi ułatwień dostępu Bitwarden do automatycznego wypełniania danych logowania.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Zmień adres e-mail</value>
@@ -482,7 +482,7 @@
     <value>Włącz Rozszerzenie Aplikacji</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>W Safari, znajdź bitwarden przy użyciu ikony udostępniania (podpowiedź: przewiń dolny rząd menu do prawej strony).</value>
+    <value>W Safari, znajdź Bitwarden przy użyciu ikony udostępniania (podpowiedź: przewiń dolny rząd menu do prawej strony).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Twoje dane logowania są teraz łatwo dostępne z Safari, Chrome i innych obsługiwanych aplikacji.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>W Safari i Chrome, znajdź bitwarden przy użyciu ikony udostępniania (podpowiedź: przewiń dolny rząd menu udostępniania do prawej strony).</value>
+    <value>W Safari i Chrome, znajdź Bitwarden przy użyciu ikony udostępniania (podpowiedź: przewiń dolny rząd menu udostępniania do prawej strony).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Naciśnij ikonę bitwarden w menu, aby uruchomić rozszerzenie.</value>
+    <value>Naciśnij ikonę Bitwarden w menu, aby uruchomić rozszerzenie.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Aby włączyć bitwarden w Safari i innych aplikacjach, dotknij ikonę "więcej" w dolnym rzędzie menu.</value>
+    <value>Aby włączyć Bbitwarden w Safari i innych aplikacjach, dotknij ikonę "więcej" w dolnym rzędzie menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Ulubione</value>
@@ -591,7 +591,7 @@
     <value>Więcej ustawień</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Musisz zalogować się do aplikacji głównej bitwarden, zanim będziesz mógł używać rozszerzenia.</value>
+    <value>Musisz zalogować się do aplikacji głównej Bitwarden, zanim będziesz mógł używać rozszerzenia.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nigdy</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Opcje domyślne są pobierane z narzędzia generatora haseł głównej aplikacji bitwarden.</value>
+    <value>Opcje domyślne są pobierane z narzędzia generatora haseł głównej aplikacji Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opcje</value>
@@ -640,7 +640,7 @@
     <value>Czy na pewno chcesz zastąpić bieżące hasło?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden przeprowadza automatyczną synchronizację sejfu przy użyciu powiadomień push. Aby uzyskać najlepsze możliwe wyniki, wybierz "Ok", gdy za chwilę zostaniesz poproszony o włączenie powiadomień push.</value>
+    <value>Bitwarden przeprowadza automatyczną synchronizację sejfu przy użyciu powiadomień push. Aby uzyskać najlepsze możliwe wyniki, wybierz "Zezwalaj", gdy za chwilę zostaniesz poproszony o włączenie powiadomień push.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Wesprzyj nas pozytywną opinią!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Oceny w App Store są zerowane przy każdej nowej wersji bitwarden. Jeśli chcesz nam pomóc, napisz pozytywną recenzję!</value>
+    <value>Oceny w App Store są zerowane przy każdej nowej wersji Bitwarden. Jeśli chcesz nam pomóc, napisz pozytywną recenzję!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Odtwórz hasło</value>
@@ -726,10 +726,10 @@
     <value>Zobacz element</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Internetowy sejf bitwarden</value>
+    <value>Internetowy sejf Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Zarządzaj swoimi danymi z poziomu dowolnej przeglądarki za pomocą sejfu internetowego bitwarden.</value>
+    <value>Zarządzaj swoimi danymi z poziomu dowolnej przeglądarki za pomocą sejfu internetowego Bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Utraciłeś dostęp do aplikacji uwierzytelniającej?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Kiedy widzisz powiadomienie automatycznego wypełniania bitwarden, możesz je dotknąć, aby uruchomić tę usługę.</value>
+    <value>Kiedy widzisz powiadomienie automatycznego wypełniania Bitwarden, możesz je dotknąć, aby uruchomić tę usługę.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Dotknij to powiadomienie, aby automatycznie wypełnić danymi z sejfu.</value>
@@ -765,7 +765,7 @@
     <value>Otwórz ustawienia ułatwień dostępu</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Na ekranie ustawień ułatwień dostępu Android dotknij "bitwarden" na liście usług.</value>
+    <value>1. Na ekranie ustawień ułatwień dostępu Android dotknij "Bitwarden" na liście usług.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Włącz przełącznik i naciśnij OK, aby zaakceptować.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Najprostszym sposobem dodania nowych danych logowania do sejfu jest Rozszerzenie Aplikacji bitwarden. Więcej informacji o używaniu Rozszerzenia Aplikacji bitwarden znajdziesz w widoku "Narzędzia".</value>
+    <value>Najprostszym sposobem dodania nowych danych logowania do sejfu jest Rozszerzenie Aplikacji Bitwarden. Więcej informacji o używaniu Rozszerzenia Aplikacji Bitwarden znajdziesz w widoku "Narzędzia".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatyczne wypełnianie</value>
@@ -1009,7 +1009,7 @@
     <value>Samodzielnie hostowane środowisko</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Podaj podstawowy adres URL hostowanej przez Ciebie instalacji bitwarden.</value>
+    <value>Podaj podstawowy adres URL hostowanej przez Ciebie instalacji Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL serwera</value>
@@ -1022,12 +1022,6 @@
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Pola niestandardowe</value>
-  </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Pola niestandardowe zaktualizowane.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>Brak pól niestandardowych. Polami niestandardowymi można zarządzać z poziomu sejfu internetowego lub rozszerzenia przeglądarki.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Skopiuj numer</value>
@@ -1201,10 +1195,10 @@
     <value>AutoUzupełnienie – ułatwienia dostępu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Usługa Autouzupełniania bitwarden wykorzystuje Androidowy Framework by pomóc wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na twoim urządzeniu.</value>
+    <value>Usługa Autouzupełniania Bitwarden wykorzystuje Androidowy Framework by pomóc wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na twoim urządzeniu.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Użyj usługi autouzupełniania bitwarden żeby wypełnić pola logowania, dane kart kredytowych i informacje osobiste w innych aplikacjach.</value>
+    <value>Użyj usługi autouzupełniania Bitwarden żeby wypełnić pola logowania, dane kart kredytowych i informacje osobiste w innych aplikacjach.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otwórz ustawienia autouzupełniania</value>
@@ -1223,15 +1217,70 @@
     <value>Zweryfikuj Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Odblokuj za pomocą Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Zweryfikuj za pomocą Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
-    <value>Windows Hello</value>
+    <value>Funkcja Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Nie udało nam się otworzyć menu ustawień usługi autouzupełniania Android. Możesz przejść do tego menu ręcznie, poprzez Ustawienia Android &gt; System &gt; Język i wprowadzanie &gt; Zaawansowane &gt; Usługa autouzupełniania.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>

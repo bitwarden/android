@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Posjetite našu web stranicu</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Posjetite našu web stranicu kako biste dobili pomoć, vijesti, e-poštu i / ili saznali više o tome kako koristiti bitwarden.</value>
+    <value>Posjetite našu web stranicu kako biste dobili pomoć, vijesti, e-poštu i / ili saznali više o tome kako koristiti Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Web stranica</value>
@@ -403,7 +403,7 @@
     <value>Proširenje aplikacije</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Koristi usluge pristupačnosti aplikacije bitwarden za automatsko ispunjavanje prijava putem aplikacija i weba.</value>
+    <value>Koristi usluge pristupačnosti aplikacije Bitwarden za automatsko popunjavanje prijava putem aplikacija i weba.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Usluga automatskog popunjavanja</value>
@@ -412,19 +412,19 @@
     <value>Izbjegavajte dvosmislene znakove</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden Proširenje aplikacije</value>
+    <value>Bitwarden Proširenje aplikacije</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Najlakši način za dodavanje novih prijava u vaš trezor je iz proširenja aplikacije bitwarden. Saznajte više o upotrebi proširenja aplikacije bitwarden odlaskom na zaslon "Alati".</value>
+    <value>Najlakši način za dodavanje novih prijava u Vaš trezor je iz proširenja aplikacije Bitwarden. Saznajte više o upotrebi proširenja aplikacije Bitwarden odlaskom na zaslon "Alati".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Upotrijebite bitwarden u Safariju i drugim aplikacijama da biste automatski ispunili prijave.</value>
+    <value>Upotrijebite Bitwarden u Safariju i drugim aplikacijama da biste automatski ispunili prijave.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden usluga automatskog popunjavanja</value>
+    <value>Bitwarden usluga automatskog popunjavanja</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Upotrijebite uslugu pristupačnosti usluge bitwarden da biste automatski ispunili prijave.</value>
+    <value>Upotrijebite uslugu pristupačnosti usluge Bitwarden da biste automatski ispunili prijave.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Promijeni e-poštu</value>
@@ -482,7 +482,7 @@
     <value>Omogući proširenje aplikacije</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>U Safariju, pronađite bitwarden pomoću ikone dijeljenja (savjet: pomaknite se desno u donjem retku izbornika).</value>
+    <value>U Safariju, pronađite Bitwarden pomoću ikone dijeljenja (savjet: pomaknite se desno u donjem retku izbornika).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Vašim prijava se sada lako može pristupiti iz Safaria, Chromea i drugih podržanih aplikacija.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>U pregledniku Safari i Chrome pronađite bitwarden upotrebom ikone za dijeljenje (savjet: pomaknite se desno u donjem retku izbornika za dijeljenje).</value>
+    <value>U pregledniku Safari i Chrome pronađite Bitwarden upotrebom ikone za dijeljenje (savjet: pomaknite se desno u donjem retku izbornika za dijeljenje).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Dodirnite bitwarden ikonu u izborniku da biste pokrenuli proširenje.</value>
+    <value>Dodirnite Bitwarden ikonu u izborniku da biste pokrenuli proširenje.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Da biste uključili bitwarden u Safariu i drugim aplikacijama, dodirnite ikonu "više" u donjem retku izbornika.</value>
+    <value>Da biste uključili Bitwarden u Safariu i drugim aplikacijama, dodirnite ikonu "više" u donjem retku izbornika.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
@@ -591,7 +591,7 @@
     <value>Više postavki</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Morate se prijaviti u glavnu bitwarden aplikaciju prije nego što možete upotrijebiti proširenje.</value>
+    <value>Morate se prijaviti u glavnu Bitwarden aplikaciju prije nego što možete upotrijebiti proširenje.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nikad</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Opcije zadanih postavki postavljene su iz alata generatora lozinke glavne aplikacije bitwarden.</value>
+    <value>Opcije zadanih postavki postavljene su iz alata generatora lozinke glavne aplikacije Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Opcije</value>
@@ -640,7 +640,7 @@
     <value>Jeste li sigurni da želite prebrisati trenutnu zaporku?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden automatski sinkronizira vaš trezor pomoću push obavijesti. Za najbolji mogući doživljaj, molimo odaberite "Ok" u sljedećem upitu kada se zatraži da omogućite push obavijesti.</value>
+    <value>Bitwarden automatski sinkronizira Vaš trezor pomoću push obavijesti. Za najbolji mogući doživljaj, molimo odaberite "Ok" u sljedećem upitu kada se zatraži da omogućite push obavijesti.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Molimo razmislite o tome da nam pomognete s dobrom recenzijom!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Ocjene na trgovini aplikacija resetiraju se svakom novom verzijom bitwardena. Molimo razmislite o tome da nam pomognete s dobrom recenzijom!</value>
+    <value>Ocjene na trgovini aplikacija resetiraju se svakom novom verzijom Bitwardena. Molimo razmislite o tome da nam pomognete s dobrom recenzijom!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Obnovi lozinku</value>
@@ -726,10 +726,10 @@
     <value>Prikaz stavke</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden Web trezor</value>
+    <value>Bitwarden Web trezor</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Upravljajte svojim prijavama s bilo kojeg web-preglednika pomoću bitwarden web trezora.</value>
+    <value>Upravljajte svojim prijavama s bilo kojeg web-preglednika pomoću Bitwarden web trezora.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Izgubljena aplikacija autentifikatora?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Kada vidite bitwarden obavijest o automatskom ispunjavanju, možete ga dodirnuti da biste pokrenuli uslugu automatskog popunjavanja.</value>
+    <value>Kada vidite Bitwarden obavijest o automatskom ispunjavanju, možete ju dodirnuti da biste pokrenuli uslugu automatskog popunjavanja.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Dodirnite ovu obavijest da biste automatski ispunili prijavu iz svog trezora.</value>
@@ -765,7 +765,7 @@
     <value>Otvorite Postavke pristupačnosti</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Na zaslonu Postavki pristupačnosti, dodirnite "bitwarden" ispod naslova usluge.</value>
+    <value>1. Na zaslonu Postavki pristupačnosti, dodirnite "Bitwarden" ispod naslova usluge.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Uključite prekidač i pritisnite OK za prihvaćanje.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Najlakši način za dodavanje novih prijava na vaš trezor je iz usluge s automatskim popunjavanjem bitwarden. Saznajte više o upotrebi usluge automatskog popunjavanja usluge bitwarden odlaskom na zaslon "Alati".</value>
+    <value>Najlakši način za dodavanje novih prijava na Vaš trezor je iz usluge s automatskim popunjavanjem Bitwarden. Saznajte više o upotrebi usluge automatskog popunjavanja usluge Bitwarden odlaskom na zaslon "Alati".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatsko popunjavanje</value>
@@ -1023,12 +1023,6 @@
   <data name="CustomFields" xml:space="preserve">
     <value>Prilagođena polja</value>
   </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Ažurirana prilagođena polja.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>Nema prilagođenih polja. Možete u potpunosti upravljati prilagođenim poljima iz web trezora ili proširenjem preglednika.</value>
-  </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Kopiraj broj</value>
   </data>
@@ -1180,7 +1174,7 @@
     <value>URL poslužitelja ikona</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Automatsko ispunjavanje s bitwarden</value>
+    <value>Automatsko ispunjavanje pomoću Bitwardena</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Trezor je zaključan</value>
@@ -1201,10 +1195,10 @@
     <value>Usluga pristupačnosti za automatsko popunjavanje</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Usluga bitwarden automatskog ispunjavanja koristi Android Autofill Framework da bi pomogla pri ispunjavanju prijava, kreditnih kartica i identifikacijskih podataka u drugim aplikacijama na Vašem uređaju.</value>
+    <value>Usluga Bitwarden automatskog ispunjavanja koristi Android Autofill Framework da bi pomogla pri ispunjavanju prijava, kreditnih kartica i identifikacijskih podataka u drugim aplikacijama na Vašem uređaju.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Upotrijebite uslugu pristupačnosti usluge bitwarden da biste automatski ispunili prijave.</value>
+    <value>Upotrijebite Bitwarden uslugu automatskog popunjavanja prijava, kreditnih kartica i informacija o identitetu u drugim aplikacijama.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otvori postavke automatskog ispunjavanja</value>
@@ -1232,6 +1226,61 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Nismo mogli automatski otvoriti izbornik postavki automatskog popunjavanja za Android. Ručno se možete kretati do izbornika postavki automatskog popunjavanja putem Androidovih postavki &gt; Sustav &gt; Jezici i unos &gt; Napredno &gt; Usluga automatskog popunjavanja.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>

@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Anmeldung</value>
+    <value>Zugangsdaten</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Besuchen Sie unsere Website</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besuchen Sie unsere Webseite um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von bitwarden zu lernen.</value>
+    <value>Besuchen Sie unsere Webseite um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von Bitwarden zu lernen.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webseite</value>
@@ -403,7 +403,7 @@
     <value>App Erweiterung</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</value>
+    <value>Verwenden Sie den Bitwarden Dienst in den Bedienungshilfen, um Ihre Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Auto-Ausfüllen Funktion</value>
@@ -412,19 +412,19 @@
     <value>Mehrdeutige Zeichen vermeiden</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden App Erweiterung</value>
+    <value>Bitwarden App Erweiterung</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Der einfachste Weg neue Zugangsdaten zum Tresor hinzuzufügen ist die bitwarden App Erweiterung. Um mehr über die bitwarden App Erweiterung zu erfahren, öffnen Sie einfach die "Werkzeuge" Bildschirmseite.</value>
+    <value>Der einfachste Weg neue Zugangsdaten zum Tresor hinzuzufügen ist die Bitwarden App Erweiterung. Um mehr über die Bitwarden App Erweiterung zu erfahren, öffnen Sie einfach die "Werkzeuge" Bildschirmseite.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Nutzen Sie bitwarden in Safari und anderen Apps um Zugangsdaten automatisch einzufügen.</value>
+    <value>Nutzen Sie Bitwarden in Safari und anderen Apps, um Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden Auto-Ausfüllen Funktion</value>
+    <value>Bitwarden Auto-Ausfüllen Funktion</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
+    <value>Verwenden Sie den Bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-Mail Adresse ändern</value>
@@ -482,7 +482,7 @@
     <value>App Erweiterung aktivieren</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari finden Sie bitwarden unter dem Teilen-Symbol (Hinweis: scrollen Sie auf der untersten Zeile des Menüs nach rechts).</value>
+    <value>In Safari finden Sie Bitwarden unter dem Teilen-Symbol (Hinweis: scrollen Sie auf der untersten Zeile des Menüs nach rechts).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Ihre Zugangsdaten sind jetzt in Safari, Chrome und anderen unterstützten Apps einfach zu erreichen.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari und Chrome finden Sie bitwarden unter dem Teilen-Symbol (Hinweis: scrollen Sie auf der untersten Zeile des Menüs nach rechts).</value>
+    <value>In Safari und Chrome finden Sie Bitwarden unter dem Teilen-Symbol (Hinweis: scrollen Sie auf der untersten Zeile des Menüs nach rechts).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tippen Sie auf das bitwarden Symbol im Menü, um die Erweiterung zu starten.</value>
+    <value>Tippen Sie auf das Bitwarden Symbol im Menü, um die Erweiterung zu starten.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Um bitwarden in Safari und anderen Apps zu aktivieren, tippen Sie auf das "Mehr"-Symbol in der untersten Zeile des Menüs.</value>
+    <value>Um Bitwarden in Safari und anderen Apps zu aktivieren, tippen Sie auf das "Mehr"-Symbol in der untersten Zeile des Menüs.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
@@ -522,7 +522,7 @@
     <value>Einträge importieren</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Du kannst deine Logins über den bitwarden.com Web-Tresor importieren. Möchtest du die Seite jetzt öffnen?</value>
+    <value>Du kannst deine Logins über den Bitwarden.com Web-Tresor importieren. Möchtest du die Seite jetzt öffnen?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
     <value>Importieren Sie all Ihre Zugangsdaten schnell und einfach von anderen Passwortmanagern.</value>
@@ -591,7 +591,7 @@
     <value>Weitere Einstellungen</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Sie müssen sich in der bitwarden App einloggen, bevor Sie die Erweiterung benutzen können.</value>
+    <value>Sie müssen sich in der Bitwarden App einloggen, bevor Sie die Erweiterung benutzen können.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Niemals</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Die Standardeinstellungen können mit dem Passwortgenerator der bitwarden App definiert werden.</value>
+    <value>Die Standardeinstellungen können mit dem Passwortgenerator der Bitwarden App definiert werden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Optionen</value>
@@ -640,7 +640,7 @@
     <value>Sind Sie sicher, dass Sie das aktuelle Passwort überschreiben möchten?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden aktualisiert Ihren Tresor mit Pushbenachrichtigungen. Für die bestmögliche Benutzererfahrung, tippen Sie im folgenden Dialogfenster auf "Ok" um Pushbenachrichtigungen zu aktivieren.</value>
+    <value>Bitwarden aktualisiert Ihren Tresor mit Pushbenachrichtigungen. Für die bestmögliche Benutzererfahrung tippen Sie im folgenden Dialogfenster auf "Ok", um Pushbenachrichtigungen zu aktivieren.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Wir würden uns freuen, wenn Sie uns mit einer positiven Bewertung helfen könnten!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Bewertungen für die App werden mit jeder neuen Version zurückgesetzt. Unterstützen Sie uns mit einer guten Rezension!</value>
+    <value>Bewertungen für die App werden mit jeder neuen Version zurückgesetzt. Unterstütze uns mit einer guten Rezension!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Passwort neu generieren</value>
@@ -726,7 +726,7 @@
     <value>Eintrag anzeigen</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden Web-Tresor</value>
+    <value>Bitwarden Web-Tresor</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
     <value>Verwalte deine Zugangsdaten in jedem Browser mit dem bitwarden Web-Tresor.</value>
@@ -752,20 +752,20 @@
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>Es befinden sich keine Zugangsdaten für {0} in Ihrem Tresor.</value>
+    <value>Es befinden sich keine Zugangsdaten für {0} in deinem Tresor.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Sie können die bitwarden Auto-Ausfüllen Benachrichtigung antippen, um Ihre Zugangsdaten automatisch einfügen zu lassen.</value>
+    <value>Du kannst die Bitwarden automatische Ausfüllbenachrichtigung antippen, um deine Zugangsdaten automatisch einfügen zu lassen.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tippen Sie auf diese Benachrichtigung um automatisch Zugangsdaten aus Ihrem Tresor einzufügen.</value>
+    <value>Tippe auf diese Benachrichtigung, um automatisch Zugangsdaten aus deinem Tresor einzufügen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Einstellungen für Bedienungshilfen öffnen</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Tippen Sie auf "bitwarden" unter "Heruntergeladene Dienste" in den Android Bedienungshilfen.</value>
+    <value>1. Tippe auf "Bitwarden" unter "Heruntergeladene Dienste" in den Android Bedienungshilfen.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Aktivieren Sie den Schalter und tippen Sie auf "Ok".</value>
@@ -783,16 +783,16 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Der einfachste Weg neue Zugangsdaten zum Tresor hinzuzufügen ist die bitwarden Auto-Ausfüllen Funktion. Um mehr über die bitwarden Auto-Ausfüllen Funktion zu erfahren, öffnen Sie einfach "Werkzeuge" in der App Erweiterung.</value>
+    <value>Der einfachste Weg, neue Zugangsdaten zum Tresor hinzuzufügen, ist die Bitwarden Auto-Ausfüllen Funktion. Um mehr über die Bitwarden Auto-Ausfüllen Funktion zu erfahren, öffne einfach "Werkzeuge" in der App Erweiterung.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-Ausfüllen</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Möchten Sie diese Zugangsdaten automatisch einfügen oder ansehen?</value>
+    <value>Möchtest du diese Zugangsdaten automatisch einfügen oder ansehen?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Sind Sie sicher, dass Sie die Zugangsdaten einfügen möchten? Sie stimmen nicht komplett mit "{0}" überein.</value>
+    <value>Bist du sicher, dass du die Zugangsdaten einfügen möchten? Sie stimmen nicht komplett mit "{0}" überein.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Passende Einträge</value>
@@ -804,13 +804,13 @@
     <value>Durchsuchen</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Sie suchen nach einem Auto-Fill Objekt für "{0}".</value>
+    <value>Du suchst nach einem Auto-Fill Objekt für "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Ihren Tresor teilen</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Erstellen Sie eine Organisation um Ihre Einträge sicher für andere Benutzer freizugeben.</value>
+    <value>Erstelle eine Organisation um deine Logindaten sicher für andere Benutzer freizugeben.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>Wir verwenden Analytics um zu erfahren, wie die App genutzt wird, sodass wir sie verbessern können. Die Sammlung der Daten geschieht völlig anonym.</value>
@@ -883,7 +883,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Halten Sie Ihren YubiKey NEO an die Rückseite Ihres Geräts um fortzufahren.</value>
+    <value>Halte deinen YubiKey NEO an die Rückseite des Geräts, um fortzufahren.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey NEO Sicherheitsschlüssel</value>
@@ -944,7 +944,7 @@
     <value>TOTP kopieren</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Wenn Ihre Zugangsdaten mit einem Authentifizierungsschlüssel verknüpft sind, wird der TOTP Bestätigungscode automatisch in Ihre Zwischenablage kopiert, sofern Sie die Zugangsdaten automatisch ausfüllen lassen.</value>
+    <value>Ist ein Authentifizierungsschlüssel mit Ihren Zugangsdaten verknüpft, wird der TOTP Bestätigungscode automatisch in die Zwischenablage kopiert, wenn Sie die Zugangsdaten einfügen lassen.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Automatisches Kopieren des TOTP deaktivieren</value>
@@ -980,7 +980,7 @@
     <value>Die maximale Dateigröße beträgt 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>Sie können diese Funktion nicht nutzen, bevor Sie Ihren Verschlüsselungsschlüssel aktualisiert haben.</value>
+    <value>Sie können diese Funktion nicht nutzen, solange Sie Ihren Verschlüsselungsschlüssel nicht aktualisiert haben.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Mehr erfahren</value>
@@ -1009,7 +1009,7 @@
     <value>Selbstgehostete Umgebung</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Bitte geben Sie die Basis-URL Ihrer vor Ort gehosteten bitwarden-Installation an.</value>
+    <value>Bitte gebe die Basis-URL deiner vor selbst gehosteten Bitwarden-Installation an.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Server URL</value>
@@ -1018,16 +1018,10 @@
     <value>Web-Tresor Server URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tippen Sie auf diese Benachrichtigung um Einträge aus Ihrem Tresor anzusehen.</value>
+    <value>Tippe auf diese Benachrichtigung um Einträge aus deinem Tresor anzusehen.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Benutzerdefinierte Felder</value>
-  </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Benutzerdefinierte Felder aktualisiert.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>Kein benutzerdefiniertes Feld. Sie können Ihre benutzerdefinierten Felder im Web-Tresor oder der Browser Erweiterung verwalten.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Nummer kopieren</value>
@@ -1042,7 +1036,7 @@
     <value>Sicherheitscode</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Welche Art Eintrag möchten Sie hinzufügen?</value>
+    <value>Welche Art Eintrag möchtest du hinzufügen?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Karte</value>
@@ -1051,7 +1045,7 @@
     <value>Identität</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Anmeldung</value>
+    <value>Zugangsdaten</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Sichere Notiz</value>
@@ -1180,7 +1174,7 @@
     <value>Icons Server URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Mit bitwarden automatisch ausfüllen</value>
+    <value>Mit Bitwarden automatisch ausfüllen</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Tresor ist gesperrt</value>
@@ -1198,13 +1192,13 @@
     <value>Es sind keine Objekte in diesem Ordner.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-Fill Barrierefreiheitsservice</value>
+    <value>Auto-Fill Bedienungshilfe</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Der Bitwarden Auto-Fill Service benutzt das Android Autofill Framework um Logins, Kreditkarten und Identitätsinformationen in anderen Apps auf Ihrem Gerät zu befüllen.</value>
+    <value>Der Bitwarden Auto-Fill Service benutzt das Android Autofill Framework, um Logins, Kreditkarten und Identitätsinformationen in anderen Apps auf Ihrem Gerät zu befüllen.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Verwenden Sie den bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
+    <value>Verwende den Bitwarden Dienst in den Bedienungshilfen, um deine Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Öffne Auto-Fill Einstellungen</value>
@@ -1220,7 +1214,7 @@
     <value>Face ID zum Entsperren verwenden</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Überprüfe Face ID</value>
+    <value>Face ID überprüfen</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
     <value>Mit Windows Hello entsperren</value>
@@ -1232,6 +1226,61 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Die Android Auto-Fill Einstellungen konnten nicht automatisch geöffnet werden. Über Android Einstellungen &gt; Sprachen &amp; Eingabe &gt; AutoFill-Dienst kannst du manuell zu den Auto-Fill Einstellungen navigieren.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>

@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Name" xml:space="preserve">
-    <value>bitwarden Passordbehandler</value>
+    <value>Bitwarden passordbehandler</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden er den enkleste og tryggeste måten å lagre alle dine innlogginger og passord mens de blir praktisk synkronisert mellom alle dine PCer og mobiler. bitwarden-apputvidelsen tillater deg å raskt logge på ethvert nettsted gjennom Safari eller Chrome, og støttes også av hundrevis av andre populære apper.
+    <value>Bitwarden er den enkleste og tryggeste måten å lagre alle dine innlogginger og passord mens de blir praktisk synkronisert mellom alle dine PCer og mobiler. Bitwarden-apputvidelsen tillater deg å raskt logge på ethvert nettsted gjennom Safari eller Chrome, og støttes også av hundrevis av andre populære apper.
 
 Passordtyveri er et seriøst problem. Nettstedene og appene som du bruker er under angrep hver eneste dag. Sikkerhetsbrudd forekommer, og dine passord blir stjålet. Når du bruker de samme passordene over flere apper og nettsteder, kan hackere lett få tilgang til din E-post, bankkonto, og andre viktige kontoer.
 
 Sikkerhetseksperter anbefaler at du bruker forskjellig og tilfeldig genererte passord for hver konto du lager. Men hvordan behandler du alle de passordene? Bitwarden gjør det lett for deg å lage, lagre, og få tilgang til dine passord.
 
-bitwarden lagrer alle dine innlogginger i et kryptert hvelv som synkroniseres mellom alle dine PCer og mobiler. Siden den er fullt kryptert før den noensinne forlater din enhet, har bare du tilgang til dine dataer. Selv ikke arbeiderne hos bitwarden kan lese dine dataer, om vi så ville det. Dine dataer er forseglet med AES 256-bitkryptering, saltet kodifisering, og PBKDF2 SHA-256.</value>
+Bitwarden lagrer alle dine innlogginger i et kryptert hvelv som synkroniseres mellom alle dine PCer og mobiler. Siden den er fullt kryptert før den noensinne forlater din enhet, har bare du tilgang til dine dataer. Selv ikke arbeiderne hos bitwarden kan lese dine dataer, om vi så ville det. Dine dataer er forseglet med AES 256-bitkryptering, saltet kodifisering, og PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,password,login,free password manager,password manager,login manager,passord</value>
+    <value>bitwarden,bit warden,8bit,password,free password manager,password manager,login manager,passord</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
