@@ -125,7 +125,7 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>フォルダの追加</value>
+    <value>フォルダーを追加</value>
   </data>
   <data name="AddItem" xml:space="preserve">
     <value>アイテムの追加</value>
@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -179,7 +179,7 @@
     <value>編集</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>フォルダの編集</value>
+    <value>フォルダーを編集</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>メール</value>
@@ -212,24 +212,24 @@
     <value>指紋で認証します。</value>
   </data>
   <data name="Folder" xml:space="preserve">
-    <value>フォルダ</value>
+    <value>フォルダー</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>新しいフォルダを作成しました。</value>
+    <value>新しいフォルダーを作成しました。</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>フォルダを削除しました。</value>
+    <value>フォルダーを削除しました。</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>フォルダなし</value>
+    <value>フォルダーなし</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
-    <value>フォルダ</value>
+    <value>フォルダー</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>フォルダを更新しました。</value>
+    <value>フォルダーを更新しました。</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>ウェブサイトを開く</value>
@@ -381,7 +381,7 @@
     <value>ウェブサイトを開く</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>私たちのウェブサイトでヘルプ、ニュース、問い合わせや bitwarden の詳しい使い方をチェックしてください。</value>
+    <value>私たちのウェブサイトでヘルプ、ニュース、問い合わせや Bitwarden の詳しい使い方をチェックしてください。</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>ウェブサイト</value>
@@ -403,7 +403,7 @@
     <value>App Extension</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>bitwarden ユーザー補助サービスを使ってアプリやウェブサイトでログイン情報を自動入力します。</value>
+    <value>Bitwarden ユーザー補助サービスを使ってアプリやウェブサイトでログイン情報を自動入力します。</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>自動入力サービス</value>
@@ -412,19 +412,19 @@
     <value>あいまいな文字を省く</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden App Extension</value>
+    <value>Bitwarden App Extension</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>bitwarden App Extension から新しいログイン情報を保管庫に追加するのが一番簡単です。ツール画面で App Extension の詳細を確認できます。</value>
+    <value>Bitwarden App Extension から新しいログイン情報を保管庫に追加するのが一番簡単です。ツール画面で App Extension の詳細を確認できます。</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Safari などのアプリで bitwarden を使ってログイン情報を自動入力します。</value>
+    <value>Safari などのアプリで Bitwarden を使ってログイン情報を自動入力します。</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden 自動入力サービス</value>
+    <value>Bitwarden 自動入力サービス</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>bitwarden ユーザー補助サービスを使ってログイン情報を自動入力します。</value>
+    <value>Bitwarden ユーザー補助サービスを使ってログイン情報を自動入力します。</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>メールアドレスの変更</value>
@@ -482,7 +482,7 @@
     <value>アプリの拡張機能を有効化</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>Safari では、共有アイコンを使って bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
+    <value>Safari では、共有アイコンを使って Bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Safari やChrome などの対応アプリでログイン情報に簡単にアクセスできます。</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>Safari と Chrome では、共有アイコンを使って bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
+    <value>Safari と Chrome では、共有アイコンを使って Bitwarden を見つけてください（ヒント：メニューの一番下の行を右側にスクロール）</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>メニューの bitwarden アイコンをタップして拡張機能を起動してください。</value>
+    <value>メニューの Bitwarden アイコンをタップして拡張機能を起動してください。</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>bitwarden を Safari などのアプリで開くには、メニューの一番下の行の「詳細」をタップしてください。</value>
+    <value>Bitwarden を Safari などのアプリで開くには、メニューの一番下の行の「詳細」をタップしてください。</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>お気に入り</value>
@@ -591,7 +591,7 @@
     <value>その他の設定</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>この拡張機能を使用する前に、メインの bitwarden アプリにログインしてください。</value>
+    <value>この拡張機能を使用する前に、メインの Bitwarden アプリにログインしてください。</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>なし</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>デフォルトのオプションはメインの bitwarden アプリのパスワード生成ツールから設定されます。</value>
+    <value>デフォルトのオプションはメインの Bitwarden アプリのパスワード生成ツールから設定されます。</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>オプション</value>
@@ -640,7 +640,7 @@
     <value>現在のパスワードを上書きしてよろしいですか?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden はプッシュ通知を使って自動的に保管庫を同期します。プッシュ通知を有効化するかどうかプロンプトが出たら OK を押してください。</value>
+    <value>Bitwarden はプッシュ通知を使って自動的に保管庫を同期します。プッシュ通知を有効化するかどうかプロンプトが出たら「許可する」を押してください。</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>良いレビューで私たちを助けてください！</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store は bitwarden の新しいバージョンが公開される毎に評価をリセットします。良いレビューで私たちを助けてください！</value>
+    <value>App Store は Bitwarden の新しいバージョンが公開される毎に評価をリセットします。良いレビューで私たちを助けてください！</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>パスワードの再生成</value>
@@ -659,7 +659,7 @@
     <value>マスターパスワードを再入力</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search vault</value>
+    <value>保管庫を検索</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>セキュリティ</value>
@@ -707,7 +707,7 @@
     <value>2段階認証</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Two-step login makes your account more secure by requiring you to enter a security code from an authenticator app whenever you log in. Two-step login can be enabled on the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>2段階認証を使うと、ログイン時にセキュリティキーや認証アプリ、SMS、電話やメールでの認証を必要にすることでアカウントをさらに安全に出来ます。2段階認証は Bitwarden ウェブ保管庫で有効化できます。ウェブサイトを開きますか？</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>{0}でロック解除</value>
@@ -726,10 +726,10 @@
     <value>アイテムの表示</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden ウェブ保管庫</value>
+    <value>Bitwarden ウェブ保管庫</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Manage your logins from any web browser with the bitwarden web vault.</value>
+    <value>Bitwarden ウェブ保管庫であらゆるブラウザのログイン情報を管理します。</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>認証アプリを無くしてしまった場合</value>
@@ -756,16 +756,16 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>bitwarden 自動入力通知が表示されたら、タップして自動入力サービスを起動できます。</value>
+    <value>Bitwarden 自動入力通知が表示されたら、タップして自動入力サービスを起動できます。</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill a login from your vault.</value>
+    <value>この通知をタップすると保管庫から自動入力します。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>ユーザー補助設定を開く</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Android のユーザー補助設定で「bitwarden」をタッチしてください。</value>
+    <value>1. Android のユーザー補助設定で「Bitwarden」をタッチしてください。</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. トグルをオンにして、「OK」を押してください。</value>
@@ -783,16 +783,16 @@
     <value>ベータ</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>bitwarden 自動入力サービスから新しいログイン情報を保管庫に追加するのが一番簡単です。ツール画面で自動入力サービスの詳細を確認できます。</value>
+    <value>Bitwarden 自動入力サービスから新しいログイン情報を保管庫に追加するのが一番簡単です。ツール画面で自動入力サービスの詳細を確認できます。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>自動入力</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this login?</value>
+    <value>このアイテムを自動入力するか表示しますか？</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+    <value>このアイテムを自動入力しますか? 「{0}」とは完全には一致していません。</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>一致するアイテム</value>
@@ -804,13 +804,13 @@
     <value>検索</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill login for "{0}".</value>
+    <value>「{0}」への自動入力アイテムを検索中です。</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>保管庫の共有</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your logins with other users.</value>
+    <value>他のユーザーとアイテムを安全に共有する組織を作成します。</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
     <value>アプリの使われ方を解析することでより使いやすくなるよう開発しています。収集されるデータはすべて匿名です。</value>
@@ -886,7 +886,7 @@
     <value>端末の NFC ポートに YubiKey NEO を近づけたまま続行してください。</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO セキュリティキー</value>
+    <value>YubiKey セキュリティキー</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -1009,7 +1009,7 @@
     <value>セルフホスティング環境</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>セルフホスティングしている bitwarden のベース URL を指定してください。</value>
+    <value>セルフホスティングしている Bitwarden のベース URL を指定してください。</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>サーバー URL</value>
@@ -1018,16 +1018,10 @@
     <value>ウェブ保管庫サーバー URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>この通知をタップすると保管庫のアイテムを表示します。</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>カスタムフィールド</value>
-  </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>カスタムフィールドを更新しました。</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>カスタムフィールドはありません。カスタムフィールドは、ウェブ保管庫やブラウザの拡張機能から管理できます。</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>番号のコピー</value>
@@ -1180,7 +1174,7 @@
     <value>アイコンのサーバー URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>bitwarden で自動入力</value>
+    <value>Bitwarden で自動入力</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>保管庫はロックされています</value>
@@ -1195,16 +1189,16 @@
     <value>このコレクションにはアイテムがありません。</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>このフォルダにはアイテムがありません。</value>
+    <value>このフォルダーにはアイテムがありません。</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
     <value>自動入力ユーザー補助サービス</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>bitwarden 自動入力サービスは Android の Autofill Framework を使ってログイン情報やクレジットカード、ID情報をお使いのアプリに入力するのを補助します。</value>
+    <value>Bitwarden 自動入力サービスは Android の Autofill Framework を使ってログイン情報やクレジットカード、ID情報をお使いのアプリに入力するのを補助します。</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+    <value>Bitwarden 自動入力サービスを使ってログイン情報やクレジットカード、ID情報などをアプリで自動入力します。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>自動入力設定を開く</value>
@@ -1232,6 +1226,61 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Android の自動入力設定を自動的に開けませんでした。Android の設定 &gt; システム &gt; 言語と入力 &gt; 詳細設定 &gt; 自動入力サービスで自動入力を設定できます。</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>
