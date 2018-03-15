@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -348,7 +348,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Використовуйте відбиток пальця для розблокування</value>
+    <value>Відбиток для розблокування</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Ім'я користувача</value>
@@ -381,7 +381,7 @@
     <value>Відвідайте наш веб-сайт</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Відвідайте наш веб-сайт, щоб прочитати новини, написати нам, або дізнатися більше про те, як ми використовуємо bitwarden.</value>
+    <value>Відвідайте наш веб-сайт, щоб прочитати новини, написати нам, або дізнатися більше про те, як ми використовуємо Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Веб-сайт</value>
@@ -403,7 +403,7 @@
     <value>Розширення</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Використовуйте службу автозаповнення bitwarden, щоб автоматично вводити паролі в програмах та на веб-сайтах.</value>
+    <value>Використовуйте службу автозаповнення Bitwarden, щоб автоматично вводити паролі в програмах та на веб-сайтах.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Служба автозаповнення</value>
@@ -412,19 +412,19 @@
     <value>Уникати неоднозначних символів</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Розширення bitwarden</value>
+    <value>Розширення Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Найлегшим способом додавання нових записів у сховище є використання розширення bitwarden. Дізнайтеся більше про використання розширення bitwarden в меню "Інструменти".</value>
+    <value>Найлегшим способом додавання нових записів у сховище є використання розширення Bitwarden. Дізнайтеся більше про використання розширення Bitwarden в меню "Інструменти".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Використовуйте bitwarden в Safari та інших програмах для автоматичного заповнення паролів.</value>
+    <value>Використовуйте Bitwarden в Safari та інших програмах для автоматичного заповнення паролів.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Служба автозаповнення bitwarden</value>
+    <value>Служба автозаповнення Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Використовуйте службу автозаповнення bitwarden, щоб автоматично вводити паролі.</value>
+    <value>Використовуйте службу автозаповнення Bitwarden, щоб автоматично вводити паролі.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Змінити адресу е-пошти</value>
@@ -464,10 +464,10 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Змінити запис</value>
+    <value>Зміна запису</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Увімкнути автоматичну синхронізацію</value>
+    <value>Увімкніть автоматичну синхронізацію</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>Введіть свою адресу е-пошти, щоб отримати підказку для головного пароля.</value>
@@ -482,7 +482,7 @@
     <value>Увімкнути розширення</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>В Safari знайдіть bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню).</value>
+    <value>В Safari знайдіть Bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Тепер ви можете легко отримувати доступ до своїх записів з Safari, Chrome та інших підтримуваних програм.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>В Safari та Chrome знайдіть bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню Поділитися).</value>
+    <value>В Safari та Chrome знайдіть Bitwarden, використовуючи піктограму Поділитися (підказка: прокрутіть вправо в нижньому рядку меню Поділитися).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Торкніться піктограми bitwarden в меню для запуску розширення.</value>
+    <value>Торкніться піктограми Bitwarden в меню для запуску розширення.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Щоб увімкнути bitwarden в Safari та інших програмах, торкніться піктограми "більше" в нижньому рядку меню.</value>
+    <value>Щоб увімкнути Bitwarden в Safari та інших програмах, торкніться піктограми "Ще" в нижньому рядку меню.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Обране</value>
@@ -552,7 +552,7 @@
     <value>Негайно</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Налаштування блокування</value>
+    <value>Час блокування</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Вхід...</value>
@@ -591,7 +591,7 @@
     <value>Додаткові налаштування</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Ви повинні увійти в основну програму bitwarden, щоб використовувати розширення.</value>
+    <value>Ви повинні увійти в основну програму Bitwarden, щоб використовувати розширення.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Ніколи</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Типові параметри задаються в генераторі паролів основної програми bitwarden.</value>
+    <value>Типові параметри задаються в генераторі паролів основної програми Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Налаштування</value>
@@ -640,7 +640,7 @@
     <value>Ви дійсно хочете перезаписати поточний пароль?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden автоматично синхронізує ваше сховище за допомогою push-сповіщень. Для найкращої роботи оберіть "Дозволити" в наступному запиті про увімкнення push-сповіщень.</value>
+    <value>Bitwarden автоматично синхронізує ваше сховище за допомогою push-сповіщень. Для найкращої роботи оберіть "Дозволити" в наступному запиті про увімкнення push-сповіщень.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Будь ласка, подумайте про те, щоб допомогти нам хорошим відгуком!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Оцінки в App Store скидаються з кожною новою версією bitwarden. Чи не бажаєте залишити про нас гарний відгук?</value>
+    <value>Оцінки в App Store скидаються з кожною новою версією Bitwarden. Чи не бажаєте залишити про нас гарний відгук?</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Генерувати новий</value>
@@ -707,13 +707,13 @@
     <value>Двоетапна авторизація</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Двоетапна авторизація робить ваш обліковий запис більш захищеним, вимагаючи підтвердження вашого входу за допомогою іншого пристрою, наприклад, код безпеки, програма авторизації, SMS, телефонний дзвінок, або е-пошта. Ви можете увімкнути двоетапну авторизацію в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
+    <value>Двоетапна авторизація робить ваш обліковий запис більш захищеним, вимагаючи підтвердження входу за допомогою іншого пристрою, наприклад, коду безпеки, програми авторизації, SMS, телефонного виклику, або е-пошти. Ви можете увімкнути двоетапну авторизацію в сховищі на bitwarden.com. Хочете перейти на веб-сайт зараз?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Розблокувати з {0}</value>
+    <value>Розблокування з {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Розблокувати з PIN-кодом</value>
+    <value>Розблокування з PIN-кодом</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Перевірка</value>
@@ -723,13 +723,13 @@
     <value>Код підтвердження</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Переглянути запис</value>
+    <value>Перегляд запису</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Веб-сховище bitwarden</value>
+    <value>Веб-сховище Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Керуйте своїми паролями з будь-якого браузера за допомогою веб-сховища bitwarden.</value>
+    <value>Керуйте своїми паролями з будь-якого браузера за допомогою веб-сховища Bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Втратили доступ до програми перевірки?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Коли ви бачите сповіщення автозаповнення bitwarden, ви можете торкнутися його для запуску служби автозаповнення.</value>
+    <value>Коли ви бачите сповіщення автозаповнення Bitwarden, ви можете торкнутися його для запуску служби автозаповнення.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Торкніться цього сповіщення для автозаповнення пароля.</value>
@@ -765,7 +765,7 @@
     <value>Відкрити налаштування доступності</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. На екрані налаштувань доступності Android, оберіть службу "bitwarden".</value>
+    <value>1. На екрані налаштувань доступності Android, оберіть службу "Bitwarden".</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Змініть положення перемикача й схваліть запит.</value>
@@ -783,7 +783,7 @@
     <value>Бета</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Найлегшим способом додавання нових записів у сховище є використання служби автозаповнення bitwarden. Дізнайтеся більше про використання служби автозаповнення bitwarden в меню "Інструменти".</value>
+    <value>Найлегшим способом додавання нових записів у сховище є використання служби автозаповнення Bitwarden. Дізнайтеся більше про використання служби автозаповнення Bitwarden в меню "Інструменти".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Автозаповнення</value>
@@ -883,10 +883,10 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Для продовження прикладіть свій YubiKey NEO до задньої сторони пристрою.</value>
+    <value>Для продовження прикладіть свій YubiKey NEO до задньої сторони пристрою, або вставте його в порт USB свого пристрою.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>Ключ безпеки YubiKey NEO</value>
+    <value>Ключ безпеки YubiKey</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -947,7 +947,7 @@
     <value>Якщо ваш запис має вкладений ключ авторизації, код підтвердження TOTP автоматично копіюється до буфера обміну щоразу при автозаповненні.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Вимкнути автоматичне копіювання TOTP</value>
+    <value>Вимкнути авто-копіювання TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Для використання цієї функції необхідний преміум статус.</value>
@@ -1009,7 +1009,7 @@
     <value>Середовище власного хостингу</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Вкажіть основну URL-адресу вашого локально розміщеного встановлення bitwarden.</value>
+    <value>Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL-адреса сервера</value>
@@ -1022,12 +1022,6 @@
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Власні поля</value>
-  </data>
-  <data name="CustomFieldsUpdated" xml:space="preserve">
-    <value>Власні поля оновлено.</value>
-  </data>
-  <data name="NoCustomFields" xml:space="preserve">
-    <value>Немає власних полів. Ви можете керувати власними полями в онлайн сховищі чи розширенні браузера.</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
     <value>Копіювати номер</value>
@@ -1180,7 +1174,7 @@
     <value>URL-адреса сервера піктограм</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Автозаповнення з bitwarden</value>
+    <value>Автозаповнення з Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Сховище заблоковано</value>
@@ -1201,10 +1195,10 @@
     <value>Служба автозаповнення</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Служба автозаповнення bitwarden використовує Android Autofill Framework для заповнення паролів, кредитних карток та особистої інформації в інших програмах на вашому пристрої.</value>
+    <value>Служба автозаповнення Bitwarden використовує Android Autofill Framework для заповнення паролів, кредитних карток та особистої інформації в інших програмах на вашому пристрої.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Використовуйте службу автозаповнення bitwarden, щоб автоматично вводити паролі, кредитні картки та особисту інформацію в інших програмах.</value>
+    <value>Використовуйте службу автозаповнення Bitwarden, щоб автоматично вводити паролі, кредитні картки та особисту інформацію в інших програмах.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Відкрити налаштування автозаповнення</value>
@@ -1217,7 +1211,7 @@
     <value>Використовувати розпізнавання обличчя для підтвердження.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Використовувати розпізнавання обличчя для розблокування</value>
+    <value>Розпізнавання обличчя для розблокування</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Підтвердження розпізнавання обличчя</value>
@@ -1232,6 +1226,61 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Нам не вдалося автоматично відкрити меню налаштувань автозаповнення Android. Ви можете перейти до меню налаштувань автозаповнення вручну в Налаштування &gt; Система &gt; Мова і введення &gt; Додатково &gt; Служба автозаповнення.</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>Custom Field Name</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>Boolean</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>Hidden</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>New Custom Field</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>What type of custom field do you want to add?</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>New URI</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>Base domain</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>Exact</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>Host</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>Regular expression</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>Starts with</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>URI Match Detection</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>Match Detection</value>
+    <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>
