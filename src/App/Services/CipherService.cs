@@ -483,8 +483,10 @@ namespace Bit.App.Services
                         (loginNameString != null && loginNameString.Contains(term));
                     if(!addedFromSearchTerm)
                     {
-                        addedFromSearchTerm = (loginDomainName != null && term.Contains(loginDomainName.Split('.')[0]))
-                            || (loginNameString != null && term.Contains(loginNameString));
+                        var domainTerm = loginDomainName?.Split('.')[0];
+                        addedFromSearchTerm =
+                            (domainTerm != null && domainTerm.Length > 2 && term.Contains(domainTerm)) ||
+                            (loginNameString != null && term.Contains(loginNameString));
                     }
 
                     if(addedFromSearchTerm)
