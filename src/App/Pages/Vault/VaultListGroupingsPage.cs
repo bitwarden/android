@@ -225,7 +225,7 @@ namespace Bit.App.Pages
                     }
                 }
 
-                if(favoriteCipherGroupings?.Any() ?? false)
+                if(favoriteCipherGroupings.Any())
                 {
                     sections.Add(new Section<GroupingOrCipher>(
                         favoriteCipherGroupings.OrderBy(g => g.Cipher.Name).ThenBy(g => g.Cipher.Subtitle).ToList(),
@@ -235,11 +235,12 @@ namespace Bit.App.Pages
                 var folders = await _folderService.GetAllAsync();
                 var collections = await _collectionService.GetAllAsync();
 
-                var folderGroupings = folders?
-                    .Select(f => new GroupingOrCipher(new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0)))
+                var folderGroupings = folders
+                    .Select(f => new GroupingOrCipher(
+                        new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0)))
                     .OrderBy(g => g.Grouping.Name).ToList();
 
-                if(collections.Any())
+                if(collections.Any() || noFolderCipherGroupings.Count >= 100)
                 {
                     folderGroupings.Add(new GroupingOrCipher(new Grouping(AppResources.FolderNone,
                         noFolderCipherGroupings.Count)));
@@ -250,15 +251,15 @@ namespace Bit.App.Pages
                     sections.Add(new Section<GroupingOrCipher>(folderGroupings, AppResources.Folders));
                 }
 
-                var collectionGroupings = collections?
-                    .Select(c => new GroupingOrCipher(new Grouping(c,
-                        collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0)))
+                var collectionGroupings = collections.Select(c =>
+                    new GroupingOrCipher(new Grouping(
+                        c, collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0)))
                    .OrderBy(g => g.Grouping.Name).ToList();
-                if(collectionGroupings?.Any() ?? false)
+                if(collectionGroupings.Any())
                 {
                     sections.Add(new Section<GroupingOrCipher>(collectionGroupings, AppResources.Collections));
                 }
-                else if(noFolderCipherGroupings?.Any() ?? false)
+                else if(noFolderCipherGroupings.Count > 0 && noFolderCipherGroupings.Count < 100)
                 {
                     sections.Add(new Section<GroupingOrCipher>(
                         noFolderCipherGroupings.OrderBy(g => g.Cipher.Name).ThenBy(g => g.Cipher.Subtitle).ToList(),
