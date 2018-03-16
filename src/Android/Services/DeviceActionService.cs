@@ -455,7 +455,7 @@ namespace Bit.Android.Services
             var activity = (MainActivity)CurrentContext;
             _progressDialog = new ProgressDialog(activity);
             _progressDialog.SetMessage(text);
-            _progressDialog.SetCancelable(true);
+            _progressDialog.SetCancelable(false);
             _progressDialog.Show();
         }
 
