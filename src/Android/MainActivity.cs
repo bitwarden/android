@@ -21,10 +21,7 @@ using Bit.App.Enums;
 
 namespace Bit.Android
 {
-    [Activity(Label = "Bitwarden",
-        Icon = "@drawable/icon",
-        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-        Exported = false)]
+    [Activity(ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, Exported = false)]
     public class MainActivity : FormsAppCompatActivity
     {
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";

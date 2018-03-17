@@ -6,10 +6,7 @@ using Android.Views;
 
 namespace Bit.Android
 {
-    [Activity(Theme = "@style/BitwardenTheme.Splash",
-        Label = "Bitwarden",
-        Icon = "@drawable/icon",
-        WindowSoftInputMode = SoftInput.StateHidden)]
+    [Activity(Theme = "@style/BitwardenTheme.Splash", WindowSoftInputMode = SoftInput.StateHidden)]
     public class AutofillActivity : Activity
     {
         private string _lastQueriedUri;
