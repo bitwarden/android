@@ -403,7 +403,7 @@
     <value>Rakenduse laiendus</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Kasuta Bitwardeni juurdepääsetavuse teenust, et erinevatel veebilehtedel ja rakendustes kontoandmeid lihtsamini sisestada.</value>
+    <value>Kasuta Bitwardeni juurdepääsetavuse teenust, et erinevatel veebilehtedel ja rakendustes kontoandmeid sisestada.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Automaattäite teenus</value>
@@ -418,13 +418,13 @@
     <value>Lihtsaim viis uute sisselogimise andmete lisamiseks on kasutada Bitwardeni rakenduse laiendust. Lisateavet Bitwardeni rakenduse laienduse kasutamiseks leiad menüüst "Tööriistad".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Kasuta Bitwardeni automaatset kontoandmete sisestamist Safaris ja teistes rakendustes.</value>
+    <value>Kasuta Bitwardenit Safaris ja teistes rakendusestes kontoandmete sisestamiseks.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Bitwardeni automaattäite teenus</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Kasuta kontoandmete automaatseks sisestamiseks Bitwardeni juurdepääsetavuse teenust.</value>
+    <value>Kasuta kontoandmete sisestamiseks Bitwardeni juurdepääsetavuse teenust.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Muuda e-posti</value>
@@ -591,7 +591,7 @@
     <value>Rohkem seadeid</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Pead enne lisa kasutamist Bitwardeni rakendusse sisse logima.</value>
+    <value>Pead enne lisarakenduse kasutamist Bitwardeni rakendusse sisse logima.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Mitte kunagi</value>
@@ -729,7 +729,7 @@
     <value>Bitwardeni Veebihoidla</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Halda oma Bitwardeni kontot mistahes brauseris.</value>
+    <value>Halda oma Bitwardeni kontot ja selle sisu mistahes brauseris.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kaotasid autentiseerimise rakenduse?</value>
@@ -1229,58 +1229,58 @@
     <value>Meil ei õnnestu Androidi sisestusabi seadeid avada. Võid selle ise avada, navigeerides Seaded &gt; Süsteem &gt; Keeled ja sisend &gt; Täpsemad &gt; Sisestusabi.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Kohandatud välja nimi</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Boolean</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Peidetud</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Tekst</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Uus kohandatud väli</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Millist tüüpi kohandatud välja soovid lisada?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Eemalda</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>Uus URL</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>URI {0}</value>
+    <value>URL {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Baasdomeen</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Vaike</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Täpne</value>
   </data>
   <data name="Host" xml:space="preserve">
     <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>RegEx</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Algab</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>URL sobivuse tuvastamine</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Sobivuse tuvastamine</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>
