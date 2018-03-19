@@ -265,7 +265,7 @@
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Login</value>
+    <value>Вход</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -427,7 +427,7 @@
     <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Change Email</value>
+    <value>Промяна на имейла</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
     <value>You can change your email address on the bitwarden.com web vault. Do you want to visit the website now?</value>
@@ -476,7 +476,7 @@
     <value>Re-enable App Extension</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>Almost done!</value>
+    <value>Почти готово!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
     <value>Enable App Extension</value>
@@ -687,7 +687,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Syncing...</value>
+    <value>Синхронизиране...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
