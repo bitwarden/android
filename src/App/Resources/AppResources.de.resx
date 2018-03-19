@@ -559,7 +559,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Sie müssen sich anmelden oder einen neuen Account erstellen um auf den Tresor zugreifen zu können.</value>
+    <value>Sie müssen sich anmelden oder einen neuen Account erstellen, um auf den Tresor zugreifen zu können.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Verwalten</value>
@@ -707,7 +707,7 @@
     <value>Zwei-Faktor Authentifizierung</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Mit der Zwei-Faktor Authentifizierung wird Ihr Account zusätzlich abgesichert, da jede Anmeldung durch einen Sicherheitscode, eine Authentifizierungs-App, SMS, einen Anruf oder eine E-Mail verifiziert werden muss. Die Zwei-Faktor Authentifizierung kann im bitwarden.com Web-Tresor aktiviert werden. Möchten Sie die Seite jetzt öffnen?</value>
+    <value>Mit der Zwei-Faktor Authentifizierung wird Ihr Account zusätzlich abgesichert, da jede Anmeldung durch einen Sicherheitscode, eine Authentifizierungs-App, SMS, einen Anruf oder eine E-Mail verifiziert werden muss. Die Zwei-Faktor Authentifizierung kann im Bitwarden.com Web-Tresor aktiviert werden. Möchten Sie die Seite jetzt öffnen?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Mit {0} entsperren</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Du kannst die Bitwarden automatische Ausfüllbenachrichtigung antippen, um deine Zugangsdaten automatisch einfügen zu lassen.</value>
+    <value>Sie können die Bitwarden Auto-Ausfüllen Benachrichtigung antippen, um Ihre Zugangsdaten automatisch einfügen zu lassen.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tippe auf diese Benachrichtigung, um automatisch Zugangsdaten aus deinem Tresor einzufügen.</value>
@@ -789,7 +789,7 @@
     <value>Auto-Ausfüllen</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Möchtest du diese Zugangsdaten automatisch einfügen oder ansehen?</value>
+    <value>Möchten Sie diese Zugangsdaten automatisch einfügen oder ansehen?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Bist du sicher, dass du die Zugangsdaten einfügen möchten? Sie stimmen nicht komplett mit "{0}" überein.</value>
@@ -1229,58 +1229,58 @@
     <value>Die Android Auto-Fill Einstellungen konnten nicht automatisch geöffnet werden. Über Android Einstellungen &gt; Sprachen &amp; Eingabe &gt; AutoFill-Dienst kannst du manuell zu den Auto-Fill Einstellungen navigieren.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Name Benutzerdefiniertes Feld</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Boolean</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Versteckt</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Neues benutzerdefiniertes Feld</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Welche Art Eintrag möchtest du hinzufügen?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Entfernen</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>Neue URL</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>URI {0}</value>
+    <value>URL {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Basis-Domäne</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Standard</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Exakt</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Server</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Regulärer Ausdruck</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Beginnt mit</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>Match-Erkennung</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Match-Erkennung</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>
