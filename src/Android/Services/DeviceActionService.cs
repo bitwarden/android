@@ -474,6 +474,11 @@ namespace Bit.Android.Services
         public Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
         {
             var activity = (MainActivity)CurrentContext;
+            if(activity == null)
+            {
+                return Task.FromResult<string>(null);
+            }
+
             var alertBuilder = new AlertDialog.Builder(activity);
             alertBuilder.SetTitle(title);
             alertBuilder.SetMessage(description);

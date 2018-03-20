@@ -405,7 +405,7 @@ namespace Bit.App.Utilities
                     {
                         selectedVal = exactingMatchVal;
                     }
-                    else if(val != AppResources.Default)
+                    else if(val != null && val != AppResources.Default)
                     {
                         selectedVal = UriMatchOptionsMap.ElementAt(Array.IndexOf(optionsArr, val) - 1).Key;
                     }
