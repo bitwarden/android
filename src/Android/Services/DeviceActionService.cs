@@ -487,15 +487,15 @@ namespace Bit.Android.Services
             {
                 InputType = global::Android.Text.InputTypes.ClassText
             };
-            if(text != null)
+            
+            if(text == null)
             {
-                input.Text = text;
-                input.SetSelection(text.Length);
+                text = string.Empty;
             }
-            else
-            {
-                input.FocusedByDefault = true;
-            }
+
+            input.Text = text;
+            input.SetSelection(text.Length);
+
             alertBuilder.SetView(input);
 
             var result = new TaskCompletionSource<string>();

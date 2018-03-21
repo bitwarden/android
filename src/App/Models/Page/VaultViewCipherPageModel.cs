@@ -676,8 +676,9 @@ namespace Bit.App.Models.Page
                 }
             }
             public string Label => IsWebsite ? AppResources.Website : AppResources.URI;
-            public bool IsWebsite => Value.StartsWith("http://") || Value.StartsWith("https://");
-            public bool IsApp => Value.StartsWith(Constants.AndroidAppProtocol);
+            public bool IsWebsite => Value == null ? false : 
+                Value.StartsWith("http://") || Value.StartsWith("https://");
+            public bool IsApp => Value == null ? false : Value.StartsWith(Constants.AndroidAppProtocol);
         }
     }
 }
