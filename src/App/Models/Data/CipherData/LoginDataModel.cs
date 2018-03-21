@@ -16,7 +16,7 @@ namespace Bit.App.Models.Data
         {
             if(response?.Login == null)
             {
-                throw new ArgumentNullException(nameof(response.Card));
+                throw new ArgumentNullException(nameof(response.Login));
             }
 
             Uris = response.Login.Uris?.Where(u => u != null).Select(u => new LoginUriDataModel(u));

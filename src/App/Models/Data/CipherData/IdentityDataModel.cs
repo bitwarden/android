@@ -12,7 +12,7 @@ namespace Bit.App.Models.Data
         {
             if(response?.Identity == null)
             {
-                throw new ArgumentNullException(nameof(response.Card));
+                throw new ArgumentNullException(nameof(response.Identity));
             }
 
             Title = response.Identity.Title;
