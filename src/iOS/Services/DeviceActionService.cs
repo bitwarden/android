@@ -286,12 +286,14 @@ namespace Bit.iOS.Services
             throw new NotImplementedException();
         }
 
-        public void ShowLoading(string text)
+        public Task ShowLoadingAsync(string text)
         {
             if(_progressAlert != null)
             {
-                HideLoading();
+                HideLoadingAsync().GetAwaiter().GetResult();
             }
+
+            var result = new TaskCompletionSource<int>();
 
             var loadingIndicator = new UIActivityIndicatorView(new CGRect(10, 5, 50, 50));
             loadingIndicator.HidesWhenStopped = true;
@@ -303,19 +305,22 @@ namespace Bit.iOS.Services
             _progressAlert.View.Add(loadingIndicator);
 
             var vc = GetPresentedViewController();
-            vc?.PresentViewController(_progressAlert, false, null);
+            vc?.PresentViewController(_progressAlert, false, () => result.TrySetResult(0));
+            return result.Task;
         }
 
-        public void HideLoading()
+        public Task HideLoadingAsync()
         {
+            var result = new TaskCompletionSource<int>();
             if(_progressAlert == null)
             {
-                return;
+                result.TrySetResult(0);
             }
 
-            _progressAlert.DismissViewController(false, null);
+            _progressAlert.DismissViewController(false, () => result.TrySetResult(0));
             _progressAlert.Dispose();
             _progressAlert = null;
+            return result.Task;
         }
 
         public Task LaunchAppAsync(string appName, Page page)

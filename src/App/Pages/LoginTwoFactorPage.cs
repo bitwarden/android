@@ -416,10 +416,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _deviceActionService.ShowLoading(string.Concat(AppResources.Validating, "..."));
+            await _deviceActionService.ShowLoadingAsync(string.Concat(AppResources.Validating, "..."));
             var response = await _authService.TokenPostTwoFactorAsync(_providerType.Value, token, RememberCell.On,
                 _email, _masterPasswordHash, _key);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(!response.Success)
             {

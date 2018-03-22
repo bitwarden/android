@@ -775,9 +775,9 @@ namespace Bit.App.Pages
 
                 Helpers.ProcessFieldsSectionForSave(FieldsSection, cipher);
 
-                _deviceActionService.ShowLoading(AppResources.Saving);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(cipher);
-                _deviceActionService.HideLoading();
+                await _deviceActionService.HideLoadingAsync();
 
                 if(saveTask.Succeeded)
                 {

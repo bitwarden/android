@@ -445,11 +445,11 @@ namespace Bit.Android.Services
             }
         }
 
-        public void ShowLoading(string text)
+        public async Task ShowLoadingAsync(string text)
         {
             if(_progressDialog != null)
             {
-                HideLoading();
+                await HideLoadingAsync();
             }
 
             var activity = (MainActivity)CurrentContext;
@@ -459,16 +459,16 @@ namespace Bit.Android.Services
             _progressDialog.Show();
         }
 
-        public void HideLoading()
+        public Task HideLoadingAsync()
         {
-            if(_progressDialog == null)
+            if(_progressDialog != null)
             {
-                return;
+                _progressDialog.Dismiss();
+                _progressDialog.Dispose();
+                _progressDialog = null;
             }
 
-            _progressDialog.Dismiss();
-            _progressDialog.Dispose();
-            _progressDialog = null;
+            return Task.FromResult(0);
         }
 
         public Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
@@ -487,7 +487,7 @@ namespace Bit.Android.Services
             {
                 InputType = global::Android.Text.InputTypes.ClassText
             };
-            
+
             if(text == null)
             {
                 text = string.Empty;

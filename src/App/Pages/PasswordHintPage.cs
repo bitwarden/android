@@ -123,9 +123,9 @@ namespace Bit.App.Pages
                 Email = EmailCell.Entry.Text
             };
 
-            _deviceActionService.ShowLoading(AppResources.Submitting);
+            await _deviceActionService.ShowLoadingAsync(AppResources.Submitting);
             var response = await _accountApiRepository.PostPasswordHintAsync(request);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(!response.Succeeded)
             {

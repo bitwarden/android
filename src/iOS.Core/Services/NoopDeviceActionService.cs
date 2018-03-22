@@ -48,9 +48,9 @@ namespace Bit.iOS.Core.Services
             return Task.FromResult<string>(null);
         }
 
-        public void HideLoading()
+        public Task HideLoadingAsync()
         {
-            // do nothing
+            return Task.FromResult(0);
         }
 
         public Task LaunchAppAsync(string appName, Page page)
@@ -83,9 +83,9 @@ namespace Bit.iOS.Core.Services
             return Task.FromResult(0);
         }
 
-        public void ShowLoading(string text)
+        public Task ShowLoadingAsync(string text)
         {
-            // do nothing
+            return Task.FromResult(0);
         }
 
         public void Toast(string text, bool longDuration = false)

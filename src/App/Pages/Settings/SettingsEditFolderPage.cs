@@ -97,9 +97,9 @@ namespace Bit.App.Pages
 
                 folder.Name = NameCell.Entry.Text.Encrypt();
 
-                _deviceActionService.ShowLoading(AppResources.Saving);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 var saveResult = await _folderService.SaveAsync(folder);
-                _deviceActionService.HideLoading();
+                await _deviceActionService.HideLoadingAsync();
 
                 if(saveResult.Succeeded)
                 {
@@ -161,9 +161,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _deviceActionService.ShowLoading(AppResources.Deleting);
+            await _deviceActionService.ShowLoadingAsync(AppResources.Deleting);
             var deleteTask = await _folderService.DeleteAsync(_folderId);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(deleteTask.Succeeded)
             {

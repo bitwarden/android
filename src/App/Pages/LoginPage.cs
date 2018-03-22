@@ -179,9 +179,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _deviceActionService.ShowLoading(AppResources.LoggingIn);
+            await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
             var result = await _authService.TokenPostAsync(EmailCell.Entry.Text, PasswordCell.Entry.Text);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(!result.Success)
             {

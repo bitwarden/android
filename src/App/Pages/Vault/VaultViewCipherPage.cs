@@ -462,9 +462,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _deviceActionService.ShowLoading(AppResources.Downloading);
+            await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
             var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, cipher.OrganizationId);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(data == null)
             {

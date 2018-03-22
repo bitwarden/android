@@ -204,9 +204,9 @@ namespace Bit.App.Pages
                 Key = encKey.EncryptedString
             };
 
-            _deviceActionService.ShowLoading(AppResources.CreatingAccount);
+            await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
             var response = await _accountsApiRepository.PostRegisterAsync(request);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(!response.Succeeded)
             {

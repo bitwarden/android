@@ -154,9 +154,9 @@ namespace Bit.App.Pages
                     return;
                 }
 
-                _deviceActionService.ShowLoading(AppResources.Saving);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 var saveTask = await _cipherService.EncryptAndSaveAttachmentAsync(_cipher, _fileBytes, FileLabel.Text);
-                _deviceActionService.HideLoading();
+                await _deviceActionService.HideLoadingAsync();
 
                 if(saveTask.Succeeded)
                 {
@@ -280,9 +280,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _deviceActionService.ShowLoading(AppResources.Deleting);
+            await _deviceActionService.ShowLoadingAsync(AppResources.Deleting);
             var saveTask = await _cipherService.DeleteAttachmentAsync(_cipher, attachment.Id);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(saveTask.Succeeded)
             {

@@ -151,14 +151,16 @@ namespace Bit.UWP.Services
             }.Show();
         }
 
-        public void ShowLoading(string text)
+        public Task ShowLoadingAsync(string text)
         {
             _userDialogs.ShowLoading(text, MaskType.Black);
+            return Task.FromResult(0);
         }
 
-        public void HideLoading()
+        public Task HideLoadingAsync()
         {
             _userDialogs.HideLoading();
+            return Task.FromResult(0);
         }
 
         public Task LaunchAppAsync(string appName, Xamarin.Forms.Page page)

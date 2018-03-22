@@ -639,9 +639,9 @@ namespace Bit.App.Pages
 
                 Helpers.ProcessFieldsSectionForSave(FieldsSection, Cipher);
 
-                _deviceActionService.ShowLoading(AppResources.Saving);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(Cipher);
-                _deviceActionService.HideLoading();
+                await _deviceActionService.HideLoadingAsync();
 
                 if(saveTask.Succeeded)
                 {
@@ -892,9 +892,9 @@ namespace Bit.App.Pages
                 return;
             }
 
-            _deviceActionService.ShowLoading(AppResources.Deleting);
+            await _deviceActionService.ShowLoadingAsync(AppResources.Deleting);
             var deleteTask = await _cipherService.DeleteAsync(_cipherId);
-            _deviceActionService.HideLoading();
+            await _deviceActionService.HideLoadingAsync();
 
             if(deleteTask.Succeeded)
             {
