@@ -401,11 +401,11 @@ namespace Bit.App.Utilities
                         null, options.ToArray());
 
                     UriMatchType? selectedVal = null;
-                    if(val == AppResources.Cancel)
+                    if(val == null || val == AppResources.Cancel)
                     {
                         selectedVal = exactingMatchVal;
                     }
-                    else if(val != null && val != AppResources.Default)
+                    else if(val.Replace("✓ ", string.Empty) != AppResources.Default)
                     {
                         selectedVal = UriMatchOptionsMap.ElementAt(Array.IndexOf(optionsArr, val) - 1).Key;
                     }
