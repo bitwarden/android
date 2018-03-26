@@ -258,7 +258,14 @@ namespace Bit.App.Pages
                 }
             }
 
-            NameCell?.Entry.FocusWithDelay();
+            if(NameCell != null && string.IsNullOrWhiteSpace(NameCell.Entry.Text))
+            {
+                NameCell.Entry.FocusWithDelay();
+            }
+            else if(LoginUsernameCell != null && string.IsNullOrWhiteSpace(LoginUsernameCell.Entry.Text))
+            {
+                LoginUsernameCell.Entry.FocusWithDelay();
+            }
         }
 
         protected override void OnDisappearing()
@@ -440,7 +447,7 @@ namespace Bit.App.Pages
                     TextColor = Colors.Primary
                 };
                 UrisSection.Add(AddUriCell);
-                UrisSection.Insert(0, Helpers.MakeUriCell(string.Empty, null, UrisSection, this));
+                UrisSection.Insert(0, Helpers.MakeUriCell(_defaultUri ?? string.Empty, null, UrisSection, this));
             }
             else if(_type == CipherType.Card)
             {
