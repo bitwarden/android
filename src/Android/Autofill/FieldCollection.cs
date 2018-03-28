@@ -11,6 +11,8 @@ namespace Bit.Android.Autofill
     {
         private List<Field> _passwordFields = null;
         private List<Field> _usernameFields = null;
+        private HashSet<string> _ignoreSearchTerms = new HashSet<string> { "search", "find" };
+        private HashSet<string> _passwordTerms = new HashSet<string> { "password", "pswd" };
 
         public HashSet<int> Ids { get; private set; } = new HashSet<int>();
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
@@ -58,21 +60,10 @@ namespace Bit.Android.Autofill
                 }
                 else
                 {
-                    _passwordFields = Fields
-                        .Where(f =>
-                            (!f.IdEntry?.ToLowerInvariant().Contains("search") ?? true) &&
-                            (!f.Hint?.ToLowerInvariant().Contains("search") ?? true) &&
-                            (
-                                f.InputType.HasFlag(InputTypes.TextVariationPassword) ||
-                                f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
-                                f.InputType.HasFlag(InputTypes.TextVariationWebPassword)
-                            )
-                        ).ToList();
+                    _passwordFields = Fields.Where(f => FieldIsPassword(f)).ToList();
                     if(!_passwordFields.Any())
                     {
-                        _passwordFields = Fields.Where(f =>
-                            (f.IdEntry?.ToLowerInvariant().Contains("password") ?? false)
-                            || (f.Hint?.ToLowerInvariant().Contains("password") ?? false)).ToList();
+                        _passwordFields = Fields.Where(f => FieldHasPasswordTerms(f)).ToList();
                     }
                 }
 
@@ -105,7 +96,8 @@ namespace Bit.Android.Autofill
                 {
                     foreach(var passwordField in PasswordFields)
                     {
-                        var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId).LastOrDefault();
+                        var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId)
+                            .LastOrDefault();
                         if(usernameField != null)
                         {
                             _usernameFields.Add(usernameField);
@@ -311,6 +303,32 @@ namespace Bit.Android.Autofill
             }
 
             return null;
+        }
+
+        private bool FieldIsPassword(Field f)
+        {
+            var inputTypePassword = f.InputType.HasFlag(InputTypes.TextVariationPassword) ||
+                f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
+                f.InputType.HasFlag(InputTypes.TextVariationWebPassword);
+
+            return inputTypePassword && !ValueContainsAnyTerms(f.IdEntry, _ignoreSearchTerms) &&
+                !ValueContainsAnyTerms(f.Hint, _ignoreSearchTerms);
+        }
+
+        private bool FieldHasPasswordTerms(Field f)
+        {
+            return ValueContainsAnyTerms(f.IdEntry, _passwordTerms) || ValueContainsAnyTerms(f.Hint, _passwordTerms);
+        }
+
+        private bool ValueContainsAnyTerms(string value, HashSet<string> terms)
+        {
+            if(string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            var lowerValue = value.ToLowerInvariant();
+            return terms.Any(t => lowerValue.Contains(t));
         }
     }
 }
