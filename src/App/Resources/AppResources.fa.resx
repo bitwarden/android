@@ -193,33 +193,33 @@
     <value>ایمیل ما</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>برای کمک گرفتن و گذاستن بازخورد بصورت مستقیم به ما ایمیل ارسال کنید.</value>
+    <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما ایمیل ارسال کنید.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>کد پین را وارد کنید.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
-    <value>مورد علاقه</value>
+    <value>علاقه مندی ها</value>
     <comment>Title for your favorite items in the vault.</comment>
   </data>
   <data name="FileBugReport" xml:space="preserve">
-    <value>گزارش ایراد یک فایل</value>
+    <value>گزارش یک مشکل</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Open an issue at our GitHub repository.</value>
+    <value>یک مسئله را در مخزن GitHub ما باز کنید.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Use your fingerprint to verify.</value>
+    <value>از اثر انگشت برای تأیید استفاده کنید.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>پوشه</value>
     <comment>Label for a folder.</comment>
   </data>
   <data name="FolderCreated" xml:space="preserve">
-    <value>New folder created.</value>
+    <value>پوشه جدید ساخته شد.</value>
   </data>
   <data name="FolderDeleted" xml:space="preserve">
-    <value>Folder deleted.</value>
+    <value>پوشه حذف شد.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
     <value>بدون پوشه</value>
@@ -229,7 +229,7 @@
     <value>پوشه ها</value>
   </data>
   <data name="FolderUpdated" xml:space="preserve">
-    <value>Folder updated.</value>
+    <value>پوشه بروزرسانی شد.</value>
   </data>
   <data name="GoToWebsite" xml:space="preserve">
     <value>برو به وب سایت</value>
@@ -243,18 +243,18 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Please connect to the internet before continuing.</value>
+    <value>لطفا قبل از ادامه به اینترنت متصل شوید.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
-    <value>Internet Connection Required</value>
+    <value>اتصال به اینترنت ضروریست</value>
     <comment>Title for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InvalidMasterPassword" xml:space="preserve">
-    <value>Invalid Master Password. Try again.</value>
+    <value>گذرواژه اصلی نامعتبر است. دوباره امتحان کنید.</value>
   </data>
   <data name="InvalidPIN" xml:space="preserve">
-    <value>Invalid PIN. Try again.</value>
+    <value>پین نامعتبر است. دوباره امتحان کنید.</value>
   </data>
   <data name="Launch" xml:space="preserve">
     <value>راه اندازی</value>
@@ -299,14 +299,14 @@
     <comment>Label for notes.</comment>
   </data>
   <data name="Ok" xml:space="preserve">
-    <value>تایید</value>
+    <value>تأیید</value>
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
     <value>غیرفعال سازی آنالیزها</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>کلمه عبور</value>
+    <value>رمز عبور</value>
     <comment>Label for a password.</comment>
   </data>
   <data name="Save" xml:space="preserve">
@@ -337,39 +337,39 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>تشکر</value>
+    <value>با تشکر از</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>ابزارها</value>
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>نشانی اینترنتی</value>
+    <value>آدرس اینترنتی</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Use Fingerprint to Unlock</value>
+    <value>از اثر انگشت برای بازگشایی قفل استفاده کنید</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>نام کاربری</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>The {0} field is required.</value>
+    <value>فیلد {0} ضروریست.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} has been copied.</value>
+    <value>{0} کپی شد.</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verify Fingerprint</value>
+    <value>تأیید اثر انگشت</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>تایید گذرواژه اصلی</value>
+    <value>تأیید گذرواژه اصلی</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
-    <value>تایید پین</value>
+    <value>تأیید پین</value>
   </data>
   <data name="Version" xml:space="preserve">
     <value>نسخه</value>
@@ -378,10 +378,10 @@
     <value>مشاهده</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>از وب‌سایت ما دیدن کنید</value>
+    <value>از وب‌ سایت ما دیدن کنید</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Visit our website to get help, news, email us, and/or learn more about how to use Bitwarden.</value>
+    <value>برای کمک گرفتن، اخبار، ایمیل ما، و یا آموزش بیشتر برای استفاده از بیت واردن از وب سایت ما دیدن کنید.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>وب سایت</value>
@@ -394,37 +394,37 @@
     <value>حساب</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>حساب شما ساخته شد! حالا میتوانید وارد شوید.</value>
+    <value>حساب کاربری شما ساخته شد! حالا میتوانید وارد شوید.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>افزودن یک مورد</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App Extension</value>
+    <value>افزونه اپلیکیشن</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>از قابلیت دسترسی بیت واردن برای پر کردن خودکار ورود به سیستم خود در سراسر برنامه ها و وب استفاده کنید.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-fill Service</value>
+    <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>از کاراکترهای تکراری همسان استفاده نکن</value>
+    <value>از کاراکترهای متقارن استفاده نکن</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden App Extension</value>
+    <value>افزونه اپلیکیشن بیت واردن</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Tools" screen.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه اپلیکیشن بیت واردن است. برای اطلاع بیشتر از چگونگی استفاده از افزونه اپلیکیشن مرورکردن صفحه "ابزار" است.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Use Bitwarden in Safari and other apps to auto-fill your logins.</value>
+    <value>با بیت واردن در سافاری و دیگر برنامه ها میتوانید از قابلیت پر کردن خودکار در ورودهایتان استفاده کنید.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden Auto-fill Service</value>
+    <value>سرویس پرکردن خودکار بیت واردن</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden accessibility service to auto-fill your logins.</value>
+    <value>از قابلیت دسترسی بیت واردن برای تکمیل خودکار ورود به سیستم خود در سراسر برنامه ها و وب استفاده کنید.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>تغییر ایمیل</value>
@@ -433,10 +433,10 @@
     <value>شما میتوانید آدرس ایمیل را در نسخه وب گاوصندوق bitwarden.com تغییر دهید. میخواهید اکنون از سایت بازدید کنید؟</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>تغییر رمز عبور اصلی</value>
+    <value>تغییر گذرواژه اصلی</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>شما می توانید رمز عبور اصلی خود را در bitwarden.com تغییر دهید. آیا می خواهید از سایت بازدید کنید؟</value>
+    <value>شما می توانید گذرواژه اصلی خود را در bitwarden.com تغییر دهید. آیا می خواهید از سایت بازدید کنید؟</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>بستن</value>
@@ -451,60 +451,60 @@
     <value>کپی انجام شد!</value>
   </data>
   <data name="CopiedPassword" xml:space="preserve">
-    <value>Copied password!</value>
+    <value>رمز عبور کپی شد!</value>
   </data>
   <data name="CopiedUsername" xml:space="preserve">
-    <value>Copied username!</value>
+    <value>نام کاربری کپی شد!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>ایجاد حساب کاربری</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Creating account...</value>
+    <value>در حال ایجاد حساب کاربری...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
     <value>ویرایش مورد</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Enable Automatic Syncing</value>
+    <value>فعال کردن همگام سازی خودکار</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
     <value>برای دریافت راهنمایی گذرواژه اصلی خود آدرس ایملیتان را وارد کنید.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Re-enable App Extension</value>
+    <value>افزونه اپلیکیشن را دوباره فعال کنید</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
-    <value>تقریبا تمام است!</value>
+    <value>تقریباً تمام شد!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Enable App Extension</value>
+    <value>افزونه اپلیکیشن را فعال کنید</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <value>در سافاری، بیت واردن را با استفاده از آیکون اشتراک گذاری پیدا کنید (راهنمایی: به سمت راست در ردیف پایین فهرست بروید).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Get instant access to your passwords!</value>
+    <value>دسترسی سریع به گذرواژه هایتان را دریافت کنید!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>You're ready to log in!</value>
+    <value>برای ورود آماده اید!</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>See Supported Apps</value>
+    <value>مشاهده برنامه های پشتیبانی شده</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable from Safari, Chrome, and other supported apps.</value>
+    <value>اطلاعات ورود شما حالا از سافاری، کروم، و دیگر برنامه های پشتیبانی شده به راحتی قابل دسترسی است.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari and Chrome, find Bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+    <value>در سافاری و کروم، بیت واردن را با استفاده از آیکون اشتراک گذاری پیدا کنید (راهنمایی: به سمت راست در ردیف پایین فهرست بروید).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tap the Bitwarden icon in the menu to launch the extension.</value>
+    <value>برای راه اندازی افزونه به آیکون بیت واردن در منو ضربه بزنید.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>To turn on Bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+    <value>برای فعال سازی بیت واردن در سافاری و سایر برنامه ها، نماد "بیشتر" را در پایین ردیف منو ضربه بزنید.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>مورد علاقه</value>
@@ -519,13 +519,13 @@
     <value>دریافت راهنمای گذرواژه اصلی</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Import Items</value>
+    <value>واردن کردن موارد</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>You can bulk import items from the bitwarden.com web vault. Do you want to visit the website now?</value>
+    <value>شما میتوانید موارد را بصورت فله ای در گاوصندوق وب bitwarden.com وارد کنید. آیا مایل به دیدن وبسایت هستید؟</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Quickly bulk import your items from other password management apps.</value>
+    <value>موارد مهم خود را سریعاً از دیگر برنامه های مدیریت رمز عبور وارد کنید.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>آخرین همگام سازی:</value>
@@ -546,7 +546,7 @@
     <value>۱ دقیقه</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>4 ساعت</value>
+    <value>۴ ساعت</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>بلافاصله</value>
@@ -565,7 +565,7 @@
     <value>مدیریت</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Password confirmation is not correct.</value>
+    <value>تأیید رمز عبور صحیح نیست.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
     <value>گذرواژه اصلی رمز عبوری است که شما برای دسترسی به گاوصندوق خود استفاده میکنید. بیاد داشتن گذرواژه اصلی بسیار اهمیت دارد. اگر فراموشش کنید هیچ راهی برای بازگردانی آن وجود ندارد.</value>
@@ -591,44 +591,44 @@
     <value>تنظیمات بیشتر</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use the extension.</value>
+    <value>شما بایستی به برنامه اصلی بیت واردن وارد شوید تا بتوانید از افزونه استفاده کنید.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>هرگز</value>
   </data>
   <data name="NewItemCreated" xml:space="preserve">
-    <value>New item created.</value>
+    <value>مورد جدید ساخته شد.</value>
   </data>
   <data name="NoFavorites" xml:space="preserve">
-    <value>There are no favorites in your vault.</value>
+    <value>هیج علاقه مندی در گاوصندوقتان موجود نیست.</value>
   </data>
   <data name="NoItems" xml:space="preserve">
-    <value>There are no items in your vault.</value>
+    <value>هیج موردی در گاوصندوقتان موجود نیست.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>هیج علاقه مندی برای این وب سایت در گاوصندوقتان موجود نیست. برای افزودن ضربه بزنید.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>This login does not have a username or password configured.</value>
+    <value>این ورود هیچ نام کاربری و رمز عبور پیکربندی شده ای ندارد.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
-    <value>Ok, got it!</value>
+    <value>باشه، فهمیدم!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Option defaults are set from the main Bitwarden app's password generator tool.</value>
+    <value>گزینه های پیش فرض از ابزار تولید رمز عبور بیت واردن تنظیم شد.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Options</value>
+    <value>گزینه ها</value>
   </data>
   <data name="Other" xml:space="preserve">
-    <value>Other</value>
+    <value>ساير</value>
   </data>
   <data name="PasswordGenerated" xml:space="preserve">
-    <value>Password generated.</value>
+    <value>رمز عبور تولید شد.</value>
   </data>
   <data name="PasswordGenerator" xml:space="preserve">
-    <value>تولید رمز عبور</value>
+    <value>تولید کننده رمز عبور</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
     <value>راهنمای گذرواژه</value>
@@ -637,20 +637,20 @@
     <value>ما یک ایمیل همراه با راهنمای گذرواژه اصلی برایتان ارسال کردیم.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>آیا از بازنویسی بر روی پسورد فعلی مطمئن هستید؟</value>
+    <value>آیا از بازنویسی بر روی رمز عبور فعلی مطمئن هستید؟</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Allow" on the following prompt when asked to enable push notifications.</value>
+    <value>بیت واردن گاوصندوق شما را بصورت خودکار از طریق نشان دادن اطلاعیه ها به هنگام سازی میکند. برای بهترین تجربه کاربری ممکن، لطفاً زمانی که از شما پرسیده شد "مجاز" را سریعاً انتخاب کنید تا نمایش اعلانیه ها فعال شود.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Rate the App</value>
+    <value>به برنامه امتیاز دهید</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Please consider helping us out with a good review!</value>
+    <value>لطفاً با یک بررسی خوب به ما کمک کنید!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of Bitwarden. Please consider helping us out with a good review!</value>
+    <value>رتبه بندی فروشگاه App Store با هر نسخه جدید از بیت واردن تنظیم می شود. لطفاً با بررسی خوب به ما کمک کنید!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>تولید رمز عبور</value>
@@ -665,7 +665,7 @@
     <value>امنیت</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
+    <value>دیدن پیشرفت و توسعه</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>انتخاب</value>
@@ -674,13 +674,13 @@
     <value>تعیین پین</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Enter a 4 digit PIN code to unlock the app with.</value>
+    <value>یک کد پین 4 رقمی برای باز کردن برنامه وارد کنید.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>اطلاعات مورد</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
-    <value>Item updated.</value>
+    <value>موارد بروزرسانی شد.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
     <value>در حال ارسال...</value>
@@ -707,39 +707,39 @@
     <value>ورود دو مرحله ای</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>ورودی دو مرحله ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه تأیید هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر ثابت کند. ورودی دو مرحله ای می تواند در bitwarden.com فعال شود. آیا می خواهید از سایت بازدید کنید؟</value>
+    <value>ورودی دو مرحله ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه تأیید هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورودی دو مرحله ای می تواند در bitwarden.com فعال شود. آیا می خواهید از سایت بازدید کنید؟</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Unlock with {0}</value>
+    <value>باز کردن با {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Unlock with PIN Code</value>
+    <value>باز کردن با کد پین</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>اعتبار سنجی</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>کد تایید</value>
+    <value>کد تأیید</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>مشاهده مورد</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Bitwarden Web Vault</value>
+    <value>گاوصندوق وب بیت واردن</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Manage your items from any web browser with the Bitwarden web vault.</value>
+    <value>مورد های خود را از هر مرورگر وب با گاوصندوق وب بیت واردن مدیریت کنید.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Lost authenticator app?</value>
+    <value>برنامه تأیید کننده از دست رفته؟</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>موارد</value>
     <comment>Screen title</comment>
   </data>
   <data name="ExtensionActivated" xml:space="preserve">
-    <value>Extension Activated!</value>
+    <value>افزونه فعال شد!</value>
   </data>
   <data name="Icons" xml:space="preserve">
     <value>آیکن‌ ها</value>
@@ -748,33 +748,33 @@
     <value>ترجمه ها</value>
   </data>
   <data name="ItemsForUri" xml:space="preserve">
-    <value>Items for {0}</value>
+    <value>موارد برای {0}</value>
     <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
   </data>
   <data name="NoItemsForUri" xml:space="preserve">
-    <value>There are no items in your vault for {0}.</value>
+    <value>هیج موردی در گاوصندوقتان برای {0} موجود نیست.</value>
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>When you see a Bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+    <value>زمانی که شما یک اطلاع رسانی پر کردن خودکار بیت واردن را میبینید، میتوانید برای اجرای پر کردن خودکار ضربه بزنید.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tap this notification to auto-fill an item from your vault.</value>
+    <value>برای پر کردن خودکار یک اطلاع رسانی در گاوصندوقتان این اطلاع رسانی را ضربه بزنید.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Open Accessibility Settings</value>
+    <value>باز کردن تنظیمات دستیابی</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. On the Android Accessibility Settings screen, touch "Bitwarden" under the Services heading.</value>
+    <value>1. در صفحه تنظیمات دستیابی اندروید، "بیت واردن" را در قسمت سرویس ها لمس کنید.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Switch on the toggle and press OK to accept.</value>
+    <value>۲. روشن کردن را انتخاب کنید و تأیید را بفشارید.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
-    <value>غیرفعال شده</value>
+    <value>غیرفعال شد</value>
   </data>
   <data name="Enabled" xml:space="preserve">
-    <value>فعال شده</value>
+    <value>فعال شد</value>
   </data>
   <data name="Status" xml:space="preserve">
     <value>وضعیت</value>
@@ -783,58 +783,58 @@
     <value>آزمایشی</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوقتان از سرویس پر کردن خودکار بیت واردن است. برای اطلاعات بیشتر درباره استفاده از سرویس پر کردن خودکار بیت واردن است مرور کردن صفحه "ابزار" است.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-fill</value>
+    <value>پر کردن خودکار</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Do you want to auto-fill or view this item?</value>
+    <value>آیا مایل به پر کردن خودکار یا دیدن این مورد هستید؟</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Are you sure you want to auto-fill this item? It is not a complete match for "{0}".</value>
+    <value>آیا از پر کردن خودکار این مورد اطمینان دارید؟ کاملا منطبق با "{0}" نیست.</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
-    <value>Matching Items</value>
+    <value>تطبیق موارد</value>
   </data>
   <data name="PossibleMatchingItems" xml:space="preserve">
-    <value>Possible Matching Items</value>
+    <value>تطبیق موارد ممکن است</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>جستجو</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>You are searching for an auto-fill item for "{0}".</value>
+    <value>شما به دنبال یافتن یک پر کردن خودکار برای "{0}" هستید.</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Share Your Vault</value>
+    <value>اشتراک گذاری گاوصندوقتان</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your items with other users.</value>
+    <value>ایجاد یک تشکیلات برای اشتراک گذاری ایمن موارد خود با سایر کاربران.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>ما از آنالیز استفاده می کنیم تا بهتر بفهمیم که چگونه برنامه استفاده می شود تا بتوانیم آن را بهتر کنیم. تمام جمع آوری داده ها کاملا ناشناس است.</value>
+    <value>ما از آنالیز استفاده می کنیم که بهتر بفهمیم چگونه برنامه استفاده می شود تا بتوانیم آن را بهتر کنیم. تمام داده های جمع آوری شده کاملاً ناشناس است.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Scan When Password Field Focused</value>
+    <value>اسکن زمانی که در فیلد پسورد متمرکز شده</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Only scan the screen for fields and offer an auto-fill notification whenever you select a password field. This setting may help conserve battery life.</value>
+    <value>فقط صفحه را اسکن میکند برای فیلدها و پیشنهاد یک پر کردن خودکار هر چند که شما یک فیلد رمز عبور را انتخاب کرده باشید. این تنظیم به افزایش عمر باتری کمک میکند.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
-    <value>Persist Notification</value>
+    <value>اطلاعیه ثابت</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Always offer an auto-fill notification and only scan for fields after attempting an auto-fill. This setting may help conserve battery life.</value>
+    <value>همیشه یک پر کردن خودکار را اطلاع میدهد و فقط برای فیلدها بعد از تلاش برای پر کردن خودکار اسکن میکند. این تنظیم ممکن است در صرفه جویی باتری موثر باشد.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
-    <value>Always Scan</value>
+    <value>همیشه اسکن کن</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Always scan the screen for fields and only offer an auto-fill notification if password fields are found. This is the default setting.</value>
+    <value>اگر فیلد رمز عبور یافت شود همیشه صفحه را برای فیلدها و پیشنهاد اعلانیه یک پر کردن خودکار اسکن میکند. این تنظیم پیش فرض است.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Cannot open the app "{0}".</value>
+    <value>نمیتوان برنامه را باز کرد "{0}".</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -842,11 +842,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>کد ۶ رقمی تایید را از برنامه تایید کننده وارد کنید.</value>
+    <value>کد ۶ رقمی تأیید را از برنامه تأیید کننده وارد کنید.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Enter the 6 digit verification code that was emailed to {0}.</value>
+    <value>کد ۶ رقمی تأیید را که به {0} ایمیل شده را وارد کنید.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -854,7 +854,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>This account has two-step login enabled, however, none of the configured two-step providers are supported on this device. Please use a supported device and/or add additional providers that are better supported across devices (such as an authenticator app).</value>
+    <value>ورود دو مرحله ای برای این حساب فعال است، هرچند که، هیچ یک از ارائه دهندگان دو مرحله ای پیکربندی شده در این دستگاه پشتیبانی نمی شود. لطفاً از یک دستگاه پشتیبانی شده استفاده کنید یا از یک ارائه دهنده اضافه کنید که بهتر از سایر دستگاه ها پشتیبانی می کند (مانند یک برنامه تأیید هویت).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>کد بازیابی</value>
@@ -865,7 +865,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>ارسال دوباره ایمیل کد تایید</value>
+    <value>ارسال دوباره ایمیل کد تأیید</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -875,15 +875,15 @@
     <value>استفاده از روش ورود دو مرحله ای دیگر</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Could not send verification email. Try again.</value>
+    <value>نمیتوان ایمیل تأیید را ارسال کرد. دوباره امتحان کنید.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Verification email sent.</value>
+    <value>ایمیل تأیید فرستاده شد.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device or insert your YubiKey into your device's USB port, then touch its button.</value>
+    <value>برای ادامه، YubiKey NEO خود را در پشت دستگاه نگه دارید یا YubiKey خود را در پورت USB دستگاه خود قرار دهید، سپس دکمه ی آن را لمس کنید.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>کلید امنیتی YubiKey</value>
@@ -896,37 +896,37 @@
     <value>پیوست ها</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
-    <value>Unable to download file.</value>
+    <value>نمیتوان پرونده را دانلود کرد.</value>
   </data>
   <data name="UnableToOpenFile" xml:space="preserve">
-    <value>Your device cannot open this type of file.</value>
+    <value>دستگاهتان قادر به باز کردن این نوع از فایل نیست.</value>
   </data>
   <data name="Downloading" xml:space="preserve">
     <value>در حال دانلود...</value>
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>This attachment is {0} in size. Are you sure you want to download it onto your device?</value>
+    <value>حجم این پیوست {0} است. آیا مایل به دانلود این فایل به دستگاهتان هستید؟</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
     <value>کلید تأیید کننده (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
-    <value>کد تایید (TOTP)</value>
+    <value>کد تأیید (TOTP)</value>
     <comment>Totp code label</comment>
   </data>
   <data name="AuthenticatorKeyAdded" xml:space="preserve">
-    <value>Authenticator key added.</value>
+    <value>کلید تأیید کننده اضافه شد.</value>
   </data>
   <data name="AuthenticatorKeyReadError" xml:space="preserve">
-    <value>Cannot read authenticator key.</value>
+    <value>کلید تأیید کننده را نمیتوان خواند.</value>
   </data>
   <data name="CameraInstructionBottom" xml:space="preserve">
-    <value>Scanning will happen automatically.</value>
+    <value>اسکن خودکار رخ می دهد.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Point your camera at the QR code.</value>
+    <value>دوربین خود را بر روی کد QR قرار دهید.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>اسکن کد QR</value>
@@ -938,25 +938,25 @@
     <value>عکس ها</value>
   </data>
   <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
+    <value>TOTP کپی شد!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Copy TOTP</value>
+    <value>کپی TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>If your login has an authenticator key attached to it, the TOTP verification code is automatically copied to your clipboard whenever you auto-fill the login.</value>
+    <value>اگر ورود شما دارای یک کلید تأیید کننده است که به آن متصل شده است، هر زمان که بصورت خودکار وارد سایت شوید کد تأیید TOTP به صورت خودکار به کلیپ بورد شما کپی می شود.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Disable Automatic TOTP Copy</value>
+    <value>غیرفعال کردن کپی خودکار TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>برای استفاده از این ویژگی عضویت پرمیوم لازم است.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>Attachment added</value>
+    <value>پیوست اضافه شد</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>Attachment deleted</value>
+    <value>پیوست حذف شد</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
     <value>انتخاب پرونده</value>
@@ -965,19 +965,19 @@
     <value>فایل</value>
   </data>
   <data name="NoFileChosen" xml:space="preserve">
-    <value>هیچ پرونده ای انتخاب نشده</value>
+    <value>هیچ فایلی انتخاب نشده</value>
   </data>
   <data name="NoAttachments" xml:space="preserve">
-    <value>هیچ ضمیمه‌ای وجود ندارد.</value>
+    <value>هیچ ضمیمه‌ ای وجود ندارد.</value>
   </data>
   <data name="FileSource" xml:space="preserve">
-    <value>File Source</value>
+    <value>فایل امن</value>
   </data>
   <data name="FeatureUnavailable" xml:space="preserve">
     <value>ویژگی موجود نیست</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>بیشترین حجم فایل 100 مگابایت است.</value>
+    <value>بیشترین حجم فایل ۱۰۰ مگابایت است.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>تا زمانی که کد رمزنگاری را بروز نکنید نمیتوانید از این قابلیت استفاده کنید.</value>
@@ -998,7 +998,7 @@
     <value>آدرس های اینترنتی محیط ذخیره شد.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} به درستی فرمت نشده.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
@@ -1012,13 +1012,13 @@
     <value>آدرس اینترنتی پایه فرضی نصب بیت واردن میزبانی شده را مشخص کنید.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>آدرس سرور</value>
+    <value>آدرس اینترنتی سرور</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>آدرس سرور گاوصندوق وب</value>
+    <value>آدرس اینترنتی سرور گاوصندوق وب</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view items from your vault.</value>
+    <value>برای مشاهده موارد مربوط به گاوصندوقتان به این اطلاع رسانی ضربه بزنید.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>فیلدهای سفارشی</value>
@@ -1036,7 +1036,7 @@
     <value>کد امنیتی</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>چه نوع موردی میخواهید اضافه کنید؟</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>کارت</value>
@@ -1162,125 +1162,125 @@
     <value>آدرس</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>انقضا</value>
+    <value>انقضاء</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>غیرفعال سازی آیکون های وبسایت</value>
+    <value>غیرفعال سازی آیکون های وب سایت</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>آیکون های وبسایت یک تصویر قابل تشخیص در کنار هر داده ورودی ارائه میدهد.</value>
+    <value>آیکون های وب سایت یک تصویر مشخص در کنار هر داده ورودی ارائه میدهد.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>آدرس سرور آیکون ها</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with Bitwarden</value>
+    <value>پر کردن خودکار با بیت واردن</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>گاوصندوق قفل شد</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
-    <value>Go to my vault</value>
+    <value>برو به گاوصندوق من</value>
   </data>
   <data name="Collections" xml:space="preserve">
     <value>مجموعه ها</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>There are no items in this collection.</value>
+    <value>در این مجموعه موردی برای نمایش نیست.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>There are no items in this folder.</value>
+    <value>در این پوشه موردی برای نمایش نیست.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-fill Accessibility Service</value>
+    <value>سرویس دستیابی به پر کردن خودکار</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The Bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>سرویس خودکار بیت واردن با استفاده از چهار چوب پر کردن خودکار اندروید برای کمک به پر کردن ورودی ها، کارت های اعتباری و اطلاعات هویت به سایر برنامه ها در دستگاه شما کمک می کند.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Use the Bitwarden auto-fill service to fill logins, credit cards, and identity information into other apps.</value>
+    <value>از سرویس پر کردن خودکار بیت واردن برای پر کردن ورودها، کارتهای اعتباری، و اطلاعات هویتی درون اپلیکیشن ها استفاده کنید.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Open Autofill Settings</value>
+    <value>باز کردن تنظیمات پر کردن خودکار</value>
   </data>
   <data name="FaceID" xml:space="preserve">
-    <value>تشخیص چهره</value>
+    <value>Face ID</value>
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>از Face ID برای تأیید استفاده شود.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>از Face ID برای قفل گشایی استفاده شود</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>تأیید Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>قفل گشایی با Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>تأیید با Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>ما نتوانستیم بصورت خودکار منو تنظیمات پر کردن خودکار اندروید را برای شما باز کنیم. شما میتوانید منوی تنظیمات را بصورت دستی مرور کنید از تنظیمات اندروید &gt; سیستم &gt; زبانها و ورودی &gt; پیشرفته &gt; سرویس پر کردن خودکار.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>نام فیلد سفارشی</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>بولین</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>مخفی</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>متن</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>فیلد سفارشی جدید</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>چه نوع فیلد سفارشی میخواهید اضافه کنید؟</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>حذف</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>آدرس اینترنتی جدید</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
-    <value>URI {0}</value>
+    <value>آدرس اینترنتی {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>دامنه پایه</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>پیش فرض</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>دقیق</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>میزبان</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>عبارت منظم</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>شروع می شود با</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>تشخیص سابقه آدرس اینترنتی</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>تشخیص سابقه</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>

@@ -619,7 +619,7 @@
     <value>Типові параметри задаються в генераторі паролів основної програми Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Налаштування</value>
+    <value>Додатково</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>Інше</value>
@@ -819,19 +819,19 @@
     <value>Сканувати коли вибрано поле пароля</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Сканувати екран на наявність полів і пропонувати автозаповнення при виборі поля пароля. Це налаштування може допомогти заощадити заряд батареї.</value>
+    <value>Сканувати екран на наявність полів і пропонувати автозаповнення при виборі поля пароля. Це може допомогти заощадити заряд батареї.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>Постійне сповіщення</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Завжди пропонувати автозаповнення й сканувати поля лише після спроби автозаповнення. Це налаштування може допомогти заощадити заряд батареї.</value>
+    <value>Завжди пропонувати автозаповнення й сканувати поля лише після спроби автозаповнення. Це може допомогти заощадити заряд батареї.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>Завжди сканувати</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Завжди сканувати екран на наявність полів і пропонувати автозаповнення при виявленні поля введення пароля. Це типове налаштування.</value>
+    <value>Завжди сканувати екран на наявність полів і пропонувати автозаповнення при виявленні поля введення пароля. Це типове значення.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Не вдається відкрити програму "{0}".</value>

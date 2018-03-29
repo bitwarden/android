@@ -222,7 +222,7 @@
     <value>Folder deleted.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>No Folder</value>
+    <value>Няма папка</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -677,13 +677,13 @@
     <value>Enter a 4 digit PIN code to unlock the app with.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
-    <value>Item Information</value>
+    <value>Сведения за елемента</value>
   </data>
   <data name="ItemUpdated" xml:space="preserve">
     <value>Item updated.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Submitting...</value>
+    <value>Подаване...</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
@@ -691,13 +691,13 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Syncing complete.</value>
+    <value>Синхронизирането завърши.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
-    <value>Syncing failed.</value>
+    <value>Синхронизирането е неуспешно.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Sync Vault Now</value>
+    <value>Синхронизиране сега</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -890,10 +890,10 @@
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Add New Attachment</value>
+    <value>Прикачване на файл</value>
   </data>
   <data name="Attachments" xml:space="preserve">
-    <value>Attachments</value>
+    <value>Прикачени файлове</value>
   </data>
   <data name="UnableToDownloadFile" xml:space="preserve">
     <value>Unable to download file.</value>
@@ -1039,25 +1039,25 @@
     <value>What type of item do you want to add?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
-    <value>Card</value>
+    <value>Карта</value>
   </data>
   <data name="TypeIdentity" xml:space="preserve">
     <value>Самоличност</value>
   </data>
   <data name="TypeLogin" xml:space="preserve">
-    <value>Login</value>
+    <value>Запис</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
     <value>Secure Note</value>
   </data>
   <data name="Address1" xml:space="preserve">
-    <value>Address 1</value>
+    <value>Адрес 1</value>
   </data>
   <data name="Address2" xml:space="preserve">
-    <value>Address 2</value>
+    <value>Адрес 2</value>
   </data>
   <data name="Address3" xml:space="preserve">
-    <value>Address 3</value>
+    <value>Адрес 3</value>
   </data>
   <data name="April" xml:space="preserve">
     <value>April</value>
@@ -1066,10 +1066,10 @@
     <value>August</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Brand</value>
+    <value>Марка</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Cardholder Name</value>
+    <value>Име на притежателя на картата</value>
   </data>
   <data name="CityTown" xml:space="preserve">
     <value>Град / село</value>
@@ -1111,7 +1111,7 @@
     <value>Фамилно име</value>
   </data>
   <data name="LicenseNumber" xml:space="preserve">
-    <value>License Number</value>
+    <value>Номер на лиценза</value>
   </data>
   <data name="March" xml:space="preserve">
     <value>Март</value>
@@ -1138,7 +1138,7 @@
     <value>Октомври</value>
   </data>
   <data name="PassportNumber" xml:space="preserve">
-    <value>Passport Number</value>
+    <value>Номер на паспорта</value>
   </data>
   <data name="Phone" xml:space="preserve">
     <value>Телефон</value>
@@ -1147,7 +1147,7 @@
     <value>Септември</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Social Security Number</value>
+    <value>Номер на осигуровката</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Област</value>
@@ -1165,19 +1165,19 @@
     <value>Изтичане</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Disable Website Icons</value>
+    <value>Изключване на иконките на сайтовете</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provide a recognizable image next to each login item in your vault.</value>
+    <value>Иконките на сайтовете са разпознаваемо изображение за всеки запис в трезора.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icons Server URL</value>
+    <value>Адрес на сървъра с иконки</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
     <value>Auto-fill with Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Vault is locked</value>
+    <value>Трезорът е заключен</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
     <value>Go to my vault</value>
@@ -1266,21 +1266,21 @@
     <value>Exact</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Сървър</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Регулярен израз</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Започва с</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>Откриване на съвпадения в адрес</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Откриване на съвпадения</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
 </root>

@@ -1229,19 +1229,19 @@
     <value>ไม่สามารถเปิดเมนูการตั้งค่าการป้อนอัตโนมัติของ Android ให้คุณได้โดยอัตโนมัติ, คุณสามารถไปที่เมนูการตั้งค่าการป้อนข้อมูลอัตโนมัติด้วยตนเองได้จากการตั้งค่าของ Android &gt; ระบบ &gt; ภาษาด้วยตนเองและป้อนข้อมูล &gt; ขั้นสูง &gt; บริการป้อนข้อความอัตโนมัติ</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>ชื่อเขตข้อมูล ที่กำหนดเอง</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Boolean</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>ซ่อน</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>ข้อความ</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>สร้างเขตข้อมูลที่กำหนดเองใหม่</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>What type of custom field do you want to add?</value>
@@ -1250,17 +1250,17 @@
     <value>Remove</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>URI ใหม่</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>โดเมนพื้นฐาน</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>ค่าเริ่มต้น</value>
   </data>
   <data name="Exact" xml:space="preserve">
     <value>Exact</value>

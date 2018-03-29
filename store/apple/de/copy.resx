@@ -138,18 +138,18 @@ Bitwarden ist zu 100% Open Source. Der Source-Code ist auf GitHub verfügbar - j
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Verwalten Sie alle Benutzernamen und Passwörter in einem sicheren Tresor</value>
+    <value>Verwalte alle Benutzernamen und Passwörter in einem sicheren Tresor</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Erstellen Sie automatisch sichere und zufällig generierte Passwörter</value>
+    <value>Erstelle automatisch sichere und zufällig generierte Passwörter</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Schützen Sie Ihren Tresor mit Touch ID, PIN-Code oder Masterpasswort</value>
+    <value>Schütze deinen Tresor mit Touch ID, PIN-Code oder Masterpasswort</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
     <value>Automatische Anmeldung in Safari, Chrome und hunderten weiteren Apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synchronisieren Sie Ihren Tresor und greifen Sie von unterschiedlichen Geräten darauf zu</value>
+    <value>Synchronisiere deinen Tresor und greife von unterschiedlichen Geräten darauf zu</value>
   </data>
 </root>

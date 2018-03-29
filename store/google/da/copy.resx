@@ -118,44 +118,46 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Adgangskode Administrator</value>
+    <value>Bitwarden adgangskode manager</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden er en login og adgangskode administrator, som hjælper med at holde dig sikker mens online.</value>
+    <value>Bitwarden er en login og adgangskode manager, som hjælper med at sikre dig, når du er online.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden er den letteste og sikreste måde at opbevare alle dine login og adgangskoder samtidig med at de er synkronisere mellem alle dine enheder.
+    <value>Bitwarden er den letteste og sikreste måde at opbevare alle dine logins og adgangskoder på, samtidig med at de er synkroniserede imellem alle dine enheder.
 
-Tyveri af adgangskoder er et seriøst problem. Hjemmesider og apps du bruger er under angreb hver dag. Sikkerheden bristes og så er dine adgangskoder væk. Når du genbruger de samme adgangskoder på hjemmesider og apps kan hackere nemt få adgang til din email, bank konti og andre vigtige kontier.
+Tyveri af adgangskoder er et seriøst problem. Hjemmesider og apps du bruger er under angreb hver dag. Sikkerheden bristes, og så er dine adgangskoder stjålet. Når du genbruger de samme adgangskoder på forskellige hjemmesider og apps, kan hackere nemt få adgang til din email, bank- og andre vigtige konti.
 
-Sikkerhedseksperter anbefaler at man bruger et unikt, tilfældig genreret adgangskode for hver konto man opretter. Men hvordan administrere man alle disse adganskoder? bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
+Sikkerhedseksperter anbefaler, at man bruger en unik, tilfældig genereret, adgangskode til hver konto man opretter. Men hvordan administrerer man alle disse adgangskoder? Bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
 
-bitwarden gemmer alle dine login i en kryptere boks der synkroniseres over alle dine enheder. Siden det er komplet krypteret før det forlader dine enheder, er det kun dig der har adgang til din data. Ikke engang de ansatte ved bitwarden can få adgang til data, også selvom de prøvede. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.</value>
+Bitwarden gemmer alle dine login i en krypteret boks, der synkroniseres imellem alle dine enheder. Da de er fuldstændig krypterede, før de overhovedet forlader dine enheder, er det kun dig der har adgang til dine data. Ikke engang teamet hos Bitwarden kan få adgang til dine data, selv hvis de forsøgte på det. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.
+
+Bitwarden er 100% open source software. Kildekoden til Bitwarden ligger på GitHub, og enhver kan gennemse, evaluere og bidrage til Bitwardens kildekode.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
-    <value>En sikker og gratis adgangskode administrator til alle dine enheder</value>
+    <value>En sikker og gratis adgangskode manager til alle dine enheder</value>
   </data>
   <data name="Screenshot1" xml:space="preserve">
     <value>Administrer alle din logins og adgangskoder fra en sikker boks</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatisk generere stærke, tilfældige og sikre adgangskoder</value>
+    <value>Opret automatisk stærke, tilfældige og sikre adgangskoder</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>Beskyt din boks med fingeraftryk, PIN-kode eller hovedadgangskode</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Hurtigt auto-udfyld login fra din webbrowser og andre apps</value>
+    <value>Auto-udfyld hurtigt logins i din webbrowser og andre apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synkroniser, og få adgang til din boks fra flere enheder 
 
-- telefon 
-- Tablet 
-- Desktop 
+- Telefon
+- Tablet
+- Desktop
 - Web</value>
   </data>
 </root>

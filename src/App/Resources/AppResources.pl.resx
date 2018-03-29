@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -1186,13 +1186,13 @@
     <value>Kolekcje</value>
   </data>
   <data name="NoItemsCollection" xml:space="preserve">
-    <value>W tym folderze nic nie ma.</value>
+    <value>Brak elementów w tej kolekcji.</value>
   </data>
   <data name="NoItemsFolder" xml:space="preserve">
-    <value>W tym folderze nic nie ma.</value>
+    <value>Brak elementów w tym folderze.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>AutoUzupełnienie – ułatwienia dostępu</value>
+    <value>Autouzupełnienie – ułatwienia dostępu</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Usługa Autouzupełniania Bitwarden wykorzystuje Androidowy Framework by pomóc wypełniać dane logowania, kart kredytowych i osobistych informacji w aplikacjach na twoim urządzeniu.</value>
@@ -1266,7 +1266,7 @@
     <value>Dokładny</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Serwer</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
