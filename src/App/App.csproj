@@ -15,6 +15,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)' == 'FDroid|net471|AnyCPU'">
     <DefineConstants>TRACE;FDROID;NET471</DefineConstants>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Remove="Resources\AppResources.fa.resx" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove="Resources\public_suffix_list.dat" />
