@@ -122,34 +122,37 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The Bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
+    <value>بیت واردن ساده ترین و امن ترین راه گردآوری تمام داده های ورودی و پسوردها است در حالی که به راحتی آنها را بین تمامی دستگاه ها همگام میکند.
 
-Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites hackers can easily access your email, bank, and other important accounts.
 
-Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? Bitwarden makes it easy for you to create, store, and access your passwords.
+سرقت پسورد یک مشکل جدی است. وبسایت ها و اپلیکیشن هایی که شما از آنها استفاده میکنید هر روز تحت حملات قرار دارند. نقص های امنیتی رخ میدهند و پسوردها به سرقت میروند. زمانی که شما مجدداً از همان پسورد برای تمام وبسایت ها و اپلیکیشن ها استفاده میکنید هکرها می‌توانند به راحتی به ایمیل، حساب بانکی، و سایر حسابهای کاربریتان دسترسی داشته باشند.
 
-Bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at Bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.
 
-Bitwarden is 100% open source software. The source code for Bitwarden is hosted on GitHub and everyone is free to review, audit, and contribute to the Bitwarden codebase.</value>
+متخصصان امنیتی توصیه میکنند که برای هر حساب کاربری که ایجاد میکنید از پسوردهای متفاوت و تصادفی تولید شده استفاده کنید. اما چطور تمامی این پسورها را مدیریت میکنید؟ بیت واردن ساختن، نگهداری، ودسترسی به پسوردهایتان را آسان میکند.
+
+
+بیت واردن تمامی داده های ورودی شما را در یک گاو صندوق رمزنگاری شده نگهداری میکند که قابل همگام سازی توسط تمامی دستگاه های شماست. از آنجا که این داده ها هر زمان قبل از ترک دستگاهتان کاملا رمزنگاری میشود، فقط شما به اطلاعاتتان دسترسی دارید. حتی اگر تیم ما در بیت واردن هم بخواهند نمیتوانند اطلاعات شما را مشاهده کنند. داده های شما توسط رمزگذاری AES-256 بیتی، هَش خرد شده، و PBKDF2SHA-256 رمزنگاری شده است.
+
+بیت واردن ۱۰۰٪ یک برنامه متن باز است. کد منبع بیت واردن در GitHub میزبانی میشود و هر کس آزاد است برای بررسی، تفتیش و کمک به کد دسترسی داشته باشد.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <value>بیت واردن، 8bit، رمز عبور، مدیر رمز عبور رایگان، مدیر رمز عبور، مدیر ورود به سیستم</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Manage all your logins and passwords from a secure vault</value>
+    <value>مدیریت تمام اطلاعات ورود و رمزهای عبورتان از یک گاوصندوق امن</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Automatically generate strong, random, and secure passwords</value>
+    <value>به صورت خودکار کلمات عبور قوی، تصادفی و امن ایجاد کنید</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protect your vault with Touch ID, PIN code, or master password</value>
+    <value>گاوصندوق خود را با اثر انگشت، کد پین یا رمز عبور اصلی محافظت کنید</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
+    <value>ورود خودکار از سافاری، کروم، و صدها برنامه دیگر</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Sync and access your vault from multiple devices</value>
+    <value>همگام سازی و دسترسی به گاوصندوق خود را از دستگاه های مختلف</value>
   </data>
 </root>
