@@ -132,7 +132,7 @@ Bitwarden przechowuje wszystkie Twoje dane logowania w zaszyfrowanym sejfie, kt�
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
-    <value>bitwarden,bit warden,8bit,hasło,login,darmowy menadżer haseł,menedżer haseł,menedżer logowania,password,free password manager,password manager,login manager</value>
+    <value>bit warden,8bit,hasło,darmowy menadżer haseł,menedżer haseł,menedżer logowania</value>
     <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
