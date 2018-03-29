@@ -1229,25 +1229,25 @@
     <value>Android otomatik doldurmayı sizin yerinize yapamıyor. Android ayarları&gt; Sistem&gt; Dil ve giriş&gt; Gelişmiş&gt; Otomatik doldurma servisleri'nden otomatik doldurma ayarlarını el ile yönlendirebilirsiniz.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Özel Alan Adı</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Boolean</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Gizli</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Metin</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Yeni Özel Alan</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Ne tür bir özel alan eklemek istiyor musunuz?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Kaldır</value>
   </data>
   <data name="NewUri" xml:space="preserve">
     <value>New URI</value>
@@ -1257,24 +1257,24 @@
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Ana alanadı</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Varsayılan</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Tam</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Sunucu alanadı</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Kurallı ifade</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>İle başlar</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
     <value>URI Match Detection</value>
