@@ -190,10 +190,10 @@
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Schreiben Sie uns</value>
+    <value>Schreibe uns</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Schreiben Sie uns direkt um Hilfe zu erhalten oder Rückmeldung zu geben.</value>
+    <value>Kontaktiere uns direkt, um Hilfe zu bekommen oder um Feedback abzugeben.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>PIN-Code eingeben.</value>
@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Bitte verbinden Sie sich mit dem Internet um fortzufahren.</value>
+    <value>Bitte verbinde dich mit dem Internet um fortzufahren.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Sind Sie sicher, dass Sie sich abmelden möchten?</value>
+    <value>Bist du sicher, dass du dich abmelden möchten?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Masterpasswort</value>
@@ -378,10 +378,10 @@
     <value>Ansicht</value>
   </data>
   <data name="VisitOurWebsite" xml:space="preserve">
-    <value>Besuchen Sie unsere Website</value>
+    <value>Besuche unsere Website</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besuchen Sie unsere Webseite um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von Bitwarden zu lernen.</value>
+    <value>Besuche unsere Webseite um Hilfe zu erhalten, Neuigkeiten zu erfahren, Kontakt aufzunehmen und mehr über die Verwendung von Bitwarden zu lernen.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webseite</value>
@@ -394,7 +394,7 @@
     <value>Benutzerkonto</value>
   </data>
   <data name="AccountCreated" xml:space="preserve">
-    <value>Ihr neue Konto wurde erstellt! Sie können sich jetzt anmelden.</value>
+    <value>Dein neues Konto wurde erstellt! Du kannst dich jetzt anmelden.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
     <value>Neuer Eintrag</value>
@@ -403,7 +403,7 @@
     <value>App Erweiterung</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Verwenden Sie den Bitwarden Dienst in den Bedienungshilfen, um Ihre Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</value>
+    <value>Verwende den Bitwarden Dienst in den Bedienungshilfen, um deine Zugangsdaten in Apps und im Web automatisch ausfüllen zu lassen.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Auto-Ausfüllen Funktion</value>
@@ -415,28 +415,28 @@
     <value>Bitwarden App Erweiterung</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Der einfachste Weg neue Zugangsdaten zum Tresor hinzuzufügen ist die Bitwarden App Erweiterung. Um mehr über die Bitwarden App Erweiterung zu erfahren, öffnen Sie einfach die "Werkzeuge" Bildschirmseite.</value>
+    <value>Der einfachste Weg neue Zugangsdaten zum Tresor hinzuzufügen ist die Bitwarden App Erweiterung. Um mehr über die Bitwarden App Erweiterung zu erfahren, öffne einfach die "Werkzeuge" Bildschirmseite.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Nutzen Sie Bitwarden in Safari und anderen Apps, um Zugangsdaten automatisch einzufügen.</value>
+    <value>Nutze Bitwarden in Safari und anderen Apps, um Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Bitwarden Auto-Ausfüllen Funktion</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Verwenden Sie den Bitwarden Dienst in den Bedienungshilfen um Ihre Zugangsdaten automatisch einzufügen.</value>
+    <value>Verwende den Bitwarden Dienst in den Bedienungshilfen um deine Zugangsdaten automatisch einzufügen.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-Mail Adresse ändern</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Sie können Ihre E-Mail Adresse im bitwarden.com Web-Tresor ändern. Möchten Sie die Website jetzt besuchen?</value>
+    <value>Du kannst deine E-Mail Adresse im Bitwarden.com Web-Tresor ändern. Möchtest du die Seite jetzt öffnen?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Masterpasswort ändern</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Sie können Ihr Masterpasswort im bitwarden.com Web-Tresor ändern. Möchten Sie die Website jetzt besuchen?</value>
+    <value>Du kannst dein Master-Passwort im Bitwarden.com Web-Tresor ändern. Möchtest du die Seite jetzt öffnen?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Schließen</value>
@@ -470,7 +470,7 @@
     <value>Automatische Synchronisierung aktivieren</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Geben Sie die E-Mail Adresse Ihres Kontos ein, um den Hinweis für Ihr Masterpasswort zu erhalten.</value>
+    <value>Gebe die E-Mail Adresse deines Kontos ein, um den Hinweis für dein Master-Passwort zu erhalten.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>App Erweiterung wieder aktivieren</value>
@@ -482,14 +482,14 @@
     <value>App Erweiterung aktivieren</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>In Safari finden Sie Bitwarden unter dem Teilen-Symbol (Hinweis: scrollen Sie auf der untersten Zeile des Menüs nach rechts).</value>
+    <value>In Safari findest du Bitwarden unter dem Teilen-Symbol (Hinweis: scrolle auf der untersten Zeile des Menüs nach rechts).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
-    <value>Erhalten Sie direkten Zugang zu Ihren Passwörtern!</value>
+    <value>Erhalte direkten Zugang zu deinen Passwörtern!</value>
   </data>
   <data name="ExtensionReady" xml:space="preserve">
-    <value>Sie können sich jetzt anmelden!</value>
+    <value>Du kannst dich jetzt anmelden!</value>
   </data>
   <data name="ExtensionSeeApps" xml:space="preserve">
     <value>Unterstützte Apps ansehen</value>
@@ -498,13 +498,13 @@
     <value>Ihre Zugangsdaten sind jetzt in Safari, Chrome und anderen unterstützten Apps einfach zu erreichen.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>In Safari und Chrome finden Sie Bitwarden unter dem Teilen-Symbol (Hinweis: scrollen Sie auf der untersten Zeile des Menüs nach rechts).</value>
+    <value>In Safari und Chrome findest du Bitwarden unter dem Teilen-Symbol (Hinweis: scrolle auf der untersten Zeile des Menüs nach rechts).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Tippen Sie auf das Bitwarden Symbol im Menü, um die Erweiterung zu starten.</value>
+    <value>Tippe auf das Bitwarden Symbol im Menü, um die Erweiterung zu starten.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Um Bitwarden in Safari und anderen Apps zu aktivieren, tippen Sie auf das "Mehr"-Symbol in der untersten Zeile des Menüs.</value>
+    <value>Um Bitwarden in Safari und anderen Apps zu aktivieren, tippe auf das "Mehr"-Symbol in der untersten Zeile des Menüs.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
@@ -525,7 +525,7 @@
     <value>Du kannst deine Logins über den Bitwarden.com Web-Tresor importieren. Möchtest du die Seite jetzt öffnen?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Importieren Sie all Ihre Zugangsdaten schnell und einfach von anderen Passwortmanagern.</value>
+    <value>Importiere all deine Zugangsdaten schnell und einfach von anderen Passwortmanagern.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Zuletzt synchronisiert:</value>
@@ -559,7 +559,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Sie müssen sich anmelden oder einen neuen Account erstellen, um auf den Tresor zugreifen zu können.</value>
+    <value>Du musst dich anmelden oder einen neuen Account erstellen um auf den Tresor zuzugreifen.</value>
   </data>
   <data name="Manage" xml:space="preserve">
     <value>Verwalten</value>
@@ -568,13 +568,13 @@
     <value>Passwortbestätigung ist nicht korrekt.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Das Masterpasswort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass Sie das Passwort nicht vergessen, da es keine Möglichkeit gibt es zurückzusetzen.</value>
+    <value>Das Master-Passwort wird verwendet, um den Tresor zu öffnen. Es ist sehr wichtig, dass du das Passwort nicht vergisst, da es keine Möglichkeit gibt es zurückzusetzen.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
     <value>Masterpassworthinweis (optional)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Ein Hinweis auf Ihr Masterpasswort kann Ihnen helfen, sich an das Passwort zu erinnern, sollten Sie es vergessen.</value>
+    <value>Ein Hinweis auf dein Master-Passwort kann dir helfen, dich an das Passwort zu erinnern, solltest du es vergessen.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
     <value>Das Masterpasswort muss mindestens 8 Zeichen lang sein.</value>
@@ -591,7 +591,7 @@
     <value>Weitere Einstellungen</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Sie müssen sich in der Bitwarden App einloggen, bevor Sie die Erweiterung benutzen können.</value>
+    <value>Du musst dich in der Bitwarden App einloggen, bevor du die Erweiterung benutzen kannst.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Niemals</value>
@@ -637,17 +637,17 @@
     <value>Wir haben Ihnen eine E-Mail mit Ihrem Masterpassworthinweis gesendet.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
-    <value>Sind Sie sicher, dass Sie das aktuelle Passwort überschreiben möchten?</value>
+    <value>Bist du sicher, dass du das aktuelle Passwort überschreiben möchtest?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden aktualisiert Ihren Tresor mit Pushbenachrichtigungen. Für die bestmögliche Benutzererfahrung tippen Sie im folgenden Dialogfenster auf "Ok", um Pushbenachrichtigungen zu aktivieren.</value>
+    <value>Bitwarden aktualisiert deinen Tresor mit Pushbenachrichtigungen. Für die bestmögliche Benutzererfahrung tippe im folgenden Dialogfenster auf "Ok", um Pushbenachrichtigungen zu aktivieren.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
     <value>App bewerten</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Wir würden uns freuen, wenn Sie uns mit einer positiven Bewertung helfen könnten!</value>
+    <value>Wir würden uns freuen, wenn du uns mit einer positiven Bewertung helfen könntest!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
     <value>Bewertungen für die App werden mit jeder neuen Version zurückgesetzt. Unterstütze uns mit einer guten Rezension!</value>
@@ -674,7 +674,7 @@
     <value>PIN festlegen</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Geben Sie Ihre 4-stellige PIN ein, um die App zu entsperren.</value>
+    <value>Gebe deine 4-stellige PIN ein, um die App zu entsperren.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Eintrags-Information</value>
@@ -707,7 +707,7 @@
     <value>Zwei-Faktor Authentifizierung</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Mit der Zwei-Faktor Authentifizierung wird Ihr Account zusätzlich abgesichert, da jede Anmeldung durch einen Sicherheitscode, eine Authentifizierungs-App, SMS, einen Anruf oder eine E-Mail verifiziert werden muss. Die Zwei-Faktor Authentifizierung kann im Bitwarden.com Web-Tresor aktiviert werden. Möchten Sie die Seite jetzt öffnen?</value>
+    <value>Mit der Zwei-Faktor Authentifizierung wird dein Account zusätzlich abgesichert, da jede Anmeldung durch einen Sicherheitscode, eine Authentifizierungs-App, SMS, einen Anruf oder eine E-Mail verifiziert werden muss. Die Zwei-Faktor Authentifizierung kann im Bitwarden.com Web-Tresor aktiviert werden. Möchtest du die Seite jetzt öffnen?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Mit {0} entsperren</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Sie können die Bitwarden Auto-Ausfüllen Benachrichtigung antippen, um Ihre Zugangsdaten automatisch einfügen zu lassen.</value>
+    <value>Du kannst die Bitwarden Auto-Ausfüllen Benachrichtigung antippen, um deine Zugangsdaten automatisch einfügen zu lassen.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tippe auf diese Benachrichtigung, um automatisch Zugangsdaten aus deinem Tresor einzufügen.</value>
@@ -768,7 +768,7 @@
     <value>1. Tippe auf "Bitwarden" unter "Heruntergeladene Dienste" in den Android Bedienungshilfen.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Aktivieren Sie den Schalter und tippen Sie auf "Ok".</value>
+    <value>2. Aktiviere den Schalter und tippe auf "Ok".</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Deaktiviert</value>
@@ -789,7 +789,7 @@
     <value>Auto-Ausfüllen</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Möchten Sie diese Zugangsdaten automatisch einfügen oder ansehen?</value>
+    <value>Möchtest du diese Zugangsdaten automatisch einfügen oder ansehen?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
     <value>Bist du sicher, dass du die Zugangsdaten einfügen möchten? Sie stimmen nicht komplett mit "{0}" überein.</value>
@@ -842,11 +842,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Geben Sie den 6-stelligen Bestätigungscode aus Ihrer Authentifizierungs-App ein.</value>
+    <value>Gib den 6-stelligen Verifizierungscode aus deiner Authenticator App ein.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Geben Sie den 6-stelligen Bestätigungscode ein, der per E-Mail an "{0}" gesendet wurde.</value>
+    <value>Gib den 6-stelligen Bestätigungscode ein, der an {0} gesendet wurde.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -854,7 +854,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Dieses Konto hat eine aktive Zwei-Faktor Authentifizierung, allerdings wird keiner der konfigurierten Zwei-Faktor Anbieter von diesem Gerät unterstützt. Bitte nutzen Sie ein unterstütztes Gerät und / oder fügen Sie zusätzliche Anbieter hinzu, die von mehr Geräten unterstützt werden (wie eine Authentifizierungs-App).</value>
+    <value>Dieses Konto hat eine aktive Zwei-Faktor Authentifizierung, allerdings wird keiner der konfigurierten Zwei-Faktor Anbieter von diesem Gerät unterstützt. Bitte nutze ein unterstütztes Gerät und / oder füge zusätzliche Anbieter hinzu, die von mehr Geräten unterstützt werden (wie eine Authentifizierungs-App).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Wiederherstellungscode</value>
@@ -872,7 +872,7 @@
     <value>Optionen für Zwei-Faktor Authentifizierung</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
-    <value>Verwenden Sie eine andere Zwei-Faktor Authentifizierungsmethode</value>
+    <value>Verwende eine andere Zwei-Faktor Authentifizierungsmethode</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
     <value>Bestätigungsmail konnte nicht gesendet werden. Erneut versuchen.</value>
@@ -906,7 +906,7 @@
     <comment>Message shown when downloading a file</comment>
   </data>
   <data name="AttachmentLargeWarning" xml:space="preserve">
-    <value>Dieser Anhang ist {0} groß. Sind sie sicher, dass Sie ihn herunterladen möchten?</value>
+    <value>Dieser Anhang ist {0} groß. Bist du sicher, dass du ihn herunterladen möchtest?</value>
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
@@ -926,7 +926,7 @@
     <value>Der Scan wird automatisch durchgeführt.</value>
   </data>
   <data name="CameraInstructionTop" xml:space="preserve">
-    <value>Richten Sie Ihre Kamera auf den QR Code.</value>
+    <value>Richte deine Kamera auf den QR Code.</value>
   </data>
   <data name="ScanQrTitle" xml:space="preserve">
     <value>QR Code scannen</value>
@@ -944,13 +944,13 @@
     <value>TOTP kopieren</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Ist ein Authentifizierungsschlüssel mit Ihren Zugangsdaten verknüpft, wird der TOTP Bestätigungscode automatisch in die Zwischenablage kopiert, wenn Sie die Zugangsdaten einfügen lassen.</value>
+    <value>Ist ein Authentifizierungsschlüssel mit deinen Zugangsdaten verknüpft, wird der TOTP Bestätigungscode automatisch in die Zwischenablage kopiert, wenn du die Zugangsdaten einfügen lässt.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Automatisches Kopieren des TOTP deaktivieren</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Für diese Funktion benötigen Sie eine Premiummitgliedschaft.</value>
+    <value>Für diese Funktion benötigst du eine Premiummitgliedschaft.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Anhang hinzugefügt</value>
@@ -980,7 +980,7 @@
     <value>Die maximale Dateigröße beträgt 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
-    <value>Sie können diese Funktion nicht nutzen, solange Sie Ihren Verschlüsselungsschlüssel nicht aktualisiert haben.</value>
+    <value>Du kannst diese Funktion nicht nutzen, solange du deinen Verschlüsselungsschlüssel nicht aktualisiert hast.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
     <value>Mehr erfahren</value>
@@ -992,7 +992,7 @@
     <value>Benutzerdefinierte Umgebung</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>Für fortgeschrittene Benutzer. Sie können die Basis-URL der jeweiligen Dienste unabhängig voneinander festlegen.</value>
+    <value>Für fortgeschrittene Benutzer. Du kannst die Basis-URL der jeweiligen Dienste unabhängig voneinander festlegen.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
     <value>Die URLs der Umgebung wurden gespeichert.</value>
@@ -1009,7 +1009,7 @@
     <value>Selbstgehostete Umgebung</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Bitte gebe die Basis-URL deiner vor selbst gehosteten Bitwarden-Installation an.</value>
+    <value>Bitte gebe die Basis-URL deiner selbst gehosteten Bitwarden-Installation an.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Server URL</value>
