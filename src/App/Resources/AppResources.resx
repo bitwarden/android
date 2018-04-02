@@ -1283,4 +1283,10 @@
     <value>Match Detection</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
 </root>

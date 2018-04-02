@@ -514,5 +514,78 @@ namespace Bit.Android.Services
             alert.Show();
             return result.Task;
         }
+
+        public Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
+        {
+            var activity = (MainActivity)CurrentContext;
+            if(activity == null)
+            {
+                return Task.FromResult<string>(null);
+            }
+
+            var result = new TaskCompletionSource<string>();
+            var alertBuilder = new AlertDialog.Builder(activity);
+            alertBuilder.SetTitle(title);
+
+            if(!string.IsNullOrWhiteSpace(message))
+            {
+                if(buttons != null && buttons.Length > 2)
+                {
+                    if(!string.IsNullOrWhiteSpace(title))
+                    {
+                        alertBuilder.SetTitle($"{title}: {message}");
+                    }
+                    else
+                    {
+                        alertBuilder.SetTitle(message);
+                    }
+                }
+                else
+                {
+                    alertBuilder.SetMessage(message);
+                }
+            }
+
+            if(buttons != null)
+            {
+                if(buttons.Length > 2)
+                {
+                    alertBuilder.SetItems(buttons, (sender, args) =>
+                    {
+                        result.TrySetResult(buttons[args.Which]);
+                    });
+                }
+                else
+                {
+                    if(buttons.Length > 0)
+                    {
+                        alertBuilder.SetPositiveButton(buttons[0], (sender, args) =>
+                        {
+                            result.TrySetResult(buttons[0]);
+                        });
+                    }
+                    if(buttons.Length > 1)
+                    {
+                        alertBuilder.SetNeutralButton(buttons[1], (sender, args) =>
+                        {
+                            result.TrySetResult(buttons[1]);
+                        });
+                    }
+                }
+            }
+
+            if(!string.IsNullOrWhiteSpace(cancel))
+            {
+                alertBuilder.SetNegativeButton(cancel, (sender, args) =>
+                {
+                    result.TrySetResult(cancel);
+                });
+            }
+
+            var alert = alertBuilder.Create();
+            alert.CancelEvent += (o, args) => { result.TrySetResult(null); };
+            alert.Show();
+            return result.Task;
+        }
     }
 }

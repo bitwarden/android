@@ -351,6 +351,32 @@ namespace Bit.iOS.Services
             return result.Task;
         }
 
+        public Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
+        {
+            var result = new TaskCompletionSource<string>();
+            var alert = UIAlertController.Create(title ?? string.Empty, message, UIAlertControllerStyle.Alert);
+
+            if(!string.IsNullOrWhiteSpace(cancel))
+            {
+                alert.AddAction(UIAlertAction.Create(cancel, UIAlertActionStyle.Cancel, x =>
+                {
+                    result.TrySetResult(cancel);
+                }));
+            }
+
+            foreach(var button in buttons)
+            {
+                alert.AddAction(UIAlertAction.Create(button, UIAlertActionStyle.Default, x =>
+                {
+                    result.TrySetResult(button);
+                }));
+            }
+
+            var vc = GetPresentedViewController();
+            vc?.PresentViewController(alert, true, null);
+            return result.Task;
+        }
+
         private UIViewController GetPresentedViewController()
         {
             var window = UIApplication.SharedApplication.KeyWindow;

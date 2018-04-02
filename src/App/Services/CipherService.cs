@@ -93,7 +93,8 @@ namespace Bit.App.Services
             return ciphers.Where(c => cipherIds.Contains(c.Id));
         }
 
-        public async Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString)
+        public async Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(
+            string uriString)
         {
             if(string.IsNullOrWhiteSpace(uriString))
             {
@@ -173,42 +174,42 @@ namespace Bit.App.Services
                         break;
                     }
 
-                    var added = false;
+                    var match = false;
                     switch(u.Match)
                     {
                         case null:
                         case Enums.UriMatchType.Domain:
-                            added = CheckDefaultUriMatch(cipher, loginUriString, matchingLogins, matchingFuzzyLogins,
+                            match = CheckDefaultUriMatch(cipher, loginUriString, matchingLogins, matchingFuzzyLogins,
                                 matchingDomainsArray, matchingFuzzyDomainsArray, mobileApp, mobileAppSearchTerms);
                             break;
                         case Enums.UriMatchType.Host:
                             var urlHost = Helpers.GetUrlHost(uriString);
-                            added = urlHost != null && urlHost == Helpers.GetUrlHost(loginUriString);
-                            if(added)
+                            match = urlHost != null && urlHost == Helpers.GetUrlHost(loginUriString);
+                            if(match)
                             {
-                                matchingLogins.Add(cipher);
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
                             break;
                         case Enums.UriMatchType.Exact:
-                            added = uriString == loginUriString;
-                            if(added)
+                            match = uriString == loginUriString;
+                            if(match)
                             {
-                                matchingLogins.Add(cipher);
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
                             break;
                         case Enums.UriMatchType.StartsWith:
-                            added = uriString.StartsWith(loginUriString);
-                            if(added)
+                            match = uriString.StartsWith(loginUriString);
+                            if(match)
                             {
-                                matchingLogins.Add(cipher);
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
                             break;
                         case Enums.UriMatchType.RegularExpression:
                             var regex = new Regex(loginUriString, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
-                            added = regex.IsMatch(uriString);
-                            if(added)
+                            match = regex.IsMatch(uriString);
+                            if(match)
                             {
-                                matchingLogins.Add(cipher);
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                             }
                             break;
                         case Enums.UriMatchType.Never:
@@ -216,7 +217,7 @@ namespace Bit.App.Services
                             break;
                     }
 
-                    if(added)
+                    if(match)
                     {
                         break;
                     }
@@ -436,21 +437,21 @@ namespace Bit.App.Services
         {
             if(Array.IndexOf(matchingDomainsArray, loginUriString) >= 0)
             {
-                matchingLogins.Add(cipher);
+                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                 return true;
             }
             else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginUriString) >= 0)
             {
-                matchingFuzzyLogins.Add(cipher);
-                return true;
+                AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                return false;
             }
             else if(!mobileApp)
             {
                 var info = InfoFromMobileAppUri(loginUriString);
                 if(info?.Item1 != null && Array.IndexOf(matchingDomainsArray, info.Item1) >= 0)
                 {
-                    matchingFuzzyLogins.Add(cipher);
-                    return true;
+                    AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                    return false;
                 }
             }
 
@@ -462,13 +463,13 @@ namespace Bit.App.Services
 
                 if(Array.IndexOf(matchingDomainsArray, loginDomainName) >= 0)
                 {
-                    matchingLogins.Add(cipher);
+                    AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
                     return true;
                 }
                 else if(mobileApp && Array.IndexOf(matchingFuzzyDomainsArray, loginDomainName) >= 0)
                 {
-                    matchingFuzzyLogins.Add(cipher);
-                    return true;
+                    AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                    return false;
                 }
             }
 
@@ -491,13 +492,31 @@ namespace Bit.App.Services
 
                     if(addedFromSearchTerm)
                     {
-                        matchingFuzzyLogins.Add(cipher);
-                        return true;
+                        AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                        return false;
                     }
                 }
             }
 
             return false;
+        }
+
+        private void AddMatchingLogin(Cipher cipher, List<Cipher> matchingLogins, List<Cipher> matchingFuzzyLogins)
+        {
+            if(matchingFuzzyLogins.Contains(cipher))
+            {
+                matchingFuzzyLogins.Remove(cipher);
+            }
+
+            matchingLogins.Add(cipher);
+        }
+
+        private void AddMatchingFuzzyLogin(Cipher cipher, List<Cipher> matchingLogins, List<Cipher> matchingFuzzyLogins)
+        {
+            if(!matchingFuzzyLogins.Contains(cipher) && !matchingLogins.Contains(cipher))
+            {
+                matchingFuzzyLogins.Add(cipher);
+            }
         }
     }
 }

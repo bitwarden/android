@@ -521,5 +521,11 @@ namespace Bit.App.Utilities
 
             return host;
         }
+
+        public static void AlertNoConnection(Page page)
+        {
+            page.DisplayAlert(AppResources.InternetConnectionRequiredTitle,
+                AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
+        }
     }
 }

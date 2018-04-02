@@ -403,8 +403,14 @@ namespace Bit.App.Pages
             string selection = null;
             if(!string.IsNullOrWhiteSpace(_uri))
             {
+                var options = new List<string> { AppResources.Autofill };
+                if(cipher.Type == Enums.CipherType.Login && _connectivity.IsConnected)
+                {
+                    options.Add(AppResources.AutofillAndSave);
+                }
+                options.Add(AppResources.View);
                 selection = await DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
-                    AppResources.Autofill, AppResources.View);
+                    options.ToArray());
             }
 
             if(selection == AppResources.View || string.IsNullOrWhiteSpace(_uri))
@@ -412,8 +418,40 @@ namespace Bit.App.Pages
                 var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
                 await Navigation.PushForDeviceAsync(page);
             }
-            else if(selection == AppResources.Autofill)
+            else if(selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
             {
+                if(selection == AppResources.AutofillAndSave)
+                {
+                    if(!_connectivity.IsConnected)
+                    {
+                        Helpers.AlertNoConnection(this);
+                    }
+                    else
+                    {
+                        var uris = cipher.CipherModel.Login?.Uris?.ToList();
+                        if(uris == null)
+                        {
+                            uris = new List<Models.LoginUri>();
+                        }
+
+                        uris.Add(new Models.LoginUri
+                        {
+                            Uri = _uri.Encrypt(cipher.CipherModel.OrganizationId),
+                            Match = null
+                        });
+
+                        cipher.CipherModel.Login.Uris = uris;
+
+                        await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                        var saveTask = await _cipherService.SaveAsync(cipher.CipherModel);
+                        await _deviceActionService.HideLoadingAsync();
+                        if(saveTask.Succeeded)
+                        {
+                            _googleAnalyticsService.TrackAppEvent("AddedLoginUriDuringAutofill");
+                        }
+                    }
+                }
+
                 if(_deviceInfoService.Version < 21)
                 {
                     Helpers.CipherMoreClickedAsync(this, cipher, !string.IsNullOrWhiteSpace(_uri));

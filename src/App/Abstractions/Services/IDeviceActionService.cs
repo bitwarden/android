@@ -23,5 +23,6 @@ namespace Bit.App.Abstractions
         void OpenAutofillSettings();
         Task LaunchAppAsync(string appName, Page page);
         Task<string> DisplayPromptAync(string title = null, string description = null, string text = null);
+        Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons);
     }
 }

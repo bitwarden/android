@@ -13,6 +13,7 @@ using Bit.App.Models;
 using System.Collections.Generic;
 using Bit.App.Enums;
 using static Bit.App.Models.Page.VaultListPageModel;
+using Plugin.Connectivity.Abstractions;
 
 namespace Bit.App.Pages
 {
@@ -22,6 +23,7 @@ namespace Bit.App.Pages
         private readonly IDeviceInfoService _deviceInfoService;
         private readonly ISettingsService _settingsService;
         private readonly IAppSettingsService _appSettingsService;
+        public readonly IConnectivity _connectivity;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly string _name;
         private readonly AppOptions _appOptions;
@@ -47,6 +49,7 @@ namespace Bit.App.Pages
             _settingsService = Resolver.Resolve<ISettingsService>();
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             GoogleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _connectivity = Resolver.Resolve<IConnectivity>();
 
             Init();
         }
@@ -237,17 +240,57 @@ namespace Bit.App.Pages
             }
             else
             {
-                bool doAutofill = true;
+                var autofillResponse = AppResources.Yes;
                 if(cipher.Fuzzy)
                 {
-                    doAutofill = await DisplayAlert(null,
-                        string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name),
-                        AppResources.Yes, AppResources.No);
+                    var options = new List<string> { AppResources.Yes };
+                    if(cipher.Type == CipherType.Login && _connectivity.IsConnected)
+                    {
+                        options.Add(AppResources.YesAndSave);
+                    }
+
+                    autofillResponse = await DeviceActionService.DisplayAlertAsync(null,
+                        string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name), AppResources.No,
+                        options.ToArray());
                 }
 
-                if(doAutofill)
+                if(autofillResponse == AppResources.YesAndSave && cipher.Type == CipherType.Login)
                 {
-                    GoogleAnalyticsService.TrackExtensionEvent("AutoFilled", Uri.StartsWith("http") ? "Website" : "App");
+                    if(!_connectivity.IsConnected)
+                    {
+                        Helpers.AlertNoConnection(this);
+                    }
+                    else
+                    {
+                        var uris = cipher.CipherModel.Login?.Uris?.ToList();
+                        if(uris == null)
+                        {
+                            uris = new List<LoginUri>();
+                        }
+
+                        uris.Add(new LoginUri
+                        {
+                            Uri = Uri.Encrypt(cipher.CipherModel.OrganizationId),
+                            Match = null
+                        });
+
+                        cipher.CipherModel.Login.Uris = uris;
+
+                        await DeviceActionService.ShowLoadingAsync(AppResources.Saving);
+                        var saveTask = await _cipherService.SaveAsync(cipher.CipherModel);
+                        await DeviceActionService.HideLoadingAsync();
+
+                        if(saveTask.Succeeded)
+                        {
+                            GoogleAnalyticsService.TrackAppEvent("AddedLoginUriDuringAutofill");
+                        }
+                    }
+                }
+
+                if(autofillResponse == AppResources.Yes || autofillResponse == AppResources.YesAndSave)
+                {
+                    GoogleAnalyticsService.TrackExtensionEvent("AutoFilled",
+                        Uri.StartsWith("http") ? "Website" : "App");
                     DeviceActionService.Autofill(cipher);
                 }
             }

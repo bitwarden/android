@@ -182,5 +182,22 @@ namespace Bit.UWP.Services
 
             return result.Ok ? result.Value ?? string.Empty : null;
         }
+
+        public async Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
+        {
+            if(!string.IsNullOrWhiteSpace(message))
+            {
+                if(string.IsNullOrWhiteSpace(title))
+                {
+                    title = message;
+                }
+                else
+                {
+                    title = $"{title}: {message}";
+                }
+            }
+
+            return await _userDialogs.ActionSheetAsync(title, cancel, null, null, buttons.ToArray());
+        }
     }
 }

@@ -43,6 +43,11 @@ namespace Bit.iOS.Core.Services
             // do nothing
         }
 
+        public Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
+        {
+            return Task.FromResult<string>(null);
+        }
+
         public Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
         {
             return Task.FromResult<string>(null);

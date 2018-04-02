@@ -331,6 +331,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-fill and save.
+        /// </summary>
+        public static string AutofillAndSave {
+            get {
+                return ResourceManager.GetString("AutofillAndSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do you want to auto-fill or view this item?.
         /// </summary>
         public static string AutofillOrView {
@@ -3288,6 +3297,15 @@ namespace Bit.App.Resources {
         public static string Yes {
             get {
                 return ResourceManager.GetString("Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes, and Save.
+        /// </summary>
+        public static string YesAndSave {
+            get {
+                return ResourceManager.GetString("YesAndSave", resourceCulture);
             }
         }
         
