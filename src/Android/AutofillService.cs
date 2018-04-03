@@ -62,7 +62,8 @@ namespace Bit.Android
             new Browser("acr.browser.lightning", "search"),
             new Browser("acr.browser.barebones", "search"),
             new Browser("com.microsoft.emmx", "url_bar"),
-            new Browser("com.duckduckgo.mobile.android", "omnibarTextInput")
+            new Browser("com.duckduckgo.mobile.android", "omnibarTextInput"),
+            new Browser("mark.via.gp", "aw")
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
@@ -122,9 +123,9 @@ namespace Bit.Android
                     return;
                 }
 
-                //var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
-                //var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
-                //testNodes.Dispose();
+                var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
+                var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+                testNodes.Dispose();
 
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 var cancelNotification = true;
