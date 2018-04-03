@@ -31,10 +31,12 @@ namespace Bit.App.Pages
         private readonly Dictionary<TwoFactorProviderType, Dictionary<string, object>> _providers;
         private TwoFactorProviderType? _providerType;
         private readonly FullLoginResult _result;
+        private readonly string _duoOrgTitle;
 
         public LoginTwoFactorPage(string email, FullLoginResult result, TwoFactorProviderType? type = null)
             : base(updateActivity: false, requireAuth: false)
         {
+            _duoOrgTitle = $"Duo ({AppResources.Organization})";
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
 
             _email = email;
@@ -180,9 +182,10 @@ namespace Bit.App.Pages
                 Content = scrollView;
                 TokenCell.Entry.FocusWithDelay();
             }
-            else if(_providerType == TwoFactorProviderType.Duo)
+            else if(_providerType == TwoFactorProviderType.Duo ||
+                _providerType == TwoFactorProviderType.OrganizationDuo)
             {
-                var duoParams = _providers[TwoFactorProviderType.Duo];
+                var duoParams = _providers[_providerType.Value];
 
                 var host = WebUtility.UrlEncode(duoParams["Host"].ToString());
                 var req = WebUtility.UrlEncode(duoParams["Signature"].ToString());
@@ -224,7 +227,7 @@ namespace Bit.App.Pages
                 table.WrappingStackLayout = () => layout;
                 scrollView.Content = layout;
 
-                Title = "Duo";
+                Title = _providerType == TwoFactorProviderType.Duo ? "Duo" : _duoOrgTitle;
                 Content = scrollView;
             }
             else if(_providerType == TwoFactorProviderType.YubiKey)
@@ -312,6 +315,11 @@ namespace Bit.App.Pages
             var beforeProviderType = _providerType;
 
             var options = new List<string>();
+            if(_providers.ContainsKey(TwoFactorProviderType.OrganizationDuo))
+            {
+                options.Add(_duoOrgTitle);
+            }
+
             if(_providers.ContainsKey(TwoFactorProviderType.Authenticator))
             {
                 options.Add(AppResources.AuthenticatorAppTitle);
@@ -348,6 +356,10 @@ namespace Bit.App.Pages
             else if(selection == "Duo")
             {
                 _providerType = TwoFactorProviderType.Duo;
+            }
+            else if(selection == _duoOrgTitle)
+            {
+                _providerType = TwoFactorProviderType.OrganizationDuo;
             }
             else if(selection == AppResources.YubiKeyTitle)
             {
@@ -448,7 +460,8 @@ namespace Bit.App.Pages
                     switch(p.Key)
                     {
                         case TwoFactorProviderType.Authenticator:
-                            if(provider == TwoFactorProviderType.Duo || provider == TwoFactorProviderType.YubiKey)
+                            if(provider == TwoFactorProviderType.Duo || provider == TwoFactorProviderType.YubiKey ||
+                                provider == TwoFactorProviderType.OrganizationDuo)
                             {
                                 continue;
                             }
@@ -460,17 +473,25 @@ namespace Bit.App.Pages
                             }
                             break;
                         case TwoFactorProviderType.Duo:
-                            if(provider == TwoFactorProviderType.YubiKey)
+                            if(provider == TwoFactorProviderType.YubiKey ||
+                                provider == TwoFactorProviderType.OrganizationDuo)
                             {
                                 continue;
                             }
                             break;
                         case TwoFactorProviderType.YubiKey:
+                            if(provider == TwoFactorProviderType.OrganizationDuo)
+                            {
+                                continue;
+                            }
+
                             var nfcKey = p.Value.ContainsKey("Nfc") && (bool)p.Value["Nfc"];
                             if((!_deviceInfoService.NfcEnabled || !nfcKey) && Device.RuntimePlatform != Device.UWP)
                             {
                                 continue;
                             }
+                            break;
+                        case TwoFactorProviderType.OrganizationDuo:
                             break;
                         default:
                             continue;

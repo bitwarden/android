@@ -1289,4 +1289,8 @@
   <data name="AutofillAndSave" xml:space="preserve">
     <value>Auto-fill and save</value>
   </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
 </root>
