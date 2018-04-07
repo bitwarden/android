@@ -152,6 +152,13 @@ namespace Bit.iOS.Services
                 e.DocumentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
             };
 
+            var root = UIApplication.SharedApplication.KeyWindow.RootViewController;
+            if(picker.PopoverPresentationController != null && root != null)
+            {
+                picker.PopoverPresentationController.SourceView = root.View;
+                picker.PopoverPresentationController.SourceRect = root.View.Bounds;
+            }
+
             controller.PresentViewController(picker, true, null);
             return Task.FromResult(0);
         }
