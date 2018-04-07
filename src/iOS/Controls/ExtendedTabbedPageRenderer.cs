@@ -58,7 +58,10 @@ namespace Bit.iOS.Controls
                 // Only show icon
                 // ref: https://stackoverflow.com/questions/26494130/remove-tab-bar-item-text-show-only-image
                 item.Title = string.Empty;
-                item.ImageInsets = new UIEdgeInsets(6, 0, -6, 0);
+                if(UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Phone)
+                {
+                    item.ImageInsets = new UIEdgeInsets(6, 0, -6, 0);
+                }
 
                 // Set selected icon
                 icon = string.Concat(icon, "_selected");
