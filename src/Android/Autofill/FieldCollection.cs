@@ -14,7 +14,6 @@ namespace Bit.Android.Autofill
         private HashSet<string> _ignoreSearchTerms = new HashSet<string> { "search", "find", "recipient" };
         private HashSet<string> _passwordTerms = new HashSet<string> { "password", "pswd" };
 
-        public HashSet<int> Ids { get; private set; } = new HashSet<int>();
         public List<AutofillId> AutofillIds { get; private set; } = new List<AutofillId>();
         public SaveDataType SaveType
         {
@@ -35,8 +34,6 @@ namespace Bit.Android.Autofill
         public HashSet<string> Hints { get; private set; } = new HashSet<string>();
         public HashSet<string> FocusedHints { get; private set; } = new HashSet<string>();
         public List<Field> Fields { get; private set; } = new List<Field>();
-        public IDictionary<int, Field> IdToFieldMap { get; private set; } =
-            new Dictionary<int, Field>();
         public IDictionary<string, List<Field>> HintToFieldsMap { get; private set; } =
             new Dictionary<string, List<Field>>();
         public List<AutofillId> IgnoreAutofillIds { get; private set; } = new List<AutofillId>();
@@ -123,18 +120,12 @@ namespace Bit.Android.Autofill
 
         public void Add(Field field)
         {
-            if(Ids.Contains(field.Id))
+            if(Fields.Contains(field))
             {
                 return;
             }
 
             _passwordFields = _usernameFields = null;
-
-            if(field.Id > -1)
-            {
-                Ids.Add(field.Id);
-                IdToFieldMap.Add(field.Id, field);
-            }
 
             Fields.Add(field);
             AutofillIds.Add(field.AutofillId);
