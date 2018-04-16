@@ -16,6 +16,7 @@ namespace Bit.Android.Autofill
         public Field(ViewNode node)
         {
             Id = node.Id;
+            TrackingId = $"{node.Id}_{node.GetHashCode()}";
             IdEntry = node.IdEntry;
             AutofillId = node.AutofillId;
             AutofillType = node.AutofillType;
@@ -68,6 +69,7 @@ namespace Bit.Android.Autofill
         }
         public string Hint { get; set; }
         public int Id { get; private set; }
+        public string TrackingId { get; private set; }
         public string IdEntry { get; set; }
         public AutofillId AutofillId { get; private set; }
         public AutofillType AutofillType { get; private set; }

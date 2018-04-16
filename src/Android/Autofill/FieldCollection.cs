@@ -33,6 +33,7 @@ namespace Bit.Android.Autofill
         }
         public HashSet<string> Hints { get; private set; } = new HashSet<string>();
         public HashSet<string> FocusedHints { get; private set; } = new HashSet<string>();
+        public HashSet<string> FieldTrackingIds { get; private set; } = new HashSet<string>();
         public List<Field> Fields { get; private set; } = new List<Field>();
         public IDictionary<string, List<Field>> HintToFieldsMap { get; private set; } =
             new Dictionary<string, List<Field>>();
@@ -120,13 +121,14 @@ namespace Bit.Android.Autofill
 
         public void Add(Field field)
         {
-            if(Fields.Contains(field))
+            if(field == null || FieldTrackingIds.Contains(field.TrackingId))
             {
                 return;
             }
 
             _passwordFields = _usernameFields = null;
 
+            FieldTrackingIds.Add(field.TrackingId);
             Fields.Add(field);
             AutofillIds.Add(field.AutofillId);
 
