@@ -11,7 +11,7 @@ namespace Bit.Android.Autofill
     {
         private List<Field> _passwordFields = null;
         private List<Field> _usernameFields = null;
-        private HashSet<string> _ignoreSearchTerms = new HashSet<string> { "search", "find" };
+        private HashSet<string> _ignoreSearchTerms = new HashSet<string> { "search", "find", "recipient" };
         private HashSet<string> _passwordTerms = new HashSet<string> { "password", "pswd" };
 
         public HashSet<int> Ids { get; private set; } = new HashSet<int>();
