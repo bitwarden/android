@@ -179,6 +179,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            /*
             var passwordUtf8 = string.Empty;
             var utf8 = System.Text.Encoding.UTF8;
             var utfBytes = utf8.GetBytes(PasswordCell.Entry.Text);
@@ -188,6 +189,7 @@ namespace Bit.App.Pages
             }
             await DisplayAlert("UTF8 Password Is", passwordUtf8, AppResources.Ok);
             _deviceActionService.CopyToClipboard(PasswordCell.Entry.Text + " = " + passwordUtf8);
+            */
 
             await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
             var result = await _authService.TokenPostAsync(EmailCell.Entry.Text, PasswordCell.Entry.Text);
