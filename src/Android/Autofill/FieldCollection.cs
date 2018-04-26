@@ -304,6 +304,20 @@ namespace Bit.Android.Autofill
                 f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
                 f.InputType.HasFlag(InputTypes.TextVariationWebPassword);
 
+            if(!inputTypePassword && f.HtmlInfo != null && f.HtmlInfo.Tag == "input" &&
+                (f.HtmlInfo.Attributes?.Any() ?? false))
+            {
+                foreach(var a in f.HtmlInfo.Attributes)
+                {
+                    var key = a.First as Java.Lang.String;
+                    var val = a.Second as Java.Lang.String;
+                    if(key != null && val != null && key.ToString() == "type" && val.ToString() == "password")
+                    {
+                        return true;
+                    }
+                }
+            }
+
             return inputTypePassword && !ValueContainsAnyTerms(f.IdEntry, _ignoreSearchTerms) &&
                 !ValueContainsAnyTerms(f.Hint, _ignoreSearchTerms);
         }
