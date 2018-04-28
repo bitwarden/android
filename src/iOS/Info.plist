@@ -105,5 +105,7 @@
 	<string>Resources/Assets.xcassets/AppIcons.appiconset</string>
 	<key>CFBundleIconName</key>
 	<string>AppIcon</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to unlock your vault.</string>
 </dict>
 </plist>

@@ -96,5 +96,7 @@
 		<string>vi</string>
 		<string>pl</string>
 	</array>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to unlock your vault.</string>
 </dict>
 </plist>
