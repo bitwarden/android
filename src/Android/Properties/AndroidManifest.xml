@@ -36,5 +36,6 @@
     </receiver>
 
     <activity android:name="net.hockeyapp.android.UpdateActivity" android:exported="false" />
+    <meta-data android:name="android.max_aspect" android:value="2.1" />
   </application>
 </manifest>
