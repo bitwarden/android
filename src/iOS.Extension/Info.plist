@@ -98,7 +98,5 @@
 	</array>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Use Face ID to unlock your vault.</string>
-	<key>NFCReaderUsageDescription</key>
-	<string>Use Yubikeys for two-facor authentication.</string>
 </dict>
 </plist>
