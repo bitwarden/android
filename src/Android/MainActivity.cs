@@ -27,6 +27,7 @@ namespace Bit.Android
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
         private Java.Util.Regex.Pattern _otpPattern = Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
         private IDeviceActionService _deviceActionService;
+        private IDeviceInfoService _deviceInfoService;
         private ISettings _settings;
         private AppOptions _appOptions;
 
@@ -69,6 +70,7 @@ namespace Bit.Android
                 .SetValue(null, Color.FromHex("d2d6de"));
 
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _settings = Resolver.Resolve<ISettings>();
             _appOptions = GetOptions();
             LoadApplication(new App.App(
@@ -134,7 +136,7 @@ namespace Bit.Android
             // ref https://bugzilla.xamarin.com/show_bug.cgi?id=36907
             Task.Delay(10).Wait();
 
-            if(Utilities.NfcEnabled())
+            if(_deviceInfoService.NfcEnabled)
             {
                 try
                 {
@@ -206,7 +208,7 @@ namespace Bit.Android
 
         private void ListenYubiKey(bool listen)
         {
-            if(!Utilities.NfcEnabled())
+            if(!_deviceInfoService.NfcEnabled)
             {
                 return;
             }

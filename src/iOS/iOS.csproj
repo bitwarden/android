@@ -233,6 +233,7 @@
     <Compile Include="Controls\ExtendedPickerRenderer.cs" />
     <Compile Include="Controls\ExtendedEntryRenderer.cs" />
     <Compile Include="Controls\ExtendedTabbedPageRenderer.cs" />
+    <Compile Include="NFCReaderDelegate.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />

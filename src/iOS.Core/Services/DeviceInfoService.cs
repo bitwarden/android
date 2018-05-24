@@ -24,7 +24,7 @@ namespace Bit.iOS.Core.Services
             }
         }
         public float Scale => (float)UIScreen.MainScreen.Scale;
-        public bool NfcEnabled => false;
+        public bool NfcEnabled => CoreNFC.NFCNdefReaderSession.ReadingAvailable;
         public bool HasCamera => true;
         public bool AutofillServiceSupported => false;
         public bool HasFaceIdSupport

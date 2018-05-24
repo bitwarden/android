@@ -1,5 +1,7 @@
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
+using Android.Nfc;
 using Android.OS;
 using Android.Views.Autofill;
 using Bit.App.Abstractions;
@@ -45,7 +47,7 @@ namespace Bit.Android.Services
                 return 1f;
             }
         }
-        public bool NfcEnabled => Utilities.NfcEnabled();
+        public bool NfcEnabled => NfcIsEnabled();
         public bool HasCamera => CrossCurrentActivity.Current.Activity.PackageManager.HasSystemFeature(
             PackageManager.FeatureCamera);
         public bool AutofillServiceSupported => AutofillSupported();
@@ -56,10 +58,17 @@ namespace Bit.Android.Services
             {
                 return false;
             }
-            
+
             var afm = (AutofillManager)CrossCurrentActivity.Current.Activity.GetSystemService(
                 Java.Lang.Class.FromType(typeof(AutofillManager)));
             return afm.IsAutofillSupported;
+        }
+        public bool NfcIsEnabled()
+        {
+            var activity = CrossCurrentActivity.Current.Activity;
+            var manager = (NfcManager)activity.GetSystemService(Context.NfcService);
+            var adapter = manager.DefaultAdapter;
+            return adapter != null && adapter.IsEnabled;
         }
     }
 }

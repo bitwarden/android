@@ -20,6 +20,7 @@ using Google.Analytics;
 using FFImageLoading.Forms.Touch;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
+using CoreNFC;
 
 namespace Bit.iOS
 {
@@ -28,6 +29,7 @@ namespace Bit.iOS
     {
         private GaiCompletionHandler _dispatchHandler = null;
         private ILockService _lockService;
+        private IDeviceInfoService _deviceInfoService;
         private iOSPushNotificationHandler _pushHandler = null;
 
         public ISettings Settings { get; set; }
@@ -42,6 +44,7 @@ namespace Bit.iOS
             }
 
             _lockService = Resolver.Resolve<ILockService>();
+            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _pushHandler = new iOSPushNotificationHandler(Resolver.Resolve<IPushNotificationListener>());
             var appIdService = Resolver.Resolve<IAppIdService>();
 
@@ -105,6 +108,26 @@ namespace Bit.iOS
 
                 modal.PresentViewController(activityViewController, true, null);
             });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
+                    "ListenYubiKeyOTP", (sender, listen) =>
+                {
+                    if(!_deviceInfoService.NfcEnabled)
+                    {
+                        return;
+                    }
+
+                    var del = new NFCReaderDelegate((success, message) =>
+                    {
+                        Debug.WriteLine((success ? "SUCCESS! " : "ERROR! ") + message);
+                        if(success)
+                        {
+                            MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", message);
+                        }
+                    });
+                    var session = new NFCNdefReaderSession(del, null, true);
+                    session.BeginSession();
+                });
 
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
