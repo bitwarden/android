@@ -28,6 +28,7 @@ namespace Bit.iOS
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
         private GaiCompletionHandler _dispatchHandler = null;
+        private NFCNdefReaderSession _nfcSession = null;
         private ILockService _lockService;
         private IDeviceInfoService _deviceInfoService;
         private iOSPushNotificationHandler _pushHandler = null;
@@ -117,16 +118,25 @@ namespace Bit.iOS
                         return;
                     }
 
-                    var del = new NFCReaderDelegate((success, message) =>
+                    if(listen)
                     {
-                        Debug.WriteLine((success ? "SUCCESS! " : "ERROR! ") + message);
-                        if(success)
+                        var del = new NFCReaderDelegate((success, message) =>
                         {
-                            MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", message);
-                        }
-                    });
-                    var session = new NFCNdefReaderSession(del, null, true);
-                    session.BeginSession();
+                            Debug.WriteLine((success ? "SUCCESS! " : "ERROR! ") + message);
+                            if(success)
+                            {
+                                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", message);
+                            }
+                        });
+
+                        _nfcSession = new NFCNdefReaderSession(del, null, true);
+                        _nfcSession.BeginSession();
+                    }
+                    else
+                    {
+                        _nfcSession?.InvalidateSession();
+                        _nfcSession = null;
+                    }
                 });
 
             UIApplication.SharedApplication.StatusBarHidden = false;
