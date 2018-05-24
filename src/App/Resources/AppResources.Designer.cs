@@ -1591,6 +1591,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hold your Yubikey near the top of the device..
+        /// </summary>
+        public static string HoldYubikeyNearTop {
+            get {
+                return ResourceManager.GetString("HoldYubikeyNearTop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Host.
         /// </summary>
         public static string Host {

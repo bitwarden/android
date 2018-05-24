@@ -34,12 +34,10 @@ namespace Bit.iOS
 
             foreach(var result in results)
             {
-                Debug.WriteLine("READ TAG: " + result);
                 var matches = _otpPattern.Matches(result);
                 if(matches.Count > 0 && matches[0].Groups.Count > 1)
                 {
                     var otp = matches[0].Groups[1].ToString();
-                    Debug.WriteLine("TAG IS MATCH: " + otp);
                     _callback.Invoke(true, otp);
                     return;
                 }

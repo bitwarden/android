@@ -21,6 +21,7 @@ using FFImageLoading.Forms.Touch;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
 using CoreNFC;
+using Bit.App.Resources;
 
 namespace Bit.iOS
 {
@@ -120,21 +121,26 @@ namespace Bit.iOS
 
                     if(listen)
                     {
-                        var del = new NFCReaderDelegate((success, message) =>
+                        _nfcSession?.InvalidateSession();
+                        _nfcSession?.Dispose();
+                        _nfcSession = null;
+                        _nfcSession = new NFCNdefReaderSession(new NFCReaderDelegate((success, message) =>
                         {
-                            Debug.WriteLine((success ? "SUCCESS! " : "ERROR! ") + message);
                             if(success)
                             {
-                                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", message);
+                                Device.BeginInvokeOnMainThread(() =>
+                                {
+                                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", message);
+                                });
                             }
-                        });
-
-                        _nfcSession = new NFCNdefReaderSession(del, null, true);
+                        }), null, true);
+                        _nfcSession.AlertMessage = AppResources.HoldYubikeyNearTop;
                         _nfcSession.BeginSession();
                     }
                     else
                     {
                         _nfcSession?.InvalidateSession();
+                        _nfcSession?.Dispose();
                         _nfcSession = null;
                     }
                 });
