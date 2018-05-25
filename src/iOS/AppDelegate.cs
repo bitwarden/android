@@ -116,19 +116,17 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
                     "ListenYubiKeyOTP", (sender, listen) =>
                 {
-                    if(!_deviceInfoService.NfcEnabled)
+                    if(_deviceInfoService.NfcEnabled)
                     {
-                        return;
-                    }
-
-                    _nfcSession?.InvalidateSession();
-                    _nfcSession?.Dispose();
-                    _nfcSession = null;
-                    if(listen)
-                    {
-                        _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true);
-                        _nfcSession.AlertMessage = AppResources.HoldYubikeyNearTop;
-                        _nfcSession.BeginSession();
+                        _nfcSession?.InvalidateSession();
+                        _nfcSession?.Dispose();
+                        _nfcSession = null;
+                        if(listen)
+                        {
+                            _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true);
+                            _nfcSession.AlertMessage = AppResources.HoldYubikeyNearTop;
+                            _nfcSession.BeginSession();
+                        }
                     }
                 });
 
