@@ -244,16 +244,20 @@ namespace Bit.App.Pages
                     Margin = new Thickness(0, 0, 0, 25)
                 };
 
-                TokenCell = new FormEntryCell("", isPassword: true, imageSource: "lock", useLabelAsPlaceholder: true);
-                TokenCell.Entry.ReturnType = ReturnType.Go;
+                var section = new TableSection(Helpers.GetEmptyTableSectionTitle())
+                {
+                    RememberCell
+                };
 
-                var table = new TwoFactorTable(
-                    new TableSection(Helpers.GetEmptyTableSectionTitle())
-                    {
-                        TokenCell,
-                        RememberCell
-                    });
+                if(Device.RuntimePlatform != Device.iOS)
+                {
+                    TokenCell = new FormEntryCell("", isPassword: true, imageSource: "lock",
+                        useLabelAsPlaceholder: true);
+                    TokenCell.Entry.ReturnType = ReturnType.Go;
+                    section.Insert(0, TokenCell);
+                }
 
+                var table = new TwoFactorTable(section);
                 var layout = new RedrawableStackLayout
                 {
                     Children = { instruction, image, table, anotherMethodButton },
