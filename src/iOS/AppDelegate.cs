@@ -33,6 +33,7 @@ namespace Bit.iOS
         private ILockService _lockService;
         private IDeviceInfoService _deviceInfoService;
         private iOSPushNotificationHandler _pushHandler = null;
+        private NFCReaderDelegate _nfcDelegate = null;
 
         public ISettings Settings { get; set; }
 
@@ -48,6 +49,7 @@ namespace Bit.iOS
             _lockService = Resolver.Resolve<ILockService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
             _pushHandler = new iOSPushNotificationHandler(Resolver.Resolve<IPushNotificationListener>());
+            _nfcDelegate = new NFCReaderDelegate((success, message) => ProcessYubikey(success, message));
             var appIdService = Resolver.Resolve<IAppIdService>();
 
             var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
@@ -119,29 +121,14 @@ namespace Bit.iOS
                         return;
                     }
 
+                    _nfcSession?.InvalidateSession();
+                    _nfcSession?.Dispose();
+                    _nfcSession = null;
                     if(listen)
                     {
-                        _nfcSession?.InvalidateSession();
-                        _nfcSession?.Dispose();
-                        _nfcSession = null;
-                        _nfcSession = new NFCNdefReaderSession(new NFCReaderDelegate((success, message) =>
-                        {
-                            if(success)
-                            {
-                                Device.BeginInvokeOnMainThread(() =>
-                                {
-                                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", message);
-                                });
-                            }
-                        }), null, true);
+                        _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true);
                         _nfcSession.AlertMessage = AppResources.HoldYubikeyNearTop;
                         _nfcSession.BeginSession();
-                    }
-                    else
-                    {
-                        _nfcSession?.InvalidateSession();
-                        _nfcSession?.Dispose();
-                        _nfcSession = null;
                     }
                 });
 
@@ -361,6 +348,17 @@ namespace Bit.iOS
             };
 
             Gai.SharedInstance.Dispatch(_dispatchHandler);
+        }
+
+        private void ProcessYubikey(bool success, string message)
+        {
+            if(success)
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", message);
+                });
+            }
         }
     }
 }
