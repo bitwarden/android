@@ -148,8 +148,8 @@ namespace Bit.Android.Services
                     .SetAlias(KeyAlias)
                     .SetSubject(subject)
                     .SetSerialNumber(BigInteger.Ten)
-                    .SetStartDate(new Date(0))
-                    .SetEndDate(end.Time)
+                    //.SetStartDate(new Date(0))
+                    //.SetEndDate(end.Time)
                     .Build();
 
                 var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
@@ -161,8 +161,8 @@ namespace Bit.Android.Services
                 var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
                     .SetBlockModes(KeyProperties.BlockModeGcm)
                     .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
-                    .SetKeyValidityStart(new Date(0))
-                    .SetKeyValidityEnd(end.Time)
+                    //.SetKeyValidityStart(new Date(0))
+                    //.SetKeyValidityEnd(end.Time)
                     .Build();
 
                 var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, AndroidKeyStore);
