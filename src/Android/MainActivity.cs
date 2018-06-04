@@ -28,6 +28,7 @@ namespace Bit.Android
         private Java.Util.Regex.Pattern _otpPattern = Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
         private IDeviceActionService _deviceActionService;
         private IDeviceInfoService _deviceInfoService;
+        private IAppSettingsService _appSettingsService;
         private ISettings _settings;
         private AppOptions _appOptions;
 
@@ -71,6 +72,7 @@ namespace Bit.Android
 
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
+            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _settings = Resolver.Resolve<ISettings>();
             _appOptions = GetOptions();
             LoadApplication(new App.App(
@@ -83,7 +85,7 @@ namespace Bit.Android
                 Resolver.Resolve<ILockService>(),
                 Resolver.Resolve<ILocalizeService>(),
                 Resolver.Resolve<IAppInfoService>(),
-                Resolver.Resolve<IAppSettingsService>(),
+                _appSettingsService,
                 _deviceActionService));
 
             if(_appOptions?.Uri == null)
@@ -146,6 +148,11 @@ namespace Bit.Android
                 {
                     System.Diagnostics.Debug.WriteLine(e);
                 }
+            }
+
+            if(_appSettingsService.Locked)
+            {
+                MessagingCenter.Send(Xamarin.Forms.Application.Current, "Resumed", false);
             }
         }
 

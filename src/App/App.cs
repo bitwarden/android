@@ -78,14 +78,14 @@ namespace Bit.App
                 MainPage = new ExtendedNavigationPage(new HomePage());
             }
 
-            if(Device.RuntimePlatform == Device.iOS)
+            MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, forceLock) =>
             {
-                MessagingCenter.Subscribe<Application, bool>(Current, "Resumed", async (sender, forceLock) =>
+                Device.BeginInvokeOnMainThread(async () => await _lockService.CheckLockAsync(forceLock));
+                if(Device.RuntimePlatform == Device.iOS)
                 {
-                    Device.BeginInvokeOnMainThread(async () => await _lockService.CheckLockAsync(forceLock));
                     await Task.Run(() => FullSyncAsync()).ConfigureAwait(false);
-                });
-            }
+                }
+            });
         }
 
         protected async override void OnStart()
