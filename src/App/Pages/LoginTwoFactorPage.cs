@@ -232,7 +232,8 @@ namespace Bit.App.Pages
             }
             else if(_providerType == TwoFactorProviderType.YubiKey)
             {
-                instruction.Text = AppResources.YubiKeyInstruction;
+                instruction.Text = Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
+                    AppResources.YubiKeyInstruction;
 
                 var image = new CachedImage
                 {
@@ -268,7 +269,7 @@ namespace Bit.App.Pages
                 {
                     var tryAgainButton = new ExtendedButton
                     {
-                        Text = "Try Again",
+                        Text = AppResources.TryAgain,
                         Style = (Style)Application.Current.Resources["btn-primaryAccent"],
                         Margin = new Thickness(15, 0, 15, 0),
                         Command = new Command(() => ListenYubiKey(true, true)),
