@@ -292,7 +292,7 @@ namespace Bit.App.Pages
                     LoginPasswordCell.Dispose();
                     LoginUsernameCell.Dispose();
                     LoginPasswordCell.Button1.Clicked -= PasswordButton_Clicked;
-                    LoginPasswordCell.Button2.Clicked += PasswordButton2_Clicked;
+                    LoginPasswordCell.Button2.Clicked -= PasswordButton2_Clicked;
                     if(LoginTotpCell?.Button1 != null)
                     {
                         LoginTotpCell.Button1.Clicked -= TotpButton_Clicked;
