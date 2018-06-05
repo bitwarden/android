@@ -260,7 +260,7 @@ namespace Bit.App.Pages
                 var table = new TwoFactorTable(section);
                 var layout = new RedrawableStackLayout
                 {
-                    Children = { instruction, image, table, anotherMethodButton },
+                    Children = { instruction, image, table },
                     Spacing = 0
                 };
 
@@ -268,20 +268,25 @@ namespace Bit.App.Pages
                 {
                     var tryAgainButton = new ExtendedButton
                     {
-                        Text = AppResources.UseAnotherTwoStepMethod,
+                        Text = "Try Again",
                         Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                        Margin = new Thickness(15, 0, 15, 25),
+                        Margin = new Thickness(15, 0, 15, 0),
                         Command = new Command(() => ListenYubiKey(true, true)),
                         Uppercase = false,
                         BackgroundColor = Color.Transparent,
                         VerticalOptions = LayoutOptions.Start
                     };
-                    layout.Children.Insert(3, tryAgainButton);
+                    layout.Children.Add(tryAgainButton);
                 }
+                else
+                {
+                    ToolbarItems.Add(continueToolbarItem);
+                }
+
+                layout.Children.Add(anotherMethodButton);
 
                 table.WrappingStackLayout = () => layout;
                 scrollView.Content = layout;
-                ToolbarItems.Add(continueToolbarItem);
 
                 Title = AppResources.YubiKeyTitle;
                 Content = scrollView;
