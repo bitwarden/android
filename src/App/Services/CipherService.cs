@@ -25,6 +25,7 @@ namespace Bit.App.Services
         private readonly ICipherApiRepository _cipherApiRepository;
         private readonly ISettingsService _settingsService;
         private readonly ICryptoService _cryptoService;
+        private readonly IAppSettingsService _appSettingsService;
 
         public CipherService(
             ICipherRepository cipherRepository,
@@ -33,7 +34,8 @@ namespace Bit.App.Services
             IAuthService authService,
             ICipherApiRepository cipherApiRepository,
             ISettingsService settingsService,
-            ICryptoService cryptoService)
+            ICryptoService cryptoService,
+            IAppSettingsService appSettingsService)
         {
             _cipherRepository = cipherRepository;
             _cipherCollectionRepository = cipherCollectionRepository;
@@ -42,6 +44,7 @@ namespace Bit.App.Services
             _cipherApiRepository = cipherApiRepository;
             _settingsService = settingsService;
             _cryptoService = cryptoService;
+            _appSettingsService = appSettingsService;
         }
 
         public async Task<Cipher> GetByIdAsync(string id)
@@ -59,6 +62,12 @@ namespace Bit.App.Services
 
         public async Task<IEnumerable<Cipher>> GetAllAsync()
         {
+            if(_appSettingsService.ClearCiphersCache)
+            {
+                CachedCiphers = null;
+                _appSettingsService.ClearCiphersCache = false;
+            }
+
             if(CachedCiphers != null)
             {
                 return CachedCiphers;
@@ -261,6 +270,7 @@ namespace Bit.App.Services
         {
             await _cipherRepository.UpsertAsync(cipher);
             CachedCiphers = null;
+            _appSettingsService.ClearCiphersCache = true;
         }
 
         public async Task<ApiResult> DeleteAsync(string id)
@@ -283,6 +293,7 @@ namespace Bit.App.Services
         {
             await _cipherRepository.DeleteAsync(id);
             CachedCiphers = null;
+            _appSettingsService.ClearCiphersCache = true;
         }
 
         public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null)
@@ -348,6 +359,7 @@ namespace Bit.App.Services
                 await _attachmentRepository.UpsertAsync(attachment);
             }
             CachedCiphers = null;
+            _appSettingsService.ClearCiphersCache = true;
         }
 
         public async Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId)
@@ -370,6 +382,7 @@ namespace Bit.App.Services
         {
             await _attachmentRepository.DeleteAsync(attachmentId);
             CachedCiphers = null;
+            _appSettingsService.ClearCiphersCache = true;
         }
 
         private Tuple<string, string[]> InfoFromMobileAppUri(string mobileAppUriString)

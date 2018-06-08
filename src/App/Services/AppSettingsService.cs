@@ -196,5 +196,17 @@ namespace Bit.App.Services
                 _settings.AddOrUpdateValue(Constants.IconsUrl, value);
             }
         }
+
+        public bool ClearCiphersCache
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.ClearCiphersCache, false);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.ClearCiphersCache, value);
+            }
+        }
     }
 }
