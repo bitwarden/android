@@ -63,7 +63,8 @@ namespace Bit.Android
             new Browser("acr.browser.barebones", "search"),
             new Browser("com.microsoft.emmx", "url_bar"),
             new Browser("com.duckduckgo.mobile.android", "omnibarTextInput"),
-            new Browser("mark.via.gp", "aw")
+            new Browser("mark.via.gp", "aw"),
+            new Browser("org.bromite.bromite", "url_bar"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
