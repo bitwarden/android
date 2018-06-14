@@ -206,5 +206,24 @@ namespace Bit.App.Utilities
 
             return code.ToString().PadLeft(6, '0');
         }
+
+        // ref: https://tools.ietf.org/html/rfc5869
+        public static byte[] HkdfExpand(byte[] prk, byte[] info, int size)
+        {
+            var hashLen = 32; // sha256
+            var okm = new byte[size];
+            var previousT = new byte[0];
+            var n = (int)Math.Ceiling((double)size / hashLen);
+            for(int i = 0; i < n; i++)
+            {
+                var t = new byte[previousT.Length + info.Length + 1];
+                previousT.CopyTo(t, 0);
+                info.CopyTo(t, previousT.Length);
+                t[t.Length - 1] = (byte)(i + 1);
+                previousT = ComputeMac(t, prk);
+                previousT.CopyTo(okm, i * hashLen);
+            }
+            return okm;
+        }
     }
 }

@@ -82,8 +82,25 @@ namespace Bit.App.Services
                     var encKeyCs = new CipherString(encKey);
                     try
                     {
-                        var decBytes = DecryptToBytes(encKeyCs, Key);
-                        _encKey = new SymmetricCryptoKey(decBytes);
+                        byte[] decEncKey = null;
+                        if(encKeyCs.EncryptionType == EncryptionType.AesCbc256_B64)
+                        {
+                            decEncKey = DecryptToBytes(encKeyCs, Key);
+                        }
+                        else if(encKeyCs.EncryptionType == EncryptionType.AesCbc256_HmacSha256_B64)
+                        {
+                            var newKey = StretchKey(Key);
+                            decEncKey = DecryptToBytes(encKeyCs, newKey);
+                        }
+                        else
+                        {
+                            throw new Exception("Unsupported EncKey type");
+                        }
+
+                        if(decEncKey != null)
+                        {
+                            _encKey = new SymmetricCryptoKey(decEncKey);
+                        }
                     }
                     catch
                     {
@@ -462,8 +479,19 @@ namespace Bit.App.Services
 
         public CipherString MakeEncKey(SymmetricCryptoKey key)
         {
-            var bytes = Crypto.RandomBytes(512 / 8);
-            return Encrypt(bytes, key);
+            var encKey = Crypto.RandomBytes(64);
+            // TODO: Remove hardcoded true/false when we're ready to enable key stretching
+            if(false && key.Key.Length == 32)
+            {
+                var newKey = StretchKey(key);
+                return Encrypt(encKey, newKey);
+            }
+            else if(true || key.Key.Length == 64)
+            {
+                return Encrypt(encKey, key);
+            }
+
+            throw new Exception("Invalid key size.");
         }
 
         // Some users like to copy/paste passwords from external files. Sometimes this can lead to two different
@@ -476,6 +504,16 @@ namespace Bit.App.Services
                 .Replace("\r\n", " ") // Windows-style new line => space
                 .Replace("\n", " ") // New line => space
                 .Replace(" ", " "); // No-break space (00A0) => space
+        }
+
+        private SymmetricCryptoKey StretchKey(SymmetricCryptoKey key)
+        {
+            var newKey = new byte[64];
+            var encKey = Crypto.HkdfExpand(key.Key, Encoding.UTF8.GetBytes("enc"), 32);
+            var macKey = Crypto.HkdfExpand(key.Key, Encoding.UTF8.GetBytes("mac"), 32);
+            encKey.CopyTo(newKey, 0);
+            macKey.CopyTo(newKey, 32);
+            return new SymmetricCryptoKey(newKey);
         }
     }
 }
