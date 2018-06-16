@@ -250,6 +250,22 @@ namespace Bit.App.Models.Page
             }
         }
         public bool ShowCardCode => !string.IsNullOrWhiteSpace(CardCode);
+        public bool RevealCardCode
+        {
+            get => _loginRevealPassword;
+            set
+            {
+                _loginRevealPassword = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(RevealCardCode)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedCardCode)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(CardCodeShowHideImage)));
+            }
+        }
+        public string MaskedCardCode => RevealCardCode ?
+            CardCode : CardCode == null ? null : new String('•', CardCode.Length);
+
+        public ImageSource CardCodeShowHideImage => RevealCardCode ?
+            ImageSource.FromFile("eye_slash.png") : ImageSource.FromFile("eye.png");
 
         // Identity
 

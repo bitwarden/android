@@ -215,6 +215,7 @@ namespace Bit.App.Pages
                     CardExpYearCell.InitEvents();
                     CardNameCell.InitEvents();
                     CardNumberCell.InitEvents();
+                    CardCodeCell.Button1.Clicked += CardCodeButton_Clicked;
                     break;
                 case CipherType.Identity:
                     IdTitleCell.InitEvents();
@@ -305,6 +306,7 @@ namespace Bit.App.Pages
                     CardExpYearCell.Dispose();
                     CardNameCell.Dispose();
                     CardNumberCell.Dispose();
+                    CardCodeCell.Button1.Clicked -= CardCodeButton_Clicked;
                     break;
                 case CipherType.Identity:
                     IdTitleCell.Dispose();
@@ -384,6 +386,13 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new ExtendedNavigationPage(scanPage));
         }
 
+        private void CardCodeButton_Clicked(object sender, EventArgs e)
+        {
+            CardCodeCell.Entry.InvokeToggleIsPassword();
+            CardCodeCell.Button1.Image =
+                "eye" + (!CardCodeCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
+        }
+
         private void AlertNoConnection()
         {
             DisplayAlert(AppResources.InternetConnectionRequiredTitle, AppResources.InternetConnectionRequiredMessage,
@@ -451,8 +460,7 @@ namespace Bit.App.Pages
             }
             else if(_type == CipherType.Card)
             {
-                CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric,
-                    nextElement: NotesCell.Editor);
+                CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric, isPassword: true, nextElement: NotesCell.Editor, button1: "eye.png");
                 if(!string.IsNullOrWhiteSpace(_defaultCardCode))
                 {
                     CardCodeCell.Entry.Text = _defaultCardCode;
