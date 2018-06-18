@@ -196,7 +196,7 @@
     <value>Envie-nos um email diretamente para obter ajuda ou deixar feedback.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>Digite o seu código PIN.</value>
+    <value>Introduza o seu código PIN.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>Favoritos</value>
@@ -366,7 +366,7 @@
     <value>Verificar impressão digital</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Verificar palavra-passe</value>
+    <value>Verificar palavra-passe mestra</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Verifica PIN</value>
@@ -470,7 +470,7 @@
     <value>Ativar sincronização automática</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Digite o endereço de email da sua conta para receber a dica da sua palavra-passe mestra.</value>
+    <value>Introduza o endereço de email da sua conta para receber a dica da sua palavra-passe mestra.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Reativar extensão da aplicação</value>
@@ -656,7 +656,7 @@
     <value>Regenerar palavra-passe</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Re-digite a palavra-passe mestra</value>
+    <value>Reescreva a palavra-passe mestra</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Pesquisar cofre</value>
@@ -674,7 +674,7 @@
     <value>Definir PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Digite um código PIN de 4 dígitos para desbloquear a aplicação.</value>
+    <value>Introduza um código PIN de 4 dígitos para desbloquear a aplicação.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Informação do item</value>
@@ -707,7 +707,7 @@
     <value>Início de sessão de dois passos</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>O início de sessão de dois passos torna a sua conta mais segura ao requerer que digite um código de segurança de uma aplicação de autenticação quando iniciar sessão. O início de sessão de dois passos pode ser ativado no cofre web bitwarden.com. Pretende visitar o website agora?</value>
+    <value>O início de sessão de dois passos torna a sua conta mais segura ao requerer que verifique o seu início de sessão com outro dispositivo como uma chave de segurança, aplicação de autenticação, SMS, chamada telefónica, ou email. O início de sessão de dois passos pode ser ativado no cofre web bitwarden.com. Pretende visitar o website agora?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Destrancar com {0}</value>
@@ -842,11 +842,11 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeApp" xml:space="preserve">
-    <value>Digite o código de verificação de 6 dígitos da sua aplicação de autenticador {0}.</value>
+    <value>Introduza o código de verificação de 6 dígitos da sua aplicação de autenticador.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Digite o código de verificação de 6 dígitos que foi enviado por email para {0}.</value>
+    <value>Introduza o código de verificação de 6 dígitos que foi enviado por email para {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -1282,5 +1282,27 @@
   <data name="MatchDetection" xml:space="preserve">
     <value>Deteção de correspondência</value>
     <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
 </root>

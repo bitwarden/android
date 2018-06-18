@@ -412,7 +412,7 @@
     <value>หลีกเลี่ยงอักขระที่ไม่ชัดเจน</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwarden App Extension</value>
+    <value>ส่วนขยายแอปพลิเคชัน bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
@@ -1232,7 +1232,7 @@
     <value>ชื่อเขตข้อมูล ที่กำหนดเอง</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>ค่าบูลีน</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
     <value>ซ่อน</value>
@@ -1244,10 +1244,10 @@
     <value>สร้างเขตข้อมูลที่กำหนดเองใหม่</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>คุณต้องการเพิ่มเขตข้อมูลแบบกำหนดเองชนิดใด</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>เอาออก</value>
   </data>
   <data name="NewUri" xml:space="preserve">
     <value>URI ใหม่</value>
@@ -1263,24 +1263,46 @@
     <value>ค่าเริ่มต้น</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>ถูกต้อง</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>โฮสต์</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>นิพจน์ทั่วไป</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>เริ่มต้นด้วย</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>ตรวจพบการจับคู่ URL</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>ตรวจพบการจับคู่</value>
     <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
 </root>

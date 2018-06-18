@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden - manager de parole</value>
+    <value>Bitwarden - Manager de parole gratuit</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden este un manager de autentificări ce vă ajută să fiţi în siguranță.</value>
+    <value>Bitwarden este un manager de autentificări ce vă ajută să fiţi în siguranță.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate autentificările și parolele, în timp ce le păstrați sincronizate între toate dispozitivele dvs.
+    <value>Bitwarden este cea mai ușoară și cea mai sigură metodă de a stoca toate autentificările și parolele, în timp ce le păstrați sincronizate între toate dispozitivele dvs.
 
 Furtul de parole este o problemă serioasă. Site-urile web și aplicațiile pe care le utilizați sunt atacate în fiecare zi. Se înregistrează încălcări ale securității și parolele dvs. sunt furate. Când reutilizați aceleași parole între aplicații și site-uri web, hackerii pot accesa cu ușurință e-mailurile, conturile bancare și alte conturi importante.
 
-Experții în securitate vă recomandă să utilizați o parolă diferită, generată aleatoriu pentru fiecare cont pe care îl creați. Dar cum gestionați toate aceste parole? bitwarden vă ușurează crearea, stocarea și accesarea parolelor.
+Experții în securitate vă recomandă să utilizați o parolă diferită, generată aleatoriu pentru fiecare cont pe care îl creați. Dar cum gestionați toate aceste parole? Bitwarden vă ușurează crearea, stocarea și accesarea parolelor.
 
-bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.</value>
+Bitwarden stochează toate autentificările dvs. într-un seif criptat care se sincronizează pe toate dispozitivele dvs. Deoarece este complet criptat numai dvs. aveţi acces la date. Nici măcar echipa Bitwarden nu poate citi datele dvs., chiar dacă vrem. Datele dvs. sunt sigilate cu criptare bit AES-256, salted hashing și PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
