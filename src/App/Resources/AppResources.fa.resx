@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>بیت واردن</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>از وب‌ سایت ما دیدن کنید</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>برای کمک گرفتن، اخبار، ایمیل ما، و یا آموزش بیشتر برای استفاده از بیت واردن از وب سایت ما دیدن کنید.</value>
+    <value>برای کمک گرفتن، اخبار، ایمیل ما، و یا آموزش بیشتر برای استفاده از Bitwarden از وب سایت ما دیدن کنید.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>وب سایت</value>
@@ -403,7 +403,7 @@
     <value>افزونه اپلیکیشن</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>از قابلیت دسترسی بیت واردن برای پر کردن خودکار ورود به سیستم خود در سراسر برنامه ها و وب استفاده کنید.</value>
+    <value>از قابلیت دسترسی Bitwarden برای پر کردن خودکار ورود به سیستم خود در سراسر برنامه ها و وب استفاده کنید.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>سرویس پر کردن خودکار</value>
@@ -412,19 +412,19 @@
     <value>از کاراکترهای متقارن استفاده نکن</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>افزونه اپلیکیشن بیت واردن</value>
+    <value>افزونه اپلیکیشن Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه اپلیکیشن بیت واردن است. برای اطلاع بیشتر از چگونگی استفاده از افزونه اپلیکیشن مرورکردن صفحه "ابزار" است.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه اپلیکیشن Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از افزونه اپلیکیشن مرورکردن صفحه "ابزار" است.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>با بیت واردن در سافاری و دیگر برنامه ها میتوانید از قابلیت پر کردن خودکار در ورودهایتان استفاده کنید.</value>
+    <value>با Bitwarden در سافاری و دیگر برنامه ها میتوانید از قابلیت پر کردن خودکار در ورودهایتان استفاده کنید.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>سرویس پرکردن خودکار بیت واردن</value>
+    <value>سرویس پرکردن خودکار Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>از قابلیت دسترسی بیت واردن برای تکمیل خودکار ورود به سیستم خود در سراسر برنامه ها و وب استفاده کنید.</value>
+    <value>از قابلیت دسترسی Bitwarden برای تکمیل خودکار ورود به سیستم خود در سراسر برنامه ها و وب استفاده کنید.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>تغییر ایمیل</value>
@@ -482,7 +482,7 @@
     <value>افزونه اپلیکیشن را فعال کنید</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>در سافاری، بیت واردن را با استفاده از آیکون اشتراک گذاری پیدا کنید (راهنمایی: به سمت راست در ردیف پایین فهرست بروید).</value>
+    <value>در سافاری، Bitwarden را با استفاده از آیکون اشتراک گذاری پیدا کنید (راهنمایی: به سمت راست در ردیف پایین فهرست بروید).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>اطلاعات ورود شما حالا از سافاری، کروم، و دیگر برنامه های پشتیبانی شده به راحتی قابل دسترسی است.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>در سافاری و کروم، بیت واردن را با استفاده از آیکون اشتراک گذاری پیدا کنید (راهنمایی: به سمت راست در ردیف پایین فهرست بروید).</value>
+    <value>در سافاری و کروم، Bitwarden را با استفاده از آیکون اشتراک گذاری پیدا کنید (راهنمایی: به سمت راست در ردیف پایین فهرست بروید).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>برای راه اندازی افزونه به آیکون بیت واردن در منو ضربه بزنید.</value>
+    <value>برای راه اندازی افزونه به آیکون Bitwarden در منو ضربه بزنید.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>برای فعال سازی بیت واردن در سافاری و سایر برنامه ها، نماد "بیشتر" را در پایین ردیف منو ضربه بزنید.</value>
+    <value>برای فعال سازی Bitwarden در سافاری و سایر برنامه ها، نماد "بیشتر" را در پایین ردیف منو ضربه بزنید.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>مورد علاقه</value>
@@ -591,7 +591,7 @@
     <value>تنظیمات بیشتر</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>شما بایستی به برنامه اصلی بیت واردن وارد شوید تا بتوانید از افزونه استفاده کنید.</value>
+    <value>شما بایستی به برنامه اصلی Bitwarden وارد شوید تا بتوانید از افزونه استفاده کنید.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>هرگز</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>گزینه های پیش فرض از ابزار تولید رمز عبور بیت واردن تنظیم شد.</value>
+    <value>گزینه های پیش فرض از ابزار تولید رمز عبور Bitwarden تنظیم شد.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>گزینه ها</value>
@@ -640,7 +640,7 @@
     <value>آیا از بازنویسی بر روی رمز عبور فعلی مطمئن هستید؟</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>بیت واردن گاوصندوق شما را بصورت خودکار از طریق نشان دادن اطلاعیه ها به هنگام سازی میکند. برای بهترین تجربه کاربری ممکن، لطفاً زمانی که از شما پرسیده شد "مجاز" را سریعاً انتخاب کنید تا نمایش اعلانیه ها فعال شود.</value>
+    <value>Bitwarden گاوصندوق شما را بصورت خودکار از طریق نشان دادن اطلاعیه ها به هنگام سازی میکند. برای بهترین تجربه کاربری ممکن، لطفاً زمانی که از شما پرسیده شد "مجاز" را سریعاً انتخاب کنید تا نمایش اعلانیه ها فعال شود.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>لطفاً با یک بررسی خوب به ما کمک کنید!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>رتبه بندی فروشگاه App Store با هر نسخه جدید از بیت واردن تنظیم می شود. لطفاً با بررسی خوب به ما کمک کنید!</value>
+    <value>رتبه بندی فروشگاه App Store با هر نسخه جدید از Bitwarden تنظیم می شود. لطفاً با بررسی خوب به ما کمک کنید!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>تولید رمز عبور</value>
@@ -726,10 +726,10 @@
     <value>مشاهده مورد</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>گاوصندوق وب بیت واردن</value>
+    <value>گاوصندوق وب Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>مورد های خود را از هر مرورگر وب با گاوصندوق وب بیت واردن مدیریت کنید.</value>
+    <value>مورد های خود را از هر مرورگر وب با گاوصندوق وب Bitwarden مدیریت کنید.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>برنامه تأیید کننده از دست رفته؟</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>زمانی که شما یک اطلاع رسانی پر کردن خودکار بیت واردن را میبینید، میتوانید برای اجرای پر کردن خودکار ضربه بزنید.</value>
+    <value>زمانی که شما یک اطلاع رسانی پر کردن خودکار Bitwarden را میبینید، میتوانید برای اجرای پر کردن خودکار ضربه بزنید.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>برای پر کردن خودکار یک اطلاع رسانی در گاوصندوقتان این اطلاع رسانی را ضربه بزنید.</value>
@@ -765,7 +765,7 @@
     <value>باز کردن تنظیمات دستیابی</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. در صفحه تنظیمات دستیابی اندروید، "بیت واردن" را در قسمت سرویس ها لمس کنید.</value>
+    <value>1. در صفحه تنظیمات دستیابی اندروید، "Bitwarden" را در قسمت سرویس ها لمس کنید.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>۲. روشن کردن را انتخاب کنید و تأیید را بفشارید.</value>
@@ -783,7 +783,7 @@
     <value>آزمایشی</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوقتان از سرویس پر کردن خودکار بیت واردن است. برای اطلاعات بیشتر درباره استفاده از سرویس پر کردن خودکار بیت واردن است مرور کردن صفحه "ابزار" است.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوقتان از سرویس پر کردن خودکار Bitwarden است. برای اطلاعات بیشتر درباره استفاده از سرویس پر کردن خودکار Bitwarden است مرور کردن صفحه "ابزار" است.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>پر کردن خودکار</value>
@@ -1009,7 +1009,7 @@
     <value>محیط خود میزبان</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>آدرس اینترنتی پایه فرضی نصب بیت واردن میزبانی شده را مشخص کنید.</value>
+    <value>آدرس اینترنتی پایه فرضی نصب Bitwarden میزبانی شده را مشخص کنید.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>آدرس اینترنتی سرور</value>
@@ -1174,7 +1174,7 @@
     <value>آدرس سرور آیکون ها</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>پر کردن خودکار با بیت واردن</value>
+    <value>پر کردن خودکار با Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>گاوصندوق قفل شد</value>
@@ -1195,10 +1195,10 @@
     <value>سرویس دستیابی به پر کردن خودکار</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>سرویس خودکار بیت واردن با استفاده از چهار چوب پر کردن خودکار اندروید برای کمک به پر کردن ورودی ها، کارت های اعتباری و اطلاعات هویت به سایر برنامه ها در دستگاه شما کمک می کند.</value>
+    <value>سرویس خودکار Bitwarden با استفاده از چهار چوب پر کردن خودکار اندروید برای کمک به پر کردن ورودی ها، کارت های اعتباری و اطلاعات هویت به سایر برنامه ها در دستگاه شما کمک می کند.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>از سرویس پر کردن خودکار بیت واردن برای پر کردن ورودها، کارتهای اعتباری، و اطلاعات هویتی درون اپلیکیشن ها استفاده کنید.</value>
+    <value>از سرویس پر کردن خودکار Bitwarden برای پر کردن ورودها، کارتهای اعتباری، و اطلاعات هویتی درون اپلیکیشن ها استفاده کنید.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>باز کردن تنظیمات پر کردن خودکار</value>
@@ -1282,5 +1282,27 @@
   <data name="MatchDetection" xml:space="preserve">
     <value>تشخیص سابقه</value>
     <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
 </root>
