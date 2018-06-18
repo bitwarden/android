@@ -221,6 +221,8 @@ namespace Bit.App.Pages
                 CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric,
                     isPassword: true, nextElement: NotesCell.Editor, button1: "eye.png");
                 CardCodeCell.Entry.Text = Cipher.Card.Code?.Decrypt(Cipher.OrganizationId);
+                CardCodeCell.Entry.FontFamily =
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
 
                 CardExpYearCell = new FormEntryCell(AppResources.ExpirationYear, Keyboard.Numeric,
                     nextElement: CardCodeCell.Entry);

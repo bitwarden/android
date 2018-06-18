@@ -460,11 +460,15 @@ namespace Bit.App.Pages
             }
             else if(_type == CipherType.Card)
             {
-                CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric, isPassword: true, nextElement: NotesCell.Editor, button1: "eye.png");
+                CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric,
+                    isPassword: true, nextElement: NotesCell.Editor, button1: "eye.png");
                 if(!string.IsNullOrWhiteSpace(_defaultCardCode))
                 {
                     CardCodeCell.Entry.Text = _defaultCardCode;
                 }
+                CardCodeCell.Entry.FontFamily =
+                    Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
+
                 CardExpYearCell = new FormEntryCell(AppResources.ExpirationYear, Keyboard.Numeric,
                     nextElement: CardCodeCell.Entry);
                 if(!string.IsNullOrWhiteSpace(_defaultCardExpYear))

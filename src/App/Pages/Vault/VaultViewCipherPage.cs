@@ -168,14 +168,15 @@ namespace Bit.App.Pages
                     CardExpCell = new LabeledValueCell(AppResources.Expiration);
                     CardExpCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.CardExp));
 
-                    CardCodeCell = new LabeledValueCell(AppResources.SecurityCode, button1Image: string.Empty, button2Image: "clipboard.png");
-                    CardCodeCell.Value.SetBinding(Label.TextProperty,
-                                            nameof(VaultViewCipherPageModel.MaskedCardCode));
+                    CardCodeCell = new LabeledValueCell(AppResources.SecurityCode, button1Image: string.Empty,
+                        button2Image: "clipboard.png");
+                    CardCodeCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.MaskedCardCode));
                     CardCodeCell.Button1.SetBinding(Button.ImageProperty,
-                                            nameof(VaultViewCipherPageModel.CardCodeShowHideImage));
-                    CardCodeCell.Button1.Command =
-                        new Command(() => Model.RevealCardCode = !Model.RevealCardCode);
+                        nameof(VaultViewCipherPageModel.CardCodeShowHideImage));
+                    CardCodeCell.Button1.Command = new Command(() => Model.RevealCardCode = !Model.RevealCardCode);
                     CardCodeCell.Button2.Command = new Command(() => Copy(Model.CardCode, AppResources.SecurityCode));
+                    CardCodeCell.Value.FontFamily =
+                        Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
                     break;
                 case CipherType.Identity:
                     IdNameCell = new LabeledValueCell(AppResources.Name);
