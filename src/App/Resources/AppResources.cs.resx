@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Navštivit naší webovou stránku</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Navštivte webovou stránku aplikace pro zobrazení nejnovějších zpráv, nápovědy nebo návodu jak používat bitwarden.</value>
+    <value>Navštivte webovou stránku aplikace pro zobrazení nápovědy, novinek, nebo návody jak používat Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webová stránka</value>
@@ -412,13 +412,13 @@
     <value>Nepoužít zaměnitelné znaky</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Rozšíření aplikace bitwarden</value>
+    <value>Rozšíření aplikace Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je použití rozšíření bitwarden. Přečtěte si další informace o použití rozšíření na obrazovce "Nástroje".</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je použití rozšíření aplikace Bitwarden. Přečtěte si další informace o použití rozšíření na obrazovce "Nástroje".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Použijte bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</value>
+    <value>Použijte Bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
     <value>Služba automatického vyplňování</value>
@@ -482,7 +482,7 @@
     <value>Zapnout rozšíření aplikace</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>V Safari bitwarden používá ikonku pro sdílení (nápověda: nachází se vpravo dole v menu).</value>
+    <value>V Safari používá Bitwarden ikonku pro sdílení (nápověda: nachází se vpravo dole v menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Vaše přihlašovací údaje jsou nyní snadno přístupné ze Safari, Chromu a dalších podporovaných aplikací.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>V Safari a Chromu najděte bitwarden pomocí ikony sdílení (nápověda: nachází se vpravo dole v menu).</value>
+    <value>V Safari a Chromu najdete Bitwarden pomocí ikony sdílení (nápověda: nachází se vpravo dole v menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Pro spuštění rozšíření klikněte na ikonku bitwarden v menu.</value>
+    <value>Pro spuštění rozšíření klikněte na ikonku Bitwarden v menu.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Pro zapnutí bitwarden v Safari a ostatních prohlížečích, klikněte na ikonku "více" v dolní části menu.</value>
+    <value>Pro zapnutí Bitwarden v Safari a ostatních prohlížečích, klikněte na ikonku "více" v dolní části menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Oblíbené</value>
@@ -591,7 +591,7 @@
     <value>Další nastavení</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Před použitím rozšíření se musíte nejdříve přihlásit v hlavní aplikaci bitwarden.</value>
+    <value>Před použitím rozšíření se musíte nejdříve přihlásit v hlavní aplikaci Bitwarden.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nikdy</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Výchozí nastavení je převzato z nastavení generování hesel v aplikaci bitwarden.</value>
+    <value>Výchozí nastavení je převzato z nastavení generování hesel v aplikaci Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Možnosti</value>
@@ -640,7 +640,7 @@
     <value>Opravdu chcete přepsat aktuální heslo?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden udržuje váš trezor automaticky synchronizovaný pomocí nabízených oznámení. Pro nejlepší možný zážitek klikněte prosím na následující výzvě na "Ok", pokud budete požádáni o jejich povolení.</value>
+    <value>Bitwarden udržuje váš trezor automaticky synchronizovaný pomocí nabízených oznámení. Pro nejlepší možný zážitek klikněte prosím na následující výzvě na "Ok", pokud budete požádáni o jejich povolení.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Pomozte nám napsáním dobré recenze!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>S každou novou verzí aplikace bitwarden se v App Store obnovuje hodnocení. Pomozte nám prosím dobrou recenzí!</value>
+    <value>S každou novou verzí aplikace Bitwarden se v App Store obnovuje hodnocení. Pomozte nám prosím dobrou recenzí!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Vygenerovat další heslo</value>
@@ -729,7 +729,7 @@
     <value>Webová aplikace</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Spravujte přihlašovací údaje z jakéhokoliv prohlížeče pomocí webové aplikace bitwarden.</value>
+    <value>Spravujte přihlašovací údaje z jakéhokoliv prohlížeče pomocí webové aplikace Bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Ztratili jste ověřovací aplikaci?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Pokud uvidíte v liště oznámení bitwarden, můžete klepnutím na něj spustit automatické vyplnění přihlašovacích údajů.</value>
+    <value>Pokud uvidíte v liště oznámení z aplikace Bitwarden, můžete klepnutím na něj spustit automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Klikněte pro automatické vyplnění přihlašovacích údajů.</value>
@@ -765,7 +765,7 @@
     <value>Otevřít nastavení usnadnění</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. V menu v nastavení Usnadnění klikněte na "bitwarden" pod nadpisem Služby.</value>
+    <value>1. V menu v nastavení Usnadnění klikněte na "Bitwarden" pod nadpisem Služby.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Zapněte přepínač a potvrďte stisknutím tlačítka OK.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je služba automatického vyplňování bitwarden. Přečtěte si další informace o použití této služby na obrazovce "Nástroje".</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je služba automatického vyplňování Bitwarden. Přečtěte si další informace o použití této služby na obrazovce "Nástroje".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatické vyplnění</value>
@@ -883,7 +883,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Pro pokračování podržte YubiKey NEO blízko zadní strany vašeho zařízení.</value>
+    <value>Pro pokračování podržte YubiKey NEO blízko zadní strany vašeho zařízení nebo vložte YubiKey do USB portu a stiskněte tlačítko na klíči.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey NEO bezpečnostní klíč</value>
@@ -1009,7 +1009,7 @@
     <value>Vlastnoručně hostované prostředí</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Zadejte základní URL adresu vlastnoručně hostované aplikace bitwarden.</value>
+    <value>Zadejte základní URL adresu vlastnoručně hostované aplikace Bitwarden.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>URL serveru</value>
@@ -1174,7 +1174,7 @@
     <value>URL serveru ikonek</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Automatické vyplnění s aplikací bitwarden</value>
+    <value>Automatické vyplnění s aplikací Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Trezor je zamknutý</value>
@@ -1226,61 +1226,83 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Nepodařilo se nám automaticky otevřít nastavení automatického vyplňování Android. Nastavení můžete otevřít ručně z Nastavení systému Android &gt; Systém &gt; Jazyky a vstup &gt; Rozšířené &gt; Služba automatického vyplňování.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Název vlastního pole</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>Ano/Ne</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Skryté</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Text</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Nové vlastní pole</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Jaký typ vlastního pole chcete přidat?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Smazat</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>Nová URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Základní doména</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Výchozí</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Přesně</value>
   </data>
   <data name="Host" xml:space="preserve">
     <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Regulární výraz</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Začíná na</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>Zjišťování shody URI</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Zjišťování shody</value>
     <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
 </root>
