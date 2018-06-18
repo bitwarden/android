@@ -4685,26 +4685,26 @@ namespace Bit.Android
 			// aapt resource value: 0x7f02005b
 			public const int avd_hide_password = 2130837595;
 			
-			// aapt resource value: 0x7f02015c
-			public const int avd_hide_password_1 = 2130837852;
-			
 			// aapt resource value: 0x7f02015d
-			public const int avd_hide_password_2 = 2130837853;
+			public const int avd_hide_password_1 = 2130837853;
 			
 			// aapt resource value: 0x7f02015e
-			public const int avd_hide_password_3 = 2130837854;
+			public const int avd_hide_password_2 = 2130837854;
+			
+			// aapt resource value: 0x7f02015f
+			public const int avd_hide_password_3 = 2130837855;
 			
 			// aapt resource value: 0x7f02005c
 			public const int avd_show_password = 2130837596;
 			
-			// aapt resource value: 0x7f02015f
-			public const int avd_show_password_1 = 2130837855;
-			
 			// aapt resource value: 0x7f020160
-			public const int avd_show_password_2 = 2130837856;
+			public const int avd_show_password_1 = 2130837856;
 			
 			// aapt resource value: 0x7f020161
-			public const int avd_show_password_3 = 2130837857;
+			public const int avd_show_password_2 = 2130837857;
+			
+			// aapt resource value: 0x7f020162
+			public const int avd_show_password_3 = 2130837858;
 			
 			// aapt resource value: 0x7f02005d
 			public const int bottom_nav_bg = 2130837597;
@@ -5411,11 +5411,11 @@ namespace Bit.Android
 			// aapt resource value: 0x7f020147
 			public const int notification_sm = 2130837831;
 			
-			// aapt resource value: 0x7f02015a
-			public const int notification_template_icon_bg = 2130837850;
-			
 			// aapt resource value: 0x7f02015b
-			public const int notification_template_icon_low_bg = 2130837851;
+			public const int notification_template_icon_bg = 2130837851;
+			
+			// aapt resource value: 0x7f02015c
+			public const int notification_template_icon_low_bg = 2130837852;
 			
 			// aapt resource value: 0x7f020148
 			public const int notification_tile_bg = 2130837832;
@@ -5466,10 +5466,13 @@ namespace Bit.Android
 			public const int upload = 2130837847;
 			
 			// aapt resource value: 0x7f020158
-			public const int user = 2130837848;
+			public const int upload2 = 2130837848;
 			
 			// aapt resource value: 0x7f020159
-			public const int yubikey = 2130837849;
+			public const int user = 2130837849;
+			
+			// aapt resource value: 0x7f02015a
+			public const int yubikey = 2130837850;
 			
 			static Drawable()
 			{
@@ -6506,17 +6509,17 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a0051
 			public const int ApplicationName = 2131361873;
 			
-			// aapt resource value: 0x7f0a00b2
-			public const int AutoFillServiceDescription = 2131361970;
+			// aapt resource value: 0x7f0a00ab
+			public const int AutoFillServiceDescription = 2131361963;
 			
-			// aapt resource value: 0x7f0a00b1
-			public const int AutoFillServiceSummary = 2131361969;
+			// aapt resource value: 0x7f0a00aa
+			public const int AutoFillServiceSummary = 2131361962;
 			
 			// aapt resource value: 0x7f0a0050
 			public const int Hello = 2131361872;
 			
-			// aapt resource value: 0x7f0a00b3
-			public const int MyVault = 2131361971;
+			// aapt resource value: 0x7f0a00ac
+			public const int MyVault = 2131361964;
 			
 			// aapt resource value: 0x7f0a0027
 			public const int abc_action_bar_home_description = 2131361831;
@@ -6670,27 +6673,6 @@ namespace Bit.Android
 			
 			// aapt resource value: 0x7f0a000f
 			public const int common_signin_button_text_long = 2131361807;
-			
-			// aapt resource value: 0x7f0a00ac
-			public const int default_web_client_id = 2131361964;
-			
-			// aapt resource value: 0x7f0a00ad
-			public const int firebase_database_url = 2131361965;
-			
-			// aapt resource value: 0x7f0a00aa
-			public const int gcm_defaultSenderId = 2131361962;
-			
-			// aapt resource value: 0x7f0a00ae
-			public const int google_api_key = 2131361966;
-			
-			// aapt resource value: 0x7f0a00ab
-			public const int google_app_id = 2131361963;
-			
-			// aapt resource value: 0x7f0a00af
-			public const int google_crash_reporting_api_key = 2131361967;
-			
-			// aapt resource value: 0x7f0a00b0
-			public const int google_storage_bucket = 2131361968;
 			
 			// aapt resource value: 0x7f0a0052
 			public const int hockeyapp_crash_dialog_app_name_fallback = 2131361874;

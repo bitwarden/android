@@ -493,6 +493,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The accessibility service may be helpful to use when apps do not support the standard auto-fill service..
+        /// </summary>
+        public static string BitwardenAutofillAccessibilityServiceDescription2 {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillAccessibilityServiceDescription2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service..
         /// </summary>
         public static string BitwardenAutofillGoToSettings {

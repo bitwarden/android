@@ -104,7 +104,7 @@ namespace Bit.App.Pages
 
             DisabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), statusDisabledLabel, enableImage, goButton, BuildAccessibilityButton() },
+                Children = { BuildServiceLabel(), statusDisabledLabel, enableImage, goButton },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
@@ -113,7 +113,7 @@ namespace Bit.App.Pages
 
             EnabledStackLayout = new StackLayout
             {
-                Children = { BuildServiceLabel(), statusEnabledLabel, useImage, BuildAccessibilityButton() },
+                Children = { BuildServiceLabel(), statusEnabledLabel, useImage },
                 Orientation = StackOrientation.Vertical,
                 Spacing = 20,
                 Padding = new Thickness(20, 30),
@@ -164,23 +164,6 @@ namespace Bit.App.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label))
-            };
-        }
-
-        private ExtendedButton BuildAccessibilityButton()
-        {
-            return new ExtendedButton
-            {
-                Text = AppResources.AutofillAccessibilityService,
-                Command = new Command(async () =>
-                {
-                    await Navigation.PushAsync(new ToolsAccessibilityServicePage());
-                }),
-                VerticalOptions = LayoutOptions.End,
-                HorizontalOptions = LayoutOptions.Fill,
-                Style = (Style)Application.Current.Resources["btn-primaryAccent"],
-                Uppercase = false,
-                BackgroundColor = Color.Transparent
             };
         }
     }
