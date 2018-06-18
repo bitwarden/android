@@ -118,21 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden - Bezplatný správce hesel</value>
+    <value>Bitwarden - Správce hesel</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>bitwarden je správce přihlašovacích údajů, který vás pomáhá udržet v bezpečí.</value>
+    <value>Bitwarden je správce přihlašovacích údajů, který Vás pomáhá udržet v bezpečí.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
-    <value>bitwarden je nejjednodušší a nejbezpečnější způsob, jak uchovávat veškeré své přihlašovací údaje a zároveň je mít pohodlně synchronizované mezi všemi svými zařízeními.
+    <value>Bitwarden je nejjednodušší a nejbezpečnější způsob, jak uchovávat veškeré své přihlašovací údaje a zároveň je mít pohodlně synchronizované mezi všemi svými zařízeními.
 
 Krádež hesla je velice vážný problém. Stránky a aplikace, které každodenně používáte, jsou často pod útokem a vaše hesla mohou být odcizena. Pokud používáte stejné heslo mezi více aplikacemi nebo stránkami, hackeři se mohou snadno dostat k vaší emailové schránce, bankovnímu účtu či do jiných důležitých účtů.
 
 Bezpečnostní experti proto doporučují používat různá, silná a náhodně generovaná hesla pro každý účet zvlášť. Ale jak tato všechna hesla spravovat? bitwarden vám ulehčí jejich správu, ale také jejich generování nebo sdílení.
 
-bitwarden uchovává veškeré vaše přihlašovací údaje v zašifrovaném trezoru, který se synchronizuje mezi všemi vašimi zařízeními. Jelikož jsou zašifrována ještě před opuštěním vašeho zařízení, máte přístup ke svým datům pouze vy. Dokonce ani tým v bitwardenu nemůže číst vaše data a to ani kdybychom chtěli. Vaše data jsou totiž zakódována pomocí šifrovávání AES-256, náhodným hashem a PBKDF2 SHA-256.</value>
+Bitwarden uchovává veškeré vaše přihlašovací údaje v zašifrovaném trezoru, který se synchronizuje mezi všemi vašimi zařízeními. Jelikož jsou zašifrována ještě před opuštěním vašeho zařízení, máte přístup ke svým datům pouze vy. Dokonce ani tým v bitwardenu nemůže číst vaše data a to ani kdybychom chtěli. Vaše data jsou totiž zakódována pomocí šifrovávání AES-256, náhodným hashem a PBKDF2 SHA-256.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="FeatureGraphic" xml:space="preserve">
