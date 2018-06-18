@@ -219,7 +219,7 @@ namespace Bit.App.Pages
             else if(Cipher.Type == CipherType.Card)
             {
                 CardCodeCell = new FormEntryCell(AppResources.SecurityCode, Keyboard.Numeric,
-                    nextElement: NotesCell.Editor);
+                    isPassword: true, nextElement: NotesCell.Editor, button1: "eye.png");
                 CardCodeCell.Entry.Text = Cipher.Card.Code?.Decrypt(Cipher.OrganizationId);
 
                 CardExpYearCell = new FormEntryCell(AppResources.ExpirationYear, Keyboard.Numeric,
@@ -717,6 +717,10 @@ namespace Bit.App.Pages
                     CardExpYearCell?.InitEvents();
                     CardNameCell?.InitEvents();
                     CardNumberCell?.InitEvents();
+                    if (CardCodeCell?.Button1 != null)
+                    {
+                        CardCodeCell.Button1.Clicked += CardCodeButton_Clicked;
+                    }
                     break;
                 case CipherType.Identity:
                     IdTitleCell?.InitEvents();
@@ -797,6 +801,10 @@ namespace Bit.App.Pages
                     CardExpYearCell?.Dispose();
                     CardNameCell?.Dispose();
                     CardNumberCell?.Dispose();
+                    if (CardCodeCell?.Button1 != null)
+                    {
+                        CardCodeCell.Button1.Clicked -= CardCodeButton_Clicked;
+                    }
                     break;
                 case CipherType.Identity:
                     IdTitleCell?.Dispose();
@@ -869,6 +877,13 @@ namespace Bit.App.Pages
             });
 
             await Navigation.PushModalAsync(new ExtendedNavigationPage(scanPage));
+        }
+
+        private void CardCodeButton_Clicked(object sender, EventArgs e)
+        {
+            CardCodeCell.Entry.InvokeToggleIsPassword();
+            CardCodeCell.Button1.Image =
+                "eye" + (!CardCodeCell.Entry.IsPasswordFromToggled ? "_slash" : string.Empty) + ".png";
         }
 
         private async void AttachmentsCell_Tapped(object sender, EventArgs e)

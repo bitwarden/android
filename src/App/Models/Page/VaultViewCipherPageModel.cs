@@ -23,6 +23,7 @@ namespace Bit.App.Models.Page
 
         // Card
         private string _cardName, _cardNumber, _cardBrand, _cardExpMonth, _cardExpYear, _cardCode;
+        private bool _cardRevealCardCode;
 
         // Identity
         private string _idFirstName, _idLastName, _idMiddleName, _idCompany, _idEmail, _idPhone, _idUsername,
@@ -250,6 +251,22 @@ namespace Bit.App.Models.Page
             }
         }
         public bool ShowCardCode => !string.IsNullOrWhiteSpace(CardCode);
+        public bool RevealCardCode
+        {
+            get => _cardRevealCardCode;
+            set
+            {
+                _cardRevealCardCode = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(RevealCardCode)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedCardCode)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(CardCodeShowHideImage)));
+            }
+        }
+        public string MaskedCardCode => RevealCardCode ?
+            CardCode : CardCode == null ? null : new String('•', CardCode.Length);
+
+        public ImageSource CardCodeShowHideImage => RevealCardCode ?
+            ImageSource.FromFile("eye_slash.png") : ImageSource.FromFile("eye.png");
 
         // Identity
 
