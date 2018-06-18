@@ -403,7 +403,7 @@
     <value>App-extensie</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Gebruik de bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen in de apps en op het internet.</value>
+    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen in de apps en op het internet.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Auto-invullen-dienst</value>
@@ -415,16 +415,16 @@
     <value>Bitwarden app-extensie</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>De eenvoudigste manier om nieuwe logins toe te voegen aan uw kluis is door de bitwarden app-extensie te gebruiken. Lees meer over het gebruik van de app-extensie op het "Hulpmiddelen"-scherm.</value>
+    <value>De eenvoudigste manier om nieuwe logins toe te voegen aan uw kluis is door de Bitwarden app-extensie te gebruiken. Lees meer over het gebruik van de app-extensie op het "Hulpmiddelen"-scherm.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Gebruik bitwarden in Safari en andere apps om uw inloggegevens automatisch in te vullen.</value>
+    <value>Gebruik Bitwarden in Safari en andere apps om uw inloggegevens automatisch in te vullen.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwarden auto-invullen-dienst</value>
+    <value>Bitwarden auto-invullen-dienst</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Gebruik de bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen.</value>
+    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggegevens automatisch in te laten vullen.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>E-mailadres wijzigen</value>
@@ -464,7 +464,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Item Bewerken</value>
+    <value>Item bewerken</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
     <value>Automatische synchronisatie inschakelen</value>
@@ -501,10 +501,10 @@
     <value>In Safari en Chrome vindt u Bitwarden onder het deel-pictogram (hint: scroll naar rechts op de onderste rij van het menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Raak het bitwarden-pictogram in het menu aan om de extensie te starten.</value>
+    <value>Raak het Bitwarden-pictogram in het menu aan om de extensie te starten.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Raak het "meer"-pictogram op de onderste rij van het menu aan om bitwarden in te schakelen in Safari en andere apps.</value>
+    <value>Raak het "meer"-pictogram op de onderste rij van het menu aan om Bitwarden in te schakelen in Safari en andere apps.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favoriet</value>
@@ -519,7 +519,7 @@
     <value>Verkrijg hoofdwachtwoord-hint</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Items Importeren</value>
+    <value>Items importeren</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
     <value>U kunt een bulk import van items doen vanuit de bitwarden.com webkluis. Wilt u de website nu bezoeken?</value>
@@ -591,7 +591,7 @@
     <value>Meer instellingen</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>U moet inloggen op de bitwarden-app voordat u de extensie kunt gebruiken.</value>
+    <value>U moet inloggen op de Bitwarden-app voordat u de extensie kunt gebruiken.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Nooit</value>
@@ -640,7 +640,7 @@
     <value>Weet u zeker dat het huidige wachtwoord wilt overschrijven?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden houdt uw kluis automatisch gesynchroniseerd d.m.v. push-meldingen. Druk op "Oké" in het volgende dialoogvenster om push-meldingen in te schakelen.</value>
+    <value>Bitwarden houdt uw kluis automatisch gesynchroniseerd d.m.v. push-meldingen. Druk in het volgende dialoogvenster op "Oké" om push-meldingen in te schakelen.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Help ons door een goede recensie te schrijven!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store-beoordelingen worden gereset bij elke nieuwe versie van bitwarden. Help ons door een goede beoordeling te schrijven!</value>
+    <value>App Store-beoordelingen worden gereset bij elke nieuwe versie van Bitwarden. Help ons door een goede beoordeling te schrijven!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Wachtwoord opnieuw genereren</value>
@@ -723,13 +723,13 @@
     <value>Verificatiecode</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
-    <value>Item Bekijken</value>
+    <value>Item weergeven</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwarden-webkluis</value>
+    <value>Bitwarden-webkluis</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Beheer je items vanuit elke browser met de bitwarden webkluis.</value>
+    <value>Beheer uw items vanuit elke webbrowser met de Bitwarden-webkluis.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Authenticatie-app kwijt?</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Als u een bitwarden auto-invullen-melding ziet, dan kunt u deze aanraken om de auto-invullen-dienst te starten.</value>
+    <value>Als u een Bitwarden auto-invullen-melding ziet, dan kunt u deze aanraken om de auto-invullen-dienst te starten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Raak deze melding aan om een login automatisch in te vullen d.m.v. uw kluis.</value>
@@ -765,7 +765,7 @@
     <value>Toegankelijkheidsinstellingen openen</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Raak op het Android-toegankelijkheidsinstellingen-scherm "bitwarden" aan onder de kop Diensten.</value>
+    <value>1. Raak op het Android-toegankelijkheidsinstellingen-scherm "Bitwarden" aan onder de kop Diensten.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Raak de schuifknop aan en druk op Oké om te accepteren.</value>
@@ -783,7 +783,7 @@
     <value>Bèta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>De eenvoudigste manier om nieuwe logins toe te voegen aan uw kluis is door de bitwarden app-extensie te gebruiken. Lees meer over het gebruik van de app-extensie op het "Hulpmiddelen"-scherm.</value>
+    <value>De eenvoudigste manier om nieuwe logins toe te voegen aan uw kluis is door de Bitwarden app-extensie te gebruiken. Lees meer over het gebruik van de app-extensie op het "Hulpmiddelen"-scherm.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-invullen</value>
@@ -986,7 +986,7 @@
     <value>Meer informatie</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
-    <value>API Server URL</value>
+    <value>API server-URL</value>
   </data>
   <data name="CustomEnvironment" xml:space="preserve">
     <value>Aangepaste omgeving</value>
@@ -1002,23 +1002,23 @@
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
-    <value>Gebruikersbeheer Server URL</value>
+    <value>Gebruikersbeheer server-URL</value>
     <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
   </data>
   <data name="SelfHostedEnvironment" xml:space="preserve">
-    <value>Zelf gehoste omgeving</value>
+    <value>Zelfgehoste omgeving</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specificeer de basis URL van je op locatie gehoste bitwarden installatie.</value>
+    <value>Specificeer de basis-URL van uw op locatie gehoste Bitwarden-installatie.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
-    <value>Server URL</value>
+    <value>Server-URL</value>
   </data>
   <data name="WebVaultUrl" xml:space="preserve">
-    <value>Web Kluis Server URL</value>
+    <value>Webkluis server-URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Raak deze melding aan om logins te bekijken uit uw kluis.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Aangepaste velden</value>
@@ -1027,7 +1027,7 @@
     <value>Nummer Kopiëren</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Kopieer Beveiligingscode</value>
+    <value>Beveiligingscode kopiëren</value>
   </data>
   <data name="Number" xml:space="preserve">
     <value>Nummer</value>
@@ -1048,7 +1048,7 @@
     <value>Login</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Veilige Notitie</value>
+    <value>Veilige notitie</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Adres 1</value>
@@ -1069,10 +1069,10 @@
     <value>Merk</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
-    <value>Naam Kaarthouder</value>
+    <value>Naam van kaarthouder</value>
   </data>
   <data name="CityTown" xml:space="preserve">
-    <value>Stad</value>
+    <value>Stad / Dorp</value>
   </data>
   <data name="Company" xml:space="preserve">
     <value>Bedrijf</value>
@@ -1129,7 +1129,7 @@
     <value>mevr.</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>mevr.</value>
+    <value>Mej.</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -1147,7 +1147,7 @@
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Burgerservicenummer (BSN)</value>
+    <value>Burgerservicenummer</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Staat / Provincie</value>
@@ -1165,19 +1165,19 @@
     <value>Vervaldatum</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>Schakel Website Icoontjes Uit</value>
+    <value>Websitepictogrammen uitschakelen</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Website Icons provides a recognizable icon next to each login item in your vault.</value>
+    <value>Websitepictogrammen bieden een herkenbare afbeelding naast elk item in uw kluis.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
-    <value>Icoontjes-server URL</value>
+    <value>Pictogrammen server-URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Automatisch invullen met bitwarden</value>
+    <value>Automatisch invullen met Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
-    <value>Kluis zit op slot</value>
+    <value>Kluis is vergrendeld</value>
   </data>
   <data name="GoToMyVault" xml:space="preserve">
     <value>Ga naar mijn kluis</value>
@@ -1195,10 +1195,10 @@
     <value>Automatisch invullen door Toegankelijkheidsservice</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>De bitwarden automatische invulservice gebruikt Android Autofill Framework om u te helpen bij het invullen van inloggegevens, creditcards en identiteitsgegevens in andere apps op uw apparaat.</value>
+    <value>De Bitwarden automatische invulservice gebruikt Android Autofill Framework om u te helpen bij het invullen van inloggegevens, creditcards en identiteitsgegevens in andere apps op uw apparaat.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Gebruik de bitwarden-toegankelijkheidsdienst om uw inloggevens automatisch in te laten vullen.</value>
+    <value>Gebruik de Bitwarden-toegankelijkheidsdienst om uw inloggevens automatisch in te laten vullen.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Open instellingen voor automatisch invullen</value>
@@ -1266,7 +1266,7 @@
     <value>Exact</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Hostnaam</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
@@ -1282,5 +1282,27 @@
   <data name="MatchDetection" xml:space="preserve">
     <value>Overeenkomstdetectie</value>
     <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
 </root>
