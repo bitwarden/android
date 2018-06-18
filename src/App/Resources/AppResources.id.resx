@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Kunjungi Situs Web Kami</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Kunjungi situs web kami untuk mendapatkan bantuan, berita, email kami, dan/atau mempelajari lebih lanjut tentang bagaimana menggunakan bitwarden.</value>
+    <value>Kunjungi situs web kami untuk mendapatkan bantuan, berita, email kami, dan/atau mempelajari lebih lanjut tentang bagaimana menggunakan Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Situs web</value>
@@ -403,7 +403,7 @@
     <value>Ekstensi Aplikasi</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda di seluruh aplikasi dan web.</value>
+    <value>Gunakan layanan aksesibilitas Bitwarden untuk mengisi otomatis info masuk Anda di seluruh aplikasi dan web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Layanan Pengisian Otomatis</value>
@@ -412,19 +412,19 @@
     <value>Hindari Karakter Ambigu</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>ekstensi Aplikasi bitwarden</value>
+    <value>Ekstensi Aplikasi Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Cara termudah untuk menambahkan log masuk baru ke brankas Anda adalah dari Ekstensi Aplikasi bitwarden. Pelajari lebih lanjut tentang menggunakan Ekstensi Aplikasi bitwarden dengan menavigasi ke layar "Alat".</value>
+    <value>Cara termudah untuk menambahkan info masuk baru ke brankas Anda adalah dari Ekstensi Aplikasi Bitwarden. Pelajari lebih lanjut tentang menggunakan Ekstensi Aplikasi Bitwarden dengan menavigasi ke layar "Alat".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Gunakan bitwarden di Safari dan aplikasi lainnya untuk mengisi otomatis log masuk Anda.</value>
+    <value>Gunakan Bitwarden di Safari dan aplikasi lainnya untuk mengisi otomatis info masuk Anda.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Layanan Pengisian Otomatis bitwarden</value>
+    <value>Layanan Pengisian Otomatis Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Gunakan layanan aksesibilitas bitwarden untuk mengisi otomatis info masuk Anda.</value>
+    <value>Gunakan layanan aksesibilitas Bitwarden untuk mengisi otomatis info masuk Anda.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Ubah Email</value>
@@ -482,7 +482,7 @@
     <value>Aktifkan Ekstensi Aplikasi</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>Pada Safari, temukan bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
+    <value>Pada Safari, temukan Bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -498,13 +498,13 @@
     <value>Info masuk Anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>Pada Safari dan Chrome, temukan bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
+    <value>Pada Safari dan Chrome, temukan Bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
-    <value>Ketuk ikon bitwarden pada menu untuk menjalankan ekstensi.</value>
+    <value>Ketuk ikon Bitwarden pada menu untuk menjalankan ekstensi.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Untuk mengaktifkan bitwarden di Safari dan aplikasi lainnya, ketuk ikon "lebih banyak" di baris bawah menu.</value>
+    <value>Untuk mengaktifkan Bitwarden di Safari dan aplikasi lainnya, ketuk ikon "lebih banyak" di baris bawah menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
@@ -591,7 +591,7 @@
     <value>Setelan Lainnya</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Anda harus masuk ke aplikasi utama bitwarden sebelum Anda dapat menggunakan ekstensi.</value>
+    <value>Anda harus masuk ke aplikasi utama Bitwarden sebelum Anda dapat menggunakan ekstensi.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Jangan pernah</value>
@@ -616,7 +616,7 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Pilihan baku diatur dari alat pembuat sandi utama aplikasi bitwarden.</value>
+    <value>Pilihan baku diatur dari alat pembuat sandi utama aplikasi Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Pilihan</value>
@@ -640,7 +640,7 @@
     <value>Anda yakin ingin menimpa sandi saat ini?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>bitwarden membuat brankas Anda disinkronkan secara otomatis dengan menggunakan notifikasi. Untuk pengalaman yang sebaik mungkin, silakan pilih "Oke" pada saran berikut ketika diminta untuk mengaktifkan notifikasi.</value>
+    <value>Bitwarden membuat brankas Anda disinkronkan secara otomatis dengan menggunakan notifikasi. Untuk pengalaman yang sebaik mungkin, silakan pilih "Oke" pada saran berikut ketika diminta untuk mengaktifkan notifikasi.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Mohon pertimbangkan membantu kami dengan ulasan yang baik!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Peringkat App Store diatur ulang dengan setiap versi baru dari bitwarden. Mohon pertimbangkan membatu kami dengan ulasan yang baik!</value>
+    <value>Peringkat App Store diatur ulang dengan setiap versi baru dari Bitwarden. Mohon pertimbangkan membatu kami dengan ulasan yang baik!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Buat Ulang Sandi</value>
@@ -726,7 +726,7 @@
     <value>Lihat Item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Brankas Web bitwarden</value>
+    <value>Brankas Web Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
     <value>Kelola info masuk Anda dari berbagai peramban web dengan brankas web bitwarden.</value>
@@ -886,7 +886,7 @@
     <value>Hold your YubiKey NEO against the back of the device to continue.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>Kunci Keamanan YubiKey NEO</value>
+    <value>Kunci Keamanan YubiKey</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -992,10 +992,10 @@
     <value>Custom Environment</value>
   </data>
   <data name="CustomEnvironmentFooter" xml:space="preserve">
-    <value>For advanced users. You can specify the base URL of each service independently.</value>
+    <value>Untuk pengguna tingkat lanjutan. Anda dapat menentukan secara mandiri basis dari URL untuk setiap layanan.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>The environment URLs have been saved.</value>
+    <value>Lingkungan dari URL sudah tersimpan.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} tidak diformat dengan benar.</value>
@@ -1036,7 +1036,7 @@
     <value>Kode Keamanan</value>
   </data>
   <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
+    <value>Jenis apa yang ingin Anda tambahkan?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Kartu</value>
@@ -1048,7 +1048,7 @@
     <value>Info Masuk</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Secure Note</value>
+    <value>Catatan Aman</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Alamat 1</value>
@@ -1153,7 +1153,7 @@
     <value>Negara Bagian / Provinsi</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>Panggilan</value>
   </data>
   <data name="ZipPostalCode" xml:space="preserve">
     <value>Kode Pos</value>
@@ -1162,7 +1162,7 @@
     <value>Alamat</value>
   </data>
   <data name="Expiration" xml:space="preserve">
-    <value>Expiration</value>
+    <value>Masa Berlaku</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
     <value>Nonaktifkan Ikon Situs Web</value>
@@ -1174,7 +1174,7 @@
     <value>URL Server Ikon</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Isi otomatis dengan bitwarden</value>
+    <value>Isi otomatis dengan Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Brankas terkunci</value>
@@ -1208,79 +1208,101 @@
     <comment>What Apple calls their facial recognition reader.</comment>
   </data>
   <data name="FaceIDDirection" xml:space="preserve">
-    <value>Use Face ID to verify.</value>
+    <value>Gunakan Face ID untuk memverifikasi.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Use Face ID To Unlock</value>
+    <value>Gunakan Face ID untuk membuka</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Verify Face ID</value>
+    <value>Verifikasi Face ID</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
+    <value>Buka dengan Windows Hello</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
+    <value>Verifikasi dengan Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service.</value>
+    <value>Kami tidak dapat secara otomatis membuka menu pengaturan Android isi otomatis untuk Anda. Anda dapat membuka menu pengaturan isi otomatis secara manual dari Pengaturan Android &gt; Sistem &gt; Bahasa dan masukan &gt; Lanjutan &gt; Layanan isi otomatis.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Nama Kolom Pilihan</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Boolean</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Tersembunyi</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Teks</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Kolom Ubahsuai Baru</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Jenis kolom ubahsuai apa yang ingin Anda tambahkan?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Hapus</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>URl Baru</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Domain basis</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Bawaan</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Tepat</value>
   </data>
   <data name="Host" xml:space="preserve">
     <value>Host</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Ekspresi umum</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Mulai dengan</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>Deteksi kecocokan URI</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Deteksi kecocokan</value>
     <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
 </root>
