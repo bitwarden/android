@@ -132,7 +132,7 @@
     <comment>The title for the add item page.</comment>
   </data>
   <data name="AnErrorHasOccurred" xml:space="preserve">
-    <value>Tapahtui virhe</value>
+    <value>Tapahtui virhe.</value>
     <comment>Alert title when something goes wrong.</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -140,7 +140,7 @@
     <comment>Navigate back to the previous screen.</comment>
   </data>
   <data name="Bitwarden" xml:space="preserve">
-    <value>bitwarden</value>
+    <value>Bitwarden</value>
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
@@ -168,7 +168,7 @@
     <comment>Delete an entity (verb).</comment>
   </data>
   <data name="Deleting" xml:space="preserve">
-    <value>Poistetaan...</value>
+    <value>Poistetaan…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
@@ -193,7 +193,7 @@
     <value>Lähetä sähköpostia</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Lähetä meille sähköpostia saadaksesi tukea tai jättääksesi palautetta.</value>
+    <value>Lähetä meille sähköpostia saadaksesi apua tai jättääksesi palautetta.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Syötä PIN-koodisi.</value>
@@ -209,7 +209,7 @@
     <value>Jätä ilmoitus GitHub-pakettivarastoomme.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Käytä sormenjälkeäsi tunnistautuaksesi.</value>
+    <value>Tunnistaudu sormenjäljelläsi.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Kansio</value>
@@ -261,11 +261,11 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Kirjaudu</value>
+    <value>Kirjaudu sisään</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
-    <value>Kirjaudu sisään</value>
+    <value>Käyttäjätunnus</value>
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Älä käytä Analyticsiä</value>
+    <value>Älä osallistu tiedonkeruuseen</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Salasana</value>
@@ -314,7 +314,7 @@
     <comment>Button text for a save operation (verb).</comment>
   </data>
   <data name="Saving" xml:space="preserve">
-    <value>Tallennetaan...</value>
+    <value>Tallennetaan…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Settings" xml:space="preserve">
@@ -330,7 +330,7 @@
     <comment>Confirmation message after successfully deleting a login.</comment>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Lähetä</value>
+    <value>Jatka</value>
   </data>
   <data name="Sync" xml:space="preserve">
     <value>Synkronointi</value>
@@ -348,14 +348,14 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Käytä sormenjälkeä avataksesi</value>
+    <value>Avaa holvi sormenjäljellä</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Käyttäjänimi</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>Kenttä "{0}" vaaditaan.</value>
+    <value>Kenttä ”{0}” vaaditaan.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
@@ -381,10 +381,10 @@
     <value>Käy sivustollamme</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Käy sivustollamme, jossa voit saada apua bitwardenin käyttämisessä, lukea palvelun uutisia tai lähettää meille sähköpostia.</value>
+    <value>Käy sivustollamme, jossa voit saada apua Bitwardenin käyttämisessä, lukea palvelun uutisia tai lähettää meille sähköpostia.</value>
   </data>
   <data name="Website" xml:space="preserve">
-    <value>Verkko-osoite</value>
+    <value>SIvusto</value>
     <comment>Label for a website.</comment>
   </data>
   <data name="Yes" xml:space="preserve">
@@ -403,7 +403,7 @@
     <value>Sovelluslaajennus</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+    <value>Käytä Bitwardenin esteettömyyspalvelua kirjautumiskenttien automaattiseen täyttämiseen sovelluksissa ja verkossa.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Automaattinen täyttö ‑palvelu</value>
@@ -421,7 +421,7 @@
     <value>Käytä bitwardenia Safarissa ja muissa sovelluksissa kirjautumistietojen automaattiseen täydennykseen.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>bitwardenin automaattinen täydennys</value>
+    <value>Bitwardenin automaattinen täyttö ‑palvelu</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
@@ -460,7 +460,7 @@
     <value>Luo tili</value>
   </data>
   <data name="CreatingAccount" xml:space="preserve">
-    <value>Luodaan tiliä...</value>
+    <value>Luodaan tiliä…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
@@ -470,7 +470,7 @@
     <value>Käytä automaattista synkronointia</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Syötä tilisi sähköpostiosoite saadaksesi pääsalasanan vihjeen.</value>
+    <value>Syötä tilisi sähköpostiosoite saadaksesi pääsalasanasi vihjeen.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Käytä sovelluslaajennusta</value>
@@ -555,7 +555,7 @@
     <value>Lukitseminen</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
-    <value>Kirjaudutaan sisään...</value>
+    <value>Kirjaudutaan sisään…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
@@ -609,7 +609,7 @@
     <value>Holvissasi ei ole kohteita tälle sivustolle. Napauta lisätäksesi kohteen.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Tälle kohteelle ei ole määritetty käyttäjänimeä tai salasanaa.</value>
+    <value>Tälle käyttäjätunnukselle ei ole määritetty käyttäjänimeä tai salasanaa.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ymmärrän!</value>
@@ -619,7 +619,7 @@
     <value>Oletusvalinnat määritetään pääsovelluksen salasanageneraattorista.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Valinnat</value>
+    <value>Asetukset</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>Muut</value>
@@ -650,7 +650,7 @@
     <value>Harkitsethan auttamistamme jättämällä positiivisen arvostelun!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Arvostelut nollautuvat App Storessa bitwardenin joka päivityksen yhteydessä. Harkitsethan auttamistamme jättämällä positiivisen arvostelun!</value>
+    <value>App Storen arvostelut nollautuvat Bitwardenin jokaisen päivityksen yhteydessä. Autathan meitä jättämällä hyvän arvostelun!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Luo uusi salasana</value>
@@ -674,7 +674,7 @@
     <value>Aseta PIN</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Aseta 4-numeroinen PIN-koodi, jonka avulla voit avata sovelluksen.</value>
+    <value>Syötä 4-numeroinen PIN-koodi, jonka avulla voit avata sovelluksen.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Kohteen tiedot</value>
@@ -683,11 +683,11 @@
     <value>Kohde päivitetty.</value>
   </data>
   <data name="Submitting" xml:space="preserve">
-    <value>Käsitellään...</value>
+    <value>Käsitellään…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="Syncing" xml:space="preserve">
-    <value>Synkronoidaan...</value>
+    <value>Synkronoidaan…</value>
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
@@ -710,7 +710,7 @@
     <value>Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman vaatimalla koodin tunnistautumispalvelusta joka kirjautumiskerralla. Voit ottaa kaksivaiheisen tunnistautumisen käyttöön bitwarden.com-verkkoholvissa. Haluatko käydä sivustolla nyt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Avaa käyttäen: {0}</value>
+    <value>Avaa sormenjäljellä</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Avaa PIN-koodilla</value>
@@ -720,19 +720,19 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Tunnistautumiskoodi</value>
+    <value>Vahvistuskoodi</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>Näytä kohde</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>bitwardenin verkkoholvi</value>
+    <value>Bitwardenin verkkoholvi</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Hallitse kirjautumistietojasi millä tahansa selaimella bitwarden-verkkoholvissa.</value>
+    <value>Hallitse kohteitasi millä tahansa selaimella Bitwardenin verkkoholvissa.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Etkö pääse tunnistautumispalveluun?</value>
+    <value>Etkö pysty käyttämään todennussovellustasi?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Kohteet</value>
@@ -765,10 +765,10 @@
     <value>Avaa esteettömyysasetukset</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Esteettömyysasetuksissa valitse Palvelut-otsikon alta "bitwarden".</value>
+    <value>1. Valitse esteettömyysasetuksissa Palvelut-otsikon alta ”Bitwarden”.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Laita asetus päälle ja paina OK hyväksyäksesi.</value>
+    <value>2. Laita asetus päälle ja paina OK-painiketta hyväksyäksesi.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Pois käytöstä</value>
@@ -783,7 +783,7 @@
     <value>Beeta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Helpoin tapa lisätä uusia kirjautumistietoja holviisi on käyttää bitwardenin automaattista täydennystä. Lue lisää täydennyspalvelusta "Työkalut"-kohdassa.</value>
+    <value>Helpoin tapa lisätä uusia käyttäjätunnuksia holviisi on käyttää Bitwardenin automaattinen täyttö ‑palvelua. Lue lisää palvelusta ”Työkalut”-kohdassa.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Täytä automaattisesti</value>
@@ -816,7 +816,7 @@
     <value>Hyödynnämme analytiikkaa saadaksemme tietoa siitä, kuinka sovellusta käytetään. Näin voimme kehittää sitä paremmaksi. Kaikki tiedonkeruu on täysin nimetöntä.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Skannaa, kun salasanakenttä on aktiivinen</value>
+    <value>Lue, kun salasanakenttä on aktiivinen</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
     <value>Skannaa kentät ja näytä ilmoitus automaattisesta täydentämisestä vain silloin, kun valitset salasanakentän. Tämä asetus saattaa vähentää virrankulutusta.</value>
@@ -834,7 +834,7 @@
     <value>Skannaa ruutua kenttien varalta ja näytä ilmoitus automaattisesta täydentämisestä, kun salasanakenttä löytyy. Tämä on oletusasetus.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
-    <value>Sovelluksen "{0}" avaaminen ei onnistu.</value>
+    <value>Sovelluksen ”{0}” avaaminen ei onnistunut.</value>
     <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
   </data>
   <data name="AuthenticatorAppTitle" xml:space="preserve">
@@ -886,7 +886,7 @@
     <value>Hold your YubiKey NEO against the back of the device to continue.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
-    <value>YubiKey NEO Security Key</value>
+    <value>YubiKey-todennuslaite</value>
     <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
@@ -977,7 +977,7 @@
     <value>Toiminto ei ole käytettävissä</value>
   </data>
   <data name="MaxFileSize" xml:space="preserve">
-    <value>Tiedoston enimmäiskoko on 100 MB.</value>
+    <value>Tiedoston enimmäiskoko on 100 MB.</value>
   </data>
   <data name="UpdateKey" xml:space="preserve">
     <value>Et voi käyttää tätä toimintoa ennen kuin päivität salausavaimesi.</value>
@@ -998,7 +998,7 @@
     <value>Ohjelmistoympäristön URL:t tallennettu.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} is not correctly formatted.</value>
+    <value>{0} on väärässä muodossa.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
@@ -1009,7 +1009,7 @@
     <value>Itse ylläpidetty ohjelmistoympäristö</value>
   </data>
   <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
-    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+    <value>Syötä omalla palvelimella ylläpitämäsi Bitwarden-asennuksen kanta-URL.</value>
   </data>
   <data name="ServerUrl" xml:space="preserve">
     <value>Palvelimen URL</value>
@@ -1018,7 +1018,7 @@
     <value>Verkkoholvipalvelimen URL</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
-    <value>Tap this notification to view logins from your vault.</value>
+    <value>Napauta tätä ilmoitusta näyttääksesi holvisi kohteet.</value>
   </data>
   <data name="CustomFields" xml:space="preserve">
     <value>Lisäkentät</value>
@@ -1174,7 +1174,7 @@
     <value>Kuvakepalvelimen URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-fill with bitwarden</value>
+    <value>Täytä automaattisesti Bitwardenilla</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Holvi on lukittu</value>
@@ -1198,7 +1198,7 @@
     <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Käytä bitwardenin esteettömyyspalvelua kirjautumistietojesi automaattiseen täydennykseen.</value>
+    <value>Käytä Bitwardenin esteettömyyspalvelua täyttääksesi automaattisesti käyttäjätunnukset, kortti- ja henkilöllisyystiedot muihin sovelluksiin.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Avaa automaattisen täytön asetukset</value>
@@ -1211,13 +1211,13 @@
     <value>Käytä Face ID:tä tunnistautuaksesi.</value>
   </data>
   <data name="UseFaceIDToUnlock" xml:space="preserve">
-    <value>Käytä Face ID:tä avataksesi holvin</value>
+    <value>Avaa holvi Face ID:llä</value>
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
-    <value>Varmista Face ID</value>
+    <value>Tunnistaudu Face ID:llä</value>
   </data>
   <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Käytä Windows Helloa avataksesi holvin</value>
+    <value>Avaa holvi Windows Hellolla</value>
   </data>
   <data name="VerifyWindowsHello" xml:space="preserve">
     <value>Tunnistaudu Windows Hellolla</value>
@@ -1229,58 +1229,80 @@
     <value>Androidin automaattisen täytön asetusten avaaminen epäonnistui. Voit mennä sinne manuaalisesti näin: Asetukset &gt; Järjestelmä &gt; Kielet ja syöttötapa &gt; Lisäasetukset &gt; Automaattinen täyttö ‑palvelu.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Lisäkentän nimi</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>Valintaruutu</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Piilotettu teksti</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Teksti</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Uusi lisäkenttä</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Minkä tyyppisen lisäkentän haluat lisätä?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Poista</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>Uusi URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Pääverkkotunnus</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Oletus</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Täsmälleen…</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Osoite</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Säännöllinen lauseke</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Alkaa…</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>URIn tunnistustapa</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Tunnistustapa</value>
     <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
 </root>
