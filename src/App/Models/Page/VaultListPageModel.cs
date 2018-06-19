@@ -79,7 +79,7 @@ namespace Bit.App.Models.Page
                                 }
                                 else
                                 {
-                                    iconsUrl = "https://icons.bitwarden.com";
+                                    iconsUrl = "https://icons.bitwarden.net";
                                 }
                             }
 
