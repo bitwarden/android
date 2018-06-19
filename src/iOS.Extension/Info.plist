@@ -95,6 +95,8 @@
 		<string>et</string>
 		<string>vi</string>
 		<string>pl</string>
+		<string>ko</string>
+		<string>fa</string>
 	</array>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Use Face ID to unlock your vault.</string>
