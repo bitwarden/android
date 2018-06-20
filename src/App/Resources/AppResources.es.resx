@@ -1284,25 +1284,25 @@
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>Sí y guardar</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Autorellenar y guardar</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Organización</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Mantén tu Yubikey cerca de la parte superior del dispositivo.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>Vuelve a intentarlo</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>Para continuar, mantén tu YubiKey NEO contra la parte trasera de tu dispositivo.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>El servicio de accesibilidad puede ser útil para utilizarlo con aplicaciones que no soportan el sistema de autorellenado estándar.</value>
   </data>
 </root>
