@@ -403,7 +403,7 @@
     <value>App 小工具</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>使用 Bitwarden 無障礙服務在應用程式和網站中自動填入您的登入資料。</value>
+    <value>使用 Bitwarden 協助工具服務在應用程式和網站中自動填入您的登入資料。</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>自動填入</value>
@@ -762,7 +762,7 @@
     <value>按此自動填入來自密碼庫的登入資料。</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>開啟無障礙設定</value>
+    <value>開啟協助工具設定</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
     <value>1. 在 Android 的協助工具設定中，按一下服務中的 "Bitwarden" 。</value>
@@ -1284,25 +1284,25 @@
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>是，我要儲存</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>自動填入並儲存</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>組織</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>將您的 Yubikey 靠近裝置的頂端。</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>再試一次</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>要繼續的話，請將您的 YubiKey NEO 靠在裝置的背面。</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>當應用程式不支援標準的自動填入服務時, 協助工具服務或許能夠幫助使用。</value>
   </data>
 </root>
