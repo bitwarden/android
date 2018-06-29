@@ -15,7 +15,7 @@ namespace Bit.Publisher
 
         private static string _apkFilePath;
         private static string _credsFilePath;
-        private static string _track;
+        private static string _track = "alpha";
 
         static void Main(string[] args)
         {
