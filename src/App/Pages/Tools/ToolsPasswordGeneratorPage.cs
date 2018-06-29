@@ -401,8 +401,8 @@ namespace Bit.App.Pages
                 {
                     HorizontalOptions = LayoutOptions.FillAndExpand,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
-                    MaximumTrackColor = Color.Gray,
-                    MinimumTrackColor = Color.Gray,
+                    MaximumTrackColor = Color.LightGray,
+                    MinimumTrackColor = Color.LightGray,
                 };
 
                 Value = new Label
@@ -410,7 +410,8 @@ namespace Bit.App.Pages
                     FontSize = Device.GetNamedSize(NamedSize.Medium, typeof(Label)),
                     HorizontalOptions = LayoutOptions.End,
                     VerticalOptions = LayoutOptions.CenterAndExpand,
-                    Style = (Style)Application.Current.Resources["text-muted"]
+                    Style = (Style)Application.Current.Resources["text-muted"],
+                    FontFamily = Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier"),
                 };
 
                 Value.SetBinding(Label.TextProperty, nameof(PasswordGeneratorPageModel.Length));
