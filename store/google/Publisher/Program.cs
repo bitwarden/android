@@ -42,6 +42,10 @@ namespace Bit.Publisher
                 {
                     _track = "production";
                 }
+                else if(args[2] == "r")
+                {
+                    _track = "rollout";
+                }
                 else if(args[2] == "i")
                 {
                     _track = "internal";
