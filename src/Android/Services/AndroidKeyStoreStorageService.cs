@@ -44,7 +44,15 @@ namespace Bit.Android.Services
             _keyStore = KeyStore.GetInstance(AndroidKeyStore);
             _keyStore.Load(null);
 
-            GenerateStoreKey();
+            try
+            {
+                GenerateStoreKey(true);
+            }
+            catch
+            {
+                GenerateStoreKey(false);
+            }
+
             GenerateAesKey();
         }
 
@@ -128,7 +136,7 @@ namespace Bit.Android.Services
             }
         }
 
-        private void GenerateStoreKey()
+        private void GenerateStoreKey(bool withDate)
         {
             if(_keyStore.ContainsAlias(KeyAlias))
             {
@@ -144,27 +152,33 @@ namespace Bit.Android.Services
             {
                 var subject = new X500Principal($"CN={KeyAlias}");
 
-                var spec = new KeyPairGeneratorSpec.Builder(Application.Context)
+                var builder = new KeyPairGeneratorSpec.Builder(Application.Context)
                     .SetAlias(KeyAlias)
                     .SetSubject(subject)
-                    .SetSerialNumber(BigInteger.Ten)
-                    //.SetStartDate(new Date(0))
-                    //.SetEndDate(end.Time)
-                    .Build();
+                    .SetSerialNumber(BigInteger.Ten);
 
+                if(withDate)
+                {
+                    builder.SetStartDate(new Date(0)).SetEndDate(end.Time);
+                }
+
+                var spec = builder.Build();
                 var gen = KeyPairGenerator.GetInstance(KeyProperties.KeyAlgorithmRsa, AndroidKeyStore);
                 gen.Initialize(spec);
                 gen.GenerateKeyPair();
             }
             else
             {
-                var spec = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
+                var builder = new KeyGenParameterSpec.Builder(KeyAlias, KeyStorePurpose.Decrypt | KeyStorePurpose.Encrypt)
                     .SetBlockModes(KeyProperties.BlockModeGcm)
-                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone)
-                    //.SetKeyValidityStart(new Date(0))
-                    //.SetKeyValidityEnd(end.Time)
-                    .Build();
+                    .SetEncryptionPaddings(KeyProperties.EncryptionPaddingNone);
 
+                if(withDate)
+                {
+                    builder.SetKeyValidityStart(new Date(0)).SetKeyValidityEnd(end.Time);
+                }
+
+                var spec = builder.Build();
                 var gen = KeyGenerator.GetInstance(KeyProperties.KeyAlgorithmAes, AndroidKeyStore);
                 gen.Init(spec);
                 gen.GenerateKey();
