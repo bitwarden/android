@@ -29,6 +29,7 @@ namespace Bit.Android
         {
             new Browser("com.android.chrome", "url_bar"),
             new Browser("com.chrome.beta", "url_bar"),
+            new Browser("org.chromium.chrome", "url_bar"),
             new Browser("com.android.browser", "url"),
             new Browser("com.brave.browser", "url_bar"),
             new Browser("com.opera.browser", "url_field"),
