@@ -46,9 +46,9 @@ namespace Bit.iOS.Controls
                     Control.TintColor = UIColor.Clear;
                 }
 
-                if(view.ReturnType.HasValue)
+                if(view.TargetReturnType.HasValue)
                 {
-                    switch(view.ReturnType.Value)
+                    switch(view.TargetReturnType.Value)
                     {
                         case App.Enums.ReturnType.Done:
                             Control.ReturnKeyType = UIReturnKeyType.Done;
@@ -171,7 +171,7 @@ namespace Bit.iOS.Controls
             Control.ShouldChangeCharacters = (textField, range, replacementString) =>
             {
                 var newLength = textField.Text.Length + replacementString.Length - range.Length;
-                return newLength <= view.MaxLength;
+                return newLength <= view.TargetMaxLength;
             };
         }
 

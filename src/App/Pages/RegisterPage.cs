@@ -60,7 +60,7 @@ namespace Bit.App.Pages
                 entryKeyboard: Keyboard.Email, useLabelAsPlaceholder: true, imageSource: "envelope.png",
                 containerPadding: padding);
 
-            PasswordHintCell.Entry.ReturnType = Enums.ReturnType.Done;
+            PasswordHintCell.Entry.TargetReturnType = Enums.ReturnType.Done;
 
             var table = new FormTableView(this)
             {

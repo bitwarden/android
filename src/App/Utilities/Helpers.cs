@@ -47,8 +47,6 @@ namespace Bit.App.Utilities
                     return iOS;
                 case Device.Android:
                     return Android;
-                case Device.WinPhone:
-                    return WinPhone;
                 case Device.UWP:
                     return Windows;
                 default:

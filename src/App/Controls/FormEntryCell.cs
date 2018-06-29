@@ -171,11 +171,11 @@ namespace Bit.App.Controls
                 _nextElement = value;
                 if(_nextElement != null && Entry != null)
                 {
-                    Entry.ReturnType = Enums.ReturnType.Next;
+                    Entry.TargetReturnType = Enums.ReturnType.Next;
                 }
                 else if(Entry != null)
                 {
-                    Entry.ReturnType = null;
+                    Entry.TargetReturnType = null;
                 }
             }
         }

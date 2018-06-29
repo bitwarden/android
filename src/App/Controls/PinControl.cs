@@ -20,7 +20,7 @@ namespace Bit.App.Controls
             Entry = new ExtendedEntry
             {
                 Keyboard = Keyboard.Numeric,
-                MaxLength = 4,
+                TargetMaxLength = 4,
                 HideCursor = true
             };
 

@@ -36,7 +36,7 @@ namespace Bit.App.Pages
             EmailCell = new FormEntryCell(AppResources.EmailAddress, entryKeyboard: Keyboard.Email,
                 useLabelAsPlaceholder: true, imageSource: "envelope.png", containerPadding: padding);
 
-            EmailCell.Entry.ReturnType = Enums.ReturnType.Go;
+            EmailCell.Entry.TargetReturnType = Enums.ReturnType.Go;
 
             var table = new ExtendedTableView
             {

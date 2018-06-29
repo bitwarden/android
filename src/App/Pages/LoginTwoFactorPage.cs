@@ -129,7 +129,7 @@ namespace Bit.App.Pages
                     imageSource: "lock", containerPadding: padding);
 
                 TokenCell.Entry.Keyboard = Keyboard.Numeric;
-                TokenCell.Entry.ReturnType = ReturnType.Go;
+                TokenCell.Entry.TargetReturnType = Enums.ReturnType.Go;
 
                 var table = new TwoFactorTable(
                     new TableSection(Helpers.GetEmptyTableSectionTitle())
@@ -254,7 +254,7 @@ namespace Bit.App.Pages
                 {
                     TokenCell = new FormEntryCell("", isPassword: true, imageSource: "lock",
                         useLabelAsPlaceholder: true);
-                    TokenCell.Entry.ReturnType = ReturnType.Go;
+                    TokenCell.Entry.TargetReturnType = Enums.ReturnType.Go;
                     section.Insert(0, TokenCell);
                 }
 

@@ -112,7 +112,7 @@ namespace Bit.Android.Controls
 
         private void Control_EditorAction(object sender, TextView.EditorActionEventArgs e)
         {
-            if(_view.ReturnType != ReturnType.Next)
+            if(_view.TargetReturnType != Bit.App.Enums.ReturnType.Next)
             {
                 _view.Unfocus();
             }
@@ -165,23 +165,23 @@ namespace Bit.Android.Controls
 
         private void SetReturnType(ExtendedEntry view)
         {
-            if(view.ReturnType.HasValue)
+            if(view.TargetReturnType.HasValue)
             {
-                switch(view.ReturnType.Value)
+                switch(view.TargetReturnType.Value)
                 {
-                    case ReturnType.Go:
+                    case App.Enums.ReturnType.Go:
                         Control.ImeOptions = ImeAction.Go;
                         Control.SetImeActionLabel("Go", ImeAction.Go);
                         break;
-                    case ReturnType.Next:
+                    case App.Enums.ReturnType.Next:
                         Control.ImeOptions = ImeAction.Next;
                         Control.SetImeActionLabel("Next", ImeAction.Next);
                         break;
-                    case ReturnType.Search:
+                    case App.Enums.ReturnType.Search:
                         Control.ImeOptions = ImeAction.Search;
                         Control.SetImeActionLabel("Search", ImeAction.Search);
                         break;
-                    case ReturnType.Send:
+                    case App.Enums.ReturnType.Send:
                         Control.ImeOptions = ImeAction.Send;
                         Control.SetImeActionLabel("Send", ImeAction.Send);
                         break;
@@ -206,7 +206,7 @@ namespace Bit.Android.Controls
 
         private void SetMaxLength(ExtendedEntry view)
         {
-            Control.SetFilters(new IInputFilter[] { new InputFilterLengthFilter(view.MaxLength) });
+            Control.SetFilters(new IInputFilter[] { new InputFilterLengthFilter(view.TargetMaxLength) });
         }
     }
 }

@@ -38,7 +38,7 @@ namespace Bit.App.Pages
             PasswordCell = new FormEntryCell(AppResources.MasterPassword, isPassword: true,
                 useLabelAsPlaceholder: true, imageSource: "lock.png", containerPadding: padding);
 
-            PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
+            PasswordCell.Entry.TargetReturnType = Enums.ReturnType.Go;
 
             var table = new ExtendedTableView
             {

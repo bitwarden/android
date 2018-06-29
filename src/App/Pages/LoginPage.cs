@@ -62,7 +62,7 @@ namespace Bit.App.Pages
                 EmailCell.Entry.Text = lastLoginEmail;
             }
 
-            PasswordCell.Entry.ReturnType = Enums.ReturnType.Go;
+            PasswordCell.Entry.TargetReturnType = Enums.ReturnType.Go;
 
             var table = new ExtendedTableView
             {

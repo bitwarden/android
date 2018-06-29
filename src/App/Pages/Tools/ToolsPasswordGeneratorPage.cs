@@ -400,7 +400,9 @@ namespace Bit.App.Pages
                 LengthSlider = new Slider(5, 64, _settings.GetValueOrDefault(Constants.PasswordGeneratorLength, 10))
                 {
                     HorizontalOptions = LayoutOptions.FillAndExpand,
-                    VerticalOptions = LayoutOptions.CenterAndExpand
+                    VerticalOptions = LayoutOptions.CenterAndExpand,
+                    MaximumTrackColor = Color.Gray,
+                    MinimumTrackColor = Color.Gray,
                 };
 
                 Value = new Label

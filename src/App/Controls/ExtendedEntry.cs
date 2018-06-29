@@ -25,8 +25,8 @@ namespace Bit.App.Controls
         public static readonly BindableProperty BottomBorderColorProperty =
             BindableProperty.Create(nameof(BottomBorderColor), typeof(Color), typeof(ExtendedEntry), Color.Default);
 
-        public static readonly BindableProperty MaxLengthProperty =
-            BindableProperty.Create(nameof(MaxLength), typeof(int), typeof(ExtendedEntry), int.MaxValue);
+        public static readonly BindableProperty TargetMaxLengthProperty =
+            BindableProperty.Create(nameof(TargetMaxLength), typeof(int), typeof(ExtendedEntry), int.MaxValue);
 
         public bool HasBorder
         {
@@ -46,13 +46,13 @@ namespace Bit.App.Controls
             set { SetValue(BottomBorderColorProperty, value); }
         }
 
-        public int MaxLength
+        public int TargetMaxLength
         {
-            get { return (int)GetValue(MaxLengthProperty); }
-            set { SetValue(MaxLengthProperty, value); }
+            get { return (int)GetValue(TargetMaxLengthProperty); }
+            set { SetValue(TargetMaxLengthProperty, value); }
         }
 
-        public ReturnType? ReturnType { get; set; }
+        public Enums.ReturnType? TargetReturnType { get; set; }
         public bool? Autocorrect { get; set; }
         public bool DisableAutocapitalize { get; set; }
         public bool AllowClear { get; set; }
