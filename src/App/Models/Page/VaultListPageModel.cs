@@ -172,7 +172,11 @@ namespace Bit.App.Models.Page
             {
                 AddRange(groupItems);
 
-                if(doUpper)
+                if(string.IsNullOrWhiteSpace(Name))
+                {
+                    Name = "-";
+                }
+                else if(doUpper)
                 {
                     Name = name.ToUpperInvariant();
                 }
