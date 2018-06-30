@@ -17,7 +17,6 @@ using Bit.App.Pages;
 using HockeyApp.iOS;
 using Bit.iOS.Core;
 using Google.Analytics;
-using FFImageLoading.Forms.Touch;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
 using CoreNFC;
@@ -301,17 +300,17 @@ namespace Bit.iOS
             container.RegisterSingleton<ICipherCollectionRepository, CipherCollectionRepository>();
 
             // Other
-            container.RegisterSingleton(CrossConnectivity.Current);
-            container.RegisterSingleton(CrossFingerprint.Current);
+            container.RegisterInstance(CrossConnectivity.Current);
+            container.RegisterInstance(CrossFingerprint.Current);
 
             Settings = new Settings("group.com.8bit.bitwarden");
-            container.RegisterSingleton(Settings);
+            container.RegisterInstance(Settings);
 
             // Push
             container.RegisterSingleton<IPushNotificationListener, PushNotificationListener>();
             container.RegisterSingleton<IPushNotificationService, iOSPushNotificationService>();
 
-            CachedImageRenderer.Init();
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
             Resolver.SetResolver(new SimpleInjectorResolver(container));
         }
 

@@ -871,7 +871,7 @@
     </PackageReference>
     <PackageReference Include="XLabs.IoC.SimpleInjector" Version="2.0.5782" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.2" />
-    <PackageReference Include="Plugin.CurrentActivity" Version="1.0.1" />
+    <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\bottom_nav_bg.xml" />
