@@ -358,7 +358,8 @@ namespace Bit.iOS.Extension
                 }
                 else
                 {
-                    throw new Exception("Cannot parse list for action.");
+                    throw new Exception("Cannot parse list for action. List is " +
+                        (list?.GetType().ToString() ?? "null"));
                 }
 
                 _googleAnalyticsService.TrackExtensionEvent("ProcessItemProvider", type);
