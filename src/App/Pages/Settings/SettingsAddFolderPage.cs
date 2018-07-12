@@ -118,10 +118,6 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             NameCell.InitEvents();
-            if(!_connectivity.IsConnected)
-            {
-                AlertNoConnection();
-            }
         }
 
         protected override void OnDisappearing()

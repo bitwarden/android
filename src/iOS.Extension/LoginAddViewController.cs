@@ -112,10 +112,6 @@ namespace Bit.iOS.Extension
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            if(!_connectivity.IsConnected)
-            {
-                AlertNoConnection();
-            }
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)

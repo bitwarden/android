@@ -667,11 +667,6 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            if(!_connectivity.IsConnected)
-            {
-                AlertNoConnection();
-            }
-
             NameCell?.InitEvents();
             NotesCell?.InitEvents();
             FolderCell?.InitEvents();

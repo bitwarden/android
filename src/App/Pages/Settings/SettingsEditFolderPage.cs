@@ -131,11 +131,6 @@ namespace Bit.App.Pages
             base.OnAppearing();
             NameCell.InitEvents();
             DeleteCell.Tapped += DeleteCell_Tapped;
-
-            if(!_connectivity.IsConnected)
-            {
-                AlertNoConnection();
-            }
         }
 
         protected override void OnDisappearing()
