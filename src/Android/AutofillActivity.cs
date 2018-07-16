@@ -10,8 +10,6 @@ namespace Bit.Android
     [Activity(Theme = "@style/BitwardenTheme.Splash", WindowSoftInputMode = SoftInput.StateHidden)]
     public class AutofillActivity : Activity
     {
-        private static TimeSpan _retrySpan = TimeSpan.FromSeconds(2);
-
         private DateTime? _lastLaunch = null;
         private string _lastQueriedUri;
 
@@ -87,13 +85,6 @@ namespace Bit.Android
 
         private void LaunchMainActivity(Intent callingIntent, int requestCode)
         {
-            var now = DateTime.UtcNow;
-            if(_lastLaunch.HasValue && (now - _lastLaunch.Value <= _retrySpan))
-            {
-                return;
-            }
-
-            _lastLaunch = now;
             _lastQueriedUri = callingIntent?.GetStringExtra("uri");
             if(_lastQueriedUri == null)
             {
@@ -101,6 +92,13 @@ namespace Bit.Android
                 return;
             }
 
+            var now = DateTime.UtcNow;
+            if(_lastLaunch.HasValue && (now - _lastLaunch.Value <= TimeSpan.FromSeconds(2)))
+            {
+                return;
+            }
+
+            _lastLaunch = now;
             var intent = new Intent(this, typeof(MainActivity));
             if(!callingIntent.Flags.HasFlag(ActivityFlags.LaunchedFromHistory))
             {
