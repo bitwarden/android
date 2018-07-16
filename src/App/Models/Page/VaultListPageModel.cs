@@ -172,7 +172,7 @@ namespace Bit.App.Models.Page
             {
                 AddRange(groupItems);
 
-                if(string.IsNullOrWhiteSpace(Name))
+                if(string.IsNullOrWhiteSpace(name))
                 {
                     Name = "-";
                 }
