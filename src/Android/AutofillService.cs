@@ -67,6 +67,7 @@ namespace Bit.Android
             new Browser("mark.via.gp", "aw"),
             new Browser("org.bromite.bromite", "url_bar"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
+            new Browser("com.ecosia.android", "url_bar"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
