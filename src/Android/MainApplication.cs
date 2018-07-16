@@ -15,6 +15,7 @@ using XLabs.Ioc;
 using System.Threading.Tasks;
 using XLabs.Ioc.SimpleInjectorContainer;
 using SimpleInjector;
+using Android.Gms.Security;
 
 namespace Bit.Android
 {
@@ -23,7 +24,7 @@ namespace Bit.Android
 #else
     [Application(Debuggable = false)]
 #endif
-    public class MainApplication : Application
+    public class MainApplication : Application, ProviderInstaller.IProviderInstallListener
     {
         private const string FirstLaunchKey = "firstLaunch";
         private const string LastVersionCodeKey = "lastVersionCode";
@@ -36,6 +37,11 @@ namespace Bit.Android
             if(!Resolver.IsSet)
             {
                 SetIoc(this);
+            }
+
+            if(Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
+            {
+                ProviderInstaller.InstallIfNeededAsync(ApplicationContext, this);
             }
         }
 
@@ -131,6 +137,14 @@ namespace Bit.Android
 
             container.Verify();
             Resolver.SetResolver(new SimpleInjectorResolver(container));
+        }
+
+        public void OnProviderInstallFailed(int errorCode, Intent recoveryIntent)
+        {
+        }
+
+        public void OnProviderInstalled()
+        {
         }
     }
 }

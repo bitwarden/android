@@ -869,6 +869,9 @@
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat">
       <Version>25.4.0.2</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet">
+      <Version>42.1021.1</Version>
+    </PackageReference>
     <PackageReference Include="XLabs.IoC.SimpleInjector" Version="2.0.5782" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.2" />
     <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />

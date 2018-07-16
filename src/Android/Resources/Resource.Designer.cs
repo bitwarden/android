@@ -6507,17 +6507,17 @@ namespace Bit.Android
 			// aapt resource value: 0x7f0a0051
 			public const int ApplicationName = 2131361873;
 			
-			// aapt resource value: 0x7f0a00b0
-			public const int AutoFillServiceDescription = 2131361968;
+			// aapt resource value: 0x7f0a00a9
+			public const int AutoFillServiceDescription = 2131361961;
 			
-			// aapt resource value: 0x7f0a00af
-			public const int AutoFillServiceSummary = 2131361967;
+			// aapt resource value: 0x7f0a00a8
+			public const int AutoFillServiceSummary = 2131361960;
 			
 			// aapt resource value: 0x7f0a0050
 			public const int Hello = 2131361872;
 			
-			// aapt resource value: 0x7f0a00b1
-			public const int MyVault = 2131361969;
+			// aapt resource value: 0x7f0a00aa
+			public const int MyVault = 2131361962;
 			
 			// aapt resource value: 0x7f0a0027
 			public const int abc_action_bar_home_description = 2131361831;
@@ -6671,27 +6671,6 @@ namespace Bit.Android
 			
 			// aapt resource value: 0x7f0a000f
 			public const int common_signin_button_text_long = 2131361807;
-			
-			// aapt resource value: 0x7f0a00aa
-			public const int default_web_client_id = 2131361962;
-			
-			// aapt resource value: 0x7f0a00ab
-			public const int firebase_database_url = 2131361963;
-			
-			// aapt resource value: 0x7f0a00a8
-			public const int gcm_defaultSenderId = 2131361960;
-			
-			// aapt resource value: 0x7f0a00ac
-			public const int google_api_key = 2131361964;
-			
-			// aapt resource value: 0x7f0a00a9
-			public const int google_app_id = 2131361961;
-			
-			// aapt resource value: 0x7f0a00ad
-			public const int google_crash_reporting_api_key = 2131361965;
-			
-			// aapt resource value: 0x7f0a00ae
-			public const int google_storage_bucket = 2131361966;
 			
 			// aapt resource value: 0x7f0a0052
 			public const int hockeyapp_crash_dialog_app_name_fallback = 2131361874;
