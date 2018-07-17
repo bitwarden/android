@@ -37,7 +37,7 @@ namespace Bit.App.Services
             _stopwatch?.Restart();
         }
 
-        public async Task<LockType> GetLockTypeAsync(bool forceLock)
+        public async Task<LockType> GetLockTypeAsync(bool forceLock, bool onlyIfAlreadyLocked = false)
         {
             // Only lock if they are logged in
             if(!_authService.IsAuthenticated)
@@ -59,6 +59,11 @@ namespace Bit.App.Services
                 }
             }
 
+            if(onlyIfAlreadyLocked && !_appSettings.Locked)
+            {
+                return LockType.None;
+            }
+
             // What method are we using to unlock?
             var fingerprintUnlock = _settings.GetValueOrDefault(Constants.SettingFingerprintUnlockOn, false);
             var pinUnlock = _settings.GetValueOrDefault(Constants.SettingPinUnlockOn, false);
@@ -77,14 +82,14 @@ namespace Bit.App.Services
             }
         }
 
-        public async Task CheckLockAsync(bool forceLock)
+        public async Task CheckLockAsync(bool forceLock, bool onlyIfAlreadyLocked = false)
         {
             if(TopPageIsLock())
             {
                 return;
             }
 
-            var lockType = await GetLockTypeAsync(forceLock);
+            var lockType = await GetLockTypeAsync(forceLock, onlyIfAlreadyLocked);
             if(lockType == LockType.None)
             {
                 return;

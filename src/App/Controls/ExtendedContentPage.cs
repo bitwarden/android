@@ -30,7 +30,7 @@ namespace Bit.App.Controls
             BackgroundColor = Color.FromHex("efeff4");
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             if(_requireAuth && !_authService.IsAuthenticated)
             {
@@ -52,6 +52,7 @@ namespace Bit.App.Controls
             }
 
             _googleAnalyticsService.TrackPage(GetType().Name);
+            await _lockService.CheckLockAsync(false, true);
             base.OnAppearing();
         }
 
