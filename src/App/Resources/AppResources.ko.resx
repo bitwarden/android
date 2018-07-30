@@ -887,7 +887,7 @@
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey 보안 키</value>
-    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
     <value>새 첨부 파일 추가</value>
@@ -1287,22 +1287,30 @@
     <value>Yes, and Save</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>자동 완성 및 저장</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>조직</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
     <value>Hold your Yubikey near the top of the device.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>다시 시도</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>To continue, hold your YubiKey NEO against the back of the device.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>ex. Date this item was updated</comment>
   </data>
 </root>

@@ -887,7 +887,7 @@
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey NEO biztonsági kulcs</value>
-    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
     <value>Melléklet hozzáadása</value>
@@ -1284,25 +1284,33 @@
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>Igen, és mentés</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Automatikus kitöltés és mentés</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Szervezet</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Tartsd lenyomva a Yubikey-t, a készülék tetején.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>Próbáld újra</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>A folytatáshoz tartsd lenyomva a YubiKey NEO-t a készülék hátoldalán.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>A kisegítő szolgáltatás használata hasznos lehet, ha az alkalmazások nem támogatják a szabványos automatikus kitöltési szolgáltatást.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>ex. Date this item was updated</comment>
   </data>
 </root>
