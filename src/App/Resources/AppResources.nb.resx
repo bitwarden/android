@@ -887,7 +887,7 @@
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey-sikkerhetsnøkkel</value>
-    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
     <value>Legg til et nytt vedlegg</value>
@@ -1126,10 +1126,10 @@
     <value>Herr</value>
   </data>
   <data name="Mrs" xml:space="preserve">
-    <value>Frøken</value>
+    <value>Fru</value>
   </data>
   <data name="Ms" xml:space="preserve">
-    <value>Fru</value>
+    <value>Frøken</value>
   </data>
   <data name="November" xml:space="preserve">
     <value>November</value>
@@ -1229,80 +1229,88 @@
     <value>Vi klarte ikke å automatisk åpne Android sine auto-utfyllingsinnstilinger for deg. Du kan bla manuelt til auto-utfyllingsinnstillingsmenyen fra Android-innstillinger → System → Språk og inndata → Avansert → Auto-utfyllingstjeneste.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Custom Field Name</value>
+    <value>Navn på spesifikt felt</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
-    <value>Boolean</value>
+    <value>Boolsk verdi</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Hidden</value>
+    <value>Skjult</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
-    <value>Text</value>
+    <value>Tekst</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>New Custom Field</value>
+    <value>Nytt spesifikt felt</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
-    <value>What type of custom field do you want to add?</value>
+    <value>Hvilken type spesifikt felt vil du legge til?</value>
   </data>
   <data name="Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Fjern</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>New URI</value>
+    <value>Ny URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Base domain</value>
+    <value>Grunndomene</value>
   </data>
   <data name="Default" xml:space="preserve">
-    <value>Default</value>
+    <value>Standard</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Exact</value>
+    <value>Nøyaktig</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Host</value>
+    <value>Vert</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">
-    <value>Regular expression</value>
+    <value>Regulært uttrykk</value>
     <comment>A programming term, also known as 'RegEx'.</comment>
   </data>
   <data name="StartsWith" xml:space="preserve">
-    <value>Starts with</value>
+    <value>Starter med</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>URI Match Detection</value>
+    <value>URI-matchgjenkjenning</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Match Detection</value>
+    <value>Match-gjenkjenning</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>Ja, og lagre</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Autofyll og lagre</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Organisasjon</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Hold din Yubikey nær toppen av enheten.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>Prøv igjen</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>For å fortsette, hold din YubiKey NEO mot baksiden av enheten.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>Tilgjengelighetstjenesten kan være nyttig å bruke når apper ikke støtter den vanlige autoutfyllingstjenesten.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>ex. Date this item was updated</comment>
   </data>
 </root>
