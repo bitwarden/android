@@ -276,7 +276,7 @@
     <value>Bạn có chắc chắn muốn đăng xuất không?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
-    <value>Mật khẩu chủ</value>
+    <value>Mật khẩu</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
@@ -366,7 +366,7 @@
     <value>Xác thực vân tay</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Nhập lại mật khẩu chủ</value>
+    <value>Nhập lại mật khẩu</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Xác thực mã PIN</value>
@@ -381,7 +381,7 @@
     <value>Ghé thăm trang web của chúng tôi</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Truy cập trang web của chúng tôi để nhận trợ giúp, tin tức, địa chỉ email liên lạc và/hoặc tìm hiểu thêm về cách sử dụng Bitwarden.</value>
+    <value>Truy cập trang web của chúng tôi để nhận trợ giúp, tin tức, địa chỉ email liên lạc và tìm hiểu thêm về cách sử dụng Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Trang web</value>
@@ -403,10 +403,10 @@
     <value>Phần mở rộng ứng dụng</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Dùng quyền truy cập sử dụng để Bitwarden tự động điền thông tin đăng nhập của bạn trên các ứng dụng và web.</value>
+    <value>Cấp quyền truy cập sử dụng để Bitwarden tự động điền thông tin đăng nhập của bạn vào các ứng dụng và trang web.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Dịch vụ tự động điền</value>
+    <value>Tự động điền tiêu chuẩn</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Tránh các ký tự không rõ ràng</value>
@@ -424,7 +424,7 @@
     <value>Dịch vụ tự động điền Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Dùng quyền truy cập sử dụng để Bitwarden tự động điền thông tin đăng nhập giúp bạn.</value>
+    <value>Cấp quyền truy cập sử dụng để Bitwarden tự động điền thông tin đăng nhập giúp bạn.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Thay đổi email</value>
@@ -433,7 +433,7 @@
     <value>Bạn có thể thay đổi địa chỉ email trong trang web Bitwarden. Bạn có muốn truy cập bitwarden.com bây giờ?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
-    <value>Thay đổi mật khẩu chủ</value>
+    <value>Thay đổi mật khẩu</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
     <value>Bạn có thể thay đổi mật khẩu chủ trong trang web Bitwarden. Bạn có muốn truy cập bitwarden.com bây giờ?</value>
@@ -470,7 +470,7 @@
     <value>Bật tự động đồng bộ</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Nhập địa chỉ email tài khoản của bạn để nhận gợi ý mật khẩu chủ.</value>
+    <value>Nhập địa chỉ email tài khoản của bạn để nhận gợi ý mật khẩu.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Bật lại phần mở rộng ứng dụng</value>
@@ -516,16 +516,16 @@
     <value>Tạo mật khẩu</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Nhận gợi ý mật khẩu chủ của bạn</value>
+    <value>Nhận gợi ý mật khẩu Bitwarden</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Nhập mục</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Bạn có thể nhập hàng loạt mục đang nhập trên trang web Bitwarden. Bạn có muốn truy cập bitwarden.com bây giờ?</value>
+    <value>Bạn có thể nhập mật khẩu hàng loạt trên trang chủ Bitwarden. Bạn có muốn truy cập bitwarden.com bây giờ?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Dễ dàng nhập toàn bộ mục đăng nhập của bạn từ các ứng dụng quản lý mật khẩu khác.</value>
+    <value>Dễ dàng nhập toàn bộ mật khẩu của bạn từ các ứng dụng quản lý mật khẩu khác.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
     <value>Lần đồng bộ gần nhất:</value>
@@ -640,7 +640,7 @@
     <value>Bạn có chắc chắn muốn ghi đè mật khẩu hiện tại không?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden giữ kho mật khẩu của bạn được đồng bộ tự động hóa bằng cách sử dụng thông báo đẩy. Để mang lại trải nghiệm tốt nhất, vui lòng chọn "Đồng ý" trên bảng thông báo sau khi được yêu cầu bật thông báo đẩy.</value>
+    <value>Bitwarden giữ kho mật khẩu của bạn luôn được đồng bộ tự động hóa bằng cách sử dụng thông báo đẩy. Để mang lại trải nghiệm tốt nhất, hãy chọn "Đồng ý" trên bảng thông báo sau khi được yêu cầu bật thông báo đẩy.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
@@ -650,7 +650,7 @@
     <value>Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Xếp hạng trên App Store sẽ được đặt lại với mỗi bản cập nhật của Bitwarden. Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</value>
+    <value>Xếp hạng trên App Store sẽ được đặt lại sau mỗi bản cập nhật của Bitwarden. Bạn có thể cảm ơn chúng tôi bằng cách đánh giá 5 sao cho Bitwarden!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Tạo lại mật khẩu</value>
@@ -659,7 +659,7 @@
     <value>Nhập lại mật khẩu chủ</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Tìm kiếm trong kho</value>
+    <value>Tìm kiếm</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Bảo mật</value>
@@ -707,7 +707,7 @@
     <value>Xác thực hai lớp</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Xác thực hai lớp giúp cho tài khoản của bạn an toàn hơn bằng cách yêu cầu bạn xác minh thông tin đăng nhập của bạn bằng một thiết bị khác như khóa bảo mật, ứng dụng xác thực, SMS, cuộc gọi điện thoại hoặc email. Bạn có thể bật xác thực hai lớp trong trang web Bitwarden. Bạn có muốn ghé thăm bitwarden.com bây giờ?</value>
+    <value>Xác thực hai lớp giúp cho tài khoản của bạn an toàn hơn bằng cách yêu cầu bạn xác minh đăng nhập của bạn bằng khóa bảo mật, ứng dụng xác thực, tin nhắn, cuộc gọi điện thoại hoặc email. Bạn có thể bật xác thực hai lớp trong trang web Bitwarden. Bạn có muốn ghé thăm bitwarden.com bây giờ?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Mở khóa với {0}</value>
@@ -729,7 +729,7 @@
     <value>Trang web Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Quản lý các mục đăng nhập của bạn từ mọi nơi.</value>
+    <value>Quản lý mật khẩu của bạn từ mọi nơi.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Mất ứng dụng xác thực?</value>
@@ -765,7 +765,7 @@
     <value>Mở cài đặt trợ năng</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. Trên màn hình Cài đặt Trợ năng, chạm vào "Bitwarden" dưới phần 'Các dịch vụ đã tải xuống'.</value>
+    <value>1. Trên màn hình Cài đặt Trợ năng, chọn "Bitwarden" trong phần 'Các dịch vụ đã tải xuống'.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Gạt công tắc và nhấn OK để chấp nhận.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Cách dễ nhất để thêm đăng nhập mới vào kho của bạn là từ dịch vụ Tự động điền của Bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của Bitwarden bằng cách điều hướng đến màn hình 'Công cụ'.</value>
+    <value>Cách dễ nhất để thêm một đăng nhập mới vào kho của bạn là bằng dịch vụ Tự động điền của Bitwarden. Tìm hiểu thêm về cách sử dụng dịch vụ Tự động điền của Bitwarden trong trang 'Công cụ'.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Tự động điền</value>
@@ -792,7 +792,7 @@
     <value>Bạn có muốn tự động điền hoặc xem đăng nhập này?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Bạn có chắc chắn muốn tự động điền vào mục này? Nó không hoàn toàn khớp cho "{0}".</value>
+    <value>Bạn có chắc chắn muốn tự động điền vào mục này? Nó không hoàn toàn khớp với "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Khớp mục</value>
@@ -887,7 +887,7 @@
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>Khóa bảo mật YubiKey NEO</value>
-    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
     <value>Thêm tệp đính kèm mới</value>
@@ -1168,7 +1168,7 @@
     <value>Vô hiệu hoá biểu tượng trang web</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Biểu tượng trang web cung cấp các biểu tượng nhận dạng trang web bên cạnh mỗi mục đăng nhập trong kho mật khẩu của bạn.</value>
+    <value>Biểu tượng trang web giúp bạn dễ dàng nhận dạng trang web trong kho mật khẩu của bạn.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>Biểu tượng địa chỉ máy chủ</value>
@@ -1192,7 +1192,7 @@
     <value>Không có mục nào trong thư mục này.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Dịch vụ Trợ năng Tự động điền</value>
+    <value>Tự động điền bằng trợ năng</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Dịch vụ tự động điền của Bitwarden sử dụng Bộ khung Tự động điền của Android để hỗ trợ điền thông tin đăng nhập, thẻ tín dụng và thông tin danh tính vào các ứng dụng khác trên thiết bị của bạn.</value>
@@ -1277,32 +1277,40 @@
     <value>Bắt đầu với</value>
   </data>
   <data name="URIMatchDetection" xml:space="preserve">
-    <value>Độ phù hợp với URL</value>
+    <value>Độ khớp với URL</value>
   </data>
   <data name="MatchDetection" xml:space="preserve">
-    <value>Độ phù hợp</value>
+    <value>Độ khớp</value>
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>Được, lưu lại</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Tự động điền và lưu</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Tổ chức</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Đặt Yubikey của bạn ở phần đầu thiết bị.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>Thử lại</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>Để tiếp tục, hãy đặt YubiKey NEO của bạn dựa vào mặt lưng của thiết bị.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>Bạn có thể cần dùng dịch vụ trợ năng vì một số ứng dụng không hỗ trợ dịch vụ tự động điền của Android.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>ex. Date this item was updated</comment>
   </data>
 </root>
