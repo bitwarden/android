@@ -13,12 +13,14 @@ namespace Bit.App.Models.Api
             Uris = cipher.Login.Uris?.Select(u => new LoginUriType(u));
             Username = cipher.Login.Username?.EncryptedString;
             Password = cipher.Login.Password?.EncryptedString;
+
             Totp = cipher.Login.Totp?.EncryptedString;
         }
 
         public IEnumerable<LoginUriType> Uris { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public System.DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
     }
 }

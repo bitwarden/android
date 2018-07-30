@@ -943,6 +943,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password Updated.
+        /// </summary>
+        public static string DatePasswordUpdated {
+            get {
+                return ResourceManager.GetString("DatePasswordUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updated.
+        /// </summary>
+        public static string DateUpdated {
+            get {
+                return ResourceManager.GetString("DateUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to December.
         /// </summary>
         public static string December {

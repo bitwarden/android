@@ -24,6 +24,7 @@ namespace Bit.App.Models
             Edit = data.Edit;
             OrganizationUseTotp = data.OrganizationUseTotp;
             Attachments = attachments?.Select(a => new Attachment(a));
+            RevisionDate = data.RevisionDateTime;
 
             switch(Type)
             {
@@ -52,6 +53,17 @@ namespace Bit.App.Models
                 }
                 catch(JsonSerializationException) { }
             }
+
+            if(!string.IsNullOrWhiteSpace(data.PasswordHistory))
+            {
+                try
+                {
+                    var phModels = JsonConvert.DeserializeObject<IEnumerable<PasswordHistoryDataModel>>(
+                        data.PasswordHistory);
+                    PasswordHistory = phModels?.Select(f => new PasswordHistory(f));
+                }
+                catch(JsonSerializationException) { }
+            }
         }
 
         public string Id { get; set; }
@@ -62,14 +74,19 @@ namespace Bit.App.Models
         public CipherString Name { get; set; }
         public CipherString Notes { get; set; }
         public IEnumerable<Field> Fields { get; set; }
+        public IEnumerable<PasswordHistory> PasswordHistory { get; set; }
         public bool Favorite { get; set; }
         public bool Edit { get; set; }
         public bool OrganizationUseTotp { get; set; }
         public IEnumerable<Attachment> Attachments { get; set; }
+        public System.DateTime RevisionDate { get; set; }
 
         public Login Login { get; set; }
         public Identity Identity { get; set; }
         public Card Card { get; set; }
         public SecureNote SecureNote { get; set; }
+
+        public System.DateTime? PasswordRevisionDisplayDate =>
+            Login?.Password == null ? (System.DateTime?)null : Login.PasswordRevisionDate ?? RevisionDate;
     }
 }

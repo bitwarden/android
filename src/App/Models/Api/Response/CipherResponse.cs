@@ -22,6 +22,7 @@ namespace Bit.App.Models.Api
         public SecureNoteType SecureNote { get; set; }
         public IEnumerable<FieldType> Fields { get; set; }
         public IEnumerable<AttachmentResponse> Attachments { get; set; }
+        public IEnumerable<PasswordHistoryResponse> PasswordHistory { get; set; }
         public IEnumerable<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
     }

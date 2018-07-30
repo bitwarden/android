@@ -43,6 +43,7 @@ namespace Bit.App.Pages
         private TableSection NotesSection { get; set; }
         private TableSection AttachmentsSection { get; set; }
         private TableSection FieldsSection { get; set; }
+        public TableSection OtherSection { get; set; }
         public LabeledValueCell NotesCell { get; set; }
         private EditCipherToolBarItem EditItem { get; set; }
         public List<LabeledValueCell> FieldsCells { get; set; }
@@ -51,6 +52,7 @@ namespace Bit.App.Pages
         // Login
         public LabeledValueCell LoginUsernameCell { get; set; }
         public LabeledValueCell LoginPasswordCell { get; set; }
+        public LabeledValueCell LoginPasswordRevisionDateCell { get; set; }
         public LabeledValueCell LoginTotpCodeCell { get; set; }
 
         // Card
@@ -111,6 +113,10 @@ namespace Bit.App.Pages
             NotesCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.Notes));
             NotesCell.Value.LineBreakMode = LineBreakMode.WordWrap;
 
+            var revisionDateCell = new LabeledValueCell(AppResources.DateUpdated);
+            revisionDateCell.Value.SetBinding(Label.TextProperty, nameof(VaultViewCipherPageModel.RevisionDate));
+            revisionDateCell.Value.LineBreakMode = LineBreakMode.WordWrap;
+
             switch(_type)
             {
                 case CipherType.Login:
@@ -152,6 +158,12 @@ namespace Bit.App.Pages
                         nameof(VaultViewCipherPageModel.LoginTotpColor));
                     LoginTotpCodeCell.Value.FontFamily =
                         Helpers.OnPlatform(iOS: "Menlo-Regular", Android: "monospace", Windows: "Courier");
+
+                    // Password Revision Date
+                    LoginPasswordRevisionDateCell = new LabeledValueCell(AppResources.DatePasswordUpdated);
+                    LoginPasswordRevisionDateCell.Value.SetBinding(Label.TextProperty,
+                        nameof(VaultViewCipherPageModel.PasswordRevisionDate));
+                    LoginPasswordRevisionDateCell.Value.LineBreakMode = LineBreakMode.WordWrap;
                     break;
                 case CipherType.Card:
                     CardNameCell = new LabeledValueCell(AppResources.CardholderName);
@@ -233,6 +245,11 @@ namespace Bit.App.Pages
             NotesSection = new TableSection(AppResources.Notes)
             {
                 NotesCell
+            };
+
+            OtherSection = new TableSection(AppResources.Other)
+            {
+                revisionDateCell
             };
 
             Table = new ExtendedTableView
@@ -363,10 +380,26 @@ namespace Bit.App.Pages
                 Table.Root.Add(AttachmentsSection);
             }
 
+            // Other
+            if(Table.Root.Contains(OtherSection))
+            {
+                Table.Root.Remove(OtherSection);
+            }
+            Table.Root.Add(OtherSection);
+
             // Various types
             switch(cipher.Type)
             {
                 case CipherType.Login:
+                    if(OtherSection.Contains(LoginPasswordRevisionDateCell))
+                    {
+                        OtherSection.Remove(LoginPasswordRevisionDateCell);
+                    }
+                    if(Model.ShowPasswordRevisionDate)
+                    {
+                        OtherSection.Add(LoginPasswordRevisionDateCell);
+                    }
+
                     AddSectionCell(LoginUsernameCell, Model.ShowLoginUsername);
                     AddSectionCell(LoginPasswordCell, Model.ShowLoginPassword);
 

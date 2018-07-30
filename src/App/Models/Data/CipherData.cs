@@ -64,6 +64,16 @@ namespace Bit.App.Models.Data
                 }
                 catch(JsonSerializationException) { }
             }
+
+            if(cipher.PasswordHistory != null && cipher.PasswordHistory.Any())
+            {
+                try
+                {
+                    PasswordHistory = JsonConvert.SerializeObject(
+                        cipher.PasswordHistory.Select(h => new PasswordHistoryDataModel(h)));
+                }
+                catch(JsonSerializationException) { }
+            }
         }
 
         [PrimaryKey]
@@ -75,6 +85,7 @@ namespace Bit.App.Models.Data
         public string Name { get; set; }
         public string Notes { get; set; }
         public string Fields { get; set; }
+        public string PasswordHistory { get; set; }
         public string Login { get; set; }
         public string Card { get; set; }
         public string Identity { get; set; }

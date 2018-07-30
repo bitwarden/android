@@ -22,6 +22,7 @@ namespace Bit.App.Models.Data
             Uris = response.Login.Uris?.Where(u => u != null).Select(u => new LoginUriDataModel(u));
             Username = response.Login.Username;
             Password = response.Login.Password;
+            PasswordRevisionDate = response.Login.PasswordRevisionDate;
             Totp = response.Login.Totp;
         }
 
@@ -33,6 +34,7 @@ namespace Bit.App.Models.Data
         public IEnumerable<LoginUriDataModel> Uris { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
     }
 }

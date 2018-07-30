@@ -11,7 +11,7 @@ namespace Bit.App.Models.Page
     {
         private const string MaskedPasswordString = "••••••••";
 
-        private string _name, _notes;
+        private string _name, _notes, _reivisonDate, _passwordReivisonDate;
         private List<Attachment> _attachments;
         private List<Field> _fields;
         private List<LoginUri> _loginUris;
@@ -43,6 +43,28 @@ namespace Bit.App.Models.Page
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Name)));
             }
         }
+
+        public string RevisionDate
+        {
+            get => _reivisonDate;
+            set
+            {
+                _reivisonDate = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(RevisionDate)));
+            }
+        }
+
+        public string PasswordRevisionDate
+        {
+            get => _passwordReivisonDate;
+            set
+            {
+                _passwordReivisonDate = value;
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(PasswordRevisionDate)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowPasswordRevisionDate)));
+            }
+        }
+        public bool ShowPasswordRevisionDate => !string.IsNullOrWhiteSpace(PasswordRevisionDate);
 
         public string Notes
         {
@@ -523,6 +545,20 @@ namespace Bit.App.Models.Page
         {
             Name = cipher.Name?.Decrypt(cipher.OrganizationId);
             Notes = cipher.Notes?.Decrypt(cipher.OrganizationId);
+            var revisionDate = DateTime.SpecifyKind(cipher.RevisionDate, DateTimeKind.Utc).ToLocalTime();
+            RevisionDate = revisionDate.ToShortDateString() + " " + revisionDate.ToShortTimeString();
+
+            if(cipher.PasswordRevisionDisplayDate.HasValue)
+            {
+                var passwordRevisionDate = DateTime.SpecifyKind(
+                    cipher.PasswordRevisionDisplayDate.Value, DateTimeKind.Utc).ToLocalTime();
+                PasswordRevisionDate = passwordRevisionDate.ToShortDateString() + " " +
+                    passwordRevisionDate.ToShortTimeString();
+            }
+            else
+            {
+                PasswordRevisionDate = null;
+            }
 
             if(cipher.Attachments != null)
             {
@@ -693,7 +729,7 @@ namespace Bit.App.Models.Page
                 }
             }
             public string Label => IsWebsite ? AppResources.Website : AppResources.URI;
-            public bool IsWebsite => Value == null ? false : 
+            public bool IsWebsite => Value == null ? false :
                 Value.StartsWith("http://") || Value.StartsWith("https://");
             public bool IsApp => Value == null ? false : Value.StartsWith(Constants.AndroidAppProtocol);
         }

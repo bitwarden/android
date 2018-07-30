@@ -28,6 +28,7 @@ namespace Bit.App.Models
 
             Username = deserializedData.Username != null ? new CipherString(deserializedData.Username) : null;
             Password = deserializedData.Password != null ? new CipherString(deserializedData.Password) : null;
+            PasswordRevisionDate = deserializedData.PasswordRevisionDate;
             Totp = deserializedData.Totp != null ? new CipherString(deserializedData.Totp) : null;
             Uris = deserializedData.Uris?.Select(u => new LoginUri(u));
         }
@@ -35,6 +36,7 @@ namespace Bit.App.Models
         public IEnumerable<LoginUri> Uris { get; set; }
         public CipherString Username { get; set; }
         public CipherString Password { get; set; }
+        public DateTime? PasswordRevisionDate { get; set; }
         public CipherString Totp { get; set; }
     }
 }

@@ -46,6 +46,7 @@ namespace Bit.App.Models.Api
         public string Name { get; set; }
         public string Notes { get; set; }
         public IEnumerable<FieldType> Fields { get; set; }
+        public IEnumerable<PasswordHistoryResponse> PasswordHistory { get; set; }
 
         public LoginType Login { get; set; }
         public CardType Card { get; set; }
