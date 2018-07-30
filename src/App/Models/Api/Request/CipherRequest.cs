@@ -20,6 +20,11 @@ namespace Bit.App.Models.Api
                 Fields = cipher.Fields.Select(f => new FieldType(f));
             }
 
+            if(cipher.PasswordHistory != null)
+            {
+                PasswordHistory = cipher.PasswordHistory.Select(h => new PasswordHistoryRequest(h));
+            }
+
             switch(Type)
             {
                 case CipherType.Login:
@@ -46,7 +51,7 @@ namespace Bit.App.Models.Api
         public string Name { get; set; }
         public string Notes { get; set; }
         public IEnumerable<FieldType> Fields { get; set; }
-        public IEnumerable<PasswordHistoryResponse> PasswordHistory { get; set; }
+        public IEnumerable<PasswordHistoryRequest> PasswordHistory { get; set; }
 
         public LoginType Login { get; set; }
         public CardType Card { get; set; }

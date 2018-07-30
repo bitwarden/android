@@ -13,7 +13,7 @@ namespace Bit.App.Models.Api
             Uris = cipher.Login.Uris?.Select(u => new LoginUriType(u));
             Username = cipher.Login.Username?.EncryptedString;
             Password = cipher.Login.Password?.EncryptedString;
-
+            PasswordRevisionDate = cipher.Login.PasswordRevisionDate;
             Totp = cipher.Login.Totp?.EncryptedString;
         }
 

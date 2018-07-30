@@ -23,6 +23,8 @@ namespace Bit.App.Pages
         private readonly IDeviceInfoService _deviceInfo;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private DateTime? _lastAction;
+        private string _originalLoginPassword = null;
+        private List<Tuple<string, string>> _originalHiddenFields = new List<Tuple<string, string>>();
 
         public VaultEditCipherPage(string cipherId)
         {
@@ -169,7 +171,7 @@ namespace Bit.App.Pages
             // Types
             if(Cipher.Type == CipherType.Login)
             {
-                LoginTotpCell = new FormEntryCell(AppResources.AuthenticatorKey, 
+                LoginTotpCell = new FormEntryCell(AppResources.AuthenticatorKey,
                     button1: _deviceInfo.HasCamera ? "camera.png" : null);
                 LoginTotpCell.Entry.Text = Cipher.Login?.Totp?.Decrypt(Cipher.OrganizationId);
                 LoginTotpCell.Entry.DisableAutocapitalize = true;
@@ -179,7 +181,8 @@ namespace Bit.App.Pages
 
                 LoginPasswordCell = new FormEntryCell(AppResources.Password, isPassword: true,
                     nextElement: LoginTotpCell.Entry, button1: "eye.png", button2: "refresh_alt.png");
-                LoginPasswordCell.Entry.Text = Cipher.Login?.Password?.Decrypt(Cipher.OrganizationId);
+                LoginPasswordCell.Entry.Text = _originalLoginPassword =
+                    Cipher.Login?.Password?.Decrypt(Cipher.OrganizationId);
                 LoginPasswordCell.Entry.DisableAutocapitalize = true;
                 LoginPasswordCell.Entry.Autocorrect = false;
                 LoginPasswordCell.Entry.FontFamily =
@@ -211,7 +214,7 @@ namespace Bit.App.Pages
                     foreach(var uri in Cipher.Login.Uris)
                     {
                         var value = uri.Uri?.Decrypt(Cipher.OrganizationId);
-                        UrisSection.Insert(UrisSection.Count - 1, 
+                        UrisSection.Insert(UrisSection.Count - 1,
                             Helpers.MakeUriCell(value, uri.Match, UrisSection, this));
                     }
                 }
@@ -415,6 +418,11 @@ namespace Bit.App.Pages
                     {
                         FieldsSection.Add(cell);
                     }
+                    if(!string.IsNullOrWhiteSpace(label) && !string.IsNullOrWhiteSpace(value) &&
+                        field.Type == FieldType.Hidden)
+                    {
+                        _originalHiddenFields.Add(new Tuple<string, string>(label, value));
+                    }
                 }
             }
             AddFieldCell = new ExtendedTextCell
@@ -491,7 +499,8 @@ namespace Bit.App.Pages
                 Cipher.Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null :
                     NotesCell.Editor.Text.Encrypt(Cipher.OrganizationId);
                 Cipher.Favorite = FavoriteCell.On;
-
+                
+                var passwordHistory = Cipher.PasswordHistory?.ToList() ?? new List<PasswordHistory>();
                 switch(Cipher.Type)
                 {
                     case CipherType.Login:
@@ -504,6 +513,18 @@ namespace Bit.App.Pages
                             Totp = string.IsNullOrWhiteSpace(LoginTotpCell.Entry.Text) ? null :
                                 LoginTotpCell.Entry.Text.Encrypt(Cipher.OrganizationId),
                         };
+
+                        if(!string.IsNullOrWhiteSpace(_originalLoginPassword) &&
+                            LoginPasswordCell.Entry.Text != _originalLoginPassword)
+                        {
+                            var now = DateTime.UtcNow;
+                            passwordHistory.Insert(0, new PasswordHistory
+                            {
+                                LastUsedDate = now,
+                                Password = _originalLoginPassword.Encrypt(Cipher.OrganizationId),
+                            });
+                            Cipher.Login.PasswordRevisionDate = now;
+                        }
 
                         Helpers.ProcessUrisSectionForSave(UrisSection, Cipher);
                         break;
@@ -639,7 +660,18 @@ namespace Bit.App.Pages
                     Cipher.FolderId = null;
                 }
 
-                Helpers.ProcessFieldsSectionForSave(FieldsSection, Cipher);
+                var hiddenFields = Helpers.ProcessFieldsSectionForSave(FieldsSection, Cipher);
+                var changedFields = _originalHiddenFields.Where(of =>
+                    hiddenFields.Any(f => f.Item1 == of.Item1 && f.Item2 != of.Item2));
+                foreach(var cf in changedFields)
+                {
+                    passwordHistory.Insert(0, new PasswordHistory
+                    {
+                        LastUsedDate = DateTime.UtcNow,
+                        Password = (cf.Item1 + ": " + cf.Item2).Encrypt(Cipher.OrganizationId),
+                    });
+                }
+                Cipher.PasswordHistory = (passwordHistory?.Count ?? 0) > 0 ? passwordHistory : null;
 
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(Cipher);
@@ -714,7 +746,7 @@ namespace Bit.App.Pages
                     CardExpYearCell?.InitEvents();
                     CardNameCell?.InitEvents();
                     CardNumberCell?.InitEvents();
-                    if (CardCodeCell?.Button1 != null)
+                    if(CardCodeCell?.Button1 != null)
                     {
                         CardCodeCell.Button1.Clicked += CardCodeButton_Clicked;
                     }
@@ -798,7 +830,7 @@ namespace Bit.App.Pages
                     CardExpYearCell?.Dispose();
                     CardNameCell?.Dispose();
                     CardNumberCell?.Dispose();
-                    if (CardCodeCell?.Button1 != null)
+                    if(CardCodeCell?.Button1 != null)
                     {
                         CardCodeCell.Button1.Clicked -= CardCodeButton_Clicked;
                     }
@@ -826,7 +858,7 @@ namespace Bit.App.Pages
                 default:
                     break;
             }
-            
+
             Helpers.DisposeSectionEvents(FieldsSection);
             Helpers.DisposeSectionEvents(UrisSection);
         }
