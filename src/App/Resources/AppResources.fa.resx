@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>مطمئنید می‌خواهید حذف کنید؟ این عمل قابل بازگشت نیست.</value>
+    <value>مطمئنید میخواهید حذف کنید؟ این عمل قابل بازگشت نیست.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -196,7 +196,7 @@
     <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما ایمیل ارسال کنید.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
-    <value>کد پین را وارد کنید.</value>
+    <value>پین کد را وارد کنید.</value>
   </data>
   <data name="Favorites" xml:space="preserve">
     <value>علاقه مندی ها</value>
@@ -236,7 +236,7 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="HelpAndFeedback" xml:space="preserve">
-    <value>کمک و بازخورد</value>
+    <value>کمک و باز خورد</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>پنهان کردن</value>
@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>آیا مطمئنید که می‌خواهید خارج شوید؟</value>
+    <value>آیا مطمئنید که میخواهید خارج شوید؟</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>گذرواژه‌ ی اصلی</value>
@@ -409,7 +409,7 @@
     <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>از کاراکترهای متقارن استفاده نکن</value>
+    <value>از تکرار کاراکترهای یک شکل اجتناب کن</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>افزونه اپلیکیشن Bitwarden</value>
@@ -436,7 +436,7 @@
     <value>تغییر گذرواژه اصلی</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>شما می توانید گذرواژه اصلی خود را در bitwarden.com تغییر دهید. آیا می خواهید از سایت بازدید کنید؟</value>
+    <value>شما می توانید گذرواژه اصلی خود را در bitwarden.com تغییر دهید. آیا میخواهید از سایت بازدید کنید؟</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>بستن</value>
@@ -674,7 +674,7 @@
     <value>تعیین پین</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>یک کد پین 4 رقمی برای باز کردن برنامه وارد کنید.</value>
+    <value>یک پین کد 4 رقمی برای باز کردن برنامه وارد کنید.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>اطلاعات مورد</value>
@@ -707,13 +707,13 @@
     <value>ورود دو مرحله ای</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>ورودی دو مرحله ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه تأیید هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورودی دو مرحله ای می تواند در bitwarden.com فعال شود. آیا می خواهید از سایت بازدید کنید؟</value>
+    <value>ورود دو مرحله ای باعث می شود که حساب کاربری شما با استفاده از یک دستگاه دیگر مانند کلید امنیتی، برنامه تأیید هویت، پیامک، تماس تلفنی و یا ایمیل، اعتبار خود را با ایمنی بیشتر اثبات کند. ورود دو مرحله ای می تواند در bitwarden.com فعال شود. آیا میخواهید از سایت بازدید کنید؟</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>باز کردن با {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>باز کردن با کد پین</value>
+    <value>باز کردن با پین کد</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>اعتبار سنجی</value>
@@ -813,19 +813,19 @@
     <value>ایجاد یک تشکیلات برای اشتراک گذاری ایمن موارد خود با سایر کاربران.</value>
   </data>
   <data name="DisableGADescription" xml:space="preserve">
-    <value>ما از آنالیز استفاده می کنیم که بهتر بفهمیم چگونه برنامه استفاده می شود تا بتوانیم آن را بهتر کنیم. تمام داده های جمع آوری شده کاملاً ناشناس است.</value>
+    <value>ما از آنالیزها جهت درک بهتر چگونگی استفاده از برنامه بهره میبریم تا بتوانیم آن را بهبود ببخشیم. تمام داده های جمع آوری شده کاملاً ناشناس است.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>اسکن زمانی که در فیلد پسورد متمرکز شده</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>فقط صفحه را اسکن میکند برای فیلدها و پیشنهاد یک پر کردن خودکار هر چند که شما یک فیلد رمز عبور را انتخاب کرده باشید. این تنظیم به افزایش عمر باتری کمک میکند.</value>
+    <value>فقط صفحه را برای فیلدها و پیشنهاد دادن پر کردن خودکار اسکن میکند هر حتی اگر شما یک فیلد رمز عبور را انتخاب کرده باشید. این تنظیم به افزایش عمر باتری کمک میکند.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>اطلاعیه ثابت</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>همیشه یک پر کردن خودکار را اطلاع میدهد و فقط برای فیلدها بعد از تلاش برای پر کردن خودکار اسکن میکند. این تنظیم ممکن است در صرفه جویی باتری موثر باشد.</value>
+    <value>همیشه یک پر کردن خودکار را اطلاع میدهد و فقط بعد از تلاش برای پر کردن خودکار فیلدها اقدام به اسکن میکند. این تنظیم ممکن است در صرفه جویی باتری موثر باشد.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>همیشه اسکن کن</value>
@@ -887,7 +887,7 @@
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>کلید امنیتی YubiKey</value>
-    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
     <value>افزودن پیوست جدید</value>
@@ -944,7 +944,7 @@
     <value>کپی TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>اگر ورود شما دارای یک کلید تأیید کننده است که به آن متصل شده است، هر زمان که بصورت خودکار وارد سایت شوید کد تأیید TOTP به صورت خودکار به کلیپ بورد شما کپی می شود.</value>
+    <value>اگر ورود شما دارای یک کلید تأیید کننده میباشد که به آن متصل شده است، هر زمان که بصورت خودکار وارد سایت شوید کد تأیید TOTP به صورت خودکار به کلیپ بورد شما کپی می شود.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>غیرفعال کردن کپی خودکار TOTP</value>
@@ -1284,25 +1284,33 @@
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>بله، و ذخیره</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>پر کردن خودکار و ذخیره</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>سازماندهی</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Yubikey خود را در نزدیکی بالای دستگاه نگه دارید.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>دوباره امتحان کنید</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>برای ادامه، دوباره YubiKey NEO خود را پشت دستگاه نگه دارید.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>خدمات دسترسی ممکن است مفید باشد برای استفاده در زمانی که برنامه از سرویس پر کردن خودکار استاندارد پشتیبانی نمی کند.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>ex. Date this item was updated</comment>
   </data>
 </root>
