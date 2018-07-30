@@ -182,18 +182,18 @@
     <value>Upravit složku</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Emailová adresa</value>
+    <value>E-mailová adresa</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
     <value>Napište nám</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Napište nám email pro získání pomoci nebo zanechání zpětné vazby.</value>
+    <value>Napište nám e-mail pro získání pomoci nebo zanechání zpětné vazby.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Zadejte PIN kód.</value>
@@ -344,7 +344,7 @@
     <comment>The title for the tools page.</comment>
   </data>
   <data name="URI" xml:space="preserve">
-    <value>URL</value>
+    <value>URI</value>
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
@@ -381,7 +381,7 @@
     <value>Navštivit naší webovou stránku</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Navštivte webovou stránku aplikace pro zobrazení nápovědy, novinek, nebo návody jak používat Bitwarden.</value>
+    <value>Navštivte náš web pro získání nápovědy, novinek, kontaktu, nebo návodů, jak používat Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Webová stránka</value>
@@ -427,10 +427,10 @@
     <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Změnit email</value>
+    <value>Změnit e-mail</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Emailovou adresu si můžete změnit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
+    <value>E-mailovou adresu si můžete změnit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Změnit hlavní heslo</value>
@@ -470,7 +470,7 @@
     <value>Povolit automatickou synchronizaci</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Zadejte emailovou adresu pro zaslání nápovědy k hlavnímu heslu.</value>
+    <value>Zadejte e-mailovou adresu pro zaslání nápovědy k hlavnímu heslu.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
     <value>Znovu zapnout rozšíření aplikace</value>
@@ -504,7 +504,7 @@
     <value>Pro spuštění rozšíření klikněte na ikonku Bitwarden v menu.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>Pro zapnutí Bitwarden v Safari a ostatních prohlížečích, klikněte na ikonku "více" v dolní části menu.</value>
+    <value>Pro zapnutí Bitwarden v prohlížeči Safari a dalších aplikacích klepněte na ikonku „více“ v dolní části menu.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Oblíbené</value>
@@ -634,7 +634,7 @@
     <value>Nápověda k heslu</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Odeslali jsme vám email s nápovědou k hlavnímu heslu.</value>
+    <value>Odeslali jsme vám e-mail s nápovědou k hlavnímu heslu.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Opravdu chcete přepsat aktuální heslo?</value>
@@ -707,7 +707,7 @@
     <value>Dvoufázové přihlášení</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>Dvoufázové přihlášení činí váš účet mnohem bezpečnější díky nutnosti po každém úspěšném přihlášení zadat ověřovací kód získaný z aplikace, SMS, emailu nebo telefonního hovoru. Dvoufázové přihlášení lze aktivovat na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
+    <value>Dvoufázové přihlášení činí váš účet mnohem bezpečnějším díky nutnosti po každém úspěšném přihlášení zadat ověřovací kód získaný z aplikace, SMS, e-mailu nebo telefonního hovoru. Dvoufázové přihlášení lze aktivovat na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Odemknout pomocí {0}</value>
@@ -846,7 +846,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="EnterVerificationCodeEmail" xml:space="preserve">
-    <value>Zadejte 6-místný kód, který byl odeslán na email {0}.</value>
+    <value>Zadejte 6místný kód z e-mailu, který byl zaslán na {0}.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="LoginUnavailable" xml:space="preserve">
@@ -865,7 +865,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Zaslat znovu ověřovací kód na email</value>
+    <value>Zaslat znovu ověřovací kód na e-mail</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
@@ -875,11 +875,11 @@
     <value>Použít jinou metodu dvoufázového přihlášení</value>
   </data>
   <data name="VerificationEmailNotSent" xml:space="preserve">
-    <value>Nepodařilo se odeslat ověřovací email. Zkuste to znovu.</value>
+    <value>Ověřovací e-mail se nepodařilo odeslat. Zkuste to znovu.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="VerificationEmailSent" xml:space="preserve">
-    <value>Ověřovací email byl odeslán.</value>
+    <value>Ověřovací e-mail byl odeslán.</value>
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
@@ -887,7 +887,7 @@
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>YubiKey NEO bezpečnostní klíč</value>
-    <comment>"YubiKey NEO" is the product name and should not be translated.</comment>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
     <value>Přidat přílohu</value>
@@ -995,10 +995,10 @@
     <value>Pro pokročilé uživatele. Můžete zadat základní URL adresu každé služby zvlášť.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>URL adresy vlastního prostředí byly uloženy.</value>
+    <value>URL adresy vlastního prostředí byly uloženy</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
-    <value>{0} nemá správný formát.</value>
+    <value>{0} má nesprávný formát.</value>
     <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
   </data>
   <data name="IdentityUrl" xml:space="preserve">
@@ -1144,7 +1144,7 @@
     <value>Telefon</value>
   </data>
   <data name="September" xml:space="preserve">
-    <value>Záři</value>
+    <value>Září</value>
   </data>
   <data name="SSN" xml:space="preserve">
     <value>Číslo sociálního pojištění</value>
@@ -1195,7 +1195,7 @@
     <value>Služba automatického vyplňování</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+    <value>Služba Bitwarden automatického vyplnění používá Android Autofill framework pro vyplnění přihlašovacích údajů, čísel platebních karet a dalších osobních informací do dalších aplikací ve vašem zařízení.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
     <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajům, karet nebo identit v ostatních aplikacích.</value>
@@ -1284,25 +1284,33 @@
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>Ano a uložit</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-fill and save</value>
+    <value>Automaticky vyplněno a uloženo.</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Organizace</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Držte Yubikey v horní části zařízení.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>Zkusit znovu</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>Pro pokračování přidržte YubiKey NEO u zadní části zařízení.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
     <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>ex. Date this item was updated</comment>
   </data>
 </root>
