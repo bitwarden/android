@@ -178,8 +178,18 @@ namespace Bit.App.Models.Page
         public bool LoginTotpLow => LoginTotpSecond <= 7;
         public Color LoginTotpColor => !string.IsNullOrWhiteSpace(LoginTotpCode) && LoginTotpLow ?
             Color.Red : Color.Black;
-        public string LoginTotpCodeFormatted => !string.IsNullOrWhiteSpace(LoginTotpCode) ?
-            string.Format("{0} {1}", LoginTotpCode.Substring(0, 3), LoginTotpCode.Substring(3)) : null;
+        public string LoginTotpCodeFormatted
+        {
+            get
+            {
+                if(string.IsNullOrWhiteSpace(LoginTotpCode) || LoginTotpCode.Length < 5)
+                {
+                    return LoginTotpCode;
+                }
+                var half = (int)Math.Floor((double)LoginTotpCode.Length / 2);
+                return string.Format("{0} {1}", LoginTotpCode.Substring(0, half), LoginTotpCode.Substring(half));
+            }
+        }
 
         // Card
         public string CardName

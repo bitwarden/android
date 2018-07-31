@@ -177,16 +177,17 @@ namespace Bit.App.Utilities
         }
 
         // ref: https://github.com/mirthas/totp-net/blob/master/TOTP/Totp.cs
-        public static string Totp(string b32Key)
+        public static string Totp(string key)
         {
-            var key = Base32.FromBase32(b32Key);
-            if(key == null || key.Length == 0)
+            var otpParams = new OtpAuth(key);
+            var b32Key = Base32.FromBase32(otpParams.Secret);
+            if(b32Key == null || b32Key.Length == 0)
             {
                 return null;
             }
 
             var now = Helpers.EpocUtcNow() / 1000;
-            var sec = now / 30;
+            var sec = now / otpParams.Period;
 
             var secBytes = BitConverter.GetBytes(sec);
             if(BitConverter.IsLittleEndian)
@@ -194,17 +195,17 @@ namespace Bit.App.Utilities
                 Array.Reverse(secBytes, 0, secBytes.Length);
             }
 
-            var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha1);
-            var hasher = algorithm.CreateHash(key);
+            var algorithm = WinRTCrypto.MacAlgorithmProvider.OpenAlgorithm(otpParams.Algorithm);
+            var hasher = algorithm.CreateHash(b32Key);
             hasher.Append(secBytes);
             var hash = hasher.GetValueAndReset();
 
             var offset = (hash[hash.Length - 1] & 0xf);
-            var i = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) |
+            var binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) |
                 ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);
-            var code = i % (int)Math.Pow(10, 6);
+            var otp = binary % (int)Math.Pow(10, otpParams.Digits);
 
-            return code.ToString().PadLeft(6, '0');
+            return otp.ToString().PadLeft(otpParams.Digits, '0');
         }
 
         // ref: https://tools.ietf.org/html/rfc5869
