@@ -247,7 +247,7 @@ namespace Bit.App.Pages
                 NotesCell
             };
 
-            OtherSection = new TableSection(AppResources.Other)
+            OtherSection = new TableSection(Helpers.GetEmptyTableSectionTitle())
             {
                 revisionDateCell
             };

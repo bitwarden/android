@@ -87,6 +87,6 @@ namespace Bit.App.Models
         public SecureNote SecureNote { get; set; }
 
         public System.DateTime? PasswordRevisionDisplayDate =>
-            Login?.Password == null ? (System.DateTime?)null : Login.PasswordRevisionDate ?? RevisionDate;
+            Login?.Password == null ? null : Login.PasswordRevisionDate;
     }
 }

@@ -499,7 +499,7 @@ namespace Bit.App.Pages
                 Cipher.Notes = string.IsNullOrWhiteSpace(NotesCell.Editor.Text) ? null :
                     NotesCell.Editor.Text.Encrypt(Cipher.OrganizationId);
                 Cipher.Favorite = FavoriteCell.On;
-                
+
                 var passwordHistory = Cipher.PasswordHistory?.ToList() ?? new List<PasswordHistory>();
                 switch(Cipher.Type)
                 {
@@ -512,6 +512,7 @@ namespace Bit.App.Pages
                                 LoginPasswordCell.Entry.Text.Encrypt(Cipher.OrganizationId),
                             Totp = string.IsNullOrWhiteSpace(LoginTotpCell.Entry.Text) ? null :
                                 LoginTotpCell.Entry.Text.Encrypt(Cipher.OrganizationId),
+                            PasswordRevisionDate = Cipher.Login.PasswordRevisionDate,
                         };
 
                         if(!string.IsNullOrWhiteSpace(_originalLoginPassword) &&
@@ -671,7 +672,7 @@ namespace Bit.App.Pages
                         Password = (cf.Item1 + ": " + cf.Item2).Encrypt(Cipher.OrganizationId),
                     });
                 }
-                Cipher.PasswordHistory = (passwordHistory?.Count ?? 0) > 0 ? passwordHistory : null;
+                Cipher.PasswordHistory = (passwordHistory?.Count ?? 0) > 0 ? passwordHistory.Take(5) : null;
 
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
                 var saveTask = await _cipherService.SaveAsync(Cipher);
