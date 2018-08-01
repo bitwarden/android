@@ -468,6 +468,10 @@ namespace Bit.App.Services
                 }
             }
 
+            if(!loginUriString.Contains("://") && loginUriString.Contains("."))
+            {
+                loginUriString = "http://" + loginUriString;
+            }
             string loginDomainName = null;
             if(Uri.TryCreate(loginUriString, UriKind.Absolute, out Uri loginUri)
                 && DomainName.TryParseBaseDomain(loginUri.Host, out loginDomainName))
