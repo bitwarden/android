@@ -233,8 +233,12 @@ namespace Bit.Android
                 ndef.AddDataScheme("https");
                 var filters = new IntentFilter[] { ndef };
 
-                // register for foreground dispatch so we'll receive tags according to our intent filters
-                adapter.EnableForegroundDispatch(this, pendingIntent, filters, null);
+                try
+                {
+                    // register for foreground dispatch so we'll receive tags according to our intent filters
+                    adapter.EnableForegroundDispatch(this, pendingIntent, filters, null);
+                }
+                catch { }
             }
             else
             {

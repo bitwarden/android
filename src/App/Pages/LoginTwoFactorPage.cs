@@ -335,6 +335,17 @@ namespace Bit.App.Pages
             MessagingCenter.Unsubscribe<Application>(Application.Current, "ResumeYubiKey");
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            // ref: https://github.com/bitwarden/mobile/issues/350
+            if(Device.RuntimePlatform == Device.Android && _providerType.HasValue &&
+                _providerType.Value == TwoFactorProviderType.YubiKey)
+            {
+                return true;
+            }
+            return base.OnBackButtonPressed();
+        }
+
         private async void AnotherMethodAsync()
         {
             var beforeProviderType = _providerType;
