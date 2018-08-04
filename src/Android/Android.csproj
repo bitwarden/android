@@ -15,7 +15,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v8.1</TargetFrameworkVersion>
     <AndroidSupportedAbis>armeabi,armeabi-v7a,x86</AndroidSupportedAbis>
     <AndroidHttpClientHandlerType>Xamarin.Android.Net.AndroidClientHandler</AndroidHttpClientHandlerType>
     <AndroidStoreUncompressedFileExtensions />
@@ -858,19 +858,31 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Firebase.Messaging">
-      <Version>42.1021.1</Version>
+      <Version>60.1142.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.Analytics">
-      <Version>42.1021.1</Version>
+      <Version>60.1142.1</Version>
     </PackageReference>
     <PackageReference Include="SimpleInjector">
       <Version>4.3.0</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.Design">
+      <Version>27.0.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.v4">
+      <Version>27.0.2.1</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat">
-      <Version>25.4.0.2</Version>
+      <Version>27.0.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.v7.CardView">
+      <Version>27.0.2.1</Version>
+    </PackageReference>
+    <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter">
+      <Version>27.0.2.1</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.GooglePlayServices.SafetyNet">
-      <Version>42.1021.1</Version>
+      <Version>60.1142.1</Version>
     </PackageReference>
     <PackageReference Include="XLabs.IoC.SimpleInjector" Version="2.0.5782" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.2" />
