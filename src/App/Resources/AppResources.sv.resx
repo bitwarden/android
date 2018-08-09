@@ -1306,11 +1306,11 @@
     <value>Tillgänglighetstjänsten kan vara användbar när appar inte stöder standardvarianten av ifyllnad.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>Lösenord uppdaterat</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Uppdaterad</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>
