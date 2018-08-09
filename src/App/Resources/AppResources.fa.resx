@@ -1306,11 +1306,11 @@
     <value>خدمات دسترسی ممکن است مفید باشد برای استفاده در زمانی که برنامه از سرویس پر کردن خودکار استاندارد پشتیبانی نمی کند.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>گذرواژه بروز رسانی شد</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>بروزرسانی شد</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>
