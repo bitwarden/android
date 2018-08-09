@@ -1306,11 +1306,11 @@
     <value>De toegankelijkheidsdienst kan nuttig zijn wanneer apps het reguliere automatisch invullen niet ondersteunen.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>Wachtwoord bijgewerkt</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Bijgewerkt</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>

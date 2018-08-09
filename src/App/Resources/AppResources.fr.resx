@@ -1306,11 +1306,11 @@
     <value>Le service d'accessibilité peut être utile lorsque des applis ne supportent pas le service d'autocomplétion de base.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>Mot de passe mis à jour</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Mis à jour</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>
