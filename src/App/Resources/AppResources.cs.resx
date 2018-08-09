@@ -1303,14 +1303,14 @@
     <value>Pro pokračování přidržte YubiKey NEO u zadní části zařízení.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>Služba usnadnění může být užitečná, pokud aplikace nepodporují standardní službu automatického vyplňování.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>Heslo bylo změněno</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Změněno</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>
