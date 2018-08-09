@@ -1306,11 +1306,11 @@
     <value>當應用程式不支援標準的自動填入服務時, 協助工具服務或許能夠幫助使用。</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>密碼已更新</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>已更新</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>
