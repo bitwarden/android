@@ -209,7 +209,7 @@
     <value>Åbn et problem på vores GitHub depot.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Brug dit fingeraftryk til at verificere.</value>
+    <value>Bekræft med dit fingeraftryk.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Mappe</value>
@@ -1306,11 +1306,11 @@
     <value>Hjælpefunktionen kan være nyttigt at bruge, når apps ikke understøtter den almindelige auto-udfyldningstjeneste.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>Adgangskode opdateret</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Opdateret</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>
