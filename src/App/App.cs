@@ -321,6 +321,7 @@ namespace Bit.App
             // Calendars are removed by linker. ref https://bugzilla.xamarin.com/show_bug.cgi?id=59077
             new System.Globalization.ThaiBuddhistCalendar();
             new System.Globalization.HijriCalendar();
+            new System.Globalization.UmAlQuraCalendar();
         }
     }
 }
