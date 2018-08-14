@@ -20,6 +20,40 @@ namespace Bit.App.Repositories
 
         protected override string ApiRoute => "/accounts";
 
+        public virtual async Task<ApiResult<PreloginResponse>> PostPreloginAsync(PreloginRequest requestObj)
+        {
+            if(!Connectivity.IsConnected)
+            {
+                return HandledNotConnected<PreloginResponse>();
+            }
+
+            using(var client = HttpService.ApiClient)
+            {
+                var requestMessage = new TokenHttpRequestMessage(requestObj)
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri(string.Concat(client.BaseAddress, ApiRoute, "/prelogin")),
+                };
+
+                try
+                {
+                    var response = await client.SendAsync(requestMessage).ConfigureAwait(false);
+                    if(!response.IsSuccessStatusCode)
+                    {
+                        return await HandleErrorAsync<PreloginResponse>(response).ConfigureAwait(false);
+                    }
+
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+                    var responseObj = JsonConvert.DeserializeObject<PreloginResponse>(responseContent);
+                    return ApiResult<PreloginResponse>.Success(responseObj, response.StatusCode);
+                }
+                catch
+                {
+                    return HandledWebException<PreloginResponse>();
+                }
+            }
+        }
+
         public virtual async Task<ApiResult> PostRegisterAsync(RegisterRequest requestObj)
         {
             if(!Connectivity.IsConnected)

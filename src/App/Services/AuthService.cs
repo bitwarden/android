@@ -17,6 +17,8 @@ namespace Bit.App.Services
     public class AuthService : IAuthService
     {
         private const string EmailKey = "email";
+        private const string KdfKey = "kdf";
+        private const string KdfIterationsKey = "kdfIterations";
         private const string UserIdKey = "userId";
         private const string PreviousUserIdKey = "previousUserId";
         private const string PinKey = "pin";
@@ -34,6 +36,8 @@ namespace Bit.App.Services
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         private string _email;
+        private KdfType? _kdf;
+        private int? _kdfIterations;
         private string _userId;
         private string _previousUserId;
         private string _pin;
@@ -158,6 +162,40 @@ namespace Bit.App.Services
             }
         }
 
+        public KdfType Kdf
+        {
+            get
+            {
+                if(!_kdf.HasValue)
+                {
+                    _kdf = (KdfType)_settings.GetValueOrDefault(KdfKey, (short)KdfType.PBKDF2);
+                }
+                return _kdf.Value;
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(KdfKey, (short)value);
+                _kdf = value;
+            }
+        }
+
+        public int KdfIterations
+        {
+            get
+            {
+                if(!_kdfIterations.HasValue)
+                {
+                    _kdfIterations = _settings.GetValueOrDefault(KdfIterationsKey, 5000);
+                }
+                return _kdfIterations.Value;
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(KdfIterationsKey, value);
+                _kdfIterations = value;
+            }
+        }
+
         public bool IsAuthenticated
         {
             get
@@ -231,10 +269,20 @@ namespace Bit.App.Services
 
         public async Task<FullLoginResult> TokenPostAsync(string email, string masterPassword)
         {
+            Kdf = KdfType.PBKDF2;
+            KdfIterations = 5000;
+            var preloginResponse = await _accountsApiRepository.PostPreloginAsync(
+                new PreloginRequest { Email = email });
+            if(preloginResponse.Succeeded)
+            {
+                Kdf = preloginResponse.Result.Kdf;
+                KdfIterations = preloginResponse.Result.KdfIterations;
+            }
+
             var result = new FullLoginResult();
 
             var normalizedEmail = email.Trim().ToLower();
-            var key = _cryptoService.MakeKeyFromPassword(masterPassword, normalizedEmail);
+            var key = _cryptoService.MakeKeyFromPassword(masterPassword, normalizedEmail, Kdf, KdfIterations);
 
             var request = new TokenRequest
             {

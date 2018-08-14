@@ -11,6 +11,8 @@ namespace Bit.App.Abstractions
         string PreviousUserId { get; }
         bool UserIdChanged { get; }
         string Email { get; set; }
+        KdfType Kdf { get; set; }
+        int KdfIterations { get; set; }
         string PIN { get; set; }
         bool BelongsToOrganization(string orgId);
         void LogOut(string logoutMessage = null);

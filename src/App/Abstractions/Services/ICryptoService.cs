@@ -1,6 +1,6 @@
-﻿using Bit.App.Models;
+﻿using Bit.App.Enums;
+using Bit.App.Models;
 using Bit.App.Models.Api;
-using System;
 using System.Collections.Generic;
 
 namespace Bit.App.Abstractions
@@ -23,8 +23,7 @@ namespace Bit.App.Abstractions
         byte[] RsaDecryptToBytes(CipherString encyptedValue, byte[] privateKey);
         CipherString Encrypt(string plaintextValue, SymmetricCryptoKey key = null);
         byte[] EncryptToBytes(byte[] plainBytes, SymmetricCryptoKey key = null);
-        SymmetricCryptoKey MakeKeyFromPassword(string password, string salt);
-        string MakeKeyFromPasswordBase64(string password, string salt);
+        SymmetricCryptoKey MakeKeyFromPassword(string password, string salt, KdfType kdf, int kdfIterations);
         byte[] HashPassword(SymmetricCryptoKey key, string password);
         string HashPasswordBase64(SymmetricCryptoKey key, string password);
         CipherString MakeEncKey(SymmetricCryptoKey key);

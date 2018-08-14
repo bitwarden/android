@@ -6,6 +6,7 @@ namespace Bit.App.Abstractions
 {
     public interface IAccountsApiRepository
     {
+        Task<ApiResult<PreloginResponse>> PostPreloginAsync(PreloginRequest requestObj);
         Task<ApiResult> PostRegisterAsync(RegisterRequest requestObj);
         Task<ApiResult> PostPasswordHintAsync(PasswordHintRequest requestObj);
         Task<ApiResult<DateTime?>> GetAccountRevisionDateAsync();

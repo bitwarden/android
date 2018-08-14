@@ -151,7 +151,8 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, _authService.Email);
+            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, _authService.Email,
+                _authService.Kdf, _authService.KdfIterations);
             if(key.Key.SequenceEqual(_cryptoService.Key.Key))
             {
                 _appSettingsService.Locked = false;

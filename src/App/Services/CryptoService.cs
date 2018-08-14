@@ -429,7 +429,7 @@ namespace Bit.App.Services
             return decryptedBytes;
         }
 
-        public SymmetricCryptoKey MakeKeyFromPassword(string password, string salt)
+        public SymmetricCryptoKey MakeKeyFromPassword(string password, string salt, KdfType kdf, int kdfIterations)
         {
             if(password == null)
             {
@@ -444,14 +444,20 @@ namespace Bit.App.Services
             var passwordBytes = Encoding.UTF8.GetBytes(NormalizePassword(password));
             var saltBytes = Encoding.UTF8.GetBytes(salt);
 
-            var keyBytes = _keyDerivationService.DeriveKey(passwordBytes, saltBytes, 5000);
+            byte[] keyBytes = null;
+            if(kdf == KdfType.PBKDF2)
+            {
+                if(kdfIterations < 5000)
+                {
+                    throw new Exception("PBKDF2 iteration minimum is 5000.");
+                }
+                keyBytes = _keyDerivationService.DeriveKey(passwordBytes, saltBytes, (uint)kdfIterations);
+            }
+            else
+            {
+                throw new Exception("Unknown Kdf.");
+            }
             return new SymmetricCryptoKey(keyBytes);
-        }
-
-        public string MakeKeyFromPasswordBase64(string password, string salt)
-        {
-            var key = MakeKeyFromPassword(password, salt);
-            return Convert.ToBase64String(key.Key);
         }
 
         public byte[] HashPassword(SymmetricCryptoKey key, string password)

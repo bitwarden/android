@@ -1,4 +1,6 @@
-﻿namespace Bit.App.Models.Api
+﻿using Bit.App.Enums;
+
+namespace Bit.App.Models.Api
 {
     public class RegisterRequest
     {
@@ -7,5 +9,7 @@
         public string MasterPasswordHash { get; set; }
         public string MasterPasswordHint { get; set; }
         public string Key { get; set; }
+        public KdfType Kdf { get; set; }
+        public int KdfIterations { get; set; }
     }
 }

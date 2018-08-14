@@ -192,8 +192,10 @@ namespace Bit.App.Pages
                 return;
             }
 
+            var kdf = Enums.KdfType.PBKDF2;
+            var kdfIterations = 5000;
             var normalizedEmail = EmailCell.Entry.Text.ToLower();
-            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail);
+            var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail, kdf, kdfIterations);
             var encKey = _cryptoService.MakeEncKey(key);
             var request = new RegisterRequest
             {
@@ -201,7 +203,9 @@ namespace Bit.App.Pages
                 MasterPasswordHash = _cryptoService.HashPasswordBase64(key, PasswordCell.Entry.Text),
                 MasterPasswordHint = !string.IsNullOrWhiteSpace(PasswordHintCell.Entry.Text)
                     ? PasswordHintCell.Entry.Text : null,
-                Key = encKey.EncryptedString
+                Key = encKey.EncryptedString,
+                Kdf = kdf,
+                KdfIterations = kdfIterations
             };
 
             await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
