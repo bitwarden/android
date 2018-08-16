@@ -125,7 +125,7 @@
     <comment>Add/create a new entity (verb).</comment>
   </data>
   <data name="AddFolder" xml:space="preserve">
-    <value>Ajouter dossier</value>
+    <value>Ajouter un dossier</value>
   </data>
   <data name="AddItem" xml:space="preserve">
     <value>Ajouter un élément</value>

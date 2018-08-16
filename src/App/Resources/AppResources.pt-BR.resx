@@ -337,7 +337,7 @@
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
-    <value>Obrigado</value>
+    <value>Agradecimentos</value>
   </data>
   <data name="Tools" xml:space="preserve">
     <value>Ferramentas</value>

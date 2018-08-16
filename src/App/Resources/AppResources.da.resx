@@ -144,19 +144,19 @@
     <comment>App name. Shouldn't ever change.</comment>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Annuller</value>
+    <value>Annullér</value>
     <comment>Cancel an operation.</comment>
   </data>
   <data name="Copy" xml:space="preserve">
-    <value>Kopier</value>
+    <value>Kopiér</value>
     <comment>Copy some value to your clipboard.</comment>
   </data>
   <data name="CopyPassword" xml:space="preserve">
-    <value>Kopier adgangskode</value>
+    <value>Kopiér adgangskode</value>
     <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
   </data>
   <data name="CopyUsername" xml:space="preserve">
-    <value>Kopier brugernavn</value>
+    <value>Kopiér brugernavn</value>
     <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
   </data>
   <data name="Credits" xml:space="preserve">
@@ -179,21 +179,21 @@
     <value>Redigér</value>
   </data>
   <data name="EditFolder" xml:space="preserve">
-    <value>Rediger mappe</value>
+    <value>Redigér mappe</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>E-mail</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Emailadresse</value>
+    <value>E-mailadresse</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>Email os</value>
+    <value>E-mail os</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>Email os direkte for at få hjælp eller give feedback.</value>
+    <value>E-mail os direkte for at få hjælp eller give feedback.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>Indtast din PIN-kode.</value>
@@ -206,10 +206,10 @@
     <value>Indsend en fejlrapport</value>
   </data>
   <data name="FileBugReportDescription" xml:space="preserve">
-    <value>Åbn et problem på vores GitHub depot.</value>
+    <value>Opret en supportsag i vores GitHub-arkiv.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Bekræft med dit fingeraftryk.</value>
+    <value>Verificér med dit fingeraftryk.</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Mappe</value>
@@ -243,7 +243,7 @@
     <comment>Hide a secret value that is currently shown (password).</comment>
   </data>
   <data name="InternetConnectionRequiredMessage" xml:space="preserve">
-    <value>Forbind venligst til internettet før du fortsætter.</value>
+    <value>Opret forbindelse til internettet inden du fortsætter.</value>
     <comment>Description message for the alert when internet connection is required to continue.</comment>
   </data>
   <data name="InternetConnectionRequiredTitle" xml:space="preserve">
@@ -269,18 +269,18 @@
     <comment>Title for login page. (noun)</comment>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>Log af</value>
+    <value>Log ud</value>
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Er du sikker på, at du vil logge af?</value>
+    <value>Er du sikker på, at du vil logge ud?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Hovedadgangskode</value>
     <comment>Label for a master password.</comment>
   </data>
   <data name="More" xml:space="preserve">
-    <value>Mere</value>
+    <value>Flere</value>
     <comment>Text to define that there are more options things to see.</comment>
   </data>
   <data name="MyVault" xml:space="preserve">
@@ -303,7 +303,7 @@
     <comment>Acknowledgement.</comment>
   </data>
   <data name="DisableGA" xml:space="preserve">
-    <value>Deaktiver Analytics</value>
+    <value>Deaktivér Analytics</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Adgangskode</value>
@@ -333,7 +333,7 @@
     <value>Indsend</value>
   </data>
   <data name="Sync" xml:space="preserve">
-    <value>Synkroniser</value>
+    <value>Synkronisér</value>
     <comment>The title for the sync page.</comment>
   </data>
   <data name="ThankYou" xml:space="preserve">
@@ -348,14 +348,14 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Brug fingeraftryk til at låse op</value>
+    <value>Benyt fingeraftryk til oplåsning</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Brugernavn</value>
     <comment>Label for a username.</comment>
   </data>
   <data name="ValidationFieldRequired" xml:space="preserve">
-    <value>Feltet {0} er påkrævet.</value>
+    <value>Feltet {0} er obligatorisk.</value>
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
@@ -363,10 +363,10 @@
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
-    <value>Verificer fingeraftryk</value>
+    <value>Verificér fingeraftryk</value>
   </data>
   <data name="VerifyMasterPassword" xml:space="preserve">
-    <value>Bekræft hovedadgangskode</value>
+    <value>Verificér hovedadgangskode</value>
   </data>
   <data name="VerifyPIN" xml:space="preserve">
     <value>Bekræft PIN-kode</value>
@@ -381,7 +381,7 @@
     <value>Besøg vores hjemmeside</value>
   </data>
   <data name="VisitOurWebsiteDescription" xml:space="preserve">
-    <value>Besøg vores hjemmeside for at få hjælp, nyheder, sende os en email og/eller lære mere om hvordan du bruger Bitwarden.</value>
+    <value>Besøg vores hjemmeside for at få hjælp, nyheder, e-maile os og/eller få mere at vide om, hvordan du benytter Bitwarden.</value>
   </data>
   <data name="Website" xml:space="preserve">
     <value>Hjemmeside</value>
@@ -397,46 +397,46 @@
     <value>Din nye konto er oprettet! Du kan nu logge ind.</value>
   </data>
   <data name="AddAnItem" xml:space="preserve">
-    <value>Tilføj element</value>
+    <value>Tilføj et element</value>
   </data>
   <data name="AppExtension" xml:space="preserve">
-    <value>App udvidelse</value>
+    <value>App-udvidelse</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Brug Bitwardens hjælpefunktion til at auto-udfylde dine logins på tværs af apps og web.</value>
+    <value>Brug Bitwardens hjælpefunktion til autoudfyldning af dine logins på tværs af apps og nettet.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-udfyld tjeneste</value>
+    <value>Auto-udfyldningstjeneste</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Undgå tvetydige tegn</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>Bitwarden app udvidelse</value>
+    <value>Bitwarden app-udvidelse</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Den nemmeste måde at tilføje nye logins til din boks er fra Bitwarden app udvidelse. Lær mere om brugen af Bitwarden app udvidelsen ved at navigere til skærmbilledet "Værktøjer".</value>
+    <value>Den letteste måde at tilføje nye logins til din boks er fra Bitwarden app-udvidelsen. Få mere at vide om brugen af Bitwarden app-udvidelsen ved at gå til skærmen "Værktøjer".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
-    <value>Brug Bitwarden i Safari og andre apps til at auto-udfylde dine logins.</value>
+    <value>Benyt Bitwarden i Safari og andre apps til autoudfyldelse af dine logins.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden auto-udfyld tjeneste</value>
+    <value>Bitwarden auto-udfyldningstjeneste</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Brug Bitwardens hjælpefunktion til at auto-udfylde dine logins.</value>
+    <value>Benyt Bitwardens hjælpefunktion til autoudfyldning af dine logins.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
-    <value>Skift email</value>
+    <value>Skift e-mail</value>
   </data>
   <data name="ChangeEmailConfirmation" xml:space="preserve">
-    <value>Du kan ændre din emailadresse i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
+    <value>Du kan skifte din e-mailadresse i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
   </data>
   <data name="ChangeMasterPassword" xml:space="preserve">
     <value>Skift hovedadgangskode</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Du kan ændre din hovedadgangskode i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
+    <value>Du kan skifte din hovedadgangskode i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Luk</value>
@@ -464,25 +464,25 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="EditItem" xml:space="preserve">
-    <value>Rediger element</value>
+    <value>Redigér element</value>
   </data>
   <data name="EnableAutomaticSyncing" xml:space="preserve">
-    <value>Aktiver automatisk synkronisering</value>
+    <value>Aktivér automatisk synkronisering</value>
   </data>
   <data name="EnterEmailForHint" xml:space="preserve">
-    <value>Indtast din kontos emailadresse for at modtage dit hovedadgangskodetip.</value>
+    <value>Angiv din kontos e-mailadresse for at modtage dit hovedadgangskodetip.</value>
   </data>
   <data name="ExntesionReenable" xml:space="preserve">
-    <value>Genaktiver app udvidelse</value>
+    <value>Genaktivér app-udvidelse</value>
   </data>
   <data name="ExtensionAlmostDone" xml:space="preserve">
     <value>Næsten færdig!</value>
   </data>
   <data name="ExtensionEnable" xml:space="preserve">
-    <value>Aktiver app udvidelse</value>
+    <value>Aktivér app-udvidelse</value>
   </data>
   <data name="ExtensionInSafari" xml:space="preserve">
-    <value>I Safari, find Bitwarden ved hjælp af ikonet del (tip: rul til højre på den nederste række i menuen).</value>
+    <value>I Safari, find Bitwarden ved hjælp af delingsikonet (tip: Rul til højre på den nederste række i menuen).</value>
     <comment>Safari is the name of apple's web browser</comment>
   </data>
   <data name="ExtensionInstantAccess" xml:space="preserve">
@@ -495,40 +495,40 @@
     <value>Se understøttede apps</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Dine logins er nu let tilgængelige fra Safari, Chrome og andre understøttede apps.</value>
+    <value>Dine logins er nu lettilgængelige fra Safari, Chrome og andre understøttede apps.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
-    <value>I Safari og Chrome, find Bitwarden ved hjælp af ikonet del (tip: rul til højre på den nederste række i delemenuen).</value>
+    <value>I Safari og Chrome, find Bitwarden ved hjælp af delingsikonet (tip: Rul til højre på den nederste række i delingsmenuen).</value>
   </data>
   <data name="ExtensionTapIcon" xml:space="preserve">
     <value>Tryk på Bitwarden-ikonet i menuen for at starte udvidelsen.</value>
   </data>
   <data name="ExtensionTurnOn" xml:space="preserve">
-    <value>For at aktivere Bitwarden i Safari og andre apps, tryk på "mere" ikonet på den nederste række i menuen.</value>
+    <value>For at aktivere Bitwarden i Safari og andre apps trykkes på "mere"-ikonet på den nederste række i menuen.</value>
   </data>
   <data name="Favorite" xml:space="preserve">
     <value>Favorit</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>fingeraftryk</value>
+    <value>Fingeraftryk</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
-    <value>Generer adgangskode</value>
+    <value>Generér adgangskode</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
     <value>Få dit hovedadgangskodetip</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
-    <value>Importer elementer</value>
+    <value>Importér elementer</value>
   </data>
   <data name="ImportItemsConfirmation" xml:space="preserve">
-    <value>Du kan importere elementer i din web-boks på bitwarden.com. Vil du besøge hjemmesiden nu?</value>
+    <value>Du kan masseimportere elementer i din web-boks på bitwarden.com. Vil du besøge hjemmesiden nu?</value>
   </data>
   <data name="ImportItemsDescription" xml:space="preserve">
-    <value>Importer hurtigt dine elementer fra andre adgangskode manager-programmer.</value>
+    <value>Masseimportér hurtigt dine elementer fra andre adgangskodehåndterings-apps.</value>
   </data>
   <data name="LastSync" xml:space="preserve">
-    <value>Sidste synkronisering:</value>
+    <value>Seneste synkronisering:</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Længde</value>
@@ -559,25 +559,25 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="LoginOrCreateNewAccount" xml:space="preserve">
-    <value>Log ind eller opret en ny konto for at få adgang til din sikre boks.</value>
+    <value>Log ind, eller opret en ny konto, for at tilgå din sikre boks.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Administrer</value>
+    <value>Administrér</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
-    <value>Din adgangskode matchede ikke.</value>
+    <value>Adgangskodebekræftelse er forkert.</value>
   </data>
   <data name="MasterPasswordDescription" xml:space="preserve">
-    <value>Hovedadgangskoden er den adgangskode, du bruger til at få adgang til din boks. Det er meget vigtigt, at du ikke glemmer din hovedadgangskode. Der er ingen måde hvorpå koden kan genoprettes, i tilfælde af at du glemmer den.</value>
+    <value>Hovedadgangskoden er den adgangskode, du benytter for at tilgå din boks. Det er meget vigtigt, at du ikke glemmer din hovedadgangskode. Der er ingen måde, hvorpå koden kan genoprettes, dersom du glemmer den.</value>
   </data>
   <data name="MasterPasswordHint" xml:space="preserve">
-    <value>Hovedadgangskode tip (valgfri)</value>
+    <value>Hovedadgangskodetip (valgfrit)</value>
   </data>
   <data name="MasterPasswordHintDescription" xml:space="preserve">
-    <value>Et tip til hovedeadgangskoden kan hjælpe dig med at huske din adgangskode, hvis du glemmer den.</value>
+    <value>Et hovedeadgangskodentip kan hjælpe dig med at huske din adgangskode, hvis du glemmer den.</value>
   </data>
   <data name="MasterPasswordLengthValMessage" xml:space="preserve">
-    <value>Hovedadgangskode skal være mindst 8 tegn.</value>
+    <value>Hovedadgangskode skal være på minimum 8 tegn.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
     <value>Minimum cifre</value>
@@ -591,7 +591,7 @@
     <value>Flere indstillinger</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Du skal logge ind på den primære Bitwarden app før du kan bruge udvidelsen.</value>
+    <value>Du skal logge ind på den primære Bitwarden-app, før du kan benytte udvidelsen.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Aldrig</value>
@@ -606,17 +606,17 @@
     <value>Der er ingen elementer i din boks.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Der er ingen elementer i din boks til denne hjemmeside. Tryk for at tilføje et.</value>
+    <value>Der er ingen elementer til dette websted i din boks. Tryk for at tilføje et.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
-    <value>Dette login har ikke et brugernavn eller adgangskode konfigureret.</value>
+    <value>Dette login har intet brugernavn eller adgangskode opsat.</value>
   </data>
   <data name="OkGotIt" xml:space="preserve">
     <value>Ok, forstået!</value>
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Standardindstillinger er sat fra Bitwarden appens adgangskode generator værktøj.</value>
+    <value>Standardindstillinger opsættes fra Bitwarden-app'ens adgangskodegeneratorværktøj.</value>
   </data>
   <data name="Options" xml:space="preserve">
     <value>Indstillinger</value>
@@ -634,29 +634,29 @@
     <value>Adgangskodetip</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
-    <value>Vi har sendt dig en email med dit hovedadgangskodetip.</value>
+    <value>Vi har sendt dig en e-mail med dit hovedadgangskodetip.</value>
   </data>
   <data name="PasswordOverrideAlert" xml:space="preserve">
     <value>Er du sikker du vil overskrive den aktuelle adgangskode?</value>
   </data>
   <data name="PushNotificationAlert" xml:space="preserve">
-    <value>Bitwarden holder automatisk din boks synkroniseret ved hjælp af push notifikationer. For at få den bedst mulige oplevelse, skal du vælge "Tillad" på den følgende prompt for at aktivere push notifikationer.</value>
+    <value>Bitwarden holder automatisk din boks synkroniseret ved hjælp af push-notifikationer. For den bedst mulige oplevelse bør du vælge "Tillad" i den følgende prompt for at aktivere push-notifikationer.</value>
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
     <value>Bedøm appen</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
-    <value>Overvej om du vil hjælpe os med en god anmeldelse!</value>
+    <value>Overvej venligst at hjælpe os med en god anmeldelse!</value>
   </data>
   <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store bedømmelser nulstilles ved hver ny version af Bitwarden. Overvej om du vil hjælpe os med en god anmeldelse!</value>
+    <value>App Store-bedømmelser nulstilles ved hver ny version af Bitwarden. Overvej venligst at hjælpe os med en god anmeldelse!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Regenerer adgangskode</value>
+    <value>Regenerér adgangskode</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
-    <value>Gentast hovedadgangskode</value>
+    <value>Angiv hovedadgangskode igen</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
     <value>Søg i boks</value>
@@ -665,7 +665,7 @@
     <value>Sikkerhed</value>
   </data>
   <data name="SeeDevProgress" xml:space="preserve">
-    <value>Se fremskridt i udviklingen</value>
+    <value>Se udviklingsforløb</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Vælg</value>
@@ -674,7 +674,7 @@
     <value>Sæt PIN-kode</value>
   </data>
   <data name="SetPINDirection" xml:space="preserve">
-    <value>Indtast en 4-cifret PIN-kode til at låse appen op med.</value>
+    <value>Angiv en 4-cifret PIN-kode til at låse appen op med.</value>
   </data>
   <data name="ItemInformation" xml:space="preserve">
     <value>Elementinformation</value>
@@ -691,7 +691,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="SyncingComplete" xml:space="preserve">
-    <value>Synkronisering komplet.</value>
+    <value>Synkronisering fuldført.</value>
   </data>
   <data name="SyncingFailed" xml:space="preserve">
     <value>Synkronisering mislykkedes.</value>
@@ -707,7 +707,7 @@
     <value>To-trins login</value>
   </data>
   <data name="TwoStepLoginConfirmation" xml:space="preserve">
-    <value>To-trins login gør din konto mere sikker, ved at kræve at du verificerer dit login med en anden enhed, såsom en sikkerhedsnøgle, autentificerings app, SMS, telefonopkald eller email. To-trins login kan aktiveres på bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
+    <value>To-trins login øger din kontosikkerhed, ved at kræve at du verificerer dit login med en anden enhed, såsom en sikkerhedsnøgle, autentificerings app, SMS, telefonopkald eller e-mail. To-trins login kan aktiveres i bitwarden.com web-boksen. Vil du besøge hjemmesiden nu?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
     <value>Lås op med {0}</value>
@@ -720,7 +720,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="VerificationCode" xml:space="preserve">
-    <value>Bekræftelseskode</value>
+    <value>Verifikationskode</value>
   </data>
   <data name="ViewItem" xml:space="preserve">
     <value>Vis element</value>
@@ -729,10 +729,10 @@
     <value>Bitwarden web-boks</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Administrer dine elementer fra enhver webbrowser med Bitwarden web-boksen.</value>
+    <value>Administrér dine elementer fra enhver webbrowser med Bitwarden web-boksen.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
-    <value>Mistet autentificerings app?</value>
+    <value>Mistet autentificerings-app?</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Elementer</value>
@@ -756,7 +756,7 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Når du ser en Bitwarden auto-udfyld notifikation, kan du trykke på den for at starte automatisk udfyldning.</value>
+    <value>Når du ser en Bitwarden auto-udfyldningsnotifikation, kan du trykke på den for at starte automatisk udfyldning.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
     <value>Tryk på denne notifikation for at auto-udfylde med et element fra din boks.</value>
@@ -765,10 +765,10 @@
     <value>Åbn indstillinger for hjælpefunktioner</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. På Android-skærmen Hjælpefunktioner tryk på "Bitwarden" under tjenester.</value>
+    <value>1. Tryk fra Androids Hjælpefunktioner på "Bitwarden" under Tjenester-sektionen.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Tænd kontakten og tryk på OK for at acceptere.</value>
+    <value>2. Slå kontakten til og tryk på OK for at acceptere.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Deaktiveret</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Den nemmeste måde at tilføje nye logins til din boks er fra Bitwarden Auto-udfyld tjenesten. Lær mere om brugen af Bitwarden auto-udfyld tjenesten ved at navigere til skærmbilledet "Værktøjer".</value>
+    <value>Den letteste måde at tilføje nye logins til din boks er fra Bitwarden Auto-udfyldningstjenesten. Få mere at vide om brugen af Bitwarden Auto-udfyldningstjenesten ved at gå til skærmen "Værktøjer".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-udfyld</value>
@@ -941,13 +941,13 @@
     <value>TOTP kopieret!</value>
   </data>
   <data name="CopyTotp" xml:space="preserve">
-    <value>Kopier TOTP</value>
+    <value>Kopiér TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
     <value>Hvis dit login har en autentificeringsnøgle tilknyttet, kopieres TOTP verifikationskoden automatisk til din udklipsholder når du auto-udfylder login.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
-    <value>Deaktiver automatisk TOTP kopiering</value>
+    <value>Deaktivér automatisk TOTP kopiering</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
     <value>Premium-medlemskab kræves for at anvende denne funktion.</value>
@@ -1024,10 +1024,10 @@
     <value>Brugerdefinerede felter</value>
   </data>
   <data name="CopyNumber" xml:space="preserve">
-    <value>Kopier nummer</value>
+    <value>Kopiér nummer</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Kopier sikkerhedskode</value>
+    <value>Kopiér sikkerhedskode</value>
   </data>
   <data name="Number" xml:space="preserve">
     <value>Nummer</value>
