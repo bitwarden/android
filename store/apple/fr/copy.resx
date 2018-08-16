@@ -142,10 +142,10 @@ Bitwarden stocke tous les identifiants dans un coffre chiffré qui est synchroni
     <value>Générer automatiquement des mots de passe forts, aléatoires et sécurisés</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Protéger votre coffre avec le Touch ID, un coe PIN, ou un mot de passe maître</value>
+    <value>Protéger votre coffre avec Touch ID, un code PIN, ou un mot de passe maître</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Remplissage automatique des identifiants depuis Safari, Chrome, et des centaines d'autres applications</value>
+    <value>Remplissage automatique des identifiants depuis Safari, Chrome et des centaines d'autres applications</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
     <value>Synchroniser et accéder à votre coffre depuis plusieurs appareils</value>
