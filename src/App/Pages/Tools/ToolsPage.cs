@@ -158,7 +158,15 @@ namespace Bit.App.Pages
         private void WebCell_Tapped(object sender, EventArgs e)
         {
             _googleAnalyticsService.TrackAppEvent("OpenedTool", "Web");
-            Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+            var appSettings = Resolver.Resolve<IAppSettingsService>();
+            if (!string.IsNullOrWhiteSpace(appSettings.BaseUrl))
+            {
+                Device.OpenUri(new Uri(appSettings.BaseUrl));
+            }
+            else
+            {
+                Device.OpenUri(new Uri("https://vault.bitwarden.com"));
+            }
         }
 
         private void ShareCell_Tapped(object sender, EventArgs e)
