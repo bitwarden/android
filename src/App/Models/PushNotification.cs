@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using Bit.App.Enums;
-using Newtonsoft.Json.Linq;
 
 namespace Bit.App.Models
 {
@@ -19,6 +19,7 @@ namespace Bit.App.Models
         public string Id { get; set; }
         public string UserId { get; set; }
         public string OrganizationId { get; set; }
+        public List<Guid> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
     }
 
