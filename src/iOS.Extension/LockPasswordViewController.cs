@@ -83,7 +83,8 @@ namespace Bit.iOS.Extension
                 return;
             }
 
-            var key = _cryptoService.MakeKeyFromPassword(MasterPasswordCell.TextField.Text, _authService.Email);
+            var key = _cryptoService.MakeKeyFromPassword(MasterPasswordCell.TextField.Text, _authService.Email,
+                 _authService.Kdf, _authService.KdfIterations);
             if(key.Key.SequenceEqual(_cryptoService.Key.Key))
             {
                 _appSettingsService.Locked = false;
