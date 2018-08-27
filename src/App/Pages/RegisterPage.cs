@@ -192,7 +192,7 @@ namespace Bit.App.Pages
                 return;
             }
 
-            var kdf = Enums.KdfType.PBKDF2;
+            var kdf = Enums.KdfType.PBKDF2_SHA256;
             var kdfIterations = 5000;
             var normalizedEmail = EmailCell.Entry.Text.ToLower();
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail, kdf, kdfIterations);

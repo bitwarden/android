@@ -2,6 +2,6 @@
 {
     public enum KdfType : short
     {
-        PBKDF2 = 0
+        PBKDF2_SHA256 = 0
     }
 }

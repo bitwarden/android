@@ -168,7 +168,7 @@ namespace Bit.App.Services
             {
                 if(!_kdf.HasValue)
                 {
-                    _kdf = (KdfType)_settings.GetValueOrDefault(KdfKey, (short)KdfType.PBKDF2);
+                    _kdf = (KdfType)_settings.GetValueOrDefault(KdfKey, (short)KdfType.PBKDF2_SHA256);
                 }
                 return _kdf.Value;
             }
@@ -269,7 +269,7 @@ namespace Bit.App.Services
 
         public async Task<FullLoginResult> TokenPostAsync(string email, string masterPassword)
         {
-            Kdf = KdfType.PBKDF2;
+            Kdf = KdfType.PBKDF2_SHA256;
             KdfIterations = 5000;
             var preloginResponse = await _accountsApiRepository.PostPreloginAsync(
                 new PreloginRequest { Email = email });

@@ -445,7 +445,7 @@ namespace Bit.App.Services
             var saltBytes = Encoding.UTF8.GetBytes(salt);
 
             byte[] keyBytes = null;
-            if(kdf == KdfType.PBKDF2)
+            if(kdf == KdfType.PBKDF2_SHA256)
             {
                 if(kdfIterations < 5000)
                 {
