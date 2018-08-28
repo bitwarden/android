@@ -124,7 +124,7 @@ namespace Bit.App.Services
                     break;
                 case Enums.PushType.SyncCiphers:
                 case Enums.PushType.SyncVault:
-                    var cipherMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
+                    var cipherMessage = JsonConvert.DeserializeObject<UserPushNotification>(data.Payload);
                     if(cipherMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -132,7 +132,7 @@ namespace Bit.App.Services
                     _syncService.FullSyncAsync(true);
                     break;
                 case Enums.PushType.SyncSettings:
-                    var domainMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
+                    var domainMessage = JsonConvert.DeserializeObject<UserPushNotification>(data.Payload);
                     if(domainMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -140,7 +140,7 @@ namespace Bit.App.Services
                     _syncService.SyncSettingsAsync();
                     break;
                 case Enums.PushType.SyncOrgKeys:
-                    var orgKeysMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
+                    var orgKeysMessage = JsonConvert.DeserializeObject<UserPushNotification>(data.Payload);
                     if(orgKeysMessage.UserId != _authService.UserId)
                     {
                         break;
@@ -148,7 +148,7 @@ namespace Bit.App.Services
                     _syncService.SyncProfileAsync();
                     break;
                 case Enums.PushType.LogOut:
-                    var logOutMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
+                    var logOutMessage = JsonConvert.DeserializeObject<UserPushNotification>(data.Payload);
                     if(logOutMessage.UserId == _authService.UserId)
                     {
                         _authService.LogOut(null);
