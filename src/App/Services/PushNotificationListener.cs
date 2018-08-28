@@ -147,6 +147,13 @@ namespace Bit.App.Services
                     }
                     _syncService.SyncProfileAsync();
                     break;
+                case Enums.PushType.LogOut:
+                    var logOutMessage = JsonConvert.DeserializeObject<SyncUserPushNotification>(data.Payload);
+                    if(logOutMessage.UserId == _authService.UserId)
+                    {
+                        _authService.LogOut(null);
+                    }
+                    break;
                 default:
                     break;
             }
