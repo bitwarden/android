@@ -376,7 +376,7 @@ namespace Bit.App.Services
                 {
                     _cryptoService.SetOrgKeys(profile.Result);
                     _appSettingsService.OrganizationGivesPremium =
-                        profile.Result?.Organizations?.Any(o => o.UsersGetPremium) ?? false;
+                        profile.Result?.Organizations?.Any(o => o.UsersGetPremium && o.Enabled) ?? false;
                 }
             }
 
