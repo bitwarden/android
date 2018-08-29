@@ -19,7 +19,6 @@ namespace Bit.App.Pages
         private readonly IConnectivity _connectivity;
         private readonly IDeviceActionService _deviceActionService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
-        private readonly ITokenService _tokenService;
         private readonly ICryptoService _cryptoService;
         private readonly string _cipherId;
         private Cipher _cipher;
@@ -35,7 +34,6 @@ namespace Bit.App.Pages
             _connectivity = Resolver.Resolve<IConnectivity>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
-            _tokenService = Resolver.Resolve<ITokenService>();
             _cryptoService = Resolver.Resolve<ICryptoService>();
 
             Init();
@@ -210,7 +208,7 @@ namespace Bit.App.Pages
                 ToolbarItems.RemoveAt(0);
             }
 
-            if(_cipher != null && (_tokenService.TokenPremium || _cipher.OrganizationId != null))
+            if(_cipher != null && (Helpers.CanAccessPremium() || _cipher.OrganizationId != null))
             {
                 ToolbarItems.Add(SaveToolbarItem);
                 ListView.Footer = NewTable;

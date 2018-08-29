@@ -25,6 +25,7 @@ using System.Linq;
 using Plugin.Settings.Abstractions;
 using Android.Views.InputMethods;
 using Android.Widget;
+using Bit.App.Utilities;
 
 namespace Bit.Android.Services
 {
@@ -240,10 +241,9 @@ namespace Bit.Android.Services
                 }
                 else
                 {
-                    var isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
                     var settings = Resolver.Resolve<ISettings>();
                     var autoCopyEnabled = !settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
-                    if(isPremium && autoCopyEnabled && cipher.LoginTotp?.Value != null)
+                    if(Helpers.CanAccessPremium() && autoCopyEnabled && cipher.LoginTotp?.Value != null)
                     {
                         CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
                     }

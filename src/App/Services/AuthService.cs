@@ -367,6 +367,7 @@ namespace Bit.App.Services
             Email = _tokenService.TokenEmail;
             _settings.AddOrUpdateValue(Constants.LastLoginEmail, Email);
             _appSettingsService.FailedPinAttempts = 0;
+            _appSettingsService.OrganizationGivesPremium = false;
 
             if(response.PrivateKey != null)
             {
@@ -374,6 +375,8 @@ namespace Bit.App.Services
                 if(profile.Succeeded)
                 {
                     _cryptoService.SetOrgKeys(profile.Result);
+                    _appSettingsService.OrganizationGivesPremium =
+                        profile.Result?.Organizations?.Any(o => o.UsersGetPremium) ?? false;
                 }
             }
 

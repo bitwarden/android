@@ -558,5 +558,16 @@ namespace Bit.App.Utilities
             }
             return dict;
         }
+
+        public static bool CanAccessPremium()
+        {
+            var tokenService = Resolver.Resolve<ITokenService>();
+            if(tokenService?.TokenPremium ?? false)
+            {
+                return true;
+            }
+            var appSettingsService = Resolver.Resolve<IAppSettingsService>();
+            return appSettingsService?.OrganizationGivesPremium ?? false;
+        }
     }
 }

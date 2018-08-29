@@ -47,6 +47,7 @@
         public const string IconsUrl = "other:iconsUrl";
         public const string FailedPinAttempts = "other:failedPinAttempts";
         public const string ClearCiphersCache = "other:clearCiphersCache";
+        public const string OrgGivesPremium = "other:orgGivesPremium";
 
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;

@@ -208,5 +208,17 @@ namespace Bit.App.Services
                 _settings.AddOrUpdateValue(Constants.ClearCiphersCache, value);
             }
         }
+
+        public bool OrganizationGivesPremium
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.OrgGivesPremium, false);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.OrgGivesPremium, value);
+            }
+        }
     }
 }

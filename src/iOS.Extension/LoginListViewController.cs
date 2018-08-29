@@ -15,6 +15,7 @@ using MobileCoreServices;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.App.Models;
+using Bit.App.Utilities;
 
 namespace Bit.iOS.Extension
 {
@@ -107,13 +108,13 @@ namespace Bit.iOS.Extension
             private LoginListViewController _controller;
             private ICipherService _cipherService;
             private ISettings _settings;
-            private bool _isPremium;
+            private bool _accessPremium;
 
             public TableSource(LoginListViewController controller)
             {
                 _context = controller.Context;
                 _controller = controller;
-                _isPremium = Resolver.Resolve<ITokenService>()?.TokenPremium ?? false;
+                _accessPremium = Helpers.CanAccessPremium();
                 _cipherService = Resolver.Resolve<ICipherService>();
                 _settings = Resolver.Resolve<ISettings>();
             }
@@ -275,11 +276,11 @@ namespace Bit.iOS.Extension
             private string GetTotp(CipherViewModel item)
             {
                 string totp = null;
-                if(_isPremium)
+                if(_accessPremium)
                 {
                     if(item != null && !string.IsNullOrWhiteSpace(item.Totp.Value))
                     {
-                        totp = App.Utilities.Crypto.Totp(item.Totp.Value);
+                        totp = Crypto.Totp(item.Totp.Value);
                     }
                 }
 

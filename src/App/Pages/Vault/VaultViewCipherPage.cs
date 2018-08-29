@@ -20,7 +20,6 @@ namespace Bit.App.Pages
         private readonly string _cipherId;
         private readonly ICipherService _cipherService;
         private readonly IDeviceActionService _deviceActionService;
-        private readonly ITokenService _tokenService;
         private DateTime? _timerStarted = null;
         private TimeSpan _timerMaxLength = TimeSpan.FromMinutes(5);
 
@@ -30,7 +29,6 @@ namespace Bit.App.Pages
             _cipherId = cipherId;
             _cipherService = Resolver.Resolve<ICipherService>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
-            _tokenService = Resolver.Resolve<ITokenService>();
 
             Init();
         }
@@ -363,7 +361,7 @@ namespace Bit.App.Pages
             {
                 Table.Root.Remove(AttachmentsSection);
             }
-            if(Model.ShowAttachments && (_tokenService.TokenPremium || cipher.OrganizationId != null))
+            if(Model.ShowAttachments && (Helpers.CanAccessPremium() || cipher.OrganizationId != null))
             {
                 AttachmentsSection = new TableSection(AppResources.Attachments);
                 AttachmentCells = new List<AttachmentViewCell>();
@@ -407,7 +405,7 @@ namespace Bit.App.Pages
                     {
                         ItemInformationSection.Remove(LoginTotpCodeCell);
                     }
-                    if(cipher.Login?.Totp != null && (_tokenService.TokenPremium || cipher.OrganizationUseTotp))
+                    if(cipher.Login?.Totp != null && (Helpers.CanAccessPremium() || cipher.OrganizationUseTotp))
                     {
                         var totpKey = cipher.Login?.Totp.Decrypt(cipher.OrganizationId);
                         if(!string.IsNullOrWhiteSpace(totpKey))
@@ -482,7 +480,7 @@ namespace Bit.App.Pages
 
         private async Task OpenAttachmentAsync(Cipher cipher, VaultViewCipherPageModel.Attachment attachment)
         {
-            if(!_tokenService.TokenPremium && !cipher.OrganizationUseTotp)
+            if(!Helpers.CanAccessPremium() && !cipher.OrganizationUseTotp)
             {
                 await DisplayAlert(null, AppResources.PremiumRequired, AppResources.Ok);
                 return;

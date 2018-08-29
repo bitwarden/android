@@ -8,7 +8,10 @@ namespace Bit.App.Models.Api
         public string Name { get; set; }
         public bool UseGroups { get; set; }
         public bool UseDirectory { get; set; }
+        public bool UseEvents { get; set; }
         public bool UseTotp { get; set; }
+        public bool Use2fa { get; set; }
+        public bool UsersGetPremium { get; set; }
         public int Seats { get; set; }
         public int MaxCollections { get; set; }
         public short? MaxStorageGb { get; set; }
