@@ -1,3 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <autofill-service
-    xmlns:android="http://schemas.android.com/apk/res/android" />
+    xmlns:android="http://schemas.android.com/apk/res/android">
+  <compatibility-package android:name="com.android.chrome" android:maxLongVersionCode="1000000000"/>
+  <compatibility-package android:name="com.opera.browser" android:maxLongVersionCode="1000000000"/>
+</autofill-service>
