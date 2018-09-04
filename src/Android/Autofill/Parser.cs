@@ -15,7 +15,8 @@ namespace Bit.Android.Autofill
             "com.google.android.apps.chrome","com.google.android.apps.chrome_dev","com.yandex.browser",
             "com.sec.android.app.sbrowser","com.sec.android.app.sbrowser.beta","org.codeaurora.swe.browser",
             "com.amazon.cloud9","org.mozilla.klar","com.duckduckgo.mobile.android","mark.via.gp","org.bromite.bromite",
-            "org.chromium.chrome", "com.kiwibrowser.browser", "com.ecosia.android"
+            "org.chromium.chrome", "com.kiwibrowser.browser", "com.ecosia.android", "com.opera.mini.native.beta",
+            "org.mozilla.fennec_aurora"
         };
 
         public static HashSet<string> ExcludedPackageIds = new HashSet<string>
