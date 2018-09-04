@@ -155,6 +155,7 @@
   <ItemGroup>
     <None Include="8bit.keystore.enc" />
     <GoogleServicesJson Include="google-services.json" />
+    <None Include="update-android.ps1" />
     <None Include="ci-build-apks.ps1" />
     <None Include="google-services.json.enc" />
     <None Include="Resources\AboutResources.txt" />
