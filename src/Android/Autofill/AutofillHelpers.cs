@@ -17,6 +17,24 @@ namespace Bit.Android.Autofill
     {
         private static int _pendingIntentId = 0;
 
+        // These browser work natively with the autofill framework
+        public static HashSet<string> TrustedBrowsers = new HashSet<string>
+        {
+            "org.mozilla.focus","org.mozilla.klar","com.duckduckgo.mobile.android"
+        };
+
+        // These browsers work using the compatibility shim for the autofill framework
+        public static HashSet<string> CompatBrowsers = new HashSet<string>
+        {
+            "org.mozilla.firefox","org.mozilla.firefox_beta","com.microsoft.emmx","com.android.chrome",
+            "com.chrome.beta","com.android.browser","com.brave.browser","com.opera.browser",
+            "com.opera.browser.beta","com.opera.mini.native","com.chrome.dev","com.chrome.canary",
+            "com.google.android.apps.chrome","com.google.android.apps.chrome_dev","com.yandex.browser",
+            "com.sec.android.app.sbrowser","com.sec.android.app.sbrowser.beta","org.codeaurora.swe.browser",
+            "com.amazon.cloud9","mark.via.gp","org.bromite.bromite","org.chromium.chrome","com.kiwibrowser.browser",
+            "com.ecosia.android", "com.opera.mini.native.beta","org.mozilla.fennec_aurora"
+        };
+
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService service)
         {
             var items = new List<FilledItem>();
@@ -62,7 +80,7 @@ namespace Bit.Android.Autofill
             }
 
             responseBuilder.AddDataset(BuildVaultDataset(context, parser.FieldCollection, parser.Uri, locked));
-            AddSaveInfo(responseBuilder, parser.FieldCollection);
+            AddSaveInfo(parser, responseBuilder, parser.FieldCollection);
             responseBuilder.SetIgnoredIds(parser.FieldCollection.IgnoreAutofillIds.ToArray());
             return responseBuilder.Build();
         }
@@ -126,8 +144,16 @@ namespace Bit.Android.Autofill
             return view;
         }
 
-        public static void AddSaveInfo(FillResponse.Builder responseBuilder, FieldCollection fields)
+        public static void AddSaveInfo(Parser parser, FillResponse.Builder responseBuilder, FieldCollection fields)
         {
+            // Docs state that password fields cannot be reliably saved in Compat mode since they will show as
+            // masked values.
+            var compatBrowser = CompatBrowsers.Contains(parser.PackageName);
+            if(compatBrowser && fields.SaveType == SaveDataType.Password)
+            {
+                return;
+            }
+
             var requiredIds = fields.GetRequiredSaveFields();
             if(fields.SaveType == SaveDataType.Generic || requiredIds.Length == 0)
             {
@@ -139,6 +165,10 @@ namespace Bit.Android.Autofill
             if(optionalIds.Length > 0)
             {
                 saveBuilder.SetOptionalIds(optionalIds);
+            }
+            if(compatBrowser)
+            {
+                saveBuilder.SetFlags(SaveFlags.SaveOnAllViewsInvisible);
             }
             responseBuilder.SetSaveInfo(saveBuilder.Build());
         }
