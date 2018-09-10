@@ -47,6 +47,7 @@ namespace Bit.Android
                 (s) => s.Split(new char[]{' ', ' '}).FirstOrDefault()), // 0 = Regular Space, 1 = No-break space (00A0)
             new Browser("org.mozilla.firefox", "url_bar_title"),
             new Browser("org.mozilla.firefox_beta", "url_bar_title"),
+            new Browser("org.mozilla.fennec_aurora", "url_bar_title"),
             new Browser("org.mozilla.focus", "display_url"),
             new Browser("org.mozilla.klar", "display_url"),
             new Browser("com.ghostery.android.ghostery", "search_field"),
