@@ -26,9 +26,6 @@ namespace Bit.Android
 #endif
     public class MainApplication : Application, ProviderInstaller.IProviderInstallListener
     {
-        private const string FirstLaunchKey = "firstLaunch";
-        private const string LastVersionCodeKey = "lastVersionCode";
-
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
