@@ -194,7 +194,7 @@ namespace Bit.App.Pages
 
             var kdf = Enums.KdfType.PBKDF2_SHA256;
             var kdfIterations = 5000;
-            var normalizedEmail = EmailCell.Entry.Text.ToLower();
+            var normalizedEmail = EmailCell.Entry.Text.ToLower().Trim();
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail, kdf, kdfIterations);
             var encKey = _cryptoService.MakeEncKey(key);
             var request = new RegisterRequest
