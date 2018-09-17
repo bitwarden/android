@@ -510,7 +510,7 @@
     <value>Favorit</value>
   </data>
   <data name="Fingerprint" xml:space="preserve">
-    <value>Fingeraftryk</value>
+    <value>fingeraftryk</value>
   </data>
   <data name="GeneratePassword" xml:space="preserve">
     <value>Generér adgangskode</value>
@@ -562,7 +562,7 @@
     <value>Log ind, eller opret en ny konto, for at tilgå din sikre boks.</value>
   </data>
   <data name="Manage" xml:space="preserve">
-    <value>Administrér</value>
+    <value>Håndtér</value>
   </data>
   <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
     <value>Adgangskodebekræftelse er forkert.</value>
@@ -697,7 +697,7 @@
     <value>Synkronisering mislykkedes.</value>
   </data>
   <data name="SyncVaultNow" xml:space="preserve">
-    <value>Synkroniser boks nu</value>
+    <value>Synkronisér boks nu</value>
   </data>
   <data name="TouchID" xml:space="preserve">
     <value>Touch ID</value>
@@ -729,7 +729,7 @@
     <value>Bitwarden web-boks</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Administrér dine elementer fra enhver webbrowser med Bitwarden web-boksen.</value>
+    <value>Håndtér dine elementer fra enhver webbrowser med Bitwarden web-boksen.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Mistet autentificerings-app?</value>

@@ -412,7 +412,7 @@
     <value>Vältä epäselviä merkkejä</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
-    <value>bitwardenin sovelluslaajennus</value>
+    <value>Bitwarden-sovelluslaajennus</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
     <value>Helpoin tapa lisätä uusia kirjautumistietoja holviisi on käyttää bitwardenin sovelluslaajennusta. Lue lisää sovelluslaajennuksesta "Työkalut"-kohdassa.</value>
@@ -1290,14 +1290,14 @@
     <value>Auto-fill and save</value>
   </data>
   <data name="Organization" xml:space="preserve">
-    <value>Organization</value>
+    <value>Organisaatio</value>
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>Pidä Yubikeytasi lähellä laitteen yläosaa.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Try Again</value>
+    <value>Yritä uudelleen</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>To continue, hold your YubiKey NEO against the back of the device.</value>
@@ -1306,11 +1306,11 @@
     <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>Salasana päivitetty</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>Päivitetty</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>

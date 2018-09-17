@@ -953,10 +953,10 @@
     <value>이 기능을 사용하려면 프리미엄 멤버십이 필요합니다.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
-    <value>첨부 파일 추가됨</value>
+    <value>첨부 파일 추가함</value>
   </data>
   <data name="AttachmentDeleted" xml:space="preserve">
-    <value>첨부 파일 삭제됨</value>
+    <value>첨부 파일 삭제함</value>
   </data>
   <data name="ChooseFile" xml:space="preserve">
     <value>파일 선택</value>
@@ -1284,7 +1284,7 @@
     <comment>URI match detection for auto-fill.</comment>
   </data>
   <data name="YesAndSave" xml:space="preserve">
-    <value>Yes, and Save</value>
+    <value>예, 저장하겠습니다.</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
     <value>자동 완성 및 저장</value>
@@ -1294,23 +1294,23 @@
     <comment>An entity of multiple related people (ex. a team or business organization).</comment>
   </data>
   <data name="HoldYubikeyNearTop" xml:space="preserve">
-    <value>Hold your Yubikey near the top of the device.</value>
+    <value>기기의 위쪽에 Yubikey를 가져다 대세요.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
     <value>다시 시도</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
-    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+    <value>계속하려면 기기의 뒷면에 YubiKey NEO를 가져다 대세요.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+    <value>접근성 서비스는 앱이 표준 자동 완성 서비스를 지원하지 않을 때 유용할 수 있습니다.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
-    <value>Password Updated</value>
+    <value>비밀번호 업데이트됨</value>
     <comment>ex. Date this password was updated</comment>
   </data>
   <data name="DateUpdated" xml:space="preserve">
-    <value>Updated</value>
+    <value>업데이트됨</value>
     <comment>ex. Date this item was updated</comment>
   </data>
 </root>
