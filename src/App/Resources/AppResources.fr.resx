@@ -580,11 +580,11 @@
     <value>Le mot de passe maître doit faire plus de 8 caractères.</value>
   </data>
   <data name="MinNumbers" xml:space="preserve">
-    <value>Nombres minimums</value>
+    <value>Nombre minimum de chiffres</value>
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Caractères spéciaux minimums</value>
+    <value>Nombre minimum de caractères spéciaux</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
