@@ -256,6 +256,12 @@
       <Project>{8a279ee4-4537-4656-9c93-44945e594556}</Project>
       <Name>App</Name>
     </ProjectReference>
+    <ProjectReference Include="..\iOS.Autofill\iOS.Autofill.csproj">
+      <Project>{c2b7adca-5964-43c5-a7c8-d3b6f8023f4f}</Project>
+      <Name>iOS.Autofill</Name>
+      <IsAppExtension>true</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
     <ProjectReference Include="..\iOS.Core\iOS.Core.csproj">
       <Project>{B2538ADA-B605-4D6F-ACD2-62A409680F84}</Project>
       <Name>iOS.Core</Name>
