@@ -13,11 +13,13 @@ namespace Bit.iOS.Autofill
 
         public override void ViewDidLoad()
         {
+            System.Diagnostics.Debug.WriteLine("AUTOFILL view did load");
             base.ViewDidLoad();
         }
 
         public override void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)
         {
+            System.Diagnostics.Debug.WriteLine("AUTOFILL Got identifiers " + serviceIdentifiers.Length);
             base.PrepareCredentialList(serviceIdentifiers);
         }
 
