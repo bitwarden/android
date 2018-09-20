@@ -31,8 +31,6 @@
     <MtouchFastDev>False</MtouchFastDev>
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
@@ -57,8 +55,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -88,8 +84,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
     <DeviceSpecificBuild>False</DeviceSpecificBuild>
@@ -115,8 +109,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -141,8 +133,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -166,8 +156,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchFloat32>False</MtouchFloat32>
     <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=SQLite-net</MtouchExtraArgs>
@@ -185,8 +173,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -205,8 +191,6 @@
     <MtouchUseLlvm>False</MtouchUseLlvm>
     <MtouchUseThumb>False</MtouchUseThumb>
     <MtouchEnableBitcode>False</MtouchEnableBitcode>
-    <MtouchUseSGen>False</MtouchUseSGen>
-    <MtouchUseRefCounting>False</MtouchUseRefCounting>
     <OptimizePNGs>True</OptimizePNGs>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
@@ -255,7 +239,6 @@
     </Compile>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
-    <Compile Include="Models\CipherViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="MainInterface.storyboard" />
   </ItemGroup>
