@@ -18,13 +18,10 @@
 	<string>37</string>
 	<key>NSExtension</key>
 	<dict>
-		<key>NSExtensionAttributes</key>
-		<dict>
-		</dict>
 		<key>NSExtensionMainStoryboard</key>
 		<string>MainInterface</string>
 		<key>NSExtensionPointIdentifier</key>
-		<string>com.apple.ui-services</string>
+		<string>com.apple.authentication-services-credential-provider-ui</string>
 	</dict>
 	<key>UIDeviceFamily</key>
 	<array>

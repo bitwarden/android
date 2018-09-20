@@ -9,13 +9,10 @@ using System;
 using System.CodeDom.Compiler;
 using UIKit;
 
-namespace Bit.iOS.Extension
+namespace Bit.iOS.Autofill
 {
-    [Register ("LoadingViewController")]
-    partial class LoadingViewController
+    [Register ("CredentialProviderViewController")]
+    partial class CredentialProviderViewController
     {
-        void ReleaseDesignerOutlets ()
-        {
-        }
     }
 }
