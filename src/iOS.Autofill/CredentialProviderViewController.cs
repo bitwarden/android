@@ -4,13 +4,16 @@ using Bit.App.Repositories;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.iOS.Autofill.Models;
+using Bit.iOS.Core;
 using Bit.iOS.Core.Services;
+using Bit.iOS.Core.Utilities;
 using Foundation;
 using Plugin.Connectivity;
 using Plugin.Fingerprint;
 using Plugin.Settings.Abstractions;
 using SimpleInjector;
 using System;
+using System.Diagnostics;
 using UIKit;
 using XLabs.Ioc;
 using XLabs.Ioc.SimpleInjectorContainer;
@@ -20,6 +23,8 @@ namespace Bit.iOS.Autofill
     public partial class CredentialProviderViewController : ASCredentialProviderViewController
     {
         private Context _context = new Context();
+        private bool _setupHockeyApp = false;
+        private IGoogleAnalyticsService _googleAnalyticsService;
 
         public CredentialProviderViewController (IntPtr handle) : base (handle)
         {
@@ -31,14 +36,42 @@ namespace Bit.iOS.Autofill
             SetCulture();
             base.ViewDidLoad();
             _context.ExtContext = ExtensionContext;
+            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
-            // TODO: HockeyApp
+            if (!_setupHockeyApp)
+            {
+                var appIdService = Resolver.Resolve<IAppIdService>();
+                var crashManagerDelegate = new HockeyAppCrashManagerDelegate(appIdService, Resolver.Resolve<IAuthService>());
+                var manager = HockeyApp.iOS.BITHockeyManager.SharedHockeyManager;
+                manager.Configure("51f96ae568ba45f699a18ad9f63046c3", crashManagerDelegate);
+                manager.CrashManager.CrashManagerStatus = HockeyApp.iOS.BITCrashManagerStatus.AutoSend;
+                manager.UserId = appIdService.AppId;
+                manager.StartManager();
+                manager.Authenticator.AuthenticateInstallation();
+                _setupHockeyApp = true;
+            }
         }
 
         public override void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)
         {
-            System.Diagnostics.Debug.WriteLine("AUTOFILL Got identifiers " + serviceIdentifiers.Length);
+            _context.ServiceIdentifiers = serviceIdentifiers;
+            _context.UrlString = serviceIdentifiers[0].Identifier;
             base.PrepareCredentialList(serviceIdentifiers);
+
+            var authService = Resolver.Resolve<IAuthService>();
+            if (!authService.IsAuthenticated)
+            {
+                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
+                {
+                    CompleteRequest();
+                });
+                PresentViewController(alert, true, null);
+                return;
+            }
+
+
+
+            PerformSegue("loginListSegue", this);
         }
 
         public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
@@ -54,6 +87,55 @@ namespace Bit.iOS.Autofill
         public override void PrepareInterfaceForExtensionConfiguration()
         {
             base.PrepareInterfaceForExtensionConfiguration();
+        }
+
+        public void CompleteRequest(string username = null, string password = null, string totp = null)
+        {
+            if(string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password)) {
+                _googleAnalyticsService.TrackAutofillExtensionEvent("Canceled");
+                var err = new NSError(new NSString("ASExtensionErrorDomain"), 
+                                      Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
+                _googleAnalyticsService.Dispatch(() =>
+                {
+                    NSRunLoop.Main.BeginInvokeOnMainThread(() =>
+                    {
+                        ExtensionContext.CancelRequest(err);
+                    });
+                });
+                return;
+            }
+
+            if(!string.IsNullOrWhiteSpace(totp))
+            {
+                UIPasteboard.General.String = totp;
+            }
+
+            _googleAnalyticsService.TrackAutofillExtensionEvent("AutoFilled");
+            var cred = new ASPasswordCredential(username, password);
+            _googleAnalyticsService.Dispatch(() =>
+            {
+                NSRunLoop.Main.BeginInvokeOnMainThread(() =>
+                {
+                    ExtensionContext.CompleteRequest(cred, null);
+                });
+            });
+        }
+
+
+
+        public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
+        {
+            var navController = segue.DestinationViewController as UINavigationController;
+            if (navController != null)
+            {
+                var listLoginController = navController.TopViewController as LoginListViewController;
+
+                if (listLoginController != null)
+                {
+                    listLoginController.Context = _context;
+                    listLoginController.CPViewController = this;
+                }
+            }
         }
 
         private void SetIoc()

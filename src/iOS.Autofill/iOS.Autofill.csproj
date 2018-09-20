@@ -214,6 +214,10 @@
     <Compile Include="CredentialProviderViewController.designer.cs">
       <DependentUpon>CredentialProviderViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoginListViewController.cs" />
+    <Compile Include="LoginListViewController.designer.cs">
+      <DependentUpon>LoginListViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

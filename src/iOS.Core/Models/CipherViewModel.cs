@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bit.iOS.Extension.Models
+namespace Bit.iOS.Core.Models
 {
     public class CipherViewModel
     {

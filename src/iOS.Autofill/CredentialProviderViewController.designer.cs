@@ -14,14 +14,6 @@ namespace Bit.iOS.Autofill
     [Register ("CredentialProviderViewController")]
     partial class CredentialProviderViewController
     {
-        [Action ("cancel:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void cancel (UIKit.UIBarButtonItem sender);
-
-        [Action ("passwordSelected:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void passwordSelected (UIKit.UIButton sender);
-
         void ReleaseDesignerOutlets ()
         {
         }

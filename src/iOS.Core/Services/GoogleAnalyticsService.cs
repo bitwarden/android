@@ -33,6 +33,11 @@ namespace Bit.iOS.Core.Services
             TrackEvent("Extension", eventName, label);
         }
 
+        public void TrackAutofillExtensionEvent(string eventName, string label = null)
+        {
+            TrackEvent("AutofillExtension", eventName, label);
+        }
+
         public void TrackEvent(string category, string eventName, string label = null)
         {
             var dict = DictionaryBuilder.CreateEvent(category, eventName, label, null).Build();

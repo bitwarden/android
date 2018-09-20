@@ -38,6 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
@@ -64,6 +65,7 @@
     <Compile Include="Views\SwitchTableViewCell.cs" />
     <Compile Include="Views\FormEntryTableViewCell.cs" />
     <Compile Include="Views\Toast.cs" />
+    <Compile Include="Models\CipherViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">

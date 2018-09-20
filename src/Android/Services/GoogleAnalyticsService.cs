@@ -41,6 +41,11 @@ namespace Bit.Android.Services
             TrackEvent("AutofillService", eventName, label);
         }
 
+        public void TrackExtensionEvent(string eventName, string label = null)
+        {
+            TrackExtensionEvent(eventName, label);
+        }
+
         public void TrackEvent(string category, string eventName, string label = null)
         {
             var builder = new HitBuilders.EventBuilder();
