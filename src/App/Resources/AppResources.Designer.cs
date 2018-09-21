@@ -529,7 +529,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to AutoFill logins directly from your keyboard when logging into websites and other apps..
+        ///   Looks up a localized string similar to Access your vault directly from your keyboard to quickly autofill passwords..
         /// </summary>
         public static string BitwardenAutofillDescription {
             get {
@@ -2478,6 +2478,15 @@ namespace Bit.App.Resources {
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password AutoFill.
+        /// </summary>
+        public static string PasswordAutofill {
+            get {
+                return ResourceManager.GetString("PasswordAutofill", resourceCulture);
             }
         }
         

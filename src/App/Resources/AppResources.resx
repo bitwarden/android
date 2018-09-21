@@ -1326,6 +1326,9 @@
     <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>AutoFill logins directly from your keyboard when logging into websites and other apps.</value>
+    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Password AutoFill</value>
   </data>
 </root>

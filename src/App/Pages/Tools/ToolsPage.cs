@@ -49,7 +49,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
-                    ExtensionCell = new ToolsViewCell(AppResources.Autofill,
+                    ExtensionCell = new ToolsViewCell(AppResources.PasswordAutofill,
                         AppResources.BitwardenAutofillDescription, "magic.png");
                     section.Add(ExtensionCell);
                 }
