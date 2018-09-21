@@ -8,5 +8,6 @@ namespace Bit.iOS.Autofill.Models
     {
         public NSExtensionContext ExtContext { get; set; }
         public ASCredentialServiceIdentifier[] ServiceIdentifiers { get; set; }
+        public ASPasswordCredentialIdentity CredentialIdentity { get; set; }
     }
 }

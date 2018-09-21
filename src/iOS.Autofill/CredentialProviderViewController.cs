@@ -21,7 +21,7 @@ namespace Bit.iOS.Autofill
 {
     public partial class CredentialProviderViewController : ASCredentialProviderViewController
     {
-        private Context _context = new Context();
+        private Context _context;
         private bool _setupHockeyApp = false;
         private IGoogleAnalyticsService _googleAnalyticsService;
 
@@ -34,6 +34,7 @@ namespace Bit.iOS.Autofill
             SetIoc();
             SetCulture();
             base.ViewDidLoad();
+            _context = new Context();
             _context.ExtContext = ExtensionContext;
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
@@ -90,11 +91,57 @@ namespace Bit.iOS.Autofill
         public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
             base.ProvideCredentialWithoutUserInteraction(credentialIdentity);
+
+            bool canGetCredentials = false;
+            var authService = Resolver.Resolve<IAuthService>();
+            if (authService.IsAuthenticated)
+            {
+                var lockService = Resolver.Resolve<ILockService>();
+                var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
+                canGetCredentials = lockType == App.Enums.LockType.None;
+            }
+
+            if(!canGetCredentials) {
+                var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                                      Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
+                ExtensionContext.CancelRequest(err);
+                return;
+            }
+            _context.CredentialIdentity = credentialIdentity;
+            ProvideCredential();
         }
 
         public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
-            base.PrepareInterfaceToProvideCredential(credentialIdentity);
+            var authService = Resolver.Resolve<IAuthService>();
+            if (!authService.IsAuthenticated)
+            {
+                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
+                {
+                    CompleteRequest();
+                });
+                PresentViewController(alert, true, null);
+                return;
+            }
+
+            _context.CredentialIdentity = credentialIdentity;
+            var lockService = Resolver.Resolve<ILockService>();
+            var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
+            switch (lockType)
+            {
+                case App.Enums.LockType.Fingerprint:
+                    PerformSegue("lockFingerprintSegue", this);
+                    break;
+                case App.Enums.LockType.PIN:
+                    PerformSegue("lockPinSegue", this);
+                    break;
+                case App.Enums.LockType.Password:
+                    PerformSegue("lockPasswordSegue", this);
+                    break;
+                default:
+                    ProvideCredential();
+                    break;
+            }
         }
 
         public override void PrepareInterfaceForExtensionConfiguration()
@@ -169,8 +216,30 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(false, () =>
             {
+                if(_context.CredentialIdentity != null) {
+                    ProvideCredential();
+                    return;
+                }
                 PerformSegue("loginListSegue", this);
             });
+        }
+
+        private void ProvideCredential()
+        {
+            var cipherService = Resolver.Resolve<ICipherService>();
+            var cipher = cipherService.GetByIdAsync(_context.CredentialIdentity.RecordIdentifier).GetAwaiter().GetResult();
+            if (cipher == null || cipher.Type != App.Enums.CipherType.Login)
+            {
+                var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                                      Convert.ToInt32(ASExtensionErrorCode.CredentialIdentityNotFound), null);
+                ExtensionContext.CancelRequest(err);
+                return;
+            }
+
+            CompleteRequest(
+                cipher.Login.Username?.Decrypt(cipher.OrganizationId),
+                cipher.Login.Password?.Decrypt(cipher.OrganizationId),
+                cipher.Login.Totp?.Decrypt(cipher.OrganizationId));
         }
 
         private void SetIoc()
