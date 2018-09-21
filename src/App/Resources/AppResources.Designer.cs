@@ -430,6 +430,60 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to To enable password autofill, follow these instructions:.
+        /// </summary>
+        public static string AutofillTurnOn {
+            get {
+                return ResourceManager.GetString("AutofillTurnOn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1. Go to the iOS &quot;Settings&quot; app..
+        /// </summary>
+        public static string AutofillTurnOn1 {
+            get {
+                return ResourceManager.GetString("AutofillTurnOn1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2. Tap &quot;Passwords &amp; Accounts&quot;.
+        /// </summary>
+        public static string AutofillTurnOn2 {
+            get {
+                return ResourceManager.GetString("AutofillTurnOn2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3. Tap &quot;AutoFill Passwords&quot;.
+        /// </summary>
+        public static string AutofillTurnOn3 {
+            get {
+                return ResourceManager.GetString("AutofillTurnOn3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 4. Turn on AutoFill.
+        /// </summary>
+        public static string AutofillTurnOn4 {
+            get {
+                return ResourceManager.GetString("AutofillTurnOn4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5. Select &quot;Bitwarden&quot;.
+        /// </summary>
+        public static string AutofillTurnOn5 {
+            get {
+                return ResourceManager.GetString("AutofillTurnOn5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Auto-fill with Bitwarden.
         /// </summary>
         public static string AutofillWithBitwarden {

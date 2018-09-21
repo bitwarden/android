@@ -15,22 +15,68 @@ namespace Bit.App.Pages
 
         public void Init()
         {
-            var notStartedLabel = new Label
+            var getAccessLabel = new Label
             {
                 Text = AppResources.ExtensionInstantAccess,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
-                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label))
+                FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
+                Margin = new Thickness(0, 0, 0, 20),
             };
 
-            var notStartedSublabel = new Label
+            var turnOnLabel = new Label
             {
-                Text = AppResources.ExtensionTurnOn,
+                Text = AppResources.AutofillTurnOn,
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
+                LineBreakMode = LineBreakMode.WordWrap
+            };
+
+            var turnOnLabel1 = new Label
+            {
+                Text = AppResources.AutofillTurnOn1,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                HorizontalTextAlignment = TextAlignment.Start,
+                LineBreakMode = LineBreakMode.WordWrap
+            };
+
+            var turnOnLabel2 = new Label
+            {
+                Text = AppResources.AutofillTurnOn2,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                HorizontalTextAlignment = TextAlignment.Start,
+                LineBreakMode = LineBreakMode.WordWrap
+            };
+
+            var turnOnLabel3 = new Label
+            {
+                Text = AppResources.AutofillTurnOn3,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                HorizontalTextAlignment = TextAlignment.Start,
+                LineBreakMode = LineBreakMode.WordWrap
+            };
+
+            var turnOnLabel4 = new Label
+            {
+                Text = AppResources.AutofillTurnOn4,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                HorizontalTextAlignment = TextAlignment.Start,
+                LineBreakMode = LineBreakMode.WordWrap
+            };
+
+            var turnOnLabel5 = new Label
+            {
+                Text = AppResources.AutofillTurnOn5,
+                VerticalOptions = LayoutOptions.Start,
+                HorizontalOptions = LayoutOptions.Start,
+                HorizontalTextAlignment = TextAlignment.Start,
                 LineBreakMode = LineBreakMode.WordWrap
             };
 
@@ -39,7 +85,7 @@ namespace Bit.App.Pages
                 Source = "autofill-kb.png",
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center,
-                Margin = new Thickness(0, -10, 0, 0),
+                Margin = new Thickness(0, 10, 0, 0),
                 WidthRequest = 290,
                 HeightRequest = 252
             };
@@ -47,9 +93,10 @@ namespace Bit.App.Pages
             var stackLayout = new StackLayout
             {
                 Orientation = StackOrientation.Vertical,
-                Spacing = 20,
+                Spacing = 5,
                 Padding = new Thickness(20, 20, 20, 30),
-                Children = { notStartedLabel, notStartedSublabel, keyboardImge },
+                Children = { getAccessLabel, turnOnLabel, turnOnLabel1, turnOnLabel2,
+                    turnOnLabel3, turnOnLabel4, turnOnLabel5, keyboardImge },
                 VerticalOptions = LayoutOptions.FillAndExpand
             };
 
