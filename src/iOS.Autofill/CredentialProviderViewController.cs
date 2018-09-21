@@ -122,23 +122,7 @@ namespace Bit.iOS.Autofill
             }
 
             _context.CredentialIdentity = credentialIdentity;
-            var lockService = Resolver.Resolve<ILockService>();
-            var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
-            switch(lockType)
-            {
-                case App.Enums.LockType.Fingerprint:
-                    PerformSegue("lockFingerprintSegue", this);
-                    break;
-                case App.Enums.LockType.PIN:
-                    PerformSegue("lockPinSegue", this);
-                    break;
-                case App.Enums.LockType.Password:
-                    PerformSegue("lockPasswordSegue", this);
-                    break;
-                default:
-                    ProvideCredential();
-                    break;
-            }
+            CheckLock(() => ProvideCredential());
         }
 
         public override void PrepareInterfaceForExtensionConfiguration()
@@ -147,34 +131,17 @@ namespace Bit.iOS.Autofill
             _context.Configuring = true;
 
             var authService = Resolver.Resolve<IAuthService>();
-            if (!authService.IsAuthenticated)
+            if(!authService.IsAuthenticated)
             {
                 var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
                 {
-                    ExtensionContext.CompleteExtensionConfigurationRequest();
+                    CompleteRequest();
                 });
                 PresentViewController(alert, true, null);
                 return;
             }
 
-            var lockService = Resolver.Resolve<ILockService>();
-            var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
-            switch (lockType)
-            {
-                case App.Enums.LockType.Fingerprint:
-                    PerformSegue("lockFingerprintSegue", this);
-                    break;
-                case App.Enums.LockType.PIN:
-                    PerformSegue("lockPinSegue", this);
-                    break;
-                case App.Enums.LockType.Password:
-                    PerformSegue("lockPasswordSegue", this);
-                    break;
-                default:
-                    var task = ASHelpers.ReplaceAllIdentities(Resolver.Resolve<ICipherService>());
-                    ExtensionContext.CompleteExtensionConfigurationRequest();
-                    break;
-            }
+            CheckLock(() => PerformSegue("setupSegue", this));
         }
 
         public void CompleteRequest(string username = null, string password = null, string totp = null)
@@ -225,6 +192,7 @@ namespace Bit.iOS.Autofill
                 var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
                 var pinViewController = navController.TopViewController as LockPinViewController;
                 var passwordViewController = navController.TopViewController as LockPasswordViewController;
+                var setupViewController = navController.TopViewController as SetupViewController;
 
                 if(listLoginController != null)
                 {
@@ -243,6 +211,10 @@ namespace Bit.iOS.Autofill
                 {
                     passwordViewController.CPViewController = this;
                 }
+                else if(setupViewController != null)
+                {
+                    setupViewController.CPViewController = this;
+                }
             }
         }
 
@@ -257,8 +229,7 @@ namespace Bit.iOS.Autofill
                 }
                 if(_context.Configuring)
                 {
-                    var task = ASHelpers.ReplaceAllIdentities(Resolver.Resolve<ICipherService>());
-                    ExtensionContext.CompleteExtensionConfigurationRequest();
+                    PerformSegue("setupSegue", this);
                     return;
                 }
                 PerformSegue("loginListSegue", this);
@@ -280,6 +251,27 @@ namespace Bit.iOS.Autofill
             CompleteRequest(cipher.Login.Username?.Decrypt(cipher.OrganizationId),
                 cipher.Login.Password?.Decrypt(cipher.OrganizationId),
                 cipher.Login.Totp?.Decrypt(cipher.OrganizationId));
+        }
+
+        private void CheckLock(Action notLockedAction)
+        {
+            var lockService = Resolver.Resolve<ILockService>();
+            var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
+            switch(lockType)
+            {
+                case App.Enums.LockType.Fingerprint:
+                    PerformSegue("lockFingerprintSegue", this);
+                    break;
+                case App.Enums.LockType.PIN:
+                    PerformSegue("lockPinSegue", this);
+                    break;
+                case App.Enums.LockType.Password:
+                    PerformSegue("lockPasswordSegue", this);
+                    break;
+                default:
+                    notLockedAction();
+                    break;
+            }
         }
 
         private void SetIoc()
