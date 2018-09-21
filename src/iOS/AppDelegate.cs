@@ -174,12 +174,16 @@ namespace Bit.iOS
                 }
             });
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
-                Xamarin.Forms.Application.Current, "DeletedCipher", async (sender, id) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, Cipher>(
+                Xamarin.Forms.Application.Current, "DeletedCipher", async (sender, cipher) =>
             {
                 if(await ASHelpers.IdentitiesCanIncremental())
                 {
-                    var identity = new ASPasswordCredentialIdentity(null, null, id);
+                    var identity = ASHelpers.ToCredentialIdentity(cipher);
+                    if(identity == null)
+                    {
+                        return;
+                    }
                     await ASCredentialIdentityStore.SharedStore.RemoveCredentialIdentitiesAsync(
                         new ASPasswordCredentialIdentity[] { identity });
                 }

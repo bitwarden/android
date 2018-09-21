@@ -296,13 +296,17 @@ namespace Bit.App.Services
 
         public async Task DeleteDataAsync(string id, bool sendMessage)
         {
+            if(sendMessage)
+            {
+                var cipherData = await _cipherRepository.GetByIdAsync(id);
+                if(cipherData != null)
+                {
+                    MessagingCenter.Send(Application.Current, "DeletedCipher", new Cipher(cipherData));
+                }
+            }
             await _cipherRepository.DeleteAsync(id);
             CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
-            if(sendMessage)
-            {
-                MessagingCenter.Send(Application.Current, "DeletedCipher", id);
-            }
         }
 
         public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null)
