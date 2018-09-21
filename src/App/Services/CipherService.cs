@@ -9,6 +9,7 @@ using Bit.App.Models.Data;
 using System.Net.Http;
 using Bit.App.Utilities;
 using System.Text.RegularExpressions;
+using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
@@ -254,7 +255,7 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 var data = new CipherData(response.Result, _authService.UserId);
-                await UpsertDataAsync(data);
+                await UpsertDataAsync(data, true);
                 cipher.Id = data.Id;
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
@@ -266,11 +267,15 @@ namespace Bit.App.Services
             return response;
         }
 
-        public async Task UpsertDataAsync(CipherData cipher)
+        public async Task UpsertDataAsync(CipherData cipher, bool sendMessage)
         {
             await _cipherRepository.UpsertAsync(cipher);
             CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
+            if(sendMessage)
+            {
+                MessagingCenter.Send(Application.Current, "UpsertedCipher", cipher.Id);
+            }
         }
 
         public async Task<ApiResult> DeleteAsync(string id)
@@ -278,7 +283,7 @@ namespace Bit.App.Services
             var response = await _cipherApiRepository.DeleteAsync(id);
             if(response.Succeeded)
             {
-                await DeleteDataAsync(id);
+                await DeleteDataAsync(id, true);
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
                 || response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
@@ -289,11 +294,15 @@ namespace Bit.App.Services
             return response;
         }
 
-        public async Task DeleteDataAsync(string id)
+        public async Task DeleteDataAsync(string id, bool sendMessage)
         {
             await _cipherRepository.DeleteAsync(id);
             CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
+            if(sendMessage)
+            {
+                MessagingCenter.Send(Application.Current, "DeletedCipher", id);
+            }
         }
 
         public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null)

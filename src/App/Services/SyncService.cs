@@ -84,7 +84,7 @@ namespace Bit.App.Services
             try
             {
                 var cipherData = new CipherData(cipher.Result, _authService.UserId);
-                await _cipherService.UpsertDataAsync(cipherData).ConfigureAwait(false);
+                await _cipherService.UpsertDataAsync(cipherData, true).ConfigureAwait(false);
 
                 var localAttachments = (await _attachmentRepository.GetAllByCipherIdAsync(cipherData.Id)
                     .ConfigureAwait(false));
@@ -181,7 +181,7 @@ namespace Bit.App.Services
 
             try
             {
-                await _cipherService.DeleteDataAsync(id).ConfigureAwait(false);
+                await _cipherService.DeleteDataAsync(id, true).ConfigureAwait(false);
                 SyncCompleted(true);
                 return true;
             }
@@ -287,11 +287,13 @@ namespace Bit.App.Services
                 domainsTask.Exception != null || profileTask.Exception != null)
             {
                 SyncCompleted(false);
+                MessagingCenter.Send(Application.Current, "FullSyncCompleted", false);
                 return false;
             }
 
             _settings.AddOrUpdateValue(Constants.LastSync, now);
             SyncCompleted(true);
+            MessagingCenter.Send(Application.Current, "FullSyncCompleted", true);
             return true;
         }
 
@@ -442,7 +444,7 @@ namespace Bit.App.Services
                         localCiphers[serverCipher.Value.Id] : null;
 
                     var data = new CipherData(serverCipher.Value, _authService.UserId);
-                    await _cipherService.UpsertDataAsync(data).ConfigureAwait(false);
+                    await _cipherService.UpsertDataAsync(data, false).ConfigureAwait(false);
 
                     if(serverCipher.Value.Attachments != null)
                     {
@@ -470,7 +472,7 @@ namespace Bit.App.Services
             {
                 try
                 {
-                    await _cipherService.DeleteDataAsync(cipher.Value.Id).ConfigureAwait(false);
+                    await _cipherService.DeleteDataAsync(cipher.Value.Id, false).ConfigureAwait(false);
                 }
                 catch(SQLite.SQLiteException) { }
             }

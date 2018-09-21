@@ -16,9 +16,9 @@ namespace Bit.App.Abstractions
         Task<IEnumerable<Cipher>> GetAllByCollectionAsync(string collectionId);
         Task<Tuple<IEnumerable<Cipher>, IEnumerable<Cipher>, IEnumerable<Cipher>>> GetAllAsync(string uriString);
         Task<ApiResult<CipherResponse>> SaveAsync(Cipher cipher);
-        Task UpsertDataAsync(CipherData cipher);
+        Task UpsertDataAsync(CipherData cipher, bool sendMessage);
         Task<ApiResult> DeleteAsync(string id);
-        Task DeleteDataAsync(string id);
+        Task DeleteDataAsync(string id, bool sendMessage);
         Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null);
         Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher cipher, byte[] data, string fileName);
         Task UpsertAttachmentDataAsync(IEnumerable<AttachmentData> attachments);
