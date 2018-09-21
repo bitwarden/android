@@ -1,22 +1,14 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Bit.App.Abstractions;
 using Bit.iOS.Extension.Models;
 using Foundation;
 using UIKit;
-using XLabs.Ioc;
-using Plugin.Settings.Abstractions;
 using Bit.iOS.Core.Utilities;
-using System.Threading.Tasks;
 using Bit.iOS.Core;
 using MobileCoreServices;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
-using Bit.App.Models;
-using Bit.App.Utilities;
-using Bit.iOS.Core.Models;
+using Bit.iOS.Core.Views;
 
 namespace Bit.iOS.Extension
 {
@@ -100,87 +92,14 @@ namespace Bit.iOS.Extension
             });
         }
 
-        public class TableSource : UITableViewSource
+        public class TableSource : ExtensionTableSource
         {
-            private const string CellIdentifier = "TableCell";
-
-            private IEnumerable<CipherViewModel> _tableItems = new List<CipherViewModel>();
-            private Context _context;
             private LoginListViewController _controller;
-            private ICipherService _cipherService;
-            private ISettings _settings;
-            private bool _accessPremium;
 
             public TableSource(LoginListViewController controller)
+                : base(controller.Context, controller)
             {
-                _context = controller.Context;
                 _controller = controller;
-                _accessPremium = Helpers.CanAccessPremium();
-                _cipherService = Resolver.Resolve<ICipherService>();
-                _settings = Resolver.Resolve<ISettings>();
-            }
-
-            public async Task LoadItemsAsync()
-            {
-                var combinedLogins = new List<Cipher>();
-
-                var logins = await _cipherService.GetAllAsync(_context.UrlString);
-                if(logins?.Item1 != null)
-                {
-                    combinedLogins.AddRange(logins.Item1);
-                }
-                if(logins?.Item2 != null)
-                {
-                    combinedLogins.AddRange(logins.Item2);
-                }
-
-                _tableItems = combinedLogins.Select(s => new CipherViewModel(s))
-                    .OrderBy(s => s.Name)
-                    .ThenBy(s => s.Username)
-                    .ToList() ?? new List<CipherViewModel>();
-            }
-
-            public IEnumerable<CipherViewModel> TableItems { get; set; }
-
-            public override nint RowsInSection(UITableView tableview, nint section)
-            {
-                return _tableItems == null || _tableItems.Count() == 0 ? 1 : _tableItems.Count();
-            }
-
-            public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
-            {
-                if(_tableItems == null || _tableItems.Count() == 0)
-                {
-                    var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
-                    noDataCell.TextLabel.Text = AppResources.NoItemsTap;
-                    noDataCell.TextLabel.TextAlignment = UITextAlignment.Center;
-                    noDataCell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
-                    noDataCell.TextLabel.Lines = 0;
-                    return noDataCell;
-                }
-
-                var cell = tableView.DequeueReusableCell(CellIdentifier);
-
-                // if there are no cells to reuse, create a new one
-                if(cell == null)
-                {
-                    Debug.WriteLine("BW Log, Make new cell for list.");
-                    cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
-                    cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
-                }
-                return cell;
-            }
-
-            public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
-            {
-                if(_tableItems == null || _tableItems.Count() == 0 || cell == null)
-                {
-                    return;
-                }
-
-                var item = _tableItems.ElementAt(indexPath.Row);
-                cell.TextLabel.Text = item.Name;
-                cell.DetailTextLabel.Text = item.Username;
             }
 
             public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
@@ -209,7 +128,7 @@ namespace Bit.iOS.Extension
                         totp = GetTotp(item);
                     }
 
-                    _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password, 
+                    _controller.LoadingController.CompleteUsernamePasswordRequest(item.Username, item.Password,
                         item.Fields.Value, totp);
                 }
                 else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
@@ -272,20 +191,6 @@ namespace Bit.iOS.Extension
                     var alert = Dialogs.CreateAlert(null, AppResources.NoUsernamePasswordConfigured, AppResources.Ok);
                     _controller.PresentViewController(alert, true, null);
                 }
-            }
-
-            private string GetTotp(CipherViewModel item)
-            {
-                string totp = null;
-                if(_accessPremium)
-                {
-                    if(item != null && !string.IsNullOrWhiteSpace(item.Totp.Value))
-                    {
-                        totp = Crypto.Totp(item.Totp.Value);
-                    }
-                }
-
-                return totp;
             }
         }
     }
