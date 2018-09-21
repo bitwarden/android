@@ -101,7 +101,7 @@ namespace Bit.iOS.Autofill
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
-                this.ExtensionContext.CancelRequest(err);
+                ExtensionContext.CancelRequest(err);
                 return;
             }
             _context.CredentialIdentity = credentialIdentity;
