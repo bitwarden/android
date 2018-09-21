@@ -23,7 +23,7 @@ namespace Bit.App.Pages
                 HorizontalTextAlignment = TextAlignment.Center,
                 LineBreakMode = LineBreakMode.WordWrap,
                 FontSize = Device.GetNamedSize(NamedSize.Large, typeof(Label)),
-                Margin = new Thickness(0, 0, 0, 20),
+                Margin = new Thickness(0, 0, 0, 15),
             };
 
             var turnOnLabel = new Label
@@ -32,7 +32,8 @@ namespace Bit.App.Pages
                 VerticalOptions = LayoutOptions.Start,
                 HorizontalOptions = LayoutOptions.Center,
                 HorizontalTextAlignment = TextAlignment.Center,
-                LineBreakMode = LineBreakMode.WordWrap
+                LineBreakMode = LineBreakMode.WordWrap,
+                Margin = new Thickness(0, 0, 0, 15),
             };
 
             var turnOnLabel1 = new Label
