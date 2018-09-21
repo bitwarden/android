@@ -203,11 +203,16 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LockFingerprintViewController.cs" />
+    <Compile Include="LockPasswordViewController.cs" />
+    <Compile Include="LockPinViewController.cs" />
+    <Compile Include="LoginAddViewController.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Models\Context.cs" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <Compile Include="PasswordGeneratorViewController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <InterfaceDefinition Include="MainInterface.storyboard" />
     <Compile Include="CredentialProviderViewController.cs" />
@@ -215,9 +220,6 @@
       <DependentUpon>CredentialProviderViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="LoginListViewController.cs" />
-    <Compile Include="LoginListViewController.designer.cs">
-      <DependentUpon>LoginListViewController.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
