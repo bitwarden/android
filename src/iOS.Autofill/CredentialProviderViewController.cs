@@ -89,7 +89,7 @@ namespace Bit.iOS.Autofill
 
         public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
-            base.ProvideCredentialWithoutUserInteraction(credentialIdentity);
+            // base.ProvideCredentialWithoutUserInteraction(credentialIdentity);
 
             bool canGetCredentials = false;
             var authService = Resolver.Resolve<IAuthService>();
@@ -104,7 +104,7 @@ namespace Bit.iOS.Autofill
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
-                ExtensionContext.CancelRequest(err);
+                this.ExtensionContext.CancelRequest(err);
                 return;
             }
             _context.CredentialIdentity = credentialIdentity;
