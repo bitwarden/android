@@ -16,6 +16,7 @@ using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.App.Models;
 using Bit.App.Utilities;
+using Bit.iOS.Core.Models;
 
 namespace Bit.iOS.Extension
 {
