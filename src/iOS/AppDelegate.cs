@@ -158,10 +158,11 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
                 Xamarin.Forms.Application.Current, "UpsertedCipher", async (sender, id) =>
             {
-                if (await ASHelpers.IdentitiesCanIncremental())
+                if(await ASHelpers.IdentitiesCanIncremental())
                 {
                     var identity = await ASHelpers.GetCipherIdentityAsync(id, _cipherService);
-                    if(identity == null) {
+                    if(identity == null)
+                    {
                         return;
                     }
                     await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(

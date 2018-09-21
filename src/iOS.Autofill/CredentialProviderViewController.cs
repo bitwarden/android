@@ -148,7 +148,7 @@ namespace Bit.iOS.Autofill
         {
             base.PrepareInterfaceForExtensionConfiguration();
             var authService = Resolver.Resolve<IAuthService>();
-            if (authService.IsAuthenticated)
+            if(authService.IsAuthenticated)
             {
                 var task = ASHelpers.ReplaceAllIdentities(Resolver.Resolve<ICipherService>());
             }
