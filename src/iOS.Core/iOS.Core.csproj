@@ -38,13 +38,19 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\ExtendedUITableViewController.cs" />
     <Compile Include="Controllers\ExtendedUIViewController.cs" />
+    <Compile Include="Controllers\LockFingerprintViewController.cs" />
+    <Compile Include="Controllers\LockPasswordViewController.cs" />
+    <Compile Include="Controllers\LockPinViewController.cs" />
+    <Compile Include="Controllers\LoginAddViewController.cs" />
+    <Compile Include="Controllers\PasswordGeneratorViewController.cs" />
     <Compile Include="HockeyAppCrashManagerDelegate.cs" />
+    <Compile Include="Models\AppExtensionContext.cs" />
+    <Compile Include="Models\PasswordGenerationOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AppInfoService.cs" />
     <Compile Include="Services\NoopDeviceActionService.cs" />

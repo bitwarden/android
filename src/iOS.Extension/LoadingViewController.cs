@@ -21,6 +21,7 @@ using Bit.iOS.Core.Controllers;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
 using System.Collections.Generic;
+using Bit.iOS.Core.Models;
 
 namespace Bit.iOS.Extension
 {
@@ -147,17 +148,14 @@ namespace Bit.iOS.Extension
                 }
                 else if(fingerprintViewController != null)
                 {
-                    fingerprintViewController.Context = _context;
                     fingerprintViewController.LoadingController = this;
                 }
                 else if(pinViewController != null)
                 {
-                    pinViewController.Context = _context;
                     pinViewController.LoadingController = this;
                 }
                 else if(passwordViewController != null)
                 {
-                    passwordViewController.Context = _context;
                     passwordViewController.LoadingController = this;
                 }
                 else if(setupViewController != null)

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bit.iOS.Extension.Models
+namespace Bit.iOS.Core.Models
 {
     public class PasswordGenerationOptions
     {

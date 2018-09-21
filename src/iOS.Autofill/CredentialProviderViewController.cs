@@ -26,7 +26,7 @@ namespace Bit.iOS.Autofill
         private bool _setupHockeyApp = false;
         private IGoogleAnalyticsService _googleAnalyticsService;
 
-        public CredentialProviderViewController (IntPtr handle) : base (handle)
+        public CredentialProviderViewController(IntPtr handle) : base(handle)
         {
         }
 
@@ -38,7 +38,7 @@ namespace Bit.iOS.Autofill
             _context.ExtContext = ExtensionContext;
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
-            if (!_setupHockeyApp)
+            if(!_setupHockeyApp)
             {
                 var appIdService = Resolver.Resolve<IAppIdService>();
                 var crashManagerDelegate = new HockeyAppCrashManagerDelegate(appIdService, Resolver.Resolve<IAuthService>());
@@ -59,7 +59,7 @@ namespace Bit.iOS.Autofill
             base.PrepareCredentialList(serviceIdentifiers);
 
             var authService = Resolver.Resolve<IAuthService>();
-            if (!authService.IsAuthenticated)
+            if(!authService.IsAuthenticated)
             {
                 var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
                 {
@@ -68,8 +68,6 @@ namespace Bit.iOS.Autofill
                 PresentViewController(alert, true, null);
                 return;
             }
-
-
 
             PerformSegue("loginListSegue", this);
         }
@@ -91,10 +89,11 @@ namespace Bit.iOS.Autofill
 
         public void CompleteRequest(string username = null, string password = null, string totp = null)
         {
-            if(string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password)) {
+            if(string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
+            {
                 _googleAnalyticsService.TrackAutofillExtensionEvent("Canceled");
-                var err = new NSError(new NSString("ASExtensionErrorDomain"), 
-                                      Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
+                var err = new NSError(new NSString("ASExtensionErrorDomain"),
+                    Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
                 _googleAnalyticsService.Dispatch(() =>
                 {
                     NSRunLoop.Main.BeginInvokeOnMainThread(() =>
@@ -121,16 +120,14 @@ namespace Bit.iOS.Autofill
             });
         }
 
-
-
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
             var navController = segue.DestinationViewController as UINavigationController;
-            if (navController != null)
+            if(navController != null)
             {
                 var listLoginController = navController.TopViewController as LoginListViewController;
 
-                if (listLoginController != null)
+                if(listLoginController != null)
                 {
                     listLoginController.Context = _context;
                     listLoginController.CPViewController = this;
