@@ -22,8 +22,11 @@
 		<string>MainInterface</string>
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.authentication-services-credential-provider-ui</string>
-		<key>ASCredentialProviderExtensionShowsConfigurationUI</key>
-		<true/>
+		<key>NSExtensionAttributes</key>
+		<dict>
+			<key>ASCredentialProviderExtensionShowsConfigurationUI</key>
+			<true/>
+		</dict>
 	</dict>
 	<key>UIDeviceFamily</key>
 	<array>

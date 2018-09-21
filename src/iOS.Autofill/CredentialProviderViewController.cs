@@ -143,16 +143,48 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareInterfaceForExtensionConfiguration()
         {
+            System.Diagnostics.Debug.WriteLine("AUTOFILL BITWARDEN: PrepareInterfaceForExtensionConfiguration");
+            _context.Configuring = true;
+
             var authService = Resolver.Resolve<IAuthService>();
-            if(authService.IsAuthenticated)
+            if (!authService.IsAuthenticated)
             {
-                var task = ASHelpers.ReplaceAllIdentities(Resolver.Resolve<ICipherService>());
+                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
+                {
+                    ExtensionContext.CompleteExtensionConfigurationRequest();
+                });
+                PresentViewController(alert, true, null);
+                return;
             }
-            ExtensionContext.CompleteExtensionConfigurationRequest();
+
+            var lockService = Resolver.Resolve<ILockService>();
+            var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
+            switch (lockType)
+            {
+                case App.Enums.LockType.Fingerprint:
+                    PerformSegue("lockFingerprintSegue", this);
+                    break;
+                case App.Enums.LockType.PIN:
+                    PerformSegue("lockPinSegue", this);
+                    break;
+                case App.Enums.LockType.Password:
+                    PerformSegue("lockPasswordSegue", this);
+                    break;
+                default:
+                    var task = ASHelpers.ReplaceAllIdentities(Resolver.Resolve<ICipherService>());
+                    ExtensionContext.CompleteExtensionConfigurationRequest();
+                    break;
+            }
         }
 
         public void CompleteRequest(string username = null, string password = null, string totp = null)
         {
+            if(_context.Configuring)
+            {
+                ExtensionContext.CompleteExtensionConfigurationRequest();
+                return;
+            }
+
             if(string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
             {
                 _googleAnalyticsService.TrackAutofillExtensionEvent("Canceled");
@@ -221,6 +253,12 @@ namespace Bit.iOS.Autofill
                 if(_context.CredentialIdentity != null)
                 {
                     ProvideCredential();
+                    return;
+                }
+                if(_context.Configuring)
+                {
+                    var task = ASHelpers.ReplaceAllIdentities(Resolver.Resolve<ICipherService>());
+                    ExtensionContext.CompleteExtensionConfigurationRequest();
                     return;
                 }
                 PerformSegue("loginListSegue", this);
