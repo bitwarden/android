@@ -112,52 +112,57 @@ namespace Bit.iOS
                 modal.PresentViewController(activityViewController, true, null);
             });
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
-                    "ListenYubiKeyOTP", (sender, listen) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(
+                Xamarin.Forms.Application.Current, "ListenYubiKeyOTP", (sender, listen) =>
+            {
+                if(_deviceInfoService.NfcEnabled)
                 {
-                    if(_deviceInfoService.NfcEnabled)
+                    _nfcSession?.InvalidateSession();
+                    _nfcSession?.Dispose();
+                    _nfcSession = null;
+                    if(listen)
                     {
-                        _nfcSession?.InvalidateSession();
-                        _nfcSession?.Dispose();
-                        _nfcSession = null;
-                        if(listen)
-                        {
-                            _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true);
-                            _nfcSession.AlertMessage = AppResources.HoldYubikeyNearTop;
-                            _nfcSession.BeginSession();
-                        }
+                        _nfcSession = new NFCNdefReaderSession(_nfcDelegate, null, true);
+                        _nfcSession.AlertMessage = AppResources.HoldYubikeyNearTop;
+                        _nfcSession.BeginSession();
                     }
-                });
+                }
+            });
 
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
-                "ShowStatusBar", (sender, show) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(
+                Xamarin.Forms.Application.Current, "ShowStatusBar", (sender, show) =>
             {
                 UIApplication.SharedApplication.SetStatusBarHidden(!show, false);
             });
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
-                "FullSyncCompleted", (sender, successfully) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(
+                Xamarin.Forms.Application.Current, "FullSyncCompleted", (sender, successfully) =>
             {
                 if(successfully)
                 {
-                    
+
                 }
             });
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current,
-                "UpsertedCipher", (sender, id) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
+                Xamarin.Forms.Application.Current, "UpsertedCipher", (sender, id) =>
             {
-                
+
             });
 
-
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current,
-                "DeletedCipher", (sender, id) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
+                Xamarin.Forms.Application.Current, "DeletedCipher", (sender, id) =>
             {
-                
+
+            });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application>(
+                Xamarin.Forms.Application.Current, "LoggedOut", (sender) =>
+            {
+
             });
 
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();

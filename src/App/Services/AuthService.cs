@@ -260,6 +260,7 @@ namespace Bit.App.Services
 
             _googleAnalyticsService.TrackAppEvent("LoggedOut");
 
+            MessagingCenter.Send(Application.Current, "LoggedOut");
             Device.BeginInvokeOnMainThread(() => Application.Current.MainPage = new ExtendedNavigationPage(new HomePage()));
             if(!string.IsNullOrWhiteSpace(logoutMessage))
             {
