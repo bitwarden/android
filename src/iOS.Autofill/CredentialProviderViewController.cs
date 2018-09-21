@@ -55,15 +55,8 @@ namespace Bit.iOS.Autofill
         {
             _context.ServiceIdentifiers = serviceIdentifiers;
             _context.UrlString = serviceIdentifiers[0].Identifier;
-
-            var authService = Resolver.Resolve<IAuthService>();
-            if(!authService.IsAuthenticated)
+            if(!CheckAuthed())
             {
-                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
-                {
-                    CompleteRequest();
-                });
-                PresentViewController(alert, true, null);
                 return;
             }
 
@@ -110,37 +103,21 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
-            var authService = Resolver.Resolve<IAuthService>();
-            if(!authService.IsAuthenticated)
+            if(!CheckAuthed())
             {
-                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
-                {
-                    CompleteRequest();
-                });
-                PresentViewController(alert, true, null);
                 return;
             }
-
             _context.CredentialIdentity = credentialIdentity;
             CheckLock(() => ProvideCredential());
         }
 
         public override void PrepareInterfaceForExtensionConfiguration()
         {
-            System.Diagnostics.Debug.WriteLine("AUTOFILL BITWARDEN: PrepareInterfaceForExtensionConfiguration");
             _context.Configuring = true;
-
-            var authService = Resolver.Resolve<IAuthService>();
-            if(!authService.IsAuthenticated)
+            if(!CheckAuthed())
             {
-                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
-                {
-                    CompleteRequest();
-                });
-                PresentViewController(alert, true, null);
                 return;
             }
-
             CheckLock(() => PerformSegue("setupSegue", this));
         }
 
@@ -272,6 +249,21 @@ namespace Bit.iOS.Autofill
                     notLockedAction();
                     break;
             }
+        }
+
+        private bool CheckAuthed()
+        {
+            var authService = Resolver.Resolve<IAuthService>();
+            if(!authService.IsAuthenticated)
+            {
+                var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainAppAutofill, AppResources.Ok, (a) =>
+                {
+                    CompleteRequest();
+                });
+                PresentViewController(alert, true, null);
+                return false;
+            }
+            return true;
         }
 
         private void SetIoc()

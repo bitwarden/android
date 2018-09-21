@@ -606,7 +606,7 @@
     <value>There are no items in your vault.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>There are no items in your vault for this website. Tap to add one.</value>
+    <value>There are no items in your vault for this website/app. Tap to add one.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>This login does not have a username or password configured.</value>
@@ -1312,5 +1312,17 @@
   <data name="DateUpdated" xml:space="preserve">
     <value>Updated</value>
     <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>AutoFill Activated!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
 </root>

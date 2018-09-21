@@ -26,13 +26,13 @@ namespace Bit.iOS.Autofill
         {
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
             var descriptor = UIFontDescriptor.PreferredBody;
-            DescriptionLabel.Text = $@"{AppResources.ExtensionSetup}
+            DescriptionLabel.Text = $@"{AppResources.AutofillSetup}
 
-{AppResources.ExtensionSetup2}";
+{AppResources.AutofillSetup2}";
             DescriptionLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
             DescriptionLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
 
-            ActivatedLabel.Text = AppResources.ExtensionActivated;
+            ActivatedLabel.Text = AppResources.AutofillActivated;
             ActivatedLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize * 1.3f);
 
             BackButton.Title = AppResources.Back;

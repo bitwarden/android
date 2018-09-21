@@ -313,6 +313,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AutoFill Activated!.
+        /// </summary>
+        public static string AutofillActivated {
+            get {
+                return ResourceManager.GetString("AutofillActivated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Always Scan.
         /// </summary>
         public static string AutofillAlways {
@@ -399,6 +408,24 @@ namespace Bit.App.Resources {
         public static string AutofillServiceDescription {
             get {
                 return ResourceManager.GetString("AutofillServiceDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your logins are now easily accessable right from your keyboard while logging into apps and websites..
+        /// </summary>
+        public static string AutofillSetup {
+            get {
+                return ResourceManager.GetString("AutofillSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We recommend disabling any other AutoFill apps under Settings if you do not plan to use them..
+        /// </summary>
+        public static string AutofillSetup2 {
+            get {
+                return ResourceManager.GetString("AutofillSetup2", resourceCulture);
             }
         }
         
@@ -2176,6 +2203,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must log into the main Bitwarden app before you can use AutoFill..
+        /// </summary>
+        public static string MustLogInMainAppAutofill {
+            get {
+                return ResourceManager.GetString("MustLogInMainAppAutofill", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Vault.
         /// </summary>
         public static string MyVault {
@@ -2302,7 +2338,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There are no items in your vault for this website. Tap to add one..
+        ///   Looks up a localized string similar to There are no items in your vault for this website/app. Tap to add one..
         /// </summary>
         public static string NoItemsTap {
             get {

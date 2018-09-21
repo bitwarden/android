@@ -1,22 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using Bit.App.Abstractions;
 using Bit.iOS.Autofill.Models;
 using Foundation;
 using UIKit;
-using XLabs.Ioc;
-using Plugin.Settings.Abstractions;
 using Bit.iOS.Core.Utilities;
-using System.Threading.Tasks;
-using Bit.iOS.Core;
-using MobileCoreServices;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
-using Bit.App.Models;
-using Bit.App.Utilities;
-using Bit.iOS.Core.Models;
 using Bit.iOS.Core.Views;
 
 namespace Bit.iOS.Autofill
@@ -121,8 +110,7 @@ namespace Bit.iOS.Autofill
 
                     _controller.CPViewController.CompleteRequest(item.Username, item.Password, totp);
                 }
-                else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
-                    !string.IsNullOrWhiteSpace(item.Totp.Value))
+                else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Totp.Value))
                 {
                     var sheet = Dialogs.CreateActionSheet(item.Name, _controller);
                     if(!string.IsNullOrWhiteSpace(item.Username))
@@ -132,20 +120,6 @@ namespace Bit.iOS.Autofill
                             UIPasteboard clipboard = UIPasteboard.General;
                             clipboard.String = item.Username;
                             var alert = Dialogs.CreateMessageAlert(AppResources.CopyUsername);
-                            _controller.PresentViewController(alert, true, () =>
-                            {
-                                _controller.DismissViewController(true, null);
-                            });
-                        }));
-                    }
-
-                    if(!string.IsNullOrWhiteSpace(item.Password))
-                    {
-                        sheet.AddAction(UIAlertAction.Create(AppResources.CopyPassword, UIAlertActionStyle.Default, a =>
-                        {
-                            UIPasteboard clipboard = UIPasteboard.General;
-                            clipboard.String = item.Password;
-                            var alert = Dialogs.CreateMessageAlert(AppResources.CopiedPassword);
                             _controller.PresentViewController(alert, true, () =>
                             {
                                 _controller.DismissViewController(true, null);

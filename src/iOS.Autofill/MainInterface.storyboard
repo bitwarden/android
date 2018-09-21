@@ -548,7 +548,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="11094" translatesAutoresizingMaskIntoConstraints="NO" image="ext-icon.png" misplaced="YES" ambiguous="YES">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="11094" translatesAutoresizingMaskIntoConstraints="NO" image="check.png" misplaced="YES" ambiguous="YES">
                                 <rect key="frame" x="255" y="205.5" width="90" height="90"/>
                             </imageView>
                         </subviews>
