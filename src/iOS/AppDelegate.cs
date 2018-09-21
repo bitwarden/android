@@ -138,6 +138,28 @@ namespace Bit.iOS
                 UIApplication.SharedApplication.SetStatusBarHidden(!show, false);
             });
 
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
+                "FullSyncCompleted", (sender, successfully) =>
+            {
+                if(successfully)
+                {
+                    
+                }
+            });
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current,
+                "UpsertedCipher", (sender, id) =>
+            {
+                
+            });
+
+
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(Xamarin.Forms.Application.Current,
+                "DeletedCipher", (sender, id) =>
+            {
+                
+            });
+
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             return base.FinishedLaunching(app, options);
         }
