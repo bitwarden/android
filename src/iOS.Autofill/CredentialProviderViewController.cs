@@ -55,7 +55,6 @@ namespace Bit.iOS.Autofill
         {
             _context.ServiceIdentifiers = serviceIdentifiers;
             _context.UrlString = serviceIdentifiers[0].Identifier;
-            base.PrepareCredentialList(serviceIdentifiers);
 
             var authService = Resolver.Resolve<IAuthService>();
             if(!authService.IsAuthenticated)
@@ -89,8 +88,6 @@ namespace Bit.iOS.Autofill
 
         public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
-            // base.ProvideCredentialWithoutUserInteraction(credentialIdentity);
-
             bool canGetCredentials = false;
             var authService = Resolver.Resolve<IAuthService>();
             if(authService.IsAuthenticated)
@@ -146,7 +143,6 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareInterfaceForExtensionConfiguration()
         {
-            base.PrepareInterfaceForExtensionConfiguration();
             var authService = Resolver.Resolve<IAuthService>();
             if (authService.IsAuthenticated)
             {
