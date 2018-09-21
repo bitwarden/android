@@ -2,7 +2,7 @@ using System;
 using Foundation;
 using UIKit;
 
-namespace Bit.iOS.Extension
+namespace Bit.iOS.Autofill
 {
     public partial class LoginAddViewController : Core.Controllers.LoginAddViewController
     {
@@ -10,7 +10,6 @@ namespace Bit.iOS.Extension
         { }
 
         public LoginListViewController LoginListController { get; set; }
-        public LoadingViewController LoadingController { get; set; }
 
         public override UINavigationItem BaseNavItem => NavItem;
         public override UIBarButtonItem BaseCancelButton => CancelBarButton;
@@ -18,27 +17,12 @@ namespace Bit.iOS.Extension
 
         public override Action Success => () =>
         {
-            if(LoginListController != null)
-            {
-                LoginListController.DismissModal();
-            }
-            else if(LoadingController != null)
-            {
-                LoadingController.CompleteUsernamePasswordRequest(UsernameCell.TextField.Text,
-                    PasswordCell.TextField.Text, null, null);
-            }
+            LoginListController?.DismissModal();
         };
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
-            if(LoginListController != null)
-            {
-                DismissViewController(true, null);
-            }
-            else
-            {
-                LoadingController.CompleteRequest(null);
-            }
+            DismissViewController(true, null);
         }
 
         async partial void SaveBarButton_Activated(UIBarButtonItem sender)

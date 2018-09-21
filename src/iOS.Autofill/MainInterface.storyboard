@@ -33,7 +33,6 @@
                         <segue destination="6815" kind="presentation" identifier="lockPinSegue" id="8924"/>
                         <segue destination="6855" kind="presentation" identifier="lockPasswordSegue" id="9874"/>
                         <segue destination="1845" kind="presentation" identifier="newLoginSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="10498"/>
-                        <segue destination="10580" kind="presentation" identifier="setupSegue" modalTransitionStyle="coverVertical" id="11089"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="45" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -521,89 +520,7 @@
             <point key="canvasLocation" x="977" y="2775"/>
         </scene>
         <!--Setup View Controller-->
-        <scene sceneID="10573">
-            <objects>
-                <viewController id="10570" customClass="SetupViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="10565"/>
-                        <viewControllerLayoutGuide type="bottom" id="10566"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="10575">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="Extension Activated!" textAlignment="center" lineBreakMode="tailTruncation" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="11092">
-                                <rect key="frame" x="15" y="100" width="384" height="20.5"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" misplaced="YES" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="11093">
-                                <rect key="frame" x="15" y="134.5" width="570" height="41"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" image="ext-icon.png" translatesAutoresizingMaskIntoConstraints="NO" id="11094">
-                                <rect key="frame" x="255" y="205.5" width="90" height="90"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="11092" firstAttribute="leading" secondItem="10575" secondAttribute="leading" constant="15" id="11114"/>
-                            <constraint firstAttribute="trailing" secondItem="11092" secondAttribute="trailing" constant="15" id="11115"/>
-                            <constraint firstItem="11092" firstAttribute="top" secondItem="10565" secondAttribute="bottom" constant="30" id="11116"/>
-                            <constraint firstItem="11093" firstAttribute="leading" secondItem="10575" secondAttribute="leading" constant="15" id="11119"/>
-                            <constraint firstAttribute="trailing" secondItem="11093" secondAttribute="trailing" constant="15" id="11120"/>
-                            <constraint firstItem="11093" firstAttribute="top" secondItem="11092" secondAttribute="bottom" constant="20" id="11121"/>
-                            <constraint firstItem="11094" firstAttribute="centerX" secondItem="10575" secondAttribute="centerX" id="11122"/>
-                            <constraint firstItem="11094" firstAttribute="top" secondItem="11093" secondAttribute="bottom" constant="30" id="11123"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" id="10574">
-                        <barButtonItem key="leftBarButtonItem" title="Back" id="11091">
-                            <connections>
-                                <action selector="BackButton_Activated:" destination="10570" id="11124"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                    <connections>
-                        <outlet property="ActivatedLabel" destination="11092" id="name-outlet-11092"/>
-                        <outlet property="BackButton" destination="11091" id="name-outlet-11091"/>
-                        <outlet property="DescriptionLabel" destination="11093" id="name-outlet-11093"/>
-                        <outlet property="IconImage" destination="11094" id="name-outlet-11094"/>
-                        <outlet property="NavItem" destination="10574" id="name-outlet-10574"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="10576" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1129" y="-264"/>
-        </scene>
         <!--Navigation Controller-->
-        <scene sceneID="10579">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="10580" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="10583">
-                        <rect key="frame" x="0.0" y="20" width="414" height="50"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.23529411764705882" green="0.55294117647058827" blue="0.73725490196078436" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <textAttributes key="titleTextAttributes">
-                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        </textAttributes>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="10570" kind="relationship" relationship="rootViewController" id="10939"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="10584" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="362" y="-267"/>
-        </scene>
     </scenes>
     <resources>
         <image name="fingerprint.png" width="91" height="92"/>

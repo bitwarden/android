@@ -13,7 +13,6 @@ using Plugin.Fingerprint;
 using Plugin.Settings.Abstractions;
 using SimpleInjector;
 using System;
-using System.Diagnostics;
 using UIKit;
 using XLabs.Ioc;
 using XLabs.Ioc.SimpleInjectorContainer;
@@ -69,7 +68,23 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            PerformSegue("loginListSegue", this);
+            var lockService = Resolver.Resolve<ILockService>();
+            var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
+            switch (lockType)
+            {
+                case App.Enums.LockType.Fingerprint:
+                    PerformSegue("lockFingerprintSegue", this);
+                    break;
+                case App.Enums.LockType.PIN:
+                    PerformSegue("lockPinSegue", this);
+                    break;
+                case App.Enums.LockType.Password:
+                    PerformSegue("lockPasswordSegue", this);
+                    break;
+                default:
+                    PerformSegue("loginListSegue", this);
+                    break;
+            }
         }
 
         public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
@@ -123,16 +138,39 @@ namespace Bit.iOS.Autofill
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
             var navController = segue.DestinationViewController as UINavigationController;
-            if(navController != null)
+            if (navController != null)
             {
                 var listLoginController = navController.TopViewController as LoginListViewController;
+                var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
+                var pinViewController = navController.TopViewController as LockPinViewController;
+                var passwordViewController = navController.TopViewController as LockPasswordViewController;
 
-                if(listLoginController != null)
+                if (listLoginController != null)
                 {
                     listLoginController.Context = _context;
                     listLoginController.CPViewController = this;
                 }
+                else if (fingerprintViewController != null)
+                {
+                    fingerprintViewController.CPViewController = this;
+                }
+                else if (pinViewController != null)
+                {
+                    pinViewController.CPViewController = this;
+                }
+                else if (passwordViewController != null)
+                {
+                    passwordViewController.CPViewController = this;
+                }
             }
+        }
+
+        public void DismissLockAndContinue()
+        {
+            DismissViewController(false, () =>
+            {
+                PerformSegue("loginListSegue", this);
+            });
         }
 
         private void SetIoc()

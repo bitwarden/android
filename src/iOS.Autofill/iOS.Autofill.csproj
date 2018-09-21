@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
@@ -10,8 +9,7 @@
     <AssemblyName>BitwardeniOSAutofill</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <NuGetPackageImportStamp></NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
     <DebugSymbols>true</DebugSymbols>
@@ -74,10 +72,8 @@
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <CodesignKey>iPhone Developer</CodesignKey>
     <MtouchDebug>True</MtouchDebug>
-    <CodesignProvision>
-    </CodesignProvision>
-    <CodesignExtraArgs>
-    </CodesignExtraArgs>
+    <CodesignProvision></CodesignProvision>
+    <CodesignExtraArgs></CodesignExtraArgs>
     <MtouchLink>None</MtouchLink>
     <MtouchProfiling>False</MtouchProfiling>
     <MtouchFastDev>False</MtouchFastDev>
@@ -88,8 +84,7 @@
     <MtouchFloat32>False</MtouchFloat32>
     <DeviceSpecificBuild>False</DeviceSpecificBuild>
     <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler</MtouchExtraArgs>
-    <MtouchSdkVersion>
-    </MtouchSdkVersion>
+    <MtouchSdkVersion></MtouchSdkVersion>
     <MtouchTlsProvider>Default</MtouchTlsProvider>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
   </PropertyGroup>
@@ -220,6 +215,24 @@
       <DependentUpon>CredentialProviderViewController.cs</DependentUpon>
     </Compile>
     <Compile Include="LoginListViewController.cs" />
+    <Compile Include="LockFingerprintViewController.designer.cs">
+      <DependentUpon>..\iOS.Extension\LockFingerprintViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LockPasswordViewController.designer.cs">
+      <DependentUpon>..\iOS.Extension\LockPasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LockPinViewController.designer.cs">
+      <DependentUpon>..\iOS.Extension\LockPinViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoginAddViewController.designer.cs">
+      <DependentUpon>..\iOS.Extension\LoginAddViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoginListViewController.designer.cs">
+      <DependentUpon>..\iOS.Extension\LoginListViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PasswordGeneratorViewController.designer.cs">
+      <DependentUpon>..\iOS.Extension\PasswordGeneratorViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

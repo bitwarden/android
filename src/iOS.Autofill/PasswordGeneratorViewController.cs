@@ -1,7 +1,7 @@
 using System;
 using UIKit;
 
-namespace Bit.iOS.Extension
+namespace Bit.iOS.Autofill
 {
     public partial class PasswordGeneratorViewController : Core.Controllers.PasswordGeneratorViewController
     {
@@ -16,7 +16,7 @@ namespace Bit.iOS.Extension
 
         partial void SelectBarButton_Activated(UIBarButtonItem sender)
         {
-            GoogleAnalyticsService.TrackExtensionEvent("SelectedGeneratedPassword");
+            GoogleAnalyticsService.TrackAutofillExtensionEvent("SelectedGeneratedPassword");
             DismissViewController(true, () =>
             {
                 Parent.PasswordCell.TextField.Text = PasswordLabel.Text;
