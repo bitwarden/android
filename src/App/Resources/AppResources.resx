@@ -1329,7 +1329,7 @@
     <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill, follow these instructions:</value>
+    <value>To enable password autofill on your device, follow these instructions:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Go to the iOS "Settings" app.</value>

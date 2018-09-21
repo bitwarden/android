@@ -106,7 +106,7 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }
 
-            Title = AppResources.Autofill;
+            Title = AppResources.PasswordAutofill;
             Content = new ScrollView { Content = stackLayout };
         }
     }
