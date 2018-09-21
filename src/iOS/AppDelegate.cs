@@ -21,6 +21,12 @@ using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
 using CoreNFC;
 using Bit.App.Resources;
+using AuthenticationServices;
+using System.Threading.Tasks;
+using Bit.App.Models;
+using System.Linq;
+using System.Collections.Generic;
+using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS
 {
@@ -31,6 +37,7 @@ namespace Bit.iOS
         private NFCNdefReaderSession _nfcSession = null;
         private ILockService _lockService;
         private IDeviceInfoService _deviceInfoService;
+        private ICipherService _cipherService;
         private iOSPushNotificationHandler _pushHandler = null;
         private NFCReaderDelegate _nfcDelegate = null;
 
@@ -47,6 +54,7 @@ namespace Bit.iOS
 
             _lockService = Resolver.Resolve<ILockService>();
             _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
+            _cipherService = Resolver.Resolve<ICipherService>();
             _pushHandler = new iOSPushNotificationHandler(Resolver.Resolve<IPushNotificationListener>());
             _nfcDelegate = new NFCReaderDelegate((success, message) => ProcessYubikey(success, message));
             var appIdService = Resolver.Resolve<IAppIdService>();
@@ -139,30 +147,51 @@ namespace Bit.iOS
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(
-                Xamarin.Forms.Application.Current, "FullSyncCompleted", (sender, successfully) =>
+                Xamarin.Forms.Application.Current, "FullSyncCompleted", async (sender, successfully) =>
             {
                 if(successfully)
                 {
-
+                    await ASHelpers.ReplaceAllIdentities(_cipherService);
                 }
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
-                Xamarin.Forms.Application.Current, "UpsertedCipher", (sender, id) =>
+                Xamarin.Forms.Application.Current, "UpsertedCipher", async (sender, id) =>
             {
-
+                if (await ASHelpers.IdentitiesCanIncremental())
+                {
+                    var identity = await ASHelpers.GetCipherIdentityAsync(id, _cipherService);
+                    if(identity == null) {
+                        return;
+                    }
+                    await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
+                        new ASPasswordCredentialIdentity[] { identity });
+                }
+                else
+                {
+                    await ASHelpers.ReplaceAllIdentities(_cipherService);
+                }
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
-                Xamarin.Forms.Application.Current, "DeletedCipher", (sender, id) =>
+                Xamarin.Forms.Application.Current, "DeletedCipher", async (sender, id) =>
             {
-
+                if(await ASHelpers.IdentitiesCanIncremental())
+                {
+                    var identity = new ASPasswordCredentialIdentity(null, null, id);
+                    await ASCredentialIdentityStore.SharedStore.RemoveCredentialIdentitiesAsync(
+                        new ASPasswordCredentialIdentity[] { identity });
+                }
+                else
+                {
+                    await ASHelpers.ReplaceAllIdentities(_cipherService);
+                }
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(
-                Xamarin.Forms.Application.Current, "LoggedOut", (sender) =>
+                Xamarin.Forms.Application.Current, "LoggedOut", async (sender) =>
             {
-
+                await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
             });
 
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();

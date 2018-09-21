@@ -23,7 +23,6 @@ namespace Bit.iOS.Core.Controllers
         private IConnectivity _connectivity;
         private IEnumerable<Folder> _folders;
         protected IGoogleAnalyticsService _googleAnalyticsService;
-        private bool _isAutofill;
 
         public LoginAddViewController(IntPtr handle) : base(handle)
         {

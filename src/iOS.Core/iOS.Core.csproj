@@ -73,6 +73,7 @@
     <Compile Include="Views\FormEntryTableViewCell.cs" />
     <Compile Include="Views\Toast.cs" />
     <Compile Include="Models\CipherViewModel.cs" />
+    <Compile Include="Utilities\ASHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\App\App.csproj">

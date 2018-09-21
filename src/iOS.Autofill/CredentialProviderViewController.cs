@@ -147,6 +147,8 @@ namespace Bit.iOS.Autofill
         public override void PrepareInterfaceForExtensionConfiguration()
         {
             base.PrepareInterfaceForExtensionConfiguration();
+            var task = ASHelpers.ReplaceAllIdentities(Resolver.Resolve<ICipherService>());
+            ExtensionContext.CompleteExtensionConfigurationRequest();
         }
 
         public void CompleteRequest(string username = null, string password = null, string totp = null)
