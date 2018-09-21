@@ -1325,4 +1325,7 @@
   <data name="AutofillSetup2" xml:space="preserve">
     <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
   </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>AutoFill logins directly from your keyboard when logging into websites and other apps.</value>
+  </data>
 </root>

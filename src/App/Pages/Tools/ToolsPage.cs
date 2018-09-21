@@ -41,9 +41,18 @@ namespace Bit.App.Pages
 
             if(Device.RuntimePlatform == Device.iOS)
             {
-                ExtensionCell = new ToolsViewCell(AppResources.BitwardenAppExtension,
-                    AppResources.BitwardenAppExtensionDescription, "upload.png");
-                section.Add(ExtensionCell);
+                if(_deviceInfoService.Version < 12)
+                {
+                    ExtensionCell = new ToolsViewCell(AppResources.BitwardenAppExtension,
+                        AppResources.BitwardenAppExtensionDescription, "upload.png");
+                    section.Add(ExtensionCell);
+                }
+                else
+                {
+                    ExtensionCell = new ToolsViewCell(AppResources.Autofill,
+                        AppResources.BitwardenAutofillDescription, "magic.png");
+                    section.Add(ExtensionCell);
+                }
             }
             if(Device.RuntimePlatform == Device.Android)
             {
@@ -152,14 +161,21 @@ namespace Bit.App.Pages
 
         private void ExtensionCell_Tapped(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
+            if(_deviceInfoService.Version < 12)
+            {
+                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsExtensionPage()));
+            }
+            else
+            {
+                Navigation.PushModalAsync(new ExtendedNavigationPage(new ToolsAutofillPage()));
+            }
         }
 
         private void WebCell_Tapped(object sender, EventArgs e)
         {
             _googleAnalyticsService.TrackAppEvent("OpenedTool", "Web");
             var appSettings = Resolver.Resolve<IAppSettingsService>();
-            if (!string.IsNullOrWhiteSpace(appSettings.BaseUrl))
+            if(!string.IsNullOrWhiteSpace(appSettings.BaseUrl))
             {
                 Device.OpenUri(new Uri(appSettings.BaseUrl));
             }

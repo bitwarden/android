@@ -529,6 +529,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AutoFill logins directly from your keyboard when logging into websites and other apps..
+        /// </summary>
+        public static string BitwardenAutofillDescription {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to We were unable to automatically open the Android autofill settings menu for you. You can navigate to the autofill settings menu manually from Android Settings &gt; System &gt; Languages and input &gt; Advanced &gt; Autofill service..
         /// </summary>
         public static string BitwardenAutofillGoToSettings {
