@@ -5,7 +5,7 @@ namespace Bit.iOS.Autofill
 {
     public partial class PasswordGeneratorViewController : Core.Controllers.PasswordGeneratorViewController
     {
-        public PasswordGeneratorViewController(IntPtr handle) : base(handle)
+        public PasswordGeneratorViewController(IntPtr handle) : base(handle, true)
         { }
         
         public LoginAddViewController Parent { get; set; }

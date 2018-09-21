@@ -5,7 +5,7 @@ namespace Bit.iOS.Extension
 {
     public partial class PasswordGeneratorViewController : Core.Controllers.PasswordGeneratorViewController
     {
-        public PasswordGeneratorViewController(IntPtr handle) : base(handle)
+        public PasswordGeneratorViewController(IntPtr handle) : base(handle, false)
         { }
         
         public LoginAddViewController Parent { get; set; }

@@ -17,6 +17,7 @@ namespace Bit.iOS.Autofill
 
         public override Action Success => () =>
         {
+            _googleAnalyticsService.TrackAutofillExtensionEvent("CreatedLogin");
             LoginListController?.DismissModal();
         };
 

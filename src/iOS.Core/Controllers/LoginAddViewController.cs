@@ -22,10 +22,12 @@ namespace Bit.iOS.Core.Controllers
         private IFolderService _folderService;
         private IConnectivity _connectivity;
         private IEnumerable<Folder> _folders;
-        private IGoogleAnalyticsService _googleAnalyticsService;
+        protected IGoogleAnalyticsService _googleAnalyticsService;
+        private bool _isAutofill;
 
         public LoginAddViewController(IntPtr handle) : base(handle)
-        { }
+        {
+        }
 
         public AppExtensionContext Context { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
@@ -171,7 +173,6 @@ namespace Bit.iOS.Core.Controllers
             await loadingAlert.DismissViewControllerAsync(true);
             if(saveTask.Result.Succeeded)
             {
-                _googleAnalyticsService.TrackExtensionEvent("CreatedLogin");
                 Success();
             }
             else if(saveTask.Result.Errors.Count() > 0)

@@ -18,6 +18,7 @@ namespace Bit.iOS.Extension
 
         public override Action Success => () =>
         {
+            _googleAnalyticsService.TrackExtensionEvent("CreatedLogin");
             if(LoginListController != null)
             {
                 LoginListController.DismissModal();

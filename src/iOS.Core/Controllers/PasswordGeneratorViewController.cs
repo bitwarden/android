@@ -17,9 +17,12 @@ namespace Bit.iOS.Core.Controllers
     {
         private IPasswordGenerationService _passwordGenerationService;
         private ISettings _settings;
+        private bool _isAutofill;
 
-        public PasswordGeneratorViewController(IntPtr handle) : base(handle)
-        { }
+        public PasswordGeneratorViewController(IntPtr handle, bool autofill) : base(handle)
+        {
+            _isAutofill = autofill;
+        }
 
         protected IGoogleAnalyticsService GoogleAnalyticsService { get; private set; }
         public UITableViewController OptionsTableViewController { get; set; }
@@ -146,7 +149,14 @@ namespace Bit.iOS.Core.Controllers
             }
 
             GeneratePassword();
-            GoogleAnalyticsService.TrackExtensionEvent("GeneratedPassword");
+            if(_isAutofill)
+            {
+                GoogleAnalyticsService.TrackAutofillExtensionEvent("GeneratedPassword");
+            }
+            else
+            {
+                GoogleAnalyticsService.TrackExtensionEvent("GeneratedPassword");
+            }
             base.ViewDidLoad();
         }
 
@@ -304,12 +314,26 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if(indexPath.Row == 0)
                     {
-                        _controller.GoogleAnalyticsService.TrackExtensionEvent("RegeneratedPassword");
+                        if(_controller._isAutofill)
+                        {
+                            _controller.GoogleAnalyticsService.TrackAutofillExtensionEvent("RegeneratedPassword");
+                        }
+                        else
+                        {
+                            _controller.GoogleAnalyticsService.TrackExtensionEvent("RegeneratedPassword");
+                        }
                         _controller.GeneratePassword();
                     }
                     else if(indexPath.Row == 1)
                     {
-                        _controller.GoogleAnalyticsService.TrackExtensionEvent("CopiedGeneratedPassword");
+                        if(_controller._isAutofill)
+                        {
+                            _controller.GoogleAnalyticsService.TrackAutofillExtensionEvent("CopiedGeneratedPassword");
+                        }
+                        else
+                        {
+                            _controller.GoogleAnalyticsService.TrackExtensionEvent("CopiedGeneratedPassword");
+                        }
                         UIPasteboard clipboard = UIPasteboard.General;
                         clipboard.String = _controller.BasePasswordLabel.Text;
                         var alert = Dialogs.CreateMessageAlert(AppResources.Copied);
