@@ -26,8 +26,7 @@ namespace Bit.iOS.Autofill
         private IGoogleAnalyticsService _googleAnalyticsService;
 
         public CredentialProviderViewController(IntPtr handle) : base(handle)
-        {
-        }
+        { }
 
         public override void ViewDidLoad()
         {
@@ -71,7 +70,7 @@ namespace Bit.iOS.Autofill
 
             var lockService = Resolver.Resolve<ILockService>();
             var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
-            switch (lockType)
+            switch(lockType)
             {
                 case App.Enums.LockType.Fingerprint:
                     PerformSegue("lockFingerprintSegue", this);
@@ -94,16 +93,17 @@ namespace Bit.iOS.Autofill
 
             bool canGetCredentials = false;
             var authService = Resolver.Resolve<IAuthService>();
-            if (authService.IsAuthenticated)
+            if(authService.IsAuthenticated)
             {
                 var lockService = Resolver.Resolve<ILockService>();
                 var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
                 canGetCredentials = lockType == App.Enums.LockType.None;
             }
 
-            if(!canGetCredentials) {
+            if(!canGetCredentials)
+            {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                                      Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
+                    Convert.ToInt32(ASExtensionErrorCode.UserInteractionRequired), null);
                 ExtensionContext.CancelRequest(err);
                 return;
             }
@@ -114,7 +114,7 @@ namespace Bit.iOS.Autofill
         public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
             var authService = Resolver.Resolve<IAuthService>();
-            if (!authService.IsAuthenticated)
+            if(!authService.IsAuthenticated)
             {
                 var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
                 {
@@ -127,7 +127,7 @@ namespace Bit.iOS.Autofill
             _context.CredentialIdentity = credentialIdentity;
             var lockService = Resolver.Resolve<ILockService>();
             var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
-            switch (lockType)
+            switch(lockType)
             {
                 case App.Enums.LockType.Fingerprint:
                     PerformSegue("lockFingerprintSegue", this);
@@ -185,27 +185,27 @@ namespace Bit.iOS.Autofill
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
             var navController = segue.DestinationViewController as UINavigationController;
-            if (navController != null)
+            if(navController != null)
             {
                 var listLoginController = navController.TopViewController as LoginListViewController;
                 var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
                 var pinViewController = navController.TopViewController as LockPinViewController;
                 var passwordViewController = navController.TopViewController as LockPasswordViewController;
 
-                if (listLoginController != null)
+                if(listLoginController != null)
                 {
                     listLoginController.Context = _context;
                     listLoginController.CPViewController = this;
                 }
-                else if (fingerprintViewController != null)
+                else if(fingerprintViewController != null)
                 {
                     fingerprintViewController.CPViewController = this;
                 }
-                else if (pinViewController != null)
+                else if(pinViewController != null)
                 {
                     pinViewController.CPViewController = this;
                 }
-                else if (passwordViewController != null)
+                else if(passwordViewController != null)
                 {
                     passwordViewController.CPViewController = this;
                 }
@@ -216,7 +216,8 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(false, () =>
             {
-                if(_context.CredentialIdentity != null) {
+                if(_context.CredentialIdentity != null)
+                {
                     ProvideCredential();
                     return;
                 }
@@ -228,16 +229,15 @@ namespace Bit.iOS.Autofill
         {
             var cipherService = Resolver.Resolve<ICipherService>();
             var cipher = cipherService.GetByIdAsync(_context.CredentialIdentity.RecordIdentifier).GetAwaiter().GetResult();
-            if (cipher == null || cipher.Type != App.Enums.CipherType.Login)
+            if(cipher == null || cipher.Type != App.Enums.CipherType.Login)
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
-                                      Convert.ToInt32(ASExtensionErrorCode.CredentialIdentityNotFound), null);
+                    Convert.ToInt32(ASExtensionErrorCode.CredentialIdentityNotFound), null);
                 ExtensionContext.CancelRequest(err);
                 return;
             }
 
-            CompleteRequest(
-                cipher.Login.Username?.Decrypt(cipher.OrganizationId),
+            CompleteRequest(cipher.Login.Username?.Decrypt(cipher.OrganizationId),
                 cipher.Login.Password?.Decrypt(cipher.OrganizationId),
                 cipher.Login.Totp?.Decrypt(cipher.OrganizationId));
         }
