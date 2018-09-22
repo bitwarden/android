@@ -13,6 +13,7 @@ using Plugin.Connectivity.Abstractions;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Models;
 using System.Threading.Tasks;
+using AuthenticationServices;
 
 namespace Bit.iOS.Core.Controllers
 {
@@ -172,6 +173,20 @@ namespace Bit.iOS.Core.Controllers
             await loadingAlert.DismissViewControllerAsync(true);
             if(saveTask.Result.Succeeded)
             {
+                if (await ASHelpers.IdentitiesCanIncremental())
+                {
+                    var identity = await ASHelpers.GetCipherIdentityAsync(saveTask.Result.Result.Id, _cipherService);
+                    if (identity == null)
+                    {
+                        return;
+                    }
+                    await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
+                        new ASPasswordCredentialIdentity[] { identity });
+                }
+                else
+                {
+                    await ASHelpers.ReplaceAllIdentities(_cipherService);
+                }
                 Success();
             }
             else if(saveTask.Result.Errors.Count() > 0)

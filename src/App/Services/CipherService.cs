@@ -270,9 +270,9 @@ namespace Bit.App.Services
         public async Task UpsertDataAsync(CipherData cipher, bool sendMessage)
         {
             await _cipherRepository.UpsertAsync(cipher);
-            CachedCiphers = null;
+            CachedCiphers = null; 
             _appSettingsService.ClearCiphersCache = true;
-            if(sendMessage)
+            if(sendMessage && Application.Current != null)
             {
                 MessagingCenter.Send(Application.Current, "UpsertedCipher", cipher.Id);
             }
@@ -299,7 +299,7 @@ namespace Bit.App.Services
             if(sendMessage)
             {
                 var cipherData = await _cipherRepository.GetByIdAsync(id);
-                if(cipherData != null)
+                if(cipherData != null && Application.Current != null)
                 {
                     MessagingCenter.Send(Application.Current, "DeletedCipher", new Cipher(cipherData));
                 }

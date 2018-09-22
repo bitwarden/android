@@ -28,7 +28,7 @@ namespace Bit.iOS.Autofill
 
         async partial void SaveBarButton_Activated(UIBarButtonItem sender)
         {
-            await this.SaveAsync();
+            await SaveAsync();
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
