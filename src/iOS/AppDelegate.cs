@@ -160,22 +160,17 @@ namespace Bit.iOS
             {
                 if(await ASHelpers.IdentitiesCanIncremental())
                 {
-                    var identity = await ASHelpers.GetCipherIdentityAsync(data.Item1, _cipherService);
-                    if(identity == null)
-                    {
-                        return;
-                    }
                     if(data.Item2)
                     {
+                        var identity = await ASHelpers.GetCipherIdentityAsync(data.Item1, _cipherService);
+                        if(identity == null)
+                        {
+                            return;
+                        }
                         await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
                             new ASPasswordCredentialIdentity[] { identity });
+                        return;
                     }
-                    else
-                    {
-                        await ASCredentialIdentityStore.SharedStore.ReplaceCredentialIdentitiesAsync(
-                               new ASPasswordCredentialIdentity[] { identity });
-                    }
-                    return;
                 }
                 await ASHelpers.ReplaceAllIdentities(_cipherService);
             });
