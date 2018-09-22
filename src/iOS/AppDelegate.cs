@@ -167,11 +167,9 @@ namespace Bit.iOS
                     }
                     await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
                         new ASPasswordCredentialIdentity[] { identity });
+                    return;
                 }
-                else
-                {
-                    await ASHelpers.ReplaceAllIdentities(_cipherService);
-                }
+                await ASHelpers.ReplaceAllIdentities(_cipherService);
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Cipher>(
@@ -186,11 +184,9 @@ namespace Bit.iOS
                     }
                     await ASCredentialIdentityStore.SharedStore.RemoveCredentialIdentitiesAsync(
                         new ASPasswordCredentialIdentity[] { identity });
+                    return;
                 }
-                else
-                {
-                    await ASHelpers.ReplaceAllIdentities(_cipherService);
-                }
+                await ASHelpers.ReplaceAllIdentities(_cipherService);
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(
