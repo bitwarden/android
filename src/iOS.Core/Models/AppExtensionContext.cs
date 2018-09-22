@@ -28,7 +28,12 @@ namespace Bit.iOS.Core.Models
             set
             {
                 _uriString = value;
-                if(_uriString != null && !_uriString.StartsWith(App.Constants.iOSAppProtocol) && _uriString.Contains("."))
+                if(string.IsNullOrWhiteSpace(_uriString))
+                {
+                    return;
+                }
+
+                if(!_uriString.StartsWith(App.Constants.iOSAppProtocol) && _uriString.Contains("."))
                 {
                     if(!_uriString.Contains("://") && !_uriString.Contains(" "))
                     {

@@ -54,7 +54,15 @@ namespace Bit.iOS.Autofill
         public override void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)
         {
             _context.ServiceIdentifiers = serviceIdentifiers;
-            _context.UrlString = serviceIdentifiers[0].Identifier;
+            if(serviceIdentifiers.Length > 0)
+            {
+                var uri = serviceIdentifiers[0].Identifier;
+                if(serviceIdentifiers[0].Type == ASCredentialServiceIdentifierType.Domain)
+                {
+                    uri = string.Concat("https://", uri);
+                }
+                _context.UrlString = uri;
+            }
             if(!CheckAuthed())
             {
                 return;
