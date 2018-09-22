@@ -25,6 +25,7 @@ namespace Bit.iOS.Autofill
         private Context _context;
         private bool _setupHockeyApp = false;
         private IGoogleAnalyticsService _googleAnalyticsService;
+        private ISettings _settings;
 
         public CredentialProviderViewController(IntPtr handle) : base(handle)
         { }
@@ -37,6 +38,7 @@ namespace Bit.iOS.Autofill
             _context = new Context();
             _context.ExtContext = ExtensionContext;
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
+            _settings = Resolver.Resolve<ISettings>();
 
             if(!_setupHockeyApp)
             {
@@ -234,11 +236,14 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            var totpKey = cipher.Login.Totp?.Decrypt(cipher.OrganizationId);
             string totpCode = null;
-            if(!string.IsNullOrWhiteSpace(totpKey))
+            if(!_settings.GetValueOrDefault(App.Constants.SettingDisableTotpCopy, false))
             {
-                totpCode = Crypto.Totp(totpKey);
+                var totpKey = cipher.Login.Totp?.Decrypt(cipher.OrganizationId);
+                if(!string.IsNullOrWhiteSpace(totpKey))
+                {
+                    totpCode = Crypto.Totp(totpKey);
+                }
             }
 
             CompleteRequest(cipher.Login.Username?.Decrypt(cipher.OrganizationId),
