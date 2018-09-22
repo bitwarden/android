@@ -3,6 +3,7 @@ using Bit.App.Abstractions;
 using Bit.App.Repositories;
 using Bit.App.Resources;
 using Bit.App.Services;
+using Bit.App.Utilities;
 using Bit.iOS.Autofill.Models;
 using Bit.iOS.Core;
 using Bit.iOS.Core.Services;
@@ -233,9 +234,15 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
+            var totpKey = cipher.Login.Totp?.Decrypt(cipher.OrganizationId);
+            string totpCode = null;
+            if(!string.IsNullOrWhiteSpace(totpKey))
+            {
+                totpCode = Crypto.Totp(totpKey);
+            }
+
             CompleteRequest(cipher.Login.Username?.Decrypt(cipher.OrganizationId),
-                cipher.Login.Password?.Decrypt(cipher.OrganizationId),
-                cipher.Login.Totp?.Decrypt(cipher.OrganizationId));
+                cipher.Login.Password?.Decrypt(cipher.OrganizationId), totpCode);
         }
 
         private void CheckLock(Action notLockedAction)
