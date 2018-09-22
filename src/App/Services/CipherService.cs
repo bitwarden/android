@@ -255,7 +255,7 @@ namespace Bit.App.Services
             if(response.Succeeded)
             {
                 var data = new CipherData(response.Result, _authService.UserId);
-                await UpsertDataAsync(data, true);
+                await UpsertDataAsync(data, true, cipher.Id == null);
                 cipher.Id = data.Id;
             }
             else if(response.StatusCode == System.Net.HttpStatusCode.Forbidden
@@ -267,14 +267,15 @@ namespace Bit.App.Services
             return response;
         }
 
-        public async Task UpsertDataAsync(CipherData cipher, bool sendMessage)
+        public async Task UpsertDataAsync(CipherData cipher, bool sendMessage, bool created)
         {
             await _cipherRepository.UpsertAsync(cipher);
-            CachedCiphers = null; 
+            CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
             if(sendMessage && Application.Current != null)
             {
-                MessagingCenter.Send(Application.Current, "UpsertedCipher", cipher.Id);
+                MessagingCenter.Send(Application.Current, "UpsertedCipher",
+                    new Tuple<string, bool>(cipher.Id, created));
             }
         }
 

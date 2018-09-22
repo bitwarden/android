@@ -83,8 +83,9 @@ namespace Bit.App.Services
 
             try
             {
+                var existingCipher = await _cipherService.GetByIdAsync(cipher.Result.Id);
                 var cipherData = new CipherData(cipher.Result, _authService.UserId);
-                await _cipherService.UpsertDataAsync(cipherData, true).ConfigureAwait(false);
+                await _cipherService.UpsertDataAsync(cipherData, true, existingCipher == null).ConfigureAwait(false);
 
                 var localAttachments = (await _attachmentRepository.GetAllByCipherIdAsync(cipherData.Id)
                     .ConfigureAwait(false));
@@ -444,7 +445,7 @@ namespace Bit.App.Services
                         localCiphers[serverCipher.Value.Id] : null;
 
                     var data = new CipherData(serverCipher.Value, _authService.UserId);
-                    await _cipherService.UpsertDataAsync(data, false).ConfigureAwait(false);
+                    await _cipherService.UpsertDataAsync(data, false, false).ConfigureAwait(false);
 
                     if(serverCipher.Value.Attachments != null)
                     {

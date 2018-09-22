@@ -155,18 +155,26 @@ namespace Bit.iOS
                 }
             });
 
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, string>(
-                Xamarin.Forms.Application.Current, "UpsertedCipher", async (sender, id) =>
+            MessagingCenter.Subscribe<Xamarin.Forms.Application, Tuple<string, bool>>(
+                Xamarin.Forms.Application.Current, "UpsertedCipher", async (sender, data) =>
             {
                 if(await ASHelpers.IdentitiesCanIncremental())
                 {
-                    var identity = await ASHelpers.GetCipherIdentityAsync(id, _cipherService);
+                    var identity = await ASHelpers.GetCipherIdentityAsync(data.Item1, _cipherService);
                     if(identity == null)
                     {
                         return;
                     }
-                    await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
-                        new ASPasswordCredentialIdentity[] { identity });
+                    if(data.Item2)
+                    {
+                        await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
+                            new ASPasswordCredentialIdentity[] { identity });
+                    }
+                    else
+                    {
+                        await ASCredentialIdentityStore.SharedStore.ReplaceCredentialIdentitiesAsync(
+                               new ASPasswordCredentialIdentity[] { identity });
+                    }
                     return;
                 }
                 await ASHelpers.ReplaceAllIdentities(_cipherService);
