@@ -583,6 +583,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the &quot;Tools&quot; screen..
+        /// </summary>
+        public static string BitwardenAutofillAlert {
+            get {
+                return ResourceManager.GetString("BitwardenAutofillAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Access your vault directly from your keyboard to quickly autofill passwords..
         /// </summary>
         public static string BitwardenAutofillDescription {

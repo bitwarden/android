@@ -245,8 +245,16 @@ namespace Bit.App.Pages
                 _settings.AddOrUpdateValue(AddedLoginAlertKey, true);
                 if(Device.RuntimePlatform == Device.iOS)
                 {
-                    DisplayAlert(AppResources.BitwardenAppExtension, AppResources.BitwardenAppExtensionAlert,
-                        AppResources.Ok);
+                    if(_deviceInfo.Version < 12)
+                    {
+                        DisplayAlert(AppResources.BitwardenAppExtension, AppResources.BitwardenAppExtensionAlert,
+                            AppResources.Ok);
+                    }
+                    else
+                    {
+                        DisplayAlert(AppResources.PasswordAutofill, AppResources.BitwardenAutofillAlert,
+                            AppResources.Ok);
+                    }
                 }
                 else if(Device.RuntimePlatform == Device.Android && !_appInfoService.AutofillAccessibilityServiceEnabled)
                 {
