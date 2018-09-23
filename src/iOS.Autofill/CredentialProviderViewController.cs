@@ -98,7 +98,7 @@ namespace Bit.iOS.Autofill
             {
                 var lockService = Resolver.Resolve<ILockService>();
                 var lockType = lockService.GetLockTypeAsync(false).GetAwaiter().GetResult();
-                canGetCredentials = lockType == App.Enums.LockType.None;
+                canGetCredentials = lockType == App.Enums.LockType.Fingerprint || lockType == App.Enums.LockType.None;
             }
 
             if(!canGetCredentials)
