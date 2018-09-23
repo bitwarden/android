@@ -1313,4 +1313,43 @@
     <value>업데이트됨</value>
     <comment>ex. Date this item was updated</comment>
   </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>AutoFill Activated!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>To enable password autofill on your device, follow these instructions:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Go to the iOS "Settings" app</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Tap "Passwords &amp; Accounts"</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Tap "AutoFill Passwords"</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Turn on AutoFill</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Select "Bitwarden"</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Password AutoFill</value>
+  </data>
+  <data name="BitwardenAutofillAlert" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+  </data>
 </root>
