@@ -105,18 +105,18 @@ namespace Bit.Android
 
         public override void OnAccessibilityEvent(AccessibilityEvent e)
         {
-            var powerManager = (PowerManager)GetSystemService(PowerService);
-            if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch && !powerManager.IsInteractive)
-            {
-                return;
-            }
-            else if(Build.VERSION.SdkInt < BuildVersionCodes.Lollipop && !powerManager.IsScreenOn)
-            {
-                return;
-            }
-
             try
             {
+                var powerManager = (PowerManager)GetSystemService(PowerService);
+                if(Build.VERSION.SdkInt > BuildVersionCodes.KitkatWatch && !powerManager.IsInteractive)
+                {
+                    return;
+                }
+                else if(Build.VERSION.SdkInt < BuildVersionCodes.Lollipop && !powerManager.IsScreenOn)
+                {
+                    return;
+                }
+
                 if(SkipPackage(e?.PackageName))
                 {
                     return;
