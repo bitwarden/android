@@ -439,7 +439,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1. Go to the iOS &quot;Settings&quot; app..
+        ///   Looks up a localized string similar to 1. Go to the iOS &quot;Settings&quot; app.
         /// </summary>
         public static string AutofillTurnOn1 {
             get {
