@@ -41,7 +41,7 @@ namespace Bit.Android.Services
             TrackEvent("AutofillService", eventName, label);
         }
 
-        public void TrackExtensionEvent(string eventName, string label = null)
+        public void TrackAutofillExtensionEvent(string eventName, string label = null)
         {
             TrackExtensionEvent(eventName, label);
         }
