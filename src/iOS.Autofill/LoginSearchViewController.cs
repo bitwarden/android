@@ -34,6 +34,7 @@ namespace Bit.iOS.Autofill
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
+            SearchBar.Delegate = new SearchDelegate(this);
             await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
         }
 
@@ -76,7 +77,7 @@ namespace Bit.iOS.Autofill
             private LoginSearchViewController _controller;
 
             public TableSource(LoginSearchViewController controller)
-                :base(controller.Context, controller)
+                : base(controller.Context, controller)
             {
                 _context = controller.Context;
                 _controller = controller;
@@ -156,6 +157,21 @@ namespace Bit.iOS.Autofill
                     _controller.PresentViewController(alert, true, null);
                 }
             }
+        }
+    }
+
+    public class SearchDelegate : UISearchBarDelegate
+    {
+        private readonly LoginSearchViewController _controller;
+
+        public SearchDelegate(LoginSearchViewController controller)
+        {
+            _controller = controller;
+        }
+
+        public override void OnEditingStopped(UISearchBar searchBar)
+        {
+            base.OnEditingStopped(searchBar);
         }
     }
 }
