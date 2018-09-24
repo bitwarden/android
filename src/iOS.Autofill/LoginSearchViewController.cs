@@ -169,9 +169,9 @@ namespace Bit.iOS.Autofill
             _controller = controller;
         }
 
-        public override void OnEditingStopped(UISearchBar searchBar)
+        public override void TextChanged(UISearchBar searchBar, string searchText)
         {
-            base.OnEditingStopped(searchBar);
+            System.Diagnostics.Debug.WriteLine("search text: " + searchText);
         }
     }
 }
