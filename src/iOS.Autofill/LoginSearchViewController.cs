@@ -174,26 +174,30 @@ namespace Bit.iOS.Autofill
             public override void TextChanged(UISearchBar searchBar, string searchText)
             {
                 var cts = new CancellationTokenSource();
-                Task.Run(async () =>
+                Task.Run(() =>
                 {
-                    if(!string.IsNullOrWhiteSpace(searchText))
+                    NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
                     {
-                        await Task.Delay(300);
-                        if(searchText != searchBar.Text)
+                        if (!string.IsNullOrWhiteSpace(searchText))
                         {
-                            return;
+                            await Task.Delay(300);
+                            if (searchText != searchBar.Text)
+                            {
+                                return;
+                            }
+                            else
+                            {
+                                _filterResultsCancellationTokenSource?.Cancel();
+                            }
                         }
-                        else
+                        try
                         {
-                            _filterResultsCancellationTokenSource?.Cancel();
+                            ((TableSource)_controller.TableView.Source).FilterResults(searchText, cts.Token);
+                            _controller.TableView.ReloadData();
                         }
-                    }
-                    try
-                    {
-                        ((TableSource)_controller.TableView.Source).FilterResults(searchText, cts.Token);
-                        _controller.TableView.ReloadData();
-                    }
-                    catch(OperationCanceledException) { }
+                        catch (OperationCanceledException) { }
+                        _filterResultsCancellationTokenSource = cts;
+                    });
                 }, cts.Token);
             }
         }
