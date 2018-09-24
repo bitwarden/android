@@ -21,7 +21,6 @@ namespace Bit.iOS.Core.Views
         private const string CellIdentifier = "TableCell";
 
         private IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
-        protected IEnumerable<CipherViewModel> _tableItems = new List<CipherViewModel>();
         protected ICipherService _cipherService;
         protected ISettings _settings;
         private bool _accessPremium;
@@ -36,6 +35,8 @@ namespace Bit.iOS.Core.Views
             _context = context;
             _controller = controller;
         }
+
+        public IEnumerable<CipherViewModel> Items { get; private set; }
 
         public async Task LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
         {
@@ -74,12 +75,12 @@ namespace Bit.iOS.Core.Views
 
             if(string.IsNullOrWhiteSpace(searchFilter))
             {
-                _tableItems = _allItems.ToList();
+                Items = _allItems.ToList();
             }
             else
             {
                 searchFilter = searchFilter.ToLower();
-                _tableItems = _allItems
+                Items = _allItems
                     .Where(s => s.Name.ToLower().Contains(searchFilter) ||
                         (s.Username?.ToLower().Contains(searchFilter) ?? false) ||
                         (s.Uris?.FirstOrDefault()?.Uri.ToLower().Contains(searchFilter) ?? false))
@@ -92,12 +93,12 @@ namespace Bit.iOS.Core.Views
 
         public override nint RowsInSection(UITableView tableview, nint section)
         {
-            return _tableItems == null || _tableItems.Count() == 0 ? 1 : _tableItems.Count();
+            return Items == null || Items.Count() == 0 ? 1 : Items.Count();
         }
 
         public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
         {
-            if(_tableItems == null || _tableItems.Count() == 0)
+            if(Items == null || Items.Count() == 0)
             {
                 var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
                 noDataCell.TextLabel.Text = AppResources.NoItemsTap;
@@ -121,17 +122,17 @@ namespace Bit.iOS.Core.Views
 
         public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
         {
-            if(_tableItems == null || _tableItems.Count() == 0 || cell == null)
+            if(Items == null || Items.Count() == 0 || cell == null)
             {
                 return;
             }
 
-            var item = _tableItems.ElementAt(indexPath.Row);
+            var item = Items.ElementAt(indexPath.Row);
             cell.TextLabel.Text = item.Name;
             cell.DetailTextLabel.Text = item.Username;
         }
 
-        protected string GetTotp(CipherViewModel item)
+        public string GetTotp(CipherViewModel item)
         {
             string totp = null;
             if(_accessPremium)

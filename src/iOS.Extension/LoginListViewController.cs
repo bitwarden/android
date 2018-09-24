@@ -107,13 +107,13 @@ namespace Bit.iOS.Extension
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
 
-                if(_tableItems == null || _tableItems.Count() == 0)
+                if(Items == null || Items.Count() == 0)
                 {
                     _controller.PerformSegue("loginAddSegue", this);
                     return;
                 }
 
-                var item = _tableItems.ElementAt(indexPath.Row);
+                var item = Items.ElementAt(indexPath.Row);
                 if(item == null)
                 {
                     _controller.LoadingController.CompleteRequest(null);

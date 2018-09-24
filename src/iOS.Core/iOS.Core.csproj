@@ -71,6 +71,7 @@
     <Compile Include="Views\SliderTableViewCell.cs" />
     <Compile Include="Views\SwitchTableViewCell.cs" />
     <Compile Include="Views\FormEntryTableViewCell.cs" />
+    <Compile Include="Views\ExtensionSearchDelegate.cs" />
     <Compile Include="Views\Toast.cs" />
     <Compile Include="Models\CipherViewModel.cs" />
     <Compile Include="Utilities\ASHelpers.cs" />

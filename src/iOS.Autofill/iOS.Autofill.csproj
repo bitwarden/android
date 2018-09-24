@@ -213,6 +213,7 @@
     <Compile Include="SetupViewController.designer.cs">
       <DependentUpon>SetupViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utilities\AutofillHelpers.cs" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="PasswordGeneratorViewController.cs" />
@@ -299,5 +300,6 @@
   <ItemGroup>
     <BundleResource Include="Resources\check%403x.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.AppExtension.CSharp.targets" />
 </Project>
