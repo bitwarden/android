@@ -59,7 +59,9 @@ namespace Bit.iOS.Core.Views
                 combinedLogins.AddRange(logins);
             }
 
-            _allItems = combinedLogins.Select(s => new CipherViewModel(s))
+            _allItems = combinedLogins
+                .Where(c => c.Type == App.Enums.CipherType.Login)
+                .Select(s => new CipherViewModel(s))
                 .OrderBy(s => s.Name)
                 .ThenBy(s => s.Username)
                 .ToList() ?? new List<CipherViewModel>();

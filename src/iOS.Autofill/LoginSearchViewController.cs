@@ -8,6 +8,7 @@ using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.iOS.Core.Views;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace Bit.iOS.Autofill
 {
@@ -163,6 +164,7 @@ namespace Bit.iOS.Autofill
         public class SearchDelegate : UISearchBarDelegate
         {
             private readonly LoginSearchViewController _controller;
+            private CancellationTokenSource _filterResultsCancellationTokenSource;
 
             public SearchDelegate(LoginSearchViewController controller)
             {
@@ -171,8 +173,28 @@ namespace Bit.iOS.Autofill
 
             public override void TextChanged(UISearchBar searchBar, string searchText)
             {
-                ((TableSource)_controller.TableView.Source).FilterResults(searchText, new CancellationToken());
-                _controller.TableView.ReloadData();
+                var cts = new CancellationTokenSource();
+                Task.Run(async () =>
+                {
+                    if(!string.IsNullOrWhiteSpace(searchText))
+                    {
+                        await Task.Delay(300);
+                        if(searchText != searchBar.Text)
+                        {
+                            return;
+                        }
+                        else
+                        {
+                            _filterResultsCancellationTokenSource?.Cancel();
+                        }
+                    }
+                    try
+                    {
+                        ((TableSource)_controller.TableView.Source).FilterResults(searchText, cts.Token);
+                        _controller.TableView.ReloadData();
+                    }
+                    catch(OperationCanceledException) { }
+                }, cts.Token);
             }
         }
     }
