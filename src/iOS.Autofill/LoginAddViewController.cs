@@ -10,6 +10,7 @@ namespace Bit.iOS.Autofill
         { }
 
         public LoginListViewController LoginListController { get; set; }
+        public LoginSearchViewController LoginSearchController { get; set; }
 
         public override UINavigationItem BaseNavItem => NavItem;
         public override UIBarButtonItem BaseCancelButton => CancelBarButton;
@@ -19,6 +20,7 @@ namespace Bit.iOS.Autofill
         {
             _googleAnalyticsService.TrackAutofillExtensionEvent("CreatedLogin");
             LoginListController?.DismissModal();
+            LoginSearchController?.DismissModal();
         };
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)

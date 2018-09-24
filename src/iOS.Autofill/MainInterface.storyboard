@@ -32,8 +32,8 @@
                         <segue destination="6512" kind="presentation" identifier="lockFingerprintSegue" id="8446"/>
                         <segue destination="6815" kind="presentation" identifier="lockPinSegue" id="8924"/>
                         <segue destination="6855" kind="presentation" identifier="lockPasswordSegue" id="9874"/>
-                        <segue destination="1845" kind="presentation" identifier="newLoginSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="10498"/>
                         <segue id="11089" destination="10580" kind="presentation" modalTransitionStyle="coverVertical" identifier="setupSegue"/>
+                        <segue id="12959" destination="11552" kind="show" identifier="loginSearchSegue"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="45" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -171,12 +171,20 @@
                                 <action selector="CancelBarButton_Activated:" destination="2304" id="3750"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="3736">
-                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <connections>
-                                <action selector="AddBarButton_Activated:" destination="2304" id="3749"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="3736">
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <connections>
+                                    <action selector="AddBarButton_Activated:" destination="2304" id="3749"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem id="13195" systemItem="search">
+                                <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                                <connections>
+                                    <action selector="SearchBarButton_Activated:" destination="2304" id="13400"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -184,6 +192,7 @@
                         <outlet property="CancelBarButton" destination="3735" id="name-outlet-3735"/>
                         <outlet property="NavItem" destination="3734" id="name-outlet-3734"/>
                         <segue destination="1845" kind="presentation" identifier="loginAddSegue" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="3731"/>
+                        <segue id="12574" destination="11552" kind="show" identifier="loginSearchFromListSegue"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2310" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -548,7 +557,7 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="11094" translatesAutoresizingMaskIntoConstraints="NO" image="check.png" misplaced="YES" ambiguous="YES">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" id="11094" translatesAutoresizingMaskIntoConstraints="NO" image="check.png" misplaced="YES">
                                 <rect key="frame" x="255" y="205.5" width="90" height="90"/>
                             </imageView>
                         </subviews>
@@ -604,9 +613,90 @@
             </objects>
             <point key="canvasLocation" x="362" y="-267"/>
         </scene>
+        <scene sceneID="11542">
+            <objects>
+                <tableViewController id="11543" sceneMemberID="viewController" customClass="LoginSearchViewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="11545">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="11548">
+                                <rect key="frame" x="0.0" y="72" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="11548" id="11549">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="11543" id="11546"/>
+                            <outlet property="delegate" destination="11543" id="11547"/>
+                        </connections>
+                        <searchBar contentMode="redraw" id="13084" key="tableHeaderView">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <textInputTraits key="textInputTraits"/>
+                            <connections>
+                                <outlet property="delegate" destination="11543" id="13085"/>
+                            </connections>
+                        </searchBar>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Search Logins" id="11544">
+                        <barButtonItem key="leftBarButtonItem" id="11950" title="Cancel">
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                            <connections>
+                                <action selector="CancelBarButton_Activated:" destination="11543" id="12044"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" id="11951" systemItem="add">
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
+                            <connections>
+                                <action selector="AddBarButton_Activated:" destination="11543" id="12045"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="CancelBarButton" destination="11950" id="name-outlet-11950"/>
+                        <outlet property="NavItem" destination="11544" id="name-outlet-11544"/>
+                        <segue id="12738" destination="1845" kind="show" identifier="loginAddFromSearchSegue"/>
+                        <outlet property="searchDisplayController" destination="13087" id="13086"/>
+                        <outlet property="SearchBar" destination="13084" id="name-outlet-13084"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="11550" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <searchDisplayController id="13087">
+                    <connections>
+                        <outlet property="delegate" destination="11543" id="13088"/>
+                        <outlet property="searchBar" destination="13084" id="13089"/>
+                        <outlet property="searchContentsController" destination="11543" id="13090"/>
+                        <outlet property="searchResultsDataSource" destination="11543" id="13091"/>
+                        <outlet property="searchResultsDelegate" destination="11543" id="13092"/>
+                    </connections>
+                </searchDisplayController>
+            </objects>
+            <point key="canvasLocation" x="2513" y="907"/>
+        </scene>
+        <scene sceneID="11551">
+            <objects>
+                <navigationController id="11552" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="11554">
+                        <rect key="frame" x="0.0" y="20" width="414" height="50"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="11543" kind="relationship" relationship="rootViewController" id="11553"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="11555" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1920" y="908"/>
+        </scene>
     </scenes>
     <resources>
         <image name="fingerprint.png" width="91" height="92"/>
         <image name="logo.png" width="282" height="44"/>
+        <image name="check.png" width="90" height="90"/>
     </resources>
 </document>

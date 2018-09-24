@@ -10,9 +10,9 @@ using Bit.iOS.Core.Views;
 
 namespace Bit.iOS.Autofill
 {
-    public partial class LoginListViewController : ExtendedUITableViewController
+    public partial class LoginSearchViewController : ExtendedUITableViewController
     {
-        public LoginListViewController(IntPtr handle) : base(handle)
+        public LoginSearchViewController(IntPtr handle) : base(handle)
         { }
 
         public Context Context { get; set; }
@@ -28,13 +28,13 @@ namespace Bit.iOS.Autofill
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
-            NavItem.Title = AppResources.Items;
+            NavItem.Title = AppResources.SearchVault;
             CancelBarButton.Title = AppResources.Cancel;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
-            await ((TableSource)TableView.Source).LoadItemsAsync();
+            await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
@@ -44,12 +44,7 @@ namespace Bit.iOS.Autofill
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)
         {
-            PerformSegue("loginAddSegue", this);
-        }
-
-        partial void SearchBarButton_Activated(UIBarButtonItem sender)
-        {
-            PerformSegue("loginSearchFromListSegue", this);
+            PerformSegue("loginAddFromSearchSegue", this);
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
@@ -57,17 +52,11 @@ namespace Bit.iOS.Autofill
             var navController = segue.DestinationViewController as UINavigationController;
             if(navController != null)
             {
-                var searchLoginController = navController.TopViewController as LoginSearchViewController;
                 var addLoginController = navController.TopViewController as LoginAddViewController;
                 if(addLoginController != null)
                 {
                     addLoginController.Context = Context;
-                    addLoginController.LoginListController = this;
-                }
-                if(searchLoginController != null)
-                {
-                    searchLoginController.Context = Context;
-                    searchLoginController.CPViewController = CPViewController;
+                    addLoginController.LoginSearchController = this;
                 }
             }
         }
@@ -76,7 +65,7 @@ namespace Bit.iOS.Autofill
         {
             DismissViewController(true, async () =>
             {
-                await ((TableSource)TableView.Source).LoadItemsAsync();
+                await ((TableSource)TableView.Source).LoadItemsAsync(false, SearchBar.Text);
                 TableView.ReloadData();
             });
         }
@@ -84,9 +73,9 @@ namespace Bit.iOS.Autofill
         public class TableSource : ExtensionTableSource
         {
             private Context _context;
-            private LoginListViewController _controller;
+            private LoginSearchViewController _controller;
 
-            public TableSource(LoginListViewController controller)
+            public TableSource(LoginSearchViewController controller)
                 :base(controller.Context, controller)
             {
                 _context = controller.Context;
@@ -100,7 +89,7 @@ namespace Bit.iOS.Autofill
 
                 if(_tableItems == null || _tableItems.Count() == 0)
                 {
-                    _controller.PerformSegue("loginAddSegue", this);
+                    _controller.PerformSegue("loginAddFromSearchSegue", this);
                     return;
                 }
 

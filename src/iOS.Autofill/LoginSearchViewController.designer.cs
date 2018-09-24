@@ -11,13 +11,9 @@ using UIKit;
 
 namespace Bit.iOS.Autofill
 {
-    [Register ("LoginListViewController")]
-    partial class LoginListViewController
+    [Register ("LoginSearchViewController")]
+    partial class LoginSearchViewController
     {
-        [Outlet]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UIBarButtonItem AddBarButton { get; set; }
-
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIBarButtonItem CancelBarButton { get; set; }
@@ -25,6 +21,14 @@ namespace Bit.iOS.Autofill
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UINavigationItem NavItem { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UISearchBar SearchBar { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UISearchDisplayController searchDisplayController { get; set; }
 
         [Action ("AddBarButton_Activated:")]
         [GeneratedCode ("iOS Designer", "1.0")]
@@ -34,17 +38,8 @@ namespace Bit.iOS.Autofill
         [GeneratedCode ("iOS Designer", "1.0")]
         partial void CancelBarButton_Activated (UIKit.UIBarButtonItem sender);
 
-        [Action ("SearchBarButton_Activated:")]
-        [GeneratedCode ("iOS Designer", "1.0")]
-        partial void SearchBarButton_Activated (UIKit.UIBarButtonItem sender);
-
         void ReleaseDesignerOutlets ()
         {
-            if (AddBarButton != null) {
-                AddBarButton.Dispose ();
-                AddBarButton = null;
-            }
-
             if (CancelBarButton != null) {
                 CancelBarButton.Dispose ();
                 CancelBarButton = null;
@@ -53,6 +48,16 @@ namespace Bit.iOS.Autofill
             if (NavItem != null) {
                 NavItem.Dispose ();
                 NavItem = null;
+            }
+
+            if (SearchBar != null) {
+                SearchBar.Dispose ();
+                SearchBar = null;
+            }
+
+            if (searchDisplayController != null) {
+                searchDisplayController.Dispose ();
+                searchDisplayController = null;
             }
         }
     }

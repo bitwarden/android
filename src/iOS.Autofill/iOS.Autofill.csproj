@@ -241,6 +241,10 @@
     <Compile Include="PasswordGeneratorViewController.designer.cs">
       <DependentUpon>PasswordGeneratorViewController.cs</DependentUpon>
     </Compile>
+    <Compile Include="LoginSearchViewController.cs" />
+    <Compile Include="LoginSearchViewController.designer.cs">
+      <DependentUpon>LoginSearchViewController.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -35,18 +35,26 @@ namespace Bit.iOS.Core.Views
             _controller = controller;
         }
 
-        public async Task LoadItemsAsync()
+        public async Task LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
         {
             var combinedLogins = new List<Cipher>();
 
-            var logins = await _cipherService.GetAllAsync(_context.UrlString);
-            if(logins?.Item1 != null)
+            if (urlFilter)
             {
-                combinedLogins.AddRange(logins.Item1);
+                var logins = await _cipherService.GetAllAsync(_context.UrlString);
+                if (logins?.Item1 != null)
+                {
+                    combinedLogins.AddRange(logins.Item1);
+                }
+                if (logins?.Item2 != null)
+                {
+                    combinedLogins.AddRange(logins.Item2);
+                }
             }
-            if(logins?.Item2 != null)
+            else
             {
-                combinedLogins.AddRange(logins.Item2);
+                var logins = await _cipherService.GetAllAsync();
+                combinedLogins.AddRange(logins);
             }
 
             _tableItems = combinedLogins.Select(s => new CipherViewModel(s))
