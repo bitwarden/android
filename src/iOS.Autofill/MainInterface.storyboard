@@ -681,7 +681,7 @@
         <scene sceneID="11551">
             <objects>
                 <navigationController id="11552" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="11554">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="11554">
                         <rect key="frame" x="0.0" y="20" width="414" height="50"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
