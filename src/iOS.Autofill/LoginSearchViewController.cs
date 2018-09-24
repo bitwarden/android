@@ -171,8 +171,8 @@ namespace Bit.iOS.Autofill
 
             public override void TextChanged(UISearchBar searchBar, string searchText)
             {
-                System.Diagnostics.Debug.WriteLine("search text: " + searchText);
                 ((TableSource)_controller.TableView.Source).FilterResults(searchText, new CancellationToken());
+                _controller.TableView.ReloadData();
             }
         }
     }

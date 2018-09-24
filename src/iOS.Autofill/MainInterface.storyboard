@@ -661,20 +661,10 @@
                         <outlet property="CancelBarButton" destination="11950" id="name-outlet-11950"/>
                         <outlet property="NavItem" destination="11544" id="name-outlet-11544"/>
                         <segue id="12738" destination="1845" kind="show" identifier="loginAddFromSearchSegue"/>
-                        <outlet property="searchDisplayController" destination="13087" id="13086"/>
                         <outlet property="SearchBar" destination="13084" id="name-outlet-13084"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="11550" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="13087">
-                    <connections>
-                        <outlet property="delegate" destination="11543" id="13088"/>
-                        <outlet property="searchBar" destination="13084" id="13089"/>
-                        <outlet property="searchContentsController" destination="11543" id="13090"/>
-                        <outlet property="searchResultsDataSource" destination="11543" id="13091"/>
-                        <outlet property="searchResultsDelegate" destination="11543" id="13092"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="2513" y="907"/>
         </scene>
