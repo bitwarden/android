@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using UIKit;
 using XLabs.Ioc;
@@ -19,6 +20,7 @@ namespace Bit.iOS.Core.Views
     {
         private const string CellIdentifier = "TableCell";
 
+        private IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
         protected IEnumerable<CipherViewModel> _tableItems = new List<CipherViewModel>();
         protected ICipherService _cipherService;
         protected ISettings _settings;
@@ -39,14 +41,14 @@ namespace Bit.iOS.Core.Views
         {
             var combinedLogins = new List<Cipher>();
 
-            if (urlFilter)
+            if(urlFilter)
             {
                 var logins = await _cipherService.GetAllAsync(_context.UrlString);
-                if (logins?.Item1 != null)
+                if(logins?.Item1 != null)
                 {
                     combinedLogins.AddRange(logins.Item1);
                 }
-                if (logins?.Item2 != null)
+                if(logins?.Item2 != null)
                 {
                     combinedLogins.AddRange(logins.Item2);
                 }
@@ -57,10 +59,31 @@ namespace Bit.iOS.Core.Views
                 combinedLogins.AddRange(logins);
             }
 
-            _tableItems = combinedLogins.Select(s => new CipherViewModel(s))
+            _allItems = combinedLogins.Select(s => new CipherViewModel(s))
                 .OrderBy(s => s.Name)
                 .ThenBy(s => s.Username)
                 .ToList() ?? new List<CipherViewModel>();
+            FilterResults(searchFilter, new CancellationToken());
+        }
+
+        public void FilterResults(string searchFilter, CancellationToken ct)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            if(string.IsNullOrWhiteSpace(searchFilter))
+            {
+                _tableItems = _allItems.ToList();
+            }
+            else
+            {
+                searchFilter = searchFilter.ToLower();
+                _tableItems = _allItems
+                    .Where(s => s.Name.ToLower().Contains(searchFilter) ||
+                        (s.Username?.ToLower().Contains(searchFilter) ?? false) ||
+                        (s.Uris?.FirstOrDefault()?.Uri.ToLower().Contains(searchFilter) ?? false))
+                    .TakeWhile(s => !ct.IsCancellationRequested)
+                    .ToArray();
+            }
         }
 
         public IEnumerable<CipherViewModel> TableItems { get; set; }

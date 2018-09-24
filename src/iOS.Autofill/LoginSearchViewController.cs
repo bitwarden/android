@@ -7,6 +7,7 @@ using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.iOS.Core.Views;
+using System.Threading;
 
 namespace Bit.iOS.Autofill
 {
@@ -158,20 +159,21 @@ namespace Bit.iOS.Autofill
                 }
             }
         }
-    }
 
-    public class SearchDelegate : UISearchBarDelegate
-    {
-        private readonly LoginSearchViewController _controller;
-
-        public SearchDelegate(LoginSearchViewController controller)
+        public class SearchDelegate : UISearchBarDelegate
         {
-            _controller = controller;
-        }
+            private readonly LoginSearchViewController _controller;
 
-        public override void TextChanged(UISearchBar searchBar, string searchText)
-        {
-            System.Diagnostics.Debug.WriteLine("search text: " + searchText);
+            public SearchDelegate(LoginSearchViewController controller)
+            {
+                _controller = controller;
+            }
+
+            public override void TextChanged(UISearchBar searchBar, string searchText)
+            {
+                System.Diagnostics.Debug.WriteLine("search text: " + searchText);
+                ((TableSource)_controller.TableView.Source).FilterResults(searchText, new CancellationToken());
+            }
         }
     }
 }
