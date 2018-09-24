@@ -85,7 +85,14 @@ namespace Bit.iOS.Autofill
                     PerformSegue("lockPasswordSegue", this);
                     break;
                 default:
-                    PerformSegue("loginListSegue", this);
+                    if(_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                    {
+                        PerformSegue("loginSearchSegue", this);
+                    }
+                    else
+                    {
+                        PerformSegue("loginListSegue", this);
+                    }
                     break;
             }
         }
@@ -177,6 +184,7 @@ namespace Bit.iOS.Autofill
             if(navController != null)
             {
                 var listLoginController = navController.TopViewController as LoginListViewController;
+                var listSearchController = navController.TopViewController as LoginSearchViewController;
                 var fingerprintViewController = navController.TopViewController as LockFingerprintViewController;
                 var pinViewController = navController.TopViewController as LockPinViewController;
                 var passwordViewController = navController.TopViewController as LockPasswordViewController;
@@ -186,6 +194,11 @@ namespace Bit.iOS.Autofill
                 {
                     listLoginController.Context = _context;
                     listLoginController.CPViewController = this;
+                }
+                else if(listSearchController != null)
+                {
+                    listSearchController.Context = _context;
+                    listSearchController.CPViewController = this;
                 }
                 else if(fingerprintViewController != null)
                 {
@@ -220,7 +233,14 @@ namespace Bit.iOS.Autofill
                     PerformSegue("setupSegue", this);
                     return;
                 }
-                PerformSegue("loginListSegue", this);
+                if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                {
+                    PerformSegue("loginSearchSegue", this);
+                }
+                else
+                {
+                    PerformSegue("loginListSegue", this);
+                }
             });
         }
 

@@ -29,6 +29,7 @@ namespace Bit.iOS.Autofill
             base.ViewDidLoad();
             NavItem.Title = AppResources.SearchVault;
             CancelBarButton.Title = AppResources.Cancel;
+            SearchBar.Placeholder = AppResources.Search;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
