@@ -33,8 +33,6 @@
 		<integer>1</integer>
 		<integer>2</integer>
 	</array>
-	<key>MinimumOSVersion</key>
-	<string>9.0</string>
 	<key>UISupportedInterfaceOrientations</key>
 	<array/>
 	<key>ITSAppUsesNonExemptEncryption</key>
