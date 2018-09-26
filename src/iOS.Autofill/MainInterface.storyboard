@@ -577,6 +577,7 @@
                             <connections>
                                 <action selector="BackButton_Activated:" destination="10570" id="11124"/>
                             </connections>
+                            <color key="tintColor" colorSpace="calibratedWhite" white="1" alpha="1"/>
                         </barButtonItem>
                     </navigationItem>
                     <connections>
