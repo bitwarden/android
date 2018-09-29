@@ -149,7 +149,7 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(
                 Xamarin.Forms.Application.Current, "FullSyncCompleted", async (sender, successfully) =>
             {
-                if(successfully)
+                if(_deviceInfoService.Version >= 12 && successfully)
                 {
                     await ASHelpers.ReplaceAllIdentities(_cipherService);
                 }
@@ -158,7 +158,7 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Tuple<string, bool>>(
                 Xamarin.Forms.Application.Current, "UpsertedCipher", async (sender, data) =>
             {
-                if(await ASHelpers.IdentitiesCanIncremental())
+                if(_deviceInfoService.Version >= 12 && await ASHelpers.IdentitiesCanIncremental())
                 {
                     if(data.Item2)
                     {
@@ -178,7 +178,7 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Cipher>(
                 Xamarin.Forms.Application.Current, "DeletedCipher", async (sender, cipher) =>
             {
-                if(await ASHelpers.IdentitiesCanIncremental())
+                if(_deviceInfoService.Version >= 12 && await ASHelpers.IdentitiesCanIncremental())
                 {
                     var identity = ASHelpers.ToCredentialIdentity(cipher);
                     if(identity == null)
@@ -195,7 +195,9 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(
                 Xamarin.Forms.Application.Current, "LoggedOut", async (sender) =>
             {
-                await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
+                if(_deviceInfoService.Version >= 12) {
+                    await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
+                }
             });
 
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
