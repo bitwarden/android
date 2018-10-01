@@ -195,7 +195,8 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(
                 Xamarin.Forms.Application.Current, "LoggedOut", async (sender) =>
             {
-                if(_deviceInfoService.Version >= 12) {
+                if(_deviceInfoService.Version >= 12)
+                {
                     await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
                 }
             });
