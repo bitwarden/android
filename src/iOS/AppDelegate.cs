@@ -158,38 +158,44 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Tuple<string, bool>>(
                 Xamarin.Forms.Application.Current, "UpsertedCipher", async (sender, data) =>
             {
-                if(_deviceInfoService.Version >= 12 && await ASHelpers.IdentitiesCanIncremental())
+                if (_deviceInfoService.Version >= 12)
                 {
-                    if(data.Item2)
+                    if (await ASHelpers.IdentitiesCanIncremental())
                     {
-                        var identity = await ASHelpers.GetCipherIdentityAsync(data.Item1, _cipherService);
-                        if(identity == null)
+                        if (data.Item2)
                         {
+                            var identity = await ASHelpers.GetCipherIdentityAsync(data.Item1, _cipherService);
+                            if (identity == null)
+                            {
+                                return;
+                            }
+                            await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
+                                new ASPasswordCredentialIdentity[] { identity });
                             return;
                         }
-                        await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
-                            new ASPasswordCredentialIdentity[] { identity });
-                        return;
                     }
+                    await ASHelpers.ReplaceAllIdentities(_cipherService);
                 }
-                await ASHelpers.ReplaceAllIdentities(_cipherService);
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Cipher>(
                 Xamarin.Forms.Application.Current, "DeletedCipher", async (sender, cipher) =>
             {
-                if(_deviceInfoService.Version >= 12 && await ASHelpers.IdentitiesCanIncremental())
+                if (_deviceInfoService.Version >= 12)
                 {
-                    var identity = ASHelpers.ToCredentialIdentity(cipher);
-                    if(identity == null)
+                    if (await ASHelpers.IdentitiesCanIncremental())
                     {
+                        var identity = ASHelpers.ToCredentialIdentity(cipher);
+                        if (identity == null)
+                        {
+                            return;
+                        }
+                        await ASCredentialIdentityStore.SharedStore.RemoveCredentialIdentitiesAsync(
+                            new ASPasswordCredentialIdentity[] { identity });
                         return;
                     }
-                    await ASCredentialIdentityStore.SharedStore.RemoveCredentialIdentitiesAsync(
-                        new ASPasswordCredentialIdentity[] { identity });
-                    return;
+                    await ASHelpers.ReplaceAllIdentities(_cipherService);
                 }
-                await ASHelpers.ReplaceAllIdentities(_cipherService);
             });
 
             MessagingCenter.Subscribe<Xamarin.Forms.Application>(
