@@ -158,14 +158,14 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Tuple<string, bool>>(
                 Xamarin.Forms.Application.Current, "UpsertedCipher", async (sender, data) =>
             {
-                if (_deviceInfoService.Version >= 12)
+                if(_deviceInfoService.Version >= 12)
                 {
-                    if (await ASHelpers.IdentitiesCanIncremental())
+                    if(await ASHelpers.IdentitiesCanIncremental())
                     {
-                        if (data.Item2)
+                        if(data.Item2)
                         {
                             var identity = await ASHelpers.GetCipherIdentityAsync(data.Item1, _cipherService);
-                            if (identity == null)
+                            if(identity == null)
                             {
                                 return;
                             }
@@ -181,12 +181,12 @@ namespace Bit.iOS
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Cipher>(
                 Xamarin.Forms.Application.Current, "DeletedCipher", async (sender, cipher) =>
             {
-                if (_deviceInfoService.Version >= 12)
+                if(_deviceInfoService.Version >= 12)
                 {
-                    if (await ASHelpers.IdentitiesCanIncremental())
+                    if(await ASHelpers.IdentitiesCanIncremental())
                     {
                         var identity = ASHelpers.ToCredentialIdentity(cipher);
-                        if (identity == null)
+                        if(identity == null)
                         {
                             return;
                         }
