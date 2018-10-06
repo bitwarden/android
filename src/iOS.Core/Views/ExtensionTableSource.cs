@@ -81,9 +81,9 @@ namespace Bit.iOS.Core.Views
             {
                 searchFilter = searchFilter.ToLower();
                 Items = _allItems
-                    .Where(s => s.Name.ToLower().Contains(searchFilter) ||
+                    .Where(s => s.Name?.ToLower().Contains(searchFilter) ?? false ||
                         (s.Username?.ToLower().Contains(searchFilter) ?? false) ||
-                        (s.Uris?.FirstOrDefault()?.Uri.ToLower().Contains(searchFilter) ?? false))
+                        (s.Uris?.FirstOrDefault()?.Uri?.ToLower().Contains(searchFilter) ?? false))
                     .TakeWhile(s => !ct.IsCancellationRequested)
                     .ToArray();
             }

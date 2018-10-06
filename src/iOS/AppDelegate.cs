@@ -169,7 +169,7 @@ namespace Bit.iOS
                             {
                                 return;
                             }
-                            await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
+                            await ASCredentialIdentityStore.SharedStore?.SaveCredentialIdentitiesAsync(
                                 new ASPasswordCredentialIdentity[] { identity });
                             return;
                         }
@@ -190,7 +190,7 @@ namespace Bit.iOS
                         {
                             return;
                         }
-                        await ASCredentialIdentityStore.SharedStore.RemoveCredentialIdentitiesAsync(
+                        await ASCredentialIdentityStore.SharedStore?.RemoveCredentialIdentitiesAsync(
                             new ASPasswordCredentialIdentity[] { identity });
                         return;
                     }
@@ -203,7 +203,7 @@ namespace Bit.iOS
             {
                 if(_deviceInfoService.Version >= 12)
                 {
-                    await ASCredentialIdentityStore.SharedStore.RemoveAllCredentialIdentitiesAsync();
+                    await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
                 }
             });
 

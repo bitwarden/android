@@ -141,13 +141,13 @@ namespace Bit.iOS.Autofill
 
         public void CompleteRequest(string username = null, string password = null, string totp = null)
         {
-            if(_context.Configuring)
+            if((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
-                ExtensionContext.CompleteExtensionConfigurationRequest();
+                ExtensionContext?.CompleteExtensionConfigurationRequest();
                 return;
             }
 
-            if(string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
+            if(_context == null || string.IsNullOrWhiteSpace(password))
             {
                 _googleAnalyticsService.TrackAutofillExtensionEvent("Canceled");
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
@@ -156,7 +156,7 @@ namespace Bit.iOS.Autofill
                 {
                     NSRunLoop.Main.BeginInvokeOnMainThread(() =>
                     {
-                        ExtensionContext.CancelRequest(err);
+                        ExtensionContext?.CancelRequest(err);
                     });
                 });
                 return;
@@ -173,7 +173,7 @@ namespace Bit.iOS.Autofill
             {
                 NSRunLoop.Main.BeginInvokeOnMainThread(() =>
                 {
-                    ExtensionContext.CompleteRequest(cred, null);
+                    ExtensionContext?.CompleteRequest(cred, null);
                 });
             });
         }
@@ -233,7 +233,7 @@ namespace Bit.iOS.Autofill
                     PerformSegue("setupSegue", this);
                     return;
                 }
-                if (_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
+                if(_context.ServiceIdentifiers == null || _context.ServiceIdentifiers.Length == 0)
                 {
                     PerformSegue("loginSearchSegue", this);
                 }

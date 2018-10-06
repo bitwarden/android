@@ -26,21 +26,21 @@ namespace Bit.iOS.Core.Utilities
                 }
                 if (identities.Any())
                 {
-                    await ASCredentialIdentityStore.SharedStore.ReplaceCredentialIdentitiesAsync(identities.ToArray());
+                    await ASCredentialIdentityStore.SharedStore?.ReplaceCredentialIdentitiesAsync(identities.ToArray());
                 }
             }
         }
 
         public static async Task<bool> IdentitiesCanIncremental()
         {
-            var state = await ASCredentialIdentityStore.SharedStore.GetCredentialIdentityStoreStateAsync();
-            return state.Enabled && state.SupportsIncrementalUpdates;
+            var state = await ASCredentialIdentityStore.SharedStore?.GetCredentialIdentityStoreStateAsync();
+            return state != null && state.Enabled && state.SupportsIncrementalUpdates;
         }
 
         public static async Task<bool> AutofillEnabled()
         {
-            var state = await ASCredentialIdentityStore.SharedStore.GetCredentialIdentityStoreStateAsync();
-            return state.Enabled;
+            var state = await ASCredentialIdentityStore.SharedStore?.GetCredentialIdentityStoreStateAsync();
+            return state != null && state.Enabled;
         }
 
         public static async Task<ASPasswordCredentialIdentity> GetCipherIdentityAsync(string cipherId, ICipherService cipherService)
