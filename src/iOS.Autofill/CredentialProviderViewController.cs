@@ -147,7 +147,7 @@ namespace Bit.iOS.Autofill
                 return;
             }
 
-            if(_context == null || string.IsNullOrWhiteSpace(password))
+            if(_context == null || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
                 _googleAnalyticsService.TrackAutofillExtensionEvent("Canceled");
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),

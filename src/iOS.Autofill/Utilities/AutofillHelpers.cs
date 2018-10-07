@@ -31,7 +31,7 @@ namespace Bit.iOS.Autofill.Utilities
                 return;
             }
 
-            if(!string.IsNullOrWhiteSpace(item.Password))
+            if(!string.IsNullOrWhiteSpace(item.Username) && !string.IsNullOrWhiteSpace(item.Password))
             {
                 string totp = null;
                 if(!settings.GetValueOrDefault(App.Constants.SettingDisableTotpCopy, false))
@@ -41,7 +41,8 @@ namespace Bit.iOS.Autofill.Utilities
 
                 cpViewController.CompleteRequest(item.Username, item.Password, totp);
             }
-            else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Totp.Value))
+            else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
+                !string.IsNullOrWhiteSpace(item.Totp.Value))
             {
                 var sheet = Dialogs.CreateActionSheet(item.Name, controller);
                 if(!string.IsNullOrWhiteSpace(item.Username))
@@ -51,6 +52,20 @@ namespace Bit.iOS.Autofill.Utilities
                         UIPasteboard clipboard = UIPasteboard.General;
                         clipboard.String = item.Username;
                         var alert = Dialogs.CreateMessageAlert(AppResources.CopyUsername);
+                        controller.PresentViewController(alert, true, () =>
+                        {
+                            controller.DismissViewController(true, null);
+                        });
+                    }));
+                }
+
+                if(!string.IsNullOrWhiteSpace(item.Password))
+                {
+                    sheet.AddAction(UIAlertAction.Create(AppResources.CopyPassword, UIAlertActionStyle.Default, a =>
+                    {
+                        UIPasteboard clipboard = UIPasteboard.General;
+                        clipboard.String = item.Password;
+                        var alert = Dialogs.CreateMessageAlert(AppResources.CopiedPassword);
                         controller.PresentViewController(alert, true, () =>
                         {
                             controller.DismissViewController(true, null);
