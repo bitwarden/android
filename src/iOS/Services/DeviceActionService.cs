@@ -58,6 +58,10 @@ namespace Bit.iOS.Services
 
         public void CopyToClipboard(string text)
         {
+            if(text == null)
+            {
+                return;
+            }
             UIPasteboard clipboard = UIPasteboard.General;
             clipboard.String = text;
         }
