@@ -1341,15 +1341,15 @@
     <value>3. Tap "AutoFill Passwords"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. 자동 완성을 켜세요.</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. "Bitwarden"을 선택하세요.</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>비밀번호 자동 완성</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>보관함에 새 로그인을 추가하는 가장 쉬운 방법은 Bitwarden 비밀번호 자동 완성 확장 프로그램을 사용하는 것입니다. "도구" 화면으로 이동하여 Bitwarden 비밀번호 자동 완성 확장 프로그램에 대해 더 자세히 알아보세요.</value>
   </data>
 </root>
