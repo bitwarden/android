@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Automatické dopĺňanie aktivované!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Pred použitím automatického vypĺňania sa najskôr musíte prihlásiť v hlavnej bitwarden aplikácií.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Pri prihlasovaní do aplikácií a westránok sú teraz vaše prihlasovacie údaje dostupné priamo z klávesnice.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Odporúčame vám vypnúť ostatné aplikácie pre automatické dopĺňanie, ak ich neplánujete používať.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Pri zadávaní hesiel pristupujte v vášmu trezoru priamo z klávesnice.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Ak chcete povoliť automatické vypĺňanie, postupujte podľa nasledujúcich inštrukcií:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Prejdite do aplikácie "Nastavenia" pre iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Ťuknite na položku "Heslá &amp; účty"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Klepnite na možnosť "Automaticky vypĺňať heslá"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Zapnite automatické dopĺňanie</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Vyberte "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Automatické vypĺňanie hesiel</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>Najjednoduchší spôsob, ako pridať nové prihlasovacie údaje do trezora, je z bitwarden rozšírenia pre automatické vypĺňanie. Ďalšie informácie o používaní rozšírenia pre automatické dopĺňanie získate prechodom na obrazovku Nástrojov.</value>
   </data>
 </root>
