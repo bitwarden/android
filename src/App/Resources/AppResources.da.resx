@@ -406,7 +406,7 @@
     <value>Brug Bitwardens hjælpefunktion til autoudfyldning af dine logins på tværs af apps og nettet.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Auto-udfyldningstjeneste</value>
+    <value>Autoudfyldningstjeneste</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Undgå tvetydige tegn</value>
@@ -421,7 +421,7 @@
     <value>Benyt Bitwarden i Safari og andre apps til autoudfyldelse af dine logins.</value>
   </data>
   <data name="BitwardenAutofillService" xml:space="preserve">
-    <value>Bitwarden auto-udfyldningstjeneste</value>
+    <value>Bitwarden autoudfyldningstjeneste</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
     <value>Benyt Bitwardens hjælpefunktion til autoudfyldning af dine logins.</value>
@@ -606,7 +606,7 @@
     <value>Der er ingen elementer i din boks.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Der er ingen elementer til dette websted i din boks. Tryk for at tilføje et.</value>
+    <value>Der er ingen elementer til denne hjemmeside/app i din boks. Tryk for at tilføje et.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Dette login har intet brugernavn eller adgangskode opsat.</value>
@@ -756,10 +756,10 @@
     <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
   </data>
   <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
-    <value>Når du ser en Bitwarden auto-udfyldningsnotifikation, kan du trykke på den for at starte automatisk udfyldning.</value>
+    <value>Når du ser en Bitwarden autoudfyldningsnotifikation, kan du trykke på den for at starte automatisk udfyldning.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Tryk på denne notifikation for at auto-udfylde med et element fra din boks.</value>
+    <value>Tryk på denne notifikation for at autoudfylde med et element fra din boks.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Åbn indstillinger for hjælpefunktioner</value>
@@ -783,16 +783,16 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Den letteste måde at tilføje nye logins til din boks er fra Bitwarden Auto-udfyldningstjenesten. Få mere at vide om brugen af Bitwarden Auto-udfyldningstjenesten ved at gå til skærmen "Værktøjer".</value>
+    <value>Den letteste måde at tilføje nye logins til din boks er fra Bitwarden Autoudfyldningstjenesten. Få mere at vide om brugen af Bitwarden Autoudfyldningstjenesten ved at gå til skærmen "Værktøjer".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
-    <value>Auto-udfyld</value>
+    <value>Autoudfyld</value>
   </data>
   <data name="AutofillOrView" xml:space="preserve">
-    <value>Vil du auto-udfylde eller se dette element?</value>
+    <value>Vil du autoudfylde eller se dette element?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Er du sikker på du vil auto-udfylde dette element? Det er ikke et fuldstændigt match til "{0}".</value>
+    <value>Er du sikker på du vil autoudfylde dette element? Det er ikke et fuldstændigt match til "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Matchende elementer</value>
@@ -804,7 +804,7 @@
     <value>Søg</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>Du søger efter et auto-udfyld element til "{0}".</value>
+    <value>Du søger efter et autoudfyld element til "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Del din boks</value>
@@ -819,19 +819,19 @@
     <value>Skan når adgangskodefeltet fokuseres</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>Skan kun skærmen for felter og tilbyd en auto-udfyld notifikation, når du vælger et adgangskodefelt. Denne indstilling kan hjælpe med at spare på batteriet.</value>
+    <value>Skan kun skærmen for felter og tilbyd en autoudfyld notifikation, når du vælger et adgangskodefelt. Denne indstilling kan hjælpe med at spare på batteriet.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>Vedvarende notifikation</value>
   </data>
   <data name="AutofillPersistNotificationDescription" xml:space="preserve">
-    <value>Tilbyd altid en auto-udfyld notifikation og skan kun for felter efter forsøgt auto-udfyld. Denne indstilling kan hjælpe med at spare på batteriet.</value>
+    <value>Tilbyd altid en autoudfyld notifikation og skan kun efter felter efter forsøgt autoudfyld. Denne indstilling kan hjælpe med at spare på batteriet.</value>
   </data>
   <data name="AutofillAlways" xml:space="preserve">
     <value>Skan altid</value>
   </data>
   <data name="AutofillAlwaysDescription" xml:space="preserve">
-    <value>Skan altid skærmen for felter og tilbyd kun en auto-udfyld notifikation, hvis adgangskodefelter er fundet. Dette er standardindstillingen.</value>
+    <value>Skan altid skærmen for felter og tilbyd kun en autoudfyld notifikation, hvis adgangskodefelter er fundet. Dette er standardindstillingen.</value>
   </data>
   <data name="CannotOpenApp" xml:space="preserve">
     <value>Kan ikke åbne appen "{0}".</value>
@@ -1174,7 +1174,7 @@
     <value>Ikonserver URL</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Auto-udfyld med Bitwarden</value>
+    <value>Autoudfyld med Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Boksen er låst</value>
@@ -1192,16 +1192,16 @@
     <value>Der er ingen elementer i denne mappe.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Auto-udfyld hjælpefunktion</value>
+    <value>Autoudfyld hjælpefunktion</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
-    <value>Bitwarden auto-udfyld tjenesten bruger Androids Auto-udfyld framework til at hjælpe med at udfylde logins, kreditkort og identitetsoplysninger i andre apps på din enhed.</value>
+    <value>Bitwarden autoudfyld tjenesten bruger Androids AutoFyld framework til at hjælpe med at udfylde logins, kreditkort og identitetsoplysninger i andre apps på din enhed.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Brug Bitwarden auto-udfyld tjenesten til at udfylde logins, kreditkort og identitetsoplysninger i andre apps.</value>
+    <value>Brug Bitwarden autoudfyld tjenesten til at udfylde logins, kreditkort og identitetsoplysninger i andre apps.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
-    <value>Åbn auto-udfyld indstillinger</value>
+    <value>Åbn autoudfyld indstillinger</value>
   </data>
   <data name="FaceID" xml:space="preserve">
     <value>Face ID</value>
@@ -1287,7 +1287,7 @@
     <value>Ja, og gem</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Auto-udfyld og gem</value>
+    <value>Autoudfyld og gem</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>Organisation</value>
@@ -1303,7 +1303,7 @@
     <value>For at fortsætte skal du holde din YubiKey NEO mod bagsiden af enheden.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Hjælpefunktionen kan være nyttigt at bruge, når apps ikke understøtter den almindelige auto-udfyldningstjeneste.</value>
+    <value>Hjælpefunktionen kan være nyttigt at bruge, når apps ikke understøtter den almindelige autoudfyldningstjeneste.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Adgangskode opdateret</value>
@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Autoudfyld aktiveret!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Du skal logge ind på den primære Bitwarden-app, før du kan bruge Autoudfyld.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Dine logins kan nu nemt tilgås direkte fra dit tastatur, når du logger ind på apps og hjemmesider.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Vi anbefaler, at du deaktiverer andre Autoudfyld-apps under Indstillinger, hvis du ikke har planer om at bruge dem.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Få adgang til din boks direkte fra dit tastatur for hurtigt at autoudfylde adgangskoder.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Følg disse instruktioner for at aktivere autoudfyldning af adgangskoder på din enhed:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Åbn iOS-appen "Indstillinger"</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Tryk på "Adgangskoder &amp; konti"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Tryk på "Autoudfyld adgangskoder"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Aktivér Autoudfyld</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Vælg "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Adgangskode Autoudfyld</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>Den letteste måde at tilføje nye logins til din boks er ved at bruge Bitwarden adgangskode Autoudfyld udvidelsen. Få mere at vide om brugen af Bitwarden adgangskode Autoudfyld udvidelsen ved at navigere til skærmbilledet "Værktøjer".</value>
   </data>
 </root>
