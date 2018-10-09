@@ -7,7 +7,6 @@ using Android.Webkit;
 using AWebkit = Android.Webkit;
 using Java.Interop;
 using Android.Content;
-using Plugin.CurrentActivity;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
 namespace Bit.Android.Controls
@@ -16,9 +15,13 @@ namespace Bit.Android.Controls
     {
         private const string JSFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
 
+        private readonly Context _context;
+
         public HybridWebViewRenderer(Context context)
             : base(context)
-        { }
+        {
+            _context = context;
+        }
 
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
         {
@@ -26,8 +29,9 @@ namespace Bit.Android.Controls
 
             if(Control == null)
             {
-                var webView = new AWebkit.WebView(CrossCurrentActivity.Current.Activity);
+                var webView = new AWebkit.WebView(_context);
                 webView.Settings.JavaScriptEnabled = true;
+                webView.SetWebViewClient(new JSWebViewClient(string.Format("javascript: {0}", JSFunction)));
                 SetNativeControl(webView);
             }
 
@@ -42,15 +46,6 @@ namespace Bit.Android.Controls
             {
                 Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
                 Control.LoadUrl(Element.Uri);
-                InjectJS(JSFunction);
-            }
-        }
-
-        private void InjectJS(string script)
-        {
-            if(Control != null)
-            {
-                Control.LoadUrl(string.Format("javascript: {0}", script));
             }
         }
 
@@ -72,6 +67,22 @@ namespace Bit.Android.Controls
                 {
                     hybridRenderer.Element.InvokeAction(data);
                 }
+            }
+        }
+
+        public class JSWebViewClient : WebViewClient
+        {
+            private readonly string _javascript;
+
+            public JSWebViewClient(string javascript)
+            {
+                _javascript = javascript;
+
+            }
+            public override void OnPageFinished(AWebkit.WebView view, string url)
+            {
+                base.OnPageFinished(view, url);
+                view.EvaluateJavascript(_javascript, null);
             }
         }
     }
