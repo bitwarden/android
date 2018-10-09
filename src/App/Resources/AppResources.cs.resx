@@ -403,10 +403,10 @@
     <value>Rozšíření aplikace</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů v aplikacích a na webových stránkách.</value>
+    <value>Služba přístupnosti Bitwarden umožňuje automatické vyplňování přihlašovacích údajů v aplikacích a na webových stránkách.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
-    <value>Služba automatického vyplnění</value>
+    <value>Služba automatického vyplňování</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
     <value>Nepoužít zaměnitelné znaky</value>
@@ -415,7 +415,7 @@
     <value>Rozšíření aplikace Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je použití rozšíření aplikace Bitwarden. Přečtěte si další informace o použití rozšíření na obrazovce "Nástroje".</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je použití rozšíření aplikace Bitwarden. Další informace o použití tohoto rozšíření naleznete na obrazovce „Nástroje“.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Použijte Bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</value>
@@ -424,7 +424,7 @@
     <value>Služba automatického vyplňování</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajů.</value>
+    <value>Použijte službu přístupnosti pro automatické vyplňování přihlašovacích údajů.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Změnit e-mail</value>
@@ -762,10 +762,10 @@
     <value>Klikněte pro automatické vyplnění přihlašovacích údajů.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Otevřít nastavení usnadnění</value>
+    <value>Otevřít nastavení přístupnosti</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. V menu v nastavení Usnadnění klikněte na "Bitwarden" pod nadpisem Služby.</value>
+    <value>1. V nastavení Přístupnosti systému Android klepněte na „Bitwarden“ v části „Stažené služby“.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Zapněte přepínač a potvrďte stisknutím tlačítka OK.</value>
@@ -783,7 +783,7 @@
     <value>Beta</value>
   </data>
   <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je služba automatického vyplňování Bitwarden. Přečtěte si další informace o použití této služby na obrazovce "Nástroje".</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je služba automatického vyplňování Bitwarden. Další informace o použití této služby naleznete na obrazovce „Nástroje“.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatické vyplnění</value>
@@ -1192,13 +1192,13 @@
     <value>V této složce nejsou žádné položky.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Služba automatického vyplňování</value>
+    <value>Služba přístupnosti</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Služba Bitwarden automatického vyplnění používá Android Autofill framework pro vyplnění přihlašovacích údajů, čísel platebních karet a dalších osobních informací do dalších aplikací ve vašem zařízení.</value>
   </data>
   <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
-    <value>Použijte službu usnadnění pro automatické vyplnění přihlašovacích údajům, karet nebo identit v ostatních aplikacích.</value>
+    <value>Použijte službu přístupnosti pro automatické vyplňování přihlašovacích údajů, platebních karet či identit v ostatních aplikacích.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
     <value>Otevřít nastavení automatického vyplňování</value>
@@ -1226,7 +1226,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Nepodařilo se nám automaticky otevřít nastavení automatického vyplňování Android. Nastavení můžete otevřít ručně z Nastavení systému Android &gt; Systém &gt; Jazyky a vstup &gt; Rozšířené &gt; Služba automatického vyplňování.</value>
+    <value>Obrazovku nastavení automatického vyplňování Android se nepodařilo otevřít. Nastavení můžete otevřít ručně z Nastavení systému Android &gt; Systém &gt; Jazyky a zadávání &gt; Rozšířená nastavení &gt; Služba automatického vyplňování.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Název vlastního pole</value>
@@ -1303,7 +1303,7 @@
     <value>Pro pokračování přidržte YubiKey NEO u zadní části zařízení.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Služba usnadnění může být užitečná, pokud aplikace nepodporují standardní službu automatického vyplňování.</value>
+    <value>Služba přístupnosti může být užitečná, pokud aplikace nepodporují standardní službu automatického vyplňování.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Heslo bylo změněno</value>
@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Automatické vyplňování zapnuto.</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Před použitím automatického vyplňování se musíte nejdříve přihlásit v hlavní aplikaci Bitwarden.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Vaše přihlašovací údaje jsou nyní snadno přístupné přímo z vaší klávesnice během přihlašování do aplikací či webů.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Doporučujeme vypnout v nastavení všechny další aplikace pro automatické vyplňování údajů, pokud je neplánujete používat.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Přistupujte k vašemu trezoru přímo z vaší klávesnice pro rychlejší automatické vyplnění hesel.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Pokyny pro zapnutí automatického vyplňování hesel na vašem zařízení:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Přejděte do aplikace „Nastavení“ v iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Klepněte na „Hesla a účty“</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Klepněte na „Automatické vyplňování hesel“</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Zapněte automatické vyplňování</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Vyberte „Bitwarden“</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Automatické vyplnění hesel</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do vašeho trezoru, je rozšíření automatického vyplňování Bitwarden. Další informace o použití tohoto rozšíření naleznete na obrazovce „Nástroje“.</value>
   </data>
 </root>
