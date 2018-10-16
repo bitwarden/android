@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Automatikus kitöltés aktiválva!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Az automatikus kitöltő szolgáltatás használata előtt be kell lépned a fő Bitwarden alkalmazásba.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Az alkalmazásokba és weboldalakra a belépési adatok most már könnyedén elérhető a billentyűzetről.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Javasoljuk, hogy kapcsolj ki minden más automatikus kitöltő alkalmazást, ha nem használod azokat.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>A széf közvetlenül a billentyűzetről érhető el a jelszavak gyors kitöltéséhez.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>A jelszó automatikus kitöltés szolgáltatás engedélyezéséhez kövesd az alábbi instrukciókat:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Lépj be az iOS "Beállítások" alkalmazásba</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Válaszd a "Jelszavak és Fiókok" lehetőséget</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Válaszd ki az "Jelszavak automatikus kitöltése" lehetőséget</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Kapcsold be az opciót</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Válaszd ki a "Bitwarden"-t</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Jelszó Automatikus kitöltése</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>A legegyszerűbb módja új bejelentkezési adatok hozzáadásának a széfedhez, a bitwarden alkalmazás. Az alkalmazás használatáról az "Eszközök" képernyőn tudhatsz meg többet.</value>
   </data>
 </root>

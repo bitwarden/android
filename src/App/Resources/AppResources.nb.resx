@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Autofyll aktivert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Du må logge deg inn i hoved Bitwarden-appen før du kan bruke Autofyll.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Innloggingene dine er nå lett tilgjengelig fra tastaturet mens du logger deg på apper og nettsteder.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Vi anbefaler å deaktivere alle andre Autofyll apps under innstillinger hvis du ikke har tenkt å bruke dem.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Få tilgang til hvelvet ditt direkte fra tastaturet for å autofyll passord raskt.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Følg disse instruksjonene for å aktivere passord autofyll på enheten din:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Gå til iOS-appen "Innstillinger"</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Trykk på "Passord og kontoer"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Trykk «Autofyll passord»</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Slå på Autofyll</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Velg "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Passord Autofyll</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>Den enkleste måten å legge til ny logikk hvelvet din er å bruke Bitwarden passord Autofyll forlengelsen. Lære mer om Bitwarden passord Autofyll filtypen ved å gå til "Verktøy" skjermen.</value>
   </data>
 </root>
