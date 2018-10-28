@@ -258,7 +258,8 @@ namespace Bit.App.Pages
                 var filteredCiphers = Ciphers
                     .Where(s => s.Name.ToLower().Contains(searchFilter) ||
                         (s.Subtitle?.ToLower().Contains(searchFilter) ?? false) ||
-                        (s.LoginUri?.ToLower().Contains(searchFilter) ?? false))
+                        (s.LoginUri?.ToLower().Contains(searchFilter) ?? false) ||
+                        (s.Notes?.ToLower().Contains(searchFilter) ?? false))
                     .TakeWhile(s => !ct.IsCancellationRequested)
                     .ToArray();
 

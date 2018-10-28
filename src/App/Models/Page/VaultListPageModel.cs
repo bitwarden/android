@@ -19,6 +19,7 @@ namespace Bit.App.Models.Page
                 HasAttachments = cipher.Attachments?.Any() ?? false;
                 FolderId = cipher.FolderId;
                 Name = cipher.Name?.Decrypt(cipher.OrganizationId);
+                Notes = cipher.Notes?.Decrypt(cipher.OrganizationId);
                 Type = cipher.Type;
 
                 if(string.IsNullOrWhiteSpace(Name) || Name.Length == 0)
@@ -139,6 +140,7 @@ namespace Bit.App.Models.Page
             public string FolderId { get; set; }
             public string NameGroup { get; set; }
             public string Name { get; set; }
+            public string Notes { get; set; }
             public string Subtitle { get; set; }
             public CipherType Type { get; set; }
             public string Icon { get; set; }
