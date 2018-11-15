@@ -58,7 +58,7 @@ namespace Bit.iOS.Core.Services
             Console.WriteLine("iOS Language:" + iOSLanguage);
             var netLanguage = iOSLanguage;
 
-            if(iOSLanguage.StartsWith("zh-Hant"))
+            if(iOSLanguage.StartsWith("zh-Hant") || iOSLanguage.StartsWith("zh-HK"))
             {
                 netLanguage = "zh-Hant";
             }
