@@ -1,6 +1,7 @@
 ﻿using Bit.App.Enums;
 using Bit.App.Models;
 using Bit.App.Models.Api;
+using System;
 using System.Collections.Generic;
 
 namespace Bit.App.Abstractions
@@ -26,6 +27,6 @@ namespace Bit.App.Abstractions
         SymmetricCryptoKey MakeKeyFromPassword(string password, string salt, KdfType kdf, int kdfIterations);
         byte[] HashPassword(SymmetricCryptoKey key, string password);
         string HashPasswordBase64(SymmetricCryptoKey key, string password);
-        CipherString MakeEncKey(SymmetricCryptoKey key);
+        Tuple<SymmetricCryptoKey, CipherString> MakeEncKey(SymmetricCryptoKey key);
     }
 }

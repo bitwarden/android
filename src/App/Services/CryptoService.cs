@@ -483,18 +483,20 @@ namespace Bit.App.Services
             return Convert.ToBase64String(hash);
         }
 
-        public CipherString MakeEncKey(SymmetricCryptoKey key)
+        public Tuple<SymmetricCryptoKey, CipherString> MakeEncKey(SymmetricCryptoKey key)
         {
+            var theKey = key ?? EncKey ?? Key;
             var encKey = Crypto.RandomBytes(64);
-            // TODO: Remove hardcoded true/false when we're ready to enable key stretching
-            if(false && key.Key.Length == 32)
+            if(theKey.Key.Length == 32)
             {
-                var newKey = StretchKey(key);
-                return Encrypt(encKey, newKey);
+                var newKey = StretchKey(theKey);
+                return new Tuple<SymmetricCryptoKey, CipherString>(
+                    new SymmetricCryptoKey(encKey), Encrypt(encKey, newKey));
             }
-            else if(true || key.Key.Length == 64)
+            else if(theKey.Key.Length == 64)
             {
-                return Encrypt(encKey, key);
+                return new Tuple<SymmetricCryptoKey, CipherString>(
+                    new SymmetricCryptoKey(encKey), Encrypt(encKey, theKey));
             }
 
             throw new Exception("Invalid key size.");

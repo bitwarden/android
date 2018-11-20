@@ -501,7 +501,8 @@ namespace Bit.App.Pages
             }
 
             await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
-            var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, cipher.OrganizationId);
+            var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment.Url, attachment.Key,
+                cipher.OrganizationId);
             await _deviceActionService.HideLoadingAsync();
 
             if(data == null)

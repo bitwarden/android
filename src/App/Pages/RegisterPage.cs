@@ -193,7 +193,7 @@ namespace Bit.App.Pages
             }
 
             var kdf = Enums.KdfType.PBKDF2_SHA256;
-            var kdfIterations = 5000;
+            var kdfIterations = 100000;
             var normalizedEmail = EmailCell.Entry.Text.ToLower().Trim();
             var key = _cryptoService.MakeKeyFromPassword(PasswordCell.Entry.Text, normalizedEmail, kdf, kdfIterations);
             var encKey = _cryptoService.MakeEncKey(key);
@@ -203,7 +203,7 @@ namespace Bit.App.Pages
                 MasterPasswordHash = _cryptoService.HashPasswordBase64(key, PasswordCell.Entry.Text),
                 MasterPasswordHint = !string.IsNullOrWhiteSpace(PasswordHintCell.Entry.Text)
                     ? PasswordHintCell.Entry.Text : null,
-                Key = encKey.EncryptedString,
+                Key = encKey.Item2.EncryptedString,
                 Kdf = kdf,
                 KdfIterations = kdfIterations
             };

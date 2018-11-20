@@ -13,6 +13,7 @@ namespace Bit.App.Models
             Id = data.Id;
             Url = data.Url;
             FileName = data.FileName != null ? new CipherString(data.FileName) : null;
+            Key = data.Key != null ? new CipherString(data.Key) : null;
             SetSize(data.Size);
             SizeName = data.SizeName;
         }
@@ -22,6 +23,7 @@ namespace Bit.App.Models
             Id = response.Id;
             Url = response.Url;
             FileName = response.FileName != null ? new CipherString(response.FileName) : null;
+            Key = response.Key != null ? new CipherString(response.Key) : null;
             SetSize(response.Size);
             SizeName = response.SizeName;
         }
@@ -29,6 +31,7 @@ namespace Bit.App.Models
         public string Id { get; set; }
         public string Url { get; set; }
         public CipherString FileName { get; set; }
+        public CipherString Key { get; set; }
         public long Size { get; set; }
         public string SizeName { get; set; }
 

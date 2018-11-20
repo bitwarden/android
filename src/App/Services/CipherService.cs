@@ -310,7 +310,7 @@ namespace Bit.App.Services
             _appSettingsService.ClearCiphersCache = true;
         }
 
-        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null)
+        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, CipherString key, string orgId = null)
         {
             using(var client = new HttpClient())
             {
@@ -328,14 +328,20 @@ namespace Bit.App.Services
                         return null;
                     }
 
-                    if(!string.IsNullOrWhiteSpace(orgId))
+                    SymmetricCryptoKey regularKey = !string.IsNullOrWhiteSpace(orgId) ?
+                        _cryptoService.GetOrgKey(orgId) : null;
+                    SymmetricCryptoKey dataKey = null;
+                    if(key != null)
                     {
-                        return _cryptoService.DecryptToBytes(data, _cryptoService.GetOrgKey(orgId));
+                        var decDataKey = _cryptoService.DecryptToBytes(key, regularKey);
+                        dataKey = new SymmetricCryptoKey(decDataKey);
                     }
                     else
                     {
-                        return _cryptoService.DecryptToBytes(data, null);
+                        dataKey = regularKey;
                     }
+
+                    return _cryptoService.DecryptToBytes(data, dataKey);
                 }
                 catch
                 {
@@ -346,10 +352,13 @@ namespace Bit.App.Services
 
         public async Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher cipher, byte[] data, string fileName)
         {
+            var key = cipher.OrganizationId != null ? _cryptoService.GetOrgKey(cipher.OrganizationId) : null;
             var encFileName = fileName.Encrypt(cipher.OrganizationId);
-            var encBytes = _cryptoService.EncryptToBytes(data,
-                cipher.OrganizationId != null ? _cryptoService.GetOrgKey(cipher.OrganizationId) : null);
-            var response = await _cipherApiRepository.PostAttachmentAsync(cipher.Id, encBytes, encFileName.EncryptedString);
+
+            var dataKey = _cryptoService.MakeEncKey(key);
+            var encBytes = _cryptoService.EncryptToBytes(data, dataKey.Item1);
+            var response = await _cipherApiRepository.PostAttachmentAsync(cipher.Id, encBytes,
+                dataKey.Item2.EncryptedString, encFileName.EncryptedString);
 
             if(response.Succeeded)
             {

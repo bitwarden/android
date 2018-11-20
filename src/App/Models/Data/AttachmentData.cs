@@ -16,6 +16,7 @@ namespace Bit.App.Models.Data
             LoginId = cipherId;
             Url = attachment.Url;
             FileName = attachment.FileName?.EncryptedString;
+            Key = attachment.Key?.EncryptedString;
             Size = attachment.Size.ToString();
             SizeName = attachment.SizeName;
         }
@@ -26,6 +27,7 @@ namespace Bit.App.Models.Data
             LoginId = cipherId;
             Url = response.Url;
             FileName = response.FileName;
+            Key = response.Key;
             Size = response.Size;
             SizeName = response.SizeName;
         }
@@ -37,6 +39,7 @@ namespace Bit.App.Models.Data
         public string LoginId { get; set; }
         public string Url { get; set; }
         public string FileName { get; set; }
+        public string Key { get; set; }
         public string Size { get; set; }
         public string SizeName { get; set; }
 

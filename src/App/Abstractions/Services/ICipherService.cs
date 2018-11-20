@@ -19,7 +19,7 @@ namespace Bit.App.Abstractions
         Task UpsertDataAsync(CipherData cipher, bool sendMessage, bool created);
         Task<ApiResult> DeleteAsync(string id);
         Task DeleteDataAsync(string id, bool sendMessage);
-        Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, string orgId = null);
+        Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, CipherString key, string orgId = null);
         Task<ApiResult<CipherResponse>> EncryptAndSaveAttachmentAsync(Cipher cipher, byte[] data, string fileName);
         Task UpsertAttachmentDataAsync(IEnumerable<AttachmentData> attachments);
         Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId);
