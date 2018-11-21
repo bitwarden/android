@@ -303,6 +303,7 @@ namespace Bit.Android.Services
 
         public void DismissKeyboard()
         {
+            /*
             try
             {
                 var activity = (MainActivity)CurrentContext;
@@ -310,6 +311,7 @@ namespace Bit.Android.Services
                 imm.HideSoftInputFromWindow(activity.CurrentFocus.WindowToken, 0);
             }
             catch { }
+            */
         }
 
         public void OpenAccessibilitySettings()
