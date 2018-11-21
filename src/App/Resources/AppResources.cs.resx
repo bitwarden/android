@@ -516,7 +516,7 @@
     <value>Vygenerovat heslo</value>
   </data>
   <data name="GetPasswordHint" xml:space="preserve">
-    <value>Získat nápovědu pro hlavní heslo</value>
+    <value>Zaslat nápovědu k hlavnímu heslu</value>
   </data>
   <data name="ImportItems" xml:space="preserve">
     <value>Importovat položky</value>
@@ -865,7 +865,7 @@
     <comment>Remember my two-step login</comment>
   </data>
   <data name="SendVerificationCodeAgain" xml:space="preserve">
-    <value>Zaslat znovu ověřovací kód na e-mail</value>
+    <value>Znovu zaslat ověřovací kód na e-mail</value>
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
