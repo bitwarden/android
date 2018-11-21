@@ -584,7 +584,7 @@
     <comment>Minimum numeric characters for password generator settings</comment>
   </data>
   <data name="MinSpecial" xml:space="preserve">
-    <value>Especiais minímos</value>
+    <value>Especiais mínimos</value>
     <comment>Minimum special characters for password generator settings</comment>
   </data>
   <data name="MoreSettings" xml:space="preserve">
@@ -606,7 +606,7 @@
     <value>Não existem itens no seu cofre.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Não existem itens no seu cofre para este website. Toque para adicionar um.</value>
+    <value>Não existem itens no seu cofre para este website/aplicação. Toque para adicionar um.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Esta credencial não tem um nome de utilizador ou palavra passe configurados.</value>
@@ -631,7 +631,7 @@
     <value>Gerador de palavras-passe</value>
   </data>
   <data name="PasswordHint" xml:space="preserve">
-    <value>Dica de palavra-passe</value>
+    <value>Dica da palavra-passe</value>
   </data>
   <data name="PasswordHintAlert" xml:space="preserve">
     <value>Enviámos-lhe um email com a dica da sua palavra-passe mestra.</value>
@@ -644,7 +644,7 @@
     <comment>Push notifications for apple products</comment>
   </data>
   <data name="RateTheApp" xml:space="preserve">
-    <value>Avalie a aplicação</value>
+    <value>Avaliar a aplicação</value>
   </data>
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Por favor considere ajudar-nos com uma boa análise!</value>
@@ -726,7 +726,7 @@
     <value>Ver item</value>
   </data>
   <data name="WebVault" xml:space="preserve">
-    <value>Cofre web Bitwarden</value>
+    <value>Cofre Web Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
     <value>Gira os seus itens a partir de qualquer navegador web com o cofre web Bitwarden.</value>
@@ -807,7 +807,7 @@
     <value>Está a pesquisar por um item de auto-preenchimento para "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
-    <value>Partilhe o seu cofre</value>
+    <value>Partilhar o seu cofre</value>
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Crie uma organização para partilhar os seus itens em segurança com outros utilizadores.</value>
@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Auto-preenchimento ativado!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Tem de iniciar sessão na aplicação Bitwarden principal antes de poder utilizar auto-preenchimento.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>As suas credenciais são agora facilmente acessíveis a partir do seu teclado ao iniciar sessão em aplicações e websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Recomendamos desativar quaisquer outras aplicações de auto-preenchimento nas Definições se não as planeia utilizar.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Aceda ao seu cofre diretamente a partir do seu teclado para rapidamente auto-preencher palavras-passe.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Para ativar o auto-preenchimento de palavras-passe no seu dispositivo, siga estas instruções:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Vá à aplicação iOS "Definições"</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Toque em "Palavras-passe e contas"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Toque em "auto-preencher palavras-passe"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Ligue o auto-preenchimento</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Selecione "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Auto-preenchimento de palavras-passe</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>A maneira mais fácil de adicionar novas credenciais ao seu cofre é ao utilizar a extensão de auto-preenchimento de palavras-passe do Bitwarden. Saiba mais acerca de como utilizar a extensão de auto-preenchimento de palavras-passe do Bitwarden ao navegar para o ecrã de "Ferramentas".</value>
   </data>
 </root>
