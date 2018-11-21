@@ -6,7 +6,7 @@ namespace Bit.App.Abstractions
 {
     public interface ICipherApiRepository : IApiRepository<CipherRequest, CipherResponse, string>
     {
-        Task<ApiResult<CipherResponse>> PostAttachmentAsync(string cipherId, byte[] data, string fileName);
+        Task<ApiResult<CipherResponse>> PostAttachmentAsync(string cipherId, byte[] data, string key, string fileName);
         Task<ApiResult> DeleteAttachmentAsync(string cipherId, string attachmentId);
     }
 }

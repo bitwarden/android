@@ -54,7 +54,8 @@ namespace Bit.Android.Services
 
             if(androidLanguage.StartsWith("zh"))
             {
-                if(androidLanguage.Contains("Hant") || androidLanguage.Contains("TW"))
+                if(androidLanguage.Contains("Hant") || androidLanguage.Contains("TW") ||
+                    androidLanguage.Contains("HK") || androidLanguage.Contains("MO"))
                 {
                     netLanguage = "zh-Hant";
                 }

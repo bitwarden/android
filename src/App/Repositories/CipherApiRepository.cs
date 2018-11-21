@@ -21,7 +21,7 @@ namespace Bit.App.Repositories
         protected override string ApiRoute => "/ciphers";
 
         public virtual async Task<ApiResult<CipherResponse>> PostAttachmentAsync(string cipherId, byte[] data,
-            string fileName)
+            string key, string fileName)
         {
             if(!Connectivity.IsConnected)
             {
@@ -37,6 +37,7 @@ namespace Bit.App.Repositories
             using(var client = HttpService.ApiClient)
             using(var content = new MultipartFormDataContent("--BWMobileFormBoundary" + DateTime.UtcNow.Ticks))
             {
+                content.Add(new StringContent(key), "key");
                 content.Add(new StreamContent(new MemoryStream(data)), "data", fileName);
 
                 var requestMessage = new TokenHttpRequestMessage
