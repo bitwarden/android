@@ -1320,16 +1320,16 @@
     <value>Du musst dich in der Bitwarden App einloggen, bevor du AutoFill nutzen kannst.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Sie können nun direkt von der Tastatur auf Ihre Zugangsdaten zugreifen, wenn Sie sich in Webseiten oder Apps anmelden.</value>
+    <value>Du kannst nun direkt von der Tastatur auf deine Zugangsdaten zugreifen, wenn du dich auf Webseiten oder in Apps anmeldest.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Wir empfehlen alle anderen Auto Ausfüllen Apps in den Einstellungen zu deaktivieren wenn du sie nicht nutzt.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Zugriff auf Zugangsdaten direkt von der Tastatur.</value>
+    <value>Greife auf deinen Tressor direkt von deiner Tastatur aus zu um Passwörter schnell und automatisch auszufüllen.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Um Autofill auf Ihrem Gerät zu aktivieren, befolgen Sie bitte die Anweisungen:</value>
+    <value>Um Autofill auf deinem Gerät zu aktivieren, befolge bitte diese Anweisungen:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Gehe in die iOS Einstellungen</value>
@@ -1350,6 +1350,6 @@
     <value>Passwort AutoFill</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>Der einfachste Weg neue Zugangsdaten hinzuzufügen führt über die Autofill Erweiterung der Bitwarden App, auf der Bildschirmseite "Werkzeuge" finden Sie mehr dazu.</value>
+    <value>Der einfachste Weg neue Zugangsdaten zum Tresor hinzuzufügen ist die Bitwarden Passwort Autofill Erweiterung. Um mehr über die Bitwarden Passwort Autofill Erweiterung zu erfahren, öffne einfach die "Werkzeuge" Bildschirmseite.</value>
   </data>
 </root>
