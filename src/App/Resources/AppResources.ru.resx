@@ -403,7 +403,7 @@
     <value>Расширение</value>
   </data>
   <data name="AutofillAccessibilityDescription" xml:space="preserve">
-    <value>Используйте службу автозаполнения Bitwarden для автоматического входа в приложения и на сайты.</value>
+    <value>Используйте службу специальных возможностей Bitwarden для автоматического заполнения ваших логинов в приложениях и интернете.</value>
   </data>
   <data name="AutofillService" xml:space="preserve">
     <value>Служба автозаполнения</value>
@@ -424,7 +424,7 @@
     <value>Служба автозаполнения Bitwarden</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
-    <value>Используйте службу автозаполнения Bitwarden для автоматического входа.</value>
+    <value>Используйте службу специальных возможностей Bitwarden для автоматического заполнения ваших логинов.</value>
   </data>
   <data name="ChangeEmail" xml:space="preserve">
     <value>Изменить email</value>
@@ -591,7 +591,7 @@
     <value>Дополнительные настройки</value>
   </data>
   <data name="MustLogInMainApp" xml:space="preserve">
-    <value>Необходимо войти в основное приложение Bitwarden прежде чем вы сможете использовать расширение.</value>
+    <value>Перед использованием расширения необходимо войти в основное приложение Bitwarden.</value>
   </data>
   <data name="Never" xml:space="preserve">
     <value>Никогда</value>
@@ -606,7 +606,7 @@
     <value>В вашем хранилище нет элементов.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>В вашем хранилище нет элементов для этого сайта. Нажмите чтобы добавить.</value>
+    <value>В вашем хранилище нет элементов для этого сайта/приложения. Нажмите чтобы добавить.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>У логина не заданы имя пользователя и пароль.</value>
@@ -762,10 +762,10 @@
     <value>Коснитесь этого уведомления для автоматического заполнения.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
-    <value>Настройки специальных возможностей</value>
+    <value>Открыть настройки специальных возможностей</value>
   </data>
   <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
-    <value>1. На экране настроек специальных возможностей Android в разделе Службы коснитесь Bitwarden.</value>
+    <value>1. На экране настроек специальных возможностей Android под заголовком Сервисы коснитесь Bitwarden.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
     <value>2. Активируйте переключатель и нажмите OK для подтверждения.</value>
@@ -1192,7 +1192,7 @@
     <value>В этой папке нет элементов.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Служба автозаполнения</value>
+    <value>Служба специальных возможностей автозаполнения</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Служба автозаполнения Bitwarden использует Android Autofill Framework для заполнения логинов, номеров карт и личной информации в других приложениях на устройстве.</value>
@@ -1303,7 +1303,7 @@
     <value>Для продолжения, удерживайте YubiKey NEO у задней панели устройства.</value>
   </data>
   <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
-    <value>Служба доступности может быть полезна, когда приложения не поддерживают стандартную службу автозаполнения.</value>
+    <value>Служба специальных возможностей может быть полезна в случае, когда приложения не поддерживают стандартную службу автозаполнения.</value>
   </data>
   <data name="DatePasswordUpdated" xml:space="preserve">
     <value>Пароль обновлен</value>
@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Автозаполнение активировано!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Перед использованием автозаполнения необходимо войти в основное приложение Bitwarden.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Авторизация никогда не была проще - теперь ваши логины доступны прямо с клавиатуры.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Рекомендуется отключить все другие приложения автозаполнения в настройках, если вы не планируете их использовать.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Получите доступ к вашему хранилищу прямо с клавиатуры для максимально быстрого автозаполнения.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Чтобы включить автозаполнение паролей на устройстве, выполните следующие действия:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Перейдите в 'Настройки' iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Нажмите 'Пароли и учетные записи'</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Нажмите 'Автозаполнение паролей'</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Включите автозаполнение</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Выберите Bitwarden</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Автозаполнение паролей</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>Самый простой способ добавить новые логины в хранилище - использовать расширение автозаполнения паролей Bitwarden. Дополнительные сведения об использовании расширения автозаполнения паролей Bitwarden в разделе Инструменты.</value>
   </data>
 </root>

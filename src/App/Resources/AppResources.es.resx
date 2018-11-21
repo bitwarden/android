@@ -1314,7 +1314,7 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Autorellenado activado!</value>
+    <value>¡Autorellenado activado!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
     <value>Debes identificarte en la aplicación principal de Bitwarden antes de poder utilizar Autorellenado.</value>
@@ -1323,28 +1323,28 @@
     <value>Tus accesos son ahora fácilmente accesibles desde tu teclado mientras te identificas en aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Recomendamos deshabilitar cualquier otra aplicación de Autorellenado en Ajustes si no piensas utilizarlas.</value>
+    <value>Te recomendamos deshabilitar cualquier otra aplicación de Autorellenado desde Ajustes si no piensas utilizarlas.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
     <value>Accede a tu caja fuerte directamente desde tu teclado para autorellenar contraseñas rápidamente.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Para habilitar el Autorellenado de contraseña en su dispositivo, siga estas instrucciones:</value>
+    <value>Para habilitar el Autorellenado de contraseña en su dispositivo, sigue estas instrucciones:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>Ve a "Ajustes" en la app de iOS</value>
+    <value>1. Ve a la aplicación "Ajustes" de iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>Click "Contraseñas y Cuentas"</value>
+    <value>2. Pulsa en "Contraseñas y Cuentas"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>Click en "Autorellenado de contraseñas"</value>
+    <value>3. Pulsa en "Autorellenado de contraseñas"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>Habilitar Autorellenado</value>
+    <value>4. Habilita el autorellenado</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>Selecciona "Bitwarden"</value>
+    <value>5. Selecciona "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
     <value>Autorellenado de contraseña</value>
