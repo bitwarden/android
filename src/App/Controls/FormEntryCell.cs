@@ -10,7 +10,7 @@ namespace Bit.App.Controls
     public class FormEntryCell : ExtendedViewCell, IDisposable
     {
         private VisualElement _nextElement;
-        private TapGestureRecognizer _tgr;
+        // private TapGestureRecognizer _tgr;
         private StackLayout _buttonStackLayout = null;
 
         public FormEntryCell(
@@ -64,7 +64,7 @@ namespace Bit.App.Controls
 
             if(imageSource != null)
             {
-                _tgr = new TapGestureRecognizer();
+                // _tgr = new TapGestureRecognizer();
 
                 var theImage = new CachedImage
                 {
@@ -74,7 +74,7 @@ namespace Bit.App.Controls
                     WidthRequest = 18,
                     HeightRequest = 18
                 };
-                theImage.GestureRecognizers.Add(_tgr);
+                // theImage.GestureRecognizers.Add(_tgr);
 
                 imageStackLayout.Children.Add(theImage);
             }
@@ -188,14 +188,15 @@ namespace Bit.App.Controls
                 Entry.Completed += Entry_Completed;
             }
 
-            if(_tgr != null)
-            {
-                _tgr.Tapped += Tgr_Tapped;
-            }
+            // if(_tgr != null)
+            // {
+            //    _tgr.Tapped += Tgr_Tapped;
+            // }
 
-            Tapped += FormEntryCell_Tapped;
+            // Tapped += FormEntryCell_Tapped;
         }
 
+        /*
         private void Tgr_Tapped(object sender, EventArgs e)
         {
             Entry.Focus();
@@ -205,6 +206,7 @@ namespace Bit.App.Controls
         {
             Entry.Focus();
         }
+        */
 
         private void Entry_Completed(object sender, EventArgs e)
         {
@@ -213,12 +215,12 @@ namespace Bit.App.Controls
 
         public void Dispose()
         {
-            if(_tgr != null)
-            {
-                _tgr.Tapped -= Tgr_Tapped;
-            }
+            // if(_tgr != null)
+            // {
+            //     _tgr.Tapped -= Tgr_Tapped;
+            // }
 
-            Tapped -= FormEntryCell_Tapped;
+            // Tapped -= FormEntryCell_Tapped;
             Entry.Completed -= Entry_Completed;
         }
     }
