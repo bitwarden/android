@@ -865,7 +865,7 @@
       <Version>60.1142.1</Version>
     </PackageReference>
     <PackageReference Include="SimpleInjector">
-      <Version>4.3.0</Version>
+      <Version>4.4.0</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Android.Support.Design">
       <Version>27.0.2.1</Version>
@@ -886,7 +886,7 @@
       <Version>60.1142.1</Version>
     </PackageReference>
     <PackageReference Include="XLabs.IoC.SimpleInjector" Version="2.0.5782" />
-    <PackageReference Include="Portable.BouncyCastle" Version="1.8.3.37" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.4" />
     <PackageReference Include="Plugin.CurrentActivity" Version="2.1.0.4" />
   </ItemGroup>
   <ItemGroup>
