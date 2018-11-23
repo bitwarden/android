@@ -34,21 +34,19 @@ namespace Bit.App.Controls
 
         public ExtendedEditor Editor { get; private set; }
 
-        /*
         private void FormEditorCell_Tapped(object sender, EventArgs e)
         {
             Editor.Focus();
         }
-        */
 
         public void InitEvents()
         {
-            // Tapped += FormEditorCell_Tapped;
+            Tapped += FormEditorCell_Tapped;
         }
 
         public void Dispose()
         {
-            // Tapped -= FormEditorCell_Tapped;
+            Tapped -= FormEditorCell_Tapped;
         }
     }
 }
