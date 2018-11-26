@@ -606,7 +606,7 @@
     <value>Det er ingen gjenstander i hvelvet ditt.</value>
   </data>
   <data name="NoItemsTap" xml:space="preserve">
-    <value>Det er ingen gjenstander i ditt hvelv for dette nettstedet. Trykk for å legge til en.</value>
+    <value>Det er ingen oppføringer i ditt hvelv for dette nettstedet. Trykk for å legge til en.</value>
   </data>
   <data name="NoUsernamePasswordConfigured" xml:space="preserve">
     <value>Denne innloggingen har verken et brukernavn eller passord satt opp.</value>
@@ -1320,13 +1320,13 @@
     <value>Du må logge deg inn i hoved Bitwarden-appen før du kan bruke Autofyll.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Innloggingene dine er nå lett tilgjengelig fra tastaturet mens du logger deg på apper og nettsteder.</value>
+    <value>Innloggingene dine er nå lett tilgjengelige fra tastaturet når du skal logge deg på apper og nettsteder.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Vi anbefaler å deaktivere alle andre Autofyll apps under innstillinger hvis du ikke har tenkt å bruke dem.</value>
+    <value>Vi anbefaler å deaktivere alle andre Autofyll apper under innstillinger dersom du ikke har tenkt å bruke dem.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Få tilgang til hvelvet ditt direkte fra tastaturet for å autofyll passord raskt.</value>
+    <value>Få tilgang til hvelvet ditt direkte fra tastaturet for å raskt autofylle passord.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
     <value>Følg disse instruksjonene for å aktivere passord autofyll på enheten din:</value>
@@ -1350,6 +1350,6 @@
     <value>Passord Autofyll</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>Den enkleste måten å legge til ny logikk hvelvet din er å bruke Bitwarden passord Autofyll forlengelsen. Lære mer om Bitwarden passord Autofyll filtypen ved å gå til "Verktøy" skjermen.</value>
+    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt er å bruke Bitwarden Passord Autofyll utvidelsen. Lær mer om Bitwarden Passord Autofyll utvidelsen ved å gå til "Verktøy" skjermen.</value>
   </data>
 </root>

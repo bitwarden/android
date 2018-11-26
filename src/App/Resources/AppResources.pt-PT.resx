@@ -944,7 +944,7 @@
     <value>Copiar TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Se o seu início de sessão tem uma chave de autenticador anexada ao mesmo, o código de verificação TOTP é copiado automaticamente para a sua área de transferência quando quer que auto-preencha o início de sessão.</value>
+    <value>Se a sua credencial tem uma chave de autenticador anexada à mesma, o código de verificação TOTP é copiado automaticamente para a sua área de transferência quando quer que auto-preencha a credencial.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Desativar cópia automática de TOTP</value>
