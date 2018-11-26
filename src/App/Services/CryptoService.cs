@@ -400,15 +400,6 @@ namespace Bit.App.Services
                 throw new ArgumentNullException(nameof(privateKey));
             }
 
-            if(EncKey?.MacKey != null && !string.IsNullOrWhiteSpace(encyptedValue.Mac))
-            {
-                var computedMacBytes = Crypto.ComputeMac(encyptedValue.CipherTextBytes, EncKey.MacKey);
-                if(!Crypto.MacsEqual(computedMacBytes, encyptedValue.MacBytes))
-                {
-                    throw new InvalidOperationException("MAC failed.");
-                }
-            }
-
             IAsymmetricKeyAlgorithmProvider provider = null;
             switch(encyptedValue.EncryptionType)
             {
