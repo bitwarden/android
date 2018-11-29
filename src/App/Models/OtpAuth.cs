@@ -44,6 +44,12 @@ namespace Bit.App.Models
                     }
                 }
             }
+            else if (key?.ToLowerInvariant().StartsWith("steam://") ?? false)
+            {
+                Steam = true;
+                Digits = 5;
+                Secret = key.Substring(8);
+            }
             else
             {
                 Secret = key;
@@ -54,5 +60,6 @@ namespace Bit.App.Models
         public int Digits { get; set; } = 6;
         public MacAlgorithm Algorithm { get; set; } = MacAlgorithm.HmacSha1;
         public string Secret { get; set; }
+        public bool Steam { get; set; }
     }
 }

@@ -9,6 +9,8 @@ namespace Bit.App.Utilities
 {
     public static class Crypto
     {
+        private static string SteamChars = "23456789BCDFGHJKMNPQRTVWXY";
+
         public static CipherString AesCbcEncrypt(byte[] plainBytes, SymmetricCryptoKey key)
         {
             var parts = AesCbcEncryptToParts(plainBytes, key);
@@ -203,9 +205,23 @@ namespace Bit.App.Utilities
             var offset = (hash[hash.Length - 1] & 0xf);
             var binary = ((hash[offset] & 0x7f) << 24) | ((hash[offset + 1] & 0xff) << 16) |
                 ((hash[offset + 2] & 0xff) << 8) | (hash[offset + 3] & 0xff);
-            var otp = binary % (int)Math.Pow(10, otpParams.Digits);
 
-            return otp.ToString().PadLeft(otpParams.Digits, '0');
+            string otp = string.Empty;
+            if(otpParams.Steam)
+            {
+                var fullCode = binary & 0x7fffffff;
+                for(var i = 0; i < otpParams.Digits; i++)
+                {
+                    otp += SteamChars[fullCode % SteamChars.Length];
+                    fullCode = (int)Math.Truncate(fullCode / (double)SteamChars.Length);
+                }
+            }
+            else
+            {
+                var rawOtp = binary % (int)Math.Pow(10, otpParams.Digits);
+                otp = rawOtp.ToString().PadLeft(otpParams.Digits, '0');
+            }
+            return otp;
         }
 
         // ref: https://tools.ietf.org/html/rfc5869
