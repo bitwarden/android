@@ -569,5 +569,67 @@ namespace Bit.App.Utilities
             var appSettingsService = Resolver.Resolve<IAppSettingsService>();
             return appSettingsService?.OrganizationGivesPremium ?? false;
         }
+
+        public static void NestedTraverse(List<TreeNode<ITreeNodeObject>> nodeTree, int partIndex, string[] parts,
+            ITreeNodeObject obj, ITreeNodeObject parent, string delimiter)
+        {
+            if(parts.Length <= partIndex)
+            {
+                return;
+            }
+
+            var end = partIndex == parts.Length - 1;
+            var partName = parts[partIndex];
+
+            foreach(var n in nodeTree)
+            {
+                if(n.Node.Name != parts[partIndex])
+                {
+                    continue;
+                }
+                if(end && n.Node.Id != obj.Id)
+                {
+                    // Another node with the same name.
+                    nodeTree.Add(new TreeNode<ITreeNodeObject>(obj, partName, parent));
+                    return;
+                }
+                NestedTraverse(n.Children, partIndex + 1, parts, obj, n.Node, delimiter);
+                return;
+            }
+
+            if(!nodeTree.Any(n => n.Node.Name == partName))
+            {
+                if(end)
+                {
+                    nodeTree.Add(new TreeNode<ITreeNodeObject>(obj, partName, parent));
+                    return;
+                }
+                var newPartName = string.Concat(parts[partIndex], delimiter, parts[partIndex + 1]);
+                var newParts = new List<string> { newPartName };
+                var newPartsStartFrom = partIndex + 2;
+                newParts.AddRange(new ArraySegment<string>(parts, newPartsStartFrom, parts.Length - newPartsStartFrom));
+                NestedTraverse(nodeTree, 0, newParts.ToArray(), obj, parent, delimiter);
+            }
+        }
+
+        public static TreeNode<ITreeNodeObject> GetTreeNodeObject(List<TreeNode<ITreeNodeObject>> nodeTree, string id)
+        {
+            foreach(var n in nodeTree)
+            {
+                if(n.Node.Id == id)
+                {
+                    return n;
+                }
+                else if(n.Children != null)
+                {
+                    var node = GetTreeNodeObject(n.Children, id);
+                    if(node != null)
+                    {
+                        return node;
+                    }
+                }
+            }
+            return null;
+        }
     }
 }
