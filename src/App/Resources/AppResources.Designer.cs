@@ -412,7 +412,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your logins are now easily accessable right from your keyboard while logging into apps and websites..
+        ///   Looks up a localized string similar to Your logins are now easily accessible right from your keyboard while logging into apps and websites..
         /// </summary>
         public static string AutofillSetup {
             get {
@@ -1420,7 +1420,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your logins are now easily accessable from Safari, Chrome, and other supported apps..
+        ///   Looks up a localized string similar to Your logins are now easily accessible from Safari, Chrome, and other supported apps..
         /// </summary>
         public static string ExtensionSetup {
             get {
