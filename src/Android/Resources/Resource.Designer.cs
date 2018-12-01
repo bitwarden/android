@@ -8565,6 +8565,9 @@ namespace Bit.Android
 			// aapt resource value: 0x7f080002
 			public const int filepaths = 2131230722;
 			
+			// aapt resource value: 0x7f080003
+			public const int network_security_config = 2131230723;
+			
 			static Xml()
 			{
 				global::Android.Runtime.ResourceIdManager.UpdateIdValues();
