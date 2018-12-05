@@ -191,7 +191,7 @@ namespace Bit.App.Models.Page
 
         public class GroupingOrCipher
         {
-            public GroupingOrCipher(Grouping grouping)
+            public GroupingOrCipher(TreeNode<Grouping> grouping)
             {
                 Grouping = grouping;
                 Cipher = null;
@@ -203,11 +203,11 @@ namespace Bit.App.Models.Page
                 Grouping = null;
             }
 
-            public Grouping Grouping { get; set; }
+            public TreeNode<Grouping> Grouping { get; set; }
             public Cipher Cipher { get; set; }
         }
 
-        public class Grouping
+        public class Grouping : ITreeNodeObject
         {
             public Grouping(string name, int count)
             {

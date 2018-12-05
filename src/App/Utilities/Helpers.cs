@@ -570,8 +570,8 @@ namespace Bit.App.Utilities
             return appSettingsService?.OrganizationGivesPremium ?? false;
         }
 
-        public static void NestedTraverse(List<TreeNode<ITreeNodeObject>> nodeTree, int partIndex, string[] parts,
-            ITreeNodeObject obj, ITreeNodeObject parent, string delimiter)
+        public static void NestedTraverse<T>(List<TreeNode<T>> nodeTree, int partIndex, string[] parts,
+            T obj, T parent, string delimiter) where T : ITreeNodeObject
         {
             if(parts.Length <= partIndex)
             {
@@ -590,7 +590,7 @@ namespace Bit.App.Utilities
                 if(end && n.Node.Id != obj.Id)
                 {
                     // Another node with the same name.
-                    nodeTree.Add(new TreeNode<ITreeNodeObject>(obj, partName, parent));
+                    nodeTree.Add(new TreeNode<T>(obj, partName, parent));
                     return;
                 }
                 NestedTraverse(n.Children, partIndex + 1, parts, obj, n.Node, delimiter);
@@ -601,7 +601,7 @@ namespace Bit.App.Utilities
             {
                 if(end)
                 {
-                    nodeTree.Add(new TreeNode<ITreeNodeObject>(obj, partName, parent));
+                    nodeTree.Add(new TreeNode<T>(obj, partName, parent));
                     return;
                 }
                 var newPartName = string.Concat(parts[partIndex], delimiter, parts[partIndex + 1]);
@@ -612,7 +612,7 @@ namespace Bit.App.Utilities
             }
         }
 
-        public static TreeNode<ITreeNodeObject> GetTreeNodeObject(List<TreeNode<ITreeNodeObject>> nodeTree, string id)
+        public static TreeNode<T> GetTreeNodeObject<T>(List<TreeNode<T>> nodeTree, string id) where T : ITreeNodeObject
         {
             foreach(var n in nodeTree)
             {
@@ -630,6 +630,16 @@ namespace Bit.App.Utilities
                 }
             }
             return null;
+        }
+
+        public static List<TreeNode<T>> GetAllNested<T>(IEnumerable<T> objs) where T : ITreeNodeObject
+        {
+            var nodes = new List<TreeNode<T>>();
+            foreach(var o in objs)
+            {
+                NestedTraverse(nodes, 0, o.Name.Split('/'), o, default(T), "/");
+            }
+            return nodes;
         }
     }
 }

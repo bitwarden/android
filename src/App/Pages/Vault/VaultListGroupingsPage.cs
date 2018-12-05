@@ -235,15 +235,18 @@ namespace Bit.App.Pages
                 var folders = await _folderService.GetAllAsync();
                 var collections = await _collectionService.GetAllAsync();
 
-                var folderGroupings = folders
-                    .Select(f => new GroupingOrCipher(
-                        new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0)))
-                    .OrderBy(g => g.Grouping.Name).ToList();
+                var fGroupings = folders
+                    .Select(f => new Grouping(f, folderCounts.ContainsKey(f.Id) ? folderCounts[f.Id] : 0))
+                    .OrderBy(g => g.Name);
+                var folderGroupings = Helpers.GetAllNested(fGroupings)
+                    .Select(n => new GroupingOrCipher(n)).ToList();
 
                 if(collections.Any() || noFolderCipherGroupings.Count >= 100)
                 {
-                    folderGroupings.Add(new GroupingOrCipher(new Grouping(AppResources.FolderNone,
-                        noFolderCipherGroupings.Count)));
+                    var noneFolderGrouping = new Grouping(AppResources.FolderNone, noFolderCipherGroupings.Count);
+                    var noneFolderNode = new Bit.App.Models.TreeNode<Grouping>(noneFolderGrouping,
+                        noneFolderGrouping.Name, null);
+                    folderGroupings.Add(new GroupingOrCipher(noneFolderNode));
                 }
 
                 if(folderGroupings.Any())
@@ -251,10 +254,12 @@ namespace Bit.App.Pages
                     sections.Add(new Section<GroupingOrCipher>(folderGroupings, AppResources.Folders));
                 }
 
-                var collectionGroupings = collections.Select(c =>
-                    new GroupingOrCipher(new Grouping(
-                        c, collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0)))
-                   .OrderBy(g => g.Grouping.Name).ToList();
+                var cGroupings = collections
+                    .Select(c => new Grouping(c, collectionsDict.ContainsKey(c.Id) ? collectionsDict[c.Id].Count() : 0))
+                    .OrderBy(g => g.Name);
+                var collectionGroupings = Helpers.GetAllNested(cGroupings)
+                    .Select(n => new GroupingOrCipher(n)).ToList();
+
                 if(collectionGroupings.Any())
                 {
                     sections.Add(new Section<GroupingOrCipher>(collectionGroupings, AppResources.Collections));
@@ -299,15 +304,15 @@ namespace Bit.App.Pages
             if(groupingOrCipher.Grouping != null)
             {
                 Page page;
-                if(groupingOrCipher.Grouping.Folder)
+                if(groupingOrCipher.Grouping.Node.Folder)
                 {
                     page = new VaultListCiphersPage(folder: true,
-                        folderId: groupingOrCipher.Grouping.Id, groupingName: groupingOrCipher.Grouping.Name);
+                        folderId: groupingOrCipher.Grouping.Node.Id, groupingName: groupingOrCipher.Grouping.Node.Name);
                 }
                 else
                 {
-                    page = new VaultListCiphersPage(collectionId: groupingOrCipher.Grouping.Id,
-                        groupingName: groupingOrCipher.Grouping.Name);
+                    page = new VaultListCiphersPage(collectionId: groupingOrCipher.Grouping.Node.Id,
+                        groupingName: groupingOrCipher.Grouping.Node.Name);
                 }
 
                 await Navigation.PushAsync(page);
