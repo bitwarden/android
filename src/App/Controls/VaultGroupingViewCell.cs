@@ -36,6 +36,8 @@ namespace Bit.App.Controls
             };
             CountLabel.SetBinding(Label.TextProperty, string.Format("{0}.Node.{1}",
                 nameof(VaultListPageModel.GroupingOrCipher.Grouping), nameof(VaultListPageModel.Grouping.Count)));
+            CountLabel.SetBinding(VisualElement.IsVisibleProperty, string.Format("{0}.Node.{1}",
+                nameof(VaultListPageModel.GroupingOrCipher.Grouping), nameof(VaultListPageModel.Grouping.ShowCount)));
 
             var stackLayout = new StackLayout
             {

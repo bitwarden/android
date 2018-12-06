@@ -217,7 +217,7 @@ namespace Bit.App.Models.Page
                 Count = count;
             }
 
-            public Grouping(Folder folder, int count)
+            public Grouping(Folder folder, int? count)
             {
                 Id = folder.Id;
                 Name = folder.Name?.Decrypt();
@@ -225,7 +225,7 @@ namespace Bit.App.Models.Page
                 Count = count;
             }
 
-            public Grouping(Collection collection, int count)
+            public Grouping(Collection collection, int? count)
             {
                 Id = collection.Id;
                 Name = collection.Name?.Decrypt(collection.OrganizationId);
@@ -235,9 +235,10 @@ namespace Bit.App.Models.Page
 
             public string Id { get; set; }
             public string Name { get; set; } = AppResources.FolderNone;
-            public int Count { get; set; }
+            public int? Count { get; set; }
             public bool Folder { get; set; }
             public bool Collection { get; set; }
+            public bool ShowCount => Count.HasValue;
         }
     }
 }

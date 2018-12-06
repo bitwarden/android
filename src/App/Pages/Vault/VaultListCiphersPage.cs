@@ -25,6 +25,8 @@ namespace Bit.App.Pages
         private readonly IAppSettingsService _appSettingsService;
         private readonly IGoogleAnalyticsService _googleAnalyticsService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IFolderService _folderService;
+        private readonly ICollectionService _collectionService;
         private CancellationTokenSource _filterResultsCancellationTokenSource;
         private readonly bool _favorites = false;
         private readonly bool _folder = false;
@@ -52,13 +54,16 @@ namespace Bit.App.Pages
             _appSettingsService = Resolver.Resolve<IAppSettingsService>();
             _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
             _deviceActionService = Resolver.Resolve<IDeviceActionService>();
+            _folderService = Resolver.Resolve<IFolderService>();
+            _collectionService = Resolver.Resolve<ICollectionService>();
 
             Init();
         }
 
-        public ExtendedObservableCollection<Section<Cipher>> PresentationSections { get; private set; }
-            = new ExtendedObservableCollection<Section<Cipher>>();
+        public ExtendedObservableCollection<Section<GroupingOrCipher>> PresentationSections { get; private set; }
+            = new ExtendedObservableCollection<Section<GroupingOrCipher>>();
         public Cipher[] Ciphers { get; set; } = new Cipher[] { };
+        public GroupingOrCipher[] Groupings { get; set; } = new GroupingOrCipher[] { };
         public ExtendedListView ListView { get; set; }
         public SearchBar Search { get; set; }
         public ActivityIndicator LoadingIndicator { get; set; }
@@ -75,11 +80,10 @@ namespace Bit.App.Pages
                 IsGroupingEnabled = true,
                 ItemsSource = PresentationSections,
                 HasUnevenRows = true,
-                GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(nameof(Section<Cipher>.Name),
-                    nameof(Section<Cipher>.Count))),
-                GroupShortNameBinding = new Binding(nameof(Section<Cipher>.Name)),
-                ItemTemplate = new DataTemplate(() => new VaultListViewCell(
-                    (Cipher c) => Helpers.CipherMoreClickedAsync(this, c, !string.IsNullOrWhiteSpace(_uri))))
+                GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
+                    nameof(Section<GroupingOrCipher>.Name), nameof(Section<GroupingOrCipher>.Count))),
+                GroupShortNameBinding = new Binding(nameof(Section<GroupingOrCipher>.Name)),
+                ItemTemplate = new GroupingOrCipherDataTemplateSelector(this)
             };
 
             if(Device.RuntimePlatform == Device.iOS)
@@ -250,7 +254,7 @@ namespace Bit.App.Pages
 
             if(string.IsNullOrWhiteSpace(searchFilter))
             {
-                LoadSections(Ciphers, ct);
+                LoadSections(Ciphers, Groupings, ct);
             }
             else
             {
@@ -263,7 +267,7 @@ namespace Bit.App.Pages
                     .ToArray();
 
                 ct.ThrowIfCancellationRequested();
-                LoadSections(filteredCiphers, ct);
+                LoadSections(filteredCiphers, null, ct);
             }
         }
 
@@ -291,7 +295,7 @@ namespace Bit.App.Pages
             });
 
             AddCipherItem?.InitEvents();
-            ListView.ItemSelected += CipherSelected;
+            ListView.ItemSelected += GroupingOrCipherSelected;
             Search.TextChanged += SearchBar_TextChanged;
             Search.SearchButtonPressed += SearchBar_SearchButtonPressed;
             _filterResultsCancellationTokenSource = FetchAndLoadVault();
@@ -303,7 +307,7 @@ namespace Bit.App.Pages
             MessagingCenter.Unsubscribe<Application, bool>(Application.Current, "SyncCompleted");
 
             AddCipherItem?.Dispose();
-            ListView.ItemSelected -= CipherSelected;
+            ListView.ItemSelected -= GroupingOrCipherSelected;
             Search.TextChanged -= SearchBar_TextChanged;
             Search.SearchButtonPressed -= SearchBar_SearchButtonPressed;
         }
@@ -324,10 +328,28 @@ namespace Bit.App.Pages
                 if(_folder || !string.IsNullOrWhiteSpace(_folderId))
                 {
                     ciphers = await _cipherService.GetAllByFolderAsync(_folderId);
+
+                    var folders = await _folderService.GetAllAsync();
+                    var fGroupings = folders.Select(f => new Grouping(f, null)).OrderBy(g => g.Name).ToList();
+                    var fTreeNodes = Helpers.GetAllNested(fGroupings);
+                    var fTreeNode = Helpers.GetTreeNodeObject(fTreeNodes, _folderId);
+                    if(fTreeNode.Children?.Any() ?? false)
+                    {
+                        Groupings = fTreeNode.Children.Select(n => new GroupingOrCipher(n)).ToArray();
+                    }
                 }
                 else if(!string.IsNullOrWhiteSpace(_collectionId))
                 {
                     ciphers = await _cipherService.GetAllByCollectionAsync(_collectionId);
+
+                    var collections = await _collectionService.GetAllAsync();
+                    var cGroupings = collections.Select(c => new Grouping(c, null)).OrderBy(g => g.Name).ToList();
+                    var cTreeNodes = Helpers.GetAllNested(cGroupings);
+                    var cTreeNode = Helpers.GetTreeNodeObject(cTreeNodes, _collectionId);
+                    if(cTreeNode.Children?.Any() ?? false)
+                    {
+                        Groupings = cTreeNode.Children.Select(n => new GroupingOrCipher(n)).ToArray();
+                    }
                 }
                 else if(_favorites)
                 {
@@ -363,11 +385,20 @@ namespace Bit.App.Pages
             return cts;
         }
 
-        private void LoadSections(Cipher[] ciphers, CancellationToken ct)
+        private void LoadSections(Cipher[] ciphers, GroupingOrCipher[] groupings, CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
+
             var sections = ciphers.GroupBy(c => c.NameGroup.ToUpperInvariant())
-                .Select(g => new Section<Cipher>(g.ToList(), g.Key));
+                .Select(g => new Section<GroupingOrCipher>(g.Select(g2 => new GroupingOrCipher(g2)).ToList(), g.Key))
+                .ToList();
+
+            if(groupings?.Any() ?? false)
+            {
+                sections.Insert(0, new Section<GroupingOrCipher>(groupings.ToList(),
+                    _folder ? AppResources.Folders : AppResources.Collections));
+            }
+
             ct.ThrowIfCancellationRequested();
             Device.BeginInvokeOnMainThread(() =>
             {
@@ -393,79 +424,122 @@ namespace Bit.App.Pages
             });
         }
 
-        private async void CipherSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void GroupingOrCipherSelected(object sender, SelectedItemChangedEventArgs e)
         {
-            var cipher = e.SelectedItem as Cipher;
-            if(cipher == null)
+            var groupingOrCipher = e.SelectedItem as GroupingOrCipher;
+            if(groupingOrCipher == null)
             {
                 return;
             }
 
-            string selection = null;
-            if(!string.IsNullOrWhiteSpace(_uri))
+            if(groupingOrCipher.Grouping != null)
             {
-                var options = new List<string> { AppResources.Autofill };
-                if(cipher.Type == Enums.CipherType.Login && _connectivity.IsConnected)
+                Page page;
+                if(groupingOrCipher.Grouping.Node.Folder)
                 {
-                    options.Add(AppResources.AutofillAndSave);
-                }
-                options.Add(AppResources.View);
-                selection = await DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
-                    options.ToArray());
-            }
-
-            if(selection == AppResources.View || string.IsNullOrWhiteSpace(_uri))
-            {
-                var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
-                await Navigation.PushForDeviceAsync(page);
-            }
-            else if(selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
-            {
-                if(selection == AppResources.AutofillAndSave)
-                {
-                    if(!_connectivity.IsConnected)
-                    {
-                        Helpers.AlertNoConnection(this);
-                    }
-                    else
-                    {
-                        var uris = cipher.CipherModel.Login?.Uris?.ToList();
-                        if(uris == null)
-                        {
-                            uris = new List<Models.LoginUri>();
-                        }
-
-                        uris.Add(new Models.LoginUri
-                        {
-                            Uri = _uri.Encrypt(cipher.CipherModel.OrganizationId),
-                            Match = null
-                        });
-
-                        cipher.CipherModel.Login.Uris = uris;
-
-                        await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
-                        var saveTask = await _cipherService.SaveAsync(cipher.CipherModel);
-                        await _deviceActionService.HideLoadingAsync();
-                        if(saveTask.Succeeded)
-                        {
-                            _googleAnalyticsService.TrackAppEvent("AddedLoginUriDuringAutofill");
-                        }
-                    }
-                }
-
-                if(_deviceInfoService.Version < 21)
-                {
-                    Helpers.CipherMoreClickedAsync(this, cipher, !string.IsNullOrWhiteSpace(_uri));
+                    page = new VaultListCiphersPage(folder: true,
+                        folderId: groupingOrCipher.Grouping.Node.Id, groupingName: groupingOrCipher.Grouping.Node.Name);
                 }
                 else
                 {
-                    _googleAnalyticsService.TrackExtensionEvent("AutoFilled",
-                        _uri.StartsWith("http") ? "Website" : "App");
-                    _deviceActionService.Autofill(cipher);
+                    page = new VaultListCiphersPage(collectionId: groupingOrCipher.Grouping.Node.Id,
+                        groupingName: groupingOrCipher.Grouping.Node.Name);
+                }
+
+                await Navigation.PushAsync(page);
+            }
+            else if(groupingOrCipher.Cipher != null)
+            {
+                var cipher = groupingOrCipher.Cipher;
+                string selection = null;
+                if(!string.IsNullOrWhiteSpace(_uri))
+                {
+                    var options = new List<string> { AppResources.Autofill };
+                    if(cipher.Type == Enums.CipherType.Login && _connectivity.IsConnected)
+                    {
+                        options.Add(AppResources.AutofillAndSave);
+                    }
+                    options.Add(AppResources.View);
+                    selection = await DisplayActionSheet(AppResources.AutofillOrView, AppResources.Cancel, null,
+                        options.ToArray());
+                }
+
+                if(selection == AppResources.View || string.IsNullOrWhiteSpace(_uri))
+                {
+                    var page = new VaultViewCipherPage(cipher.Type, cipher.Id);
+                    await Navigation.PushForDeviceAsync(page);
+                }
+                else if(selection == AppResources.Autofill || selection == AppResources.AutofillAndSave)
+                {
+                    if(selection == AppResources.AutofillAndSave)
+                    {
+                        if(!_connectivity.IsConnected)
+                        {
+                            Helpers.AlertNoConnection(this);
+                        }
+                        else
+                        {
+                            var uris = cipher.CipherModel.Login?.Uris?.ToList();
+                            if(uris == null)
+                            {
+                                uris = new List<Models.LoginUri>();
+                            }
+
+                            uris.Add(new Models.LoginUri
+                            {
+                                Uri = _uri.Encrypt(cipher.CipherModel.OrganizationId),
+                                Match = null
+                            });
+
+                            cipher.CipherModel.Login.Uris = uris;
+
+                            await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                            var saveTask = await _cipherService.SaveAsync(cipher.CipherModel);
+                            await _deviceActionService.HideLoadingAsync();
+                            if(saveTask.Succeeded)
+                            {
+                                _googleAnalyticsService.TrackAppEvent("AddedLoginUriDuringAutofill");
+                            }
+                        }
+                    }
+
+                    if(_deviceInfoService.Version < 21)
+                    {
+                        Helpers.CipherMoreClickedAsync(this, cipher, !string.IsNullOrWhiteSpace(_uri));
+                    }
+                    else
+                    {
+                        _googleAnalyticsService.TrackExtensionEvent("AutoFilled",
+                            _uri.StartsWith("http") ? "Website" : "App");
+                        _deviceActionService.Autofill(cipher);
+                    }
                 }
             }
 
             ((ListView)sender).SelectedItem = null;
+        }
+
+        public class GroupingOrCipherDataTemplateSelector : DataTemplateSelector
+        {
+            public GroupingOrCipherDataTemplateSelector(VaultListCiphersPage page)
+            {
+                GroupingTemplate = new DataTemplate(() => new VaultGroupingViewCell());
+                CipherTemplate = new DataTemplate(() => new VaultListViewCell(
+                    (Cipher c) => Helpers.CipherMoreClickedAsync(page, c, !string.IsNullOrWhiteSpace(page._uri)),
+                    true));
+            }
+
+            public DataTemplate GroupingTemplate { get; set; }
+            public DataTemplate CipherTemplate { get; set; }
+
+            protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
+            {
+                if(item == null)
+                {
+                    return null;
+                }
+                return ((GroupingOrCipher)item).Cipher == null ? GroupingTemplate : CipherTemplate;
+            }
         }
     }
 }
