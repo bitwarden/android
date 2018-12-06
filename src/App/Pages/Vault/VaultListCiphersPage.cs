@@ -81,8 +81,8 @@ namespace Bit.App.Pages
                 ItemsSource = PresentationSections,
                 HasUnevenRows = true,
                 GroupHeaderTemplate = new DataTemplate(() => new SectionHeaderViewCell(
-                    nameof(Section<GroupingOrCipher>.Name), nameof(Section<GroupingOrCipher>.Count))),
-                GroupShortNameBinding = new Binding(nameof(Section<GroupingOrCipher>.Name)),
+                    nameof(Section<Grouping>.Name), nameof(Section<Grouping>.Count))),
+                GroupShortNameBinding = new Binding(nameof(Section<Grouping>.NameShort)),
                 ItemTemplate = new GroupingOrCipherDataTemplateSelector(this)
             };
 

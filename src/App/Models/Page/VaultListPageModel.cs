@@ -187,6 +187,7 @@ namespace Bit.App.Models.Page
             }
 
             public string Name { get; set; }
+            public string NameShort => string.IsNullOrWhiteSpace(Name) || Name.Length == 0 ? "-" : Name[0].ToString();
         }
 
         public class GroupingOrCipher
