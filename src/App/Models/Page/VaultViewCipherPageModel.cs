@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using System.Collections.Generic;
 using Bit.App.Enums;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 
 namespace Bit.App.Models.Page
 {
@@ -122,7 +123,7 @@ namespace Bit.App.Models.Page
             {
                 _loginPassword = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(LoginPassword)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedLoginPassword)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(FormattedLoginPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(ShowLoginPassword)));
             }
         }
@@ -134,12 +135,12 @@ namespace Bit.App.Models.Page
             {
                 _loginRevealPassword = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(RevealLoginPassword)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(MaskedLoginPassword)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(FormattedLoginPassword)));
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(LoginShowHideImage)));
             }
         }
-        public string MaskedLoginPassword => RevealLoginPassword ?
-            LoginPassword : LoginPassword == null ? null : MaskedPasswordString;
+        public FormattedString FormattedLoginPassword => RevealLoginPassword ?
+            PasswordFormatter.FormatPassword(LoginPassword) : LoginPassword == null ? null : MaskedPasswordString;
         public ImageSource LoginShowHideImage => RevealLoginPassword ?
             ImageSource.FromFile("eye_slash.png") : ImageSource.FromFile("eye.png");
 
