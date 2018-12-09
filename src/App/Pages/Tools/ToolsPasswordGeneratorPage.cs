@@ -67,7 +67,7 @@ namespace Bit.App.Pages
 
             Tgr = new TapGestureRecognizer();
             Password.GestureRecognizers.Add(Tgr);
-            Password.SetBinding(Label.TextProperty, nameof(PasswordGeneratorPageModel.Password));
+            Password.SetBinding(Label.FormattedTextProperty, nameof(PasswordGeneratorPageModel.FormattedPassword));
 
             SliderCell = new SliderViewCell(this, _passwordGenerationService, _settings);
 
