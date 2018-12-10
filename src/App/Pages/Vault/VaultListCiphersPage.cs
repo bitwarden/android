@@ -328,14 +328,16 @@ namespace Bit.App.Pages
                 if(_folder || !string.IsNullOrWhiteSpace(_folderId))
                 {
                     ciphers = await _cipherService.GetAllByFolderAsync(_folderId);
-
-                    var folders = await _folderService.GetAllAsync();
-                    var fGroupings = folders.Select(f => new Grouping(f, null)).OrderBy(g => g.Name).ToList();
-                    var fTreeNodes = Helpers.GetAllNested(fGroupings);
-                    var fTreeNode = Helpers.GetTreeNodeObject(fTreeNodes, _folderId);
-                    if(fTreeNode.Children?.Any() ?? false)
+                    if(!string.IsNullOrWhiteSpace(_folderId))
                     {
-                        Groupings = fTreeNode.Children.Select(n => new GroupingOrCipher(n)).ToArray();
+                        var folders = await _folderService.GetAllAsync();
+                        var fGroupings = folders.Select(f => new Grouping(f, null)).OrderBy(g => g.Name).ToList();
+                        var fTreeNodes = Helpers.GetAllNested(fGroupings);
+                        var fTreeNode = Helpers.GetTreeNodeObject(fTreeNodes, _folderId);
+                        if(fTreeNode.Children?.Any() ?? false)
+                        {
+                            Groupings = fTreeNode.Children.Select(n => new GroupingOrCipher(n)).ToArray();
+                        }
                     }
                 }
                 else if(!string.IsNullOrWhiteSpace(_collectionId))
