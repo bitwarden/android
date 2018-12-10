@@ -285,7 +285,7 @@ namespace Bit.iOS.Extension
             container.RegisterSingleton<ILockService, LockService>();
             container.RegisterSingleton<IAppInfoService, AppInfoService>();
             container.RegisterSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();
-            container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
+            container.RegisterInstance<IDeviceInfoService>(new DeviceInfoService(true));
             container.RegisterSingleton<ILocalizeService, LocalizeService>();
             container.RegisterSingleton<ILogService, LogService>();
             container.RegisterSingleton<IHttpService, HttpService>();

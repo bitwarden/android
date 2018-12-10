@@ -209,6 +209,18 @@ namespace Bit.App.Services
             }
         }
 
+        public bool ClearExtensionCiphersCache
+        {
+            get
+            {
+                return _settings.GetValueOrDefault(Constants.ClearExtensionCiphersCache, false);
+            }
+            set
+            {
+                _settings.AddOrUpdateValue(Constants.ClearExtensionCiphersCache, value);
+            }
+        }
+
         public bool OrganizationGivesPremium
         {
             get

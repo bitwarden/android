@@ -18,6 +18,7 @@ namespace Bit.App.Abstractions
         string IdentityUrl { get; set; }
         string IconsUrl { get; set; }
         bool ClearCiphersCache { get; set; }
+        bool ClearExtensionCiphersCache { get; set; }
         bool OrganizationGivesPremium { get; set; }
     }
 }

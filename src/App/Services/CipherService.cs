@@ -27,6 +27,7 @@ namespace Bit.App.Services
         private readonly ISettingsService _settingsService;
         private readonly ICryptoService _cryptoService;
         private readonly IAppSettingsService _appSettingsService;
+        private readonly IDeviceInfoService _deviceInfoService;
 
         public CipherService(
             ICipherRepository cipherRepository,
@@ -36,7 +37,8 @@ namespace Bit.App.Services
             ICipherApiRepository cipherApiRepository,
             ISettingsService settingsService,
             ICryptoService cryptoService,
-            IAppSettingsService appSettingsService)
+            IAppSettingsService appSettingsService,
+            IDeviceInfoService deviceInfoService)
         {
             _cipherRepository = cipherRepository;
             _cipherCollectionRepository = cipherCollectionRepository;
@@ -46,6 +48,7 @@ namespace Bit.App.Services
             _settingsService = settingsService;
             _cryptoService = cryptoService;
             _appSettingsService = appSettingsService;
+            _deviceInfoService = deviceInfoService;
         }
 
         public async Task<Cipher> GetByIdAsync(string id)
@@ -63,10 +66,16 @@ namespace Bit.App.Services
 
         public async Task<IEnumerable<Cipher>> GetAllAsync()
         {
-            if(_appSettingsService.ClearCiphersCache)
+            if(!_deviceInfoService.IsExtension && _appSettingsService.ClearCiphersCache)
             {
                 CachedCiphers = null;
                 _appSettingsService.ClearCiphersCache = false;
+            }
+
+            if(_deviceInfoService.IsExtension && _appSettingsService.ClearExtensionCiphersCache)
+            {
+                CachedCiphers = null;
+                _appSettingsService.ClearExtensionCiphersCache = false;
             }
 
             if(CachedCiphers != null)
@@ -272,6 +281,7 @@ namespace Bit.App.Services
             await _cipherRepository.UpsertAsync(cipher);
             CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
+            _appSettingsService.ClearExtensionCiphersCache = true;
             if(sendMessage && Application.Current != null)
             {
                 MessagingCenter.Send(Application.Current, "UpsertedCipher",
@@ -308,6 +318,7 @@ namespace Bit.App.Services
             await _cipherRepository.DeleteAsync(id);
             CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
+            _appSettingsService.ClearExtensionCiphersCache = true;
         }
 
         public async Task<byte[]> DownloadAndDecryptAttachmentAsync(string url, CipherString key, string orgId = null)
@@ -383,6 +394,7 @@ namespace Bit.App.Services
             }
             CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
+            _appSettingsService.ClearExtensionCiphersCache = true;
         }
 
         public async Task<ApiResult> DeleteAttachmentAsync(Cipher cipher, string attachmentId)
@@ -406,6 +418,7 @@ namespace Bit.App.Services
             await _attachmentRepository.DeleteAsync(attachmentId);
             CachedCiphers = null;
             _appSettingsService.ClearCiphersCache = true;
+            _appSettingsService.ClearExtensionCiphersCache = true;
         }
 
         private Tuple<string, string[]> InfoFromMobileAppUri(string mobileAppUriString)

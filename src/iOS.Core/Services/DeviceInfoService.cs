@@ -7,6 +7,15 @@ namespace Bit.iOS.Core.Services
 {
     public class DeviceInfoService : IDeviceInfoService
     {
+        public DeviceInfoService()
+            : this(false)
+        { }
+
+        public DeviceInfoService(bool isExtension)
+        {
+            IsExtension = isExtension;
+        }
+
         public string Type => Xamarin.Forms.Device.iOS;
         public string Model => UIDevice.CurrentDevice.Model;
         public int Version
@@ -45,5 +54,6 @@ namespace Bit.iOS.Core.Services
                 return context.BiometryType == LABiometryType.FaceId;
             }
         }
+        public bool IsExtension { get; private set; }
     }
 }

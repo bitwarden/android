@@ -10,5 +10,6 @@
         bool HasCamera { get; }
         bool AutofillServiceSupported { get; }
         bool HasFaceIdSupport { get; }
+        bool IsExtension { get; }
     }
 }

@@ -70,5 +70,6 @@ namespace Bit.Android.Services
             var adapter = manager.DefaultAdapter;
             return adapter != null && adapter.IsEnabled;
         }
+        public bool IsExtension => false;
     }
 }
