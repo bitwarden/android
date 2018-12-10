@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using Bit.App.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Models.Page
 {
@@ -19,7 +21,13 @@ namespace Bit.App.Models.Page
             {
                 _password = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Password)));
+                PropertyChanged(this, new PropertyChangedEventArgs(nameof(FormattedPassword)));
             }
+        }
+
+        public FormattedString FormattedPassword
+        {
+            get { return PasswordFormatter.FormatPassword(_password); }
         }
 
         public string Length

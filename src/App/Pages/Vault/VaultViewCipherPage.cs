@@ -129,8 +129,8 @@ namespace Bit.App.Pages
                     // Password
                     LoginPasswordCell = new LabeledValueCell(AppResources.Password, button1Image: string.Empty,
                         button2Image: "clipboard.png");
-                    LoginPasswordCell.Value.SetBinding(Label.TextProperty,
-                        nameof(VaultViewCipherPageModel.MaskedLoginPassword));
+                    LoginPasswordCell.Value.SetBinding(Label.FormattedTextProperty,
+                        nameof(VaultViewCipherPageModel.FormattedLoginPassword));
                     LoginPasswordCell.Button1.SetBinding(Button.ImageProperty,
                         nameof(VaultViewCipherPageModel.LoginShowHideImage));
                     LoginPasswordCell.Button1.Command =
