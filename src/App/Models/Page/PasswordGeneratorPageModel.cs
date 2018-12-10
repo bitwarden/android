@@ -25,10 +25,7 @@ namespace Bit.App.Models.Page
             }
         }
 
-        public FormattedString FormattedPassword
-        {
-            get { return PasswordFormatter.FormatPassword(_password); }
-        }
+        public FormattedString FormattedPassword => PasswordFormatter.FormatPassword(_password);
 
         public string Length
         {
