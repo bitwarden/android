@@ -97,11 +97,16 @@ namespace Bit.Android.Controls
 
                 bool isHeader, nextIsHeader;
                 var cell = GetCellForPosition(position, out isHeader, out nextIsHeader);
+                var cellView = CellFactory.GetCell(cell, convertView, parent, Context, _view);
                 if(layout.ChildCount > 0)
                 {
                     layout.RemoveViewAt(0);
-                    var cellView = CellFactory.GetCell(cell, convertView, parent, Context, _view);
                     layout.AddView(cellView, 0);
+                }
+
+                if(cellView.HasFocus)
+                {
+                    cellView.ClearFocus();
                 }
 
                 if(isHeader)
