@@ -203,7 +203,7 @@ namespace Bit.App.Pages
                         _googleAnalyticsService.TrackAppEvent("SelectedGeneratedPassword");
                     }
 
-                    _passwordValueAction(Password.Text);
+                    _passwordValueAction(Model.Password);
                     await Navigation.PopForDeviceAsync();
                 }, ToolbarItemOrder.Default, 0);
 
@@ -302,7 +302,7 @@ namespace Bit.App.Pages
             {
                 _googleAnalyticsService.TrackAppEvent("CopiedGeneratedPassword");
             }
-            _deviceActionService.CopyToClipboard(Password.Text);
+            _deviceActionService.CopyToClipboard(Model.Password);
             _deviceActionService.Toast(string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
 
