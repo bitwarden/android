@@ -21,7 +21,7 @@ namespace Bit.App.Models.Page
             {
                 _password = value;
                 PropertyChanged(this, new PropertyChangedEventArgs(nameof(Password)));
-                PropertyChanged(this, new PropertyChangedEventArgs(nameof(FormattedPassword)));
+                // PropertyChanged(this, new PropertyChangedEventArgs(nameof(FormattedPassword)));
             }
         }
 
