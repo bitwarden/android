@@ -69,6 +69,7 @@ namespace Bit.Android
             new Browser("org.bromite.bromite", "url_bar"),
             new Browser("com.kiwibrowser.browser", "url_bar"),
             new Browser("com.ecosia.android", "url_bar"),
+            new Browser("com.qwant.liberty", "url_bar_title"),
         }.ToDictionary(n => n.PackageName);
 
         // Known packages to skip
@@ -128,8 +129,8 @@ namespace Bit.Android
                     return;
                 }
 
-                //var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
-                //var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
+                var testNodes = GetWindowNodes(root, e, n => n.ViewIdResourceName != null && n.Text != null, false);
+                var testNodesData = testNodes.Select(n => new { id = n.ViewIdResourceName, text = n.Text });
 
                 var notificationManager = (NotificationManager)GetSystemService(NotificationService);
                 var cancelNotification = true;
