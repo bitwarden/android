@@ -176,12 +176,11 @@ namespace Bit.iOS.Core.Controllers
                 if (await ASHelpers.IdentitiesCanIncremental())
                 {
                     var identity = await ASHelpers.GetCipherIdentityAsync(saveTask.Result.Result.Id, _cipherService);
-                    if (identity == null)
+                    if (identity != null)
                     {
-                        return;
+                        await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
+                            new ASPasswordCredentialIdentity[] { identity });
                     }
-                    await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
-                        new ASPasswordCredentialIdentity[] { identity });
                 }
                 else
                 {
