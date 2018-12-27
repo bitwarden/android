@@ -141,7 +141,7 @@ Bitwarden 為完全的開源軟體。Bitwarden 的原始碼託管於 GitHub 上�
     <value>在一個安全的密碼庫中管理密碼</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>自動產生強力、隨機並安全的密碼</value>
+    <value>自動產生高強度、隨機並安全的密碼</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
     <value>用 Touch ID 、PIN碼或主密碼保護您的密碼庫</value>

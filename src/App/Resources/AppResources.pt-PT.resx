@@ -710,10 +710,10 @@
     <value>O início de sessão de dois passos torna a sua conta mais segura ao requerer que verifique o seu início de sessão com outro dispositivo como uma chave de segurança, aplicação de autenticação, SMS, chamada telefónica, ou email. O início de sessão de dois passos pode ser ativado no cofre web bitwarden.com. Pretende visitar o website agora?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Destrancar com {0}</value>
+    <value>Desbloquear com {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Destrancar com código PIN</value>
+    <value>Desbloquear com código PIN</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>A validar</value>
