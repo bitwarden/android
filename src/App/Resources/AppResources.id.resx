@@ -495,7 +495,7 @@
     <value>Lihat Aplikasi yang Didukung</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Info masuk Anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
+    <value>Log masuk Anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>Pada Safari dan Chrome, temukan Bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
