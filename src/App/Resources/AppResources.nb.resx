@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>Autofyll aktivert!</value>
+    <value>Autoutfylling aktivert!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>Du må logge deg inn i hoved Bitwarden-appen før du kan bruke Autofyll.</value>
+    <value>Du må logge deg inn på Bitwarden-hovedappen før du kan bruke autoutfylling.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Innloggingene dine er nå lett tilgjengelige fra tastaturet når du skal logge deg på apper og nettsteder.</value>
+    <value>Innloggingene dine er nå lett tilgjengelige fra tastaturet når du skal logge deg inn på apper og nettsteder.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>Vi anbefaler å deaktivere alle andre Autofyll apper under innstillinger dersom du ikke har tenkt å bruke dem.</value>
+    <value>Vi anbefaler å deaktivere alle andre autoutfyllingsapper i Innstillinger dersom du ikke har tenkt å bruke dem.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Få tilgang til hvelvet ditt direkte fra tastaturet for å raskt autofylle passord.</value>
+    <value>Få tilgang til hvelvet ditt direkte fra tastaturet for å raskt autoutfylle passord.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>Følg disse instruksjonene for å aktivere passord autofyll på enheten din:</value>
+    <value>Følg disse instruksjonene for å aktivere passord-autoutfylling på enheten din:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Gå til iOS-appen "Innstillinger"</value>
+    <value>1. Gå til iOS-appen «Innstillinger»</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Trykk på "Passord og kontoer"</value>
+    <value>2. Trykk på «Passord og kontoer»</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Trykk «Autofyll passord»</value>
+    <value>3. Trykk «Autoutfyll passord»</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Slå på Autofyll</value>
+    <value>4. Slå på Autoutfyll</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Velg "Bitwarden"</value>
+    <value>5. Velg «Bitwarden»</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Passord Autofyll</value>
+    <value>Passord-autoutfylling</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt er å bruke Bitwarden Passord Autofyll utvidelsen. Lær mer om Bitwarden Passord Autofyll utvidelsen ved å gå til "Verktøy" skjermen.</value>
+    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er å bruke «Bitwarden-passordautoutfylling»-utvidelsen. Lær mer om «Bitwarden-passordautoutfylling»-utvidelsen ved å gå til «Verktøy»-siden.</value>
   </data>
 </root>
