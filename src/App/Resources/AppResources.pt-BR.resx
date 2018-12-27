@@ -1320,7 +1320,7 @@
     <value>Você deve iniciar a sessão no aplicativo principal do Bitwarden, antes de poder usar o Autopreenchimento.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Suas credenciais agora são facilmente acessadas diretamente do seu teclado, enquanto você faz login em aplicativos e sites.</value>
+    <value>Suas credenciais agora são facilmente acessáveis diretamente do seu teclado, enquanto você faz login em aplicativos e sites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Recomendamos desabilitar qualquer outro aplicativo de autopreenchimento em Ajustes, se você não pretende usá-los.</value>
