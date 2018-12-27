@@ -950,7 +950,7 @@
     <value>Отключить копирование TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Для использования этой функции требуется премиум-статус.</value>
+    <value>Для использования этой функции требуется Премиум.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Вложение добавлено</value>
@@ -1174,7 +1174,7 @@
     <value>URL-адрес сервера значков</value>
   </data>
   <data name="AutofillWithBitwarden" xml:space="preserve">
-    <value>Автозаполнение с помощью Bitwarden</value>
+    <value>Автозаполнение Bitwarden</value>
   </data>
   <data name="VaultIsLocked" xml:space="preserve">
     <value>Хранилище заблокировано</value>
