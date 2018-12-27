@@ -1226,7 +1226,7 @@
     <value>Windows Hello</value>
   </data>
   <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
-    <value>Het automatisch openen van het Android automatisch aanvullen-instellingenmenu is mislukt. U kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatisch aanvullen-dienst.</value>
+    <value>Het automatisch openen van het Android automatisch invullen-instellingenmenu is mislukt. U kunt het menu handmatig openen via Android-instellingen &gt; Systeem &gt; Taal en invoer &gt; Geavanceerd &gt; Automatisch aanvullen-dienst.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
     <value>Naam van aangepast veld</value>
@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Automatisch invullen geactiveerd!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>U moet inloggen op de Bitwarden-app voordat u Automatisch invullen kunt gebruiken.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Het is raadzaam Automatisch invullen door andere apps uit te schakelen als u niet van plan bent om deze te gebruiken.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Open uw kluis rechtstreeks vanaf uw toetsenbord om wachtwoorden snel automatisch te laten invullen.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Voer de volgende stappen uit om Automatisch invullen van wachtwoorden in te schakelen:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Ga naar de iOS-app "Instellingen"</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Tik op "Wachtwoorden &amp; Accounts"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Tik op "Wachtwoorden automatisch invullen"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Activeer Automatisch invullen</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Selecteer "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Wachtwoord automatisch invullen</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>De eenvoudigste manier om nieuwe aanmeldingen aan uw kluis toe te voegen, is met behulp van de Bitwarden Password AutoFill-extensie. Meer informatie over het gebruik van de AutoFill-extensie Bitwarden-wachtwoord door naar het scherm "Gereedschap" te gaan.</value>
   </data>
 </root>
