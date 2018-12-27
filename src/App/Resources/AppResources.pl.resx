@@ -1287,7 +1287,7 @@
     <value>Tak i Zapisz</value>
   </data>
   <data name="AutofillAndSave" xml:space="preserve">
-    <value>Automatycznie wypełniaj i zapisuj</value>
+    <value>Automatycznie wypełnij i zapisz</value>
   </data>
   <data name="Organization" xml:space="preserve">
     <value>Organizacja</value>
@@ -1314,42 +1314,42 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Autouzupełnianie aktywowane!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Musisz zalogować się do aplikacji głównej Bitwarden, zanim będziesz mógł używać autouzupełniania.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Zalecamy wyłączenie w Ustawieniach innych aplikacji autouzupełniania, jeśli nie zamierzasz ich używać.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Uzyskaj dostęp do sejfu bezpośrednio z klawiatury, aby szybko i automatycznie uzupełniać hasła.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Aby włączyć automatyczne uzupełnianie haseł na swoim urządzeniu, wykonaj następujące czynności:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. przejdź do Ustawień systemu iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Dotknij "Hasła &amp; konta"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. Dotknij opcji "Autowypełnianie haseł"</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
-    <value>4. Turn on AutoFill</value>
+    <value>4. Włącz Autouzupełnianie</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Wybierz "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Autouzupełnianie haseł</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+    <value>Najprostszym sposobem dodania nowych danych logowania do sejfu jest rozszerzenie Autouzupełniania Haseł Bitwarden. Więcej informacji o używaniu rozszerzenia Autouzupełniania Haseł Bitwarden znajdziesz w widoku "Narzędzia".</value>
   </data>
 </root>
