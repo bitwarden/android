@@ -168,7 +168,7 @@ namespace Bit.App.Services
                         break;
                 }
 
-                var randomCharIndex = Next(positionChars.Length - 1);
+                var randomCharIndex = Next(positionChars.Length);
                 password.Append(positionChars[randomCharIndex]);
             }
 
