@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Deaktivér Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Adgangskode</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Opret en organisation for at dele dine elementer med andre brugere på en sikker måde.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Vi bruger Analytics for bedre at lære hvordan appen bruges, således at vi kan gøre den bedre. Al dataindsamling er fuldstændig anonym.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skan når adgangskodefeltet fokuseres</value>
