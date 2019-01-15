@@ -302,9 +302,6 @@
     <value>확인</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>분석 사용 안 함</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>비밀번호</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>조직을 만들어 당신의 항목을 다른 사용자들과 안전하게 공유하세요.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>저희는 앱이 어떻게 사용되고 있는지 확인하여 개선하기 위해 분석 자료를 사용합니다. 자료는 완전한 익명으로 수집됩니다.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>비밀번호 필드 선택 시 스캔</value>
