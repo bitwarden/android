@@ -8,6 +8,7 @@ files:
         zh-TW: zh-Hant
         pt-PT: pt-PT
         pt-BR: pt-BR
+        en-GB: en-GB
   - source: /store/apple/en/copy.resx
     translation: /store/apple/%two_letters_code%/copy.resx
     update_option: update_as_unapproved
@@ -17,6 +18,7 @@ files:
         zh-TW: zh-Hant
         pt-PT: pt-PT
         pt-BR: pt-BR
+        en-GB: en-GB
   - source: /store/google/en/copy.resx
     translation: /store/google/%two_letters_code%/copy.resx
     update_option: update_as_unapproved
@@ -26,3 +28,4 @@ files:
         zh-TW: zh-Hant
         pt-BR: pt-BR
         pt-PT: pt-PT
+        en-GB: en-GB
