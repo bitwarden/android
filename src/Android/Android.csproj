@@ -861,9 +861,6 @@
     <PackageReference Include="Xamarin.Firebase.Messaging">
       <Version>60.1142.1</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.GooglePlayServices.Analytics">
-      <Version>60.1142.1</Version>
-    </PackageReference>
     <PackageReference Include="SimpleInjector">
       <Version>4.4.0</Version>
     </PackageReference>

@@ -284,9 +284,6 @@
     <PackageReference Include="SimpleInjector">
       <Version>4.4.0</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.Google.iOS.Analytics">
-      <Version>3.17.0.1</Version>
-    </PackageReference>
     <PackageReference Include="XLabs.IoC.SimpleInjector">
       <Version>2.0.5782</Version>
     </PackageReference>

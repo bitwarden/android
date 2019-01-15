@@ -82,10 +82,5 @@
       <Name>App</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Xamarin.Google.iOS.Analytics">
-      <Version>3.17.0.1</Version>
-    </PackageReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
