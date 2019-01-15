@@ -302,9 +302,6 @@
     <value>好</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>禁用 Google Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>密码</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>创建一个组织来安全地分享您的登录项目。</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>我们使用 analytics 来帮助分析扩展的使用情况，以便我们改进扩展。所有的数据收集完全是匿名的。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>当焦点在密码字段时扫描</value>
