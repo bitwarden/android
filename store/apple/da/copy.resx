@@ -126,7 +126,7 @@
 
 Tyveri af adgangskoder er et seriøst problem. Hjemmesider og apps du bruger er under angreb hver dag. Sikkerheden bristes, og så er dine adgangskoder stjålet. Når du genbruger de samme adgangskoder på forskellige hjemmesider og apps, kan hackere nemt få adgang til din e-mail, bank- og andre vigtige konti.
 
-Sikkerhedseksperter anbefaler, at man bruger en unik, tilfældig genereret, adgangskode til hver konto man opretter. Men hvordan håndterer man alle disse adgangskoder? Bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
+Sikkerhedseksperter anbefaler, at man bruger en unik, tilfældig genereret, adgangskode til hver konto man opretter. Men hvordan administrerer man alle disse adgangskoder? Bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
 
 Bitwarden gemmer alle dine login i en krypteret boks, der synkroniseres imellem alle dine enheder. Da de er fuldstændig krypterede, før de overhovedet forlader dine enheder, er det kun dig der har adgang til dine data. Ikke engang teamet hos Bitwarden kan få adgang til dine data, selv hvis de forsøgte på det. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.
 
