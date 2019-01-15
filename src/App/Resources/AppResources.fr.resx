@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Désactiver les Analyses</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Mot de passe</value>
     <comment>Label for a password.</comment>
@@ -812,9 +809,6 @@
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Créez une organisation pour partager de manière sécurisée vos identifiants avec d'autres utilisateurs.</value>
   </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Nous utilisons des statistiques pour mieux comprendre comment l'application est utilisée et ainsi l'améliorer. Toutes les données collectées sont entièrement anonymes.</value>
-  </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scanner quand le champ Mot de passe est sélectionné</value>
   </data>
@@ -1320,7 +1314,7 @@
     <value>Vous devez vous identifier sur l'application principale Bitwarden avant d'utiliser le remplissage automatique des mots de passe.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Vos identifiants sont désormais facilement accessibles directement depuis votre clavier lorsque vous vous connectez à des applications et des sites web.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Nous vous recommandons de désactiver toutes les autres applications disponibles dans "Préremplir mots de passe" dans les Réglages d'iOS si vous n'avez pas l'intention de les utiliser.</value>

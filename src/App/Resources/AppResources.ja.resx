@@ -302,9 +302,6 @@
     <value>OK</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>解析の無効化</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>パスワード</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>他のユーザーとアイテムを安全に共有する組織を作成します。</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>アプリの使われ方を解析することでより使いやすくなるよう開発しています。収集されるデータはすべて匿名です。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>パスワードフィールドのフォーカス時にスキャン</value>
