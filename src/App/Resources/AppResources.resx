@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Disable Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Create an organization to securely share your items with other users.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scan When Password Field Focused</value>

@@ -1123,24 +1123,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disable Analytics.
-        /// </summary>
-        public static string DisableGA {
-            get {
-                return ResourceManager.GetString("DisableGA", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We use analytics to better learn how the app is being used so that we can make it better. All data collection is completely anonymous..
-        /// </summary>
-        public static string DisableGADescription {
-            get {
-                return ResourceManager.GetString("DisableGADescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Disable Website Icons.
         /// </summary>
         public static string DisableWebsiteIcons {

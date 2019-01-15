@@ -13,13 +13,11 @@ namespace Bit.App.Pages
     {
         private readonly ISettings _settings;
         private readonly IAppSettingsService _appSettings;
-        private readonly IGoogleAnalyticsService _googleAnalyticsService;
 
         public SettingsOptionsPage()
         {
             _settings = Resolver.Resolve<ISettings>();
             _appSettings = Resolver.Resolve<IAppSettingsService>();
-            _googleAnalyticsService = Resolver.Resolve<IGoogleAnalyticsService>();
 
             Init();
         }
@@ -27,8 +25,6 @@ namespace Bit.App.Pages
         private RedrawableStackLayout StackLayout { get; set; }
         private ExtendedSwitchCell CopyTotpCell { get; set; }
         private Label CopyTotpLabel { get; set; }
-        private ExtendedSwitchCell AnalyticsCell { get; set; }
-        private Label AnalyticsLabel { get; set; }
         private ExtendedSwitchCell WebsiteIconsCell { get; set; }
         private Label WebsiteIconsLabel { get; set; }
         private ExtendedSwitchCell AutofillPersistNotificationCell { get; set; }
@@ -74,31 +70,9 @@ namespace Bit.App.Pages
                 }
             };
 
-            AnalyticsCell = new ExtendedSwitchCell
-            {
-                Text = AppResources.DisableGA,
-                On = _settings.GetValueOrDefault(Constants.SettingGaOptOut, false)
-            };
-
-            var analyticsTable = new FormTableView(this)
-            {
-                Root = new TableRoot
-                {
-                    new TableSection(Helpers.GetEmptyTableSectionTitle())
-                    {
-                        AnalyticsCell
-                    }
-                }
-            };
-
             CopyTotpLabel = new FormTableLabel(this)
             {
                 Text = AppResources.DisableAutoTotpCopyDescription
-            };
-
-            AnalyticsLabel = new FormTableLabel(this)
-            {
-                Text = AppResources.DisableGADescription
             };
 
             WebsiteIconsLabel = new FormTableLabel(this)
@@ -111,10 +85,7 @@ namespace Bit.App.Pages
                 Children =
                 {
                     websiteIconsTable, WebsiteIconsLabel,
-                    totpTable, CopyTotpLabel,
-#if !FDROID
-                    analyticsTable, AnalyticsLabel
-#endif
+                    totpTable, CopyTotpLabel
                 },
                 Spacing = 0
             };
@@ -202,9 +173,6 @@ namespace Bit.App.Pages
 
             if(Device.RuntimePlatform == Device.iOS || Device.RuntimePlatform == Device.UWP)
             {
-                analyticsTable.RowHeight = websiteIconsTable.RowHeight = totpTable.RowHeight = -1;
-                analyticsTable.EstimatedRowHeight = websiteIconsTable.EstimatedRowHeight =
-                    totpTable.EstimatedRowHeight = 70;
                 ToolbarItems.Add(new DismissModalToolBarItem(this, AppResources.Close));
             }
 
@@ -215,8 +183,7 @@ namespace Bit.App.Pages
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            AnalyticsCell.OnChanged += AnalyticsCell_Changed;
+            
             WebsiteIconsCell.OnChanged += WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged += CopyTotpCell_OnChanged;
 
@@ -231,8 +198,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-
-            AnalyticsCell.OnChanged -= AnalyticsCell_Changed;
+            
             WebsiteIconsCell.OnChanged -= WebsiteIconsCell_Changed;
             CopyTotpCell.OnChanged -= CopyTotpCell_OnChanged;
 
@@ -253,18 +219,6 @@ namespace Bit.App.Pages
             }
 
             _appSettings.DisableWebsiteIcons = cell.On;
-        }
-
-        private void AnalyticsCell_Changed(object sender, ToggledEventArgs e)
-        {
-            var cell = sender as ExtendedSwitchCell;
-            if(cell == null)
-            {
-                return;
-            }
-
-            _settings.AddOrUpdateValue(Constants.SettingGaOptOut, cell.On);
-            _googleAnalyticsService.SetAppOptOut(cell.On);
         }
 
         private void CopyTotpCell_OnChanged(object sender, ToggledEventArgs e)
