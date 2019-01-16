@@ -317,7 +317,7 @@ namespace Bit.Android
         {
             if(addressNode?.Text != null)
             {
-                uri = browser.GetUriFunction(addressNode.Text).Trim();
+                uri = browser.GetUriFunction(addressNode.Text)?.Trim();
                 if(uri != null && uri.Contains("."))
                 {
                     if(!uri.Contains("://") && !uri.Contains(" "))
