@@ -273,7 +273,7 @@
     <comment>The log out button text (verb).</comment>
   </data>
   <data name="LogoutConfirmation" xml:space="preserve">
-    <value>Bist du sicher, dass du dich abmelden möchten?</value>
+    <value>Bist du sicher, dass du dich abmelden möchtest?</value>
   </data>
   <data name="MasterPassword" xml:space="preserve">
     <value>Masterpasswort</value>
@@ -301,9 +301,6 @@
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
-  </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Analytics deaktivieren</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Passwort</value>
@@ -495,7 +492,7 @@
     <value>Unterstützte Apps ansehen</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Ihre Zugangsdaten sind jetzt in Safari, Chrome und anderen unterstützten Apps einfach zu erreichen.</value>
+    <value>Deine Zugangsdaten sind jetzt in Safari, Chrome und anderen unterstützten Apps einfach zu erreichen.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>In Safari und Chrome findest du Bitwarden unter dem Teilen-Symbol (Hinweis: scrolle auf der untersten Zeile des Menüs nach rechts).</value>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Erstelle eine Organisation um deine Logindaten sicher für andere Benutzer freizugeben.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Wir verwenden Analytics um zu erfahren, wie die App genutzt wird, sodass wir sie verbessern können. Die Sammlung der Daten geschieht völlig anonym.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scan bei ausgewähltem Passwortfeld durchführen</value>
