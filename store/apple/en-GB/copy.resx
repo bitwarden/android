@@ -117,47 +117,39 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Title" xml:space="preserve">
-    <value>Bitwarden adgangskodemanager</value>
+  <data name="Name" xml:space="preserve">
+    <value>Bitwarden Password Manager</value>
     <comment>Max 30 characters</comment>
   </data>
-  <data name="ShortDescription" xml:space="preserve">
-    <value>Bitwarden er en login- og adgangskodemanager, som sikrer dine informationer.</value>
-    <comment>Max 80 characters</comment>
-  </data>
-  <data name="FullDesciption" xml:space="preserve">
-    <value>Bitwarden er den letteste og sikreste måde at opbevare alle dine logins og adgangskoder på, samtidig med at de er synkroniserede imellem alle dine enheder.
+  <data name="Description" xml:space="preserve">
+    <value>Bitwarden is the easiest and safest way to store all of your logins and passwords while conveniently keeping them synced between all of your devices. The Bitwarden app extension allows you to quickly log into any website through Safari or Chrome and is supported by hundreds of other popular apps.
 
-Tyveri af adgangskoder er et seriøst problem. Hjemmesider og apps du bruger er under angreb hver dag. Sikkerheden bristes, og så er dine adgangskoder stjålet. Når du genbruger de samme adgangskoder på forskellige hjemmesider og apps, kan hackere nemt få adgang til din e-mail, bank- og andre vigtige konti.
+Password theft is a serious problem. The websites and apps that you use are under attack every day. Security breaches occur and your passwords are stolen. When you reuse the same passwords across apps and websites, hackers can easily access your email, bank, and other important accounts.
 
-Sikkerhedseksperter anbefaler, at man bruger en unik, tilfældig genereret, adgangskode til hver konto man opretter. Men hvordan administrerer man alle disse adgangskoder? Bitwarden gør det nemt for dig at oprette, gemme og få adgang til dine adgangskoder.
+Security experts recommend that you use a different, randomly generated password for every account that you create. But how do you manage all those passwords? Bitwarden makes it easy for you to create, store, and access your passwords.
 
-Bitwarden gemmer alle dine login i en krypteret boks, der synkroniseres imellem alle dine enheder. Da de er fuldstændig krypterede, før de overhovedet forlader dine enheder, er det kun dig der har adgang til dine data. Ikke engang teamet hos Bitwarden kan få adgang til dine data, selv hvis de forsøgte på det. Dine data er sikret med AES-256 bit kryptering, saltet hasing og PBKDF2 SHA-256.
+Bitwarden stores all of your logins in an encrypted vault that syncs across all of your devices. Since it's fully encrypted before it ever leaves your device, only you have access to your data. Not even the team at Bitwarden can read your data, even if we wanted to. Your data is sealed with AES-256 bit encryption, salted hashing, and PBKDF2 SHA-256.
 
-Bitwarden er 100% open source software. Kildekoden til Bitwarden ligger på GitHub, og enhver kan gennemse, evaluere og bidrage til Bitwardens kildekode.</value>
+Bitwarden is 100% open source software. The source code for Bitwarden is hosted on GitHub and everyone is free to review, audit, and contribute to the Bitwarden codebase.</value>
     <comment>Max 4000 characters</comment>
   </data>
-  <data name="FeatureGraphic" xml:space="preserve">
-    <value>En sikker og gratis adgangskodemanager til alle dine enheder</value>
+  <data name="Keywords" xml:space="preserve">
+    <value>bit warden,8bit,password,free password manager,password manager,login manager</value>
+    <comment>Max 100 characters</comment>
   </data>
   <data name="Screenshot1" xml:space="preserve">
-    <value>Håndtér alle din logins og adgangskoder fra en sikker boks</value>
+    <value>Manage all your logins and passwords from a secure vault</value>
   </data>
   <data name="Screenshot2" xml:space="preserve">
-    <value>Opret stærke, tilfældige og sikre adgangskoder automatisk</value>
+    <value>Automatically generate strong, random, and secure passwords</value>
   </data>
   <data name="Screenshot3" xml:space="preserve">
-    <value>Beskyt din boks med fingeraftryk, PIN-kode eller hovedadgangskode</value>
+    <value>Protect your vault with Touch ID, PIN code, or master password</value>
   </data>
   <data name="Screenshot4" xml:space="preserve">
-    <value>Autoudfyld hurtigt logins i din webbrowser og andre apps</value>
+    <value>Auto-fill logins from Safari, Chrome, and hundreds of other apps</value>
   </data>
   <data name="Screenshot5" xml:space="preserve">
-    <value>Synkroniser, og få adgang til din boks fra flere enheder 
-
-- Telefon
-- Tablet
-- Desktop
-- Web</value>
+    <value>Sync and access your vault from multiple devices</value>
   </data>
 </root>
