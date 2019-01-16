@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Keela analüütika</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Parool</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Loo organisatsioon, et saaksid oma andmeid teiste inimestega turvaliselt jagada.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Kasutame analüütikat, et rakenduse kasutamist paremini mõista ja seda paremaks muuta. Kogu andmekorje on anonüümne.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Paku täitmist, kui valitud on parooliväli</value>
