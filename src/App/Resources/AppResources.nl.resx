@@ -302,9 +302,6 @@
     <value>Oké</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Analytics uitschakelen</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Wachtwoord</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Creëer een organisatie om uw logins veilig te delen met andere gebruikers.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>We gebruiken analytics om te weten te komen hoe de extensie gebruikt wordt, zodat we deze kunnen verbeteren. Alle verzamelde gegevens zijn anoniem.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scannen als wachtwoordveld gefocust is</value>
