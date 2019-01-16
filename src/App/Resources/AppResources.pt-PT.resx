@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Desativar analítica</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Palavra-passe</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Crie uma organização para partilhar os seus itens em segurança com outros utilizadores.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Utilizamos analítica para aprender melhor como a aplicação está a ser utilizada para que possamos torná-la melhor. Toda a recolha de dados é completamente anónima.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scanear quando o campo de palavra-passe está focado</value>

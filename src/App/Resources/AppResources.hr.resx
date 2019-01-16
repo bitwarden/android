@@ -302,9 +302,6 @@
     <value>U redu</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Onemogućite uslugu Google Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Lozinka</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Izradite organizaciju kako biste sigurno dijelili svoje prijave s drugim korisnicima.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Koristimo Google analytics kako bismo saznali na koji način se aplikacija upotrebljava, kako bi istu mogli poboljšati. Svako prikupljanje podataka potpuno je anonimno.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skeniraj kada se fokusira na polje za lozinku</value>

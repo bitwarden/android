@@ -302,9 +302,6 @@
     <value>好</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>停用 Google Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>密碼</value>
     <comment>Label for a password.</comment>
@@ -812,9 +809,6 @@
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>新增組織以安全地分享您的登入資料。</value>
   </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>我们使用 analytics 協助分析應用程式的使用情況，以便我們改善程式。所有資料均為匿名收集。</value>
-  </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>選取密碼欄位時掃描</value>
   </data>
@@ -1165,7 +1159,7 @@
     <value>到期</value>
   </data>
   <data name="DisableWebsiteIcons" xml:space="preserve">
-    <value>停用網站圖示</value>
+    <value>停用網站圖示顯示功能</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
     <value>在您密碼庫的每個登入資料旁顯示一個可辨識圖示。</value>

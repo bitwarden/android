@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Desabilitar o Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Senha</value>
     <comment>Label for a password.</comment>
@@ -495,7 +492,7 @@
     <value>Ver Aplicativos Suportados</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Suas credenciais são agora facilmente acessíveis do Safari, Chrome e outros aplicativos com suporte.</value>
+    <value>As suas credenciais estão agora facilmente acessíveis no Safari, Chrome, e outros aplicativos suportados.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>No Safari e Chrome, encontre o Bitwarden usando o ícone de compartilhamento (dica: role para a direita na linha inferior do menu de compartilhamento).</value>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Crie uma organização para compartilhar com segurança suas credenciais com outros usuários.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Nós utilizamos o Analytics para aprender melhor como o aplicativo está sendo utilizado para que possamos torná-lo melhor. Toda a coleta de informações é completamente anônima.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Escanear quando o campo da senha estiver focado</value>
@@ -1147,7 +1141,7 @@
     <value>Setembro</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>Número de Segurança Social</value>
+    <value>Cadastro de Pessoas Físicas (CPF)</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Estado / Província</value>
@@ -1250,7 +1244,7 @@
     <value>Remover</value>
   </data>
   <data name="NewUri" xml:space="preserve">
-    <value>Nova URI</value>
+    <value>Novo URI</value>
   </data>
   <data name="URIPosition" xml:space="preserve">
     <value>URI {0}</value>
@@ -1320,7 +1314,7 @@
     <value>Você deve iniciar a sessão no aplicativo principal do Bitwarden, antes de poder usar o Autopreenchimento.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Suas credenciais agora são facilmente acessáveis diretamente do seu teclado, enquanto você faz login em aplicativos e sites.</value>
+    <value>Suas credenciais agora são facilmente acessíveis diretamente do seu teclado, enquanto você faz login em aplicativos e sites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Recomendamos desabilitar qualquer outro aplicativo de autopreenchimento em Ajustes, se você não pretende usá-los.</value>

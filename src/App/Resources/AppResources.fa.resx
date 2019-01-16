@@ -302,9 +302,6 @@
     <value>تأیید</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>غیرفعال سازی آنالیزها</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>رمز عبور</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>ایجاد یک تشکیلات برای اشتراک گذاری ایمن موارد خود با سایر کاربران.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>ما از آنالیزها جهت درک بهتر چگونگی استفاده از برنامه بهره میبریم تا بتوانیم آن را بهبود ببخشیم. تمام داده های جمع آوری شده کاملاً ناشناس است.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>اسکن زمانی که در فیلد پسورد متمرکز شده</value>

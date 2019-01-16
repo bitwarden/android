@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Analitika kikapcsolása</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Jelszó</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Hozz létre egy szervezetet, hogy biztonságosan megoszthasd bejelentkezéseidet másokkal.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Analitikát használunk arra, hogy többet többet tudjunk arról hogyan használod az alkalmazást, hogy jobbá tudjuk azt. Az adatok gyűjtése teljesen névtelen.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Szkennelés, amikor a jelszó mezőre fókuszált</value>

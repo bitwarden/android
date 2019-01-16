@@ -302,9 +302,6 @@
     <value>OK</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Inaktivera Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Lösenord</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Skapa en organisation för att på ett säkert sätt kunna dela dina inloggningar med andra användare.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Vi använder analytics för att bättre förstå hur appen används så att vi kan göra förbättringar. All datainsamling är helt anonym.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skanna när ett lösenordsfält är fokuserat</value>

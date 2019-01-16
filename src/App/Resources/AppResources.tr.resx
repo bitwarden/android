@@ -302,9 +302,6 @@
     <value>Tamam</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Analitikleri Devre Dışı Bırak</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Parola</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Diğer kullanıcılar ile giriş bilgilerinizi güvenle paylaşmak için bir organizasyon oluşturun.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Uygulamanın nasıl kullanıldığını daha iyi öğrenmek için analitikleri kullanırız, böylece onu daha iyi hale getirebiliriz. Tüm veri toplama işlemi tamamen anonimdir.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Parola alanına odaklanıldığında tara</value>

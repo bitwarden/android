@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Dezactivaţi datele analitice</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Parolă</value>
     <comment>Label for a password.</comment>
@@ -812,9 +809,6 @@
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Creați o organizație pentru a partaja în siguranță accesul la datele de conectare cu alţi utilizatori.</value>
   </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Utilizăm datele analitice pentru a afla mai bine modul în care este folosită aplicația, astfel încât s-o putem face mai bună. Toate colectările de date sunt complet anonime.</value>
-  </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scanare atunci când câmpul pentru parole este focalizat</value>
   </data>
@@ -1314,28 +1308,28 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>Auto Completare Activată!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>Trebuie să te loghezi în aplicația Bitwarden înainte să folosești Auto Completarea.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
     <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Recomandăm dezactivarea celorlalte aplicații care folosesc AutoFill din setări dacă nu intenționați să le utilizați.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
     <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Pentru a activa auto completarea pe acest dispozitiv, urmărește aceste instrucțiuni:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. Accesează Setările iOS</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Selectează "Parole &amp; Conturi"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Tap "AutoFill Passwords"</value>
@@ -1344,10 +1338,10 @@
     <value>4. Turn on AutoFill</value>
   </data>
   <data name="AutofillTurnOn5" xml:space="preserve">
-    <value>5. Select "Bitwarden"</value>
+    <value>5. Selectează "Bitwarden"</value>
   </data>
   <data name="PasswordAutofill" xml:space="preserve">
-    <value>Password AutoFill</value>
+    <value>Auto Completare Parolă</value>
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>

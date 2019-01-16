@@ -131,7 +131,7 @@
 El robo de contraseñas es un grave problema. Las páginas web y aplicaciones que usas están bajo ataque cada día. Las brechas de seguridad ocurren y tus contraseñas son robadas. Cuando usas la misma contraseña en diferentes aplicaciones o sitios web, los piratas 
 informáticos pueden acceder fácilmente a tu correo electrónico, cuenta bancaria y otras cuentas importantes.
 
-Expertos en seguridad recomendan utilizar contraseña generadas aleatoriamente y diferentes para cada cuenta que crees. ¿Pero como puedes gestionar todas esas contraseñas? Bitwarden te facilita su creación, guardado y acceso a tus contraseñas.
+Expertos en seguridad recomiendan utilizar contraseña generadas aleatoriamente y diferentes para cada cuenta que crees. ¿Pero como puedes gestionar todas esas contraseñas? Bitwarden te facilita su creación, guardado y acceso a tus contraseñas.
 
 Bitwarden guarda todos tus usuarios en una bóveda cifrada sincronizada a través de todos tus dispositivos. Dado que la información está completamente cifrada en tu dispositivo, solo tú tienes acceso a los datos. Ni siquiera el equipo de Bitwarden podría leer tu información aunque quisiera. Tu información está sellada con cifrado AES de 256 bits, con semilla y PBKDF2 SHA-256.
 

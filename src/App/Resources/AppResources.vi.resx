@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Vô hiệu hóa phân tích</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Mật khẩu</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Tạo một tổ chức để chia sẻ các thông tin đăng nhập của bạn một cách an toàn với những người dùng khác.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Chúng tôi sử dụng phân tích để hiểu rõ hơn cách bạn sử dụng ứng dụng, nó chúng tôi cải thiện ứng dụng ngày càng tốt hơn. Tất cả dữ liệu sẽ được thu thập ẩn danh.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Quét khi bạn chọn trường Mật khẩu</value>

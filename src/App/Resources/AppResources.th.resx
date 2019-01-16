@@ -302,9 +302,6 @@
     <value>ตกลง</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>ปิดการใช้งานการวิเคราะห์</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>รหัสผ่าน</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Create an organization to securely share your logins with other users.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>เราใช้การวิเคราะห์เพื่อเรียนรู้วิธีใช้แอปเพื่อให้เราสามารถปรับปรุงได้ดียิ่งขึ้น การเก็บรวบรวมข้อมูลทั้งหมดเป็นแบบไม่ระบุชื่อโดยสิ้นเชิง</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>สแกนเมื่อเน้นช่องรหัสผ่าน</value>

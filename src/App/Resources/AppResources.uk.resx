@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Вимкнути аналітику</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Створіть організацію, щоб безпечно ділитися записами з іншими користувачами.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Ми використовуємо аналітику для розуміння того, як використовується програма, щоб зробити її кращою. Всі зібрані дані цілком анонімні.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Сканувати коли вибрано поле пароля</value>

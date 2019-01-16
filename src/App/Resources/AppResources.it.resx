@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Disabilita Analytics</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Password</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Crea un'organizzazione per condividere in sicurezza i tuoi login con altri utenti.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Usiamo analytics per capire meglio come l'estensione viene utilizzata in modo da migliorarla. Tutti i dati collezionati sono completamente anonimi.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Rileva quando un campo password è selezionato</value>
