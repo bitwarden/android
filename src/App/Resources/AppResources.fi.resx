@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Älä osallistu tiedonkeruuseen</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Salasana</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Luo organisaatio jakaaksesi kirjautumistiedot turvallisesti muiden käyttäjien kanssa.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Hyödynnämme analytiikkaa saadaksemme tietoa siitä, kuinka sovellusta käytetään. Näin voimme kehittää sitä paremmaksi. Kaikki tiedonkeruu on täysin nimetöntä.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Lue, kun salasanakenttä on aktiivinen</value>
