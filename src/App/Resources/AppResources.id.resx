@@ -302,6 +302,9 @@
     <value>Oke</value>
     <comment>Acknowledgement.</comment>
   </data>
+  <data name="DisableGA" xml:space="preserve">
+    <value>Nonaktifkan Analitik</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Kata Sandi</value>
     <comment>Label for a password.</comment>
@@ -492,7 +495,7 @@
     <value>Lihat Aplikasi yang Didukung</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Login anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
+    <value>Log masuk Anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>Pada Safari dan Chrome, temukan Bitwarden menggunakan ikon berbagi (petunjuk: gulir ke kanan di baris bawah menu).</value>
@@ -726,7 +729,7 @@
     <value>Brankas Web Bitwarden</value>
   </data>
   <data name="WebVaultDescription" xml:space="preserve">
-    <value>Kelola info masuk Anda dari berbagai peramban web dengan Bitwarden web vault.</value>
+    <value>Kelola info masuk Anda dari berbagai peramban web dengan brankas web bitwarden.</value>
   </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kehilangan aplikasi autentikasi?</value>
@@ -809,6 +812,9 @@
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Buat organisasi untuk berbagi info masuk Anda dengan aman dengan pengguna lain.</value>
   </data>
+  <data name="DisableGADescription" xml:space="preserve">
+    <value>Kami menggunakan analitik untuk mempelajari lebih baik bagaimana aplikasi sedang digunakan sehingga kami dapat membuatnya lebih baik. Semua pengumpulan data benar-benar anonim.</value>
+  </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Pindai Ketika Fokus ke Kolom Kata Sandi</value>
   </data>
@@ -877,7 +883,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Untuk melanjutkan, tahan YubiKey Neo pada bagian belakang perangkat anda atau masukkan YubiKey ke port USB perangkat anda, kemudian tekan tombolnya.</value>
+    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>Kunci Keamanan YubiKey</value>
@@ -989,7 +995,7 @@
     <value>Untuk pengguna tingkat lanjutan. Anda dapat menentukan secara mandiri basis dari URL untuk setiap layanan.</value>
   </data>
   <data name="EnvironmentSaved" xml:space="preserve">
-    <value>URL dari lingkungan sudah tersimpan.</value>
+    <value>Lingkungan dari URL sudah tersimpan.</value>
   </data>
   <data name="FormattedIncorrectly" xml:space="preserve">
     <value>{0} tidak diformat dengan benar.</value>
@@ -1223,7 +1229,7 @@
     <value>Kami tidak dapat secara otomatis membuka menu pengaturan Android isi otomatis untuk Anda. Anda dapat membuka menu pengaturan isi otomatis secara manual dari Pengaturan Android &gt; Sistem &gt; Bahasa dan masukan &gt; Lanjutan &gt; Layanan isi otomatis.</value>
   </data>
   <data name="CustomFieldName" xml:space="preserve">
-    <value>Nama Kolom Pilihan Sendiri</value>
+    <value>Nama Kolom Pilihan</value>
   </data>
   <data name="FieldTypeBoolean" xml:space="preserve">
     <value>Boolean</value>
@@ -1235,7 +1241,7 @@
     <value>Teks</value>
   </data>
   <data name="NewCustomField" xml:space="preserve">
-    <value>Kolom Pilihan Sendiri Baru</value>
+    <value>Kolom Ubahsuai Baru</value>
   </data>
   <data name="SelectTypeField" xml:space="preserve">
     <value>Jenis kolom ubahsuai apa yang ingin Anda tambahkan?</value>

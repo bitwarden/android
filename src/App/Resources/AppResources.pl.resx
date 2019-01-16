@@ -222,7 +222,7 @@
     <value>Folder usunięty.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Nieprzypisane</value>
+    <value>Brak folderu</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -301,6 +301,9 @@
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
+  </data>
+  <data name="DisableGA" xml:space="preserve">
+    <value>Wyłącz Analitykę</value>
   </data>
   <data name="Password" xml:space="preserve">
     <value>Hasło</value>
@@ -433,7 +436,7 @@
     <value>Zmień hasło główne</value>
   </data>
   <data name="ChangePasswordConfirmation" xml:space="preserve">
-    <value>Swoje hasło główne możesz zmienić na stronie sejfu bitwarden.com. Czy chcesz teraz przejść do tej strony?</value>
+    <value>Swoje hasło główne możesz zmienić w sejfie internetowym bitwarden.com. Czy chcesz teraz przejść do tej strony?</value>
   </data>
   <data name="Close" xml:space="preserve">
     <value>Zamknij</value>
@@ -534,22 +537,22 @@
     <value>Blokada</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>po 15 minutach</value>
+    <value>15 minut</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>po 1 godzinie</value>
+    <value>1 godzina</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>po 1 minucie</value>
+    <value>1 minuta</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>po 4 godzinach</value>
+    <value>4 godziny</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>Natychmiast</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Czas automatycznego blokowania</value>
+    <value>Opcje blokowania</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Logowanie...</value>
@@ -650,13 +653,13 @@
     <value>Oceny w App Store są zerowane przy każdej nowej wersji Bitwarden. Jeśli chcesz nam pomóc, napisz pozytywną recenzję!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Wygeneruj hasło</value>
+    <value>Odtwórz hasło</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Powtórz hasło główne</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Szukaj w sejfie</value>
+    <value>Znajdź w sejfie</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Zabezpieczenia</value>
@@ -765,7 +768,7 @@
     <value>1. Na ekranie ustawień ułatwień dostępu Android dotknij "Bitwarden" na liście usług.</value>
   </data>
   <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
-    <value>2. Przestaw przełącznik i naciśnij OK, aby zaakceptować.</value>
+    <value>2. Włącz przełącznik i naciśnij OK, aby zaakceptować.</value>
   </data>
   <data name="Disabled" xml:space="preserve">
     <value>Wyłączone</value>
@@ -809,6 +812,9 @@
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Utwórz organizację, aby bezpiecznie udostępniać innym użytkownikom swoje dane.</value>
   </data>
+  <data name="DisableGADescription" xml:space="preserve">
+    <value>Korzystamy z Analytics, aby lepiej dowiedzieć się, jak nasze rozszerzenie jest używane i nieustannie je ulepszać. Wszystkie zebrane dane są całkowicie anonimowe.</value>
+  </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skanuj, gdy aktywne jest pole hasła</value>
   </data>
@@ -848,7 +854,7 @@
     <comment>For 2FA whenever there are no available providers on this device.</comment>
   </data>
   <data name="NoTwoStepAvailable" xml:space="preserve">
-    <value>Dla tego konta aktywowano dwustopniowe logowanie, jednak to urządzenie nie wspiera żadnego ze skonfigurowanych mechanizmów dwustopniowej autoryzacji. Proszę użyć wspieranego urządzenia i/lub dodatkowych mechanizmów, które są lepiej obsługiwane przez różne urządzenia (np. aplikacja uwierzytelniająca).</value>
+    <value>Dla tego konta aktywowano dwustopniowe logowanie, jednak to urządzenie nie wspiera żadnego ze skonfigurowanych dostawców dwustopniowej autoryzacji. Proszę użyć wspieranego urządzenia i/lub dodatkowych dostawców, którzy są lepiej obsługiwani przez różne urządzenia (np. aplikacja uwierzytelniająca).</value>
   </data>
   <data name="RecoveryCodeTitle" xml:space="preserve">
     <value>Kod odzyskiwania</value>
@@ -884,7 +890,7 @@
     <comment>"YubiKey" is the product name and should not be translated.</comment>
   </data>
   <data name="AddNewAttachment" xml:space="preserve">
-    <value>Dodaj załącznik</value>
+    <value>Dodaj nowy załącznik</value>
   </data>
   <data name="Attachments" xml:space="preserve">
     <value>Załączniki</value>
@@ -944,7 +950,7 @@
     <value>Wyłącz automatyczne kopiowanie TOTP</value>
   </data>
   <data name="PremiumRequired" xml:space="preserve">
-    <value>Musisz posiadać konto Premium, aby skorzystać z tej funkcji.</value>
+    <value>Członkostwo premium jest wymagane do korzystania z tej funkcji.</value>
   </data>
   <data name="AttachementAdded" xml:space="preserve">
     <value>Załącznik dodany</value>
@@ -1021,7 +1027,7 @@
     <value>Skopiuj numer</value>
   </data>
   <data name="CopySecurityCode" xml:space="preserve">
-    <value>Skopiuj kod CVV/CVC</value>
+    <value>Skopiuj kod zabezpieczający</value>
   </data>
   <data name="Number" xml:space="preserve">
     <value>Numer</value>
@@ -1141,7 +1147,7 @@
     <value>September</value>
   </data>
   <data name="SSN" xml:space="preserve">
-    <value>PESEL</value>
+    <value>Numer ubezpieczenia społecznego</value>
   </data>
   <data name="StateProvince" xml:space="preserve">
     <value>Województwo</value>
@@ -1162,7 +1168,7 @@
     <value>Wyłącz ikony stron</value>
   </data>
   <data name="DisableWebsiteIconsDescription" xml:space="preserve">
-    <value>Możesz wyświetlać rozpoznawalną ikonę serwisu obok danych logowania w Twoim sejfie.</value>
+    <value>Ikony stron internetowych wstawiają charakterystyczny obrazek obok danych logowania w Twoim sejfie.</value>
   </data>
   <data name="IconsUrl" xml:space="preserve">
     <value>URL serwera ikon</value>
@@ -1229,7 +1235,7 @@
     <value>Wartość logiczna</value>
   </data>
   <data name="FieldTypeHidden" xml:space="preserve">
-    <value>Pole maskowane</value>
+    <value>Ukryty</value>
   </data>
   <data name="FieldTypeText" xml:space="preserve">
     <value>Tekst</value>
@@ -1251,16 +1257,16 @@
     <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
   </data>
   <data name="BaseDomain" xml:space="preserve">
-    <value>Domena nadrzędna</value>
+    <value>Domena podstawowa</value>
   </data>
   <data name="Default" xml:space="preserve">
     <value>Domyślne</value>
   </data>
   <data name="Exact" xml:space="preserve">
-    <value>Dokładnie</value>
+    <value>Dokładny</value>
   </data>
   <data name="Host" xml:space="preserve">
-    <value>Nazwa domeny</value>
+    <value>Serwer</value>
     <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
   </data>
   <data name="RegEx" xml:space="preserve">

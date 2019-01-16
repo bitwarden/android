@@ -302,6 +302,9 @@
     <value>Aceptar</value>
     <comment>Acknowledgement.</comment>
   </data>
+  <data name="DisableGA" xml:space="preserve">
+    <value>Deshabilitar análisis</value>
+  </data>
   <data name="Password" xml:space="preserve">
     <value>Contraseña</value>
     <comment>Label for a password.</comment>
@@ -492,7 +495,7 @@
     <value>Ver Aplicaciones soportadas</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
-    <value>Tus entradas ahora son fácilmente accesibles desde Safari, Chrome y otras aplicaciones soportadas.</value>
+    <value>Tus entradas ahora son facilmente accesibles desde Safari, Chrome y otras aplicaciones soportadas.</value>
   </data>
   <data name="ExtensionSetup2" xml:space="preserve">
     <value>En Safari y Chrome, busca Bitwarden en el icono compartir (pista: desplazate a la derecha en la última fila del menú).</value>
@@ -808,6 +811,9 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Crea una organización para compartir tus entradas de forma segura con otros usuarios.</value>
+  </data>
+  <data name="DisableGADescription" xml:space="preserve">
+    <value>Realizamos análisis para aprender de como se utiliza la aplicación para poder mejorarla. Toda la información recogida es completamente anónima.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Escanear cuando un campo de contraseña está resaltado</value>
@@ -1314,7 +1320,7 @@
     <value>Debes identificarte en la aplicación principal de Bitwarden antes de poder utilizar Autorellenado.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Tus entradas son ahora fácilmente accesibles desde tu teclado mientras te identificas en aplicaciones y sitios web.</value>
+    <value>Tus accesos son ahora fácilmente accesibles desde tu teclado mientras te identificas en aplicaciones y sitios web.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Te recomendamos deshabilitar cualquier otra aplicación de Autorellenado desde Ajustes si no piensas utilizarlas.</value>
