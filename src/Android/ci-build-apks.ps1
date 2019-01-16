@@ -54,9 +54,6 @@ $ns.AddNamespace("ns", $xml.DocumentElement.NamespaceURI);
 $firebaseNode=$xml.SelectSingleNode("/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.Firebase.Messaging']", $ns);
 $firebaseNode.ParentNode.RemoveChild($firebaseNode);
 
-$playServiceNode=$xml.SelectSingleNode("/ns:Project/ns:ItemGroup/ns:PackageReference[@Include='Xamarin.GooglePlayServices.Analytics']", $ns);
-$playServiceNode.ParentNode.RemoveChild($playServiceNode);
-
 $xml.Save($androidPath);
 
 echo "##### Uninstall from App.csproj"
