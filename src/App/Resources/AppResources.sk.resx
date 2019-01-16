@@ -302,9 +302,6 @@
     <value>Ok</value>
     <comment>Acknowledgement.</comment>
   </data>
-  <data name="DisableGA" xml:space="preserve">
-    <value>Vypnúť analytiku</value>
-  </data>
   <data name="Password" xml:space="preserve">
     <value>Heslo</value>
     <comment>Label for a password.</comment>
@@ -811,9 +808,6 @@
   </data>
   <data name="ShareVaultDescription" xml:space="preserve">
     <value>Vytvorte organizáciu pre bezpečné zdieľanie vašich prihlasovacích údajov s inými používateľmi.</value>
-  </data>
-  <data name="DisableGADescription" xml:space="preserve">
-    <value>Používame analytiku, aby sme zistili, ako je aplikácia používaná, aby sme ju mohli vylepšiť. Všetky zhromaždené údaje sú kompletne anonymné.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skenovať ak je pole pre heslo označené</value>
