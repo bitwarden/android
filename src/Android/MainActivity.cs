@@ -203,12 +203,19 @@ namespace Bit.Android
                     return;
                 }
 
-                using(var stream = ContentResolver.OpenInputStream(uri))
-                using(var memoryStream = new MemoryStream())
+                try
                 {
-                    stream.CopyTo(memoryStream);
-                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
-                        new Tuple<byte[], string>(memoryStream.ToArray(), fileName ?? "unknown_file_name"));
+                    using(var stream = ContentResolver.OpenInputStream(uri))
+                    using(var memoryStream = new MemoryStream())
+                    {
+                        stream.CopyTo(memoryStream);
+                        MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
+                            new Tuple<byte[], string>(memoryStream.ToArray(), fileName ?? "unknown_file_name"));
+                    }
+                }
+                catch (Java.IO.FileNotFoundException)
+                {
+                    return;
                 }
             }
         }
