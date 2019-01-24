@@ -66,6 +66,11 @@ namespace Bit.Android.Controls
                 Control.SetRawInputType(InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationVisiblePassword);
             }
 
+            if(_view.NumbersOnly)
+            {
+                Control.SetRawInputType(InputTypes.ClassNumber | InputTypes.NumberVariationPassword);
+            }
+
             _view.ToggleIsPassword += ToggleIsPassword;
 
             if(_view.FontFamily == "monospace")
