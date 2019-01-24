@@ -66,7 +66,7 @@ namespace Bit.Android.Controls
                 Control.SetRawInputType(InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationVisiblePassword);
             }
 
-            if(_view.IsPin)
+            if(_view.NumbersOnly)
             {
                 Control.SetRawInputType(InputTypes.ClassNumber | InputTypes.NumberVariationPassword);
             }

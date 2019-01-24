@@ -57,7 +57,7 @@ namespace Bit.App.Controls
         public bool DisableAutocapitalize { get; set; }
         public bool AllowClear { get; set; }
         public bool HideCursor { get; set; }
-        public bool IsPin { get; set; }
+        public bool NumbersOnly { get; set; }
 
         // Need to overwrite default handler because we cant Invoke otherwise
         public new event EventHandler Completed;

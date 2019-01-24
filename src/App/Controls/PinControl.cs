@@ -22,7 +22,7 @@ namespace Bit.App.Controls
                 Keyboard = Keyboard.Numeric,
                 TargetMaxLength = 4,
                 HideCursor = true,
-                IsPin = true
+                NumbersOnly = true
             };
 
             Entry.BackgroundColor = Entry.TextColor = Color.Transparent;
