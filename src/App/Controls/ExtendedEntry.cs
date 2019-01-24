@@ -12,7 +12,7 @@ namespace Bit.App.Controls
             {
                 PlaceholderColor = Color.FromHex("c7c7cd");
             }
-            
+
             IsPasswordFromToggled = IsPassword;
         }
 
