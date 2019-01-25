@@ -16,7 +16,6 @@ using Plugin.Connectivity.Abstractions;
 using Bit.App.Pages;
 using HockeyApp.iOS;
 using Bit.iOS.Core;
-using Google.Analytics;
 using SimpleInjector;
 using XLabs.Ioc.SimpleInjectorContainer;
 using CoreNFC;
@@ -33,7 +32,6 @@ namespace Bit.iOS
     [Register("AppDelegate")]
     public partial class AppDelegate : global::Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
     {
-        private GaiCompletionHandler _dispatchHandler = null;
         private NFCNdefReaderSession _nfcSession = null;
         private ILockService _lockService;
         private IDeviceInfoService _deviceInfoService;
@@ -277,10 +275,6 @@ namespace Bit.iOS
         {
             SendResumedMessage();
 
-            // Restores the dispatch interval because dispatchWithCompletionHandler
-            // has disabled automatic dispatching.
-            Gai.SharedInstance.DispatchInterval = 10;
-
             base.WillEnterForeground(uiApplication);
             Debug.WriteLine("WillEnterForeground");
         }
@@ -399,21 +393,6 @@ namespace Bit.iOS
             {
                 return;
             }
-
-            _dispatchHandler = (result) =>
-            {
-                // Send hits until no hits are left, a dispatch error occurs, or the background task expires.
-                if(_dispatchHandler != null && result == DispatchResult.Good && !taskExpired)
-                {
-                    Gai.SharedInstance.Dispatch(_dispatchHandler);
-                }
-                else
-                {
-                    UIApplication.SharedApplication.EndBackgroundTask(taskId);
-                }
-            };
-
-            Gai.SharedInstance.Dispatch(_dispatchHandler);
         }
 
         private void ProcessYubikey(bool success, string message)
