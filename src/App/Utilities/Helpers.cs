@@ -341,16 +341,18 @@ namespace Bit.App.Utilities
                 {
                     if(cell is FormEntryCell entryCell)
                     {
+                        var type = entryCell.Entry.IsPassword || entryCell.Button2 != null ?
+                            FieldType.Hidden : FieldType.Text;
                         fields.Add(new Field
                         {
                             Name = string.IsNullOrWhiteSpace(entryCell.Label.Text) ? null :
                                 entryCell.Label.Text.Encrypt(cipher.OrganizationId),
                             Value = string.IsNullOrWhiteSpace(entryCell.Entry.Text) ? null :
                                 entryCell.Entry.Text.Encrypt(cipher.OrganizationId),
-                            Type = entryCell.Entry.IsPassword ? FieldType.Hidden : FieldType.Text
+                            Type = type
                         });
 
-                        if(entryCell.Entry.IsPassword && !string.IsNullOrWhiteSpace(entryCell.Label.Text))
+                        if(type == FieldType.Hidden && !string.IsNullOrWhiteSpace(entryCell.Label.Text))
                         {
                             hiddenFieldValues.Add(new Tuple<string, string>(entryCell.Label.Text,
                                 entryCell.Entry.Text));
