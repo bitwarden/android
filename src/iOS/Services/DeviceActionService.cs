@@ -73,7 +73,9 @@ namespace Bit.iOS.Services
             var url = NSUrl.FromFilename(filePath);
             var viewer = UIDocumentInteractionController.FromUrl(url);
             var controller = GetVisibleViewController();
-            return viewer.PresentOpenInMenu(controller.View.Frame, controller.View, true);
+            var rect = UIDevice.CurrentDevice.UserInterfaceIdiom == UIUserInterfaceIdiom.Pad ? 
+                new CGRect(100, 5, 320, 320) : controller.View.Frame;
+            return viewer.PresentOpenInMenu(rect, controller.View, true);
         }
 
         public bool CanOpenFile(string fileName)
