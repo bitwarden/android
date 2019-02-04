@@ -40,6 +40,7 @@ namespace Bit.Android.Services
 
         public void Dispatch(Action completionHandler = null)
         {
+            completionHandler?.Invoke();
         }
 
         public void SetAppOptOut(bool optOut)
