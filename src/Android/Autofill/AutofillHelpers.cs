@@ -35,6 +35,12 @@ namespace Bit.Android.Autofill
             "com.ecosia.android","com.opera.mini.native.beta","org.mozilla.fennec_aurora","com.qwant.liberty"
         };
 
+        // The URLs are blacklisted from autofilling
+        public static HashSet<string> BlacklistedUris = new HashSet<string>
+        {
+            "androidapp://android", "androidapp://com.x8bit.bitwarden", "androidapp://com.oneplus.applocker"
+        };
+
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService service)
         {
             var items = new List<FilledItem>();

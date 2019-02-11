@@ -76,6 +76,15 @@ namespace Bit.Android.Autofill
             }
         }
 
+        public bool ShouldAutofill
+        {
+            get
+            {
+                return !string.IsNullOrWhiteSpace(Uri) && !AutofillHelpers.BlacklistedUris.Contains(Uri) &&
+                    FieldCollection != null && FieldCollection.Fillable;
+            }
+        }
+
         public void Parse()
         {
             for(var i = 0; i < _structure.WindowNodeCount; i++)
