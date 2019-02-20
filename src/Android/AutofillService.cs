@@ -35,6 +35,7 @@ namespace Bit.Android
             new Browser("com.opera.browser", "url_field"),
             new Browser("com.opera.browser.beta", "url_field"),
             new Browser("com.opera.mini.native", "url_field"),
+            new Browser("com.opera.touch", "addressbarEdit"),
             new Browser("com.chrome.dev", "url_bar"),
             new Browser("com.chrome.canary", "url_bar"),
             new Browser("com.google.android.apps.chrome", "url_bar"),
