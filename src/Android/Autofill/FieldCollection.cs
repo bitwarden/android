@@ -304,6 +304,13 @@ namespace Bit.Android.Autofill
                 f.InputType.HasFlag(InputTypes.TextVariationVisiblePassword) ||
                 f.InputType.HasFlag(InputTypes.TextVariationWebPassword);
 
+            // For whatever reason, multi-line input types are coming through with TextVariationPassword flags
+            if(inputTypePassword && f.InputType.HasFlag(InputTypes.TextVariationPassword) &&
+                f.InputType.HasFlag(InputTypes.TextFlagMultiLine))
+            {
+                inputTypePassword = false;
+            }
+
             if(!inputTypePassword && f.HtmlInfo != null && f.HtmlInfo.Tag == "input" &&
                 (f.HtmlInfo.Attributes?.Any() ?? false))
             {
