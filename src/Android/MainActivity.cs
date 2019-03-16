@@ -54,7 +54,7 @@ namespace Bit.Android
             Console.WriteLine("A OnCreate");
             if(!App.Utilities.Helpers.InDebugMode())
             {
-                //Window.AddFlags(WindowManagerFlags.Secure);
+                Window.AddFlags(WindowManagerFlags.Secure);
             }
 
             var appIdService = Resolver.Resolve<IAppIdService>();
