@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:summary="@string/AutoFillServiceSummary"
-    android:description="@string/AutoFillServiceDescription"
-    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowContentChanged|typeViewFocused"
-    android:accessibilityFeedbackType="feedbackGeneric"
-    android:accessibilityFlags="flagReportViewIds"
-    android:notificationTimeout="100"
-    android:canRetrieveWindowContent="true"/>
