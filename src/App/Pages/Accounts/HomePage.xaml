@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.HomePage"
+    xmlns:vm="clr-namespace:Bit.App.ViewModels"
+    Title="{Binding Title}">
+    <ContentPage.BindingContext>
+        <vm:HomeViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout>
+        <!-- Place new controls here -->
+        <Label
+            Text="Home Page!"
+            HorizontalOptions="Center"
+            VerticalOptions="CenterAndExpand" />
+        <Label
+            Text="&#xf2b9;"
+            HorizontalOptions="Center"
+            VerticalOptions="CenterAndExpand">
+
+            <Label.FontFamily>
+                <OnPlatform x:TypeArguments="x:String"
+                    Android="FontAwesome.ttf#FontAwesome"
+                    iOS="FontAwesome" />
+            </Label.FontFamily>
+        </Label>
+    </StackLayout>
+
+</ContentPage>

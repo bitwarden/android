@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Pages;
+using System;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,8 +11,7 @@ namespace Bit.App
         public App()
         {
             InitializeComponent();
-
-            MainPage = new MainPage();
+            MainPage = new HomePage();
         }
 
         protected override void OnStart()
