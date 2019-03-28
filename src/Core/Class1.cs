@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Bit.Lib
+namespace Bit.Core
 {
     public class Class1
     {

@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Bit.Lib</RootNamespace>
-    <AssemblyName>BitwardenLib</AssemblyName>
+    <RootNamespace>Bit.Core</RootNamespace>
+    <AssemblyName>BitwardenCore</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
