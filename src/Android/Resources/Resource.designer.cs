@@ -26,6 +26,8 @@ namespace Bit.Droid
 		
 		public static void UpdateIdValues()
 		{
+			global::PCLCrypto.Resource.String.ApplicationName = global::Bit.Droid.Resource.String.ApplicationName;
+			global::PCLCrypto.Resource.String.Hello = global::Bit.Droid.Resource.String.Hello;
 			global::Xamarin.Essentials.Resource.Attribute.alpha = global::Bit.Droid.Resource.Attribute.alpha;
 			global::Xamarin.Essentials.Resource.Attribute.coordinatorLayoutStyle = global::Bit.Droid.Resource.Attribute.coordinatorLayoutStyle;
 			global::Xamarin.Essentials.Resource.Attribute.font = global::Bit.Droid.Resource.Attribute.font;
@@ -7693,13 +7695,19 @@ namespace Bit.Droid
 		{
 			
 			// aapt resource value: 0x7f0b004f
-			public const int AutoFillServiceDescription = 2131427407;
+			public const int ApplicationName = 2131427407;
 			
-			// aapt resource value: 0x7f0b004e
-			public const int AutoFillServiceSummary = 2131427406;
+			// aapt resource value: 0x7f0b0051
+			public const int AutoFillServiceDescription = 2131427409;
 			
 			// aapt resource value: 0x7f0b0050
-			public const int MyVault = 2131427408;
+			public const int AutoFillServiceSummary = 2131427408;
+			
+			// aapt resource value: 0x7f0b004e
+			public const int Hello = 2131427406;
+			
+			// aapt resource value: 0x7f0b0052
+			public const int MyVault = 2131427410;
 			
 			// aapt resource value: 0x7f0b0018
 			public const int abc_action_bar_home_description = 2131427352;
