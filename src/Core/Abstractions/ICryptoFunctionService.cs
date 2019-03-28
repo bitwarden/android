@@ -1,10 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Bit.Core.Enums;
+using System;
+using System.Threading.Tasks;
 
 namespace Bit.Core.Abstractions
 {
     public interface ICryptoFunctionService
     {
+        Task<byte[]> Pbkdf2Async(string password, string salt, CryptoHashAlgorithm algorithm, int iterations);
+        Task<byte[]> Pbkdf2Async(byte[] password, string salt, CryptoHashAlgorithm algorithm, int iterations);
+        Task<byte[]> Pbkdf2Async(string password, byte[] salt, CryptoHashAlgorithm algorithm, int iterations);
+        Task<byte[]> Pbkdf2Async(byte[] password, byte[] salt, CryptoHashAlgorithm algorithm, int iterations);
+        Task<byte[]> HashAsync(string value, CryptoHashAlgorithm algorithm);
+        Task<byte[]> HashAsync(byte[] value, CryptoHashAlgorithm algorithm);
+        Task<byte[]> HmacAsync(byte[] value, byte[] key, CryptoHashAlgorithm algorithm);
+        Task<bool> CompareAsync(byte[] a, byte[] b);
+        Task<byte[]> AesEncryptAsync(byte[] data, byte[] iv, byte[] key);
+        Task<byte[]> AesDecryptAsync(byte[] data, byte[] iv, byte[] key);
+        Task<byte[]> RsaEncryptAsync(byte[] data, byte[] publicKey, CryptoHashAlgorithm algorithm);
+        Task<byte[]> RsaDecryptAsync(byte[] data, byte[] privateKey, CryptoHashAlgorithm algorithm);
+        Task<byte[]> RsaExtractPublicKeyAsync(byte[] privateKey);
+        Task<Tuple<byte[], byte[]>> RsaGenerateKeyPairAsync(int length);
+        Task<byte[]> RandomBytesAsync(int length);
     }
 }
