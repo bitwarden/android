@@ -4,8 +4,7 @@
   xmlns:tools="http://schemas.android.com/tools"
   android:versionCode="1"
   android:versionName="2.0.0"
-  package="com.x8bit.bitwarden"
-  android:installLocation="auto">
+  package="com.x8bit.bitwarden">
 
   <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="28" />
 
