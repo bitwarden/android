@@ -2,8 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>Bit.App</RootNamespace>
-    <AssemblyName>BitwardenApp</AssemblyName>
+    <RootNamespace>Bit.Lib</RootNamespace>
+    <AssemblyName>BitwardenLib</AssemblyName>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -11,11 +11,4 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.264807" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Lib\Lib.csproj" />
-  </ItemGroup>
 </Project>
