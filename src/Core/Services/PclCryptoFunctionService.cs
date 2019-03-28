@@ -60,6 +60,31 @@ namespace Bit.Core.Services
             return Task.FromResult(hasher.GetValueAndReset());
         }
 
+        public async Task<bool> CompareAsync(byte[] a, byte[] b)
+        {
+            var provider = MacAlgorithmProvider.OpenAlgorithm(MacAlgorithm.HmacSha256);
+            var hasher = provider.CreateHash(await RandomBytesAsync(32));
+
+            hasher.Append(a);
+            var mac1 = hasher.GetValueAndReset();
+            hasher.Append(b);
+            var mac2 = hasher.GetValueAndReset();
+            if(mac1.Length != mac2.Length)
+            {
+                return false;
+            }
+
+            for(int i = 0; i < mac2.Length; i++)
+            {
+                if(mac1[i] != mac2[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         public Task<byte[]> AesEncryptAsync(byte[] data, byte[] iv, byte[] key)
         {
             var provider = SymmetricKeyAlgorithmProvider.OpenAlgorithm(SymmetricAlgorithm.AesCbcPkcs7);
@@ -99,6 +124,11 @@ namespace Bit.Core.Services
 
         public Task<Tuple<byte[], byte[]>> RsaGenerateKeyPairAsync(int length)
         {
+            if(length != 1024 && length != 2048 && length != 4096)
+            {
+                throw new ArgumentException("Invalid key pair length.");
+            }
+
             // Have to specify some algorithm
             var provider = AsymmetricKeyAlgorithmProvider.OpenAlgorithm(AsymmetricAlgorithm.RsaOaepSha1);
             var cryptoKey = provider.CreateKeyPair(length);
