@@ -12,7 +12,7 @@ namespace Bit.Core.Services
 
         public LiteDbStorageService(string dbPath)
         {
-            var db = new LiteDatabase($"filename={dbPath}");
+            var db = new LiteDatabase($"Filename={dbPath};");
             _collection = db.GetCollection<JsonItem>("json_items");
         }
 
