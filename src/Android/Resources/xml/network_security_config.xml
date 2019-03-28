@@ -1,0 +1,17 @@
+﻿<network-security-config>
+  <base-config>
+    <trust-anchors>
+      <!-- Trust pre-installed CAs -->
+      <certificates src="system" />
+      <!-- Additionally trust user added CAs -->
+      <certificates src="user" />
+    </trust-anchors>
+  </base-config>
+  <domain-config cleartextTrafficPermitted="false">
+    <domain includeSubdomains="true">bitwarden.com</domain>
+    <trust-anchors>
+      <!-- Only trust pre-installed CAs for Bitwarden.com and all subdomains -->
+      <certificates src="system" />
+    </trust-anchors>
+  </domain-config>
+</network-security-config>
