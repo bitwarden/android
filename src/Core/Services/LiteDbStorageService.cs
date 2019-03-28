@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using LiteDB;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,7 +9,11 @@ namespace Bit.Core.Services
 {
     public class LiteDbStorageService : IStorageService
     {
-        private LiteCollection<JsonItem> _collection;
+        private readonly LiteCollection<JsonItem> _collection;
+        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
         public LiteDbStorageService(string dbPath)
         {
@@ -23,12 +28,12 @@ namespace Bit.Core.Services
             {
                 return Task.FromResult(default(T));
             }
-            return Task.FromResult(JsonConvert.DeserializeObject<T>(item.Value));
+            return Task.FromResult(JsonConvert.DeserializeObject<T>(item.Value, _jsonSettings));
         }
 
         public Task SaveAsync<T>(string key, T obj)
         {
-            var data = JsonConvert.SerializeObject(obj);
+            var data = JsonConvert.SerializeObject(obj, _jsonSettings);
             _collection.Upsert(new JsonItem(key, data));
             return Task.FromResult(0);
         }
