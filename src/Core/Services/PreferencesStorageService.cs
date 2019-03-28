@@ -6,7 +6,7 @@ namespace Bit.Core.Services
 {
     public class PreferencesStorageService : IStorageService
     {
-        private string _keyFormat = "bwPref:{0}";
+        private string _keyFormat = "bwPreferencesStorage:{0}";
 
         public Task<T> GetAsync<T>(string key)
         {
@@ -50,12 +50,12 @@ namespace Bit.Core.Services
 
         public Task SaveAsync<T>(string key, T obj)
         {
-            var formattedKey = string.Format(_keyFormat, key);
             if(obj == null)
             {
-                return RemoveAsync(formattedKey);
+                return RemoveAsync(key);
             }
 
+            var formattedKey = string.Format(_keyFormat, key);
             var objType = typeof(T);
             if(objType == typeof(string))
             {
