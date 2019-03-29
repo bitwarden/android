@@ -3,12 +3,11 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           x:Class="Bit.App.Controls.CipherViewCell"
           xmlns:controls="clr-namespace:Bit.App.Controls">
-
     <ViewCell.View>
+
         <StackLayout x:Name="_layout"
                      Padding="10"
                      x:DataType="controls:CipherViewCellViewModel">
-
             <StackLayout.BindingContext>
                 <controls:CipherViewCellViewModel />
             </StackLayout.BindingContext>
@@ -16,8 +15,7 @@
             <Label Text="{Binding Cipher.Name}"
                    LineBreakMode="NoWrap"
                    FontSize="16" />
-
         </StackLayout>
-    </ViewCell.View>
 
+    </ViewCell.View>
 </ViewCell>

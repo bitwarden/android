@@ -1,32 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.SettingsPage"
-    xmlns:pages="clr-namespace:Bit.App.Pages"
-    x:DataType="pages:SettingsPageViewModel"
-    Title="{Binding PageTitle}">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bit.App.Pages.SettingsPage"
+             xmlns:pages="clr-namespace:Bit.App.Pages"
+             xmlns:controls="clr-namespace:Bit.App.Controls"
+             x:DataType="pages:SettingsPageViewModel"
+             Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
         <pages:SettingsPageViewModel />
     </ContentPage.BindingContext>
 
     <StackLayout>
         <!-- Place new controls here -->
-        <Label
-            Text="Settings!"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand" />
-        <Label
-            Text="&#xf2b9;"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand">
-
-            <Label.FontFamily>
-                <OnPlatform x:TypeArguments="x:String"
-                    Android="FontAwesome.ttf#FontAwesome"
-                    iOS="FontAwesome" />
-            </Label.FontFamily>
-        </Label>
+        <Label Text="Settings!"
+               HorizontalOptions="Center"
+               VerticalOptions="CenterAndExpand" />
+        <controls:FaLabel Text="&#xf2b9;"
+                          HorizontalOptions="Center"
+                          VerticalOptions="CenterAndExpand">
+        </controls:FaLabel>
     </StackLayout>
 
 </ContentPage>

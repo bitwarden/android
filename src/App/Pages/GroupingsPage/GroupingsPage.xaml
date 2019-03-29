@@ -21,10 +21,14 @@
             <DataTemplate x:Key="folderTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
-                    <StackLayout Padding="10">
+                    <StackLayout StyleClass="list-cell">
+                        <controls:FaLabel Text="&#xf07c;"
+                                          HorizontalOptions="Start"
+                                          VerticalOptions="CenterAndExpand" />
                         <Label Text="{Binding Folder.Name}"
-                               LineBreakMode="NoWrap"
-                               FontSize="16" />
+                               LineBreakMode="TailTruncation"
+                               HorizontalOptions="StartAndExpand"
+                               VerticalOptions="CenterAndExpand" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
@@ -32,10 +36,14 @@
             <DataTemplate x:Key="collectionTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
-                    <StackLayout Padding="10">
+                    <StackLayout StyleClass="list-cell">
+                        <controls:FaLabel Text="&#xf1b2;"
+                                          HorizontalOptions="Start"
+                                          VerticalOptions="CenterAndExpand" />
                         <Label Text="{Binding Collection.Name}"
-                               LineBreakMode="NoWrap"
-                               FontSize="16" />
+                               LineBreakMode="TailTruncation"
+                               HorizontalOptions="StartAndExpand"
+                               VerticalOptions="CenterAndExpand" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
