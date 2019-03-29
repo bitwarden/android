@@ -13,7 +13,7 @@
                 <FileImageSource File="lock.png"></FileImageSource>
             </NavigationPage.Icon>
             <x:Arguments>
-                <pages:VaultGroupingsPage />
+                <pages:GroupingsPage />
             </x:Arguments>
         </NavigationPage>
 

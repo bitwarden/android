@@ -6,14 +6,14 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class VaultGroupingsPageViewModel : BaseViewModel
+    public class GroupingsPageViewModel : BaseViewModel
     {
         private bool _loading = false;
 
-        public VaultGroupingsPageViewModel()
+        public GroupingsPageViewModel()
         {
             PageTitle = "My Vault";
-            Items = new ExtendedObservableCollection<VaultGroupingsPageListItem>();
+            Items = new ExtendedObservableCollection<GroupingsPageListItem>();
             LoadCommand = new Command(async () => await LoadAsync());
         }
 
@@ -22,7 +22,7 @@ namespace Bit.App.Pages
             get => _loading;
             set => SetProperty(ref _loading, value);
         }
-        public ExtendedObservableCollection<VaultGroupingsPageListItem> Items { get; set; }
+        public ExtendedObservableCollection<GroupingsPageListItem> Items { get; set; }
         public Command LoadCommand { get; set; }
 
         public Task LoadAsync()
@@ -35,41 +35,41 @@ namespace Bit.App.Pages
 
             try
             {
-                Items.ResetWithRange(new List<VaultGroupingsPageListItem>
+                Items.ResetWithRange(new List<GroupingsPageListItem>
                 {
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Cipher = new CipherView { Name = "Cipher 1" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Cipher = new CipherView { Name = "Cipher 2" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Cipher = new CipherView { Name = "Cipher 3" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Cipher = new CipherView { Name = "Cipher 4" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Folder = new FolderView { Name = "Folder 1" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Folder = new FolderView { Name = "Folder 2" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Folder = new FolderView { Name = "Folder 3" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Collection = new Core.Models.View.CollectionView { Name = "Collection 1" }
                     },
-                    new VaultGroupingsPageListItem
+                    new GroupingsPageListItem
                     {
                         Collection = new Core.Models.View.CollectionView { Name = "Collection 2" }
                     },
@@ -82,12 +82,5 @@ namespace Bit.App.Pages
 
             return Task.FromResult(0);
         }
-    }
-
-    public class VaultGroupingsPageListItem
-    {
-        public FolderView Folder { get; set; }
-        public Core.Models.View.CollectionView Collection { get; set; }
-        public CipherView Cipher { get; set; }
     }
 }

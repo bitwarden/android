@@ -26,8 +26,8 @@
     <Compile Update="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\VaultGroupingsPage.xaml.cs">
-      <DependentUpon>VaultGroupingsPage.xaml</DependentUpon>
+    <Compile Update="Pages\GroupingsPage\GroupingsPage.xaml.cs">
+      <DependentUpon>GroupingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\TabsPage.xaml.cs">
       <DependentUpon>TabsPage.xaml</DependentUpon>

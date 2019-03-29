@@ -2,20 +2,20 @@
 <ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.VaultGroupingsPage"
+    x:Class="Bit.App.Pages.GroupingsPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
-    x:DataType="pages:VaultGroupingsPageViewModel"
+    x:DataType="pages:GroupingsPageViewModel"
     Title="{Binding PageTitle}">
 
     <ContentPage.BindingContext>
-        <pages:VaultGroupingsPageViewModel />
+        <pages:GroupingsPageViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <DataTemplate
                 x:Key="cipherTemplate"
-                x:DataType="pages:VaultGroupingsPageListItem">
+                x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Padding="10">
                         <Label 
@@ -28,7 +28,7 @@
 
             <DataTemplate
                 x:Key="folderTemplate"
-                x:DataType="pages:VaultGroupingsPageListItem">
+                x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Padding="10">
                         <Label 
@@ -41,7 +41,7 @@
 
             <DataTemplate
                 x:Key="collectionTemplate"
-                x:DataType="pages:VaultGroupingsPageListItem">
+                x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Padding="10">
                         <Label 
@@ -52,7 +52,7 @@
                 </ViewCell>
             </DataTemplate>
 
-            <pages:ListItemDataTemplateSelector
+            <pages:GroupingsPageListItemSelector
                 x:Key="listItemDataTemplateSelector"
                 CipherTemplate="{StaticResource cipherTemplate}"
                 FolderTemplate="{StaticResource folderTemplate}"
