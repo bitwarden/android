@@ -6,27 +6,72 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     x:DataType="pages:VaultGroupingsPageViewModel"
     Title="{Binding PageTitle}">
+
     <ContentPage.BindingContext>
         <pages:VaultGroupingsPageViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label
-            Text="Vault Groupings!"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand" />
-        <Label
-            Text="&#xf2b9;"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate
+                x:Key="cipherTemplate"
+                x:DataType="pages:VaultGroupingsPageListItem">
+                <ViewCell>
+                    <StackLayout Padding="10">
+                        <Label 
+                            Text="{Binding Cipher.Name}"
+                            LineBreakMode="NoWrap"
+                            FontSize="16" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
 
-            <Label.FontFamily>
-                <OnPlatform x:TypeArguments="x:String"
-                    Android="FontAwesome.ttf#FontAwesome"
-                    iOS="FontAwesome" />
-            </Label.FontFamily>
-        </Label>
+            <DataTemplate
+                x:Key="folderTemplate"
+                x:DataType="pages:VaultGroupingsPageListItem">
+                <ViewCell>
+                    <StackLayout Padding="10">
+                        <Label 
+                            Text="{Binding Folder.Name}"
+                            LineBreakMode="NoWrap"
+                            FontSize="16" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <DataTemplate
+                x:Key="collectionTemplate"
+                x:DataType="pages:VaultGroupingsPageListItem">
+                <ViewCell>
+                    <StackLayout Padding="10">
+                        <Label 
+                            Text="{Binding Collection.Name}"
+                            LineBreakMode="NoWrap"
+                            FontSize="16" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <pages:ListItemDataTemplateSelector
+                x:Key="listItemDataTemplateSelector"
+                CipherTemplate="{StaticResource cipherTemplate}"
+                FolderTemplate="{StaticResource folderTemplate}"
+                CollectionTemplate="{StaticResource collectionTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+        <ListView
+            x:Name="ItemsListView"
+            ItemsSource="{Binding Items}"
+            VerticalOptions="FillAndExpand"
+            HasUnevenRows="true"
+            RefreshCommand="{Binding LoadCommand}"
+            IsPullToRefreshEnabled="true"
+            IsRefreshing="{Binding Loading, Mode=OneWay}"
+            CachingStrategy="RecycleElement"
+            ItemTemplate="{StaticResource listItemDataTemplateSelector}">
+        </ListView>
     </StackLayout>
 
 </ContentPage>
