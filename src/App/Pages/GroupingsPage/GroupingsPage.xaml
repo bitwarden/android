@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.GroupingsPage"
-    xmlns:pages="clr-namespace:Bit.App.Pages"
-    x:DataType="pages:GroupingsPageViewModel"
-    Title="{Binding PageTitle}">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bit.App.Pages.GroupingsPage"
+             xmlns:pages="clr-namespace:Bit.App.Pages"
+             xmlns:controls="clr-namespace:Bit.App.Controls"
+             x:DataType="pages:GroupingsPageViewModel"
+             Title="{Binding PageTitle}">
 
     <ContentPage.BindingContext>
         <pages:GroupingsPageViewModel />
@@ -13,64 +13,50 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <DataTemplate
-                x:Key="cipherTemplate"
-                x:DataType="pages:GroupingsPageListItem">
+            <DataTemplate x:Key="cipherTemplate"
+                          x:DataType="pages:GroupingsPageListItem">
+                <controls:CipherViewCell Cipher="{Binding Cipher}" />
+            </DataTemplate>
+
+            <DataTemplate x:Key="folderTemplate"
+                          x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Padding="10">
-                        <Label 
-                            Text="{Binding Cipher.Name}"
-                            LineBreakMode="NoWrap"
-                            FontSize="16" />
+                        <Label Text="{Binding Folder.Name}"
+                               LineBreakMode="NoWrap"
+                               FontSize="16" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
 
-            <DataTemplate
-                x:Key="folderTemplate"
-                x:DataType="pages:GroupingsPageListItem">
+            <DataTemplate x:Key="collectionTemplate"
+                          x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Padding="10">
-                        <Label 
-                            Text="{Binding Folder.Name}"
-                            LineBreakMode="NoWrap"
-                            FontSize="16" />
+                        <Label Text="{Binding Collection.Name}"
+                               LineBreakMode="NoWrap"
+                               FontSize="16" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
 
-            <DataTemplate
-                x:Key="collectionTemplate"
-                x:DataType="pages:GroupingsPageListItem">
-                <ViewCell>
-                    <StackLayout Padding="10">
-                        <Label 
-                            Text="{Binding Collection.Name}"
-                            LineBreakMode="NoWrap"
-                            FontSize="16" />
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-
-            <pages:GroupingsPageListItemSelector
-                x:Key="listItemDataTemplateSelector"
-                CipherTemplate="{StaticResource cipherTemplate}"
-                FolderTemplate="{StaticResource folderTemplate}"
-                CollectionTemplate="{StaticResource collectionTemplate}" />
+            <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
+                                                 CipherTemplate="{StaticResource cipherTemplate}"
+                                                 FolderTemplate="{StaticResource folderTemplate}"
+                                                 CollectionTemplate="{StaticResource collectionTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <StackLayout>
-        <ListView
-            x:Name="ItemsListView"
-            ItemsSource="{Binding Items}"
-            VerticalOptions="FillAndExpand"
-            HasUnevenRows="true"
-            RefreshCommand="{Binding LoadCommand}"
-            IsPullToRefreshEnabled="true"
-            IsRefreshing="{Binding Loading, Mode=OneWay}"
-            CachingStrategy="RecycleElement"
-            ItemTemplate="{StaticResource listItemDataTemplateSelector}">
+        <ListView x:Name="ItemsListView"
+                  ItemsSource="{Binding Items}"
+                  VerticalOptions="FillAndExpand"
+                  HasUnevenRows="true"
+                  RefreshCommand="{Binding LoadCommand}"
+                  IsPullToRefreshEnabled="true"
+                  IsRefreshing="{Binding Loading, Mode=OneWay}"
+                  CachingStrategy="RecycleElement"
+                  ItemTemplate="{StaticResource listItemDataTemplateSelector}">
         </ListView>
     </StackLayout>
 

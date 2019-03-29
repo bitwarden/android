@@ -37,4 +37,10 @@
   <ItemGroup>
     <Folder Include="Pages\Accounts\" />
   </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Controls\CipherViewCell\CipherViewCell.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

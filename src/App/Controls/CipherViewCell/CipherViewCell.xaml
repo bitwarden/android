@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          x:Class="Bit.App.Controls.CipherViewCell"
+          xmlns:controls="clr-namespace:Bit.App.Controls">
+
+    <ViewCell.View>
+        <StackLayout x:Name="_layout"
+                     Padding="10"
+                     x:DataType="controls:CipherViewCellViewModel">
+
+            <StackLayout.BindingContext>
+                <controls:CipherViewCellViewModel />
+            </StackLayout.BindingContext>
+
+            <Label Text="{Binding Cipher.Name}"
+                   LineBreakMode="NoWrap"
+                   FontSize="16" />
+
+        </StackLayout>
+    </ViewCell.View>
+
+</ViewCell>

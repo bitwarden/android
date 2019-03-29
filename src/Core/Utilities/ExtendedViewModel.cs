@@ -9,8 +9,8 @@ namespace Bit.Core.Utilities
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName]string propertyName = "",
-            Action onChanged = null)
+        protected bool SetProperty<T>(ref T backingStore, T value, Action onChanged = null,
+            [CallerMemberName]string propertyName = "")
         {
             if(EqualityComparer<T>.Default.Equals(backingStore, value))
             {
@@ -18,14 +18,9 @@ namespace Bit.Core.Utilities
             }
 
             backingStore = value;
-            onChanged?.Invoke();
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            onChanged?.Invoke();
+            return true;
         }
     }
 }
