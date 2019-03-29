@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<TabbedPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.TabsPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+    android:TabbedPage.ToolbarPlacement="Bottom">
+
+    <TabbedPage.Children>
+        <NavigationPage Title="My Vault">
+            <NavigationPage.Icon>
+                <FileImageSource File="lock.png"></FileImageSource>
+            </NavigationPage.Icon>
+            <x:Arguments>
+                <pages:VaultGroupingsPage />
+            </x:Arguments>
+        </NavigationPage>
+
+        <NavigationPage Title="Generator">
+            <NavigationPage.Icon>
+                <FileImageSource File="refresh.png"></FileImageSource>
+            </NavigationPage.Icon>
+            <x:Arguments>
+                <pages:GeneratorPage />
+            </x:Arguments>
+        </NavigationPage>
+
+        <NavigationPage Title="Settings">
+            <NavigationPage.Icon>
+                <FileImageSource File="cogs.png"></FileImageSource>
+            </NavigationPage.Icon>
+            <x:Arguments>
+                <pages:SettingsPage />
+            </x:Arguments>
+        </NavigationPage>
+    </TabbedPage.Children>
+
+</TabbedPage>

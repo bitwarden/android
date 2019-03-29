@@ -2,17 +2,17 @@
 <ContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.HomePage"
-    xmlns:vm="clr-namespace:Bit.App.ViewModels"
-    Title="{Binding Title}">
+    x:Class="Bit.App.Pages.VaultGroupingsPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
-        <vm:HomeViewModel />
+        <pages:VaultGroupingsPageViewModel />
     </ContentPage.BindingContext>
 
     <StackLayout>
         <!-- Place new controls here -->
         <Label
-            Text="Home Page!"
+            Text="Vault Groupings!"
             HorizontalOptions="Center"
             VerticalOptions="CenterAndExpand" />
         <Label

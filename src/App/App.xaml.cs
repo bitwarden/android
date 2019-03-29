@@ -11,7 +11,7 @@ namespace Bit.App
         public App()
         {
             InitializeComponent();
-            MainPage = new HomePage();
+            MainPage = new TabsPage();
         }
 
         protected override void OnStart()

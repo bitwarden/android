@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -20,8 +20,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Pages\Accounts\HomePage.xaml.cs">
-      <DependentUpon>HomePage.xaml</DependentUpon>
+    <Compile Update="Pages\GeneratorPage.xaml.cs">
+      <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\SettingsPage.xaml.cs">
+      <DependentUpon>SettingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\VaultGroupingsPage.xaml.cs">
+      <DependentUpon>VaultGroupingsPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Pages\TabsPage.xaml.cs">
+      <DependentUpon>TabsPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\Accounts\" />
   </ItemGroup>
 </Project>

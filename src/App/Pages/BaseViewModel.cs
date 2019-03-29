@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Bit.App.ViewModels
+namespace Bit.App.Pages
 {
     public abstract class BaseViewModel : INotifyPropertyChanged
     {
