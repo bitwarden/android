@@ -1,4 +1,5 @@
 ﻿using Bit.App.Pages;
+using Bit.App.Utilities;
 using System;
 using System.Reflection;
 using Xamarin.Forms;
@@ -14,22 +15,7 @@ namespace Bit.App
         {
             InitializeComponent();
 
-            // TODO: Load theme?
-            if(false)
-            {
-#pragma warning disable CS0162 // Unreachable code detected
-                Resources.Add(
-#pragma warning restore CS0162 // Unreachable code detected
-                    StyleSheet.FromAssemblyResource(IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly,
-                    "Bit.App.Css.dark.css"));
-            }
-            Resources.Add(
-                StyleSheet.FromAssemblyResource(IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly,
-                "Bit.App.Css.styles.css"));
-            Resources.Add(
-                StyleSheet.FromAssemblyResource(IntrospectionExtensions.GetTypeInfo(typeof(App)).Assembly,
-                $"Bit.App.Css.{Device.RuntimePlatform.ToLowerInvariant()}.css"));
-
+            ThemeManager.SetTheme("dark");
             MainPage = new TabsPage();
         }
 
