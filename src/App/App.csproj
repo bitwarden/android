@@ -45,6 +45,6 @@
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="npm run less" />
+    <Exec Command="npm run sass" />
   </Target>
 </Project>
