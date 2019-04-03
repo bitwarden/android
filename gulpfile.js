@@ -1,29 +1,33 @@
 ﻿const gulp = require('gulp');
-const gulpLess = require('gulp-less');
+const gulpSass = require('gulp-sass');
 const del = require('del');
 const fs = require('fs');
+
+gulpSass.compiler = require('node-sass');
 
 const paths = {
     css: './src/App/Css',
 };
 
-const lessFiles = [
-    './src/App/Less/android.less',
-    './src/App/Less/ios.less',
-    './src/App/Less/dark.less',
-    './src/App/Less/styles.less',
+const sassFiles = [
+    './src/App/Sass/android.scss',
+    './src/App/Sass/ios.scss',
+    './src/App/Sass/dark.scss',
+    './src/App/Sass/styles.scss',
 ];
 
-function less() {
-    return gulp.src(lessFiles).pipe(gulpLess()).pipe(gulp.dest(paths.css));
+function sass() {
+    return gulp.src(sassFiles)
+        .pipe(gulpSass().on('error', gulpSass.logError))
+        .pipe(gulp.dest(paths.css));
 }
 
-function fixLess(cb) {
+function fixSass(cb) {
     fs.readdir(paths.css, (err, cssFiles) => {
         cssFiles.forEach((cssFile) => {
             const file = paths.css + '/' + cssFile;
             let fileContents = fs.readFileSync(file, 'utf8');
-            fileContents = fileContents.replace(/ \^ /g, '^');
+            fileContents = fileContents.replace(/__/g, '^');
             fs.writeFileSync(file, fileContents, 'utf8');
         });
         cb();
@@ -34,6 +38,4 @@ function cleanCss() {
     return del(paths.css);
 }
 
-exports.cleanCss = cleanCss;
-exports.fixLess = fixLess;
-exports.less = gulp.series(cleanCss, less, fixLess);
+exports.sass = gulp.series(cleanCss, sass, fixSass);

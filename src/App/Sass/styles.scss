@@ -1,7 +1,7 @@
-﻿@import "variables.less";
+﻿@import "variables.scss";
 
-^ContentPage {
-    background-color: @white;
+__ContentPage {
+    background-color: $white;
 }
 
 StackLayout.list-cell {

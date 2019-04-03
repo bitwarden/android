@@ -2,11 +2,12 @@
   "name": "bitwarden-mobile",
   "version": "1.0.0",
   "scripts": {
-    "less": "gulp less"
+    "sass": "gulp sass"
   },
   "devDependencies": {
     "del": "4.1.0",
     "gulp": "4.0.0",
-    "gulp-less": "4.0.1"
+    "gulp-sass": "4.0.2",
+    "node-sass": "4.11.0"
   }
 }
