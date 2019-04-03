@@ -1,6 +1,6 @@
 ﻿namespace Bit.Core.Enums
 {
-    public enum CryptoHashAlgorithm
+    public enum CryptoHashAlgorithm : byte
     {
         Sha1 = 0,
         Sha256 = 1,
