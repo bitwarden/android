@@ -8,13 +8,14 @@
     android:paddingTop="4dp"
     android:paddingBottom="4dp">
     <LinearLayout
-        android:id="@+id/CellBody"
+        android:id="@+id/CellContent"
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
         <LinearLayout
-            android:id="@+id/CellContentStack"
+            android:id="@+id/CellTitleContent"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,7 +34,7 @@
         </LinearLayout>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/CellAccessoryView"
+        android:id="@+id/CellAccessory"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"

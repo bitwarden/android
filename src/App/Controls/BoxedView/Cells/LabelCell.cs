@@ -13,7 +13,7 @@ namespace Bit.App.Controls.BoxedView
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty ValueTextFontSizeProperty = BindableProperty.Create(
-            nameof(ValueTextFontSize), typeof(double), typeof(LabelCell), -1.0d,
+            nameof(ValueTextFontSize), typeof(double), typeof(LabelCell), -1.0,
             defaultBindingMode: BindingMode.OneWay);
 
         public string ValueText

@@ -20,7 +20,6 @@ namespace Bit.Droid.Renderers.BoxedView
             {
                 nativeCell = InstanceCreator<Context, Xamarin.Forms.Cell, TNativeCell>.Create(context, item);
             }
-
             ClearPropertyChanged(nativeCell);
             nativeCell.Cell = item;
             SetUpPropertyChanged(nativeCell);

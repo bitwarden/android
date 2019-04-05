@@ -31,7 +31,7 @@ namespace Bit.Droid.Renderers.BoxedView
                 ViewGroup.LayoutParams.WrapContent);
             using(textParams)
             {
-                ContentStack.AddView(ValueLabel, textParams);
+                CellContent.AddView(ValueLabel, textParams);
             }
         }
 

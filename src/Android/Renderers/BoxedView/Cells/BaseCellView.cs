@@ -38,9 +38,10 @@ namespace Bit.Droid.Renderers.BoxedView
         public Element Element => Cell;
         protected BaseCell CellBase => Cell as BaseCell;
         public App.Controls.BoxedView.BoxedView CellParent => Cell.Parent as App.Controls.BoxedView.BoxedView;
-        public TextView TitleLabel { get; set; }
-        public LinearLayout ContentStack { get; set; }
-        public LinearLayout AccessoryStack { get; set; }
+        public TextView CellTitle { get; set; }
+        public LinearLayout CellTitleContent { get; set; }
+        public LinearLayout CellContent { get; set; }
+        public LinearLayout CellAccessory { get; set; }
 
         private void CreateContentView()
         {
@@ -50,9 +51,10 @@ namespace Bit.Droid.Renderers.BoxedView
 
             contentView.LayoutParameters = new ViewGroup.LayoutParams(-1, -1);
 
-            TitleLabel = contentView.FindViewById<TextView>(Resource.Id.CellTitle);
-            ContentStack = contentView.FindViewById<LinearLayout>(Resource.Id.CellContentStack);
-            AccessoryStack = contentView.FindViewById<LinearLayout>(Resource.Id.CellAccessoryView);
+            CellTitle = contentView.FindViewById<TextView>(Resource.Id.CellTitle);
+            CellContent = contentView.FindViewById<LinearLayout>(Resource.Id.CellContent);
+            CellTitleContent = contentView.FindViewById<LinearLayout>(Resource.Id.CellTitleContent);
+            CellAccessory = contentView.FindViewById<LinearLayout>(Resource.Id.CellAccessory);
 
             _backgroundColor = new ColorDrawable();
             _selectedColor = new ColorDrawable(Android.Graphics.Color.Argb(125, 180, 180, 180));
@@ -72,8 +74,8 @@ namespace Bit.Droid.Renderers.BoxedView
             _ripple = RendererUtils.CreateRipple(rippleColor, sel);
             Background = _ripple;
 
-            _defaultTextColor = new Android.Graphics.Color(TitleLabel.CurrentTextColor);
-            _defaultFontSize = TitleLabel.TextSize;
+            _defaultTextColor = new Android.Graphics.Color(CellTitle.CurrentTextColor);
+            _defaultFontSize = CellTitle.TextSize;
         }
 
         public virtual void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -184,24 +186,24 @@ namespace Bit.Droid.Renderers.BoxedView
 
         private void UpdateTitleText()
         {
-            TitleLabel.Text = CellBase.Title;
+            CellTitle.Text = CellBase.Title;
             // Hide TextView right padding when TextView.Text empty.
-            TitleLabel.Visibility = string.IsNullOrEmpty(TitleLabel.Text) ? ViewStates.Gone : ViewStates.Visible;
+            CellTitle.Visibility = string.IsNullOrEmpty(CellTitle.Text) ? ViewStates.Gone : ViewStates.Visible;
         }
 
         private void UpdateTitleColor()
         {
             if(CellBase.TitleColor != Color.Default)
             {
-                TitleLabel.SetTextColor(CellBase.TitleColor.ToAndroid());
+                CellTitle.SetTextColor(CellBase.TitleColor.ToAndroid());
             }
             else if(CellParent != null && CellParent.CellTitleColor != Color.Default)
             {
-                TitleLabel.SetTextColor(CellParent.CellTitleColor.ToAndroid());
+                CellTitle.SetTextColor(CellParent.CellTitleColor.ToAndroid());
             }
             else
             {
-                TitleLabel.SetTextColor(_defaultTextColor);
+                CellTitle.SetTextColor(_defaultTextColor);
             }
         }
 
@@ -209,15 +211,15 @@ namespace Bit.Droid.Renderers.BoxedView
         {
             if(CellBase.TitleFontSize > 0)
             {
-                TitleLabel.SetTextSize(ComplexUnitType.Sp, (float)CellBase.TitleFontSize);
+                CellTitle.SetTextSize(ComplexUnitType.Sp, (float)CellBase.TitleFontSize);
             }
             else if(CellParent != null)
             {
-                TitleLabel.SetTextSize(ComplexUnitType.Sp, (float)CellParent.CellTitleFontSize);
+                CellTitle.SetTextSize(ComplexUnitType.Sp, (float)CellParent.CellTitleFontSize);
             }
             else
             {
-                TitleLabel.SetTextSize(ComplexUnitType.Sp, _defaultFontSize);
+                CellTitle.SetTextSize(ComplexUnitType.Sp, _defaultFontSize);
             }
         }
 
@@ -232,7 +234,7 @@ namespace Bit.Droid.Renderers.BoxedView
             {
                 Focusable = false;
                 DescendantFocusability = DescendantFocusability.AfterDescendants;
-                TitleLabel.Alpha = 1f;
+                CellTitle.Alpha = 1f;
             }
             else
             {
@@ -240,7 +242,7 @@ namespace Bit.Droid.Renderers.BoxedView
                 Focusable = true;
                 DescendantFocusability = DescendantFocusability.BlockDescendants;
                 // to turn like disabled
-                TitleLabel.Alpha = 0.3f;
+                CellTitle.Alpha = 0.3f;
             }
         }
 
@@ -257,12 +259,12 @@ namespace Bit.Droid.Renderers.BoxedView
                     CellBase.Section = null;
                 }
 
-                TitleLabel?.Dispose();
-                TitleLabel = null;
-                ContentStack?.Dispose();
-                ContentStack = null;
-                AccessoryStack?.Dispose();
-                AccessoryStack = null;
+                CellTitle?.Dispose();
+                CellTitle = null;
+                CellTitleContent?.Dispose();
+                CellTitleContent = null;
+                CellAccessory?.Dispose();
+                CellAccessory = null;
                 Cell = null;
 
                 _iconTokenSource?.Dispose();
