@@ -41,6 +41,10 @@ namespace Bit.Droid.Renderers.BoxedView
         public TextView CellTitle { get; set; }
         public LinearLayout CellTitleContent { get; set; }
         public LinearLayout CellContent { get; set; }
+        public LinearLayout CellButtonContent { get; set; }
+        public Android.Widget.ImageButton CellButton1 { get; set; }
+        public Android.Widget.ImageButton CellButton2 { get; set; }
+        public Android.Widget.ImageButton CellButton3 { get; set; }
         public LinearLayout CellAccessory { get; set; }
 
         private void CreateContentView()
@@ -54,6 +58,13 @@ namespace Bit.Droid.Renderers.BoxedView
             CellTitle = contentView.FindViewById<TextView>(Resource.Id.CellTitle);
             CellContent = contentView.FindViewById<LinearLayout>(Resource.Id.CellContent);
             CellTitleContent = contentView.FindViewById<LinearLayout>(Resource.Id.CellTitleContent);
+            CellButtonContent = contentView.FindViewById<LinearLayout>(Resource.Id.CellButtonContent);
+            CellButton1 = contentView.FindViewById<Android.Widget.ImageButton>(Resource.Id.CellButton1);
+            CellButton1.Click += CellButton1_Click;
+            CellButton2 = contentView.FindViewById<Android.Widget.ImageButton>(Resource.Id.CellButton2);
+            CellButton2.Click += CellButton2_Click;
+            CellButton3 = contentView.FindViewById<Android.Widget.ImageButton>(Resource.Id.CellButton3);
+            CellButton3.Click += CellButton3_Click;
             CellAccessory = contentView.FindViewById<LinearLayout>(Resource.Id.CellAccessory);
 
             _backgroundColor = new ColorDrawable();
@@ -100,6 +111,18 @@ namespace Bit.Droid.Renderers.BoxedView
             {
                 UpdateIsEnabled();
             }
+            else if(e.PropertyName == BaseCell.Button1IconProperty.PropertyName)
+            {
+                UpdateButtonIcon(CellButton1, CellBase.Button1Icon);
+            }
+            else if(e.PropertyName == BaseCell.Button2IconProperty.PropertyName)
+            {
+                UpdateButtonIcon(CellButton2, CellBase.Button2Icon);
+            }
+            else if(e.PropertyName == BaseCell.Button3IconProperty.PropertyName)
+            {
+                UpdateButtonIcon(CellButton3, CellBase.Button3Icon);
+            }
         }
 
         public virtual void ParentPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -142,6 +165,9 @@ namespace Bit.Droid.Renderers.BoxedView
 
         public virtual void UpdateCell()
         {
+            UpdateButtonIcon(CellButton1, CellBase.Button1Icon);
+            UpdateButtonIcon(CellButton2, CellBase.Button2Icon);
+            UpdateButtonIcon(CellButton3, CellBase.Button3Icon);
             UpdateBackgroundColor();
             UpdateSelectedColor();
             UpdateTitleText();
@@ -151,6 +177,43 @@ namespace Bit.Droid.Renderers.BoxedView
             UpdateIsEnabled();
 
             Invalidate();
+        }
+
+        private void UpdateButtonIcon(Android.Widget.ImageButton cellButton, string icon)
+        {
+            if(string.IsNullOrWhiteSpace(icon))
+            {
+                cellButton.Visibility = ViewStates.Gone;
+            }
+            else
+            {
+                cellButton.Background = _Context.GetDrawable(icon);
+                cellButton.Visibility = ViewStates.Visible;
+            }
+        }
+
+        private void CellButton1_Click(object sender, EventArgs e)
+        {
+            if(CellBase.Button1Command?.CanExecute(CellBase.Button1CommandParameter) ?? false)
+            {
+                CellBase.Button1Command.Execute(CellBase.Button1CommandParameter);
+            }
+        }
+
+        private void CellButton2_Click(object sender, EventArgs e)
+        {
+            if(CellBase.Button2Command?.CanExecute(CellBase.Button2CommandParameter) ?? false)
+            {
+                CellBase.Button2Command.Execute(CellBase.Button2CommandParameter);
+            }
+        }
+
+        private void CellButton3_Click(object sender, EventArgs e)
+        {
+            if(CellBase.Button3Command?.CanExecute(CellBase.Button3CommandParameter) ?? false)
+            {
+                CellBase.Button3Command.Execute(CellBase.Button3CommandParameter);
+            }
         }
 
         private void UpdateBackgroundColor()
@@ -252,6 +315,9 @@ namespace Bit.Droid.Renderers.BoxedView
             {
                 CellBase.PropertyChanged -= CellPropertyChanged;
                 CellParent.PropertyChanged -= ParentPropertyChanged;
+                CellButton1.Click -= CellButton1_Click;
+                CellButton2.Click -= CellButton2_Click;
+                CellButton3.Click -= CellButton3_Click;
 
                 if(CellBase.Section != null)
                 {
@@ -265,6 +331,16 @@ namespace Bit.Droid.Renderers.BoxedView
                 CellTitleContent = null;
                 CellAccessory?.Dispose();
                 CellAccessory = null;
+                CellButton1?.Dispose();
+                CellButton1 = null;
+                CellButton2?.Dispose();
+                CellButton2 = null;
+                CellButton3?.Dispose();
+                CellButton3 = null;
+                CellButtonContent?.Dispose();
+                CellButtonContent = null;
+                CellContent?.Dispose();
+                CellContent = null;
                 Cell = null;
 
                 _iconTokenSource?.Dispose();

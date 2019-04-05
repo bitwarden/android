@@ -13,6 +13,8 @@ namespace Bit.App.Pages
         public SettingsPage()
         {
             InitializeComponent();
+            var viewModel = BindingContext as SettingsPageViewModel;
+            viewModel.Page = this;
         }
     }
 }
