@@ -38,7 +38,7 @@ namespace Bit.Droid.Renderers
             }
         }
 
-        public static GravityFlags ToAndroidVertical(this Xamarin.Forms.TextAlignment formsAlignment)
+        public static GravityFlags ToAndroidHorizontal(this Xamarin.Forms.TextAlignment formsAlignment)
         {
             switch(formsAlignment)
             {
@@ -49,7 +49,7 @@ namespace Bit.Droid.Renderers
                 case Xamarin.Forms.TextAlignment.End:
                     return GravityFlags.Right | GravityFlags.CenterVertical;
                 default:
-                    return GravityFlags.Right | GravityFlags.CenterVertical;
+                    return GravityFlags.Left | GravityFlags.CenterVertical;
             }
         }
 

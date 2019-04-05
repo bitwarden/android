@@ -11,9 +11,22 @@
         <pages:SettingsPageViewModel />
     </ContentPage.BindingContext>
 
-    <bv:BoxedView>
-        <bv:BoxedSection Title="The Title" FooterText="The Footer">
-            <bv:LabelCell Title="The title" ValueText="The value" />
+    <bv:BoxedView HasUnevenRows="True">
+        <bv:BoxedSection Title="The Title"
+                         FooterText="The Footer"
+                         UseDragSort="True">
+            <bv:EntryCell Title="The title"
+                          ValueText="The value for entry" />
+            <bv:LabelCell Title="The title"
+                          ValueText="The value" />
+            <bv:LabelCell Title="The title 2"
+                          ValueText="The value" />
+            <bv:LabelCell Title="The title 3"
+                          ValueText="The value" />
+            <bv:LabelCell Title="The title 4"
+                          ValueText="The value" />
+            <bv:LabelCell Title="The title 5"
+                          ValueText="The value" />
         </bv:BoxedSection>
     </bv:BoxedView>
 

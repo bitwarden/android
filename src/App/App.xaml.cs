@@ -15,7 +15,7 @@ namespace Bit.App
         {
             InitializeComponent();
 
-            ThemeManager.SetTheme("dark");
+            ThemeManager.SetTheme("light");
             MainPage = new TabsPage();
         }
 

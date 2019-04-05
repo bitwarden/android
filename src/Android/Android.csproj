@@ -68,6 +68,7 @@
     <Compile Include="Renderers\BoxedView\BoxedViewSimpleCallback.cs" />
     <Compile Include="Renderers\BoxedView\Cells\BaseCellRenderer.cs" />
     <Compile Include="Renderers\BoxedView\Cells\BaseCellView.cs" />
+    <Compile Include="Renderers\BoxedView\Cells\EntryCellRenderer.cs" />
     <Compile Include="Renderers\BoxedView\Cells\LabelCellRenderer.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainActivity.cs" />

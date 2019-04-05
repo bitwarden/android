@@ -25,13 +25,12 @@ namespace Bit.Droid.Renderers.BoxedView
             ValueLabel = new TextView(context);
             ValueLabel.SetSingleLine(true);
             ValueLabel.Ellipsize = TextUtils.TruncateAt.End;
-            ValueLabel.Gravity = GravityFlags.Right;
+            ValueLabel.Gravity = GravityFlags.Left;
 
-            var textParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
-                ViewGroup.LayoutParams.WrapContent);
-            using(textParams)
+            using(var lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
+                ViewGroup.LayoutParams.WrapContent))
             {
-                CellContent.AddView(ValueLabel, textParams);
+                CellContent.AddView(ValueLabel, lParams);
             }
         }
 
