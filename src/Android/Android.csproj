@@ -63,8 +63,15 @@
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Renderers\BoxedView\BoxedViewRecyclerAdapter.cs" />
+    <Compile Include="Renderers\BoxedView\BoxedViewRenderer.cs" />
+    <Compile Include="Renderers\BoxedView\BoxedViewSimpleCallback.cs" />
+    <Compile Include="Renderers\BoxedView\Cells\BaseCellRenderer.cs" />
+    <Compile Include="Renderers\BoxedView\Cells\BaseCellView.cs" />
+    <Compile Include="Renderers\BoxedView\Cells\LabelCellRenderer.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainActivity.cs" />
+    <Compile Include="Renderers\RendererUtils.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CryptoPrimitiveService.cs" />
@@ -193,6 +200,18 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\lock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\CellBaseView.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\ContentCell.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\FooterCell.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\HeaderCell.axml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

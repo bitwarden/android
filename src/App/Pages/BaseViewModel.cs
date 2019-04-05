@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Utilities;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -11,5 +12,7 @@ namespace Bit.App.Pages
             get => _pageTitle;
             set => SetProperty(ref _pageTitle, value);
         }
+
+        public ContentPage Page { get; set; }
     }
 }

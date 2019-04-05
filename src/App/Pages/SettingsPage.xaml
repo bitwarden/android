@@ -4,21 +4,17 @@
              x:Class="Bit.App.Pages.SettingsPage"
              xmlns:pages="clr-namespace:Bit.App.Pages"
              xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:bv="clr-namespace:Bit.App.Controls.BoxedView"
              x:DataType="pages:SettingsPageViewModel"
              Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
         <pages:SettingsPageViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label Text="Settings!"
-               HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand" />
-        <controls:FaLabel Text="&#xf2b9;"
-                          HorizontalOptions="Center"
-                          VerticalOptions="CenterAndExpand">
-        </controls:FaLabel>
-    </StackLayout>
+    <bv:BoxedView>
+        <bv:BoxedSection Title="The Title" FooterText="The Footer">
+            <bv:LabelCell Title="The title" ValueText="The value" />
+        </bv:BoxedSection>
+    </bv:BoxedView>
 
 </ContentPage>
