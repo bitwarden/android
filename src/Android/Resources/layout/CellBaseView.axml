@@ -12,8 +12,7 @@
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="4dp">
+        android:layout_height="wrap_content">
         <LinearLayout
             android:id="@+id/CellContentStack"
             android:orientation="horizontal"
@@ -32,13 +31,6 @@
                 android:paddingRight="6dp"
                 android:layout_gravity="left|center_vertical" />
         </LinearLayout>
-        <TextView
-            android:id="@+id/CellDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:layout_gravity="left"
-            android:layout_marginTop="2dp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/CellAccessoryView"

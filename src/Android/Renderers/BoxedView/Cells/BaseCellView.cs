@@ -39,7 +39,6 @@ namespace Bit.Droid.Renderers.BoxedView
         protected BaseCell CellBase => Cell as BaseCell;
         public App.Controls.BoxedView.BoxedView CellParent => Cell.Parent as App.Controls.BoxedView.BoxedView;
         public TextView TitleLabel { get; set; }
-        public TextView DescriptionLabel { get; set; }
         public LinearLayout ContentStack { get; set; }
         public LinearLayout AccessoryStack { get; set; }
 
@@ -52,7 +51,6 @@ namespace Bit.Droid.Renderers.BoxedView
             contentView.LayoutParameters = new ViewGroup.LayoutParams(-1, -1);
 
             TitleLabel = contentView.FindViewById<TextView>(Resource.Id.CellTitle);
-            DescriptionLabel = contentView.FindViewById<TextView>(Resource.Id.CellDescription);
             ContentStack = contentView.FindViewById<LinearLayout>(Resource.Id.CellContentStack);
             AccessoryStack = contentView.FindViewById<LinearLayout>(Resource.Id.CellAccessoryView);
 
@@ -92,18 +90,6 @@ namespace Bit.Droid.Renderers.BoxedView
             {
                 UpdateTitleFontSize();
             }
-            else if(e.PropertyName == BaseCell.DescriptionProperty.PropertyName)
-            {
-                UpdateDescriptionText();
-            }
-            else if(e.PropertyName == BaseCell.DescriptionFontSizeProperty.PropertyName)
-            {
-                UpdateDescriptionFontSize();
-            }
-            else if(e.PropertyName == BaseCell.DescriptionColorProperty.PropertyName)
-            {
-                UpdateDescriptionColor();
-            }
             else if(e.PropertyName == BaseCell.BackgroundColorProperty.PropertyName)
             {
                 UpdateBackgroundColor();
@@ -129,14 +115,6 @@ namespace Bit.Droid.Renderers.BoxedView
             else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellTitleFontSizeProperty.PropertyName)
             {
                 UpdateWithForceLayout(UpdateTitleFontSize);
-            }
-            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellDescriptionColorProperty.PropertyName)
-            {
-                UpdateDescriptionColor();
-            }
-            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellDescriptionFontSizeProperty.PropertyName)
-            {
-                UpdateWithForceLayout(UpdateDescriptionFontSize);
             }
             else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellBackgroundColorProperty.PropertyName)
             {
@@ -167,9 +145,6 @@ namespace Bit.Droid.Renderers.BoxedView
             UpdateTitleText();
             UpdateTitleColor();
             UpdateTitleFontSize();
-            UpdateDescriptionText();
-            UpdateDescriptionColor();
-            UpdateDescriptionFontSize();
 
             UpdateIsEnabled();
 
@@ -246,45 +221,6 @@ namespace Bit.Droid.Renderers.BoxedView
             }
         }
 
-        private void UpdateDescriptionText()
-        {
-            DescriptionLabel.Text = CellBase.Description;
-            DescriptionLabel.Visibility = string.IsNullOrEmpty(DescriptionLabel.Text) ?
-                ViewStates.Gone : ViewStates.Visible;
-        }
-
-        private void UpdateDescriptionFontSize()
-        {
-            if(CellBase.DescriptionFontSize > 0)
-            {
-                DescriptionLabel.SetTextSize(ComplexUnitType.Sp, (float)CellBase.DescriptionFontSize);
-            }
-            else if(CellParent != null)
-            {
-                DescriptionLabel.SetTextSize(ComplexUnitType.Sp, (float)CellParent.CellDescriptionFontSize);
-            }
-            else
-            {
-                DescriptionLabel.SetTextSize(ComplexUnitType.Sp, _defaultFontSize);
-            }
-        }
-
-        private void UpdateDescriptionColor()
-        {
-            if(CellBase.DescriptionColor != Color.Default)
-            {
-                DescriptionLabel.SetTextColor(CellBase.DescriptionColor.ToAndroid());
-            }
-            else if(CellParent != null && CellParent.CellDescriptionColor != Color.Default)
-            {
-                DescriptionLabel.SetTextColor(CellParent.CellDescriptionColor.ToAndroid());
-            }
-            else
-            {
-                DescriptionLabel.SetTextColor(_defaultTextColor);
-            }
-        }
-
         protected virtual void UpdateIsEnabled()
         {
             SetEnabledAppearance(CellBase.IsEnabled);
@@ -297,7 +233,6 @@ namespace Bit.Droid.Renderers.BoxedView
                 Focusable = false;
                 DescendantFocusability = DescendantFocusability.AfterDescendants;
                 TitleLabel.Alpha = 1f;
-                DescriptionLabel.Alpha = 1f;
             }
             else
             {
@@ -306,7 +241,6 @@ namespace Bit.Droid.Renderers.BoxedView
                 DescendantFocusability = DescendantFocusability.BlockDescendants;
                 // to turn like disabled
                 TitleLabel.Alpha = 0.3f;
-                DescriptionLabel.Alpha = 0.3f;
             }
         }
 
@@ -325,8 +259,6 @@ namespace Bit.Droid.Renderers.BoxedView
 
                 TitleLabel?.Dispose();
                 TitleLabel = null;
-                DescriptionLabel?.Dispose();
-                DescriptionLabel = null;
                 ContentStack?.Dispose();
                 ContentStack = null;
                 AccessoryStack?.Dispose();

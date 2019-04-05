@@ -79,14 +79,6 @@ namespace Bit.App.Controls.BoxedView
             nameof(CellValueTextFontSize), typeof(double), typeof(BoxedView), -1.0d,
             defaultBindingMode: BindingMode.OneWay);
 
-        public static BindableProperty CellDescriptionColorProperty = BindableProperty.Create(
-            nameof(CellDescriptionColor), typeof(Color), typeof(BoxedView), default(Color),
-            defaultBindingMode: BindingMode.OneWay);
-
-        public static BindableProperty CellDescriptionFontSizeProperty = BindableProperty.Create(
-            nameof(CellDescriptionFontSize), typeof(double), typeof(BoxedView), -1.0d,
-            defaultBindingMode: BindingMode.OneWay);
-
         public static BindableProperty CellBackgroundColorProperty = BindableProperty.Create(
             nameof(CellBackgroundColor), typeof(Color), typeof(BoxedView), default(Color),
             defaultBindingMode: BindingMode.OneWay);
@@ -260,19 +252,6 @@ namespace Bit.App.Controls.BoxedView
         {
             get => (double)GetValue(CellValueTextFontSizeProperty);
             set => SetValue(CellValueTextFontSizeProperty, value);
-        }
-
-        public Color CellDescriptionColor
-        {
-            get => (Color)GetValue(CellDescriptionColorProperty);
-            set => SetValue(CellDescriptionColorProperty, value);
-        }
-
-        [TypeConverter(typeof(FontSizeConverter))]
-        public double CellDescriptionFontSize
-        {
-            get => (double)GetValue(CellDescriptionFontSizeProperty);
-            set => SetValue(CellDescriptionFontSizeProperty, value);
         }
 
         public Color CellBackgroundColor
