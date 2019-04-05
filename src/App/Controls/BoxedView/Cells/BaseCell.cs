@@ -5,13 +5,6 @@ namespace Bit.App.Controls.BoxedView
 {
     public class BaseCell : Cell
     {
-        public new event EventHandler Tapped;
-
-        internal new void OnTapped()
-        {
-            Tapped?.Invoke(this, EventArgs.Empty);
-        }
-
         public static BindableProperty TitleProperty = BindableProperty.Create(
             nameof(Title), typeof(string), typeof(BaseCell), default(string), defaultBindingMode: BindingMode.OneWay);
 
@@ -83,5 +76,12 @@ namespace Bit.App.Controls.BoxedView
         }
 
         public BoxedSection Section { get; set; }
+
+        public new event EventHandler Tapped;
+
+        protected internal new void OnTapped()
+        {
+            Tapped?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

@@ -4,13 +4,13 @@ using Android.Text;
 using Android.Views;
 using Android.Widget;
 using Bit.App.Controls.BoxedView;
-using Bit.Droid.Renderers;
+using Bit.Droid.Renderers.BoxedView;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(LabelCell), typeof(LabelCellRenderer))]
-namespace Bit.Droid.Renderers
+namespace Bit.Droid.Renderers.BoxedView
 {
     [Preserve(AllMembers = true)]
     public class LabelCellRenderer : BaseCellRenderer<LabelCellView>
@@ -59,11 +59,11 @@ namespace Bit.Droid.Renderers
         public override void ParentPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.ParentPropertyChanged(sender, e);
-            if(e.PropertyName == BoxedView.CellValueTextColorProperty.PropertyName)
+            if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellValueTextColorProperty.PropertyName)
             {
                 UpdateValueTextColor();
             }
-            else if(e.PropertyName == BoxedView.CellValueTextFontSizeProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellValueTextFontSizeProperty.PropertyName)
             {
                 UpdateValueTextFontSize();
             }

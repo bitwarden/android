@@ -12,7 +12,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using ARelativeLayout = Android.Widget.RelativeLayout;
 
-namespace Bit.Droid.Renderers
+namespace Bit.Droid.Renderers.BoxedView
 {
     [Preserve(AllMembers = true)]
     public class BaseCellView : ARelativeLayout, INativeElementView
@@ -37,7 +37,7 @@ namespace Bit.Droid.Renderers
         public Cell Cell { get; set; }
         public Element Element => Cell;
         protected BaseCell CellBase => Cell as BaseCell;
-        public BoxedView CellParent => Cell.Parent as BoxedView;
+        public App.Controls.BoxedView.BoxedView CellParent => Cell.Parent as App.Controls.BoxedView.BoxedView;
         public TextView TitleLabel { get; set; }
         public TextView DescriptionLabel { get; set; }
         public LinearLayout ContentStack { get; set; }
@@ -122,27 +122,27 @@ namespace Bit.Droid.Renderers
                 return;
             }
 
-            if(e.PropertyName == BoxedView.CellTitleColorProperty.PropertyName)
+            if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellTitleColorProperty.PropertyName)
             {
                 UpdateTitleColor();
             }
-            else if(e.PropertyName == BoxedView.CellTitleFontSizeProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellTitleFontSizeProperty.PropertyName)
             {
                 UpdateWithForceLayout(UpdateTitleFontSize);
             }
-            else if(e.PropertyName == BoxedView.CellDescriptionColorProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellDescriptionColorProperty.PropertyName)
             {
                 UpdateDescriptionColor();
             }
-            else if(e.PropertyName == BoxedView.CellDescriptionFontSizeProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellDescriptionFontSizeProperty.PropertyName)
             {
                 UpdateWithForceLayout(UpdateDescriptionFontSize);
             }
-            else if(e.PropertyName == BoxedView.CellBackgroundColorProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellBackgroundColorProperty.PropertyName)
             {
                 UpdateBackgroundColor();
             }
-            else if(e.PropertyName == BoxedView.SelectedColorProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.SelectedColorProperty.PropertyName)
             {
                 UpdateWithForceLayout(UpdateSelectedColor);
             }

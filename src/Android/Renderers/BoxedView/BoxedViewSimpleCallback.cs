@@ -1,24 +1,24 @@
 ﻿using Android.Runtime;
 using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
-using Bit.App.Controls.BoxedView;
 using System;
 
-namespace Bit.Droid.Renderers
+namespace Bit.Droid.Renderers.BoxedView
 {
     [Preserve(AllMembers = true)]
     public class BoxedViewSimpleCallback : ItemTouchHelper.SimpleCallback
     {
-        private BoxedView _boxedView;
+        private App.Controls.BoxedView.BoxedView _boxedView;
         private int _offset = 0;
 
-        public BoxedViewSimpleCallback(BoxedView boxedView, int dragDirs, int swipeDirs)
+        public BoxedViewSimpleCallback(App.Controls.BoxedView.BoxedView boxedView, int dragDirs, int swipeDirs)
             : base(dragDirs, swipeDirs)
         {
             _boxedView = boxedView;
         }
 
-        public override bool OnMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target)
+        public override bool OnMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder,
+            RecyclerView.ViewHolder target)
         {
             if(!(viewHolder is ContentViewHolder fromContentHolder))
             {

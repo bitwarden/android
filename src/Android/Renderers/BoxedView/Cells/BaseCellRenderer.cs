@@ -8,26 +8,11 @@ using System.Linq.Expressions;
 using System.Reflection;
 using Xamarin.Forms.Platform.Android;
 
-namespace Bit.Droid.Renderers
+namespace Bit.Droid.Renderers.BoxedView
 {
     [Preserve(AllMembers = true)]
     public class BaseCellRenderer<TNativeCell> : CellRenderer where TNativeCell : BaseCellView
     {
-        internal static class InstanceCreator<T1, T2, TInstance>
-        {
-            public static Func<T1, T2, TInstance> Create { get; } = CreateInstance();
-
-            private static Func<T1, T2, TInstance> CreateInstance()
-            {
-                var argsTypes = new[] { typeof(T1), typeof(T2) };
-                var constructor = typeof(TInstance).GetConstructor(
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
-                    Type.DefaultBinder, argsTypes, null);
-                var args = argsTypes.Select(Expression.Parameter).ToArray();
-                return Expression.Lambda<Func<T1, T2, TInstance>>(Expression.New(constructor, args), args).Compile();
-            }
-        }
-
         protected override View GetCellCore(Xamarin.Forms.Cell item, View convertView, ViewGroup parent,
             Context context)
         {
@@ -47,7 +32,7 @@ namespace Bit.Droid.Renderers
         {
             var formsCell = nativeCell.Cell as BaseCell;
             formsCell.PropertyChanged += nativeCell.CellPropertyChanged;
-            if(formsCell.Parent is BoxedView parentElement)
+            if(formsCell.Parent is App.Controls.BoxedView.BoxedView parentElement)
             {
                 parentElement.PropertyChanged += nativeCell.ParentPropertyChanged;
                 var section = parentElement.Model.GetSection(BoxedModel.GetPath(formsCell).Item1);
@@ -63,13 +48,28 @@ namespace Bit.Droid.Renderers
         {
             var formsCell = nativeCell.Cell as BaseCell;
             formsCell.PropertyChanged -= nativeCell.CellPropertyChanged;
-            if(formsCell.Parent is BoxedView parentElement)
+            if(formsCell.Parent is App.Controls.BoxedView.BoxedView parentElement)
             {
                 parentElement.PropertyChanged -= nativeCell.ParentPropertyChanged;
                 if(formsCell.Section != null)
                 {
                     formsCell.Section.PropertyChanged -= nativeCell.SectionPropertyChanged;
                 }
+            }
+        }
+
+        internal static class InstanceCreator<T1, T2, TInstance>
+        {
+            public static Func<T1, T2, TInstance> Create { get; } = CreateInstance();
+
+            private static Func<T1, T2, TInstance> CreateInstance()
+            {
+                var argsTypes = new[] { typeof(T1), typeof(T2) };
+                var constructor = typeof(TInstance).GetConstructor(
+                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance,
+                    Type.DefaultBinder, argsTypes, null);
+                var args = argsTypes.Select(Expression.Parameter).ToArray();
+                return Expression.Lambda<Func<T1, T2, TInstance>>(Expression.New(constructor, args), args).Compile();
             }
         }
     }

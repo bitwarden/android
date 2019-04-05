@@ -4,17 +4,17 @@ using Android.Support.V7.Widget;
 using Android.Support.V7.Widget.Helper;
 using Android.Views;
 using Bit.App.Controls.BoxedView;
-using Bit.Droid.Renderers;
+using Bit.Droid.Renderers.BoxedView;
 using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(BoxedView), typeof(BoxedViewRenderer))]
-namespace Bit.Droid.Renderers
+namespace Bit.Droid.Renderers.BoxedView
 {
     [Preserve(AllMembers = true)]
-    public class BoxedViewRenderer : ViewRenderer<BoxedView, RecyclerView>
+    public class BoxedViewRenderer : ViewRenderer<App.Controls.BoxedView.BoxedView, RecyclerView>
     {
         private Page _parentPage;
         private LinearLayoutManager _layoutManager;
@@ -28,7 +28,7 @@ namespace Bit.Droid.Renderers
             AutoPackage = false;
         }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<BoxedView> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<App.Controls.BoxedView.BoxedView> e)
         {
             base.OnElementChanged(e);
             if(e.NewElement != null)
@@ -48,7 +48,8 @@ namespace Bit.Droid.Renderers
                 _adapter = new BoxedViewRecyclerAdapter(Context, e.NewElement, recyclerView);
                 Control.SetAdapter(_adapter);
 
-                _simpleCallback = new BoxedViewSimpleCallback(e.NewElement, ItemTouchHelper.Up | ItemTouchHelper.Down, 0);
+                _simpleCallback = new BoxedViewSimpleCallback(
+                    e.NewElement, ItemTouchHelper.Up | ItemTouchHelper.Down, 0);
                 _itemTouchhelper = new ItemTouchHelper(_simpleCallback);
                 _itemTouchhelper.AttachToRecyclerView(Control);
 
@@ -100,11 +101,11 @@ namespace Bit.Droid.Renderers
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if(e.PropertyName == BoxedView.SeparatorColorProperty.PropertyName)
+            if(e.PropertyName == App.Controls.BoxedView.BoxedView.SeparatorColorProperty.PropertyName)
             {
                 _adapter.NotifyDataSetChanged();
             }
-            else if(e.PropertyName == BoxedView.BackgroundColorProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.BackgroundColorProperty.PropertyName)
             {
                 UpdateBackgroundColor();
             }
@@ -112,11 +113,11 @@ namespace Bit.Droid.Renderers
             {
                 UpdateRowHeight();
             }
-            else if(e.PropertyName == BoxedView.SelectedColorProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.SelectedColorProperty.PropertyName)
             {
                 //_adapter.NotifyDataSetChanged();
             }
-            else if(e.PropertyName == BoxedView.ShowSectionTopBottomBorderProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.ShowSectionTopBottomBorderProperty.PropertyName)
             {
                 _adapter.NotifyDataSetChanged();
             }
@@ -124,11 +125,11 @@ namespace Bit.Droid.Renderers
             {
                 _adapter.NotifyDataSetChanged();
             }
-            else if(e.PropertyName == BoxedView.ScrollToTopProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.ScrollToTopProperty.PropertyName)
             {
                 UpdateScrollToTop();
             }
-            else if(e.PropertyName == BoxedView.ScrollToBottomProperty.PropertyName)
+            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.ScrollToBottomProperty.PropertyName)
             {
                 UpdateScrollToBottom();
             }

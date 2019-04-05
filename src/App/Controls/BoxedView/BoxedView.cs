@@ -9,9 +9,117 @@ namespace Bit.App.Controls.BoxedView
     [ContentProperty("Root")]
     public class BoxedView : TableView
     {
-        private BoxedRoot _root;
+        public static new BindableProperty BackgroundColorProperty = BindableProperty.Create(
+            nameof(BackgroundColor), typeof(Color), typeof(BoxedView), default(Color),
+                defaultBindingMode: BindingMode.OneWay);
 
-        public new event EventHandler ModelChanged;
+        public static BindableProperty SeparatorColorProperty = BindableProperty.Create(
+            nameof(SeparatorColor), typeof(Color), typeof(BoxedView), Color.FromRgb(199, 199, 204),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty SelectedColorProperty = BindableProperty.Create(
+            nameof(SelectedColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty HeaderPaddingProperty = BindableProperty.Create(
+            nameof(HeaderPadding), typeof(Thickness), typeof(BoxedView), new Thickness(14, 8, 8, 8),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty HeaderTextColorProperty = BindableProperty.Create(
+            nameof(HeaderTextColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty HeaderFontSizeProperty = BindableProperty.Create(
+            nameof(HeaderFontSize), typeof(double), typeof(BoxedView), -1.0d,
+            defaultBindingMode: BindingMode.OneWay,
+            defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Small, (BoxedView)bindable));
+
+        public static BindableProperty HeaderTextVerticalAlignProperty = BindableProperty.Create(
+            nameof(HeaderTextVerticalAlign), typeof(LayoutAlignment), typeof(BoxedView), LayoutAlignment.End,
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty HeaderBackgroundColorProperty = BindableProperty.Create(
+            nameof(HeaderBackgroundColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty HeaderHeightProperty = BindableProperty.Create(
+            nameof(HeaderHeight), typeof(double), typeof(BoxedView), -1d, defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty FooterTextColorProperty = BindableProperty.Create(
+            nameof(FooterTextColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty FooterFontSizeProperty = BindableProperty.Create(
+            nameof(FooterFontSize), typeof(double), typeof(BoxedView), -1.0d,
+            defaultBindingMode: BindingMode.OneWay,
+            defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Small, (BoxedView)bindable));
+
+        public static BindableProperty FooterBackgroundColorProperty = BindableProperty.Create(
+            nameof(FooterBackgroundColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty FooterPaddingProperty = BindableProperty.Create(
+            nameof(FooterPadding), typeof(Thickness), typeof(BoxedView), new Thickness(14, 8, 14, 8),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty CellTitleColorProperty = BindableProperty.Create(
+            nameof(CellTitleColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty CellTitleFontSizeProperty = BindableProperty.Create(
+            nameof(CellTitleFontSize), typeof(double), typeof(BoxedView), -1.0,
+            defaultBindingMode: BindingMode.OneWay,
+            defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Default, (BoxedView)bindable));
+
+        public static BindableProperty CellValueTextColorProperty = BindableProperty.Create(
+            nameof(CellValueTextColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty CellValueTextFontSizeProperty = BindableProperty.Create(
+            nameof(CellValueTextFontSize), typeof(double), typeof(BoxedView), -1.0d,
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty CellDescriptionColorProperty = BindableProperty.Create(
+            nameof(CellDescriptionColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty CellDescriptionFontSizeProperty = BindableProperty.Create(
+            nameof(CellDescriptionFontSize), typeof(double), typeof(BoxedView), -1.0d,
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty CellBackgroundColorProperty = BindableProperty.Create(
+            nameof(CellBackgroundColor), typeof(Color), typeof(BoxedView), default(Color),
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty CellAccentColorProperty = BindableProperty.Create(
+            nameof(CellAccentColor), typeof(Color), typeof(BoxedView), Color.Accent,
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty ShowSectionTopBottomBorderProperty = BindableProperty.Create(
+            nameof(ShowSectionTopBottomBorder), typeof(bool), typeof(BoxedView), true,
+            defaultBindingMode: BindingMode.OneWay);
+
+        public static BindableProperty ScrollToBottomProperty = BindableProperty.Create(
+            nameof(ScrollToBottom), typeof(bool), typeof(BoxedView), default(bool),
+            defaultBindingMode: BindingMode.TwoWay);
+
+        public static BindableProperty ScrollToTopProperty = BindableProperty.Create(
+            nameof(ScrollToTop), typeof(bool), typeof(BoxedView), default(bool),
+            defaultBindingMode: BindingMode.TwoWay);
+
+        public static BindableProperty VisibleContentHeightProperty = BindableProperty.Create(
+            nameof(VisibleContentHeight), typeof(double), typeof(BoxedView), -1d,
+            defaultBindingMode: BindingMode.OneWayToSource);
+
+        public static BindableProperty ItemsSourceProperty = BindableProperty.Create(
+            nameof(ItemsSource), typeof(IEnumerable), typeof(BoxedView), default(IEnumerable),
+            defaultBindingMode: BindingMode.OneWay, propertyChanged: ItemsChanged);
+
+        public static BindableProperty ItemTemplateProperty = BindableProperty.Create(
+            nameof(ItemTemplate), typeof(DataTemplate), typeof(BoxedView), default(DataTemplate),
+            defaultBindingMode: BindingMode.OneWay);
+
+        private BoxedRoot _root;
 
         public BoxedView()
         {
@@ -45,6 +153,178 @@ namespace Bit.App.Controls.BoxedView
             }
         }
 
+        // Make the unnecessary property existing at TableView sealed.
+        private new int Intent { get; set; }
+
+        public new Color BackgroundColor
+        {
+            get => (Color)GetValue(BackgroundColorProperty);
+            set => SetValue(BackgroundColorProperty, value);
+        }
+
+        public Color SeparatorColor
+        {
+            get => (Color)GetValue(SeparatorColorProperty);
+            set => SetValue(SeparatorColorProperty, value);
+        }
+
+        public Color SelectedColor
+        {
+            get => (Color)GetValue(SelectedColorProperty);
+            set => SetValue(SelectedColorProperty, value);
+        }
+
+        public Thickness HeaderPadding
+        {
+            get => (Thickness)GetValue(HeaderPaddingProperty);
+            set => SetValue(HeaderPaddingProperty, value);
+        }
+
+        public Color HeaderTextColor
+        {
+            get => (Color)GetValue(HeaderTextColorProperty);
+            set => SetValue(HeaderTextColorProperty, value);
+        }
+
+        [TypeConverter(typeof(FontSizeConverter))]
+        public double HeaderFontSize
+        {
+            get => (double)GetValue(HeaderFontSizeProperty);
+            set => SetValue(HeaderFontSizeProperty, value);
+        }
+
+        public LayoutAlignment HeaderTextVerticalAlign
+        {
+            get => (LayoutAlignment)GetValue(HeaderTextVerticalAlignProperty);
+            set => SetValue(HeaderTextVerticalAlignProperty, value);
+        }
+
+        public Color HeaderBackgroundColor
+        {
+            get => (Color)GetValue(HeaderBackgroundColorProperty);
+            set => SetValue(HeaderBackgroundColorProperty, value);
+        }
+
+        public double HeaderHeight
+        {
+            get => (double)GetValue(HeaderHeightProperty);
+            set => SetValue(HeaderHeightProperty, value);
+        }
+
+        public Color FooterTextColor
+        {
+            get => (Color)GetValue(FooterTextColorProperty);
+            set => SetValue(FooterTextColorProperty, value);
+        }
+
+        [TypeConverter(typeof(FontSizeConverter))]
+        public double FooterFontSize
+        {
+            get => (double)GetValue(FooterFontSizeProperty);
+            set => SetValue(FooterFontSizeProperty, value);
+        }
+
+        public Color FooterBackgroundColor
+        {
+            get => (Color)GetValue(FooterBackgroundColorProperty);
+            set => SetValue(FooterBackgroundColorProperty, value);
+        }
+
+        public Thickness FooterPadding
+        {
+            get => (Thickness)GetValue(FooterPaddingProperty);
+            set => SetValue(FooterPaddingProperty, value);
+        }
+
+        public Color CellTitleColor
+        {
+            get => (Color)GetValue(CellTitleColorProperty);
+            set => SetValue(CellTitleColorProperty, value);
+        }
+
+        [TypeConverter(typeof(FontSizeConverter))]
+        public double CellTitleFontSize
+        {
+            get => (double)GetValue(CellTitleFontSizeProperty);
+            set => SetValue(CellTitleFontSizeProperty, value);
+        }
+
+        public Color CellValueTextColor
+        {
+            get => (Color)GetValue(CellValueTextColorProperty);
+            set => SetValue(CellValueTextColorProperty, value);
+        }
+
+        [TypeConverter(typeof(FontSizeConverter))]
+        public double CellValueTextFontSize
+        {
+            get => (double)GetValue(CellValueTextFontSizeProperty);
+            set => SetValue(CellValueTextFontSizeProperty, value);
+        }
+
+        public Color CellDescriptionColor
+        {
+            get => (Color)GetValue(CellDescriptionColorProperty);
+            set => SetValue(CellDescriptionColorProperty, value);
+        }
+
+        [TypeConverter(typeof(FontSizeConverter))]
+        public double CellDescriptionFontSize
+        {
+            get => (double)GetValue(CellDescriptionFontSizeProperty);
+            set => SetValue(CellDescriptionFontSizeProperty, value);
+        }
+
+        public Color CellBackgroundColor
+        {
+            get => (Color)GetValue(CellBackgroundColorProperty);
+            set => SetValue(CellBackgroundColorProperty, value);
+        }
+
+        public Color CellAccentColor
+        {
+            get => (Color)GetValue(CellAccentColorProperty);
+            set => SetValue(CellAccentColorProperty, value);
+        }
+
+        public bool ShowSectionTopBottomBorder
+        {
+            get => (bool)GetValue(ShowSectionTopBottomBorderProperty);
+            set => SetValue(ShowSectionTopBottomBorderProperty, value);
+        }
+
+        public bool ScrollToBottom
+        {
+            get => (bool)GetValue(ScrollToBottomProperty);
+            set => SetValue(ScrollToBottomProperty, value);
+        }
+
+        public bool ScrollToTop
+        {
+            get => (bool)GetValue(ScrollToTopProperty);
+            set => SetValue(ScrollToTopProperty, value);
+        }
+
+        public double VisibleContentHeight
+        {
+            get => (double)GetValue(VisibleContentHeightProperty);
+            set => SetValue(VisibleContentHeightProperty, value);
+        }
+
+        public IEnumerable ItemsSource
+        {
+            get => (IEnumerable)GetValue(ItemsSourceProperty);
+            set => SetValue(ItemsSourceProperty, value);
+        }
+
+        public DataTemplate ItemTemplate
+        {
+            get => (DataTemplate)GetValue(ItemTemplateProperty);
+            set => SetValue(ItemTemplateProperty, value);
+        }
+
+        public new event EventHandler ModelChanged;
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -56,9 +336,10 @@ namespace Bit.App.Controls.BoxedView
 
         private void RootOnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == TableSectionBase.TitleProperty.PropertyName ||
+            var changed = e.PropertyName == TableSectionBase.TitleProperty.PropertyName ||
                 e.PropertyName == BoxedSection.FooterTextProperty.PropertyName ||
-                e.PropertyName == BoxedSection.IsVisibleProperty.PropertyName)
+                e.PropertyName == BoxedSection.IsVisibleProperty.PropertyName;
+            if(changed)
             {
                 OnModelChanged();
             }
@@ -108,424 +389,6 @@ namespace Bit.App.Controls.BoxedView
             ModelChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        // Make the unnecessary property existing at TableView sealed.
-        private new int Intent { get; set; }
-
-        public static new BindableProperty BackgroundColorProperty =
-            BindableProperty.Create(
-                nameof(BackgroundColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public new Color BackgroundColor
-        {
-            get { return (Color)GetValue(BackgroundColorProperty); }
-            set { SetValue(BackgroundColorProperty, value); }
-        }
-
-        public static BindableProperty SeparatorColorProperty =
-            BindableProperty.Create(
-                nameof(SeparatorColor),
-                typeof(Color),
-                typeof(BoxedView),
-                Color.FromRgb(199, 199, 204),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color SeparatorColor
-        {
-            get { return (Color)GetValue(SeparatorColorProperty); }
-            set { SetValue(SeparatorColorProperty, value); }
-        }
-
-        public static BindableProperty SelectedColorProperty =
-            BindableProperty.Create(
-                nameof(SelectedColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color SelectedColor
-        {
-            get { return (Color)GetValue(SelectedColorProperty); }
-            set { SetValue(SelectedColorProperty, value); }
-        }
-
-        public static BindableProperty HeaderPaddingProperty =
-            BindableProperty.Create(
-                nameof(HeaderPadding),
-                typeof(Thickness),
-                typeof(BoxedView),
-                new Thickness(14, 8, 8, 8),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Thickness HeaderPadding
-        {
-            get { return (Thickness)GetValue(HeaderPaddingProperty); }
-            set { SetValue(HeaderPaddingProperty, value); }
-        }
-
-        public static BindableProperty HeaderTextColorProperty =
-            BindableProperty.Create(
-                nameof(HeaderTextColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color HeaderTextColor
-        {
-            get { return (Color)GetValue(HeaderTextColorProperty); }
-            set { SetValue(HeaderTextColorProperty, value); }
-        }
-
-        public static BindableProperty HeaderFontSizeProperty =
-            BindableProperty.Create(
-                nameof(HeaderFontSize),
-                typeof(double),
-                typeof(BoxedView),
-                -1.0d,
-                defaultBindingMode: BindingMode.OneWay,
-                defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Small, (BoxedView)bindable)
-            );
-
-        [TypeConverter(typeof(FontSizeConverter))]
-        public double HeaderFontSize
-        {
-            get { return (double)GetValue(HeaderFontSizeProperty); }
-            set { SetValue(HeaderFontSizeProperty, value); }
-        }
-
-        public static BindableProperty HeaderTextVerticalAlignProperty =
-            BindableProperty.Create(
-                nameof(HeaderTextVerticalAlign),
-                typeof(LayoutAlignment),
-                typeof(BoxedView),
-                LayoutAlignment.End,
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public LayoutAlignment HeaderTextVerticalAlign
-        {
-            get { return (LayoutAlignment)GetValue(HeaderTextVerticalAlignProperty); }
-            set { SetValue(HeaderTextVerticalAlignProperty, value); }
-        }
-
-        public static BindableProperty HeaderBackgroundColorProperty =
-            BindableProperty.Create(
-                nameof(HeaderBackgroundColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color HeaderBackgroundColor
-        {
-            get { return (Color)GetValue(HeaderBackgroundColorProperty); }
-            set { SetValue(HeaderBackgroundColorProperty, value); }
-        }
-
-        public static BindableProperty HeaderHeightProperty =
-            BindableProperty.Create(
-                nameof(HeaderHeight),
-                typeof(double),
-                typeof(BoxedView),
-                -1d,
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public double HeaderHeight
-        {
-            get { return (double)GetValue(HeaderHeightProperty); }
-            set { SetValue(HeaderHeightProperty, value); }
-        }
-
-        public static BindableProperty FooterTextColorProperty =
-            BindableProperty.Create(
-                nameof(FooterTextColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color FooterTextColor
-        {
-            get { return (Color)GetValue(FooterTextColorProperty); }
-            set { SetValue(FooterTextColorProperty, value); }
-        }
-
-        public static BindableProperty FooterFontSizeProperty =
-            BindableProperty.Create(
-                nameof(FooterFontSize),
-                typeof(double),
-                typeof(BoxedView),
-                -1.0d,
-                defaultBindingMode: BindingMode.OneWay,
-                defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Small, (BoxedView)bindable)
-            );
-
-        [TypeConverter(typeof(FontSizeConverter))]
-        public double FooterFontSize
-        {
-            get { return (double)GetValue(FooterFontSizeProperty); }
-            set { SetValue(FooterFontSizeProperty, value); }
-        }
-
-        public static BindableProperty FooterBackgroundColorProperty =
-            BindableProperty.Create(
-                nameof(FooterBackgroundColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color FooterBackgroundColor
-        {
-            get { return (Color)GetValue(FooterBackgroundColorProperty); }
-            set { SetValue(FooterBackgroundColorProperty, value); }
-        }
-
-        public static BindableProperty FooterPaddingProperty =
-            BindableProperty.Create(
-                nameof(FooterPadding),
-                typeof(Thickness),
-                typeof(BoxedView),
-                new Thickness(14, 8, 14, 8),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Thickness FooterPadding
-        {
-            get { return (Thickness)GetValue(FooterPaddingProperty); }
-            set { SetValue(FooterPaddingProperty, value); }
-        }
-
-        public static BindableProperty CellTitleColorProperty =
-            BindableProperty.Create(
-                nameof(CellTitleColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color CellTitleColor
-        {
-            get { return (Color)GetValue(CellTitleColorProperty); }
-            set { SetValue(CellTitleColorProperty, value); }
-        }
-
-        public static BindableProperty CellTitleFontSizeProperty =
-            BindableProperty.Create(
-                nameof(CellTitleFontSize),
-                typeof(double),
-                typeof(BoxedView),
-                -1.0,
-                defaultBindingMode: BindingMode.OneWay,
-                defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Default, (BoxedView)bindable)
-            );
-
-
-        [TypeConverter(typeof(FontSizeConverter))]
-        public double CellTitleFontSize
-        {
-            get { return (double)GetValue(CellTitleFontSizeProperty); }
-            set { SetValue(CellTitleFontSizeProperty, value); }
-        }
-
-        public static BindableProperty CellValueTextColorProperty =
-            BindableProperty.Create(
-                nameof(CellValueTextColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color CellValueTextColor
-        {
-            get { return (Color)GetValue(CellValueTextColorProperty); }
-            set { SetValue(CellValueTextColorProperty, value); }
-        }
-
-        public static BindableProperty CellValueTextFontSizeProperty =
-            BindableProperty.Create(
-                nameof(CellValueTextFontSize),
-                typeof(double),
-                typeof(BoxedView),
-                -1.0d,
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        [TypeConverter(typeof(FontSizeConverter))]
-        public double CellValueTextFontSize
-        {
-            get { return (double)GetValue(CellValueTextFontSizeProperty); }
-            set { SetValue(CellValueTextFontSizeProperty, value); }
-        }
-
-        public static BindableProperty CellDescriptionColorProperty =
-            BindableProperty.Create(
-                nameof(CellDescriptionColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color CellDescriptionColor
-        {
-            get { return (Color)GetValue(CellDescriptionColorProperty); }
-            set { SetValue(CellDescriptionColorProperty, value); }
-        }
-
-        public static BindableProperty CellDescriptionFontSizeProperty =
-            BindableProperty.Create(
-                nameof(CellDescriptionFontSize),
-                typeof(double),
-                typeof(BoxedView),
-                -1.0d,
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        [TypeConverter(typeof(FontSizeConverter))]
-        public double CellDescriptionFontSize
-        {
-            get { return (double)GetValue(CellDescriptionFontSizeProperty); }
-            set { SetValue(CellDescriptionFontSizeProperty, value); }
-        }
-
-        public static BindableProperty CellBackgroundColorProperty =
-            BindableProperty.Create(
-                nameof(CellBackgroundColor),
-                typeof(Color),
-                typeof(BoxedView),
-                default(Color),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color CellBackgroundColor
-        {
-            get { return (Color)GetValue(CellBackgroundColorProperty); }
-            set { SetValue(CellBackgroundColorProperty, value); }
-        }
-
-        public static BindableProperty CellAccentColorProperty =
-            BindableProperty.Create(
-                nameof(CellAccentColor),
-                typeof(Color),
-                typeof(BoxedView),
-                Color.Accent,
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public Color CellAccentColor
-        {
-            get { return (Color)GetValue(CellAccentColorProperty); }
-            set { SetValue(CellAccentColorProperty, value); }
-        }
-
-        public static BindableProperty ShowSectionTopBottomBorderProperty =
-            BindableProperty.Create(
-                nameof(ShowSectionTopBottomBorder),
-                typeof(bool),
-                typeof(BoxedView),
-                true,
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public bool ShowSectionTopBottomBorder
-        {
-            get { return (bool)GetValue(ShowSectionTopBottomBorderProperty); }
-            set { SetValue(ShowSectionTopBottomBorderProperty, value); }
-        }
-
-        public static BindableProperty ScrollToBottomProperty =
-            BindableProperty.Create(
-                nameof(ScrollToBottom),
-                typeof(bool),
-                typeof(BoxedView),
-                default(bool),
-                defaultBindingMode: BindingMode.TwoWay
-            );
-
-        public bool ScrollToBottom
-        {
-            get { return (bool)GetValue(ScrollToBottomProperty); }
-            set { SetValue(ScrollToBottomProperty, value); }
-        }
-
-        public static BindableProperty ScrollToTopProperty =
-            BindableProperty.Create(
-                nameof(ScrollToTop),
-                typeof(bool),
-                typeof(BoxedView),
-                default(bool),
-                defaultBindingMode: BindingMode.TwoWay
-            );
-
-        public bool ScrollToTop
-        {
-            get { return (bool)GetValue(ScrollToTopProperty); }
-            set { SetValue(ScrollToTopProperty, value); }
-        }
-
-        public static BindableProperty VisibleContentHeightProperty =
-            BindableProperty.Create(
-                nameof(VisibleContentHeight),
-                typeof(double),
-                typeof(BoxedView),
-                -1d,
-                defaultBindingMode: BindingMode.OneWayToSource
-            );
-
-        public double VisibleContentHeight
-        {
-            get { return (double)GetValue(VisibleContentHeightProperty); }
-            set { SetValue(VisibleContentHeightProperty, value); }
-        }
-
-        public static BindableProperty ItemsSourceProperty =
-            BindableProperty.Create(
-                nameof(ItemsSource),
-                typeof(IEnumerable),
-                typeof(BoxedView),
-                default(IEnumerable),
-                defaultBindingMode: BindingMode.OneWay,
-                propertyChanged: ItemsChanged
-            );
-
-        public IEnumerable ItemsSource
-        {
-            get { return (IEnumerable)GetValue(ItemsSourceProperty); }
-            set { SetValue(ItemsSourceProperty, value); }
-        }
-
-        public static BindableProperty ItemTemplateProperty =
-            BindableProperty.Create(
-                nameof(ItemTemplate),
-                typeof(DataTemplate),
-                typeof(BoxedView),
-                default(DataTemplate),
-                defaultBindingMode: BindingMode.OneWay
-            );
-
-        public DataTemplate ItemTemplate
-        {
-            get { return (DataTemplate)GetValue(ItemTemplateProperty); }
-            set { SetValue(ItemTemplateProperty, value); }
-        }
-
         private static void ItemsChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var boxedView = bindable as BoxedView;
@@ -542,7 +405,6 @@ namespace Bit.App.Controls.BoxedView
             {
                 newObservableCollection.CollectionChanged += boxedView.OnItemsSourceCollectionChanged;
             }
-
             boxedView.Root.Clear();
 
             if(newValue is IList newValueAsEnumerable)

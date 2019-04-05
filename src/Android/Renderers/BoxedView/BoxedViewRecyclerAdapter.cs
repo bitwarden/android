@@ -12,15 +12,13 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using AView = Android.Views.View;
 
-namespace Bit.Droid.Renderers
+namespace Bit.Droid.Renderers.BoxedView
 {
     [Preserve(AllMembers = true)]
     public class BoxedViewRecyclerAdapter : RecyclerView.Adapter, AView.IOnClickListener
     {
         private const int ViewTypeHeader = 0;
         private const int ViewTypeFooter = 1;
-
-        private float MinRowHeight => _context.ToPixels(44);
 
         private Dictionary<Type, int> _viewTypes;
         private List<CellCache> _cellCaches;
@@ -42,28 +40,21 @@ namespace Bit.Droid.Renderers
         private AView _preSelectedCell = null;
 
         Context _context;
-        BoxedView _boxedView;
+        App.Controls.BoxedView.BoxedView _boxedView;
         RecyclerView _recyclerView;
 
         List<ViewHolder> _viewHolders = new List<ViewHolder>();
 
-        public BoxedViewRecyclerAdapter(Context context, BoxedView boxedView, RecyclerView recyclerView)
+        public BoxedViewRecyclerAdapter(Context context, App.Controls.BoxedView.BoxedView boxedView,
+            RecyclerView recyclerView)
         {
             _context = context;
             _boxedView = boxedView;
             _recyclerView = recyclerView;
-
-            _boxedView.ModelChanged += _boxedView_ModelChanged;
+            _boxedView.ModelChanged += BoxedView_ModelChanged;
         }
 
-        void _boxedView_ModelChanged(object sender, EventArgs e)
-        {
-            if(_recyclerView != null)
-            {
-                _cellCaches = null;
-                NotifyDataSetChanged();
-            }
-        }
+        private float MinRowHeight => _context.ToPixels(44);
 
         public override int ItemCount => CellCaches.Count;
 
@@ -101,28 +92,24 @@ namespace Bit.Droid.Renderers
         {
             var position = _recyclerView.GetChildAdapterPosition(view);
 
-            //TODO: It is desirable that the forms side has Selected property and reflects it.
-            //      But do it at a later as iOS side doesn't have that process.
+            // TODO: It is desirable that the forms side has Selected property and reflects it.
+            // But do it at a later as iOS side doesn't have that process.
             DeselectRow();
 
             var cell = view.FindViewById<LinearLayout>(Resource.Id.ContentCellBody).GetChildAt(0) as BaseCellView;
-
-
             if(cell == null || !CellCaches[position].Cell.IsEnabled)
             {
-                //if FormsCell IsEnable is false, does nothing. 
+                // If FormsCell IsEnable is false, does nothing. 
                 return;
             }
 
             _boxedView.Model.RowSelected(CellCaches[position].Cell);
-
             cell.RowSelected(this, position);
         }
 
         public override void OnBindViewHolder(RecyclerView.ViewHolder holder, int position)
         {
             var cellInfo = CellCaches[position];
-
             switch(holder.ItemViewType)
             {
                 case ViewTypeHeader:
@@ -175,7 +162,7 @@ namespace Bit.Droid.Renderers
         {
             if(disposing)
             {
-                _boxedView.ModelChanged -= _boxedView_ModelChanged;
+                _boxedView.ModelChanged -= BoxedView_ModelChanged;
                 _cellCaches?.Clear();
                 _cellCaches = null;
                 _boxedView = null;
@@ -190,12 +177,20 @@ namespace Bit.Droid.Renderers
             base.Dispose(disposing);
         }
 
+        private void BoxedView_ModelChanged(object sender, EventArgs e)
+        {
+            if(_recyclerView != null)
+            {
+                _cellCaches = null;
+                NotifyDataSetChanged();
+            }
+        }
 
         private void BindHeaderView(HeaderViewHolder holder, TextCell formsCell)
         {
             var view = holder.ItemView;
 
-            //judging cell height
+            // Judging cell height
             int cellHeight = (int)_context.ToPixels(44);
             var individualHeight = formsCell.Height;
 
@@ -211,7 +206,6 @@ namespace Bit.Droid.Renderers
             view.SetMinimumHeight(cellHeight);
             view.LayoutParameters.Height = cellHeight;
 
-            //textview setting
             holder.TextView.SetPadding(
                 (int)view.Context.ToPixels(_boxedView.HeaderPadding.Left),
                 (int)view.Context.ToPixels(_boxedView.HeaderPadding.Top),
@@ -231,7 +225,7 @@ namespace Bit.Droid.Renderers
                 holder.TextView.SetTextColor(_boxedView.HeaderTextColor.ToAndroid());
             }
 
-            //border setting
+            // Border setting
             if(_boxedView.ShowSectionTopBottomBorder)
             {
                 holder.Border.SetBackgroundColor(_boxedView.SeparatorColor.ToAndroid());
@@ -241,7 +235,7 @@ namespace Bit.Droid.Renderers
                 holder.Border.SetBackgroundColor(Android.Graphics.Color.Transparent);
             }
 
-            //update text
+            // Update text
             holder.TextView.Text = formsCell.Text;
         }
 
@@ -249,7 +243,7 @@ namespace Bit.Droid.Renderers
         {
             var view = holder.ItemView;
 
-            //footer visible setting
+            // Footer visible setting
             if(string.IsNullOrEmpty(formsCell.Text))
             {
                 //if text is empty, hidden (height 0)
@@ -262,7 +256,6 @@ namespace Bit.Droid.Renderers
                 view.Visibility = ViewStates.Visible;
             }
 
-            //textview setting
             holder.TextView.SetPadding(
                 (int)view.Context.ToPixels(_boxedView.FooterPadding.Left),
                 (int)view.Context.ToPixels(_boxedView.FooterPadding.Top),
@@ -276,7 +269,7 @@ namespace Bit.Droid.Renderers
                 holder.TextView.SetTextColor(_boxedView.FooterTextColor.ToAndroid());
             }
 
-            //update text
+            // Update text
             holder.TextView.Text = formsCell.Text;
         }
 
@@ -305,31 +298,31 @@ namespace Bit.Droid.Renderers
 
             var minHeight = (int)Math.Max(_context.ToPixels(_boxedView.RowHeight), MinRowHeight);
 
-            //it is neccesary to set both
+            // It is necessary to set both
             layout.SetMinimumHeight(minHeight);
             nativeCell.SetMinimumHeight(minHeight);
 
             if(!_boxedView.HasUnevenRows)
             {
-                // if not Uneven, set the larger one of RowHeight and MinRowHeight.
+                // If not Uneven, set the larger one of RowHeight and MinRowHeight.
                 layout.LayoutParameters.Height = minHeight;
             }
             else if(formsCell.Height > -1)
             {
-                // if the cell itself was specified height, set it.
+                // If the cell itself was specified height, set it.
                 layout.SetMinimumHeight((int)_context.ToPixels(formsCell.Height));
                 layout.LayoutParameters.Height = (int)_context.ToPixels(formsCell.Height);
             }
             else if(formsCell is ViewCell viewCell)
             {
-                // if used a viewcell, calculate the size and layout it.
+                // If used a viewcell, calculate the size and layout it.
                 var size = viewCell.View.Measure(_boxedView.Width, double.PositiveInfinity);
                 viewCell.View.Layout(new Rectangle(0, 0, size.Request.Width, size.Request.Height));
                 layout.LayoutParameters.Height = (int)_context.ToPixels(size.Request.Height);
             }
             else
             {
-                layout.LayoutParameters.Height = -2; //wrap_content
+                layout.LayoutParameters.Height = -2; // wrap_content
             }
 
             if(!CellCaches[position].IsLastCell || _boxedView.ShowSectionTopBottomBorder)
@@ -446,7 +439,7 @@ namespace Bit.Droid.Renderers
     [Preserve(AllMembers = true)]
     internal class HeaderViewHolder : ViewHolder
     {
-        public HeaderViewHolder(AView view, BoxedView boxedView)
+        public HeaderViewHolder(AView view, App.Controls.BoxedView.BoxedView boxedView)
             : base(view)
         {
             TextView = view.FindViewById<TextView>(Resource.Id.HeaderCellText);
@@ -474,7 +467,7 @@ namespace Bit.Droid.Renderers
     {
         public TextView TextView { get; private set; }
 
-        public FooterViewHolder(AView view, BoxedView boxedView)
+        public FooterViewHolder(AView view, App.Controls.BoxedView.BoxedView boxedView)
             : base(view)
         {
             TextView = view.FindViewById<TextView>(Resource.Id.FooterCellText);
