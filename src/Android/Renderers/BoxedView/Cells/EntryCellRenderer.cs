@@ -1,5 +1,4 @@
 ﻿using Android.Content;
-using Android.Content.Res;
 using Android.OS;
 using Android.Runtime;
 using Android.Text;
@@ -22,34 +21,40 @@ namespace Bit.Droid.Renderers.BoxedView
     { }
 
     [Preserve(AllMembers = true)]
-    public class EntryCellView : BaseCellView, ITextWatcher, TextView.IOnFocusChangeListener,
+    public class EntryCellView : BaseCellView, ITextWatcher, Android.Views.View.IOnFocusChangeListener,
         TextView.IOnEditorActionListener
     {
+        private bool _debugWithColors = false;
         private CustomEditText _editText;
 
         public EntryCellView(Context context, Cell cell)
             : base(context, cell)
         {
-            _editText = new CustomEditText(context);
-
-            _editText.Focusable = true;
-            _editText.ImeOptions = ImeAction.Done;
+            _editText = new CustomEditText(context)
+            {
+                Focusable = true,
+                ImeOptions = ImeAction.Done,
+                OnFocusChangeListener = this,
+                Ellipsize = TextUtils.TruncateAt.End,
+                ClearFocusAction = DoneEdit,
+                Background = _Context.GetDrawable(Android.Resource.Color.Transparent)
+            };
+            _editText.SetPadding(0, 0, 0, 0);
             _editText.SetOnEditorActionListener(this);
-
-            _editText.OnFocusChangeListener = this;
             _editText.SetSingleLine(true);
-            _editText.Ellipsize = TextUtils.TruncateAt.End;
-
             _editText.InputType |= InputTypes.TextFlagNoSuggestions; // Disabled spell check
-            _editText.Background.Alpha = 0; // Hide underline
 
-            _editText.ClearFocusAction = DoneEdit;
             Click += EntryCellView_Click;
 
             using(var lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MatchParent,
                 ViewGroup.LayoutParams.WrapContent))
             {
                 CellContent.AddView(_editText, lParams);
+            }
+            
+            if(_debugWithColors)
+            {
+                _editText.Background = _Context.GetDrawable(Android.Resource.Color.HoloRedLight);
             }
         }
 
@@ -62,7 +67,6 @@ namespace Bit.Droid.Renderers.BoxedView
             UpdateValueTextFontSize();
             UpdateKeyboard();
             UpdatePlaceholder();
-            UpdateAccentColor();
             UpdateTextAlignment();
             UpdateIsPassword();
             base.UpdateCell();
@@ -91,10 +95,6 @@ namespace Bit.Droid.Renderers.BoxedView
             {
                 UpdatePlaceholder();
             }
-            else if(e.PropertyName == App.Controls.BoxedView.EntryCell.AccentColorProperty.PropertyName)
-            {
-                UpdateAccentColor();
-            }
             else if(e.PropertyName == App.Controls.BoxedView.EntryCell.TextAlignmentProperty.PropertyName)
             {
                 UpdateTextAlignment();
@@ -116,10 +116,6 @@ namespace Bit.Droid.Renderers.BoxedView
             {
                 UpdateWithForceLayout(UpdateValueTextFontSize);
             }
-            else if(e.PropertyName == App.Controls.BoxedView.BoxedView.CellAccentColorProperty.PropertyName)
-            {
-                UpdateAccentColor();
-            }
         }
 
         protected override void Dispose(bool disposing)
@@ -136,21 +132,6 @@ namespace Bit.Droid.Renderers.BoxedView
                 _editText = null;
             }
             base.Dispose(disposing);
-        }
-
-        protected override void SetEnabledAppearance(bool isEnabled)
-        {
-            if(isEnabled)
-            {
-                _editText.Enabled = true;
-                _editText.Alpha = 1.0f;
-            }
-            else
-            {
-                _editText.Enabled = false;
-                _editText.Alpha = 0.3f;
-            }
-            base.SetEnabledAppearance(isEnabled);
         }
 
         private void EntryCellView_Click(object sender, EventArgs e)
@@ -212,33 +193,6 @@ namespace Bit.Droid.Renderers.BoxedView
         private void UpdateTextAlignment()
         {
             _editText.Gravity = _EntryCell.TextAlignment.ToAndroidHorizontal();
-        }
-
-        private void UpdateAccentColor()
-        {
-            if(_EntryCell.AccentColor != Color.Default)
-            {
-                ChangeTextViewBack(_EntryCell.AccentColor.ToAndroid());
-            }
-            else if(CellParent != null && CellParent.CellAccentColor != Color.Default)
-            {
-                ChangeTextViewBack(CellParent.CellAccentColor.ToAndroid());
-            }
-        }
-
-        private void ChangeTextViewBack(Android.Graphics.Color accent)
-        {
-            var colorlist = new ColorStateList(
-                new int[][]
-                {
-                    new int[]{Android.Resource.Attribute.StateFocused},
-                    new int[]{-Android.Resource.Attribute.StateFocused},
-                },
-                new int[] {
-                    Android.Graphics.Color.Argb(255,accent.R,accent.G,accent.B),
-                    Android.Graphics.Color.Argb(255, 200, 200, 200)
-                });
-            _editText.Background.SetTintList(colorlist);
         }
 
         private void DoneEdit()

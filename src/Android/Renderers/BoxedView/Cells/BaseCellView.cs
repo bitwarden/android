@@ -17,6 +17,7 @@ namespace Bit.Droid.Renderers.BoxedView
     [Preserve(AllMembers = true)]
     public class BaseCellView : ARelativeLayout, INativeElementView
     {
+        private bool _debugWithColors = false;
         private CancellationTokenSource _iconTokenSource;
         private Android.Graphics.Color _defaultTextColor;
         private ColorDrawable _backgroundColor;
@@ -87,6 +88,14 @@ namespace Bit.Droid.Renderers.BoxedView
 
             _defaultTextColor = new Android.Graphics.Color(CellTitle.CurrentTextColor);
             _defaultFontSize = CellTitle.TextSize;
+            
+            if(_debugWithColors)
+            {
+                contentView.Background = _Context.GetDrawable(Android.Resource.Color.HoloGreenLight);
+                CellContent.Background = _Context.GetDrawable(Android.Resource.Color.HoloOrangeLight);
+                CellButtonContent.Background = _Context.GetDrawable(Android.Resource.Color.HoloOrangeDark);
+                CellTitle.Background = _Context.GetDrawable(Android.Resource.Color.HoloBlueLight);
+            }
         }
 
         public virtual void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -187,7 +196,8 @@ namespace Bit.Droid.Renderers.BoxedView
             }
             else
             {
-                cellButton.Background = _Context.GetDrawable(icon);
+                cellButton.SetImageDrawable(_Context.GetDrawable(icon));
+                cellButton.SetImageDrawable(_Context.GetDrawable(icon));
                 cellButton.Visibility = ViewStates.Visible;
             }
         }

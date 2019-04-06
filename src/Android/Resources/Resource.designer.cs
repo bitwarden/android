@@ -6534,29 +6534,29 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0a003a
 			public const int CTRL = 2131361850;
 			
-			// aapt resource value: 0x7f0a00ac
-			public const int CellAccessory = 2131361964;
-			
 			// aapt resource value: 0x7f0a00a9
-			public const int CellButton1 = 2131361961;
+			public const int CellAccessory = 2131361961;
 			
 			// aapt resource value: 0x7f0a00aa
-			public const int CellButton2 = 2131361962;
+			public const int CellButton1 = 2131361962;
 			
 			// aapt resource value: 0x7f0a00ab
-			public const int CellButton3 = 2131361963;
+			public const int CellButton2 = 2131361963;
 			
-			// aapt resource value: 0x7f0a00a8
-			public const int CellButtonContent = 2131361960;
+			// aapt resource value: 0x7f0a00ac
+			public const int CellButton3 = 2131361964;
+			
+			// aapt resource value: 0x7f0a00a6
+			public const int CellButtonContent = 2131361958;
 			
 			// aapt resource value: 0x7f0a00a5
 			public const int CellContent = 2131361957;
 			
-			// aapt resource value: 0x7f0a00a7
-			public const int CellTitle = 2131361959;
+			// aapt resource value: 0x7f0a00a8
+			public const int CellTitle = 2131361960;
 			
-			// aapt resource value: 0x7f0a00a6
-			public const int CellTitleContent = 2131361958;
+			// aapt resource value: 0x7f0a00a7
+			public const int CellTitleContent = 2131361959;
 			
 			// aapt resource value: 0x7f0a00ad
 			public const int ContentCellBody = 2131361965;

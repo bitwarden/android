@@ -22,7 +22,7 @@ namespace Bit.App.Controls.BoxedView
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty HeaderPaddingProperty = BindableProperty.Create(
-            nameof(HeaderPadding), typeof(Thickness), typeof(BoxedView), new Thickness(14, 8, 8, 8),
+            nameof(HeaderPadding), typeof(Thickness), typeof(BoxedView), new Thickness(15, 8, 15, 8),
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty HeaderTextColorProperty = BindableProperty.Create(
@@ -30,7 +30,7 @@ namespace Bit.App.Controls.BoxedView
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty HeaderFontSizeProperty = BindableProperty.Create(
-            nameof(HeaderFontSize), typeof(double), typeof(BoxedView), -1.0d,
+            nameof(HeaderFontSize), typeof(double), typeof(BoxedView), 14.0,
             defaultBindingMode: BindingMode.OneWay,
             defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Small, (BoxedView)bindable));
 
@@ -50,7 +50,7 @@ namespace Bit.App.Controls.BoxedView
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty FooterFontSizeProperty = BindableProperty.Create(
-            nameof(FooterFontSize), typeof(double), typeof(BoxedView), -1.0d,
+            nameof(FooterFontSize), typeof(double), typeof(BoxedView), 14.0,
             defaultBindingMode: BindingMode.OneWay,
             defaultValueCreator: bindable => Device.GetNamedSize(NamedSize.Small, (BoxedView)bindable));
 
@@ -59,7 +59,7 @@ namespace Bit.App.Controls.BoxedView
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty FooterPaddingProperty = BindableProperty.Create(
-            nameof(FooterPadding), typeof(Thickness), typeof(BoxedView), new Thickness(14, 8, 14, 8),
+            nameof(FooterPadding), typeof(Thickness), typeof(BoxedView), new Thickness(15, 8, 15, 8),
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty CellTitleColorProperty = BindableProperty.Create(

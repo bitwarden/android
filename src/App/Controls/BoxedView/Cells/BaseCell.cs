@@ -10,11 +10,11 @@ namespace Bit.App.Controls.BoxedView
             nameof(Title), typeof(string), typeof(BaseCell), default(string), defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty TitleColorProperty = BindableProperty.Create(
-            nameof(TitleColor), typeof(Color), typeof(BaseCell), default(Color),
+            nameof(TitleColor), typeof(Color), typeof(BaseCell), Color.Gray,
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty TitleFontSizeProperty = BindableProperty.Create(
-            nameof(TitleFontSize), typeof(double), typeof(BaseCell), -1.0, defaultBindingMode: BindingMode.OneWay);
+            nameof(TitleFontSize), typeof(double), typeof(BaseCell), 14.0, defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty Button1IconProperty = BindableProperty.Create(
             nameof(Button1Icon), typeof(string), typeof(BaseCell), default(string),

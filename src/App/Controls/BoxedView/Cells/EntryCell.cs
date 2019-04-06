@@ -11,11 +11,11 @@ namespace Bit.App.Controls.BoxedView
             // propertyChanging: ValueTextPropertyChanging);
 
         public static BindableProperty ValueTextColorProperty = BindableProperty.Create(
-            nameof(ValueTextColor), typeof(Color), typeof(EntryCell), default(Color),
+            nameof(ValueTextColor), typeof(Color), typeof(EntryCell), Color.Black,
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty ValueTextFontSizeProperty = BindableProperty.Create(
-            nameof(ValueTextFontSize), typeof(double), typeof(EntryCell), -1.0,
+            nameof(ValueTextFontSize), typeof(double), typeof(EntryCell), 18.0,
             defaultBindingMode: BindingMode.OneWay);
 
         public static BindableProperty KeyboardProperty = BindableProperty.Create(

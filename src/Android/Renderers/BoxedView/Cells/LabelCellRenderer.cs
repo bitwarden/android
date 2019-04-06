@@ -19,24 +19,32 @@ namespace Bit.Droid.Renderers.BoxedView
     [Preserve(AllMembers = true)]
     public class LabelCellView : BaseCellView
     {
+        private bool _debugWithColors = false;
+        private TextView _valueLabel;
+
         public LabelCellView(Context context, Cell cell)
             : base(context, cell)
         {
-            ValueLabel = new TextView(context);
-            ValueLabel.SetSingleLine(true);
-            ValueLabel.Ellipsize = TextUtils.TruncateAt.End;
-            ValueLabel.Gravity = GravityFlags.Left;
+            _valueLabel = new TextView(context)
+            {
+                Ellipsize = TextUtils.TruncateAt.End,
+                Gravity = GravityFlags.Left,
+            };
+            _valueLabel.SetSingleLine(true);
 
             using(var lParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WrapContent,
                 ViewGroup.LayoutParams.WrapContent))
             {
-                CellContent.AddView(ValueLabel, lParams);
+                CellContent.AddView(_valueLabel, lParams);
+            }
+
+            if(_debugWithColors)
+            {
+                _valueLabel.Background = _Context.GetDrawable(Android.Resource.Color.HoloRedLight);
             }
         }
 
-        private LabelCell _LabelCell => Cell as LabelCell;
-
-        public TextView ValueLabel { get; set; }
+        private LabelCell LabelCell => Cell as LabelCell;
 
         public override void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -76,46 +84,33 @@ namespace Bit.Droid.Renderers.BoxedView
             UpdateValueTextFontSize();
         }
 
-        protected override void SetEnabledAppearance(bool isEnabled)
-        {
-            if(isEnabled)
-            {
-                ValueLabel.Alpha = 1f;
-            }
-            else
-            {
-                ValueLabel.Alpha = 0.3f;
-            }
-            base.SetEnabledAppearance(isEnabled);
-        }
-
         protected void UpdateValueText()
         {
-            ValueLabel.Text = _LabelCell.ValueText;
+            _valueLabel.Text = LabelCell.ValueText;
         }
 
         private void UpdateValueTextFontSize()
         {
-            if(_LabelCell.ValueTextFontSize > 0)
+            if(LabelCell.ValueTextFontSize > 0)
             {
-                ValueLabel.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)_LabelCell.ValueTextFontSize);
+                _valueLabel.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)LabelCell.ValueTextFontSize);
             }
             else if(CellParent != null)
             {
-                ValueLabel.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)CellParent.CellValueTextFontSize);
+                _valueLabel.SetTextSize(Android.Util.ComplexUnitType.Sp, (float)CellParent.CellValueTextFontSize);
             }
             Invalidate();
         }
 
         private void UpdateValueTextColor()
         {
-            if(_LabelCell.ValueTextColor != Color.Default)
+            if(LabelCell.ValueTextColor != Color.Default)
             {
-                ValueLabel.SetTextColor(_LabelCell.ValueTextColor.ToAndroid());
+                _valueLabel.SetTextColor(LabelCell.ValueTextColor.ToAndroid());
             }
             else if(CellParent != null && CellParent.CellValueTextColor != Color.Default)
             {
-                ValueLabel.SetTextColor(CellParent.CellValueTextColor.ToAndroid());
+                _valueLabel.SetTextColor(CellParent.CellValueTextColor.ToAndroid());
             }
         }
 
@@ -123,8 +118,8 @@ namespace Bit.Droid.Renderers.BoxedView
         {
             if(disposing)
             {
-                ValueLabel?.Dispose();
-                ValueLabel = null;
+                _valueLabel?.Dispose();
+                _valueLabel = null;
             }
             base.Dispose(disposing);
         }

@@ -218,6 +218,7 @@ namespace Bit.Droid.Renderers.BoxedView
             holder.TextView.SetBackgroundColor(_boxedView.HeaderBackgroundColor.ToAndroid());
             holder.TextView.SetMaxLines(1);
             holder.TextView.SetMinLines(1);
+            holder.TextView.SetTypeface(null, Android.Graphics.TypefaceStyle.Bold);
             holder.TextView.Ellipsize = TextUtils.TruncateAt.End;
 
             if(_boxedView.HeaderTextColor != Color.Default)

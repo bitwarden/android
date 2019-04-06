@@ -3,16 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:minHeight="44dp"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp">
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
     <LinearLayout
         android:id="@+id/CellContent"
         android:orientation="vertical"
         android:layout_centerVertical="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/CellButtonContent"
         android:gravity="center_vertical">
         <LinearLayout
             android:id="@+id/CellTitleContent"
@@ -39,23 +40,30 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/CellAccessory"
         android:gravity="center_vertical">
         <ImageButton
             android:id="@+id/CellButton1"
             android:visibility="gone"
+            android:background="@android:color/transparent"
+            android:paddingLeft="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
         <ImageButton
             android:id="@+id/CellButton2"
             android:visibility="gone"
+            android:background="@android:color/transparent"
+            android:paddingLeft="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
         <ImageButton
             android:id="@+id/CellButton3"
             android:visibility="gone"
+            android:background="@android:color/transparent"
+            android:paddingLeft="5dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/CellAccessory"
