@@ -7,7 +7,7 @@ namespace Bit.Core.Models.Domain
     {
         private string _decryptedValue;
 
-        public CipherString(EncryptionType encryptionType, string data, string iv, string mac)
+        public CipherString(EncryptionType encryptionType, string data, string iv = null, string mac = null)
         {
             if(string.IsNullOrWhiteSpace(data))
             {

@@ -142,6 +142,11 @@ namespace Bit.Core.Services
             return Task.FromResult(CryptographicBuffer.GenerateRandom(length));
         }
 
+        public Task<uint> RandomNumberAsync()
+        {
+            return Task.FromResult(CryptographicBuffer.GenerateRandomNumber());
+        }
+
         private HashAlgorithm ToHashAlgorithm(CryptoHashAlgorithm algorithm)
         {
             switch(algorithm)
