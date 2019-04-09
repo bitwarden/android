@@ -22,6 +22,11 @@ namespace Bit.Core.Services
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(string));
                 return Task.FromResult((T)(object)val);
             }
+            else if(objType == typeof(bool) || objType == typeof(bool?))
+            {
+                var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(bool));
+                return Task.FromResult((T)Convert.ChangeType(val, objType));
+            }
             else if(objType == typeof(int) || objType == typeof(int?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(int));
@@ -60,6 +65,10 @@ namespace Bit.Core.Services
             if(objType == typeof(string))
             {
                 Xamarin.Essentials.Preferences.Set(formattedKey, obj as string);
+            }
+            else if(objType == typeof(bool) || objType == typeof(bool?))
+            {
+                Xamarin.Essentials.Preferences.Set(formattedKey, (obj as bool?).Value);
             }
             else if(objType == typeof(int) || objType == typeof(int?))
             {
