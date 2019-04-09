@@ -4,7 +4,7 @@ using Foundation;
 using System;
 using System.Runtime.InteropServices;
 
-namespace Bit.iOS.Services
+namespace Bit.iOS.Core.Services
 {
     public class CryptoPrimitiveService : ICryptoPrimitiveService
     {

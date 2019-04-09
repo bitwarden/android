@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Security;
 
-namespace Bit.iOS.Services
+namespace Bit.iOS.Core.Services
 {
     public class KeyChainStorageService : IStorageService
     {
