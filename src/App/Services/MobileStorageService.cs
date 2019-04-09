@@ -1,8 +1,9 @@
-﻿using Bit.Core.Abstractions;
+﻿using Bit.Core;
+using Bit.Core.Abstractions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Bit.Core.Services
+namespace Bit.App.Services
 {
     public class MobileStorageService : IStorageService
     {

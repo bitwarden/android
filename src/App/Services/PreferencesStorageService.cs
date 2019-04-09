@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 
-namespace Bit.Core.Services
+namespace Bit.App.Services
 {
     public class PreferencesStorageService : IStorageService
     {

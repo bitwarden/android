@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Bit.Core.Services
+namespace Bit.App.Services
 {
     public class SecureStorageService : IStorageService
     {
