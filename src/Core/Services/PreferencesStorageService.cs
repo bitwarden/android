@@ -22,22 +22,22 @@ namespace Bit.Core.Services
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(string));
                 return Task.FromResult((T)(object)val);
             }
-            else if(objType == typeof(int))
+            else if(objType == typeof(int) || objType == typeof(int?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(int));
                 return Task.FromResult((T)Convert.ChangeType(val, objType));
             }
-            else if(objType == typeof(long))
+            else if(objType == typeof(long) || objType == typeof(long?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(long));
                 return Task.FromResult((T)Convert.ChangeType(val, objType));
             }
-            else if(objType == typeof(double))
+            else if(objType == typeof(double) || objType == typeof(double?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(double));
                 return Task.FromResult((T)Convert.ChangeType(val, objType));
             }
-            else if(objType == typeof(DateTime))
+            else if(objType == typeof(DateTime) || objType == typeof(DateTime?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(DateTime));
                 return Task.FromResult((T)Convert.ChangeType(val, objType));
@@ -61,19 +61,19 @@ namespace Bit.Core.Services
             {
                 Xamarin.Essentials.Preferences.Set(formattedKey, obj as string);
             }
-            else if(objType == typeof(int))
+            else if(objType == typeof(int) || objType == typeof(int?))
             {
                 Xamarin.Essentials.Preferences.Set(formattedKey, (obj as int?).Value);
             }
-            else if(objType == typeof(long))
+            else if(objType == typeof(long) || objType == typeof(long?))
             {
                 Xamarin.Essentials.Preferences.Set(formattedKey, (obj as long?).Value);
             }
-            else if(objType == typeof(double))
+            else if(objType == typeof(double) || objType == typeof(double?))
             {
                 Xamarin.Essentials.Preferences.Set(formattedKey, (obj as double?).Value);
             }
-            else if(objType == typeof(DateTime))
+            else if(objType == typeof(DateTime) || objType == typeof(DateTime?))
             {
                 Xamarin.Essentials.Preferences.Set(formattedKey, (obj as DateTime?).Value);
             }
