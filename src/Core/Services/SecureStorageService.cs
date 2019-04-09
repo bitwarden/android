@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Abstractions;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -10,16 +11,16 @@ namespace Bit.Core.Services
 
         public async Task<T> GetAsync<T>(string key)
         {
+            var formattedKey = string.Format(_keyFormat, key);
+            var val = await Xamarin.Essentials.SecureStorage.GetAsync(formattedKey);
             var objType = typeof(T);
             if(objType == typeof(string))
             {
-                var formattedKey = string.Format(_keyFormat, key);
-                var val = await Xamarin.Essentials.SecureStorage.GetAsync(formattedKey);
                 return (T)(object)val;
             }
             else
             {
-                throw new Exception("Unsupported object type for secure storage.");
+                return JsonConvert.DeserializeObject<T>(val);
             }
         }
 
@@ -30,16 +31,15 @@ namespace Bit.Core.Services
                 await RemoveAsync(key);
                 return;
             }
-
+            var formattedKey = string.Format(_keyFormat, key);
             var objType = typeof(T);
             if(objType == typeof(string))
             {
-                var formattedKey = string.Format(_keyFormat, key);
                 await Xamarin.Essentials.SecureStorage.SetAsync(formattedKey, obj as string);
             }
             else
             {
-                throw new Exception("Unsupported object type for secure storage.");
+                await Xamarin.Essentials.SecureStorage.SetAsync(formattedKey, JsonConvert.SerializeObject(obj));
             }
         }
 

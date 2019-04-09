@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Abstractions;
+using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 
@@ -49,7 +50,8 @@ namespace Bit.Core.Services
             }
             else
             {
-                throw new Exception("Unsupported object type for preferences.");
+                var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(string));
+                return Task.FromResult(JsonConvert.DeserializeObject<T>(val));
             }
         }
 
@@ -88,7 +90,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                throw new Exception("Unsupported object type for preferences.");
+                Xamarin.Essentials.Preferences.Set(formattedKey, JsonConvert.SerializeObject(obj));
             }
             return Task.FromResult(0);
         }
