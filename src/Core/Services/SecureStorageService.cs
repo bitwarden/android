@@ -1,6 +1,6 @@
 ﻿using Bit.Core.Abstractions;
 using Newtonsoft.Json;
-using System;
+using Newtonsoft.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Bit.Core.Services
@@ -8,6 +8,10 @@ namespace Bit.Core.Services
     public class SecureStorageService : IStorageService
     {
         private string _keyFormat = "bwSecureStorage:{0}";
+        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
         public async Task<T> GetAsync<T>(string key)
         {
@@ -20,7 +24,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                return JsonConvert.DeserializeObject<T>(val);
+                return JsonConvert.DeserializeObject<T>(val, _jsonSettings);
             }
         }
 
@@ -39,7 +43,8 @@ namespace Bit.Core.Services
             }
             else
             {
-                await Xamarin.Essentials.SecureStorage.SetAsync(formattedKey, JsonConvert.SerializeObject(obj));
+                await Xamarin.Essentials.SecureStorage.SetAsync(formattedKey,
+                    JsonConvert.SerializeObject(obj, _jsonSettings));
             }
         }
 

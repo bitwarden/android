@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Abstractions;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Threading.Tasks;
 
@@ -8,6 +9,10 @@ namespace Bit.Core.Services
     public class PreferencesStorageService : IStorageService
     {
         private string _keyFormat = "bwPreferencesStorage:{0}";
+        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
         public Task<T> GetAsync<T>(string key)
         {
@@ -51,7 +56,7 @@ namespace Bit.Core.Services
             else
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(string));
-                return Task.FromResult(JsonConvert.DeserializeObject<T>(val));
+                return Task.FromResult(JsonConvert.DeserializeObject<T>(val, _jsonSettings));
             }
         }
 
@@ -90,7 +95,7 @@ namespace Bit.Core.Services
             }
             else
             {
-                Xamarin.Essentials.Preferences.Set(formattedKey, JsonConvert.SerializeObject(obj));
+                Xamarin.Essentials.Preferences.Set(formattedKey, JsonConvert.SerializeObject(obj, _jsonSettings));
             }
             return Task.FromResult(0);
         }
