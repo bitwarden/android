@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class CryptoService
+    public class CryptoService : ICryptoService
     {
         private readonly IStorageService _storageService;
         private readonly IStorageService _secureStorageService;
