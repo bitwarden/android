@@ -7,7 +7,7 @@ namespace Bit.Core.Services
 {
     public class SecureStorageService : IStorageService
     {
-        private string _keyFormat = "bwSecureStorage:{0}";
+        private readonly string _keyFormat = "bwSecureStorage:{0}";
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -17,8 +17,7 @@ namespace Bit.Core.Services
         {
             var formattedKey = string.Format(_keyFormat, key);
             var val = await Xamarin.Essentials.SecureStorage.GetAsync(formattedKey);
-            var objType = typeof(T);
-            if(objType == typeof(string))
+            if(typeof(T) == typeof(string))
             {
                 return (T)(object)val;
             }
@@ -36,8 +35,7 @@ namespace Bit.Core.Services
                 return;
             }
             var formattedKey = string.Format(_keyFormat, key);
-            var objType = typeof(T);
-            if(objType == typeof(string))
+            if(typeof(T) == typeof(string))
             {
                 await Xamarin.Essentials.SecureStorage.SetAsync(formattedKey, obj as string);
             }

@@ -8,8 +8,7 @@ namespace Bit.Core.Services
 {
     public class PreferencesStorageService : IStorageService
     {
-        private string _keyFormat = "bwPreferencesStorage:{0}";
-
+        private readonly string _keyFormat = "bwPreferencesStorage:{0}";
         private readonly string _sharedName;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
