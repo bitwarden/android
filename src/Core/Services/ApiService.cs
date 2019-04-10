@@ -5,6 +5,7 @@ using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace Bit.Core.Services
 {
     public class ApiService
     {
+        private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
         private readonly HttpClient _httpClient = new HttpClient();
         private readonly ITokenService _tokenService;
         private readonly IPlatformUtilsService _platformUtilsService;
@@ -117,7 +122,41 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region Account APIs
 
+        public async Task<ProfileResponse> GetProfileAsync()
+        {
+            return await SendAsync<object, ProfileResponse>(HttpMethod.Get, "/accounts/profile", null, true, true);
+        }
+
+        public async Task<PreloginResponse> PostPreloginAsync(PreloginRequest request)
+        {
+            return await SendAsync<PreloginRequest, PreloginResponse>(HttpMethod.Post, "/accounts/prelogin",
+                request, false, true);
+        }
+
+        public async Task<long> GetAccountRevisionDateAsync()
+        {
+            return await SendAsync<object, long>(HttpMethod.Get, "/accounts/revision-date", null, true, true);
+        }
+
+        public async Task PostPasswordHintAsync(PasswordHintRequest request)
+        {
+            await SendAsync<PasswordHintRequest, object>(HttpMethod.Post, "/accounts/password-hint",
+                request, false, false);
+        }
+
+        public async Task PostRegisterAsync(RegisterRequest request)
+        {
+            await SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false);
+        }
+
+        public async Task PostAccountKeysAsync(KeysRequest request)
+        {
+            await SendAsync<KeysRequest, object>(HttpMethod.Post, "/accounts/keys", request, true, false);
+        }
+
+        #endregion
 
         #region Helpers
 
@@ -155,7 +194,7 @@ namespace Bit.Core.Services
                 }
                 else
                 {
-                    requestMessage.Content = new StringContent(JsonConvert.SerializeObject(body),
+                    requestMessage.Content = new StringContent(JsonConvert.SerializeObject(body, _jsonSettings),
                         Encoding.UTF8, "application/json");
                 }
             }
