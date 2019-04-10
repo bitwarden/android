@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.Core.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Services
 {
-    public class MobilePlatformUtilsService
+    public class MobilePlatformUtilsService : IPlatformUtilsService
     {
         private static readonly Random _random = new Random();
 
