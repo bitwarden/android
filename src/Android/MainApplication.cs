@@ -15,5 +15,11 @@ namespace Bit.Droid
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         { }
+
+        public override void OnCreate()
+        {
+            base.OnCreate();
+            Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this);
+        }
     }
 }
