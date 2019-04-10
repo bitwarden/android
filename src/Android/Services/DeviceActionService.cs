@@ -1,10 +1,13 @@
-﻿using Bit.App.Abstractions;
+﻿using System.Threading.Tasks;
+using Android.App;
+using Bit.App.Abstractions;
 using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
+        private ProgressDialog _progressDialog;
         private Android.Widget.Toast _toast;
 
         public void Toast(string text, bool longDuration = false)
@@ -30,6 +33,30 @@ namespace Bit.Droid.Services
                 activity.StartActivity(launchIntent);
             }
             return launchIntent != null;
+        }
+
+        public async Task ShowLoadingAsync(string text)
+        {
+            if(_progressDialog != null)
+            {
+                await HideLoadingAsync();
+            }
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            _progressDialog = new ProgressDialog(activity);
+            _progressDialog.SetMessage(text);
+            _progressDialog.SetCancelable(false);
+            _progressDialog.Show();
+        }
+
+        public Task HideLoadingAsync()
+        {
+            if(_progressDialog != null)
+            {
+                _progressDialog.Dismiss();
+                _progressDialog.Dispose();
+                _progressDialog = null;
+            }
+            return Task.FromResult(0);
         }
     }
 }
