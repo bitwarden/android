@@ -1,8 +1,11 @@
 ﻿using Bit.App.Models;
 using Bit.App.Pages;
+using Bit.App.Resources;
+using Bit.App.Services;
 using Bit.App.Utilities;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using System;
-using System.Reflection;
 using Xamarin.Forms;
 using Xamarin.Forms.StyleSheets;
 using Xamarin.Forms.Xaml;
@@ -12,18 +15,23 @@ namespace Bit.App
 {
     public partial class App : Application
     {
+        private readonly MobileI18nService _i18nService;
+
         public App()
         {
-            InitializeComponent();
+            _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
 
+            InitializeComponent();
+            SetCulture();
             ThemeManager.SetTheme("light");
             MainPage = new TabsPage();
 
+            ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
             MessagingCenter.Subscribe<Application, DialogDetails>(Current, "ShowDialog", async (sender, details) =>
             {
                 var confirmed = true;
-                // TODO: ok text
-                var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ? "Ok" : details.ConfirmText;
+                var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
+                    AppResources.Ok : details.ConfirmText;
                 if(!string.IsNullOrWhiteSpace(details.CancelText))
                 {
                     confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
@@ -50,6 +58,15 @@ namespace Bit.App
         protected override void OnResume()
         {
             // Handle when your app resumes
+        }
+
+        private void SetCulture()
+        {
+            _i18nService.Init();
+            // Calendars are removed by linker. ref https://bugzilla.xamarin.com/show_bug.cgi?id=59077
+            new System.Globalization.ThaiBuddhistCalendar();
+            new System.Globalization.HijriCalendar();
+            new System.Globalization.UmAlQuraCalendar();
         }
     }
 }
