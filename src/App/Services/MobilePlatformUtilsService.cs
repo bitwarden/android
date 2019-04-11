@@ -22,7 +22,12 @@ namespace Bit.App.Services
         public MobilePlatformUtilsService(IDeviceActionService deviceActionService)
         {
             _deviceActionService = deviceActionService;
+        }
 
+        public string IdentityClientId => "mobile";
+
+        public void Init()
+        {
             MessagingCenter.Subscribe<Xamarin.Forms.Application, Tuple<int, bool>>(
                 Xamarin.Forms.Application.Current, "ShowDialogResolve", (sender, details) =>
                 {
@@ -50,8 +55,6 @@ namespace Bit.App.Services
                     }
                 });
         }
-
-        public string IdentityClientId => "mobile";
 
         public Core.Enums.DeviceType GetDevice()
         {
