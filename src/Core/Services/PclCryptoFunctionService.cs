@@ -8,7 +8,7 @@ using static PCLCrypto.WinRTCrypto;
 
 namespace Bit.Core.Services
 {
-    public class PclCryptoFunctionService
+    public class PclCryptoFunctionService : ICryptoFunctionService
     {
         private readonly ICryptoPrimitiveService _cryptoPrimitiveService;
 

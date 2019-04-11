@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class AppIdService
+    public class AppIdService : IAppIdService
     {
         private readonly IStorageService _storageService;
 
