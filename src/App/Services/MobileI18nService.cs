@@ -10,7 +10,7 @@ namespace Bit.App.Services
 {
     public class MobileI18nService : II18nService
     {
-        private const string ResourceId = "UsingResxLocalization.Resx.AppResources";
+        private const string ResourceId = "Bit.App.Resources.AppResources";
 
         private static readonly Lazy<ResourceManager> _resourceManager = new Lazy<ResourceManager>(() =>
             new ResourceManager(ResourceId, IntrospectionExtensions.GetTypeInfo(typeof(MobileI18nService)).Assembly));
@@ -41,12 +41,12 @@ namespace Bit.App.Services
             Thread.CurrentThread.CurrentUICulture = Culture;
         }
 
-        public string T(string id, params string[] p)
+        public string T(string id, string p1, string p2, string p3)
         {
-            return Translate(id, p);
+            return Translate(id, p1, p2, p3);
         }
 
-        public string Translate(string id, params string[] p)
+        public string Translate(string id, string p1, string p2, string p3)
         {
             if(string.IsNullOrWhiteSpace(id))
             {
@@ -61,7 +61,19 @@ namespace Bit.App.Services
                     result = $"{{{id}}}";
                 }
             }
-            return string.Format(result, p);
+            if(p1 == null && p2 == null && p3 == null)
+            {
+                return result;
+            }
+            else if(p2 == null && p3 == null)
+            {
+                return string.Format(result, p1);
+            }
+            else if(p3 == null)
+            {
+                return string.Format(result, p1, p2);
+            }
+            return string.Format(result, p1, p2, p3);
         }
     }
 }

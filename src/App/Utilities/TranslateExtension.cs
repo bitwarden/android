@@ -6,7 +6,7 @@ using Xamarin.Forms.Xaml;
 
 namespace Bit.App.Utilities
 {
-    [ContentProperty("Text")]
+    [ContentProperty("Id")]
     public class TranslateExtension : IMarkupExtension
     {
         private II18nService _i18nService;
