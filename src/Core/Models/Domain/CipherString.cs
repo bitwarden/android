@@ -1,5 +1,6 @@
 ﻿using Bit.Core.Enums;
 using System;
+using System.Threading.Tasks;
 
 namespace Bit.Core.Models.Domain
 {
@@ -96,14 +97,14 @@ namespace Bit.Core.Models.Domain
         public string Data { get; private set; }
         public string Mac { get; private set; }
 
-        public string Decrypt(string orgId = null)
+        public Task<string> DecryptAsync(string orgId = null)
         {
             if(_decryptedValue == null)
             {
                 // TODO
             }
 
-            return _decryptedValue;
+            return Task.FromResult(_decryptedValue);
         }
     }
 }

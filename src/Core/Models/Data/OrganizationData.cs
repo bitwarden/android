@@ -3,7 +3,7 @@ using Bit.Core.Models.Response;
 
 namespace Bit.Core.Models.Data
 {
-    public class OrganizationData
+    public class OrganizationData : Data
     {
         public OrganizationData(ProfileOrganizationResponse response)
         {

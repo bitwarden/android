@@ -9,5 +9,6 @@ namespace Bit.Core.Models.Domain
         public string Id { get; set; }
         public string OrganizationId { get; set; }
         public CipherString Name { get; set; }
+        public Login Login { get; set; }
     }
 }
