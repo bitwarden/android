@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class ApiService
+    public class ApiService : IApiService
     {
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
