@@ -32,8 +32,9 @@ namespace Bit.Android.Autofill
             "com.google.android.apps.chrome","com.google.android.apps.chrome_dev","com.yandex.browser",
             "com.sec.android.app.sbrowser","com.sec.android.app.sbrowser.beta","org.codeaurora.swe.browser",
             "com.amazon.cloud9","mark.via.gp","org.bromite.bromite","org.chromium.chrome","com.kiwibrowser.browser",
-            "com.ecosia.android","com.opera.mini.native.beta","org.mozilla.fennec_aurora","com.qwant.liberty",
-            "com.opera.touch","org.mozilla.fenix","org.mozilla.reference.browser","org.mozilla.rocket"
+            "com.ecosia.android","com.opera.mini.native.beta","org.mozilla.fennec_aurora","org.mozilla.fennec_fdroid",
+	    "com.qwant.liberty", "com.opera.touch","org.mozilla.fenix","org.mozilla.reference.browser",
+	    "org.mozilla.rocket"
         };
 
         // The URLs are blacklisted from autofilling
