@@ -49,6 +49,7 @@ namespace Bit.Android
             new Browser("org.mozilla.firefox", "url_bar_title"),
             new Browser("org.mozilla.firefox_beta", "url_bar_title"),
             new Browser("org.mozilla.fennec_aurora", "url_bar_title"),
+            new Browser("org.mozilla.fennec_fdroid", "url_bar_title"),
             new Browser("org.mozilla.focus", "display_url"),
             new Browser("org.mozilla.klar", "display_url"),
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),

@@ -37,6 +37,9 @@
     android:name="org.mozilla.fennec_aurora"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
+    android:name="org.mozilla.fennec_fdroid"
+    android:maxLongVersionCode="10000000000"/>
+  <compatibility-package
     android:name="org.mozilla.firefox"
     android:maxLongVersionCode="10000000000"/>
   <compatibility-package
