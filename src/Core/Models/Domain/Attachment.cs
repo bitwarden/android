@@ -1,0 +1,59 @@
+﻿using Bit.Core.Models.Data;
+using Bit.Core.Models.View;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace Bit.Core.Models.Domain
+{
+    public class Attachment : Domain
+    {
+        public Attachment() { }
+
+        public Attachment(AttachmentData obj, bool alreadyEncrypted = false)
+        {
+            Size = obj.Size;
+            BuildDomainModel(this, obj, new HashSet<string>
+            {
+                "Id",
+                "Url",
+                "SizeName",
+                "FileName",
+                "Key"
+            }, alreadyEncrypted, new HashSet<string> { "Id", "Url", "SizeName" });
+        }
+
+        public string Id { get; set; }
+        public string Url { get; set; }
+        public string Size { get; set; }
+        public string SizeName { get; set; }
+        public CipherString Key { get; set; }
+        public CipherString FileName { get; set; }
+
+        public async Task<AttachmentView> DecryptAsync(string orgId)
+        {
+            var view = await DecryptObjAsync(new AttachmentView(this), this, new HashSet<string>
+            {
+                "FileName"
+            }, orgId);
+
+            // TODO: Decrypt key
+
+            return view;
+        }
+
+        public AttachmentData ToAttachmentData()
+        {
+            var a = new AttachmentData();
+            a.Size = Size;
+            BuildDataModel(this, a, new HashSet<string>
+            {
+                "Id",
+                "Url",
+                "SizeName",
+                "FileName",
+                "Key"
+            }, new HashSet<string> { "Id", "Url", "SizeName" });
+            return a;
+        }
+    }
+}
