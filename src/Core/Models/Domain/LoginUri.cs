@@ -8,15 +8,17 @@ namespace Bit.Core.Models.Domain
 {
     public class LoginUri : Domain
     {
+        private HashSet<string> _map = new HashSet<string>
+        {
+            "Uri"
+        };
+
         public LoginUri() { }
 
         public LoginUri(LoginUriData obj, bool alreadyEncrypted = false)
         {
             Match = obj.Match;
-            BuildDomainModel(this, obj, new HashSet<string>
-            {
-                "Uri"
-            }, alreadyEncrypted);
+            BuildDomainModel(this, obj, _map, alreadyEncrypted);
         }
 
         public CipherString Uri { get; set; }
@@ -24,19 +26,13 @@ namespace Bit.Core.Models.Domain
 
         public Task<LoginUriView> DecryptAsync(string orgId)
         {
-            return DecryptObjAsync(new LoginUriView(this), this, new HashSet<string>
-            {
-                "Uri"
-            }, orgId);
+            return DecryptObjAsync(new LoginUriView(this), this, _map, orgId);
         }
 
         public LoginUriData ToLoginUriData()
         {
             var u = new LoginUriData();
-            BuildDataModel(this, u, new HashSet<string>
-            {
-                "Uri"
-            }, new HashSet<string> { "Match" });
+            BuildDataModel(this, u, _map, new HashSet<string> { "Match" });
             return u;
         }
     }

@@ -7,19 +7,21 @@ namespace Bit.Core.Models.Domain
 {
     public class Attachment : Domain
     {
+        private HashSet<string> _map = new HashSet<string>
+        {
+            "Id",
+            "Url",
+            "SizeName",
+            "FileName",
+            "Key"
+        };
+
         public Attachment() { }
 
         public Attachment(AttachmentData obj, bool alreadyEncrypted = false)
         {
             Size = obj.Size;
-            BuildDomainModel(this, obj, new HashSet<string>
-            {
-                "Id",
-                "Url",
-                "SizeName",
-                "FileName",
-                "Key"
-            }, alreadyEncrypted, new HashSet<string> { "Id", "Url", "SizeName" });
+            BuildDomainModel(this, obj, _map, alreadyEncrypted, new HashSet<string> { "Id", "Url", "SizeName" });
         }
 
         public string Id { get; set; }
@@ -45,14 +47,7 @@ namespace Bit.Core.Models.Domain
         {
             var a = new AttachmentData();
             a.Size = Size;
-            BuildDataModel(this, a, new HashSet<string>
-            {
-                "Id",
-                "Url",
-                "SizeName",
-                "FileName",
-                "Key"
-            }, new HashSet<string> { "Id", "Url", "SizeName" });
+            BuildDataModel(this, a, _map, new HashSet<string> { "Id", "Url", "SizeName" });
             return a;
         }
     }
