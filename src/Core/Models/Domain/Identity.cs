@@ -60,7 +60,7 @@ namespace Bit.Core.Models.Domain
             return DecryptObjAsync(new IdentityView(this), this, _map, orgId);
         }
 
-        public IdentityData ToLoginUriData()
+        public IdentityData ToIdentityData()
         {
             var i = new IdentityData();
             BuildDataModel(this, i, _map);

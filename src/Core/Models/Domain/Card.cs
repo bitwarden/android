@@ -36,7 +36,7 @@ namespace Bit.Core.Models.Domain
             return DecryptObjAsync(new CardView(this), this, _map, orgId);
         }
 
-        public CardData ToLoginUriData()
+        public CardData ToCardData()
         {
             var c = new CardData();
             BuildDataModel(this, c, _map);

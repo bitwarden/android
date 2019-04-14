@@ -29,7 +29,7 @@ namespace Bit.Core.Models.Domain
             return DecryptObjAsync(new PasswordHistoryView(this), this, _map, orgId);
         }
 
-        public PasswordHistoryData ToLoginUriData()
+        public PasswordHistoryData ToPasswordHistoryData()
         {
             var ph = new PasswordHistoryData();
             ph.LastUsedDate = LastUsedDate;

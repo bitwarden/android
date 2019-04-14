@@ -48,7 +48,7 @@ namespace Bit.Core.Models.Domain
             return view;
         }
 
-        public LoginData ToLoginUriData()
+        public LoginData ToLoginData()
         {
             var l = new LoginData();
             l.PasswordRevisionDate = PasswordRevisionDate;

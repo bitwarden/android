@@ -21,7 +21,7 @@ namespace Bit.Core.Models.Domain
             return Task.FromResult(new SecureNoteView(this));
         }
 
-        public SecureNoteData ToLoginUriData()
+        public SecureNoteData ToSecureNoteData()
         {
             return new SecureNoteData
             {

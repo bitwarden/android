@@ -31,7 +31,7 @@ namespace Bit.Core.Models.Domain
             return DecryptObjAsync(new FieldView(this), this, _map, orgId);
         }
 
-        public FieldData ToLoginUriData()
+        public FieldData ToFieldData()
         {
             var f = new FieldData();
             BuildDataModel(this, f, new HashSet<string>
