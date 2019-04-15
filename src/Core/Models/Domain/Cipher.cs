@@ -74,28 +74,28 @@ namespace Bit.Core.Models.Domain
         public List<PasswordHistory> PasswordHistory { get; set; }
         public List<string> CollectionIds { get; set; }
 
-        public async Task<CipherView> DecryptAsync(string orgId)
+        public async Task<CipherView> DecryptAsync()
         {
             var model = new CipherView(this);
             await DecryptObjAsync(model, this, new HashSet<string>
             {
                 "Name",
                 "Notes"
-            }, orgId);
+            }, OrganizationId);
 
             switch(Type)
             {
                 case Enums.CipherType.Login:
-                    model.Login = await Login.DecryptAsync(orgId);
+                    model.Login = await Login.DecryptAsync(OrganizationId);
                     break;
                 case Enums.CipherType.SecureNote:
-                    model.SecureNote = await SecureNote.DecryptAsync(orgId);
+                    model.SecureNote = await SecureNote.DecryptAsync(OrganizationId);
                     break;
                 case Enums.CipherType.Card:
-                    model.Card = await Card.DecryptAsync(orgId);
+                    model.Card = await Card.DecryptAsync(OrganizationId);
                     break;
                 case Enums.CipherType.Identity:
-                    model.Identity = await Identity.DecryptAsync(orgId);
+                    model.Identity = await Identity.DecryptAsync(OrganizationId);
                     break;
                 default:
                     break;
@@ -107,7 +107,7 @@ namespace Bit.Core.Models.Domain
                 var tasks = new List<Task>();
                 foreach(var attachment in Attachments)
                 {
-                    var t = attachment.DecryptAsync(orgId)
+                    var t = attachment.DecryptAsync(OrganizationId)
                         .ContinueWith(async decAttachment => model.Attachments.Add(await decAttachment));
                     tasks.Add(t);
                 }
@@ -119,7 +119,7 @@ namespace Bit.Core.Models.Domain
                 var tasks = new List<Task>();
                 foreach(var field in Fields)
                 {
-                    var t = field.DecryptAsync(orgId)
+                    var t = field.DecryptAsync(OrganizationId)
                         .ContinueWith(async decField => model.Fields.Add(await decField));
                     tasks.Add(t);
                 }
@@ -131,7 +131,7 @@ namespace Bit.Core.Models.Domain
                 var tasks = new List<Task>();
                 foreach(var ph in PasswordHistory)
                 {
-                    var t = ph.DecryptAsync(orgId)
+                    var t = ph.DecryptAsync(OrganizationId)
                         .ContinueWith(async decPh => model.PasswordHistory.Add(await decPh));
                     tasks.Add(t);
                 }
