@@ -4,19 +4,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace Bit.Core.Utilities
 {
     // ref: https://github.com/danesparza/domainname-parser
     public class DomainName
     {
-        private const string IpRegex =
-            "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
-            "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
-            "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
-            "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
-
         private readonly string _subDomain = string.Empty;
         private readonly string _domain = string.Empty;
         private readonly string _tld = string.Empty;
@@ -66,11 +59,6 @@ namespace Bit.Core.Utilities
 
         public static bool TryParseBaseDomain(string domainString, out string result)
         {
-            if(Regex.IsMatch(domainString, IpRegex))
-            {
-                result = domainString;
-                return true;
-            }
             var retVal = TryParse(domainString, out DomainName domain);
             result = domain?.BaseDomain;
             return retVal;
