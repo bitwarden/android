@@ -1,5 +1,7 @@
-﻿using Bit.Core.Models.Data;
+﻿using Bit.Core.Abstractions;
+using Bit.Core.Models.Data;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -37,9 +39,21 @@ namespace Bit.Core.Models.Domain
             {
                 "FileName"
             }, orgId);
-
-            // TODO: Decrypt key
-
+            
+            if(Key != null)
+            {
+                var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+                try
+                {
+                    var orgKey = await cryptoService.GetOrgKeyAsync(orgId);
+                    var decValue = await cryptoService.DecryptToBytesAsync(Key, orgKey);
+                    view.Key = new SymmetricCryptoKey(decValue);
+                }
+                catch
+                {
+                    // TODO: error?
+                }
+            }
             return view;
         }
 
