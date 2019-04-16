@@ -17,6 +17,7 @@ namespace Bit.App.Services
 
         private readonly CultureInfo _defaultCulture = new CultureInfo("en-US");
         private bool _inited;
+        private StringComparer _stringComparer;
 
         public MobileI18nService(CultureInfo systemCulture)
         {
@@ -24,6 +25,17 @@ namespace Bit.App.Services
         }
 
         public CultureInfo Culture { get; set; }
+        public StringComparer StringComparer
+        {
+            get
+            {
+                if(_stringComparer == null)
+                {
+                    _stringComparer = StringComparer.Create(Culture, false);
+                }
+                return _stringComparer;
+            }
+        }
 
         public void Init(CultureInfo culture = null)
         {
