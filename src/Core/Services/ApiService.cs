@@ -124,36 +124,125 @@ namespace Bit.Core.Services
 
         #region Account APIs
 
-        public async Task<ProfileResponse> GetProfileAsync()
+        public Task<ProfileResponse> GetProfileAsync()
         {
-            return await SendAsync<object, ProfileResponse>(HttpMethod.Get, "/accounts/profile", null, true, true);
+            return SendAsync<object, ProfileResponse>(HttpMethod.Get, "/accounts/profile", null, true, true);
         }
 
-        public async Task<PreloginResponse> PostPreloginAsync(PreloginRequest request)
+        public Task<PreloginResponse> PostPreloginAsync(PreloginRequest request)
         {
-            return await SendAsync<PreloginRequest, PreloginResponse>(HttpMethod.Post, "/accounts/prelogin",
+            return SendAsync<PreloginRequest, PreloginResponse>(HttpMethod.Post, "/accounts/prelogin",
                 request, false, true);
         }
 
-        public async Task<long> GetAccountRevisionDateAsync()
+        public Task<long> GetAccountRevisionDateAsync()
         {
-            return await SendAsync<object, long>(HttpMethod.Get, "/accounts/revision-date", null, true, true);
+            return SendAsync<object, long>(HttpMethod.Get, "/accounts/revision-date", null, true, true);
         }
 
-        public async Task PostPasswordHintAsync(PasswordHintRequest request)
+        public Task PostPasswordHintAsync(PasswordHintRequest request)
         {
-            await SendAsync<PasswordHintRequest, object>(HttpMethod.Post, "/accounts/password-hint",
+            return SendAsync<PasswordHintRequest, object>(HttpMethod.Post, "/accounts/password-hint",
                 request, false, false);
         }
 
-        public async Task PostRegisterAsync(RegisterRequest request)
+        public Task PostRegisterAsync(RegisterRequest request)
         {
-            await SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false);
+            return SendAsync<RegisterRequest, object>(HttpMethod.Post, "/accounts/register", request, false, false);
         }
 
-        public async Task PostAccountKeysAsync(KeysRequest request)
+        public Task PostAccountKeysAsync(KeysRequest request)
         {
-            await SendAsync<KeysRequest, object>(HttpMethod.Post, "/accounts/keys", request, true, false);
+            return SendAsync<KeysRequest, object>(HttpMethod.Post, "/accounts/keys", request, true, false);
+        }
+
+        #endregion
+
+        #region Folder APIs
+
+        public Task<FolderResponse> GetFolderAsync(string id)
+        {
+            return SendAsync<object, FolderResponse>(HttpMethod.Get, string.Concat("/folders/", id),
+                null, true, true);
+        }
+
+        public Task<FolderResponse> PostFolderAsync(FolderRequest request)
+        {
+            return SendAsync<FolderRequest, FolderResponse>(HttpMethod.Post, "/folders", request, true, true);
+        }
+
+        public async Task<FolderResponse> PutFolderAsync(string id, FolderRequest request)
+        {
+            return await SendAsync<FolderRequest, FolderResponse>(HttpMethod.Put, string.Concat("/folders/", id),
+                request, true, true);
+        }
+
+        public Task DeleteFolderAsync(string id)
+        {
+            return SendAsync<object, object>(HttpMethod.Delete, string.Concat("/folders/", id), null, true, false);
+        }
+
+        #endregion
+
+        #region Cipher APIs
+
+        public Task<CipherResponse> GetCipherAsync(string id)
+        {
+            return SendAsync<object, CipherResponse>(HttpMethod.Get, string.Concat("/ciphers/", id),
+                null, true, true);
+        }
+
+        public Task<CipherResponse> PostCipherAsync(CipherRequest request)
+        {
+            return SendAsync<CipherRequest, CipherResponse>(HttpMethod.Post, "/ciphers", request, true, true);
+        }
+
+        public Task<CipherResponse> PostCipherCreateAsync(CipherCreateRequest request)
+        {
+            return SendAsync<CipherCreateRequest, CipherResponse>(HttpMethod.Post, "/ciphers/create",
+                request, true, true);
+        }
+
+        public Task<CipherResponse> PutCipherAsync(string id, CipherRequest request)
+        {
+            return SendAsync<CipherRequest, CipherResponse>(HttpMethod.Put, string.Concat("/ciphers/", id),
+                request, true, true);
+        }
+
+        public Task<CipherResponse> PutShareCipherAsync(string id, CipherShareRequest request)
+        {
+            return SendAsync<CipherShareRequest, CipherResponse>(HttpMethod.Put,
+                string.Concat("/ciphers/", id, "/share"), request, true, true);
+        }
+
+        public Task PutCipherCollectionsAsync(string id, CipherCollectionsRequest request)
+        {
+            return SendAsync<CipherCollectionsRequest, object>(HttpMethod.Put,
+                string.Concat("/ciphers/", id, "/collections"), request, true, false);
+        }
+
+        public Task DeleteCipherAsync(string id)
+        {
+            return SendAsync<object, object>(HttpMethod.Delete, string.Concat("/ciphers/", id), null, true, false);
+        }
+
+        #endregion
+
+        #region Attachments APIs
+
+        public Task DeleteCipherAttachmentAsync(string id, string attachmentId)
+        {
+            return SendAsync<object, object>(HttpMethod.Delete,
+                string.Concat("/ciphers/", id, "/attachments/", attachmentId), null, true, false);
+        }
+
+        #endregion
+
+        #region Sync APIs
+
+        public Task<SyncResponse> GetSyncAsync(string id)
+        {
+            return SendAsync<object, SyncResponse>(HttpMethod.Get, "/sync", null, true, true);
         }
 
         #endregion
