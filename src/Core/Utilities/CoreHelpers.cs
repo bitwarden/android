@@ -5,13 +5,13 @@ namespace Bit.Core.Utilities
 {
     public static class CoreHelpers
     {
-        private static string IpRegex =
+        public static readonly string IpRegex =
             "^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
             "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
             "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\." +
             "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$";
 
-        private static string TldEndingRegex =
+        public static readonly string TldEndingRegex =
             ".*\\.(com|net|org|edu|uk|gov|ca|de|jp|fr|au|ru|ch|io|es|us|co|xyz|info|ly|mil)$";
 
         public static readonly DateTime Epoc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
