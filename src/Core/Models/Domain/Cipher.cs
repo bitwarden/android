@@ -28,7 +28,7 @@ namespace Bit.Core.Models.Domain
             OrganizationUseTotp = obj.OrganizationUseTotp;
             Edit = obj.Edit;
             RevisionDate = obj.RevisionDate;
-            CollectionIds = obj.CollectionIds;
+            CollectionIds = new HashSet<string>(obj.CollectionIds);
             LocalData = localData;
 
             switch(Type)
@@ -72,7 +72,7 @@ namespace Bit.Core.Models.Domain
         public List<Attachment> Attachments { get; set; }
         public List<Field> Fields { get; set; }
         public List<PasswordHistory> PasswordHistory { get; set; }
-        public List<string> CollectionIds { get; set; }
+        public HashSet<string> CollectionIds { get; set; }
 
         public async Task<CipherView> DecryptAsync()
         {
@@ -153,7 +153,7 @@ namespace Bit.Core.Models.Domain
                 Favorite = Favorite,
                 RevisionDate = RevisionDate,
                 Type = Type,
-                CollectionIds = CollectionIds
+                CollectionIds = CollectionIds.ToList()
             };
             BuildDataModel(this, c, new HashSet<string>
             {

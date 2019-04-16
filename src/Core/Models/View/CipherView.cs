@@ -41,7 +41,7 @@ namespace Bit.Core.Models.View
         public List<AttachmentView> Attachments { get; set; }
         public List<FieldView> Fields { get; set; }
         public List<PasswordHistoryView> PasswordHistory { get; set; }
-        public List<string> CollectionIds { get; set; }
+        public HashSet<string> CollectionIds { get; set; }
         public DateTime RevisionDate { get; set; }
 
 
@@ -56,10 +56,9 @@ namespace Bit.Core.Models.View
                     case CipherType.SecureNote:
                         return SecureNote.SubTitle;
                     case CipherType.Card:
-                    // TODO
-                    // return Card.SubTitle;
+                        return Card.SubTitle;
                     case CipherType.Identity:
-                    // return Identity.SubTitle;
+                        return Identity.SubTitle;
                     default:
                         break;
                 }

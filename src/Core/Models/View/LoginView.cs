@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Models.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Bit.Core.Models.View
 {
@@ -21,7 +22,8 @@ namespace Bit.Core.Models.View
         public string Uri => HashUris ? Uris[0].Uri : null;
         public string MaskedPassword => Password != null ? "••••••••" : null;
         public string SubTitle => Username;
-        // TODO: uri launch props
+        public bool CanLaunch => HashUris && Uris.Any(u => u.CanLaunch);
+        public string LaunchUri => HashUris ? Uris.FirstOrDefault(u => u.CanLaunch)?.LaunchUri : null;
         public bool HashUris => (Uris?.Count ?? 0) > 0;
     }
 }
