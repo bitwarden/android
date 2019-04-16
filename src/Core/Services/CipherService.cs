@@ -1,12 +1,17 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
+using Bit.Core.Models.Request;
+using Bit.Core.Models.Response;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -26,11 +31,12 @@ namespace Bit.Core.Services
         private readonly ISettingsService _settingsService;
         private readonly IApiService _apiService;
         private readonly IStorageService _storageService;
-        private readonly II18nService _i18NService;
+        private readonly II18nService _i18nService;
         private Dictionary<string, HashSet<string>> _domainMatchBlacklist = new Dictionary<string, HashSet<string>>
         {
             ["google.com"] = new HashSet<string> { "script.google.com" }
         };
+        private readonly HttpClient _httpClient = new HttpClient();
 
         public CipherService(
             ICryptoService cryptoService,
@@ -45,7 +51,7 @@ namespace Bit.Core.Services
             _settingsService = settingsService;
             _apiService = apiService;
             _storageService = storageService;
-            _i18NService = i18nService;
+            _i18nService = i18nService;
         }
 
         private List<CipherView> DecryptedCipherCache
@@ -67,7 +73,7 @@ namespace Bit.Core.Services
             DecryptedCipherCache = null;
         }
 
-        public async Task<Cipher> Encrypt(CipherView model, SymmetricCryptoKey key = null,
+        public async Task<Cipher> EncryptAsync(CipherView model, SymmetricCryptoKey key = null,
             Cipher originalCipher = null)
         {
             // Adjust password history
@@ -370,7 +376,224 @@ namespace Bit.Core.Services
                 matchingLogins, matchingFuzzyLogins, others);
         }
 
+        public async Task<CipherView> GetLastUsedForUrlAsync(string url)
+        {
+            var ciphers = await GetAllDecryptedForUrlAsync(url);
+            return ciphers.OrderBy(c => c, new CipherLastUsedComparer()).FirstOrDefault();
+        }
+
+        public async Task UpdateLastUsedDateAsync(string id)
+        {
+            var ciphersLocalData = await _storageService.GetAsync<Dictionary<string, Dictionary<string, object>>>(
+                Keys_LocalData);
+            if(ciphersLocalData == null)
+            {
+                ciphersLocalData = new Dictionary<string, Dictionary<string, object>>();
+            }
+            if(!ciphersLocalData.ContainsKey(id))
+            {
+                ciphersLocalData.Add(id, new Dictionary<string, object>());
+            }
+            if(ciphersLocalData[id].ContainsKey("lastUsedDate"))
+            {
+                ciphersLocalData[id]["lastUsedDate"] = DateTime.UtcNow;
+            }
+            else
+            {
+                ciphersLocalData[id].Add("lastUsedDate", DateTime.UtcNow);
+            }
+
+            await _storageService.SaveAsync(Keys_LocalData, ciphersLocalData);
+            // Update cache
+            if(DecryptedCipherCache == null)
+            {
+                return;
+            }
+            var cached = DecryptedCipherCache.FirstOrDefault(c => c.Id == id);
+            if(cached != null)
+            {
+                cached.LocalData = ciphersLocalData[id];
+            }
+        }
+
+        public async Task SaveNeverDomainAsync(string domain)
+        {
+            if(string.IsNullOrWhiteSpace(domain))
+            {
+                return;
+            }
+            var domains = await _storageService.GetAsync<HashSet<string>>(Keys_NeverDomains);
+            if(domains == null)
+            {
+                domains = new HashSet<string>();
+            }
+            domains.Add(domain);
+            await _storageService.SaveAsync(Keys_NeverDomains, domains);
+        }
+
+        public async Task SaveWithServerAsync(Cipher cipher)
+        {
+            CipherResponse response;
+            if(cipher.Id == null)
+            {
+                if(cipher.CollectionIds != null)
+                {
+                    var request = new CipherCreateRequest(cipher);
+                    response = await _apiService.PostCipherCreateAsync(request);
+                }
+                else
+                {
+                    var request = new CipherRequest(cipher);
+                    response = await _apiService.PostCipherAsync(request);
+                }
+                cipher.Id = response.Id;
+            }
+            else
+            {
+                var request = new CipherRequest(cipher);
+                response = await _apiService.PutCipherAsync(cipher.Id, request);
+            }
+            var userId = await _userService.GetUserIdAsync();
+            var data = new CipherData(response, userId, cipher.CollectionIds);
+            await UpsertAsync(data);
+        }
+
+        public async Task ShareWithServerAsync(CipherView cipher, string organizationId, HashSet<string> collectionIds)
+        {
+            var attachmentTasks = new List<Task>();
+            if(cipher.Attachments != null)
+            {
+                foreach(var attachment in cipher.Attachments)
+                {
+                    if(attachment.Key == null)
+                    {
+                        attachmentTasks.Add(ShareAttachmentWithServerAsync(attachment, cipher.Id, organizationId));
+                    }
+                }
+            }
+            await Task.WhenAll(attachmentTasks);
+            cipher.OrganizationId = organizationId;
+            cipher.CollectionIds = collectionIds;
+            var encCipher = await EncryptAsync(cipher);
+            var request = new CipherShareRequest(encCipher);
+            var response = await _apiService.PutShareCipherAsync(cipher.Id, request);
+            var userId = await _userService.GetUserIdAsync();
+            var data = new CipherData(response, userId, collectionIds);
+            await UpsertAsync(data);
+        }
+
+        public async Task<Cipher> SaveAttachmentRawWithServerAsync(Cipher cipher, string filename, byte[] data)
+        {
+            var key = await _cryptoService.GetOrgKeyAsync(cipher.OrganizationId);
+            var encFileName = await _cryptoService.EncryptAsync(filename, key);
+            var dataEncKey = await _cryptoService.MakeEncKeyAsync(key);
+            var encData = await _cryptoService.EncryptToBytesAsync(data, dataEncKey.Item1);
+
+            CipherResponse response;
+            try
+            {
+                using(var fd = new MultipartFormDataContent(string.Concat("Upload----", DateTime.UtcNow)))
+                {
+                    fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
+                    fd.Add(new StringContent(string.Empty), "key", dataEncKey.Item2.EncryptedString);
+                    response = await _apiService.PostCipherAttachmentAsync(cipher.Id, fd);
+                }
+            }
+            catch(ApiException e)
+            {
+                throw new Exception(e.Error.GetSingleMessage());
+            }
+
+            var userId = await _userService.GetUserIdAsync();
+            var cData = new CipherData(response, userId, cipher.CollectionIds);
+            await UpsertAsync(cData);
+            return new Cipher(cData);
+        }
+
+        public async Task UpsertAsync(CipherData cipher)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            var storageKey = string.Format(Keys_CiphersFormat, userId);
+            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(storageKey);
+            if(ciphers == null)
+            {
+                ciphers = new Dictionary<string, CipherData>();
+            }
+            if(!ciphers.ContainsKey(cipher.Id))
+            {
+                ciphers.Add(cipher.Id, null);
+            }
+            ciphers[cipher.Id] = cipher;
+            await _storageService.SaveAsync(storageKey, ciphers);
+            DecryptedCipherCache = null;
+        }
+
+        public async Task UpsertAsync(List<CipherData> cipher)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            var storageKey = string.Format(Keys_CiphersFormat, userId);
+            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(storageKey);
+            if(ciphers == null)
+            {
+                ciphers = new Dictionary<string, CipherData>();
+            }
+            foreach(var c in cipher)
+            {
+                if(!ciphers.ContainsKey(c.Id))
+                {
+                    ciphers.Add(c.Id, null);
+                }
+                ciphers[c.Id] = c;
+            }
+            await _storageService.SaveAsync(storageKey, ciphers);
+            DecryptedCipherCache = null;
+        }
+
+        public async Task RelaceAsync(Dictionary<string, CipherData> ciphers)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            await _storageService.SaveAsync(string.Format(Keys_CiphersFormat, userId), ciphers);
+            DecryptedCipherCache = null;
+        }
+
+        public async Task ClearAsync(string userId)
+        {
+            await _storageService.RemoveAsync(string.Format(Keys_CiphersFormat, userId));
+            ClearCache();
+        }
+
         // Helpers
+
+        private async Task ShareAttachmentWithServerAsync(AttachmentView attachmentView, string cipherId,
+            string organizationId)
+        {
+            var attachmentResponse = await _httpClient.GetAsync(attachmentView.Url);
+            if(!attachmentResponse.IsSuccessStatusCode)
+            {
+                throw new Exception("Failed to download attachment: " + attachmentResponse.StatusCode);
+            }
+
+            var bytes = await attachmentResponse.Content.ReadAsByteArrayAsync();
+            var decBytes = await _cryptoService.DecryptFromBytesAsync(bytes, null);
+            var key = await _cryptoService.GetOrgKeyAsync(organizationId);
+            var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, key);
+            var dataEncKey = await _cryptoService.MakeEncKeyAsync(key);
+            var encData = await _cryptoService.EncryptToBytesAsync(decBytes, dataEncKey.Item1);
+
+            try
+            {
+                using(var fd = new MultipartFormDataContent(string.Concat("Upload----", DateTime.UtcNow)))
+                {
+                    fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
+                    fd.Add(new StringContent(string.Empty), "key", dataEncKey.Item2.EncryptedString);
+                    await _apiService.PostShareCipherAttachmentAsync(cipherId, attachmentView.Id, fd, organizationId);
+                }
+            }
+            catch(ApiException e)
+            {
+                throw new Exception(e.Error.GetSingleMessage());
+            }
+        }
 
         private bool CheckDefaultUriMatch(CipherView cipher, LoginUriView loginUri,
             List<CipherView> matchingLogins, List<CipherView> matchingFuzzyLogins,
@@ -627,7 +850,7 @@ namespace Bit.Core.Services
         {
             switch(cipher.Type)
             {
-                case Enums.CipherType.Login:
+                case CipherType.Login:
                     cipher.Login = new Login
                     {
                         PasswordRevisionDate = model.Login.PasswordRevisionDate
@@ -652,13 +875,13 @@ namespace Bit.Core.Services
                         }
                     }
                     break;
-                case Enums.CipherType.SecureNote:
+                case CipherType.SecureNote:
                     cipher.SecureNote = new SecureNote
                     {
                         Type = model.SecureNote.Type
                     };
                     break;
-                case Enums.CipherType.Card:
+                case CipherType.Card:
                     cipher.Card = new Card();
                     await EncryptObjPropertyAsync(model.Card, cipher.Card, new HashSet<string>
                     {
@@ -670,7 +893,7 @@ namespace Bit.Core.Services
                         "Code"
                     }, key);
                     break;
-                case Enums.CipherType.Identity:
+                case CipherType.Identity:
                     cipher.Identity = new Identity();
                     await EncryptObjPropertyAsync(model.Identity, cipher.Identity, new HashSet<string>
                     {
@@ -758,6 +981,100 @@ namespace Bit.Core.Services
             }
             await Task.WhenAll(tasks);
             return encPhs;
+        }
+
+        private class CipherLocaleComparer : IComparer<CipherView>
+        {
+            private readonly II18nService _i18nService;
+
+            public CipherLocaleComparer(II18nService i18nService)
+            {
+                _i18nService = i18nService;
+            }
+
+            public int Compare(CipherView a, CipherView b)
+            {
+                var aName = a.Name;
+                var bName = b.Name;
+                if(aName == null && bName != null)
+                {
+                    return -1;
+                }
+                if(aName != null && bName == null)
+                {
+                    return 1;
+                }
+                if(aName == null && bName == null)
+                {
+                    return 0;
+                }
+                var result = _i18nService.StringComparer.Compare(aName, bName);
+                if(result != 0 || a.Type != CipherType.Login || b.Type != CipherType.Login)
+                {
+                    return result;
+                }
+                if(a.Login.Username != null)
+                {
+                    aName += a.Login.Username;
+                }
+                if(b.Login.Username != null)
+                {
+                    bName += b.Login.Username;
+                }
+                return _i18nService.StringComparer.Compare(aName, bName);
+            }
+        }
+
+        private class CipherLastUsedComparer : IComparer<CipherView>
+        {
+            public int Compare(CipherView a, CipherView b)
+            {
+                var aLastUsed = a.LocalData != null && a.LocalData.ContainsKey("lastUsedDate") ?
+                    a.LocalData["lastUsedDate"] as DateTime? : null;
+                var bLastUsed = b.LocalData != null && b.LocalData.ContainsKey("lastUsedDate") ?
+                    b.LocalData["lastUsedDate"] as DateTime? : null;
+
+                var bothNotNull = aLastUsed != null && bLastUsed != null;
+                if(bothNotNull && aLastUsed.Value < bLastUsed.Value)
+                {
+                    return 1;
+                }
+                if(aLastUsed != null && bLastUsed == null)
+                {
+                    return -1;
+                }
+                if(bothNotNull && aLastUsed.Value > bLastUsed.Value)
+                {
+                    return -1;
+                }
+                if(bLastUsed != null && aLastUsed == null)
+                {
+                    return 1;
+                }
+                return 0;
+            }
+        }
+
+        private class CipherLastUsedThenNameComparer : IComparer<CipherView>
+        {
+            private CipherLastUsedComparer _cipherLastUsedComparer;
+            private CipherLocaleComparer _cipherLocaleComparer;
+
+            public CipherLastUsedThenNameComparer(II18nService i18nService)
+            {
+                _cipherLastUsedComparer = new CipherLastUsedComparer();
+                _cipherLocaleComparer = new CipherLocaleComparer(i18nService);
+            }
+
+            public int Compare(CipherView a, CipherView b)
+            {
+                var result = _cipherLastUsedComparer.Compare(a, b);
+                if(result != 0)
+                {
+                    return result;
+                }
+                return _cipherLocaleComparer.Compare(a, b);
+            }
         }
     }
 }
