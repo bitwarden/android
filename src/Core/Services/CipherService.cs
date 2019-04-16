@@ -3,9 +3,11 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bit.Core.Services
@@ -16,6 +18,8 @@ namespace Bit.Core.Services
         private const string Keys_LocalData = "ciphersLocalData";
         private const string Keys_NeverDomains = "neverDomains";
 
+        private readonly string[] _ignoredSearchTerms = new string[] { "com", "net", "org", "android",
+            "io", "co", "uk", "au", "nz", "fr", "de", "tv", "info", "app", "apps", "eu", "me", "dev", "jp", "mobile" };
         private List<CipherView> _decryptedCipherCache;
         private readonly ICryptoService _cryptoService;
         private readonly IUserService _userService;
@@ -195,6 +199,362 @@ namespace Bit.Core.Services
             var response = ciphers.Select(c => new Cipher(c.Value, false,
                 localData?.ContainsKey(c.Key) ?? false ? localData[c.Key] : null));
             return response.ToList();
+        }
+
+        // TODO: sequentialize?
+        public async Task<List<CipherView>> GetAllDecryptedAsync()
+        {
+            if(DecryptedCipherCache != null)
+            {
+                return DecryptedCipherCache;
+            }
+            var hashKey = await _cryptoService.HasKeyAsync();
+            if(!hashKey)
+            {
+                throw new Exception("No key.");
+            }
+            var decCiphers = new List<CipherView>();
+            var tasks = new List<Task>();
+            var ciphers = await GetAllAsync();
+            foreach(var cipher in ciphers)
+            {
+                tasks.Add(cipher.DecryptAsync().ContinueWith(async c => decCiphers.Add(await c)));
+            }
+            await Task.WhenAll(tasks);
+            // TODO: sort
+            DecryptedCipherCache = decCiphers;
+            return DecryptedCipherCache;
+        }
+
+        public async Task<List<CipherView>> GetAllDecryptedForGroupingAsync(string groupingId, bool folder = true)
+        {
+            var ciphers = await GetAllDecryptedAsync();
+            return ciphers.Where(cipher =>
+            {
+                if(folder && cipher.FolderId == groupingId)
+                {
+                    return true;
+                }
+                if(!folder && cipher.CollectionIds != null && cipher.CollectionIds.Contains(groupingId))
+                {
+                    return true;
+                }
+                return false;
+            }).ToList();
+        }
+
+        public async Task<List<CipherView>> GetAllDecryptedForUrlAsync(string url)
+        {
+            var all = await GetAllDecryptedByUrlAsync(url);
+            return all.Item1;
+        }
+
+        public async Task<Tuple<List<CipherView>, List<CipherView>, List<CipherView>>> GetAllDecryptedByUrlAsync(
+            string url, List<CipherType> includeOtherTypes = null)
+        {
+            if(string.IsNullOrWhiteSpace(url) && includeOtherTypes == null)
+            {
+                return new Tuple<List<CipherView>, List<CipherView>, List<CipherView>>(
+                    new List<CipherView>(), new List<CipherView>(), new List<CipherView>());
+            }
+
+            var domain = CoreHelpers.GetDomain(url);
+            var mobileApp = UrlIsMobileApp(url);
+
+            var mobileAppInfo = InfoFromMobileAppUrl(url);
+            var mobileAppWebUriString = mobileAppInfo?.Item1;
+            var mobileAppSearchTerms = mobileAppInfo?.Item2;
+
+            var matchingDomainsTask = GetMatchingDomainsAsync(url, domain, mobileApp, mobileAppWebUriString);
+            var ciphersTask = GetAllDecryptedAsync();
+            await Task.WhenAll(new List<Task>
+            {
+                matchingDomainsTask,
+                ciphersTask
+            });
+
+            var matchingDomains = await matchingDomainsTask;
+            var matchingDomainsSet = matchingDomains.Item1;
+            var matchingFuzzyDomainsSet = matchingDomains.Item2;
+
+            var matchingLogins = new List<CipherView>();
+            var matchingFuzzyLogins = new List<CipherView>();
+            var others = new List<CipherView>();
+            var ciphers = await ciphersTask;
+
+            var defaultMatch = await _storageService.GetAsync<UriMatchType?>(Constants.DefaultUriMatch);
+            if(defaultMatch == null)
+            {
+                defaultMatch = UriMatchType.Domain;
+            }
+
+            foreach(var cipher in ciphers)
+            {
+                if(cipher.Type != CipherType.Login && (includeOtherTypes?.Any(t => t == cipher.Type) ?? false))
+                {
+                    others.Add(cipher);
+                    continue;
+                }
+
+                if(cipher.Type != CipherType.Login || cipher.Login?.Uris == null || !cipher.Login.Uris.Any())
+                {
+                    continue;
+                }
+
+                foreach(var u in cipher.Login.Uris)
+                {
+                    if(string.IsNullOrWhiteSpace(u.Uri))
+                    {
+                        continue;
+                    }
+                    var match = false;
+                    switch(u.Match)
+                    {
+                        case null:
+                        case UriMatchType.Domain:
+                            match = CheckDefaultUriMatch(cipher, u, matchingLogins, matchingFuzzyLogins,
+                                matchingDomainsSet, matchingFuzzyDomainsSet, mobileApp, mobileAppSearchTerms);
+                            if(match && u.Domain != null)
+                            {
+                                if(_domainMatchBlacklist.ContainsKey(u.Domain))
+                                {
+                                    var domainUrlHost = CoreHelpers.GetHost(url);
+                                    if(_domainMatchBlacklist[u.Domain].Contains(domainUrlHost))
+                                    {
+                                        match = false;
+                                    }
+                                }
+                            }
+                            break;
+                        case UriMatchType.Host:
+                            var urlHost = CoreHelpers.GetHost(url);
+                            match = urlHost != null && urlHost == CoreHelpers.GetHost(u.Uri);
+                            if(match)
+                            {
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                            }
+                            break;
+                        case UriMatchType.Exact:
+                            match = url == u.Uri;
+                            if(match)
+                            {
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                            }
+                            break;
+                        case UriMatchType.StartsWith:
+                            match = url.StartsWith(u.Uri);
+                            if(match)
+                            {
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                            }
+                            break;
+                        case UriMatchType.RegularExpression:
+                            var regex = new Regex(u.Uri, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
+                            match = regex.IsMatch(url);
+                            if(match)
+                            {
+                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                            }
+                            break;
+                        case UriMatchType.Never:
+                        default:
+                            break;
+                    }
+                    if(match)
+                    {
+                        break;
+                    }
+                }
+            }
+            return new Tuple<List<CipherView>, List<CipherView>, List<CipherView>>(
+                matchingLogins, matchingFuzzyLogins, others);
+        }
+
+        // Helpers
+
+        private bool CheckDefaultUriMatch(CipherView cipher, LoginUriView loginUri,
+            List<CipherView> matchingLogins, List<CipherView> matchingFuzzyLogins,
+            HashSet<string> matchingDomainsSet, HashSet<string> matchingFuzzyDomainsSet,
+            bool mobileApp, string[] mobileAppSearchTerms)
+        {
+            var loginUriString = loginUri.Uri;
+            var loginUriDomain = loginUri.Domain;
+
+            if(matchingDomainsSet.Contains(loginUriString))
+            {
+                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                return true;
+            }
+            else if(mobileApp && matchingFuzzyDomainsSet.Contains(loginUriString))
+            {
+                AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                return false;
+            }
+            else if(!mobileApp)
+            {
+                var info = InfoFromMobileAppUrl(loginUriString);
+                if(info?.Item1 != null && matchingDomainsSet.Contains(info.Item1))
+                {
+                    AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                    return false;
+                }
+            }
+
+            if(!loginUri.Uri.Contains("://") && loginUriString.Contains("."))
+            {
+                loginUriString = "http://" + loginUriString;
+            }
+
+            if(loginUriDomain != null)
+            {
+                loginUriDomain = loginUriDomain.ToLowerInvariant();
+                if(matchingDomainsSet.Contains(loginUriDomain))
+                {
+                    AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                    return true;
+                }
+                else if(mobileApp && matchingFuzzyDomainsSet.Contains(loginUriDomain))
+                {
+                    AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                    return false;
+                }
+            }
+
+            if(mobileApp && (mobileAppSearchTerms?.Any() ?? false))
+            {
+                var addedFromSearchTerm = false;
+                var loginName = cipher.Name?.ToLowerInvariant();
+                foreach(var term in mobileAppSearchTerms)
+                {
+                    addedFromSearchTerm = (loginUriDomain != null && loginUriDomain.Contains(term)) ||
+                        (loginName != null && loginName.Contains(term));
+                    if(!addedFromSearchTerm)
+                    {
+                        var domainTerm = loginUriDomain?.Split('.')[0];
+                        addedFromSearchTerm =
+                            (domainTerm != null && domainTerm.Length > 2 && term.Contains(domainTerm)) ||
+                            (loginName != null && term.Contains(loginName));
+                    }
+                    if(addedFromSearchTerm)
+                    {
+                        AddMatchingFuzzyLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                        return false;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private void AddMatchingLogin(CipherView cipher, List<CipherView> matchingLogins,
+            List<CipherView> matchingFuzzyLogins)
+        {
+            if(matchingFuzzyLogins.Contains(cipher))
+            {
+                matchingFuzzyLogins.Remove(cipher);
+            }
+            matchingLogins.Add(cipher);
+        }
+
+        private void AddMatchingFuzzyLogin(CipherView cipher, List<CipherView> matchingLogins,
+            List<CipherView> matchingFuzzyLogins)
+        {
+            if(!matchingFuzzyLogins.Contains(cipher) && !matchingLogins.Contains(cipher))
+            {
+                matchingFuzzyLogins.Add(cipher);
+            }
+        }
+
+        private async Task<Tuple<HashSet<string>, HashSet<string>>> GetMatchingDomainsAsync(string url,
+            string domain, bool mobileApp, string mobileAppWebUriString)
+        {
+            var matchingDomains = new HashSet<string>();
+            var matchingFuzzyDomains = new HashSet<string>();
+            var eqDomains = await _settingsService.GetEquivalentDomainsAsync();
+            foreach(var eqDomain in eqDomains)
+            {
+                var eqDomainSet = new HashSet<string>(eqDomain);
+                if(mobileApp)
+                {
+                    if(eqDomainSet.Contains(url))
+                    {
+                        eqDomain.Select(d => matchingDomains.Add(d));
+                    }
+                    else if(mobileAppWebUriString != null && eqDomainSet.Contains(mobileAppWebUriString))
+                    {
+                        eqDomain.Select(d => matchingFuzzyDomains.Add(d));
+                    }
+                }
+                else if(eqDomainSet.Contains(url))
+                {
+                    eqDomain.Select(d => matchingDomains.Add(d));
+                }
+            }
+            if(!matchingDomains.Any())
+            {
+                matchingDomains.Add(mobileApp ? url : domain);
+            }
+            if(mobileApp && mobileAppWebUriString != null &&
+                !matchingFuzzyDomains.Any() && !matchingDomains.Contains(mobileAppWebUriString))
+            {
+                matchingFuzzyDomains.Add(mobileAppWebUriString);
+            }
+            return new Tuple<HashSet<string>, HashSet<string>>(matchingDomains, matchingFuzzyDomains);
+        }
+
+        private Tuple<string, string[]> InfoFromMobileAppUrl(string mobileAppUrlString)
+        {
+            if(UrlIsAndroidApp(mobileAppUrlString))
+            {
+                return InfoFromAndroidAppUri(mobileAppUrlString);
+            }
+            else if(UrlIsiOSApp(mobileAppUrlString))
+            {
+                return InfoFromiOSAppUrl(mobileAppUrlString);
+            }
+            return null;
+        }
+
+        private Tuple<string, string[]> InfoFromAndroidAppUri(string androidAppUrlString)
+        {
+            if(!UrlIsAndroidApp(androidAppUrlString))
+            {
+                return null;
+            }
+            var androidUrlParts = androidAppUrlString.Replace(Constants.AndroidAppProtocol, string.Empty).Split('.');
+            if(androidUrlParts.Length >= 2)
+            {
+                var webUri = string.Join(".", androidUrlParts[1], androidUrlParts[0]);
+                var searchTerms = androidUrlParts.Where(p => !_ignoredSearchTerms.Contains(p))
+                    .Select(p => p.ToLowerInvariant()).ToArray();
+                return new Tuple<string, string[]>(webUri, searchTerms);
+            }
+            return null;
+        }
+
+        private Tuple<string, string[]> InfoFromiOSAppUrl(string iosAppUrlString)
+        {
+            if(!UrlIsiOSApp(iosAppUrlString))
+            {
+                return null;
+            }
+            var webUri = iosAppUrlString.Replace(Constants.iOSAppProtocol, string.Empty);
+            return new Tuple<string, string[]>(webUri, null);
+        }
+
+        private bool UrlIsMobileApp(string url)
+        {
+            return UrlIsAndroidApp(url) || UrlIsiOSApp(url);
+        }
+
+        private bool UrlIsAndroidApp(string url)
+        {
+            return url.StartsWith(Constants.AndroidAppProtocol);
+        }
+
+        private bool UrlIsiOSApp(string url)
+        {
+            return url.StartsWith(Constants.iOSAppProtocol);
         }
 
         private Task EncryptObjPropertyAsync<V, D>(V model, D obj, HashSet<string> map, SymmetricCryptoKey key)
