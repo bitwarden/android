@@ -39,5 +39,8 @@ namespace Bit.Core.Abstractions
         Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path,
             TRequest body, bool authed, bool hasResponse);
         void SetUrls(EnvironmentUrls urls);
+        Task<CipherResponse> PostCipherAttachmentAsync(string id, MultipartFormDataContent data);
+        Task PostShareCipherAttachmentAsync(string id, string attachmentId, MultipartFormDataContent data,
+            string organizationId);
     }
 }

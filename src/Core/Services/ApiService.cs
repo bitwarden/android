@@ -230,10 +230,24 @@ namespace Bit.Core.Services
 
         #region Attachments APIs
 
+        public Task<CipherResponse> PostCipherAttachmentAsync(string id, MultipartFormDataContent data)
+        {
+            return SendAsync<MultipartFormDataContent, CipherResponse>(HttpMethod.Post,
+                string.Concat("/ciphers/", id, "/attachment"), data, true, true);
+        }
+
         public Task DeleteCipherAttachmentAsync(string id, string attachmentId)
         {
             return SendAsync<object, object>(HttpMethod.Delete,
                 string.Concat("/ciphers/", id, "/attachments/", attachmentId), null, true, false);
+        }
+
+        public Task PostShareCipherAttachmentAsync(string id, string attachmentId, MultipartFormDataContent data,
+            string organizationId)
+        {
+            return SendAsync<MultipartFormDataContent, object>(HttpMethod.Post,
+                string.Concat("/ciphers/", id, "/attachment/", attachmentId, "/share?organizationId=", organizationId),
+                data, true, false);
         }
 
         #endregion
@@ -263,54 +277,53 @@ namespace Bit.Core.Services
         public async Task<TResponse> SendAsync<TRequest, TResponse>(HttpMethod method, string path, TRequest body,
             bool authed, bool hasResponse)
         {
-            var requestMessage = new HttpRequestMessage
+            using(var requestMessage = new HttpRequestMessage())
             {
-                Method = method,
-                RequestUri = new Uri(string.Concat(ApiBaseUrl, path)),
-            };
-
-            if(body != null)
-            {
-                var bodyType = body.GetType();
-                if(bodyType == typeof(string))
+                requestMessage.Method = method;
+                requestMessage.RequestUri = new Uri(string.Concat(ApiBaseUrl, path));
+                if(body != null)
                 {
-                    requestMessage.Content = new StringContent((object)bodyType as string, Encoding.UTF8,
-                        "application/x-www-form-urlencoded; charset=utf-8");
+                    var bodyType = body.GetType();
+                    if(bodyType == typeof(string))
+                    {
+                        requestMessage.Content = new StringContent((object)bodyType as string, Encoding.UTF8,
+                            "application/x-www-form-urlencoded; charset=utf-8");
+                    }
+                    else if(bodyType == typeof(MultipartFormDataContent))
+                    {
+                        requestMessage.Content = body as MultipartFormDataContent;
+                    }
+                    else
+                    {
+                        requestMessage.Content = new StringContent(JsonConvert.SerializeObject(body, _jsonSettings),
+                            Encoding.UTF8, "application/json");
+                    }
                 }
-                else if(false)
-                {
-                    // TODO: form data content
-                }
-                else
-                {
-                    requestMessage.Content = new StringContent(JsonConvert.SerializeObject(body, _jsonSettings),
-                        Encoding.UTF8, "application/json");
-                }
-            }
 
-            requestMessage.Headers.Add("Device-Type", _deviceType);
-            if(authed)
-            {
-                var authHeader = await GetActiveBearerTokenAsync();
-                requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
-            }
-            if(hasResponse)
-            {
-                requestMessage.Headers.Add("Accept", "application/json");
-            }
+                requestMessage.Headers.Add("Device-Type", _deviceType);
+                if(authed)
+                {
+                    var authHeader = await GetActiveBearerTokenAsync();
+                    requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+                }
+                if(hasResponse)
+                {
+                    requestMessage.Headers.Add("Accept", "application/json");
+                }
 
-            var response = await _httpClient.SendAsync(requestMessage);
-            if(hasResponse && response.IsSuccessStatusCode)
-            {
-                var responseJsonString = await response.Content.ReadAsStringAsync();
-                return JsonConvert.DeserializeObject<TResponse>(responseJsonString);
+                var response = await _httpClient.SendAsync(requestMessage);
+                if(hasResponse && response.IsSuccessStatusCode)
+                {
+                    var responseJsonString = await response.Content.ReadAsStringAsync();
+                    return JsonConvert.DeserializeObject<TResponse>(responseJsonString);
+                }
+                else if(response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false);
+                    throw new ApiException(error);
+                }
+                return (TResponse)(object)null;
             }
-            else if(response.IsSuccessStatusCode)
-            {
-                var error = await HandleErrorAsync(response, false);
-                throw new ApiException(error);
-            }
-            return (TResponse)(object)null;
         }
 
         public async Task<IdentityTokenResponse> DoRefreshTokenAsync()
