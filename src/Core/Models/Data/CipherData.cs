@@ -1,5 +1,4 @@
-﻿using Bit.Core.Models.Api;
-using Bit.Core.Models.Response;
+﻿using Bit.Core.Models.Response;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +9,7 @@ namespace Bit.Core.Models.Data
     {
         public CipherData() { }
 
-        public CipherData(CipherResponse response, string userId = null, List<string> collectionIds = null)
+        public CipherData(CipherResponse response, string userId = null, HashSet<string> collectionIds = null)
         {
             Id = response.Id;
             OrganizationId = response.OrganizationId;
@@ -23,7 +22,7 @@ namespace Bit.Core.Models.Data
             Type = response.Type;
             Name = response.Name;
             Notes = response.Notes;
-            CollectionIds = collectionIds != null ? collectionIds : response.CollectionIds;
+            CollectionIds = collectionIds?.ToList() ?? response.CollectionIds;
 
             switch(Type)
             {
