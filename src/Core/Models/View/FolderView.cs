@@ -3,7 +3,7 @@ using System;
 
 namespace Bit.Core.Models.View
 {
-    public class FolderView : View
+    public class FolderView : View, ITreeNodeObject
     {
         public FolderView() { }
 

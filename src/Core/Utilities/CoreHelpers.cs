@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Bit.Core.Models.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Bit.Core.Utilities
@@ -84,6 +87,66 @@ namespace Bit.Core.Utilities
             if(Uri.TryCreate(uriString, UriKind.Absolute, out var uri))
             {
                 return uri;
+            }
+            return null;
+        }
+
+        public static void NestedTraverse<T>(List<TreeNode<T>> nodeTree, int partIndex, string[] parts,
+            T obj, T parent, char delimiter) where T : ITreeNodeObject
+        {
+            if(parts.Length <= partIndex)
+            {
+                return;
+            }
+
+            var end = partIndex == parts.Length - 1;
+            var partName = parts[partIndex];
+            foreach(var n in nodeTree)
+            {
+                if(n.Node.Name != parts[partIndex])
+                {
+                    continue;
+                }
+                if(end && n.Node.Id != obj.Id)
+                {
+                    // Another node with the same name.
+                    nodeTree.Add(new TreeNode<T>(obj, partName, parent));
+                    return;
+                }
+                NestedTraverse(n.Children, partIndex + 1, parts, obj, n.Node, delimiter);
+                return;
+            }
+            if(!nodeTree.Any(n => n.Node.Name == partName))
+            {
+                if(end)
+                {
+                    nodeTree.Add(new TreeNode<T>(obj, partName, parent));
+                    return;
+                }
+                var newPartName = string.Concat(parts[partIndex], delimiter, parts[partIndex + 1]);
+                var newParts = new List<string> { newPartName };
+                var newPartsStartFrom = partIndex + 2;
+                newParts.AddRange(new ArraySegment<string>(parts, newPartsStartFrom, parts.Length - newPartsStartFrom));
+                NestedTraverse(nodeTree, 0, newParts.ToArray(), obj, parent, delimiter);
+            }
+        }
+
+        public static TreeNode<T> GetTreeNodeObject<T>(List<TreeNode<T>> nodeTree, string id) where T : ITreeNodeObject
+        {
+            foreach(var n in nodeTree)
+            {
+                if(n.Node.Id == id)
+                {
+                    return n;
+                }
+                else if(n.Children != null)
+                {
+                    var node = GetTreeNodeObject(n.Children, id);
+                    if(node != null)
+                    {
+                        return node;
+                    }
+                }
             }
             return null;
         }

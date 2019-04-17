@@ -1,6 +1,4 @@
 ﻿using Bit.Core.Abstractions;
-using Bit.Core.Enums;
-using Bit.Core.Exceptions;
 using Bit.Core.Models.Data;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.Request;
@@ -9,10 +7,7 @@ using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bit.Core.Services
@@ -21,7 +16,7 @@ namespace Bit.Core.Services
     {
         private const string Keys_CiphersFormat = "ciphers_{0}";
         private const string Keys_FoldersFormat = "folders_{0}";
-        private const string NestingDelimiter = "/";
+        private const char NestingDelimiter = '/';
 
         private List<FolderView> _decryptedFolderCache;
         private readonly ICryptoService _cryptoService;
@@ -115,7 +110,28 @@ namespace Bit.Core.Services
             return _decryptedFolderCache;
         }
 
-        // TODO: nested stuff
+        public async Task<List<TreeNode<FolderView>>> GetAllNestedAsync()
+        {
+            var folders = await GetAllDecryptedAsync();
+            var nodes = new List<TreeNode<FolderView>>();
+            foreach(var f in folders)
+            {
+                var folderCopy = new FolderView
+                {
+                    Id = f.Id,
+                    RevisionDate = f.RevisionDate
+                };
+                CoreHelpers.NestedTraverse(nodes, 0, f.Name.Split(NestingDelimiter), folderCopy, null,
+                    NestingDelimiter);
+            }
+            return nodes;
+        }
+
+        public async Task<TreeNode<FolderView>> GetNestedAsync(string id)
+        {
+            var folders = await GetAllNestedAsync();
+            return CoreHelpers.GetTreeNodeObject(folders, id);
+        }
 
         public async Task SaveWithServerAsync(Folder folder)
         {

@@ -2,7 +2,7 @@
 
 namespace Bit.Core.Models.View
 {
-    public class CollectionView : View
+    public class CollectionView : View, ITreeNodeObject
     {
         public CollectionView() { }
 
