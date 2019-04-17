@@ -22,7 +22,7 @@ namespace Bit.Core.Abstractions
         Task<CipherResponse> GetCipherAsync(string id);
         Task<FolderResponse> GetFolderAsync(string id);
         Task<ProfileResponse> GetProfileAsync();
-        Task<SyncResponse> GetSyncAsync(string id);
+        Task<SyncResponse> GetSyncAsync();
         Task PostAccountKeysAsync(KeysRequest request);
         Task<CipherResponse> PostCipherAsync(CipherRequest request);
         Task<CipherResponse> PostCipherCreateAsync(CipherCreateRequest request);

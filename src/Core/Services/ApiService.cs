@@ -254,7 +254,7 @@ namespace Bit.Core.Services
 
         #region Sync APIs
 
-        public Task<SyncResponse> GetSyncAsync(string id)
+        public Task<SyncResponse> GetSyncAsync()
         {
             return SendAsync<object, SyncResponse>(HttpMethod.Get, "/sync", null, true, true);
         }
