@@ -14,9 +14,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground", "test\Playground\Playground.csproj", "{9C8DA5A8-904D-466F-B9B0-1A4AB5A9AFC3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D10CA4A9-F866-40E1-B658-F69051236C71}"
-	ProjectSection(SolutionItems) = preProject
-		src\Core\Services\ITotpService.cs = src\Core\Services\ITotpService.cs
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{8904C536-C67D-420F-9971-51B26574C3AA}"
 EndProject
