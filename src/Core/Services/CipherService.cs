@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class CipherService
+    public class CipherService : ICipherService
     {
         private const string Keys_CiphersFormat = "ciphers_{0}";
         private const string Keys_LocalData = "ciphersLocalData";
@@ -558,7 +558,7 @@ namespace Bit.Core.Services
             DecryptedCipherCache = null;
         }
 
-        public async Task RelaceAsync(Dictionary<string, CipherData> ciphers)
+        public async Task ReplaceAsync(Dictionary<string, CipherData> ciphers)
         {
             var userId = await _userService.GetUserIdAsync();
             await _storageService.SaveAsync(string.Format(Keys_CiphersFormat, userId), ciphers);
