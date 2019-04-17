@@ -8,6 +8,7 @@ using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Bit.Core.Services
@@ -85,8 +86,8 @@ namespace Bit.Core.Services
             {
                 return _decryptedFolderCache;
             }
-            var hashKey = await _cryptoService.HasKeyAsync();
-            if(!hashKey)
+            var hasKey = await _cryptoService.HasKeyAsync();
+            if(!hasKey)
             {
                 throw new Exception("No key.");
             }
@@ -121,8 +122,9 @@ namespace Bit.Core.Services
                     Id = f.Id,
                     RevisionDate = f.RevisionDate
                 };
-                CoreHelpers.NestedTraverse(nodes, 0, f.Name.Split(NestingDelimiter), folderCopy, null,
-                    NestingDelimiter);
+                CoreHelpers.NestedTraverse(nodes, 0,
+                    Regex.Replace(f.Name, "^\\/+|\\/+$", string.Empty).Split(NestingDelimiter),
+                    folderCopy, null, NestingDelimiter);
             }
             return nodes;
         }

@@ -33,9 +33,9 @@ namespace Bit.Core.Models.Domain
         public string ExternalId { get; set; }
         public bool ReadOnly { get; set; }
 
-        public Task<CollectionView> DecryptAsync(string orgId)
+        public Task<CollectionView> DecryptAsync()
         {
-            return DecryptObjAsync(new CollectionView(this), this, new HashSet<string> { "Name" }, orgId);
+            return DecryptObjAsync(new CollectionView(this), this, new HashSet<string> { "Name" }, OrganizationId);
         }
     }
 }
