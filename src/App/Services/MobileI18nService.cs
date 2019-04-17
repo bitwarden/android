@@ -53,12 +53,12 @@ namespace Bit.App.Services
             Thread.CurrentThread.CurrentUICulture = Culture;
         }
 
-        public string T(string id, string p1, string p2, string p3)
+        public string T(string id, string p1 = null, string p2 = null, string p3 = null)
         {
             return Translate(id, p1, p2, p3);
         }
 
-        public string Translate(string id, string p1, string p2, string p3)
+        public string Translate(string id, string p1 = null, string p2 = null, string p3 = null)
         {
             if(string.IsNullOrWhiteSpace(id))
             {

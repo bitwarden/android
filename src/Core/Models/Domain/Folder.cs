@@ -24,9 +24,9 @@ namespace Bit.Core.Models.Domain
         public CipherString Name { get; set; }
         public DateTime RevisionDate { get; set; }
 
-        public Task<FolderView> DecryptAsync(string orgId)
+        public Task<FolderView> DecryptAsync()
         {
-            return DecryptObjAsync(new FolderView(this), this, new HashSet<string> { "Name" }, orgId);
+            return DecryptObjAsync(new FolderView(this), this, new HashSet<string> { "Name" }, null);
         }
     }
 }

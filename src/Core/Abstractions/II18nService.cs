@@ -7,7 +7,7 @@ namespace Bit.Core.Abstractions
     {
         CultureInfo Culture { get; set; }
         StringComparer StringComparer { get; }
-        string T(string id, string p1, string p2, string p3);
-        string Translate(string id, string p1, string p2, string p3);
+        string T(string id, string p1 = null, string p2 = null, string p3 = null);
+        string Translate(string id, string p1 = null, string p2 = null, string p3 = null);
     }
 }
