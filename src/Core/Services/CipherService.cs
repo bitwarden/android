@@ -227,7 +227,7 @@ namespace Bit.Core.Services
                 tasks.Add(cipher.DecryptAsync().ContinueWith(async c => decCiphers.Add(await c)));
             }
             await Task.WhenAll(tasks);
-            // TODO: sort
+            decCiphers = decCiphers.OrderBy(c => c, new CipherLocaleComparer(_i18nService)).ToList();
             DecryptedCipherCache = decCiphers;
             return DecryptedCipherCache;
         }
@@ -510,6 +510,15 @@ namespace Bit.Core.Services
             return new Cipher(cData);
         }
 
+        public async Task SaveCollectionsWithServerAsync(Cipher cipher)
+        {
+            var request = new CipherCollectionsRequest(cipher.CollectionIds?.ToList());
+            await _apiService.PutCipherCollectionsAsync(cipher.Id, request);
+            var userId = await _userService.GetUserIdAsync();
+            var data = cipher.ToCipherData(userId);
+            await UpsertAsync(data);
+        }
+
         public async Task UpsertAsync(CipherData cipher)
         {
             var userId = await _userService.GetUserIdAsync();
@@ -560,6 +569,82 @@ namespace Bit.Core.Services
         {
             await _storageService.RemoveAsync(string.Format(Keys_CiphersFormat, userId));
             ClearCache();
+        }
+
+        public async Task DeleteAsync(string id)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            var cipherKey = string.Format(Keys_CiphersFormat, userId);
+            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            if(ciphers == null)
+            {
+                return;
+            }
+            if(!ciphers.ContainsKey(id))
+            {
+                return;
+            }
+            ciphers.Remove(id);
+            await _storageService.SaveAsync(cipherKey, ciphers);
+            DecryptedCipherCache = null;
+        }
+
+        public async Task DeleteAsync(List<string> ids)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            var cipherKey = string.Format(Keys_CiphersFormat, userId);
+            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            if(ciphers == null)
+            {
+                return;
+            }
+            foreach(var id in ids)
+            {
+                if(!ciphers.ContainsKey(id))
+                {
+                    return;
+                }
+                ciphers.Remove(id);
+            }
+            await _storageService.SaveAsync(cipherKey, ciphers);
+            DecryptedCipherCache = null;
+        }
+
+        public async Task DeleteWithServerAsync(string id)
+        {
+            await _apiService.DeleteCipherAsync(id);
+            await DeleteAsync(id);
+        }
+
+        public async Task DeleteAttachmentAsync(string id, string attachmentId)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            var cipherKey = string.Format(Keys_CiphersFormat, userId);
+            var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(cipherKey);
+            if(ciphers == null || !ciphers.ContainsKey(id) || ciphers[id].Attachments == null)
+            {
+                return;
+            }
+            var attachment = ciphers[id].Attachments.FirstOrDefault(a => a.Id == attachmentId);
+            if(attachment != null)
+            {
+                ciphers[id].Attachments.Remove(attachment);
+            }
+            await _storageService.SaveAsync(cipherKey, ciphers);
+            DecryptedCipherCache = null;
+        }
+
+        public async Task DeleteAttachmentWithServerAsync(string id, string attachmentId)
+        {
+            try
+            {
+                await _apiService.DeleteCipherAttachmentAsync(id, attachmentId);
+            }
+            catch(ApiException e)
+            {
+                throw new Exception(e.Error.GetSingleMessage());
+            }
+            await DeleteAttachmentAsync(id, attachmentId);
         }
 
         // Helpers
