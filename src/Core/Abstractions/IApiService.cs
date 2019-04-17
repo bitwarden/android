@@ -2,6 +2,7 @@
 using Bit.Core.Models.Request;
 using Bit.Core.Models.Response;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -42,5 +43,6 @@ namespace Bit.Core.Abstractions
         Task<CipherResponse> PostCipherAttachmentAsync(string id, MultipartFormDataContent data);
         Task PostShareCipherAttachmentAsync(string id, string attachmentId, MultipartFormDataContent data,
             string organizationId);
+        Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username);
     }
 }

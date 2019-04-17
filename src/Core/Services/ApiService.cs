@@ -261,6 +261,16 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region HIBP APIs
+
+        public Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username)
+        {
+            return SendAsync<object, List<BreachAccountResponse>>(HttpMethod.Get,
+                string.Concat("/hibp/breach?username=", username), null, true, true);
+        }
+
+        #endregion
+
         #region Helpers
 
         public async Task<string> GetActiveBearerTokenAsync()
