@@ -19,6 +19,11 @@ namespace Bit.Core.Utilities
 
         public static readonly DateTime Epoc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 
+        public static long EpocUtcNow()
+        {
+            return (long)(DateTime.UtcNow - Epoc).TotalMilliseconds;
+        }
+
         public static bool InDebugMode()
         {
 #if DEBUG
@@ -149,6 +154,30 @@ namespace Bit.Core.Utilities
                 }
             }
             return null;
+        }
+
+        public static Dictionary<string, string> GetQueryParams(string urlString)
+        {
+            var dict = new Dictionary<string, string>();
+            if(!Uri.TryCreate(urlString, UriKind.Absolute, out var uri) || string.IsNullOrWhiteSpace(uri.Query))
+            {
+                return dict;
+            }
+            var pairs = uri.Query.Substring(1).Split('&');
+            foreach(var pair in pairs)
+            {
+                var parts = pair.Split('=');
+                if(parts.Length < 1)
+                {
+                    continue;
+                }
+                var key = System.Net.WebUtility.UrlDecode(parts[0]).ToLower();
+                if(!dict.ContainsKey(key))
+                {
+                    dict.Add(key, parts[1] == null ? string.Empty : System.Net.WebUtility.UrlDecode(parts[1]));
+                }
+            }
+            return dict;
         }
     }
 }
