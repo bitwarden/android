@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class FolderService
+    public class FolderService : IFolderService
     {
         private const string Keys_CiphersFormat = "ciphers_{0}";
         private const string Keys_FoldersFormat = "folders_{0}";

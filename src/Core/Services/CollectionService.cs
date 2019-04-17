@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Bit.Core.Services
 {
-    public class CollectionService
+    public class CollectionService : ICollectionService
     {
         private const string Keys_CollectionsFormat = "collections_{0}";
         private const char NestingDelimiter = '/';
@@ -19,25 +19,19 @@ namespace Bit.Core.Services
         private List<CollectionView> _decryptedCollectionCache;
         private readonly ICryptoService _cryptoService;
         private readonly IUserService _userService;
-        private readonly IApiService _apiService;
         private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
-        private readonly ICipherService _cipherService;
 
         public CollectionService(
             ICryptoService cryptoService,
             IUserService userService,
-            IApiService apiService,
             IStorageService storageService,
-            II18nService i18nService,
-            ICipherService cipherService)
+            II18nService i18nService)
         {
             _cryptoService = cryptoService;
             _userService = userService;
-            _apiService = apiService;
             _storageService = storageService;
             _i18nService = i18nService;
-            _cipherService = cipherService;
         }
 
         public void ClearCache()
