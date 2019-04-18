@@ -8,5 +8,6 @@
         public static string PinProtectedKey = "pinProtectedKey";
         public static string DefaultUriMatch = "defaultUriMatch";
         public static string DisableAutoTotpCopyKey = "disableAutoTotpCopy";
+        public static string EnvironmentUrlsKey = "environmentUrls";
     }
 }
