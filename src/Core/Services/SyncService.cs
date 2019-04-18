@@ -255,7 +255,7 @@ namespace Bit.Core.Services
         private void SyncStarted()
         {
             SyncInProgress = true;
-            _messagingService.Send("syncStarted");
+            _messagingService.Send<object>("syncStarted");
         }
 
         private bool SyncCompleted(bool successfully)
