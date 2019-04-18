@@ -23,6 +23,8 @@ namespace Bit.Core.Utilities
             var storageService = Resolve<IStorageService>("storageService");
             var secureStorageService = Resolve<IStorageService>("secureStorageService");
             var cryptoPrimitiveService = Resolve<ICryptoPrimitiveService>("cryptoPrimitiveService");
+            var i18nService = Resolve<II18nService>("i18nService");
+            var messagingService = Resolve<IMessagingService>("messagingService");
 
             var stateService = new StateService();
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
@@ -31,14 +33,40 @@ namespace Bit.Core.Utilities
             var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) => Task.FromResult(0));
             var appIdService = new AppIdService(storageService);
             var userService = new UserService(storageService, tokenService);
+            var settingsService = new SettingsService(userService, storageService);
+            var cipherService = new CipherService(cryptoService, userService, settingsService, apiService,
+                storageService, i18nService);
+            var folderService = new FolderService(cryptoService, userService, apiService, storageService,
+                i18nService, cipherService);
+            var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
+            // TODO: lock service
+            var syncService = new SyncService(userService, apiService, settingsService, folderService,
+                cipherService, cryptoService, collectionService, storageService, messagingService);
+            var passwordGenerationService = new PasswordGenerationService(cryptoService, storageService,
+                cryptoFunctionService);
+            var totpService = new TotpService(storageService, cryptoFunctionService);
+            var authService = new AuthService(cryptoService, apiService, userService, tokenService, appIdService,
+                i18nService, platformUtilsService, messagingService);
+            // TODO: export service
+            var auditService = new AuditService(cryptoFunctionService, apiService);
+            // TODO: notification and env services
 
             Register<IStateService>("stateService", stateService);
             Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
             Register<ICryptoService>("cryptoService", cryptoService);
             Register<ITokenService>("tokenService", tokenService);
-            Register<ApiService>("apiService", apiService); // TODO: interface
+            Register<IApiService>("apiService", apiService);
             Register<IAppIdService>("appIdService", appIdService);
             Register<IUserService>("userService", userService);
+            Register<ISettingsService>("settingsService", settingsService);
+            Register<ICipherService>("cipherService", cipherService);
+            Register<IFolderService>("folderService", folderService);
+            Register<ICollectionService>("collectionService", collectionService);
+            Register<ISyncService>("syncService", syncService);
+            Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
+            Register<ITotpService>("totpService", totpService);
+            Register<IAuthService>("authService", authService);
+            Register<IAuditService>("auditService", auditService);
         }
 
         public static void Register<T>(string serviceName, T obj)

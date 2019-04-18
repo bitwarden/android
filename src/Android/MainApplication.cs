@@ -42,17 +42,21 @@ namespace Bit.Droid
             var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
             var deviceActionService = new DeviceActionService();
             var localizeService = new LocalizeService();
+            var messagingService = new MobileMessagingService();
+            var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
+            var secureStorageService = new SecureStorageService();
+            var cryptoPrimitiveService = new CryptoPrimitiveService();
+            var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
+            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService);
 
+            ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
             ServiceContainer.Register<ILocalizeService>("localizeService", localizeService);
-            ServiceContainer.Register<II18nService>("i18nService",
-                new MobileI18nService(localizeService.GetCurrentCultureInfo()));
-            ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", new CryptoPrimitiveService());
-            ServiceContainer.Register<IStorageService>("storageService",
-                new MobileStorageService(preferencesStorage, liteDbStorage));
-            ServiceContainer.Register<IStorageService>("secureStorageService", new SecureStorageService());
+            ServiceContainer.Register<II18nService>("i18nService", i18nService);
+            ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
+            ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
+            ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
-            ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService",
-                new MobilePlatformUtilsService(deviceActionService));
+            ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
         }
     }
 }
