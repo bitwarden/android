@@ -106,6 +106,11 @@ namespace Bit.App.Services
             return AppInfo.VersionString;
         }
 
+        public bool SupportsDuo()
+        {
+            return true;
+        }
+
         public bool SupportsU2f()
         {
             return false;

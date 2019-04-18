@@ -24,5 +24,6 @@ namespace Bit.Core.Abstractions
         void ShowToast(string type, string title, string text, Dictionary<string, object> options = null);
         void ShowToast(string type, string title, string[] text, Dictionary<string, object> options = null);
         bool SupportsU2f();
+        bool SupportsDuo();
     }
 }
