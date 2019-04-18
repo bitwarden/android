@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using Android.App;
 using Android.Runtime;
 using Bit.App.Abstractions;
@@ -32,10 +33,11 @@ namespace Bit.Droid
         public override void OnCreate()
         {
             base.OnCreate();
+            Bootstrap();
             Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this);
         }
 
-        public void RegisterLocalServices()
+        private void RegisterLocalServices()
         {
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
@@ -57,6 +59,19 @@ namespace Bit.Droid
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
+        }
+
+        private void Bootstrap()
+        {
+            (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService).Init();
+            ServiceContainer.Resolve<IAuthService>("authService").Init();
+            // Note: This is not awaited
+            var bootstrapTask = BootstrapAsync();
+        }
+
+        private async Task BootstrapAsync()
+        {
+            await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
         }
     }
 }

@@ -19,5 +19,6 @@ namespace Bit.Core.Abstractions
         Task<AuthResult> LogInCompleteAsync(string email, string masterPassword, TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null);
         Task<AuthResult> LogInTwoFactorAsync(TwoFactorProviderType twoFactorProvider, string twoFactorToken, bool? remember = null);
         void LogOut(Action callback);
+        void Init();
     }
 }
