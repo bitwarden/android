@@ -16,44 +16,50 @@ namespace Bit.App.Services
         private const int DialogPromiseExpiration = 600000; // 10 minutes
 
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IMessagingService _messagingService;
+        private readonly IBroadcasterService _broadcasterService;
         private readonly Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>> _showDialogResolves =
             new Dictionary<int, Tuple<TaskCompletionSource<bool>, DateTime>>();
 
-        public MobilePlatformUtilsService(IDeviceActionService deviceActionService)
+        public MobilePlatformUtilsService(
+            IDeviceActionService deviceActionService,
+            IMessagingService messagingService,
+            IBroadcasterService broadcasterService)
         {
             _deviceActionService = deviceActionService;
+            _messagingService = messagingService;
+            _broadcasterService = broadcasterService;
         }
 
         public string IdentityClientId => "mobile";
 
         public void Init()
         {
-            MessagingCenter.Subscribe<Xamarin.Forms.Application, Tuple<int, bool>>(
-                Xamarin.Forms.Application.Current, "ShowDialogResolve", (sender, details) =>
+            _broadcasterService.Subscribe<Tuple<int, bool>>("showDialogResolve", (details) =>
+            {
+                var dialogId = details.Item1;
+                var confirmed = details.Item2;
+                if(_showDialogResolves.ContainsKey(dialogId))
                 {
-                    var dialogId = details.Item1;
-                    var confirmed = details.Item2;
-                    if(_showDialogResolves.ContainsKey(dialogId))
-                    {
-                        var resolveObj = _showDialogResolves[dialogId].Item1;
-                        resolveObj.TrySetResult(confirmed);
-                    }
+                    var resolveObj = _showDialogResolves[dialogId].Item1;
+                    resolveObj.TrySetResult(confirmed);
+                }
 
-                    // Clean up old tasks
-                    var deleteIds = new HashSet<int>();
-                    foreach(var item in _showDialogResolves)
+                // Clean up old tasks
+                var deleteIds = new HashSet<int>();
+                foreach(var item in _showDialogResolves)
+                {
+                    var age = DateTime.UtcNow - item.Value.Item2;
+                    if(age.TotalMilliseconds > DialogPromiseExpiration)
                     {
-                        var age = DateTime.UtcNow - item.Value.Item2;
-                        if(age.TotalMilliseconds > DialogPromiseExpiration)
-                        {
-                            deleteIds.Add(item.Key);
-                        }
+                        deleteIds.Add(item.Key);
                     }
-                    foreach(var id in deleteIds)
-                    {
-                        _showDialogResolves.Remove(id);
-                    }
-                });
+                }
+                foreach(var id in deleteIds)
+                {
+                    _showDialogResolves.Remove(id);
+                }
+            });
         }
 
         public Core.Enums.DeviceType GetDevice()
@@ -139,7 +145,7 @@ namespace Bit.App.Services
             {
                 dialogId = _random.Next(0, int.MaxValue);
             }
-            MessagingCenter.Send(Xamarin.Forms.Application.Current, "ShowAlert", new DialogDetails
+            _messagingService.Send("showDialog", new DialogDetails
             {
                 Text = text,
                 Title = title,
@@ -167,7 +173,7 @@ namespace Bit.App.Services
         {
             var clearMs = options != null && options.ContainsKey("clearMs") ? (int?)options["clearMs"] : null;
             await Clipboard.SetTextAsync(text);
-            // TODO: send message 'copiedToClipboard'
+            _messagingService.Send("copiedToClipboard", new Tuple<string, int?>(text, clearMs));
         }
 
         public async Task<string> ReadFromClipboardAsync(Dictionary<string, object> options = null)

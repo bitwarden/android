@@ -16,9 +16,13 @@ namespace Bit.App
     public partial class App : Application
     {
         private readonly MobileI18nService _i18nService;
+        private readonly IBroadcasterService _broadcasterService;
+        private readonly IMessagingService _messagingService;
 
         public App()
         {
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
 
             InitializeComponent();
@@ -27,7 +31,7 @@ namespace Bit.App
             MainPage = new TabsPage();
 
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
-            MessagingCenter.Subscribe<Application, DialogDetails>(Current, "ShowDialog", async (sender, details) =>
+            _broadcasterService.Subscribe<DialogDetails>("showDialog", async (details) =>
             {
                 var confirmed = true;
                 var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
@@ -41,7 +45,7 @@ namespace Bit.App
                 {
                     await MainPage.DisplayAlert(details.Title, details.Text, details.ConfirmText);
                 }
-                MessagingCenter.Send(Current, "ShowDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
             });
         }
 
