@@ -613,9 +613,9 @@ namespace Bit.Core.Services
             Buffer.BlockCopy(dataBytes, 0, macDataBytes, ivBytes.Length, dataBytes.Length);
 
             byte[] macKey = null;
-            if(key.MacKey != null)
+            if(theKey.MacKey != null)
             {
-                macKey = key.MacKey;
+                macKey = theKey.MacKey;
             }
             byte[] macBytes = null;
             if(mac != null)

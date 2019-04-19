@@ -42,7 +42,7 @@ namespace Bit.Core.Models.Domain
                 EncKey = new ArraySegment<byte>(Key, 0, 16).ToArray();
                 MacKey = new ArraySegment<byte>(Key, 16, 16).ToArray();
             }
-            else if(EncType == EncryptionType.AesCbc256_HmacSha256_B64 && Key.Length == 34)
+            else if(EncType == EncryptionType.AesCbc256_HmacSha256_B64 && Key.Length == 64)
             {
                 EncKey = new ArraySegment<byte>(Key, 0, 32).ToArray();
                 MacKey = new ArraySegment<byte>(Key, 32, 32).ToArray();
