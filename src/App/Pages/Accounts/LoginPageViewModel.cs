@@ -13,11 +13,13 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
+        private readonly ISyncService _syncService;
 
         public LoginPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
             PageTitle = AppResources.Bitwarden;
             ShowPasswordCommand = new Command(() =>
@@ -62,6 +64,7 @@ namespace Bit.App.Pages
                 }
                 else
                 {
+                    var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
                     Application.Current.MainPage = new TabsPage();
                 }
             }
