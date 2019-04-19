@@ -44,8 +44,8 @@ namespace Bit.Droid
             var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
             var deviceActionService = new DeviceActionService();
             var localizeService = new LocalizeService();
-            var broadcasterService = new MobileBroadcasterService();
-            var messagingService = new MobileMessagingService();
+            var broadcasterService = new BroadcasterService();
+            var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
             var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
             var secureStorageService = new SecureStorageService();
             var cryptoPrimitiveService = new CryptoPrimitiveService();

@@ -44,21 +44,25 @@ namespace Bit.App
             });
 
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
-            _broadcasterService.Subscribe<DialogDetails>("showDialog", async (details) =>
+            _broadcasterService.Subscribe(nameof(App), async (message) =>
             {
-                var confirmed = true;
-                var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
-                    AppResources.Ok : details.ConfirmText;
-                if(!string.IsNullOrWhiteSpace(details.CancelText))
+                if(message.Command == "showDialog")
                 {
-                    confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
-                        details.CancelText);
+                    var details = message.Data as DialogDetails;
+                    var confirmed = true;
+                    var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
+                        AppResources.Ok : details.ConfirmText;
+                    if(!string.IsNullOrWhiteSpace(details.CancelText))
+                    {
+                        confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
+                            details.CancelText);
+                    }
+                    else
+                    {
+                        await MainPage.DisplayAlert(details.Title, details.Text, details.ConfirmText);
+                    }
+                    _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                 }
-                else
-                {
-                    await MainPage.DisplayAlert(details.Title, details.Text, details.ConfirmText);
-                }
-                _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
             });
         }
 

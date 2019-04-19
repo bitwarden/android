@@ -140,7 +140,7 @@ namespace Bit.Core.Services
         public void LogOut(Action callback)
         {
             callback.Invoke();
-            _messagingService.Send<object>("loggedOut");
+            _messagingService.Send("loggedOut");
         }
 
         public List<TwoFactorProvider> GetSupportedTwoFactorProviders()
@@ -312,7 +312,7 @@ namespace Bit.Core.Services
                 await _cryptoService.SetEncPrivateKeyAsync(tokenResponse.PrivateKey);
             }
 
-            _messagingService.Send<object>("loggedIn");
+            _messagingService.Send("loggedIn");
             return result;
         }
 

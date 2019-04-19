@@ -2,6 +2,6 @@
 {
     public interface IMessagingService
     {
-        void Send<T>(string subscriber, T arg = default(T));
+        void Send(string subscriber, object arg = null);
     }
 }
