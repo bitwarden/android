@@ -202,9 +202,9 @@ namespace Bit.Core.Services
                 Keys_LocalData);
             var ciphers = await _storageService.GetAsync<Dictionary<string, CipherData>>(
                 string.Format(Keys_CiphersFormat, userId));
-            var response = ciphers.Select(c => new Cipher(c.Value, false,
+            var response = ciphers?.Select(c => new Cipher(c.Value, false,
                 localData?.ContainsKey(c.Key) ?? false ? localData[c.Key] : null));
-            return response.ToList();
+            return response?.ToList() ?? new List<Cipher>();
         }
 
         // TODO: sequentialize?

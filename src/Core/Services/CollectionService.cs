@@ -93,8 +93,8 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var collections = await _storageService.GetAsync<Dictionary<string, CollectionData>>(
                 string.Format(Keys_CollectionsFormat, userId));
-            var response = collections.Select(c => new Collection(c.Value));
-            return response.ToList();
+            var response = collections?.Select(c => new Collection(c.Value));
+            return response?.ToList() ?? new List<Collection>();
         }
 
         // TODO: sequentialize?

@@ -75,8 +75,8 @@ namespace Bit.Core.Services
             var userId = await _userService.GetUserIdAsync();
             var folders = await _storageService.GetAsync<Dictionary<string, FolderData>>(
                 string.Format(Keys_CiphersFormat, userId));
-            var response = folders.Select(f => new Folder(f.Value));
-            return response.ToList();
+            var response = folders?.Select(f => new Folder(f.Value));
+            return response?.ToList() ?? new List<Folder>();
         }
 
         // TODO: sequentialize?
