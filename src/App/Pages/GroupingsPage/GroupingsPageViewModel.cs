@@ -1,6 +1,10 @@
-﻿using Bit.Core.Models.View;
+﻿using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Models.Domain;
+using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -9,78 +13,133 @@ namespace Bit.App.Pages
     public class GroupingsPageViewModel : BaseViewModel
     {
         private bool _loading = false;
+        private bool _loaded = false;
+        private List<CipherView> _allCiphers;
+
+        private readonly ICipherService _cipherService;
+        private readonly IFolderService _folderService;
+        private readonly ICollectionService _collectionService;
+        private readonly ISyncService _syncService;
 
         public GroupingsPageViewModel()
         {
+            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
+            _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+
             PageTitle = "My Vault";
-            Items = new ExtendedObservableCollection<GroupingsPageListItem>();
+            GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
             LoadCommand = new Command(async () => await LoadAsync());
         }
+
+        public bool ShowFavorites { get; set; } = true;
+        public bool ShowFolders { get; set; } = true;
+        public bool ShowCollections { get; set; } = true;
+
+        public List<CipherView> Ciphers { get; set; }
+        public List<CipherView> FavoriteCiphers { get; set; }
+        public List<CipherView> NoFolderCiphers { get; set; }
+        public List<FolderView> Folders { get; set; }
+        public List<TreeNode<FolderView>> NestedFolders { get; set; }
+        public List<Core.Models.View.CollectionView> Collections { get; set; }
+        public List<TreeNode<Core.Models.View.CollectionView>> NestedCollections { get; set; }
 
         public bool Loading
         {
             get => _loading;
             set => SetProperty(ref _loading, value);
         }
-        public ExtendedObservableCollection<GroupingsPageListItem> Items { get; set; }
+        public bool Loaded
+        {
+            get => _loaded;
+            set
+            {
+                SetProperty(ref _loaded, value);
+                SetProperty(ref _loading, !value);
+            }
+        }
+        public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
         public Command LoadCommand { get; set; }
 
-        public Task LoadAsync()
+        public async Task LoadAsync()
         {
-            if(Loading)
-            {
-                return Task.FromResult(0);
-            }
-            Loading = true;
-
             try
             {
-                Items.ResetWithRange(new List<GroupingsPageListItem>
+                await LoadFoldersAsync();
+                await LoadCollectionsAsync();
+                await LoadCiphersAsync();
+
+                var favListItems = FavoriteCiphers?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+                var folderListItems = NestedFolders?.Select(f => new GroupingsPageListItem { Folder = f.Node }).ToList();
+                var collectionListItems = NestedCollections?.Select(c =>
+                    new GroupingsPageListItem { Collection = c.Node }).ToList();
+
+                var groupedItems = new List<GroupingsPageListGroup>();
+                if(favListItems?.Any() ?? false)
                 {
-                    new GroupingsPageListItem
-                    {
-                        Cipher = new CipherView { Name = "Cipher 1" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Cipher = new CipherView { Name = "Cipher 2" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Cipher = new CipherView { Name = "Cipher 3" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Cipher = new CipherView { Name = "Cipher 4" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Folder = new FolderView { Name = "Folder 1" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Folder = new FolderView { Name = "Folder 2" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Folder = new FolderView { Name = "Folder 3" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Collection = new Core.Models.View.CollectionView { Name = "Collection 1" }
-                    },
-                    new GroupingsPageListItem
-                    {
-                        Collection = new Core.Models.View.CollectionView { Name = "Collection 2" }
-                    },
-                });
+                    groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites));
+                }
+                if(folderListItems?.Any() ?? false)
+                {
+                    groupedItems.Add(new GroupingsPageListGroup(folderListItems, AppResources.Folders));
+                }
+                if(collectionListItems?.Any() ?? false)
+                {
+                    groupedItems.Add(new GroupingsPageListGroup(collectionListItems, AppResources.Collections));
+                }
+                GroupedItems.ResetWithRange(groupedItems);
             }
             finally
             {
-                Loading = false;
+                Loaded = true;
             }
+        }
 
-            return Task.FromResult(0);
+        private async Task LoadFoldersAsync()
+        {
+            if(!ShowFolders)
+            {
+                return;
+            }
+            Folders = await _folderService.GetAllDecryptedAsync();
+            NestedFolders = await _folderService.GetAllNestedAsync();
+        }
+
+        private async Task LoadCollectionsAsync()
+        {
+            if(!ShowCollections)
+            {
+                return;
+            }
+            Collections = await _collectionService.GetAllDecryptedAsync();
+            NestedCollections = await _collectionService.GetAllNestedAsync(Collections);
+        }
+
+        private async Task LoadCiphersAsync()
+        {
+            _allCiphers = await _cipherService.GetAllDecryptedAsync();
+            Ciphers = _allCiphers;
+            foreach(var c in _allCiphers)
+            {
+                if(c.Favorite)
+                {
+                    if(FavoriteCiphers == null)
+                    {
+                        FavoriteCiphers = new List<CipherView>();
+                    }
+                    FavoriteCiphers.Add(c);
+                }
+                if(c.FolderId == null)
+                {
+                    if(NoFolderCiphers == null)
+                    {
+                        NoFolderCiphers = new List<CipherView>();
+                    }
+                    NoFolderCiphers.Add(c);
+                }
+            }
+            FavoriteCiphers = _allCiphers.Where(c => c.Favorite).ToList();
         }
     }
 }

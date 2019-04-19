@@ -57,14 +57,22 @@
 
     <StackLayout>
         <ListView x:Name="ItemsListView"
-                  ItemsSource="{Binding Items}"
+                  ItemsSource="{Binding GroupedItems}"
                   VerticalOptions="FillAndExpand"
                   HasUnevenRows="true"
                   RefreshCommand="{Binding LoadCommand}"
                   IsPullToRefreshEnabled="true"
                   IsRefreshing="{Binding Loading, Mode=OneWay}"
                   CachingStrategy="RecycleElement"
-                  ItemTemplate="{StaticResource listItemDataTemplateSelector}">
+                  ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                  IsGroupingEnabled="True">
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="pages:GroupingsPageListGroup">
+                    <ViewCell>
+                        <Label Text="{Binding Name}" />
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
         </ListView>
     </StackLayout>
 
