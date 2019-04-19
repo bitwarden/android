@@ -8,6 +8,8 @@ namespace Bit.Core.Models.Response
 {
     public class ErrorResponse
     {
+        public ErrorResponse() { }
+
         public ErrorResponse(JObject response, HttpStatusCode status, bool identityResponse = false)
         {
             JObject errorModel = null;

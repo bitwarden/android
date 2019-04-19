@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.Core.Enums;
 using Bit.iOS.Core.Views;
 using CoreGraphics;
 using Foundation;
@@ -15,6 +16,8 @@ namespace Bit.iOS.Services
     {
         private Toast _toast;
         private UIAlertController _progressAlert;
+
+        public DeviceType DeviceType => DeviceType.iOS;
 
         public bool LaunchApp(string appName)
         {

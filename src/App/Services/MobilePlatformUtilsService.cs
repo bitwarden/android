@@ -64,7 +64,7 @@ namespace Bit.App.Services
 
         public Core.Enums.DeviceType GetDevice()
         {
-            return Device.RuntimePlatform == Device.iOS ? Core.Enums.DeviceType.iOS : Core.Enums.DeviceType.Android;
+            return _deviceActionService.DeviceType;
         }
 
         public string GetDeviceString()
@@ -91,7 +91,7 @@ namespace Bit.App.Services
             else
             {
                 var launched = false;
-                if(Device.RuntimePlatform == Device.Android && uri.StartsWith("androidapp://"))
+                if(GetDevice() == Core.Enums.DeviceType.Android && uri.StartsWith("androidapp://"))
                 {
                     launched = _deviceActionService.LaunchApp(uri);
                 }

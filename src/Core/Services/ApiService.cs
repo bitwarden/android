@@ -37,6 +37,8 @@ namespace Bit.Core.Services
             _tokenService = tokenService;
             _platformUtilsService = platformUtilsService;
             _logoutCallbackAsync = logoutCallbackAsync;
+            var device = _platformUtilsService.GetDevice();
+            _deviceType = device.ToString();
         }
 
         public bool UrlsSet { get; private set; }
@@ -81,7 +83,15 @@ namespace Bit.Core.Services
             requestMessage.Headers.Add("Accept", "application/json");
             requestMessage.Headers.Add("Device-Type", _deviceType);
 
-            var response = await _httpClient.SendAsync(requestMessage);
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.SendAsync(requestMessage);
+            }
+            catch
+            {
+                throw new ApiException(HandleWebError());
+            }
             JObject responseJObject = null;
             if(IsJsonResponse(response))
             {
@@ -321,7 +331,15 @@ namespace Bit.Core.Services
                     requestMessage.Headers.Add("Accept", "application/json");
                 }
 
-                var response = await _httpClient.SendAsync(requestMessage);
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch
+                {
+                    throw new ApiException(HandleWebError());
+                }
                 if(hasResponse && response.IsSuccessStatusCode)
                 {
                     var responseJsonString = await response.Content.ReadAsStringAsync();
@@ -359,7 +377,15 @@ namespace Bit.Core.Services
             requestMessage.Headers.Add("Accept", "application/json");
             requestMessage.Headers.Add("Device-Type", _deviceType);
 
-            var response = await _httpClient.SendAsync(requestMessage);
+            HttpResponseMessage response;
+            try
+            {
+                response = await _httpClient.SendAsync(requestMessage);
+            }
+            catch
+            {
+                throw new ApiException(HandleWebError());
+            }
             if(response.IsSuccessStatusCode)
             {
                 var responseJsonString = await response.Content.ReadAsStringAsync();
@@ -372,6 +398,15 @@ namespace Bit.Core.Services
                 var error = await HandleErrorAsync(response, true);
                 throw new ApiException(error);
             }
+        }
+
+        private ErrorResponse HandleWebError()
+        {
+            return new ErrorResponse
+            {
+                StatusCode = HttpStatusCode.BadGateway,
+                Message = "There is a problem connecting to the server."
+            };
         }
 
         private async Task<ErrorResponse> HandleErrorAsync(HttpResponseMessage response, bool tokenError)
@@ -393,8 +428,7 @@ namespace Bit.Core.Services
 
         private bool IsJsonResponse(HttpResponseMessage response)
         {
-            return response.Headers.Contains("content-type") &&
-                response.Headers.GetValues("content-type").Any(h => h.Contains("application/json"));
+            return (response.Content?.Headers?.ContentType?.MediaType ?? string.Empty) == "application/json";
         }
 
         #endregion

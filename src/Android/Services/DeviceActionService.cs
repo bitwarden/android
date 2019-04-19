@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Android.App;
 using Bit.App.Abstractions;
+using Bit.Core.Enums;
 using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Services
@@ -9,6 +10,8 @@ namespace Bit.Droid.Services
     {
         private ProgressDialog _progressDialog;
         private Android.Widget.Toast _toast;
+
+        public DeviceType DeviceType => DeviceType.Android;
 
         public void Toast(string text, bool longDuration = false)
         {
