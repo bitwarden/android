@@ -16,12 +16,11 @@ namespace Bit.Core.Models.Domain
             BuildDomainModel(this, obj, new HashSet<string>
             {
                 "Id",
-                "UserId",
                 "OrganizationId",
                 "FolderId",
                 "Name",
                 "Notes"
-            }, alreadyEncrypted, new HashSet<string> { "Id", "UserId", "OrganizationId", "FolderId" });
+            }, alreadyEncrypted, new HashSet<string> { "Id", "OrganizationId", "FolderId" });
 
             Type = obj.Type;
             Favorite = obj.Favorite;
