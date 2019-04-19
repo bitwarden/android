@@ -4,6 +4,8 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.HomePage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:i18n="clr-namespace:Bit.App.Utilities"
+    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
     x:DataType="pages:HomeViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -11,22 +13,19 @@
     </ContentPage.BindingContext>
 
     <StackLayout>
-        <!-- Place new controls here -->
-        <Label
-            Text="Home Page!"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand" />
-        <Label
-            Text="&#xf2b9;"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand">
-
-            <Label.FontFamily>
-                <OnPlatform x:TypeArguments="x:String"
-                    Android="FontAwesome.ttf#FontAwesome"
-                    iOS="FontAwesome" />
-            </Label.FontFamily>
-        </Label>
+        <Button Text="&#xf2b9;"
+                class="fa"
+                HorizontalOptions="Start"></Button>
+        <StackLayout VerticalOptions="CenterAndExpand">
+            <Image Source="logo.png" 
+                VerticalOptions="Center" />
+            <Label Text="{i18n:Translate LoginOrCreateNewAccount}"
+                   class="text-lg"
+                   HorizontalTextAlignment="Center"></Label>
+            <Button Text="{i18n:Translate LogIn}" 
+                    android:Button.UseDefaultShadow="false"></Button>
+            <Button Text="{i18n:Translate CreateAccount}"></Button>
+        </StackLayout>
     </StackLayout>
 
 </ContentPage>

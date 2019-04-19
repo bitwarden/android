@@ -28,7 +28,7 @@ namespace Bit.App
             InitializeComponent();
             SetCulture();
             ThemeManager.SetTheme("light");
-            MainPage = new TabsPage();
+            MainPage = new HomePage();
 
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
             _broadcasterService.Subscribe<DialogDetails>("showDialog", async (details) =>
