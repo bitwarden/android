@@ -5,6 +5,8 @@ namespace Bit.Core.Models.Data
 {
     public class FolderData : Data
     {
+        public FolderData() { }
+
         public FolderData(FolderResponse response, string userId)
         {
             UserId = userId;

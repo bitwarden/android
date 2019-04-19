@@ -4,6 +4,8 @@ namespace Bit.Core.Models.Data
 {
     public class CollectionData : Data
     {
+        public CollectionData() { }
+
         public CollectionData(CollectionDetailsResponse response)
         {
             Id = response.Id;

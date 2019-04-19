@@ -5,6 +5,8 @@ namespace Bit.Core.Models.Data
 {
     public class OrganizationData : Data
     {
+        public OrganizationData() { }
+
         public OrganizationData(ProfileOrganizationResponse response)
         {
             Id = response.Id;
