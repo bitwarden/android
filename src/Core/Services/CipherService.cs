@@ -169,12 +169,9 @@ namespace Bit.Core.Services
                    "Notes"
                 }, key),
                 EncryptCipherDataAsync(cipher, model, key),
-                EncryptFieldsAsync(model.Fields, key)
-                    .ContinueWith(async fields => cipher.Fields = await fields),
-                EncryptPasswordHistoriesAsync(model.PasswordHistory, key)
-                    .ContinueWith(async phs => cipher.PasswordHistory = await phs),
-                EncryptAttachmentsAsync(model.Attachments, key)
-                    .ContinueWith(async attachments => cipher.Attachments = await attachments)
+                EncryptFieldsAsync(model.Fields, key, cipher),
+                EncryptPasswordHistoriesAsync(model.PasswordHistory, key, cipher),
+                EncryptAttachmentsAsync(model.Attachments, key, cipher)
             };
             await Task.WhenAll(tasks);
             return cipher;
@@ -220,11 +217,16 @@ namespace Bit.Core.Services
                 throw new Exception("No key.");
             }
             var decCiphers = new List<CipherView>();
+            async Task decryptAndAddCipherAsync(Cipher cipher)
+            {
+                var c = await cipher.DecryptAsync();
+                decCiphers.Add(c);
+            }
             var tasks = new List<Task>();
             var ciphers = await GetAllAsync();
             foreach(var cipher in ciphers)
             {
-                tasks.Add(cipher.DecryptAsync().ContinueWith(async c => decCiphers.Add(await c)));
+                tasks.Add(decryptAndAddCipherAsync(cipher));
             }
             await Task.WhenAll(tasks);
             decCiphers = decCiphers.OrderBy(c => c, new CipherLocaleComparer(_i18nService)).ToList();
@@ -872,18 +874,15 @@ namespace Bit.Core.Services
             var modelType = model.GetType();
             var objType = obj.GetType();
 
-            Task<CipherString> makeCs(string propName)
+            async Task makeAndSetCs(string propName)
             {
                 var modelPropInfo = modelType.GetProperty(propName);
                 var modelProp = modelPropInfo.GetValue(model) as string;
+                CipherString val = null;
                 if(!string.IsNullOrWhiteSpace(modelProp))
                 {
-                    return _cryptoService.EncryptAsync(modelProp, key);
+                    val = await _cryptoService.EncryptAsync(modelProp, key);
                 }
-                return Task.FromResult((CipherString)null);
-            };
-            void setCs(string propName, CipherString val)
-            {
                 var objPropInfo = objType.GetProperty(propName);
                 objPropInfo.SetValue(obj, val, null);
             };
@@ -891,44 +890,44 @@ namespace Bit.Core.Services
             var tasks = new List<Task>();
             foreach(var prop in map)
             {
-                tasks.Add(makeCs(prop).ContinueWith(async val => setCs(prop, await val)));
+                tasks.Add(makeAndSetCs(prop));
             }
             return Task.WhenAll(tasks);
         }
 
-        private async Task<List<Attachment>> EncryptAttachmentsAsync(
-            List<AttachmentView> attachmentsModel, SymmetricCryptoKey key)
+        private async Task EncryptAttachmentsAsync(List<AttachmentView> attachmentsModel, SymmetricCryptoKey key,
+            Cipher cipher)
         {
             if(!attachmentsModel?.Any() ?? true)
             {
-                return null;
+                cipher.Attachments = null;
             }
             var tasks = new List<Task>();
             var encAttachments = new List<Attachment>();
+            async Task encryptAndAddAttachmentAsync(AttachmentView model, Attachment attachment)
+            {
+                await EncryptObjPropertyAsync(model, attachment, new HashSet<string>
+                {
+                    "FileName"
+                }, key);
+                if(model.Key != null)
+                {
+                    attachment.Key = await _cryptoService.EncryptAsync(model.Key.Key, key);
+                }
+                encAttachments.Add(attachment);
+            }
             foreach(var model in attachmentsModel)
             {
-                var attachment = new Attachment
+                tasks.Add(encryptAndAddAttachmentAsync(model, new Attachment
                 {
                     Id = model.Id,
                     Size = model.Size,
                     SizeName = model.SizeName,
                     Url = model.Url
-                };
-                var task = EncryptObjPropertyAsync(model, attachment, new HashSet<string>
-                {
-                    "FileName"
-                }, key).ContinueWith(async (t) =>
-                {
-                    if(model.Key != null)
-                    {
-                        attachment.Key = await _cryptoService.EncryptAsync(model.Key.Key, key);
-                    }
-                    encAttachments.Add(attachment);
-                });
-                tasks.Add(task);
+                }));
             }
             await Task.WhenAll(tasks);
-            return encAttachments;
+            cipher.Attachments = encAttachments;
         }
 
         private async Task EncryptCipherDataAsync(Cipher cipher, CipherView model, SymmetricCryptoKey key)
@@ -1007,14 +1006,25 @@ namespace Bit.Core.Services
             }
         }
 
-        private async Task<List<Field>> EncryptFieldsAsync(List<FieldView> fieldsModel, SymmetricCryptoKey key)
+        private async Task EncryptFieldsAsync(List<FieldView> fieldsModel, SymmetricCryptoKey key,
+            Cipher cipher)
         {
             if(!fieldsModel?.Any() ?? true)
             {
-                return null;
+                cipher.Fields = null;
+                return;
             }
             var tasks = new List<Task>();
             var encFields = new List<Field>();
+            async Task encryptAndAddFieldAsync(FieldView model, Field field)
+            {
+                await EncryptObjPropertyAsync(model, field, new HashSet<string>
+                {
+                    "Name",
+                    "Value"
+                }, key);
+                encFields.Add(field);
+            }
             foreach(var model in fieldsModel)
             {
                 var field = new Field
@@ -1026,46 +1036,38 @@ namespace Bit.Core.Services
                 {
                     model.Value = "false";
                 }
-                var task = EncryptObjPropertyAsync(model, field, new HashSet<string>
-                {
-                    "Name",
-                    "Value"
-                }, key).ContinueWith((t) =>
-                {
-                    encFields.Add(field);
-                });
-                tasks.Add(task);
+                tasks.Add(encryptAndAddFieldAsync(model, field));
             }
             await Task.WhenAll(tasks);
-            return encFields;
+            cipher.Fields = encFields;
         }
 
-        private async Task<List<PasswordHistory>> EncryptPasswordHistoriesAsync(List<PasswordHistoryView> phModels,
-            SymmetricCryptoKey key)
+        private async Task EncryptPasswordHistoriesAsync(List<PasswordHistoryView> phModels,
+            SymmetricCryptoKey key, Cipher cipher)
         {
             if(!phModels?.Any() ?? true)
             {
-                return null;
+                cipher.PasswordHistory = null;
             }
             var tasks = new List<Task>();
             var encPhs = new List<PasswordHistory>();
-            foreach(var model in phModels)
+            async Task encryptAndAddHistoryAsync(PasswordHistoryView model, PasswordHistory ph)
             {
-                var ph = new PasswordHistory
-                {
-                    LastUsedDate = model.LastUsedDate
-                };
-                var task = EncryptObjPropertyAsync(model, ph, new HashSet<string>
+                await EncryptObjPropertyAsync(model, ph, new HashSet<string>
                 {
                     "Password"
-                }, key).ContinueWith((t) =>
+                }, key);
+                encPhs.Add(ph);
+            }
+            foreach(var model in phModels)
+            {
+                tasks.Add(encryptAndAddHistoryAsync(model, new PasswordHistory
                 {
-                    encPhs.Add(ph);
-                });
-                tasks.Add(task);
+                    LastUsedDate = model.LastUsedDate
+                }));
             }
             await Task.WhenAll(tasks);
-            return encPhs;
+            cipher.PasswordHistory = encPhs;
         }
 
         private class CipherLocaleComparer : IComparer<CipherView>

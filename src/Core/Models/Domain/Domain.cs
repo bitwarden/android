@@ -58,18 +58,14 @@ namespace Bit.Core.Models.Domain
             var viewModelType = viewModel.GetType();
             var domainType = domain.GetType();
 
-            Task<string> decCs(string propName)
+            async Task decCsAndSetDec(string propName)
             {
                 var domainPropInfo = domainType.GetProperty(propName);
-                var domainProp = domainPropInfo.GetValue(domain) as CipherString;
-                if(domainProp != null)
+                string val = null;
+                if(domainPropInfo.GetValue(domain) is CipherString domainProp)
                 {
-                    return domainProp.DecryptAsync(orgId);
+                    val = await domainProp.DecryptAsync(orgId);
                 }
-                return Task.FromResult((string)null);
-            };
-            void setDec(string propName, string val)
-            {
                 var viewModelPropInfo = viewModelType.GetProperty(propName);
                 viewModelPropInfo.SetValue(viewModel, val, null);
             };
@@ -77,7 +73,7 @@ namespace Bit.Core.Models.Domain
             var tasks = new List<Task>();
             foreach(var prop in map)
             {
-                tasks.Add(decCs(prop).ContinueWith(async val => setDec(prop, await val)));
+                tasks.Add(decCsAndSetDec(prop));
             }
             await Task.WhenAll(tasks);
             return viewModel;

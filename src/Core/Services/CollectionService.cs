@@ -67,10 +67,15 @@ namespace Bit.Core.Services
                 return new List<CollectionView>();
             }
             var decCollections = new List<CollectionView>();
+            async Task decryptAndAddCollectionAsync(Collection collection)
+            {
+                var c = await collection.DecryptAsync();
+                decCollections.Add(c);
+            }
             var tasks = new List<Task>();
             foreach(var collection in collections)
             {
-                tasks.Add(collection.DecryptAsync().ContinueWith(async c => decCollections.Add(await c)));
+                tasks.Add(decryptAndAddCollectionAsync(collection));
             }
             await Task.WhenAll(tasks);
             return decCollections.OrderBy(c => c, new CollectionLocaleComparer(_i18nService)).ToList();

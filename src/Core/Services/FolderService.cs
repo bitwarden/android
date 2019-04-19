@@ -92,11 +92,16 @@ namespace Bit.Core.Services
                 throw new Exception("No key.");
             }
             var decFolders = new List<FolderView>();
+            async Task decryptAndAddFolderAsync(Folder folder)
+            {
+                var f = await folder.DecryptAsync();
+                decFolders.Add(f);
+            }
             var tasks = new List<Task>();
             var folders = await GetAllAsync();
             foreach(var folder in folders)
             {
-                tasks.Add(folder.DecryptAsync().ContinueWith(async f => decFolders.Add(await f)));
+                tasks.Add(decryptAndAddFolderAsync(folder));
             }
             await Task.WhenAll(tasks);
             decFolders = decFolders.OrderBy(f => f, new FolderLocaleComparer(_i18nService)).ToList();

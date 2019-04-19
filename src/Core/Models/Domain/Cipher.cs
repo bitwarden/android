@@ -104,11 +104,14 @@ namespace Bit.Core.Models.Domain
             {
                 model.Attachments = new List<AttachmentView>();
                 var tasks = new List<Task>();
+                async Task decryptAndAddAttachmentAsync(Attachment attachment)
+                {
+                    var decAttachment = await attachment.DecryptAsync(OrganizationId);
+                    model.Attachments.Add(decAttachment);
+                }
                 foreach(var attachment in Attachments)
                 {
-                    var t = attachment.DecryptAsync(OrganizationId)
-                        .ContinueWith(async decAttachment => model.Attachments.Add(await decAttachment));
-                    tasks.Add(t);
+                    tasks.Add(decryptAndAddAttachmentAsync(attachment));
                 }
                 await Task.WhenAll(tasks);
             }
@@ -116,11 +119,14 @@ namespace Bit.Core.Models.Domain
             {
                 model.Fields = new List<FieldView>();
                 var tasks = new List<Task>();
+                async Task decryptAndAddFieldAsync(Field field)
+                {
+                    var decField = await field.DecryptAsync(OrganizationId);
+                    model.Fields.Add(decField);
+                }
                 foreach(var field in Fields)
                 {
-                    var t = field.DecryptAsync(OrganizationId)
-                        .ContinueWith(async decField => model.Fields.Add(await decField));
-                    tasks.Add(t);
+                    tasks.Add(decryptAndAddFieldAsync(field));
                 }
                 await Task.WhenAll(tasks);
             }
@@ -128,11 +134,14 @@ namespace Bit.Core.Models.Domain
             {
                 model.PasswordHistory = new List<PasswordHistoryView>();
                 var tasks = new List<Task>();
+                async Task decryptAndAddHistoryAsync(PasswordHistory ph)
+                {
+                    var decPh = await ph.DecryptAsync(OrganizationId);
+                    model.PasswordHistory.Add(decPh);
+                }
                 foreach(var ph in PasswordHistory)
                 {
-                    var t = ph.DecryptAsync(OrganizationId)
-                        .ContinueWith(async decPh => model.PasswordHistory.Add(await decPh));
-                    tasks.Add(t);
+                    tasks.Add(decryptAndAddHistoryAsync(ph));
                 }
                 await Task.WhenAll(tasks);
             }
