@@ -218,8 +218,8 @@ namespace Bit.Core.Services
 
             public int Compare(CollectionView a, CollectionView b)
             {
-                var aName = a.Name;
-                var bName = b.Name;
+                var aName = a?.Name;
+                var bName = b?.Name;
                 if(aName == null && bName != null)
                 {
                     return -1;
