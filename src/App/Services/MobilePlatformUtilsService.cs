@@ -35,29 +35,33 @@ namespace Bit.App.Services
 
         public void Init()
         {
-            _broadcasterService.Subscribe<Tuple<int, bool>>("showDialogResolve", (details) =>
+            _broadcasterService.Subscribe("showDialogResolve", (message) =>
             {
-                var dialogId = details.Item1;
-                var confirmed = details.Item2;
-                if(_showDialogResolves.ContainsKey(dialogId))
+                if(message.Command == "")
                 {
-                    var resolveObj = _showDialogResolves[dialogId].Item1;
-                    resolveObj.TrySetResult(confirmed);
-                }
-
-                // Clean up old tasks
-                var deleteIds = new HashSet<int>();
-                foreach(var item in _showDialogResolves)
-                {
-                    var age = DateTime.UtcNow - item.Value.Item2;
-                    if(age.TotalMilliseconds > DialogPromiseExpiration)
+                    var details = message.Data as Tuple<int, bool>;
+                    var dialogId = details.Item1;
+                    var confirmed = details.Item2;
+                    if(_showDialogResolves.ContainsKey(dialogId))
                     {
-                        deleteIds.Add(item.Key);
+                        var resolveObj = _showDialogResolves[dialogId].Item1;
+                        resolveObj.TrySetResult(confirmed);
                     }
-                }
-                foreach(var id in deleteIds)
-                {
-                    _showDialogResolves.Remove(id);
+
+                    // Clean up old tasks
+                    var deleteIds = new HashSet<int>();
+                    foreach(var item in _showDialogResolves)
+                    {
+                        var age = DateTime.UtcNow - item.Value.Item2;
+                        if(age.TotalMilliseconds > DialogPromiseExpiration)
+                        {
+                            deleteIds.Add(item.Key);
+                        }
+                    }
+                    foreach(var id in deleteIds)
+                    {
+                        _showDialogResolves.Remove(id);
+                    }
                 }
             });
         }
