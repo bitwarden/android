@@ -23,6 +23,8 @@ namespace Bit.Core.Services
         private byte[] _publicKey;
         private byte[] _privateKey;
         private Dictionary<string, SymmetricCryptoKey> _orgKeys;
+        private Task<SymmetricCryptoKey> _getEncKeysTask;
+        private Task<Dictionary<string, SymmetricCryptoKey>> _getOrgKeysTask;
 
         private const string Keys_Key = "key";
         private const string Keys_EncOrgKeys = "encOrgKeys";
@@ -113,46 +115,62 @@ namespace Bit.Core.Services
             return keyHash == null ? null : _keyHash;
         }
 
-        public async Task<SymmetricCryptoKey> GetEncKeyAsync()
+        public Task<SymmetricCryptoKey> GetEncKeyAsync()
         {
             if(_encKey != null)
             {
-                return _encKey;
+                return Task.FromResult(_encKey);
             }
-            var encKey = await _storageService.GetAsync<string>(Keys_EncKey);
-            if(encKey == null)
+            if(_getEncKeysTask != null)
             {
-                return null;
+                return _getEncKeysTask;
             }
+            async Task<SymmetricCryptoKey> doTask()
+            {
+                try
+                {
+                    var encKey = await _storageService.GetAsync<string>(Keys_EncKey);
+                    if(encKey == null)
+                    {
+                        return null;
+                    }
 
-            var key = await GetKeyAsync();
-            if(key == null)
-            {
-                return null;
-            }
+                    var key = await GetKeyAsync();
+                    if(key == null)
+                    {
+                        return null;
+                    }
 
-            byte[] decEncKey = null;
-            var encKeyCipher = new CipherString(encKey);
-            if(encKeyCipher.EncryptionType == EncryptionType.AesCbc256_B64)
-            {
-                decEncKey = await DecryptToBytesAsync(encKeyCipher, key);
-            }
-            else if(encKeyCipher.EncryptionType == EncryptionType.AesCbc256_HmacSha256_B64)
-            {
-                var newKey = await StretchKeyAsync(key);
-                decEncKey = await DecryptToBytesAsync(encKeyCipher, newKey);
-            }
-            else
-            {
-                throw new Exception("Unsupported encKey type.");
-            }
+                    byte[] decEncKey = null;
+                    var encKeyCipher = new CipherString(encKey);
+                    if(encKeyCipher.EncryptionType == EncryptionType.AesCbc256_B64)
+                    {
+                        decEncKey = await DecryptToBytesAsync(encKeyCipher, key);
+                    }
+                    else if(encKeyCipher.EncryptionType == EncryptionType.AesCbc256_HmacSha256_B64)
+                    {
+                        var newKey = await StretchKeyAsync(key);
+                        decEncKey = await DecryptToBytesAsync(encKeyCipher, newKey);
+                    }
+                    else
+                    {
+                        throw new Exception("Unsupported encKey type.");
+                    }
 
-            if(decEncKey == null)
-            {
-                return null;
+                    if(decEncKey == null)
+                    {
+                        return null;
+                    }
+                    _encKey = new SymmetricCryptoKey(decEncKey);
+                    return _encKey;
+                }
+                finally
+                {
+                    _getEncKeysTask = null;
+                }
             }
-            _encKey = new SymmetricCryptoKey(decEncKey);
-            return _encKey;
+            _getEncKeysTask = doTask();
+            return _getEncKeysTask;
         }
 
         public async Task<byte[]> GetPublicKeyAsync()
@@ -200,31 +218,47 @@ namespace Bit.Core.Services
             return HashPhrase(userFingerprint);
         }
 
-        public async Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync()
+        public Task<Dictionary<string, SymmetricCryptoKey>> GetOrgKeysAsync()
         {
             if(_orgKeys != null && _orgKeys.Count > 0)
             {
-                return _orgKeys;
+                return Task.FromResult(_orgKeys);
             }
-            var encOrgKeys = await _storageService.GetAsync<Dictionary<string, string>>(Keys_EncOrgKeys);
-            if(encOrgKeys == null)
+            if(_getOrgKeysTask != null)
             {
-                return null;
+                return _getOrgKeysTask;
             }
-            var orgKeys = new Dictionary<string, SymmetricCryptoKey>();
-            var setKey = false;
-            foreach(var org in encOrgKeys)
+            async Task<Dictionary<string, SymmetricCryptoKey>> doTask()
             {
-                var decValue = await RsaDecryptAsync(org.Value);
-                orgKeys.Add(org.Key, new SymmetricCryptoKey(decValue));
-                setKey = true;
-            }
+                try
+                {
+                    var encOrgKeys = await _storageService.GetAsync<Dictionary<string, string>>(Keys_EncOrgKeys);
+                    if(encOrgKeys == null)
+                    {
+                        return null;
+                    }
+                    var orgKeys = new Dictionary<string, SymmetricCryptoKey>();
+                    var setKey = false;
+                    foreach(var org in encOrgKeys)
+                    {
+                        var decValue = await RsaDecryptAsync(org.Value);
+                        orgKeys.Add(org.Key, new SymmetricCryptoKey(decValue));
+                        setKey = true;
+                    }
 
-            if(setKey)
-            {
-                _orgKeys = orgKeys;
+                    if(setKey)
+                    {
+                        _orgKeys = orgKeys;
+                    }
+                    return _orgKeys;
+                }
+                finally
+                {
+                    _getOrgKeysTask = null;
+                }
             }
-            return _orgKeys;
+            _getOrgKeysTask = doTask();
+            return _getOrgKeysTask;
         }
 
         public async Task<SymmetricCryptoKey> GetOrgKeyAsync(string orgId)

@@ -37,6 +37,7 @@ namespace Bit.Core.Services
             ["google.com"] = new HashSet<string> { "script.google.com" }
         };
         private readonly HttpClient _httpClient = new HttpClient();
+        private Task<List<CipherView>> _getAllDecryptedTask;
 
         public CipherService(
             ICryptoService cryptoService,
@@ -204,34 +205,49 @@ namespace Bit.Core.Services
             return response?.ToList() ?? new List<Cipher>();
         }
 
-        // TODO: sequentialize?
-        public async Task<List<CipherView>> GetAllDecryptedAsync()
+        public Task<List<CipherView>> GetAllDecryptedAsync()
         {
             if(DecryptedCipherCache != null)
             {
-                return DecryptedCipherCache;
+                return Task.FromResult(DecryptedCipherCache);
             }
-            var hashKey = await _cryptoService.HasKeyAsync();
-            if(!hashKey)
+            if(_getAllDecryptedTask != null)
             {
-                throw new Exception("No key.");
+                return _getAllDecryptedTask;
             }
-            var decCiphers = new List<CipherView>();
-            async Task decryptAndAddCipherAsync(Cipher cipher)
+            async Task<List<CipherView>> doTask()
             {
-                var c = await cipher.DecryptAsync();
-                decCiphers.Add(c);
+                try
+                {
+                    var hashKey = await _cryptoService.HasKeyAsync();
+                    if(!hashKey)
+                    {
+                        throw new Exception("No key.");
+                    }
+                    var decCiphers = new List<CipherView>();
+                    async Task decryptAndAddCipherAsync(Cipher cipher)
+                    {
+                        var c = await cipher.DecryptAsync();
+                        decCiphers.Add(c);
+                    }
+                    var tasks = new List<Task>();
+                    var ciphers = await GetAllAsync();
+                    foreach(var cipher in ciphers)
+                    {
+                        tasks.Add(decryptAndAddCipherAsync(cipher));
+                    }
+                    await Task.WhenAll(tasks);
+                    decCiphers = decCiphers.OrderBy(c => c, new CipherLocaleComparer(_i18nService)).ToList();
+                    DecryptedCipherCache = decCiphers;
+                    return DecryptedCipherCache;
+                }
+                finally
+                {
+
+                }
             }
-            var tasks = new List<Task>();
-            var ciphers = await GetAllAsync();
-            foreach(var cipher in ciphers)
-            {
-                tasks.Add(decryptAndAddCipherAsync(cipher));
-            }
-            await Task.WhenAll(tasks);
-            decCiphers = decCiphers.OrderBy(c => c, new CipherLocaleComparer(_i18nService)).ToList();
-            DecryptedCipherCache = decCiphers;
-            return DecryptedCipherCache;
+            _getAllDecryptedTask = doTask();
+            return _getAllDecryptedTask;
         }
 
         public async Task<List<CipherView>> GetAllDecryptedForGroupingAsync(string groupingId, bool folder = true)
