@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.LoginPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:i18n="clr-namespace:Bit.App.Utilities"
+    xmlns:bv="clr-namespace:Bit.App.Controls.BoxedView"
+    x:DataType="pages:LoginPageViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:LoginPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="cogs.png" Text="{i18n:Translate LogIn}" Clicked="LogIn_Clicked" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout>
+        <bv:BoxedView HasUnevenRows="True" VerticalOptions="Start">
+            <bv:BoxedSection HeaderHeight="0">
+                <bv:EntryCell Title="{i18n:Translate EmailAddress}" 
+                              ValueText="{Binding Email}" />
+                <bv:EntryCell Title="{i18n:Translate MasterPassword}"
+                              ValueText="{Binding MasterPassword}"
+                              IsPassword="True"
+                              Button1Icon="cogs"
+                              Button1Command="{Binding ShowPasswordCommand}" />
+            </bv:BoxedSection>
+        </bv:BoxedView>
+        <Button Text="{i18n:Translate GetPasswordHint}" VerticalOptions="EndAndExpand"></Button>
+    </StackLayout>
+
+</ContentPage>

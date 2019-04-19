@@ -23,7 +23,7 @@
                    class="text-lg"
                    HorizontalTextAlignment="Center"></Label>
             <Button Text="{i18n:Translate LogIn}" 
-                    android:Button.UseDefaultShadow="false"></Button>
+                    Clicked="LogIn_Clicked"></Button>
             <Button Text="{i18n:Translate CreateAccount}"></Button>
         </StackLayout>
     </StackLayout>

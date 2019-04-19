@@ -16,11 +16,13 @@ namespace Bit.App
     public partial class App : Application
     {
         private readonly MobileI18nService _i18nService;
+        private readonly IUserService _userService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
 
         public App()
         {
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
@@ -29,6 +31,17 @@ namespace Bit.App
             SetCulture();
             ThemeManager.SetTheme("light");
             MainPage = new HomePage();
+            _userService.IsAuthenticatedAsync().ContinueWith(async authed =>
+            {
+                if(await authed)
+                {
+                    Current.MainPage = new TabsPage();
+                }
+                else
+                {
+                    Current.MainPage = new HomePage();
+                }
+            });
 
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
             _broadcasterService.Subscribe<DialogDetails>("showDialog", async (details) =>

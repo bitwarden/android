@@ -14,5 +14,10 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
         }
+
+        private void LogIn_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+        }
     }
 }

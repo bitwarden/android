@@ -1346,4 +1346,7 @@
   <data name="BitwardenAutofillAlert" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
   </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Invalid email address.</value>
+  </data>
 </root>

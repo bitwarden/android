@@ -21,6 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\Accounts\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\GeneratorPage.xaml.cs">
       <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
@@ -37,7 +40,6 @@
 
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Pages\Accounts\" />
   </ItemGroup>
 
   <ItemGroup>
