@@ -6,8 +6,8 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.StyleSheets;
 using Xamarin.Forms.Xaml;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
@@ -31,17 +31,7 @@ namespace Bit.App
             SetCulture();
             ThemeManager.SetTheme("light");
             MainPage = new HomePage();
-            _userService.IsAuthenticatedAsync().ContinueWith(async authed =>
-            {
-                if(await authed)
-                {
-                    Current.MainPage = new TabsPage();
-                }
-                else
-                {
-                    Current.MainPage = new HomePage();
-                }
-            });
+            var mainPageTask = SetMainPageAsync();
 
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
             _broadcasterService.Subscribe(nameof(App), async (message) =>
@@ -87,6 +77,19 @@ namespace Bit.App
             new System.Globalization.ThaiBuddhistCalendar();
             new System.Globalization.HijriCalendar();
             new System.Globalization.UmAlQuraCalendar();
+        }
+
+        private async Task SetMainPageAsync()
+        {
+            var authed = await _userService.IsAuthenticatedAsync();
+            if(authed)
+            {
+                Current.MainPage = new TabsPage();
+            }
+            else
+            {
+                Current.MainPage = new HomePage();
+            }
         }
     }
 }
