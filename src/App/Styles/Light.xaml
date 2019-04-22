@@ -2,9 +2,12 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Light">
-    <Style TargetType="Label"
-           Class="list-header-themed">
-        <Setter Property="TextColor"
-                Value="Blue" />
-    </Style>
+    <Color x:Key="TextColor">#000000</Color>
+    <Color x:Key="PrimaryColor">#3c8dbc</Color>
+    <Color x:Key="DangerColor">#dd4b39</Color>
+    <Color x:Key="SuccessColor">#00a65a</Color>
+    <Color x:Key="InfoColor">#555555</Color>
+    <Color x:Key="WarningColor">#bf7e16</Color>
+
+    <Color x:Key="ListHeaderTextColor">#3c8dbc</Color>
 </ResourceDictionary>

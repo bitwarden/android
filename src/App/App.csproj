@@ -57,6 +57,9 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Styles\Variables.xaml.cs">
+      <DependentUpon>Variables.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Styles\Light.xaml.cs">
       <DependentUpon>Light.xaml</DependentUpon>
     </Compile>

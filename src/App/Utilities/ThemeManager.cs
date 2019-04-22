@@ -30,6 +30,19 @@ namespace Bit.App.Utilities
             Application.Current.Resources.Clear();
             Application.Current.Resources.MergedDictionaries.Clear();
 
+            // Variables
+            Application.Current.Resources.MergedDictionaries.Add(new Variables());
+
+            // Themed variables
+            if(name == "dark")
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new Dark());
+            }
+            else
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new Light());
+            }
+
             // Base styles
             Application.Current.Resources.MergedDictionaries.Add(new Base());
 
@@ -41,16 +54,6 @@ namespace Bit.App.Utilities
             else if(Device.RuntimePlatform == Device.iOS)
             {
                 Application.Current.Resources.MergedDictionaries.Add(new iOS());
-            }
-
-            // Theme styles
-            if(name == "dark")
-            {
-                Application.Current.Resources.MergedDictionaries.Add(new Dark());
-            }
-            else
-            {
-                Application.Current.Resources.MergedDictionaries.Add(new Light());
             }
         }
     }

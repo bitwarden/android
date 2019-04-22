@@ -4,6 +4,7 @@
                     x:Class="Bit.App.Styles.Android">
     <Style TargetType="Label"
            Class="list-header-platform">
-        
+        <Setter Property="TextColor"
+                Value="{StaticResource ListHeaderTextColor}" />
     </Style>
 </ResourceDictionary>
