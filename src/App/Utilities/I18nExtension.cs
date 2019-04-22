@@ -7,11 +7,11 @@ using Xamarin.Forms.Xaml;
 namespace Bit.App.Utilities
 {
     [ContentProperty("Id")]
-    public class TranslateExtension : IMarkupExtension
+    public class I18nExtension : IMarkupExtension
     {
         private II18nService _i18nService;
 
-        public TranslateExtension()
+        public I18nExtension()
         {
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService");
         }

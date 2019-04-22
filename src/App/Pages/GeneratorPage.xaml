@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.GeneratorPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
-    xmlns:i18n="clr-namespace:Bit.App.Utilities"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:GeneratorPageViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -18,7 +18,7 @@
             HorizontalOptions="Center"
             VerticalOptions="CenterAndExpand" />
         <Label
-            Text="{i18n:Translate AttachmentLargeWarning, P1='10 MB'}"
+            Text="{u:I18n AttachmentLargeWarning, P1='10 MB'}"
             HorizontalOptions="Center"
             VerticalOptions="CenterAndExpand" />
         <Label

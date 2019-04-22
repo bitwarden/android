@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.LoginPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
-    xmlns:i18n="clr-namespace:Bit.App.Utilities"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:bv="clr-namespace:Bit.App.Controls.BoxedView"
     x:DataType="pages:LoginPageViewModel"
     Title="{Binding PageTitle}">
@@ -13,22 +13,22 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="cogs.png" Text="{i18n:Translate LogIn}" Clicked="LogIn_Clicked" />
+        <ToolbarItem Icon="cogs.png" Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
     </ContentPage.ToolbarItems>
 
     <StackLayout>
         <bv:BoxedView HasUnevenRows="True" VerticalOptions="Start">
             <bv:BoxedSection HeaderHeight="0">
-                <bv:EntryCell Title="{i18n:Translate EmailAddress}" 
+                <bv:EntryCell Title="{u:I18n EmailAddress}" 
                               ValueText="{Binding Email}" />
-                <bv:EntryCell Title="{i18n:Translate MasterPassword}"
+                <bv:EntryCell Title="{u:I18n MasterPassword}"
                               ValueText="{Binding MasterPassword}"
                               IsPassword="True"
                               Button1Icon="cogs"
                               Button1Command="{Binding ShowPasswordCommand}" />
             </bv:BoxedSection>
         </bv:BoxedView>
-        <Button Text="{i18n:Translate GetPasswordHint}" VerticalOptions="EndAndExpand"></Button>
+        <Button Text="{u:I18n GetPasswordHint}" VerticalOptions="EndAndExpand"></Button>
     </StackLayout>
 
 </ContentPage>
