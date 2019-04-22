@@ -21,14 +21,17 @@
             <DataTemplate x:Key="folderTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
-                    <StackLayout StyleClass="list-cell">
+                    <StackLayout Orientation="Horizontal"
+                                 StyleClass="list-row">
                         <controls:FaLabel Text="&#xf07c;"
                                           HorizontalOptions="Start"
-                                          VerticalOptions="CenterAndExpand" />
-                        <Label Text="{Binding Folder.Name}"
+                                          VerticalOptions="CenterAndExpand"
+                                          StyleClass="list-icon" />
+                        <Label Text="{Binding Folder.Name, Mode=OneWay}"
                                LineBreakMode="TailTruncation"
                                HorizontalOptions="StartAndExpand"
-                               VerticalOptions="CenterAndExpand" />
+                               VerticalOptions="CenterAndExpand"
+                               StyleClass="list-title"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
@@ -36,14 +39,17 @@
             <DataTemplate x:Key="collectionTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
-                    <StackLayout StyleClass="list-cell">
+                    <StackLayout Orientation="Horizontal"
+                                 StyleClass="list-row">
                         <controls:FaLabel Text="&#xf1b2;"
                                           HorizontalOptions="Start"
-                                          VerticalOptions="CenterAndExpand" />
-                        <Label Text="{Binding Collection.Name}"
+                                          VerticalOptions="CenterAndExpand"
+                                          StyleClass="list-icon" />
+                        <Label Text="{Binding Collection.Name, Mode=OneWay}"
                                LineBreakMode="TailTruncation"
                                HorizontalOptions="StartAndExpand"
-                               VerticalOptions="CenterAndExpand" />
+                               VerticalOptions="CenterAndExpand"
+                               StyleClass="list-title"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
@@ -65,11 +71,15 @@
                   IsRefreshing="{Binding Loading, Mode=OneWay}"
                   CachingStrategy="RecycleElement"
                   ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                  IsGroupingEnabled="True">
+                  IsGroupingEnabled="True"
+                  StyleClass="list">
             <ListView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                     <ViewCell>
-                        <Label Text="{Binding Name}" />
+                        <StackLayout StyleClass="list-row-header">
+                            <Label Text="{Binding Name}"
+                                   StyleClass="list-header, list-header-themed, list-header-platform" />
+                        </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>

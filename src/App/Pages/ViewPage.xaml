@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.ViewPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:i18n="clr-namespace:Bit.App.Utilities"
+    xmlns:bv="clr-namespace:Bit.App.Controls.BoxedView"
+    x:DataType="pages:ViewPageViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:ViewPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="cogs.png" Text="{i18n:Translate Edit}" />
+    </ContentPage.ToolbarItems>
+
+    <bv:BoxedView HasUnevenRows="True">
+        <bv:BoxedSection HeaderHeight="0">
+            <bv:EntryCell Title="{i18n:Translate EmailAddress}" 
+                              ValueText="{Binding Email}" />
+            <bv:EntryCell Title="{i18n:Translate MasterPassword}"
+                              ValueText="{Binding MasterPassword}"
+                              IsPassword="True"
+                              Button1Icon="cogs"
+                              Button1Command="{Binding ShowPasswordCommand}" />
+        </bv:BoxedSection>
+    </bv:BoxedView>
+
+</ContentPage>

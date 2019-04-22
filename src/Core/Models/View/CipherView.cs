@@ -45,7 +45,7 @@ namespace Bit.Core.Models.View
         public DateTime RevisionDate { get; set; }
 
 
-        public string Subtitle
+        public string SubTitle
         {
             get
             {

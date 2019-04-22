@@ -6,15 +6,16 @@
     <ViewCell.View>
 
         <StackLayout x:Name="_layout"
-                     Padding="10"
-                     x:DataType="controls:CipherViewCellViewModel">
+                     x:DataType="controls:CipherViewCellViewModel"
+                     StyleClass="list-row">
             <StackLayout.BindingContext>
                 <controls:CipherViewCellViewModel />
             </StackLayout.BindingContext>
 
-            <Label Text="{Binding Cipher.Name}"
-                   LineBreakMode="NoWrap"
-                   FontSize="16" />
+            <Label Text="{Binding Cipher.Name, Mode=OneWay}"
+                   StyleClass="list-title" />
+            <Label Text="{Binding Cipher.SubTitle, Mode=OneWay}"
+                   StyleClass="list-subtitle" />
         </StackLayout>
 
     </ViewCell.View>

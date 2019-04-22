@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Bit.App.Styles.Base">
+    <Style TargetType="ListView"
+           Class="list">
+        <Setter Property="SeparatorColor"
+                Value="Transparent" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-header">
+        <Setter Property="Padding"
+                Value="10" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header">
+        <Setter Property="FontSize"
+                Value="Medium" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="10" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-title">
+        <Setter Property="FontSize"
+                Value="Medium" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-subtitle">
+        <Setter Property="FontSize"
+                Value="Small" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-icon"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Medium" />
+    </Style>
+</ResourceDictionary>
