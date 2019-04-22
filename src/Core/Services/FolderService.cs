@@ -108,7 +108,7 @@ namespace Bit.Core.Services
 
             var noneFolder = new FolderView
             {
-                Name = _i18nService.T("noneFolder")
+                Name = _i18nService.T("FolderNone")
             };
             decFolders.Add(noneFolder);
 
