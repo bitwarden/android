@@ -23,6 +23,9 @@ namespace Bit.iOS
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
             Xamarin.Forms.Forms.Init();
+
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+
             LoadApplication(new App.App());
 
             return base.FinishedLaunching(app, options);

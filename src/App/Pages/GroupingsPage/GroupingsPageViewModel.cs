@@ -78,15 +78,18 @@ namespace Bit.App.Pages
                 var groupedItems = new List<GroupingsPageListGroup>();
                 if(favListItems?.Any() ?? false)
                 {
-                    groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites));
+                    groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites,
+                        Device.RuntimePlatform == Device.iOS));
                 }
                 if(folderListItems?.Any() ?? false)
                 {
-                    groupedItems.Add(new GroupingsPageListGroup(folderListItems, AppResources.Folders));
+                    groupedItems.Add(new GroupingsPageListGroup(folderListItems, AppResources.Folders,
+                        Device.RuntimePlatform == Device.iOS));
                 }
                 if(collectionListItems?.Any() ?? false)
                 {
-                    groupedItems.Add(new GroupingsPageListGroup(collectionListItems, AppResources.Collections));
+                    groupedItems.Add(new GroupingsPageListGroup(collectionListItems, AppResources.Collections,
+                        Device.RuntimePlatform == Device.iOS));
                 }
                 GroupedItems.ResetWithRange(groupedItems);
             }

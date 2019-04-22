@@ -2,21 +2,82 @@
 <ViewCell xmlns="http://xamarin.com/schemas/2014/forms"
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           x:Class="Bit.App.Controls.CipherViewCell"
-          xmlns:controls="clr-namespace:Bit.App.Controls">
+          xmlns:controls="clr-namespace:Bit.App.Controls"
+          xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms">
     <ViewCell.View>
 
-        <StackLayout x:Name="_layout"
-                     x:DataType="controls:CipherViewCellViewModel"
-                     StyleClass="list-row">
-            <StackLayout.BindingContext>
+        <Grid x:Name="_grid"
+              StyleClass="list-row, list-row-platform"
+              RowSpacing="0"
+              ColumnSpacing="0"
+              x:DataType="controls:CipherViewCellViewModel">
+
+            <Grid.BindingContext>
                 <controls:CipherViewCellViewModel />
-            </StackLayout.BindingContext>
+            </Grid.BindingContext>
 
-            <Label Text="{Binding Cipher.Name, Mode=OneWay}"
-                   StyleClass="list-title" />
-            <Label Text="{Binding Cipher.SubTitle, Mode=OneWay}"
-                   StyleClass="list-subtitle" />
-        </StackLayout>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
 
+            <controls:FaLabel x:Name="_icon"
+                              HorizontalOptions="Center"
+                              VerticalOptions="Center"
+                              StyleClass="list-icon" />
+            <ff:CachedImage x:Name="_image"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.RowSpan="2"
+                            BitmapOptimizations="True"
+                            ErrorPlaceholder="login.png"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            WidthRequest="20"
+                            HeightRequest="20"
+                            IsVisible="False"/>
+            <Label LineBreakMode="TailTruncation"
+                   Grid.Column="1"
+                   Grid.Row="0"
+                   StyleClass="list-title, list-title-platform"
+                   Text="{Binding Cipher.Name, Mode=OneWay}" />
+            <Label LineBreakMode="TailTruncation"
+                   Grid.Column="1"
+                   Grid.Row="1"
+                   Grid.ColumnSpan="3"
+                   StyleClass="list-subtitle, list-subtitle-platform"
+                   Text="{Binding Cipher.SubTitle, Mode=OneWay}" />
+
+            <controls:FaLabel Grid.Column="2"
+                   Grid.Row="0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   StyleClass="list-title-icon"
+                   Margin="5, 0, 0, 0"
+                   Text="&#xf1e0;"
+                   IsVisible="{Binding Cipher.Shared, Mode=OneWay}" />
+            <controls:FaLabel Grid.Column="3"
+                   Grid.Row="0"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   StyleClass="list-title-icon"
+                   Margin="5, 0, 0, 0"
+                   Text="&#xf0c6;"
+                   IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}" />
+
+            <Button WidthRequest="60"
+                    Grid.Column="4"
+                    Grid.Row="0"
+                    Grid.RowSpan="2"
+                    BackgroundColor="Transparent" />
+
+        </Grid>
     </ViewCell.View>
 </ViewCell>

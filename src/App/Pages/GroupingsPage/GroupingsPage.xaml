@@ -22,8 +22,8 @@
                           x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal"
-                                 StyleClass="list-row">
-                        <controls:FaLabel Text="&#xf07c;"
+                                 StyleClass="list-row, list-row-platform">
+                        <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
                                           HorizontalOptions="Start"
                                           VerticalOptions="CenterAndExpand"
                                           StyleClass="list-icon" />
@@ -40,8 +40,8 @@
                           x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal"
-                                 StyleClass="list-row">
-                        <controls:FaLabel Text="&#xf1b2;"
+                                 StyleClass="list-row, list-row-platform">
+                        <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
                                           HorizontalOptions="Start"
                                           VerticalOptions="CenterAndExpand"
                                           StyleClass="list-icon" />
@@ -72,13 +72,13 @@
                   CachingStrategy="RecycleElement"
                   ItemTemplate="{StaticResource listItemDataTemplateSelector}"
                   IsGroupingEnabled="True"
-                  StyleClass="list">
+                  StyleClass="list, list-platform">
             <ListView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                     <ViewCell>
                         <StackLayout StyleClass="list-row-header">
                             <Label Text="{Binding Name}"
-                                   StyleClass="list-header, list-header-themed, list-header-platform" />
+                                   StyleClass="list-header, list-header-platform" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

@@ -8,4 +8,5 @@
     <Color x:Key="SuccessColor">#00a65a</Color>
     <Color x:Key="InfoColor">#555555</Color>
     <Color x:Key="WarningColor">#bf7e16</Color>
+    <Color x:Key="MutedColor">#777777</Color>
 </ResourceDictionary>

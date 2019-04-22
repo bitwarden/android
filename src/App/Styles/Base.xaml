@@ -2,40 +2,64 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Base">
+
+    <!-- General -->
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+    </Style>
+
+    <!-- List -->
     <Style TargetType="ListView"
            Class="list">
-        <Setter Property="SeparatorColor"
-                Value="Transparent" />
     </Style>
     <Style TargetType="StackLayout"
            Class="list-row-header">
         <Setter Property="Padding"
-                Value="10" />
+                Value="10, 12" />
     </Style>
     <Style TargetType="Label"
            Class="list-header">
-        <Setter Property="FontSize"
-                Value="Medium" />
     </Style>
     <Style TargetType="StackLayout"
            Class="list-row">
         <Setter Property="Padding"
-                Value="10" />
+                Value="12" />
+    </Style>
+    <Style TargetType="Grid"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="2, 5" />
     </Style>
     <Style TargetType="Label"
            Class="list-title">
+    </Style>
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="list-title-icon">
         <Setter Property="FontSize"
-                Value="Medium" />
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
            Class="list-subtitle">
         <Setter Property="FontSize"
                 Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
            Class="list-icon"
            ApplyToDerivedTypes="True">
+        <Setter Property="Margin"
+                Value="3, 3, 3, 0" />
         <Setter Property="FontSize"
                 Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
     </Style>
 </ResourceDictionary>

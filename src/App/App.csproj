@@ -13,7 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
-    <PackageReference Include="Xamarin.Forms" Version="3.6.0.293080" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.5.909-pre" />
+    <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
   </ItemGroup>
 
   <ItemGroup>

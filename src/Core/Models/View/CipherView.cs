@@ -66,6 +66,7 @@ namespace Bit.Core.Models.View
             }
         }
 
+        public bool Shared => OrganizationId != null;
         public bool HasPasswordHistory => PasswordHistory?.Any() ?? false;
         public bool HasAttachments => Attachments?.Any() ?? false;
         public bool HasOldAttachments

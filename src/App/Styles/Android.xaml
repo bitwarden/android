@@ -2,9 +2,24 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Android">
+    <Style TargetType="ListView"
+           Class="list-platform">
+        <Setter Property="SeparatorColor"
+                Value="Transparent" />
+    </Style>
     <Style TargetType="Label"
            Class="list-header-platform">
         <Setter Property="TextColor"
                 Value="{StaticResource ListHeaderTextColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="Grid"
+           Class="list-row-platform">
     </Style>
 </ResourceDictionary>

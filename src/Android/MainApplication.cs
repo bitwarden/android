@@ -39,6 +39,8 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
+            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
