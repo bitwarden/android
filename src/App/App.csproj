@@ -28,7 +28,7 @@
     <Compile Update="Pages\GeneratorPage.xaml.cs">
       <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\ViewPage.xaml.cs">
+    <Compile Update="Pages\Vault\ViewPage.xaml.cs">
       <DependentUpon>ViewPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\SettingsPage.xaml.cs">

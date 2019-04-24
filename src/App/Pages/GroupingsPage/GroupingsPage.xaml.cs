@@ -22,6 +22,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _viewModel = BindingContext as GroupingsPageViewModel;
+            _viewModel.Page = this;
         }
 
         protected async override void OnAppearing()
@@ -54,6 +55,23 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(GroupingsPage));
+        }
+
+        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if(!(e.SelectedItem is GroupingsPageListItem item))
+            {
+                return;
+            }
+
+            if(item.Cipher != null)
+            {
+                await _viewModel.SelectCipherAsync(item.Cipher);
+            }
+            else if(item.Folder != null || item.Collection != null)
+            {
+                // TODO
+            }
         }
     }
 }

@@ -99,6 +99,12 @@ namespace Bit.App.Pages
             }
         }
 
+        public async Task SelectCipherAsync(CipherView cipher)
+        {
+            var page = new ViewPage(cipher.Id);
+            await Page.Navigation.PushModalAsync(new NavigationPage(page));
+        }
+
         private async Task LoadFoldersAsync()
         {
             if(!ShowFolders)
