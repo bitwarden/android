@@ -19,7 +19,7 @@ namespace Bit.App.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class AppResources {
@@ -165,6 +165,15 @@ namespace Bit.App.Resources {
         internal static string Address3 {
             get {
                 return ResourceManager.GetString("Address3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Items.
+        /// </summary>
+        internal static string AllItems {
+            get {
+                return ResourceManager.GetString("AllItems", resourceCulture);
             }
         }
         
@@ -777,6 +786,15 @@ namespace Bit.App.Resources {
         internal static string CardholderName {
             get {
                 return ResourceManager.GetString("CardholderName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cards.
+        /// </summary>
+        internal static string Cards {
+            get {
+                return ResourceManager.GetString("Cards", resourceCulture);
             }
         }
         
@@ -1735,6 +1753,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Identities.
+        /// </summary>
+        internal static string Identities {
+            get {
+                return ResourceManager.GetString("Identities", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identity Server URL.
         /// </summary>
         internal static string IdentityUrl {
@@ -2037,6 +2064,15 @@ namespace Bit.App.Resources {
         internal static string LoginOrCreateNewAccount {
             get {
                 return ResourceManager.GetString("LoginOrCreateNewAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Logins.
+        /// </summary>
+        internal static string Logins {
+            get {
+                return ResourceManager.GetString("Logins", resourceCulture);
             }
         }
         
@@ -2757,6 +2793,15 @@ namespace Bit.App.Resources {
         internal static string SearchVault {
             get {
                 return ResourceManager.GetString("SearchVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Secure Notes.
+        /// </summary>
+        internal static string SecureNotes {
+            get {
+                return ResourceManager.GetString("SecureNotes", resourceCulture);
             }
         }
         

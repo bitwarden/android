@@ -1349,4 +1349,19 @@
   <data name="InvalidEmail" xml:space="preserve">
     <value>Invalid email address.</value>
   </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Identities</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Logins</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Secure Notes</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>All Items</value>
+  </data>
 </root>

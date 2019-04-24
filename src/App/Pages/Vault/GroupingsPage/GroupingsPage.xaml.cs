@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
@@ -17,12 +18,25 @@ namespace Bit.App.Pages
         private readonly GroupingsPageViewModel _viewModel;
 
         public GroupingsPage()
+            : this(true)
+        { }
+
+        public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
+            string collectionId = null, string pageTitle = null)
         {
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _viewModel = BindingContext as GroupingsPageViewModel;
             _viewModel.Page = this;
+            _viewModel.MainPage = mainPage;
+            _viewModel.Type = type;
+            _viewModel.FolderId = folderId;
+            _viewModel.CollectionId = collectionId;
+            if(pageTitle != null)
+            {
+                _viewModel.PageTitle = pageTitle;
+            }
         }
 
         protected async override void OnAppearing()
@@ -68,9 +82,13 @@ namespace Bit.App.Pages
             {
                 await _viewModel.SelectCipherAsync(item.Cipher);
             }
-            else if(item.Folder != null || item.Collection != null)
+            else if(item.Folder != null)
             {
-                // TODO
+                await _viewModel.SelectFolderAsync(item.Folder);
+            }
+            else if(item.Collection != null)
+            {
+                await _viewModel.SelectCollectionAsync(item.Collection);
             }
         }
     }

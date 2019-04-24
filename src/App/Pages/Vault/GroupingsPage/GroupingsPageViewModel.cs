@@ -1,5 +1,6 @@
 ﻿using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -28,7 +29,7 @@ namespace Bit.App.Pages
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
-            PageTitle = "My Vault";
+            PageTitle = AppResources.MyVault;
             GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
             LoadCommand = new Command(async () => await LoadAsync());
         }
@@ -36,6 +37,10 @@ namespace Bit.App.Pages
         public bool ShowFavorites { get; set; } = true;
         public bool ShowFolders { get; set; } = true;
         public bool ShowCollections { get; set; } = true;
+        public bool MainPage { get; set; }
+        public CipherType? Type { get; set; }
+        public string FolderId { get; set; }
+        public string CollectionId { get; set; }
 
         public List<CipherView> Ciphers { get; set; }
         public List<CipherView> FavoriteCiphers { get; set; }
@@ -66,11 +71,10 @@ namespace Bit.App.Pages
         {
             try
             {
-                await LoadFoldersAsync();
-                await LoadCollectionsAsync();
-                await LoadCiphersAsync();
+                await LoadDataAsync();
 
                 var favListItems = FavoriteCiphers?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+                var ciphersListItems = Ciphers?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
                 var folderListItems = NestedFolders?.Select(f => new GroupingsPageListItem { Folder = f.Node }).ToList();
                 var collectionListItems = NestedCollections?.Select(c =>
                     new GroupingsPageListItem { Collection = c.Node }).ToList();
@@ -91,6 +95,11 @@ namespace Bit.App.Pages
                     groupedItems.Add(new GroupingsPageListGroup(collectionListItems, AppResources.Collections,
                         Device.RuntimePlatform == Device.iOS));
                 }
+                if(ciphersListItems?.Any() ?? false)
+                {
+                    groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
+                        Device.RuntimePlatform == Device.iOS));
+                }
                 GroupedItems.ResetWithRange(groupedItems);
             }
             finally
@@ -105,50 +114,118 @@ namespace Bit.App.Pages
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private async Task LoadFoldersAsync()
+        public async Task SelectFolderAsync(CipherType type)
         {
-            if(!ShowFolders)
+            string title = null;
+            switch(Type.Value)
             {
-                return;
+                case CipherType.Login:
+                    title = AppResources.Logins;
+                    break;
+                case CipherType.SecureNote:
+                    title = AppResources.SecureNotes;
+                    break;
+                case CipherType.Card:
+                    title = AppResources.Cards;
+                    break;
+                case CipherType.Identity:
+                    title = AppResources.Identities;
+                    break;
+                default:
+                    break;
             }
-            Folders = await _folderService.GetAllDecryptedAsync();
-            NestedFolders = await _folderService.GetAllNestedAsync();
+            var page = new GroupingsPage(false, type, null, null, title);
+            await Page.Navigation.PushAsync(page);
         }
 
-        private async Task LoadCollectionsAsync()
+        public async Task SelectFolderAsync(FolderView folder)
         {
-            if(!ShowCollections)
-            {
-                return;
-            }
-            Collections = await _collectionService.GetAllDecryptedAsync();
-            NestedCollections = await _collectionService.GetAllNestedAsync(Collections);
+            var page = new GroupingsPage(false, null, folder.Id ?? "none", null, folder.Name);
+            await Page.Navigation.PushAsync(page);
         }
 
-        private async Task LoadCiphersAsync()
+        public async Task SelectCollectionAsync(Core.Models.View.CollectionView collection)
+        {
+            var page = new GroupingsPage(false, null, null, collection.Id, collection.Name);
+            await Page.Navigation.PushAsync(page);
+        }
+
+        private async Task LoadDataAsync()
         {
             _allCiphers = await _cipherService.GetAllDecryptedAsync();
-            Ciphers = _allCiphers;
-            foreach(var c in _allCiphers)
+            if(MainPage)
             {
-                if(c.Favorite)
+                if(ShowFolders)
                 {
-                    if(FavoriteCiphers == null)
-                    {
-                        FavoriteCiphers = new List<CipherView>();
-                    }
-                    FavoriteCiphers.Add(c);
+                    Folders = await _folderService.GetAllDecryptedAsync();
+                    NestedFolders = await _folderService.GetAllNestedAsync();
                 }
-                if(c.FolderId == null)
+                if(ShowCollections)
                 {
-                    if(NoFolderCiphers == null)
+                    Collections = await _collectionService.GetAllDecryptedAsync();
+                    NestedCollections = await _collectionService.GetAllNestedAsync(Collections);
+                }
+
+                foreach(var c in _allCiphers)
+                {
+                    if(c.Favorite)
                     {
-                        NoFolderCiphers = new List<CipherView>();
+                        if(FavoriteCiphers == null)
+                        {
+                            FavoriteCiphers = new List<CipherView>();
+                        }
+                        FavoriteCiphers.Add(c);
                     }
-                    NoFolderCiphers.Add(c);
+                    if(c.FolderId == null)
+                    {
+                        if(NoFolderCiphers == null)
+                        {
+                            NoFolderCiphers = new List<CipherView>();
+                        }
+                        NoFolderCiphers.Add(c);
+                    }
+                }
+                FavoriteCiphers = _allCiphers.Where(c => c.Favorite).ToList();
+            }
+            else
+            {
+                if(Type != null)
+                {
+                    Ciphers = _allCiphers.Where(c => c.Type == Type.Value).ToList();
+                }
+                else if(FolderId != null)
+                {
+                    FolderId = FolderId == "none" ? null : FolderId;
+                    if(FolderId != null)
+                    {
+                        var folderNode = await _folderService.GetNestedAsync(FolderId);
+                        if(folderNode?.Node != null)
+                        {
+                            PageTitle = folderNode.Node.Name;
+                            NestedFolders = (folderNode.Children?.Count ?? 0) > 0 ? folderNode.Children : null;
+                        }
+                    }
+                    else
+                    {
+                        PageTitle = AppResources.FolderNone;
+                    }
+                    Ciphers = _allCiphers.Where(c => c.FolderId == FolderId).ToList();
+                }
+                else if(CollectionId != null)
+                {
+                    var collectionNode = await _collectionService.GetNestedAsync(CollectionId);
+                    if(collectionNode?.Node != null)
+                    {
+                        PageTitle = collectionNode.Node.Name;
+                    }
+                    Ciphers = _allCiphers.Where(c => c.CollectionIds?.Contains(CollectionId) ?? false).ToList();
+                }
+                else
+                {
+                    PageTitle = AppResources.AllItems;
+                    Ciphers = _allCiphers;
                 }
             }
-            FavoriteCiphers = _allCiphers.Where(c => c.Favorite).ToList();
         }
     }
 }
