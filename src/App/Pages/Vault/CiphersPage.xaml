@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.ViewPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:ViewPageViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:ViewPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="cogs.png" 
+                     Text="{u:I18n Edit}" />
+    </ContentPage.ToolbarItems>
+
+    <StackLayout StyleClass="box">
+        <StackLayout StyleClass="box-row">
+            <Label
+                Text="{u:I18n Name}"
+                StyleClass="box-label" />
+            <Label 
+                Text="{Binding Cipher.Name, Mode=OneWay}"
+                StyleClass="box-value" />
+        </StackLayout>
+        <StackLayout StyleClass="box-row">
+            <Label
+                Text="{u:I18n Notes}"
+                StyleClass="box-label" />
+            <Label 
+                Text="{Binding Cipher.Notes, Mode=OneWay}"
+                StyleClass="box-value" />
+        </StackLayout>
+    </StackLayout>
+
+</ContentPage>

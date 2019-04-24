@@ -32,6 +32,7 @@ namespace Bit.Core.Services
         private readonly IApiService _apiService;
         private readonly IStorageService _storageService;
         private readonly II18nService _i18nService;
+        private readonly Func<ISearchService> _searchService;
         private Dictionary<string, HashSet<string>> _domainMatchBlacklist = new Dictionary<string, HashSet<string>>
         {
             ["google.com"] = new HashSet<string> { "script.google.com" }
@@ -45,7 +46,8 @@ namespace Bit.Core.Services
             ISettingsService settingsService,
             IApiService apiService,
             IStorageService storageService,
-            II18nService i18nService)
+            II18nService i18nService,
+            Func<ISearchService> searchService)
         {
             _cryptoService = cryptoService;
             _userService = userService;
@@ -53,6 +55,7 @@ namespace Bit.Core.Services
             _apiService = apiService;
             _storageService = storageService;
             _i18nService = i18nService;
+            _searchService = searchService;
         }
 
         private List<CipherView> DecryptedCipherCache
@@ -65,7 +68,17 @@ namespace Bit.Core.Services
                     _decryptedCipherCache.Clear();
                 }
                 _decryptedCipherCache = value;
-                // TODO: update search index
+                if(_searchService != null)
+                {
+                    if(value == null)
+                    {
+                        _searchService().ClearIndex();
+                    }
+                    else
+                    {
+                        _searchService().IndexCiphersAsync();
+                    }
+                }
             }
         }
 

@@ -25,6 +25,7 @@ namespace Bit.Core.Utilities
             var cryptoPrimitiveService = Resolve<ICryptoPrimitiveService>("cryptoPrimitiveService");
             var i18nService = Resolve<II18nService>("i18nService");
             var messagingService = Resolve<IMessagingService>("messagingService");
+            ISearchService searchService = null;
 
             var stateService = new StateService();
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
@@ -35,10 +36,11 @@ namespace Bit.Core.Utilities
             var userService = new UserService(storageService, tokenService);
             var settingsService = new SettingsService(userService, storageService);
             var cipherService = new CipherService(cryptoService, userService, settingsService, apiService,
-                storageService, i18nService);
+                storageService, i18nService, () => searchService);
             var folderService = new FolderService(cryptoService, userService, apiService, storageService,
                 i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
+            searchService = new SearchService(cipherService);
             // TODO: lock service
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
                 cipherService, cryptoService, collectionService, storageService, messagingService);
