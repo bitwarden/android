@@ -34,7 +34,7 @@
     <Compile Update="Pages\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\GroupingsPage\GroupingsPage.xaml.cs">
+    <Compile Update="Pages\Vault\GroupingsPage\GroupingsPage.xaml.cs">
       <DependentUpon>GroupingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\TabsPage.xaml.cs">
