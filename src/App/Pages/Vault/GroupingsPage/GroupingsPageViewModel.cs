@@ -15,6 +15,10 @@ namespace Bit.App.Pages
     {
         private bool _loading = false;
         private bool _loaded = false;
+        private bool _showAddCipherButton = false;
+        private bool _showNoData = false;
+        private bool _showList = false;
+        private string _noDataText;
         private List<CipherView> _allCiphers;
 
         private readonly ICipherService _cipherService;
@@ -32,6 +36,7 @@ namespace Bit.App.Pages
             PageTitle = AppResources.MyVault;
             GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
             LoadCommand = new Command(async () => await LoadAsync());
+            AddCipherCommand = new Command(() => { /* TODO */ });
         }
 
         public bool ShowFavorites { get; set; } = true;
@@ -58,17 +63,40 @@ namespace Bit.App.Pages
         public bool Loaded
         {
             get => _loaded;
-            set
-            {
-                SetProperty(ref _loaded, value);
-                SetProperty(ref _loading, !value);
-            }
+            set => SetProperty(ref _loaded, value);
+        }
+        public bool ShowAddCipherButton
+        {
+            get => _showAddCipherButton;
+            set => SetProperty(ref _showAddCipherButton, value);
+        }
+        public bool ShowNoData
+        {
+            get => _showNoData;
+            set => SetProperty(ref _showNoData, value);
+        }
+        public string NoDataText
+        {
+            get => _noDataText;
+            set => SetProperty(ref _noDataText, value);
+        }
+        public bool ShowList
+        {
+            get => _showList;
+            set => SetProperty(ref _showList, value);
         }
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
         public Command LoadCommand { get; set; }
+        public Command AddCipherCommand { get; set; }
 
         public async Task LoadAsync()
         {
+            ShowNoData = false;
+            Loading = true;
+            ShowList = false;
+            ShowAddCipherButton = true;
+            var groupedItems = new List<GroupingsPageListGroup>();
+
             try
             {
                 await LoadDataAsync();
@@ -79,7 +107,6 @@ namespace Bit.App.Pages
                 var collectionListItems = NestedCollections?.Select(c =>
                     new GroupingsPageListItem { Collection = c.Node }).ToList();
 
-                var groupedItems = new List<GroupingsPageListGroup>();
                 if(favListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites,
@@ -104,7 +131,10 @@ namespace Bit.App.Pages
             }
             finally
             {
+                ShowNoData = !groupedItems.Any();
+                ShowList = !ShowNoData;
                 Loaded = true;
+                Loading = false;
             }
         }
 
@@ -152,6 +182,7 @@ namespace Bit.App.Pages
 
         private async Task LoadDataAsync()
         {
+            NoDataText = AppResources.NoItems;
             _allCiphers = await _cipherService.GetAllDecryptedAsync();
             if(MainPage)
             {
@@ -195,6 +226,7 @@ namespace Bit.App.Pages
                 }
                 else if(FolderId != null)
                 {
+                    NoDataText = AppResources.NoItemsFolder;
                     FolderId = FolderId == "none" ? null : FolderId;
                     if(FolderId != null)
                     {
@@ -213,6 +245,8 @@ namespace Bit.App.Pages
                 }
                 else if(CollectionId != null)
                 {
+                    ShowAddCipherButton = false;
+                    NoDataText = AppResources.NoItemsCollection;
                     var collectionNode = await _collectionService.GetNestedAsync(CollectionId);
                     if(collectionNode?.Node != null)
                     {

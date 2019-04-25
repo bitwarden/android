@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bit.App.Pages.GroupingsPage"
              xmlns:pages="clr-namespace:Bit.App.Pages"
+             xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:controls="clr-namespace:Bit.App.Controls"
              x:DataType="pages:GroupingsPageViewModel"
              Title="{Binding PageTitle}">
@@ -60,9 +61,23 @@
                                                  CollectionTemplate="{StaticResource collectionTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>
-
     <StackLayout>
+        <ActivityIndicator VerticalOptions="CenterAndExpand"
+                           HorizontalOptions="Center"
+                           IsRunning="True"
+                           IsVisible="{Binding Loading}"></ActivityIndicator>
+        <StackLayout VerticalOptions="CenterAndExpand"
+                     Padding="20, 0"
+                     Spacing="20"
+                    IsVisible="{Binding ShowNoData}">
+            <Label Text="{Binding NoDataText}"
+                   HorizontalTextAlignment="Center"></Label>
+            <Button Text="{u:I18n AddAnItem}"
+                    Command="{Binding AddCipherCommand}"
+                    IsVisible="{Binding ShowAddCipherButton}"></Button>
+        </StackLayout>
         <ListView x:Name="ItemsListView"
+                  IsVisible="{Binding ShowList}"
                   ItemsSource="{Binding GroupedItems}"
                   VerticalOptions="FillAndExpand"
                   HasUnevenRows="true"
