@@ -52,13 +52,13 @@ namespace Bit.App.Controls
                         image = loginIconImage.Item2;
                         break;
                     case CipherType.SecureNote:
-                        icon = "&#xf24a;";
+                        icon = "";
                         break;
                     case CipherType.Card:
-                        icon = "&#xf09d;";
+                        icon = "";
                         break;
                     case CipherType.Identity:
-                        icon = "&#xf2c3;";
+                        icon = "";
                         break;
                     default:
                         break;
@@ -83,7 +83,7 @@ namespace Bit.App.Controls
 
         private Tuple<string, string> GetLoginIconImage(CipherView cipher)
         {
-            string icon = "&#xf0ac;";
+            string icon = "";
             string image = null;
             var imageEnabled = true;
             if(cipher.Login.Uri != null)
@@ -93,11 +93,11 @@ namespace Bit.App.Controls
 
                 if(hostnameUri.StartsWith(Constants.AndroidAppProtocol))
                 {
-                    icon = "&#xf17b;";
+                    icon = "";
                 }
                 else if(hostnameUri.StartsWith(Constants.iOSAppProtocol))
                 {
-                    icon = "&#xf179;";
+                    icon = "";
                 }
                 else if(imageEnabled && !hostnameUri.Contains("://") && hostnameUri.Contains("."))
                 {

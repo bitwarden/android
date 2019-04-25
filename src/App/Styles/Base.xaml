@@ -58,7 +58,7 @@
         <Setter Property="Margin"
                 Value="3, 3, 3, 0" />
         <Setter Property="FontSize"
-                Value="Medium" />
+                Value="Large" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
