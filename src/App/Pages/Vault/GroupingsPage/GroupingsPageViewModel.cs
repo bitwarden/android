@@ -13,11 +13,12 @@ namespace Bit.App.Pages
 {
     public class GroupingsPageViewModel : BaseViewModel
     {
-        private bool _loading = false;
-        private bool _loaded = false;
-        private bool _showAddCipherButton = false;
-        private bool _showNoData = false;
-        private bool _showList = false;
+        private bool _refreshing;
+        private bool _loading;
+        private bool _loaded;
+        private bool _showAddCipherButton;
+        private bool _showNoData;
+        private bool _showList;
         private string _noDataText;
         private List<CipherView> _allCiphers;
 
@@ -33,9 +34,14 @@ namespace Bit.App.Pages
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
+            Loading = true;
             PageTitle = AppResources.MyVault;
             GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
-            LoadCommand = new Command(async () => await LoadAsync());
+            RefreshCommand = new Command(async () =>
+            {
+                Refreshing = true;
+                await LoadAsync();
+            });
             AddCipherCommand = new Command(() => { /* TODO */ });
         }
 
@@ -55,6 +61,11 @@ namespace Bit.App.Pages
         public List<Core.Models.View.CollectionView> Collections { get; set; }
         public List<TreeNode<Core.Models.View.CollectionView>> NestedCollections { get; set; }
 
+        public bool Refreshing
+        {
+            get => _refreshing;
+            set => SetProperty(ref _refreshing, value);
+        }
         public bool Loading
         {
             get => _loading;
@@ -86,7 +97,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _showList, value);
         }
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
-        public Command LoadCommand { get; set; }
+        public Command RefreshCommand { get; set; }
         public Command AddCipherCommand { get; set; }
 
         public async Task LoadAsync()
@@ -135,6 +146,7 @@ namespace Bit.App.Pages
                 ShowList = !ShowNoData;
                 Loaded = true;
                 Loading = false;
+                Refreshing = false;
             }
         }
 
