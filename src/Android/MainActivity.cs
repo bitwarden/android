@@ -7,9 +7,9 @@ namespace Bit.Droid
 {
     [Activity(
         Label = "Bitwarden",
-        MainLauncher = true,
         Icon = "@mipmap/ic_launcher",
         Theme = "@style/MainTheme",
+        Exported = false,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity

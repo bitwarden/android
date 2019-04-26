@@ -66,6 +66,7 @@
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SplashActivity.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRecyclerAdapter.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRenderer.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewSimpleCallback.cs" />
