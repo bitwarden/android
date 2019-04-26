@@ -44,6 +44,7 @@ namespace Bit.Droid
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
             var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
+            liteDbStorage.InitAsync();
             var deviceActionService = new DeviceActionService();
             var localizeService = new LocalizeService();
             var broadcasterService = new BroadcasterService();
