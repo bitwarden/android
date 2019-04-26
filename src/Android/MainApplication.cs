@@ -39,7 +39,8 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
-            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+            // Note: This might cause a race condition. Investigate more.
+            Task.Run(() => FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true));
 
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
