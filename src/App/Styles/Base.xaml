@@ -87,6 +87,14 @@
         <Setter Property="Spacing"
                 Value="0" />
     </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-header">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 5" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-header">
+    </Style>
     <Style TargetType="Grid"
            Class="box-row">
         <Setter Property="Padding"

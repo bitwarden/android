@@ -13,6 +13,7 @@
     <Color x:Key="BorderColor">#dddddd</Color>
 
     <Color x:Key="BoxBorderColor">#f0f0f0</Color>
+    <Color x:Key="BoxHeaderTextColor">#3c8dbc</Color>
 
     <Color x:Key="ListItemBorderColor">#f0f0f0</Color>
     <Color x:Key="ListHeaderTextColor">#3c8dbc</Color>

@@ -111,6 +111,7 @@
                 <Label
                     Text="{Binding TotpSec, Mode=OneWay}"
                     Style="{DynamicResource textTotp}"
+                    Margin="0, 0, 10, 0"
                     Grid.Row="0"
                     Grid.Column="1"
                     Grid.RowSpan="2"

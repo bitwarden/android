@@ -2,6 +2,8 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Android">
+    <!-- List -->
+    
     <Style TargetType="ListView"
            Class="list-platform">
         <Setter Property="SeparatorColor"
@@ -25,6 +27,15 @@
     
     <!-- Box -->
 
+    <Style TargetType="Label"
+           Class="box-header-platform">
+        <Setter Property="TextColor"
+                Value="{StaticResource BoxHeaderTextColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+    </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
            Class="box-row-button-platform">
