@@ -49,6 +49,7 @@ namespace Bit.App.Pages
         {
             base.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(ViewPage));
+            _vm.CleanUp();
         }
     }
 }

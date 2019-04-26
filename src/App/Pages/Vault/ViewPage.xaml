@@ -5,6 +5,7 @@
     x:Class="Bit.App.Pages.ViewPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
     x:DataType="pages:ViewPageViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
@@ -17,19 +18,123 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout StyleClass="box">
+        <StackLayout StyleClass="box-row-header">
+            <Label Text="{u:I18n ItemInformation}"
+                   StyleClass="box-header, box-header-platform" />
+        </StackLayout>
         <StackLayout StyleClass="box-row">
             <Label
                 Text="{u:I18n Name}"
                 StyleClass="box-label" />
-            <Label 
+            <Label
                 Text="{Binding Cipher.Name, Mode=OneWay}"
                 StyleClass="box-value" />
+        </StackLayout>
+        <BoxView StyleClass="box-row-separator" />
+        <StackLayout IsVisible="{Binding IsLogin}">
+            <Grid StyleClass="box-row">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Text="{u:I18n Username}"
+                    StyleClass="box-label"
+                    Grid.Row="0"
+                    Grid.Column="0" />
+                <Label
+                    Text="{Binding Cipher.Login.Username, Mode=OneWay}"
+                    StyleClass="box-value"
+                    Grid.Row="1"
+                    Grid.Column="0" />
+                <controls:FaButton StyleClass="box-row-button, box-row-button-platform"
+                        Text="&#xf0ea;"
+                        Command="{Binding CopyCommand}"
+                        CommandParameter="LoginUsername"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2" />
+            </Grid>
+            <BoxView StyleClass="box-row-separator" />
+            <Grid StyleClass="box-row">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Text="{u:I18n Password}"
+                    StyleClass="box-label"
+                    Grid.Row="0"
+                    Grid.Column="0" />
+                <Label
+                    Text="{Binding Cipher.Login.MaskedPassword, Mode=OneWay}"
+                    StyleClass="box-value"
+                    Grid.Row="1"
+                    Grid.Column="0" />
+                <controls:FaButton StyleClass="box-row-button, box-row-button-platform"
+                        Text="&#xf0ea;"
+                        Command="{Binding CopyCommand}"
+                        CommandParameter="LoginPassword"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2" />
+            </Grid>
+            <BoxView StyleClass="box-row-separator" />
+            <Grid StyleClass="box-row">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Label
+                    Text="{u:I18n VerificationCodeTotp}"
+                    StyleClass="box-label"
+                    Grid.Row="0"
+                    Grid.Column="0" />
+                <Label
+                    Text="{Binding TotpCodeFormatted, Mode=OneWay}"
+                    StyleClass="box-value"
+                    Grid.Row="1"
+                    Grid.Column="0" />
+                <Label
+                    Text="{Binding TotpSec, Mode=OneWay}"
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Grid.RowSpan="2"
+                    HorizontalOptions="End"
+                    VerticalOptions="CenterAndExpand"/>
+                <controls:FaButton StyleClass="box-row-button, box-row-button-platform"
+                        Text="&#xf0ea;"
+                        Command="{Binding CopyCommand}"
+                        CommandParameter="LoginTotp"
+                        Grid.Row="0"
+                        Grid.Column="2"
+                        Grid.RowSpan="2" />
+            </Grid>
+        </StackLayout>
+        <StackLayout IsVisible="{Binding IsCard}">
+            
+        </StackLayout>
+        <StackLayout IsVisible="{Binding IsIdentity}">
+            
         </StackLayout>
         <StackLayout StyleClass="box-row">
             <Label
                 Text="{u:I18n Notes}"
                 StyleClass="box-label" />
-            <Label 
+            <Label
                 Text="{Binding Cipher.Notes, Mode=OneWay}"
                 StyleClass="box-value" />
         </StackLayout>

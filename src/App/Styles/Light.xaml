@@ -10,5 +10,10 @@
     <Color x:Key="WarningColor">#bf7e16</Color>
     <Color x:Key="MutedColor">#777777</Color>
 
+    <Color x:Key="BorderColor">#dddddd</Color>
+
+    <Color x:Key="BoxBorderColor">#dddddd</Color>
+
+    <Color x:Key="ListItemBorderColor">#f0f0f0</Color>
     <Color x:Key="ListHeaderTextColor">#3c8dbc</Color>
 </ResourceDictionary>

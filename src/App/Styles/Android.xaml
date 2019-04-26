@@ -22,4 +22,15 @@
     <Style TargetType="Grid"
            Class="list-row-platform">
     </Style>
+    
+    <!-- Box -->
+
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-row-button-platform">
+        <Setter Property="WidthRequest"
+                Value="40" />
+        <Setter Property="FontSize"
+                Value="28" />
+    </Style>
 </ResourceDictionary>

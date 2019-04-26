@@ -62,4 +62,61 @@
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
+    
+    <!-- Box -->
+
+    <Style TargetType="StackLayout"
+           Class="box">
+        <Setter Property="Padding"
+                Value="10, 0" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="Grid"
+           Class="box-row">
+        <Setter Property="Padding"
+                Value="0, 10" />
+        <Setter Property="RowSpacing"
+                Value="0" />
+        <Setter Property="ColumnSpacing"
+                Value="10" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row">
+        <Setter Property="Padding"
+                Value="0, 10" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-row-button">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{StaticResource PrimaryColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="box-row-separator">
+        <Setter Property="HeightRequest"
+                Value="1" />
+        <Setter Property="Color"
+                Value="{StaticResource BoxBorderColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-value">
+    </Style>
 </ResourceDictionary>
