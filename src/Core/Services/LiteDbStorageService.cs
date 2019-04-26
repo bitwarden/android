@@ -32,21 +32,18 @@ namespace Bit.Core.Services
             {
                 return _initTask;
             }
-            Task doTask()
+            _initTask = Task.Run(() =>
             {
-                
                 try
                 {
                     var db = new LiteDatabase($"Filename={_dbPath};");
                     _collection = db.GetCollection<JsonItem>("json_items");
-                    return Task.FromResult(0);
                 }
                 finally
                 {
                     _initTask = null;
                 }
-            };
-            _initTask = doTask();
+            });
             return _initTask;
         }
 
