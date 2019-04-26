@@ -9,20 +9,30 @@ namespace Bit.Core.Services
 {
     public class LiteDbStorageService : IStorageService
     {
-        private readonly LiteCollection<JsonItem> _collection;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
+        private readonly string _dbPath;
+        private LiteCollection<JsonItem> _collection;
 
         public LiteDbStorageService(string dbPath)
         {
-            var db = new LiteDatabase($"Filename={dbPath};");
-            _collection = db.GetCollection<JsonItem>("json_items");
+            _dbPath = dbPath;
+        }
+
+        public void Init()
+        {
+            if(_collection == null)
+            {
+                var db = new LiteDatabase($"Filename={_dbPath};");
+                _collection = db.GetCollection<JsonItem>("json_items");
+            }
         }
 
         public Task<T> GetAsync<T>(string key)
         {
+            Init();
             var item = _collection.Find(i => i.Id == key).FirstOrDefault();
             if(item == null)
             {
@@ -33,6 +43,7 @@ namespace Bit.Core.Services
 
         public Task SaveAsync<T>(string key, T obj)
         {
+            Init();
             var data = JsonConvert.SerializeObject(obj, _jsonSettings);
             _collection.Upsert(new JsonItem(key, data));
             return Task.FromResult(0);
@@ -40,6 +51,7 @@ namespace Bit.Core.Services
 
         public Task RemoveAsync(string key)
         {
+            Init();
             _collection.Delete(i => i.Id == key);
             return Task.FromResult(0);
         }
