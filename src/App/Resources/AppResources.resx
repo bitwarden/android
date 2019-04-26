@@ -1364,4 +1364,8 @@
   <data name="AllItems" xml:space="preserve">
     <value>All Items</value>
   </data>
+  <data name="URIs" xml:space="preserve">
+    <value>URIs</value>
+    <comment>Plural form of a URI</comment>
+  </data>
 </root>

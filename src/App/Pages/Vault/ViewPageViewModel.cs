@@ -31,12 +31,16 @@ namespace Bit.App.Pages
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
-            CopyCommand = new Command<string>(CopyAsync);
+            CopyCommand = new Command<string>((id) => CopyAsync(id, null));
+            CopyUriCommand = new Command<LoginUriView>(CopyUriAsync);
+            LaunchUriCommand = new Command<LoginUriView>(LaunchUriAsync);
 
             PageTitle = AppResources.ViewItem;
         }
 
         public Command CopyCommand { get; set; }
+        public Command CopyUriCommand { get; set; }
+        public Command LaunchUriCommand { get; set; }
         public string CipherId { get; set; }
         public CipherView Cipher
         {
@@ -47,7 +51,11 @@ namespace Bit.App.Pages
                     nameof(IsLogin),
                     nameof(IsIdentity),
                     nameof(IsCard),
-                    nameof(IsSecureNote)
+                    nameof(IsSecureNote),
+                    nameof(ShowUris),
+                    nameof(ShowFields),
+                    nameof(ShowNotes),
+                    nameof(ShowTotp)
                 });
         }
         public bool CanAccessPremium
@@ -59,10 +67,19 @@ namespace Bit.App.Pages
         public bool IsIdentity => _cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => _cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => _cipher?.Type == Core.Enums.CipherType.SecureNote;
+        public bool ShowUris => IsLogin && _cipher.Login.HasUris;
+        public bool ShowNotes => !string.IsNullOrWhiteSpace(_cipher.Notes);
+        public bool ShowFields => _cipher.HasFields;
+        public bool ShowTotp => !string.IsNullOrWhiteSpace(_cipher.Login.Totp) &&
+            !string.IsNullOrWhiteSpace(TotpCodeFormatted);
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
-            set => SetProperty(ref _totpCodeFormatted, value);
+            set => SetProperty(ref _totpCodeFormatted, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowTotp)
+                });
         }
         public string TotpSec
         {
@@ -151,9 +168,8 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void CopyAsync(string id)
+        private async void CopyAsync(string id, string text = null)
         {
-            string text = null;
             string name = null;
             if(id == "LoginUsername")
             {
@@ -170,6 +186,10 @@ namespace Bit.App.Pages
                 text = _totpCode;
                 name = AppResources.VerificationCodeTotp;
             }
+            else if(id == "LoginUri")
+            {
+                name = AppResources.URI;
+            }
 
             if(text != null)
             {
@@ -178,6 +198,19 @@ namespace Bit.App.Pages
                 {
                     _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
                 }
+            }
+        }
+
+        private void CopyUriAsync(LoginUriView uri)
+        {
+            CopyAsync("LoginUri", uri.Uri);
+        }
+
+        private void LaunchUriAsync(LoginUriView uri)
+        {
+            if(uri.CanLaunch)
+            {
+                _platformUtilsService.LaunchUri(uri.LaunchUri);
             }
         }
     }

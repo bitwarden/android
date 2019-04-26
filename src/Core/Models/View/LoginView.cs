@@ -19,11 +19,11 @@ namespace Bit.Core.Models.View
         public DateTime? PasswordRevisionDate { get; set; }
         public string Totp { get; set; }
         public List<LoginUriView> Uris { get; set; }
-        public string Uri => HashUris ? Uris[0].Uri : null;
+        public string Uri => HasUris ? Uris[0].Uri : null;
         public string MaskedPassword => Password != null ? "••••••••" : null;
         public string SubTitle => Username;
-        public bool CanLaunch => HashUris && Uris.Any(u => u.CanLaunch);
-        public string LaunchUri => HashUris ? Uris.FirstOrDefault(u => u.CanLaunch)?.LaunchUri : null;
-        public bool HashUris => (Uris?.Count ?? 0) > 0;
+        public bool CanLaunch => HasUris && Uris.Any(u => u.CanLaunch);
+        public string LaunchUri => HasUris ? Uris.FirstOrDefault(u => u.CanLaunch)?.LaunchUri : null;
+        public bool HasUris => (Uris?.Count ?? 0) > 0;
     }
 }

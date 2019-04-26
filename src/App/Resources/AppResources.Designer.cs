@@ -3247,6 +3247,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to URIs.
+        /// </summary>
+        internal static string URIs {
+            get {
+                return ResourceManager.GetString("URIs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use another two-step login method.
         /// </summary>
         internal static string UseAnotherTwoStepMethod {

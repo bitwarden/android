@@ -42,6 +42,7 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+            // await _syncService.FullSyncAsync(true);
             _broadcasterService.Subscribe(nameof(GroupingsPage), async (message) =>
             {
                 if(message.Command == "syncCompleted")

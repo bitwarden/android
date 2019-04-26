@@ -40,8 +40,8 @@
            ApplyToDerivedTypes="True"
            Class="box-row-button-platform">
         <Setter Property="WidthRequest"
-                Value="40" />
+                Value="37" />
         <Setter Property="FontSize"
-                Value="28" />
+                Value="25" />
     </Style>
 </ResourceDictionary>
