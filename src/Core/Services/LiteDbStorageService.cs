@@ -15,45 +15,63 @@ namespace Bit.Core.Services
         };
         private readonly string _dbPath;
         private LiteCollection<JsonItem> _collection;
+        private Task _initTask;
 
         public LiteDbStorageService(string dbPath)
         {
             _dbPath = dbPath;
         }
 
-        public void Init()
+        public Task InitAsync()
         {
-            if(_collection == null)
+            if(_collection != null)
             {
-                var db = new LiteDatabase($"Filename={_dbPath};");
-                _collection = db.GetCollection<JsonItem>("json_items");
+                return Task.FromResult(0);
             }
+            if(_initTask != null)
+            {
+                return _initTask;
+            }
+            Task doTask()
+            {
+                
+                try
+                {
+                    var db = new LiteDatabase($"Filename={_dbPath};");
+                    _collection = db.GetCollection<JsonItem>("json_items");
+                    return Task.FromResult(0);
+                }
+                finally
+                {
+                    _initTask = null;
+                }
+            };
+            _initTask = doTask();
+            return _initTask;
         }
 
-        public Task<T> GetAsync<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
-            Init();
+            await InitAsync();
             var item = _collection.Find(i => i.Id == key).FirstOrDefault();
             if(item == null)
             {
-                return Task.FromResult(default(T));
+                return default(T);
             }
-            return Task.FromResult(JsonConvert.DeserializeObject<T>(item.Value, _jsonSettings));
+            return JsonConvert.DeserializeObject<T>(item.Value, _jsonSettings);
         }
 
-        public Task SaveAsync<T>(string key, T obj)
+        public async Task SaveAsync<T>(string key, T obj)
         {
-            Init();
+            await InitAsync();
             var data = JsonConvert.SerializeObject(obj, _jsonSettings);
             _collection.Upsert(new JsonItem(key, data));
-            return Task.FromResult(0);
         }
 
-        public Task RemoveAsync(string key)
+        public async Task RemoveAsync(string key)
         {
-            Init();
+            await InitAsync();
             _collection.Delete(i => i.Id == key);
-            return Task.FromResult(0);
         }
 
         private class JsonItem
