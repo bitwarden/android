@@ -110,10 +110,12 @@
                     Grid.Column="0" />
                 <Label
                     Text="{Binding TotpSec, Mode=OneWay}"
+                    Style="{DynamicResource textTotp}"
                     Grid.Row="0"
                     Grid.Column="1"
                     Grid.RowSpan="2"
                     HorizontalOptions="End"
+                    HorizontalTextAlignment="End"
                     VerticalOptions="CenterAndExpand"/>
                 <controls:FaButton StyleClass="box-row-button, box-row-button-platform"
                         Text="&#xf0ea;"

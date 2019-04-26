@@ -11,6 +11,21 @@
         <Setter Property="TextColor"
                 Value="{StaticResource TextColor}" />
     </Style>
+    <Style TargetType="Label"
+           x:Key="text-default">
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="text-danger">
+        <Setter Property="TextColor"
+                Value="{StaticResource DangerColor}" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="text-success">
+        <Setter Property="TextColor"
+                Value="{StaticResource SuccessColor}" />
+    </Style>
 
     <!-- List -->
     <Style TargetType="ListView"

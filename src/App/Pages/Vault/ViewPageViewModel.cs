@@ -72,7 +72,11 @@ namespace Bit.App.Pages
         public bool TotpLow
         {
             get => _totpLow;
-            set => SetProperty(ref _totpLow, value);
+            set
+            {
+                SetProperty(ref _totpLow, value);
+                Page.Resources["textTotp"] = Application.Current.Resources[value ? "text-danger" : "text-default"];
+            }
         }
 
         public async Task LoadAsync()
