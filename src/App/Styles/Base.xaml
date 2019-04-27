@@ -141,5 +141,7 @@
     </Style>
     <Style TargetType="Label"
            Class="box-value">
+        <Setter Property="LineBreakMode"
+                Value="CharacterWrap" />
     </Style>
 </ResourceDictionary>

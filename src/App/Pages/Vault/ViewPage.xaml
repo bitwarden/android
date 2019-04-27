@@ -185,7 +185,6 @@
                                     <Label
                                         Text="{Binding HostnameOrUri, Mode=OneWay}"
                                         StyleClass="box-value"
-                                        LineBreakMode="CharacterWrap"
                                         Grid.Row="1"
                                         Grid.Column="0" />
                                     <controls:FaButton
