@@ -1,6 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -67,6 +68,7 @@ namespace Bit.App.Pages
                     nameof(ShowNotes),
                     nameof(ShowTotp),
                     nameof(ShowUsername),
+                    nameof(ColoredPassword),
                     nameof(ShowPasswordBox)
                 });
         }
@@ -103,6 +105,7 @@ namespace Bit.App.Pages
         public bool IsCard => _cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => _cipher?.Type == Core.Enums.CipherType.SecureNote;
         public bool ShowUsername => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Username);
+        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(_cipher.Login.Password);
         public bool ShowPasswordBox => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Password);
         public bool ShowUris => IsLogin && _cipher.Login.HasUris;
         public bool ShowNotes => !string.IsNullOrWhiteSpace(_cipher.Notes);
