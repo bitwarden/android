@@ -49,7 +49,7 @@ namespace Bit.App
                     }
                     else
                     {
-                        await MainPage.DisplayAlert(details.Title, details.Text, details.ConfirmText);
+                        await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
                     }
                     _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                 }

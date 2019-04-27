@@ -16,7 +16,7 @@ namespace Bit.Core.Services
         private readonly ICryptoFunctionService _cryptoFunctionService;
         private readonly IApiService _apiService;
 
-        private HttpClient _httpClient;
+        private HttpClient _httpClient = new HttpClient();
 
         public AuditService(
             ICryptoFunctionService cryptoFunctionService,

@@ -1368,4 +1368,17 @@
     <value>URIs</value>
     <comment>Plural form of a URI</comment>
   </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Checking password...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Check if password has been exposed.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+  </data>
 </root>

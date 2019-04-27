@@ -20,6 +20,7 @@ namespace Bit.App.Pages
         private readonly IUserService _userService;
         private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IAuditService _auditService;
         private CipherView _cipher;
         private List<ViewFieldViewModel> _fields;
         private bool _canAccessPremium;
@@ -38,11 +39,13 @@ namespace Bit.App.Pages
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
-            CopyUriCommand = new Command<LoginUriView>(CopyUriAsync);
-            LaunchUriCommand = new Command<LoginUriView>(LaunchUriAsync);
+            CopyUriCommand = new Command<LoginUriView>(CopyUri);
+            LaunchUriCommand = new Command<LoginUriView>(LaunchUri);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
+            CheckPasswordCommand = new Command(CheckPasswordAsync);
 
             PageTitle = AppResources.ViewItem;
         }
@@ -52,6 +55,7 @@ namespace Bit.App.Pages
         public Command LaunchUriCommand { get; set; }
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
+        public Command CheckPasswordCommand { get; set; }
         public string CipherId { get; set; }
         public CipherView Cipher
         {
@@ -221,6 +225,25 @@ namespace Bit.App.Pages
             }
         }
 
+        private async void CheckPasswordAsync()
+        {
+            if(string.IsNullOrWhiteSpace(Cipher.Login?.Password))
+            {
+                return;
+            }
+            await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
+            var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
+            await _deviceActionService.HideLoadingAsync();
+            if(matches > 0)
+            {
+                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed, matches));
+            }
+            else
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
+            }
+        }
+
         private async void CopyAsync(string id, string text = null)
         {
             string name = null;
@@ -254,12 +277,12 @@ namespace Bit.App.Pages
             }
         }
 
-        private void CopyUriAsync(LoginUriView uri)
+        private void CopyUri(LoginUriView uri)
         {
             CopyAsync("LoginUri", uri.Uri);
         }
 
-        private void LaunchUriAsync(LoginUriView uri)
+        private void LaunchUri(LoginUriView uri)
         {
             if(uri.CanLaunch)
             {

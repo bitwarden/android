@@ -835,6 +835,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Checking password....
+        /// </summary>
+        internal static string CheckingPassword {
+            get {
+                return ResourceManager.GetString("CheckingPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check if password has been exposed..
+        /// </summary>
+        internal static string CheckPassword {
+            get {
+                return ResourceManager.GetString("CheckPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose File.
         /// </summary>
         internal static string ChooseFile {
@@ -2581,6 +2599,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This password has been exposed {0} time(s) in data breaches. You should change it..
+        /// </summary>
+        internal static string PasswordExposed {
+            get {
+                return ResourceManager.GetString("PasswordExposed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password generated..
         /// </summary>
         internal static string PasswordGenerated {
@@ -2622,6 +2649,15 @@ namespace Bit.App.Resources {
         internal static string PasswordOverrideAlert {
             get {
                 return ResourceManager.GetString("PasswordOverrideAlert", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This password was not found in any known data breaches. It should be safe to use..
+        /// </summary>
+        internal static string PasswordSafe {
+            get {
+                return ResourceManager.GetString("PasswordSafe", resourceCulture);
             }
         }
         
