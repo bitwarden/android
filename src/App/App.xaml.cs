@@ -29,7 +29,6 @@ namespace Bit.App
 
             InitializeComponent();
             SetCulture();
-            // ThemeManager.SetTheme("light");
             ThemeManager.SetThemeStyle("light");
             MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
