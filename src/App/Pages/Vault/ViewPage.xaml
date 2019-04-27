@@ -190,7 +190,7 @@
                                         Grid.Column="0" />
                                     <controls:FaButton
                                         StyleClass="box-row-button, box-row-button-platform"
-                                        Text="&#xf064;"
+                                        Text="&#xf045;"
                                         Command="{Binding BindingContext.LaunchUriCommand, Source={x:Reference _page}}"
                                         CommandParameter="{Binding .}"
                                         Grid.Row="0"
