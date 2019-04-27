@@ -45,7 +45,7 @@
                 <StackLayout IsVisible="{Binding IsLogin}" 
                              Spacing="0" 
                              Padding="0">
-                    <Grid StyleClass="box-row">
+                    <Grid StyleClass="box-row" IsVisible="{Binding ShowUsername}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -74,7 +74,7 @@
                             Grid.RowSpan="2" />
                     </Grid>
                     <BoxView StyleClass="box-row-separator" />
-                    <Grid StyleClass="box-row">
+                    <Grid StyleClass="box-row" IsVisible="{Binding ShowPasswordBox}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
@@ -82,24 +82,39 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <Label
                             Text="{u:I18n Password}"
                             StyleClass="box-label"
                             Grid.Row="0"
                             Grid.Column="0" />
-                        <Label
+                        <controls:MonoLabel
                             Text="{Binding Cipher.Login.MaskedPassword, Mode=OneWay}"
                             StyleClass="box-value"
                             Grid.Row="1"
-                            Grid.Column="0" />
+                            Grid.Column="0"
+                            IsVisible="{Binding ShowPassword, Converter={StaticResource inverseBool}}" />
+                        <controls:MonoLabel
+                            Text="{Binding Cipher.Login.Password, Mode=OneWay}"
+                            StyleClass="box-value"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            IsVisible="{Binding ShowPassword}" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding ShowPasswordIcon}"
+                            Command="{Binding TogglePasswordCommand}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2" />
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf0ea;"
                             Command="{Binding CopyCommand}"
                             CommandParameter="LoginPassword"
                             Grid.Row="0"
-                            Grid.Column="1"
+                            Grid.Column="2"
                             Grid.RowSpan="2" />
                     </Grid>
                     <BoxView StyleClass="box-row-separator" />
@@ -118,7 +133,7 @@
                             StyleClass="box-label"
                             Grid.Row="0"
                             Grid.Column="0" />
-                        <Label
+                        <controls:MonoLabel
                             Text="{Binding TotpCodeFormatted, Mode=OneWay}"
                             StyleClass="box-value"
                             Grid.Row="1"

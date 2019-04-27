@@ -22,6 +22,8 @@ namespace Bit.App.Pages
         private CipherView _cipher;
         private List<ViewFieldViewModel> _fields;
         private bool _canAccessPremium;
+        private bool _showPassword;
+        private bool _showCardCode;
         private string _totpCode;
         private string _totpCodeFormatted;
         private string _totpSec;
@@ -38,6 +40,8 @@ namespace Bit.App.Pages
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUriAsync);
             LaunchUriCommand = new Command<LoginUriView>(LaunchUriAsync);
+            TogglePasswordCommand = new Command(TogglePassword);
+            ToggleCardCodeCommand = new Command(ToggleCardCode);
 
             PageTitle = AppResources.ViewItem;
         }
@@ -45,6 +49,8 @@ namespace Bit.App.Pages
         public Command CopyCommand { get; set; }
         public Command CopyUriCommand { get; set; }
         public Command LaunchUriCommand { get; set; }
+        public Command TogglePasswordCommand { get; set; }
+        public Command ToggleCardCodeCommand { get; set; }
         public string CipherId { get; set; }
         public CipherView Cipher
         {
@@ -59,7 +65,9 @@ namespace Bit.App.Pages
                     nameof(ShowUris),
                     nameof(ShowFields),
                     nameof(ShowNotes),
-                    nameof(ShowTotp)
+                    nameof(ShowTotp),
+                    nameof(ShowUsername),
+                    nameof(ShowPasswordBox)
                 });
         }
         public List<ViewFieldViewModel> Fields
@@ -72,15 +80,37 @@ namespace Bit.App.Pages
             get => _canAccessPremium;
             set => SetProperty(ref _canAccessPremium, value);
         }
+        public bool ShowPassword
+        {
+            get => _showPassword;
+            set => SetProperty(ref _showPassword, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowPasswordIcon)
+                });
+        }
+        public bool ShowCardCode
+        {
+            get => _showCardCode;
+            set => SetProperty(ref _showCardCode, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowCardCodeIcon)
+                });
+        }
         public bool IsLogin => _cipher?.Type == Core.Enums.CipherType.Login;
         public bool IsIdentity => _cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => _cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => _cipher?.Type == Core.Enums.CipherType.SecureNote;
+        public bool ShowUsername => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Username);
+        public bool ShowPasswordBox => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Password);
         public bool ShowUris => IsLogin && _cipher.Login.HasUris;
         public bool ShowNotes => !string.IsNullOrWhiteSpace(_cipher.Notes);
         public bool ShowFields => _cipher.HasFields;
-        public bool ShowTotp => !string.IsNullOrWhiteSpace(_cipher.Login.Totp) &&
+        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);
+        public string ShowPasswordIcon => _showPassword ? "" : "";
+        public string ShowCardCodeIcon => _showCardCode ? "" : "";
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -135,6 +165,16 @@ namespace Bit.App.Pages
         public void CleanUp()
         {
             _totpInterval = null;
+        }
+
+        public void TogglePassword()
+        {
+            ShowPassword = !ShowPassword;
+        }
+
+        public void ToggleCardCode()
+        {
+            ShowCardCode = !ShowCardCode;
         }
 
         private async Task TotpUpdateCodeAsync()

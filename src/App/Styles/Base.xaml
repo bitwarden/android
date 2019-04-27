@@ -140,6 +140,7 @@
                 Value="{StaticResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
            Class="box-value">
         <Setter Property="LineBreakMode"
                 Value="CharacterWrap" />

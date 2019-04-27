@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\FontAwesome.ttf" />
+    <AndroidAsset Include="Assets\RobotoMono_Regular.ttf" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
