@@ -1,9 +1,12 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -17,6 +20,7 @@ namespace Bit.App.Pages
         private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private CipherView _cipher;
+        private List<ViewFieldViewModel> _fields;
         private bool _canAccessPremium;
         private string _totpCode;
         private string _totpCodeFormatted;
@@ -57,6 +61,11 @@ namespace Bit.App.Pages
                     nameof(ShowNotes),
                     nameof(ShowTotp)
                 });
+        }
+        public List<ViewFieldViewModel> Fields
+        {
+            get => _fields;
+            set => SetProperty(ref _fields, value);
         }
         public bool CanAccessPremium
         {
@@ -102,6 +111,7 @@ namespace Bit.App.Pages
             var cipher = await _cipherService.GetAsync(CipherId);
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _userService.CanAccessPremiumAsync();
+            Fields = Cipher.Fields?.Select(f => new ViewFieldViewModel(f)).ToList();
 
             if(Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
