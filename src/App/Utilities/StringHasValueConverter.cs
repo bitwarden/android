@@ -8,9 +8,16 @@ namespace Bit.App.Utilities
         public object Convert(object value, Type targetType, object parameter,
             System.Globalization.CultureInfo culture)
         {
-            if(targetType == typeof(bool) && value.GetType() == typeof(string))
+            if(targetType == typeof(bool))
             {
-                return !string.IsNullOrWhiteSpace((string)value);
+                if(value == null)
+                {
+                    return false;
+                }
+                if(value.GetType() == typeof(string))
+                {
+                    return !string.IsNullOrWhiteSpace((string)value);
+                }
             }
             throw new InvalidOperationException("The value must be a string with a boolean target.");
         }
