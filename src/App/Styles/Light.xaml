@@ -13,6 +13,7 @@
     <Color x:Key="PasswordSpecialColor">#c40800</Color>
 
     <Color x:Key="BorderColor">#dddddd</Color>
+    <Color x:Key="DisabledIconColor">#c7c7cd</Color>
 
     <Color x:Key="BoxBorderColor">#dddddd</Color>
     <Color x:Key="BoxHeaderTextColor">#3c8dbc</Color>

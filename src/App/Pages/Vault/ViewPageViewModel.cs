@@ -47,6 +47,7 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             CheckPasswordCommand = new Command(CheckPasswordAsync);
+            DownloadAttachmentCommand = new Command<AttachmentView>(DownloadAttachmentAsync);
 
             PageTitle = AppResources.ViewItem;
         }
@@ -58,6 +59,7 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
         public Command CheckPasswordCommand { get; set; }
+        public Command DownloadAttachmentCommand { get; set; }
         public string CipherId { get; set; }
         public CipherView Cipher
         {
@@ -104,21 +106,22 @@ namespace Bit.App.Pages
                     nameof(ShowCardCodeIcon)
                 });
         }
-        public bool IsLogin => _cipher?.Type == Core.Enums.CipherType.Login;
-        public bool IsIdentity => _cipher?.Type == Core.Enums.CipherType.Identity;
-        public bool IsCard => _cipher?.Type == Core.Enums.CipherType.Card;
-        public bool IsSecureNote => _cipher?.Type == Core.Enums.CipherType.SecureNote;
-        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(_cipher.Login.Password);
-        public bool ShowUris => IsLogin && _cipher.Login.HasUris;
+        public bool IsLogin => Cipher?.Type == Core.Enums.CipherType.Login;
+        public bool IsIdentity => Cipher?.Type == Core.Enums.CipherType.Identity;
+        public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
+        public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
+        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(Cipher.Login.Password);
+        public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
-            !string.IsNullOrWhiteSpace(_cipher.Identity.Address1) ||
-            !string.IsNullOrWhiteSpace(_cipher.Identity.City) ||
-            !string.IsNullOrWhiteSpace(_cipher.Identity.Country));
-        public bool ShowFields => _cipher.HasFields;
-        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Totp) &&
+            !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||
+            !string.IsNullOrWhiteSpace(Cipher.Identity.City) ||
+            !string.IsNullOrWhiteSpace(Cipher.Identity.Country));
+        public bool ShowFields => Cipher.HasFields;
+        public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
+        public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);
-        public string ShowPasswordIcon => _showPassword ? "" : "";
-        public string ShowCardCodeIcon => _showCardCode ? "" : "";
+        public string ShowPasswordIcon => ShowPassword ? "" : "";
+        public string ShowCardCodeIcon => ShowCardCode ? "" : "";
         public string TotpCodeFormatted
         {
             get => _totpCodeFormatted;
@@ -243,6 +246,17 @@ namespace Bit.App.Pages
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
             }
+        }
+
+        private async void DownloadAttachmentAsync(AttachmentView attachment)
+        {
+            if(Cipher.OrganizationId == null && !CanAccessPremium)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
+            }
+            await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
+            await Task.Delay(2000); // TODO: download
+            await _deviceActionService.HideLoadingAsync();
         }
 
         private async void CopyAsync(string id, string text = null)

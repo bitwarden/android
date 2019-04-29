@@ -145,4 +145,11 @@
         <Setter Property="LineBreakMode"
                 Value="CharacterWrap" />
     </Style>
+    <Style TargetType="Label"
+           Class="box-sub-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
 </ResourceDictionary>
