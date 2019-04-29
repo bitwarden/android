@@ -490,6 +490,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*" />
                                         <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Label
                                         Text="{Binding Field.Name, Mode=OneWay}"
@@ -497,17 +498,45 @@
                                         Grid.Row="0"
                                         Grid.Column="0" />
                                     <Label
-                                        Text="{Binding Field.Value, Mode=OneWay}"
+                                        Text="{Binding ValueText, Mode=OneWay}"
                                         StyleClass="box-value"
                                         Grid.Row="1"
-                                        Grid.Column="0" />
+                                        Grid.Column="0"
+                                        IsVisible="{Binding IsTextType}" />
+                                    <controls:FaLabel
+                                        Text="{Binding ValueText, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding IsBooleanType}" />
+                                    <StackLayout IsVisible="{Binding IsHiddenType}"
+                                                 Grid.Row="1"
+                                                 Grid.Column="0">
+                                        <controls:MonoLabel
+                                            Text="{Binding ValueText, Mode=OneWay}"
+                                            StyleClass="box-value"
+                                            IsVisible="{Binding ShowHiddenValue}" />
+                                        <controls:MonoLabel
+                                            Text="{Binding Field.MaskedValue, Mode=OneWay}"
+                                            StyleClass="box-value"
+                                            IsVisible="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}" />
+                                    </StackLayout>
+                                    <controls:FaButton 
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding ShowHiddenValueIcon}"
+                                        Command="{Binding ToggleHiddenValueCommand}"
+                                        IsVisible="{Binding IsHiddenType}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2" />
                                     <controls:FaButton
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="&#xf0ea;"
                                         Command="{Binding BindingContext.CopyFieldCommand, Source={x:Reference _page}}"
                                         CommandParameter="{Binding Field}"
+                                        IsVisible="{Binding ShowCopyButton}"
                                         Grid.Row="0"
-                                        Grid.Column="1"
+                                        Grid.Column="2"
                                         Grid.RowSpan="2" />
                                 </Grid>
                                 <BoxView StyleClass="box-row-separator" />

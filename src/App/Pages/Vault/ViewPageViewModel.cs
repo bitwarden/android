@@ -42,6 +42,7 @@ namespace Bit.App.Pages
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
+            CopyFieldCommand = new Command<FieldView>(CopyField);
             LaunchUriCommand = new Command<LoginUriView>(LaunchUri);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
@@ -52,6 +53,7 @@ namespace Bit.App.Pages
 
         public Command CopyCommand { get; set; }
         public Command CopyUriCommand { get; set; }
+        public Command CopyFieldCommand { get; set; }
         public Command LaunchUriCommand { get; set; }
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
@@ -265,6 +267,10 @@ namespace Bit.App.Pages
             {
                 name = AppResources.URI;
             }
+            else if(id == "FieldValue")
+            {
+                name = AppResources.Value;
+            }
             else if(id == "CardNumber")
             {
                 text = Cipher.Card.Number;
@@ -289,6 +295,11 @@ namespace Bit.App.Pages
         private void CopyUri(LoginUriView uri)
         {
             CopyAsync("LoginUri", uri.Uri);
+        }
+
+        private void CopyField(FieldView field)
+        {
+            CopyAsync("FieldValue", field.Value);
         }
 
         private void LaunchUri(LoginUriView uri)
