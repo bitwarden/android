@@ -73,6 +73,7 @@ namespace Bit.App.Pages
                     nameof(IsSecureNote),
                     nameof(ShowUris),
                     nameof(ShowFields),
+                    nameof(ShowAttachments),
                     nameof(ShowTotp),
                     nameof(ColoredPassword),
                     nameof(ShowIdentityAddress),
@@ -253,10 +254,44 @@ namespace Bit.App.Pages
             if(Cipher.OrganizationId == null && !CanAccessPremium)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
+                return;
             }
+            if(attachment.FileSize >= 10485760) // 10 MB
+            {
+                var confirmed = await _platformUtilsService.ShowDialogAsync(
+                    string.Format(AppResources.AttachmentLargeWarning, attachment.SizeName), null,
+                    AppResources.Yes, AppResources.No);
+                if(!confirmed)
+                {
+                    return;
+                }
+            }
+            if(!_deviceActionService.CanOpenFile(attachment.FileName))
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
+                return;
+            }
+
             await _deviceActionService.ShowLoadingAsync(AppResources.Downloading);
-            await Task.Delay(2000); // TODO: download
-            await _deviceActionService.HideLoadingAsync();
+            try
+            {
+                var data = await _cipherService.DownloadAndDecryptAttachmentAsync(attachment, Cipher.OrganizationId);
+                await _deviceActionService.HideLoadingAsync();
+                if(data == null)
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.UnableToDownloadFile);
+                    return;
+                }
+                if(!_deviceActionService.OpenFile(data, attachment.Id, attachment.FileName))
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.UnableToOpenFile);
+                    return;
+                }
+            }
+            catch
+            {
+                await _deviceActionService.HideLoadingAsync();
+            }
         }
 
         private async void CopyAsync(string id, string text = null)

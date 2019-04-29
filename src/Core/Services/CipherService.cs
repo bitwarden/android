@@ -678,6 +678,27 @@ namespace Bit.Core.Services
             await DeleteAttachmentAsync(id, attachmentId);
         }
 
+        public async Task<byte[]> DownloadAndDecryptAttachmentAsync(AttachmentView attachment, string organizationId)
+        {
+            try
+            {
+                var response = await _httpClient.GetAsync(new Uri(attachment.Url));
+                if(!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+                var data = await response.Content.ReadAsByteArrayAsync();
+                if(data == null)
+                {
+                    return null;
+                }
+                var key = attachment.Key ?? await _cryptoService.GetOrgKeyAsync(organizationId);
+                return await _cryptoService.DecryptFromBytesAsync(data, key);
+            }
+            catch { }
+            return null;
+        }
+
         // Helpers
 
         private async Task ShareAttachmentWithServerAsync(AttachmentView attachmentView, string cipherId,

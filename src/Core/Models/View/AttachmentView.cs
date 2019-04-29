@@ -20,5 +20,17 @@ namespace Bit.Core.Models.View
         public string SizeName { get; set; }
         public string FileName { get; set; }
         public SymmetricCryptoKey Key { get; set; }
+
+        public long FileSize
+        {
+            get
+            {
+                if(!string.IsNullOrWhiteSpace(Size) && long.TryParse(Size, out var s))
+                {
+                    return s;
+                }
+                return 0;
+            }
+        }
     }
 }

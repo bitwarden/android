@@ -9,5 +9,6 @@
         public static string DefaultUriMatch = "defaultUriMatch";
         public static string DisableAutoTotpCopyKey = "disableAutoTotpCopy";
         public static string EnvironmentUrlsKey = "environmentUrls";
+        public static string LastFileCacheClearKey = "lastFileCacheClear";
     }
 }
