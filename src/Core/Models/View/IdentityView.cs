@@ -75,23 +75,23 @@ namespace Bit.Core.Models.View
         {
             get
             {
-                if(string.IsNullOrWhiteSpace(Title) || string.IsNullOrWhiteSpace(FirstName) ||
-                    string.IsNullOrWhiteSpace(MiddleName) || string.IsNullOrWhiteSpace(LastName))
+                if(!string.IsNullOrWhiteSpace(Title) || !string.IsNullOrWhiteSpace(FirstName) ||
+                    !string.IsNullOrWhiteSpace(MiddleName) || !string.IsNullOrWhiteSpace(LastName))
                 {
                     var name = string.Empty;
-                    if(string.IsNullOrWhiteSpace(Title))
+                    if(!string.IsNullOrWhiteSpace(Title))
                     {
                         name = string.Concat(name, Title, " ");
                     }
-                    if(string.IsNullOrWhiteSpace(FirstName))
+                    if(!string.IsNullOrWhiteSpace(FirstName))
                     {
                         name = string.Concat(name, FirstName, " ");
                     }
-                    if(string.IsNullOrWhiteSpace(MiddleName))
+                    if(!string.IsNullOrWhiteSpace(MiddleName))
                     {
                         name = string.Concat(name, MiddleName, " ");
                     }
-                    if(string.IsNullOrWhiteSpace(LastName))
+                    if(!string.IsNullOrWhiteSpace(LastName))
                     {
                         name = string.Concat(name, LastName);
                     }
@@ -106,17 +106,17 @@ namespace Bit.Core.Models.View
             get
             {
                 var address = Address1;
-                if(string.IsNullOrWhiteSpace(Address2))
+                if(!string.IsNullOrWhiteSpace(Address2))
                 {
-                    if(string.IsNullOrWhiteSpace(address))
+                    if(!string.IsNullOrWhiteSpace(address))
                     {
                         address += ", ";
                     }
                     address += Address2;
                 }
-                if(string.IsNullOrWhiteSpace(Address3))
+                if(!string.IsNullOrWhiteSpace(Address3))
                 {
-                    if(string.IsNullOrWhiteSpace(address))
+                    if(!string.IsNullOrWhiteSpace(address))
                     {
                         address += ", ";
                     }
