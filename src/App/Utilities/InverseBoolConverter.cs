@@ -10,10 +10,6 @@ namespace Bit.App.Utilities
         {
             if(targetType == typeof(bool))
             {
-                return !(bool)value;
-            }
-            if(targetType == typeof(bool?))
-            {
                 return !((bool?)value).GetValueOrDefault();
             }
             throw new InvalidOperationException("The target must be a boolean.");
