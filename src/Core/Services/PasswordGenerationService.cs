@@ -15,7 +15,7 @@ namespace Bit.Core.Services
         private const string Keys_History = "generatedPasswordHistory";
         private const int MaxPasswordsInHistory = 100;
         private const string LowercaseCharSet = "abcdefghijkmnopqrstuvwxyz";
-        private const string UppercaseCharSet = "ABCDEFGHIJKLMNPQRSTUVWXYZ";
+        private const string UppercaseCharSet = "ABCDEFGHJKLMNPQRSTUVWXYZ";
         private const string NumberCharSet = "23456789";
         private const string SpecialCharSet = "!@#$%^&*";
 
@@ -127,7 +127,7 @@ namespace Bit.Core.Services
             var uppercaseCharSet = UppercaseCharSet;
             if(options.Ambiguous.GetValueOrDefault())
             {
-                uppercaseCharSet = string.Concat(uppercaseCharSet, "O");
+                uppercaseCharSet = string.Concat(uppercaseCharSet, "IO");
             }
             if(options.Uppercase.GetValueOrDefault())
             {
