@@ -125,5 +125,21 @@ namespace Bit.Core.Models.View
                 return address;
             }
         }
+
+        public string FullAddressPart2
+        {
+            get
+            {
+                if(string.IsNullOrWhiteSpace(City) && string.IsNullOrWhiteSpace(State) &&
+                    string.IsNullOrWhiteSpace(PostalCode))
+                {
+                    return null;
+                }
+                var city = string.IsNullOrWhiteSpace(City) ? "-" : City;
+                var state = string.IsNullOrWhiteSpace(State) ? "-" : State;
+                var postalCode = string.IsNullOrWhiteSpace(PostalCode) ? "-" : PostalCode;
+                return string.Format("{0}, {1}, {2}", city, state, postalCode);
+            }
+        }
     }
 }

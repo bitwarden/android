@@ -1381,4 +1381,7 @@
   <data name="PasswordSafe" xml:space="preserve">
     <value>This password was not found in any known data breaches. It should be safe to use.</value>
   </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Identity Name</value>
+  </data>
 </root>

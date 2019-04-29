@@ -1780,6 +1780,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Identity Name.
+        /// </summary>
+        internal static string IdentityName {
+            get {
+                return ResourceManager.GetString("IdentityName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Identity Server URL.
         /// </summary>
         internal static string IdentityUrl {

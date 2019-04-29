@@ -69,11 +69,9 @@ namespace Bit.App.Pages
                     nameof(IsSecureNote),
                     nameof(ShowUris),
                     nameof(ShowFields),
-                    nameof(ShowNotes),
                     nameof(ShowTotp),
-                    nameof(ShowUsername),
                     nameof(ColoredPassword),
-                    nameof(ShowPasswordBox)
+                    nameof(ShowIdentityAddress),
                 });
         }
         public List<ViewFieldViewModel> Fields
@@ -108,11 +106,12 @@ namespace Bit.App.Pages
         public bool IsIdentity => _cipher?.Type == Core.Enums.CipherType.Identity;
         public bool IsCard => _cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => _cipher?.Type == Core.Enums.CipherType.SecureNote;
-        public bool ShowUsername => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Username);
         public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(_cipher.Login.Password);
-        public bool ShowPasswordBox => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Password);
         public bool ShowUris => IsLogin && _cipher.Login.HasUris;
-        public bool ShowNotes => !string.IsNullOrWhiteSpace(_cipher.Notes);
+        public bool ShowIdentityAddress => IsIdentity && (
+            !string.IsNullOrWhiteSpace(_cipher.Identity.Address1) ||
+            !string.IsNullOrWhiteSpace(_cipher.Identity.City) ||
+            !string.IsNullOrWhiteSpace(_cipher.Identity.Country));
         public bool ShowFields => _cipher.HasFields;
         public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(_cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);
@@ -265,6 +264,16 @@ namespace Bit.App.Pages
             else if(id == "LoginUri")
             {
                 name = AppResources.URI;
+            }
+            else if(id == "CardNumber")
+            {
+                text = Cipher.Card.Number;
+                name = AppResources.Number;
+            }
+            else if(id == "CardCode")
+            {
+                text = Cipher.Card.Code;
+                name = AppResources.SecurityCode;
             }
 
             if(text != null)
