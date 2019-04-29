@@ -7,7 +7,6 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
-    xmlns:models="clr-namespace:Bit.App.Models"
     x:DataType="pages:ViewPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
@@ -480,7 +479,7 @@
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Fields}">
                     <controls:RepeaterView.ItemTemplate>
-                        <DataTemplate x:DataType="models:ViewFieldViewModel">
+                        <DataTemplate x:DataType="pages:ViewPageFieldViewModel">
                             <StackLayout Spacing="0" Padding="0">
                                 <Grid StyleClass="box-row">
                                     <Grid.RowDefinitions>

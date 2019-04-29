@@ -22,7 +22,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
         private CipherView _cipher;
-        private List<ViewFieldViewModel> _fields;
+        private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
         private bool _showPassword;
         private bool _showCardCode;
@@ -76,7 +76,7 @@ namespace Bit.App.Pages
                     nameof(ShowIdentityAddress),
                 });
         }
-        public List<ViewFieldViewModel> Fields
+        public List<ViewPageFieldViewModel> Fields
         {
             get => _fields;
             set => SetProperty(ref _fields, value);
@@ -149,7 +149,7 @@ namespace Bit.App.Pages
             var cipher = await _cipherService.GetAsync(CipherId);
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _userService.CanAccessPremiumAsync();
-            Fields = Cipher.Fields?.Select(f => new ViewFieldViewModel(f)).ToList();
+            Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(f)).ToList();
 
             if(Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
@@ -308,6 +308,57 @@ namespace Bit.App.Pages
             {
                 _platformUtilsService.LaunchUri(uri.LaunchUri);
             }
+        }
+    }
+
+    public class ViewPageFieldViewModel : BaseViewModel
+    {
+        private FieldView _field;
+        private bool _showHiddenValue;
+
+        public ViewPageFieldViewModel(FieldView field)
+        {
+            Field = field;
+            ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
+        }
+
+        public FieldView Field
+        {
+            get => _field;
+            set => SetProperty(ref _field, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ValueText),
+                    nameof(IsBooleanType),
+                    nameof(IsHiddenType),
+                    nameof(IsTextType),
+                    nameof(ShowCopyButton),
+                });
+        }
+
+        public bool ShowHiddenValue
+        {
+            get => _showHiddenValue;
+            set => SetProperty(ref _showHiddenValue, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowHiddenValueIcon)
+                });
+        }
+
+        public Command ToggleHiddenValueCommand { get; set; }
+
+        public string ValueText => IsBooleanType ? (_field.Value == "true" ? "" : "") : _field.Value;
+        public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
+        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
+        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
+        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
+        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
+            !string.IsNullOrWhiteSpace(_field.Value);
+
+        public void ToggleHiddenValue()
+        {
+            ShowHiddenValue = !ShowHiddenValue;
         }
     }
 }
