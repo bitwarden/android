@@ -17,6 +17,11 @@
                 Value="{StaticResource TextColor}" />
     </Style>
     <Style TargetType="Label"
+           x:Key="text-muted">
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
            x:Key="text-danger">
         <Setter Property="TextColor"
                 Value="{StaticResource DangerColor}" />
@@ -25,6 +30,21 @@
            x:Key="text-success">
         <Setter Property="TextColor"
                 Value="{StaticResource SuccessColor}" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="text-sm">
+        <Setter Property="FontSize"
+                Value="Small" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="text-lg">
+        <Setter Property="FontSize"
+                Value="Large" />
+    </Style>
+    <Style TargetType="Label"
+           x:Key="text-bold">
+        <Setter Property="FontAttributes"
+                Value="Bold" />
     </Style>
 
     <!-- List -->
@@ -88,6 +108,13 @@
                 Value="0" />
     </Style>
     <Style TargetType="StackLayout"
+           Class="box-bottom">
+        <Setter Property="Padding"
+                Value="10, 0, 10, 10" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="StackLayout"
            Class="box-row-header">
         <Setter Property="Padding"
                 Value="0, 10, 0, 5" />
@@ -136,6 +163,8 @@
            Class="box-label">
         <Setter Property="FontSize"
                 Value="Small" />
+        <Setter Property="Margin"
+                Value="0, 0, 0, 5" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
@@ -147,6 +176,13 @@
     </Style>
     <Style TargetType="Label"
            Class="box-sub-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-footer-label">
         <Setter Property="FontSize"
                 Value="Small" />
         <Setter Property="TextColor"

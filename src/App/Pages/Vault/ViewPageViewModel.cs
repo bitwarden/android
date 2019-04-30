@@ -72,10 +72,12 @@ namespace Bit.App.Pages
                     nameof(IsCard),
                     nameof(IsSecureNote),
                     nameof(ShowUris),
-                    nameof(ShowFields),
                     nameof(ShowAttachments),
                     nameof(ShowTotp),
                     nameof(ColoredPassword),
+                    nameof(UpdatedText),
+                    nameof(PasswordUpdatedText),
+                    nameof(PasswordHistoryText),
                     nameof(ShowIdentityAddress),
                 });
         }
@@ -112,12 +114,67 @@ namespace Bit.App.Pages
         public bool IsCard => Cipher?.Type == Core.Enums.CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == Core.Enums.CipherType.SecureNote;
         public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(Cipher.Login.Password);
+        public FormattedString UpdatedText
+        {
+            get
+            {
+                var fs = new FormattedString();
+                fs.Spans.Add(new Span
+                {
+                    Text = string.Format("{0}:", AppResources.DateUpdated),
+                    FontAttributes = FontAttributes.Bold
+                });
+                fs.Spans.Add(new Span
+                {
+                    Text = string.Format(" {0} {1}",
+                        Cipher.RevisionDate.ToShortDateString(),
+                        Cipher.RevisionDate.ToShortTimeString())
+                });
+                return fs;
+            }
+        }
+        public FormattedString PasswordUpdatedText
+        {
+            get
+            {
+                var fs = new FormattedString();
+                fs.Spans.Add(new Span
+                {
+                    Text = string.Format("{0}:", AppResources.DatePasswordUpdated),
+                    FontAttributes = FontAttributes.Bold
+                });
+                fs.Spans.Add(new Span
+                {
+                    Text = string.Format(" {0} {1}",
+                        Cipher.PasswordRevisionDisplayDate?.ToShortDateString(),
+                        Cipher.PasswordRevisionDisplayDate?.ToShortTimeString())
+                });
+                return fs;
+            }
+        }
+        public FormattedString PasswordHistoryText
+        {
+            get
+            {
+                var fs = new FormattedString();
+                fs.Spans.Add(new Span
+                {
+                    Text = string.Format("{0}:", AppResources.PasswordHistory),
+                    FontAttributes = FontAttributes.Bold
+                });
+                fs.Spans.Add(new Span
+                {
+                    Text = string.Format(" {0}", Cipher.PasswordHistory.Count.ToString()),
+                    TextColor = (Color)Application.Current.Resources["PrimaryColor"]
+                });
+                return fs;
+            }
+        }
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
         public bool ShowIdentityAddress => IsIdentity && (
             !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.City) ||
             !string.IsNullOrWhiteSpace(Cipher.Identity.Country));
-        public bool ShowFields => Cipher.HasFields;
         public bool ShowAttachments => Cipher.HasAttachments && (CanAccessPremium || Cipher.OrganizationId != null);
         public bool ShowTotp => IsLogin && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
             !string.IsNullOrWhiteSpace(TotpCodeFormatted);

@@ -1387,4 +1387,7 @@
   <data name="Value" xml:space="preserve">
     <value>Value</value>
   </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Password History</value>
+  </data>
 </root>

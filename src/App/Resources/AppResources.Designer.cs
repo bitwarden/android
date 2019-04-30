@@ -2653,6 +2653,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Password History.
+        /// </summary>
+        internal static string PasswordHistory {
+            get {
+                return ResourceManager.GetString("PasswordHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to overwrite the current password?.
         /// </summary>
         internal static string PasswordOverrideAlert {

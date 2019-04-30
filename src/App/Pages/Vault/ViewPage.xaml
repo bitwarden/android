@@ -23,6 +23,7 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
+            <u:IsNotNullConverter x:Key="notNull" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -472,7 +473,7 @@
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator" />
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding ShowFields}">
+            <StackLayout StyleClass="box" IsVisible="{Binding Cipher.HasFields}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n CustomFields}"
                            StyleClass="box-header, box-header-platform" />
@@ -507,7 +508,8 @@
                                         StyleClass="box-value"
                                         Grid.Row="1"
                                         Grid.Column="0"
-                                        IsVisible="{Binding IsBooleanType}" />
+                                        IsVisible="{Binding IsBooleanType}"
+                                        Margin="0, 5, 0, 0" />
                                     <StackLayout IsVisible="{Binding IsHiddenType}"
                                                  Grid.Row="1"
                                                  Grid.Column="0">
@@ -563,22 +565,29 @@
                                         Text="{Binding SizeName, Mode=OneWay}"
                                         StyleClass="box-sub-label"
                                         HorizontalTextAlignment="End"
-                                        HorizontalOptions="End"
-                                        VerticalTextAlignment="Center"
-                                        VerticalOptions="CenterAndExpand" />
+                                        VerticalTextAlignment="Center" />
                                     <controls:FaButton 
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="&#xf019;"
                                         Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"
                                         CommandParameter="{Binding .}"
-                                        HorizontalOptions="End"
-                                        VerticalOptions="CenterAndExpand" />
+                                        VerticalOptions="Center" />
                                 </StackLayout>
                                 <BoxView StyleClass="box-row-separator" />
                             </StackLayout>
                         </DataTemplate>
                     </controls:RepeaterView.ItemTemplate>
                 </controls:RepeaterView>
+            </StackLayout>
+            <StackLayout StyleClass="box-bottom">
+                <Label FormattedText="{Binding UpdatedText}"
+                       StyleClass="box-footer-label" />
+                <Label FormattedText="{Binding PasswordUpdatedText}"
+                       StyleClass="box-footer-label"
+                       IsVisible="{Binding Cipher.PasswordRevisionDisplayDate, Converter={StaticResource notNull}}" />
+                <Label FormattedText="{Binding PasswordHistoryText}"
+                       StyleClass="box-footer-label"
+                       IsVisible="{Binding Cipher.HasPasswordHistory}" />
             </StackLayout>
         </StackLayout>
     </ScrollView>
