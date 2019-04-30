@@ -13,6 +13,9 @@ namespace Bit.App.Controls
         public static readonly BindableProperty CipherProperty = BindableProperty.Create(
             nameof(Cipher), typeof(CipherView), typeof(CipherViewCell), default(CipherView), BindingMode.OneWay);
 
+        public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
+            nameof(ButtonCommand), typeof(Command<CipherView>), typeof(CipherViewCell));
+
         private CipherViewCellViewModel _viewModel;
 
         public CipherViewCell()
@@ -25,6 +28,12 @@ namespace Bit.App.Controls
         {
             get => GetValue(CipherProperty) as CipherView;
             set => SetValue(CipherProperty, value);
+        }
+
+        public Command<CipherView> ButtonCommand
+        {
+            get => GetValue(ButtonCommandProperty) as Command<CipherView>;
+            set => SetValue(ButtonCommandProperty, value);
         }
 
         protected override void OnPropertyChanged(string propertyName = null)
@@ -117,6 +126,11 @@ namespace Bit.App.Controls
                 }
             }
             return new Tuple<string, string>(icon, image);
+        }
+
+        private void ImageButton_Clicked(object sender, EventArgs e)
+        {
+            ButtonCommand?.Execute(Cipher);
         }
     }
 }

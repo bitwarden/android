@@ -43,6 +43,7 @@ namespace Bit.App.Pages
                 await LoadAsync();
             });
             AddCipherCommand = new Command(() => { /* TODO */ });
+            CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
         }
 
         public bool ShowFavorites { get; set; } = true;
@@ -99,6 +100,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command AddCipherCommand { get; set; }
+        public Command<CipherView> CipherOptionsCommand { get; set; }
 
         public async Task LoadAsync()
         {
@@ -272,6 +274,16 @@ namespace Bit.App.Pages
                     Ciphers = _allCiphers;
                 }
             }
+        }
+
+        private async void CipherOptionsAsync(CipherView cipher)
+        {
+            var option = await Page.DisplayActionSheet(cipher.Name, AppResources.Cancel, null, "1", "2");
+            if(option == AppResources.Cancel)
+            {
+                return;
+            }
+            // TODO: process options
         }
     }
 }

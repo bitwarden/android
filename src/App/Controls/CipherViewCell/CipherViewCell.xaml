@@ -74,13 +74,14 @@
                    Margin="5, 0, 0, 0"
                    Text="&#xf0c6;"
                    IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}" />
-
-            <Button WidthRequest="60"
-                    Grid.Column="4"
-                    Grid.Row="0"
-                    Grid.RowSpan="2"
-                    BackgroundColor="Transparent" />
-
+            <ImageButton
+                Source="more.png"
+                StyleClass="list-button, list-button-platform"
+                Clicked="ImageButton_Clicked"
+                Grid.Column="4"
+                Grid.Row="0"
+                Grid.RowSpan="2" />
         </Grid>
+
     </ViewCell.View>
 </ViewCell>

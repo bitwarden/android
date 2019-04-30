@@ -24,6 +24,9 @@
     <Style TargetType="Grid"
            Class="list-row-platform">
     </Style>
+    <Style TargetType="ImageButton"
+           Class="list-button-platform">
+    </Style>
     
     <!-- Box -->
 

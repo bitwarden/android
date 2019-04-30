@@ -97,6 +97,18 @@
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
+    <Style TargetType="ImageButton"
+           ApplyToDerivedTypes="True"
+           Class="list-button">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
     
     <!-- Box -->
 

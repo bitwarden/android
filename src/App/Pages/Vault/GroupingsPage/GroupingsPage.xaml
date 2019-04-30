@@ -6,7 +6,8 @@
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:controls="clr-namespace:Bit.App.Controls"
              x:DataType="pages:GroupingsPageViewModel"
-             Title="{Binding PageTitle}">
+             Title="{Binding PageTitle}"
+             x:Name="_page">
 
     <ContentPage.BindingContext>
         <pages:GroupingsPageViewModel />
@@ -16,7 +17,9 @@
         <ResourceDictionary>
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
-                <controls:CipherViewCell Cipher="{Binding Cipher}" />
+                <controls:CipherViewCell
+                    Cipher="{Binding Cipher}"
+                    ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
             </DataTemplate>
 
             <DataTemplate x:Key="folderTemplate"
