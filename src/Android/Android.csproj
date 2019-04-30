@@ -66,6 +66,12 @@
     <PackageReference Include="Xamarin.Android.Support.v7.MediaRouter" Version="28.0.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Accessibility\AccessibilityActivity.cs" />
+    <Compile Include="Accessibility\AccessibilityHelpers.cs" />
+    <Compile Include="Accessibility\Credentials.cs" />
+    <Compile Include="Accessibility\AccessibilityService.cs" />
+    <Compile Include="Accessibility\Browser.cs" />
+    <Compile Include="Accessibility\NodeList.cs" />
     <Compile Include="Autofill\AutofillHelpers.cs" />
     <Compile Include="Autofill\AutofillService.cs" />
     <Compile Include="Autofill\Field.cs" />
@@ -373,7 +379,7 @@
     <AndroidResource Include="Resources\drawable-xxxhdpi\refresh.png" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Accessibility\" />
+    <AndroidResource Include="Resources\drawable\notification_sm.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\id.png" />
@@ -419,6 +425,18 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-hdpi\notification_sm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xhdpi\notification_sm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxhdpi\notification_sm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable-xxxhdpi\notification_sm.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

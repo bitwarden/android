@@ -5825,26 +5825,26 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f02005a
 			public const int avd_hide_password = 2130837594;
 			
-			// aapt resource value: 0x7f020147
-			public const int avd_hide_password_1 = 2130837831;
-			
 			// aapt resource value: 0x7f020148
-			public const int avd_hide_password_2 = 2130837832;
+			public const int avd_hide_password_1 = 2130837832;
 			
 			// aapt resource value: 0x7f020149
-			public const int avd_hide_password_3 = 2130837833;
+			public const int avd_hide_password_2 = 2130837833;
+			
+			// aapt resource value: 0x7f02014a
+			public const int avd_hide_password_3 = 2130837834;
 			
 			// aapt resource value: 0x7f02005b
 			public const int avd_show_password = 2130837595;
 			
-			// aapt resource value: 0x7f02014a
-			public const int avd_show_password_1 = 2130837834;
-			
 			// aapt resource value: 0x7f02014b
-			public const int avd_show_password_2 = 2130837835;
+			public const int avd_show_password_1 = 2130837835;
 			
 			// aapt resource value: 0x7f02014c
-			public const int avd_show_password_3 = 2130837836;
+			public const int avd_show_password_2 = 2130837836;
+			
+			// aapt resource value: 0x7f02014d
+			public const int avd_show_password_3 = 2130837837;
 			
 			// aapt resource value: 0x7f02005c
 			public const int card = 2130837596;
@@ -6521,35 +6521,38 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f02013c
 			public const int notification_icon_background = 2130837820;
 			
-			// aapt resource value: 0x7f020145
-			public const int notification_template_icon_bg = 2130837829;
+			// aapt resource value: 0x7f02013d
+			public const int notification_sm = 2130837821;
 			
 			// aapt resource value: 0x7f020146
-			public const int notification_template_icon_low_bg = 2130837830;
+			public const int notification_template_icon_bg = 2130837830;
 			
-			// aapt resource value: 0x7f02013d
-			public const int notification_tile_bg = 2130837821;
+			// aapt resource value: 0x7f020147
+			public const int notification_template_icon_low_bg = 2130837831;
 			
 			// aapt resource value: 0x7f02013e
-			public const int notify_panel_notification_icon_bg = 2130837822;
+			public const int notification_tile_bg = 2130837822;
 			
 			// aapt resource value: 0x7f02013f
-			public const int refresh = 2130837823;
+			public const int notify_panel_notification_icon_bg = 2130837823;
 			
 			// aapt resource value: 0x7f020140
-			public const int shield = 2130837824;
+			public const int refresh = 2130837824;
 			
 			// aapt resource value: 0x7f020141
-			public const int splash_screen = 2130837825;
+			public const int shield = 2130837825;
 			
 			// aapt resource value: 0x7f020142
-			public const int tooltip_frame_dark = 2130837826;
+			public const int splash_screen = 2130837826;
 			
 			// aapt resource value: 0x7f020143
-			public const int tooltip_frame_light = 2130837827;
+			public const int tooltip_frame_dark = 2130837827;
 			
 			// aapt resource value: 0x7f020144
-			public const int yubikey = 2130837828;
+			public const int tooltip_frame_light = 2130837828;
+			
+			// aapt resource value: 0x7f020145
+			public const int yubikey = 2130837829;
 			
 			static Drawable()
 			{
