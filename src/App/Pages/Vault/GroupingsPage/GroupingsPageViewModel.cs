@@ -239,10 +239,10 @@ namespace Bit.App.Pages
                 else if(FolderId != null)
                 {
                     NoDataText = AppResources.NoItemsFolder;
-                    FolderId = FolderId == "none" ? null : FolderId;
-                    if(FolderId != null)
+                    var folderId = FolderId == "none" ? null : FolderId;
+                    if(folderId != null)
                     {
-                        var folderNode = await _folderService.GetNestedAsync(FolderId);
+                        var folderNode = await _folderService.GetNestedAsync(folderId);
                         if(folderNode?.Node != null)
                         {
                             PageTitle = folderNode.Node.Name;
@@ -253,7 +253,7 @@ namespace Bit.App.Pages
                     {
                         PageTitle = AppResources.FolderNone;
                     }
-                    Ciphers = _allCiphers.Where(c => c.FolderId == FolderId).ToList();
+                    Ciphers = _allCiphers.Where(c => c.FolderId == folderId).ToList();
                 }
                 else if(CollectionId != null)
                 {
