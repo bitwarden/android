@@ -78,7 +78,7 @@
   <ItemGroup>
     <EmbeddedResource Update="Resources\AppResources.resx">
       <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Styles\Base.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
