@@ -1,16 +1,10 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Bit.App.Pages
 {
-    public partial class ViewPage : ContentPage
+    public partial class ViewPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
         private ViewPageViewModel _vm;
@@ -22,9 +16,10 @@ namespace Bit.App.Pages
             _vm = BindingContext as ViewPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
+            SetActivityIndicator();
         }
 
-        protected async override void OnAppearing()
+        protected override async void OnAppearing()
         {
             base.OnAppearing();
             _broadcasterService.Subscribe(nameof(ViewPage), async (message) =>
@@ -42,7 +37,7 @@ namespace Bit.App.Pages
                     }
                 }
             });
-            await _vm.LoadAsync();
+            await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync());
         }
 
         protected override void OnDisappearing()
