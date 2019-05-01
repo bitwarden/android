@@ -18,7 +18,7 @@ namespace Bit.App.Pages
 
         protected async Task LoadOnAppearedAsync(View viewToSet, bool fromModal, Func<Task> workFunction)
         {
-            async Task LoadAsync()
+            async Task DoWorkAsync()
             {
                 await workFunction.Invoke();
                 if(viewToSet != null)
@@ -26,15 +26,15 @@ namespace Bit.App.Pages
                     Content = viewToSet;
                 }
             }
-            if(Device.RuntimePlatform == Device.iOS)
+            if(!fromModal || Device.RuntimePlatform == Device.iOS)
             {
-                await LoadAsync();
+                await DoWorkAsync();
                 return;
             }
             await Task.Run(async () =>
             {
-                await Task.Delay(fromModal ? 400 : 200);
-                Device.BeginInvokeOnMainThread(async () => await LoadAsync());
+                await Task.Delay(400);
+                Device.BeginInvokeOnMainThread(async () => await DoWorkAsync());
             });
         }
     }

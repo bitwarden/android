@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bit.App.Pages.GroupingsPage"
              xmlns:pages="clr-namespace:Bit.App.Pages"
@@ -64,11 +64,7 @@
                                                  CollectionTemplate="{StaticResource collectionTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>
-    <StackLayout>
-        <ActivityIndicator VerticalOptions="CenterAndExpand"
-                           HorizontalOptions="Center"
-                           IsRunning="True"
-                           IsVisible="{Binding Loading}"></ActivityIndicator>
+    <StackLayout x:Name="_mainLayout">
         <StackLayout VerticalOptions="CenterAndExpand"
                      Padding="20, 0"
                      Spacing="20"
@@ -105,4 +101,4 @@
         </ListView>
     </StackLayout>
 
-</ContentPage>
+</pages:BaseContentPage>

@@ -1,17 +1,12 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Bit.App.Pages
 {
-    public partial class GroupingsPage : ContentPage
+    public partial class GroupingsPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
@@ -25,6 +20,7 @@ namespace Bit.App.Pages
             string collectionId = null, string pageTitle = null)
         {
             InitializeComponent();
+            SetActivityIndicator();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _viewModel = BindingContext as GroupingsPageViewModel;
@@ -52,18 +48,21 @@ namespace Bit.App.Pages
                 }
             });
 
-            if(!_syncService.SyncInProgress)
+            await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
-                await _viewModel.LoadAsync();
-            }
-            else
-            {
-                await Task.Delay(5000);
-                if(!_viewModel.Loaded)
+                if(!_syncService.SyncInProgress)
                 {
                     await _viewModel.LoadAsync();
                 }
-            }
+                else
+                {
+                    await Task.Delay(5000);
+                    if(!_viewModel.Loaded)
+                    {
+                        await _viewModel.LoadAsync();
+                    }
+                }
+            });
         }
 
         protected override void OnDisappearing()
