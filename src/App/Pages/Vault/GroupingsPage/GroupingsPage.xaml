@@ -28,7 +28,7 @@
                     <StackLayout Orientation="Horizontal"
                                  StyleClass="list-row, list-row-platform">
                         <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
-                                          HorizontalOptions="Center"
+                                          HorizontalOptions="Start"
                                           VerticalOptions="Center"
                                           StyleClass="list-icon" />
                         <Label Text="{Binding Name, Mode=OneWay}"
@@ -36,6 +36,10 @@
                                HorizontalOptions="StartAndExpand"
                                VerticalOptions="CenterAndExpand"
                                StyleClass="list-title"/>
+                        <Label Text="{Binding ItemCount, Mode=OneWay}"
+                               HorizontalOptions="End"
+                               HorizontalTextAlignment="End"
+                               StyleClass="list-sub"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
@@ -75,6 +79,8 @@
                         <StackLayout StyleClass="list-row-header">
                             <Label Text="{Binding Name}"
                                    StyleClass="list-header, list-header-platform" />
+                            <Label Text="{Binding ItemCount}"
+                                   StyleClass="list-header-sub" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

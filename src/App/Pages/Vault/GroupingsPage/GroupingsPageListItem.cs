@@ -13,6 +13,7 @@ namespace Bit.App.Pages
         public CollectionView Collection { get; set; }
         public CipherView Cipher { get; set; }
         public CipherType? Type { get; set; }
+        public string ItemCount { get; set; }
 
         public string Name
         {

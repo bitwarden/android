@@ -55,9 +55,30 @@
            Class="list-row-header">
         <Setter Property="Padding"
                 Value="10, 12" />
+        <Setter Property="Orientation"
+                Value="Horizontal" />
     </Style>
     <Style TargetType="Label"
            Class="list-header">
+        <Setter Property="HorizontalOptions"
+                Value="StartAndExpand" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header-sub">
+        <Setter Property="HorizontalTextAlignment"
+                Value="End" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
     </Style>
     <Style TargetType="StackLayout"
            Class="list-row">
@@ -71,6 +92,11 @@
     </Style>
     <Style TargetType="Label"
            Class="list-title">
+    </Style>
+    <Style TargetType="Label"
+           Class="list-sub">
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
            ApplyToDerivedTypes="True"

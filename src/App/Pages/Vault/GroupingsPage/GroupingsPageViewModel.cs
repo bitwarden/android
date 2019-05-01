@@ -21,6 +21,9 @@ namespace Bit.App.Pages
         private bool _showList;
         private string _noDataText;
         private List<CipherView> _allCiphers;
+        private Dictionary<string, int> _folderCounts = new Dictionary<string, int>();
+        private Dictionary<string, int> _collectionCounts = new Dictionary<string, int>();
+        private Dictionary<CipherType, int> _typeCounts = new Dictionary<CipherType, int>();
 
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
@@ -116,40 +119,72 @@ namespace Bit.App.Pages
 
                 var favListItems = FavoriteCiphers?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
                 var ciphersListItems = Ciphers?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
-                var folderListItems = NestedFolders?.Select(f => new GroupingsPageListItem { Folder = f.Node }).ToList();
-                var collectionListItems = NestedCollections?.Select(c =>
-                    new GroupingsPageListItem { Collection = c.Node }).ToList();
+                var folderListItems = NestedFolders?.Select(f =>
+                {
+                    var fId = f.Node.Id ?? "none";
+                    return new GroupingsPageListItem
+                    {
+                        Folder = f.Node,
+                        ItemCount = (_folderCounts.ContainsKey(fId) ? _folderCounts[fId] : 0).ToString("N0")
+                    };
+                }).ToList();
+                var collectionListItems = NestedCollections?.Select(c => new GroupingsPageListItem
+                {
+                    Collection = c.Node,
+                    ItemCount = (_collectionCounts.ContainsKey(c.Node.Id) ?
+                        _collectionCounts[c.Node.Id] : 0).ToString("N0")
+                }).ToList();
 
                 if(favListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites,
-                        Device.RuntimePlatform == Device.iOS));
+                        favListItems.Count, Device.RuntimePlatform == Device.iOS));
                 }
                 if(MainPage)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(
-                        AppResources.Types, Device.RuntimePlatform == Device.iOS)
+                        AppResources.Types, 4, Device.RuntimePlatform == Device.iOS)
                     {
-                        new GroupingsPageListItem { Type = CipherType.Login },
-                        new GroupingsPageListItem { Type = CipherType.Card },
-                        new GroupingsPageListItem { Type = CipherType.Identity },
-                        new GroupingsPageListItem { Type = CipherType.SecureNote }
+                        new GroupingsPageListItem
+                        {
+                            Type = CipherType.Login,
+                            ItemCount = (_typeCounts.ContainsKey(CipherType.Login) ?
+                                _typeCounts[CipherType.Login] : 0).ToString("N0")
+                        },
+                        new GroupingsPageListItem
+                        {
+                            Type = CipherType.Card,
+                            ItemCount = (_typeCounts.ContainsKey(CipherType.Card) ?
+                                _typeCounts[CipherType.Card] : 0).ToString("N0")
+                        },
+                        new GroupingsPageListItem
+                        {
+                            Type = CipherType.Identity,
+                            ItemCount = (_typeCounts.ContainsKey(CipherType.Identity) ?
+                                _typeCounts[CipherType.Identity] : 0).ToString("N0")
+                        },
+                        new GroupingsPageListItem
+                        {
+                            Type = CipherType.SecureNote,
+                            ItemCount = (_typeCounts.ContainsKey(CipherType.SecureNote) ?
+                                _typeCounts[CipherType.SecureNote] : 0).ToString("N0")
+                        },
                     });
                 }
                 if(folderListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(folderListItems, AppResources.Folders,
-                        Device.RuntimePlatform == Device.iOS));
+                        folderListItems.Count, Device.RuntimePlatform == Device.iOS));
                 }
                 if(collectionListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(collectionListItems, AppResources.Collections,
-                        Device.RuntimePlatform == Device.iOS));
+                        collectionListItems.Count, Device.RuntimePlatform == Device.iOS));
                 }
                 if(ciphersListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
-                        Device.RuntimePlatform == Device.iOS));
+                        ciphersListItems.Count, Device.RuntimePlatform == Device.iOS));
                 }
                 GroupedItems.ResetWithRange(groupedItems);
             }
@@ -209,6 +244,12 @@ namespace Bit.App.Pages
         {
             NoDataText = AppResources.NoItems;
             _allCiphers = await _cipherService.GetAllDecryptedAsync();
+            FavoriteCiphers?.Clear();
+            NoFolderCiphers?.Clear();
+            _folderCounts.Clear();
+            _collectionCounts.Clear();
+            _typeCounts.Clear();
+
             if(MainPage)
             {
                 if(ShowFolders)
@@ -221,27 +262,6 @@ namespace Bit.App.Pages
                     Collections = await _collectionService.GetAllDecryptedAsync();
                     NestedCollections = await _collectionService.GetAllNestedAsync(Collections);
                 }
-
-                foreach(var c in _allCiphers)
-                {
-                    if(c.Favorite)
-                    {
-                        if(FavoriteCiphers == null)
-                        {
-                            FavoriteCiphers = new List<CipherView>();
-                        }
-                        FavoriteCiphers.Add(c);
-                    }
-                    if(c.FolderId == null)
-                    {
-                        if(NoFolderCiphers == null)
-                        {
-                            NoFolderCiphers = new List<CipherView>();
-                        }
-                        NoFolderCiphers.Add(c);
-                    }
-                }
-                FavoriteCiphers = _allCiphers.Where(c => c.Favorite).ToList();
             }
             else
             {
@@ -283,6 +303,63 @@ namespace Bit.App.Pages
                 {
                     PageTitle = AppResources.AllItems;
                     Ciphers = _allCiphers;
+                }
+            }
+
+            foreach(var c in _allCiphers)
+            {
+                if(MainPage)
+                {
+                    if(c.Favorite)
+                    {
+                        if(FavoriteCiphers == null)
+                        {
+                            FavoriteCiphers = new List<CipherView>();
+                        }
+                        FavoriteCiphers.Add(c);
+                    }
+                    if(c.FolderId == null)
+                    {
+                        if(NoFolderCiphers == null)
+                        {
+                            NoFolderCiphers = new List<CipherView>();
+                        }
+                        NoFolderCiphers.Add(c);
+                    }
+
+                    if(_typeCounts.ContainsKey(c.Type))
+                    {
+                        _typeCounts[c.Type] = _typeCounts[c.Type] + 1;
+                    }
+                    else
+                    {
+                        _typeCounts.Add(c.Type, 1);
+                    }
+                }
+
+                var fId = c.FolderId ?? "none";
+                if(_folderCounts.ContainsKey(fId))
+                {
+                    _folderCounts[fId] = _folderCounts[fId] + 1;
+                }
+                else
+                {
+                    _folderCounts.Add(fId, 1);
+                }
+
+                if(c.CollectionIds != null)
+                {
+                    foreach(var colId in c.CollectionIds)
+                    {
+                        if(_collectionCounts.ContainsKey(colId))
+                        {
+                            _collectionCounts[colId] = _collectionCounts[colId] + 1;
+                        }
+                        else
+                        {
+                            _collectionCounts.Add(colId, 1);
+                        }
+                    }
                 }
             }
         }
