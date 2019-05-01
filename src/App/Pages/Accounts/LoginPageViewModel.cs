@@ -4,7 +4,6 @@ using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -15,6 +14,8 @@ namespace Bit.App.Pages
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
 
+        private bool _showPassword;
+
         public LoginPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -22,11 +23,21 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
             PageTitle = AppResources.Bitwarden;
-            ShowPasswordCommand = new Command(() =>
-                Page.DisplayAlert("Button 1 Command", "Button 1 message", "Cancel"));
+            TogglePasswordCommand = new Command(TogglePassword);
         }
 
-        public ICommand ShowPasswordCommand { get; }
+        public bool ShowPassword
+        {
+            get => _showPassword;
+            set => SetProperty(ref _showPassword, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowPasswordIcon)
+                });
+        }
+
+        public Command TogglePasswordCommand { get; }
+        public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string Email { get; set; }
         public string MasterPassword { get; set; }
 
@@ -73,6 +84,11 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
             }
+        }
+
+        public void TogglePassword()
+        {
+            ShowPassword = !ShowPassword;
         }
     }
 }

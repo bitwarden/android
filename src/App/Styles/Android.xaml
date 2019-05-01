@@ -2,6 +2,12 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Android">
+    <Style TargetType="Entry"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Margin"
+                Value="-4, 0" />
+    </Style>
+
     <!-- List -->
     
     <Style TargetType="ListView"

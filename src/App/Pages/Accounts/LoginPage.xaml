@@ -4,31 +4,69 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.LoginPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:bv="clr-namespace:Bit.App.Controls.BoxedView"
     x:DataType="pages:LoginPageViewModel"
     Title="{Binding PageTitle}">
+    
     <ContentPage.BindingContext>
         <pages:LoginPageViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="cogs.png" Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
+        <ToolbarItem Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
     </ContentPage.ToolbarItems>
 
-    <StackLayout>
-        <bv:BoxedView HasUnevenRows="True" VerticalOptions="Start">
-            <bv:BoxedSection HeaderHeight="0">
-                <bv:EntryCell Title="{u:I18n EmailAddress}" 
-                              ValueText="{Binding Email}" />
-                <bv:EntryCell Title="{u:I18n MasterPassword}"
-                              ValueText="{Binding MasterPassword}"
-                              IsPassword="True"
-                              Button1Icon="cogs"
-                              Button1Command="{Binding ShowPasswordCommand}" />
-            </bv:BoxedSection>
-        </bv:BoxedView>
-        <Button Text="{u:I18n GetPasswordHint}" VerticalOptions="EndAndExpand"></Button>
-    </StackLayout>
+    <ScrollView>
+        <StackLayout Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n EmailAddress}"
+                        StyleClass="box-label" />
+                    <Entry
+                        Text="{Binding Email}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Grid StyleClass="box-row">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Text="{u:I18n MasterPassword}"
+                        StyleClass="box-label"
+                        Grid.Row="0"
+                        Grid.Column="0" />
+                    <controls:MonoEntry
+                        Text="{Binding MasterPassword}"
+                        StyleClass="box-value"
+                        IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                        Grid.Row="1"
+                        Grid.Column="0" />
+                    <controls:FaButton
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding ShowPasswordIcon}"
+                        Command="{Binding TogglePasswordCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2" />
+                </Grid>
+            </StackLayout>
+            <StackLayout Padding="10, 0">
+                <Button Text="{u:I18n GetPasswordHint}"></Button>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 
 </ContentPage>

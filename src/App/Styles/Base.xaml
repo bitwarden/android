@@ -207,8 +207,6 @@
            Class="box-label">
         <Setter Property="FontSize"
                 Value="Small" />
-        <Setter Property="Margin"
-                Value="0, 0, 0, 5" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
@@ -217,6 +215,8 @@
            Class="box-value">
         <Setter Property="LineBreakMode"
                 Value="CharacterWrap" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 0" />
     </Style>
     <Style TargetType="Label"
            Class="box-sub-label">

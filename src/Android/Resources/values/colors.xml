@@ -12,4 +12,5 @@
   <color name="primary">#3c8dbc</color>
   <color name="darkaccent">#222d32</color>
   <color name="accent">#3883af</color>
+  <color name="border">#dddddd</color>
 </resources>

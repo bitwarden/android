@@ -14,6 +14,7 @@
     <item name="colorPrimary">@color/primary</item>
     <item name="colorPrimaryDark">@color/accent</item>
     <item name="colorAccent">@color/primary</item>
+    <item name="colorControlNormal">@color/border</item>
     <item name="windowActionModeOverlay">true</item>
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
     <item name="android:colorActivatedHighlight">@android:color/transparent</item>
