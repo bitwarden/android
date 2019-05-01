@@ -43,8 +43,8 @@
                             ErrorPlaceholder="login.png"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            WidthRequest="20"
-                            HeightRequest="20"
+                            WidthRequest="22"
+                            HeightRequest="22"
                             IsVisible="False"/>
             <Label LineBreakMode="TailTruncation"
                    Grid.Column="1"

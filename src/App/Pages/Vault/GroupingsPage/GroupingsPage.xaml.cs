@@ -90,6 +90,10 @@ namespace Bit.App.Pages
             {
                 await _viewModel.SelectCollectionAsync(item.Collection);
             }
+            else if(item.Type != null)
+            {
+                await _viewModel.SelectTypeAsync(item.Type.Value);
+            }
         }
     }
 }

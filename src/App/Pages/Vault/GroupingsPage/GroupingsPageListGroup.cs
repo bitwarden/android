@@ -4,6 +4,10 @@ namespace Bit.App.Pages
 {
     public class GroupingsPageListGroup : List<GroupingsPageListItem>
     {
+        public GroupingsPageListGroup(string name, bool doUpper = true)
+            : this(new List<GroupingsPageListItem>(), name, doUpper)
+        { }
+
         public GroupingsPageListGroup(List<GroupingsPageListItem> groupItems, string name, bool doUpper = true)
         {
             AddRange(groupItems);

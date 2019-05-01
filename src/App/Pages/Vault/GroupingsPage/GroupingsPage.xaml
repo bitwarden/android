@@ -22,34 +22,16 @@
                     ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
             </DataTemplate>
 
-            <DataTemplate x:Key="folderTemplate"
+            <DataTemplate x:Key="groupTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <ViewCell>
                     <StackLayout Orientation="Horizontal"
                                  StyleClass="list-row, list-row-platform">
                         <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
-                                          HorizontalOptions="Start"
-                                          VerticalOptions="CenterAndExpand"
+                                          HorizontalOptions="Center"
+                                          VerticalOptions="Center"
                                           StyleClass="list-icon" />
-                        <Label Text="{Binding Folder.Name, Mode=OneWay}"
-                               LineBreakMode="TailTruncation"
-                               HorizontalOptions="StartAndExpand"
-                               VerticalOptions="CenterAndExpand"
-                               StyleClass="list-title"/>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-
-            <DataTemplate x:Key="collectionTemplate"
-                          x:DataType="pages:GroupingsPageListItem">
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal"
-                                 StyleClass="list-row, list-row-platform">
-                        <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
-                                          HorizontalOptions="Start"
-                                          VerticalOptions="CenterAndExpand"
-                                          StyleClass="list-icon" />
-                        <Label Text="{Binding Collection.Name, Mode=OneWay}"
+                        <Label Text="{Binding Name, Mode=OneWay}"
                                LineBreakMode="TailTruncation"
                                HorizontalOptions="StartAndExpand"
                                VerticalOptions="CenterAndExpand"
@@ -60,8 +42,7 @@
 
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
-                                                 FolderTemplate="{StaticResource folderTemplate}"
-                                                 CollectionTemplate="{StaticResource collectionTemplate}" />
+                                                 GroupTemplate="{StaticResource groupTemplate}" />
         </ResourceDictionary>
     </ContentPage.Resources>
     <StackLayout x:Name="_mainLayout">

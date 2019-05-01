@@ -3220,6 +3220,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Types.
+        /// </summary>
+        public static string Types {
+            get {
+                return ResourceManager.GetString("Types", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Secure Note.
         /// </summary>
         public static string TypeSecureNote {

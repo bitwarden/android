@@ -62,7 +62,7 @@
     <Style TargetType="StackLayout"
            Class="list-row">
         <Setter Property="Padding"
-                Value="12" />
+                Value="10, 12" />
     </Style>
     <Style TargetType="Grid"
            Class="list-row">
@@ -90,8 +90,14 @@
     <Style TargetType="Label"
            Class="list-icon"
            ApplyToDerivedTypes="True">
-        <Setter Property="Margin"
-                Value="3, 3, 3, 0" />
+        <Setter Property="WidthRequest"
+                Value="26" />
+        <Setter Property="HeightRequest"
+                Value="26" />
+        <Setter Property="HorizontalTextAlignment"
+                Value="Center" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
         <Setter Property="FontSize"
                 Value="Large" />
         <Setter Property="TextColor"

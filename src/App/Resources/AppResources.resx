@@ -1390,4 +1390,7 @@
   <data name="PasswordHistory" xml:space="preserve">
     <value>Password History</value>
   </data>
+  <data name="Types" xml:space="preserve">
+    <value>Types</value>
+  </data>
 </root>

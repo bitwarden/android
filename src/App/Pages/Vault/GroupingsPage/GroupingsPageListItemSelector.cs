@@ -5,22 +5,13 @@ namespace Bit.App.Pages
     public class GroupingsPageListItemSelector : DataTemplateSelector
     {
         public DataTemplate CipherTemplate { get; set; }
-        public DataTemplate FolderTemplate { get; set; }
-        public DataTemplate CollectionTemplate { get; set; }
+        public DataTemplate GroupTemplate { get; set; }
 
         protected override DataTemplate OnSelectTemplate(object item, BindableObject container)
         {
             if(item is GroupingsPageListItem listItem)
             {
-                if(listItem.Collection != null)
-                {
-                    return CollectionTemplate;
-                }
-                else if(listItem.Folder != null)
-                {
-                    return FolderTemplate;
-                }
-                return CipherTemplate;
+                return listItem.Cipher != null ? CipherTemplate : GroupTemplate;
             }
             return null;
         }

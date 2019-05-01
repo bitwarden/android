@@ -125,6 +125,17 @@ namespace Bit.App.Pages
                     groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites,
                         Device.RuntimePlatform == Device.iOS));
                 }
+                if(MainPage)
+                {
+                    groupedItems.Add(new GroupingsPageListGroup(
+                        AppResources.Types, Device.RuntimePlatform == Device.iOS)
+                    {
+                        new GroupingsPageListItem { Type = CipherType.Login },
+                        new GroupingsPageListItem { Type = CipherType.Card },
+                        new GroupingsPageListItem { Type = CipherType.Identity },
+                        new GroupingsPageListItem { Type = CipherType.SecureNote }
+                    });
+                }
                 if(folderListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(folderListItems, AppResources.Folders,
@@ -158,10 +169,10 @@ namespace Bit.App.Pages
             await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        public async Task SelectFolderAsync(CipherType type)
+        public async Task SelectTypeAsync(CipherType type)
         {
             string title = null;
-            switch(Type.Value)
+            switch(type)
             {
                 case CipherType.Login:
                     title = AppResources.Logins;
