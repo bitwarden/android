@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Bit.App.Pages
 {
-    public partial class LoginPage : ContentPage
+    public partial class LoginPage : BaseContentPage
     {
         private LoginPageViewModel _vm;
 
@@ -17,6 +12,23 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
+            MasterPasswordEntry = _masterPassword;
+        }
+
+        public Entry MasterPasswordEntry { get; set; }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            await _vm.InitAsync();
+            if(string.IsNullOrWhiteSpace(_vm.Email))
+            {
+                RequestFocus(_email);
+            }
+            else
+            {
+                RequestFocus(_masterPassword);
+            }
         }
 
         private async void LogIn_Clicked(object sender, EventArgs e)

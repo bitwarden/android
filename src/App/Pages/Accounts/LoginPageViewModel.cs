@@ -10,9 +10,13 @@ namespace Bit.App.Pages
 {
     public class LoginPageViewModel : BaseViewModel
     {
+        private const string Keys_RememberedEmail = "rememberedEmail";
+        private const string Keys_RememberEmail = "rememberEmail";
+
         private readonly IDeviceActionService _deviceActionService;
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
+        private readonly IStorageService _storageService;
 
         private bool _showPassword;
 
@@ -21,6 +25,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -40,6 +45,17 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string Email { get; set; }
         public string MasterPassword { get; set; }
+        public bool RememberEmail { get; set; }
+
+        public async Task InitAsync()
+        {
+            if(string.IsNullOrWhiteSpace(Email))
+            {
+                Email = await _storageService.GetAsync<string>(Keys_RememberedEmail);
+            }
+            var rememberEmail = await _storageService.GetAsync<bool?>(Keys_RememberEmail);
+            RememberEmail = rememberEmail.GetValueOrDefault(true);
+        }
 
         public async Task LogInAsync()
         {
@@ -68,7 +84,14 @@ namespace Bit.App.Pages
                 await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
                 var response = await _authService.LogInAsync(Email, MasterPassword);
                 await _deviceActionService.HideLoadingAsync();
-                // TODO: remember email?
+                if(RememberEmail)
+                {
+                    await _storageService.SaveAsync(Keys_RememberedEmail, Email);
+                }
+                else
+                {
+                    await _storageService.RemoveAsync(Keys_RememberedEmail);
+                }
                 if(response.TwoFactor)
                 {
                     // TODO: 2fa page
@@ -89,6 +112,7 @@ namespace Bit.App.Pages
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
+            (Page as LoginPage).MasterPasswordEntry.Focus();
         }
     }
 }

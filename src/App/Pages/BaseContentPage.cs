@@ -6,6 +6,8 @@ namespace Bit.App.Pages
 {
     public class BaseContentPage : ContentPage
     {
+        protected int AndroidShowModalAnimationDelay = 400;
+
         protected void SetActivityIndicator()
         {
             Content = new ActivityIndicator
@@ -33,8 +35,22 @@ namespace Bit.App.Pages
             }
             await Task.Run(async () =>
             {
-                await Task.Delay(400);
+                await Task.Delay(AndroidShowModalAnimationDelay);
                 Device.BeginInvokeOnMainThread(async () => await DoWorkAsync());
+            });
+        }
+
+        protected void RequestFocus(Entry entry)
+        {
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                entry.Focus();
+                return;
+            }
+            Task.Run(async () =>
+            {
+                await Task.Delay(AndroidShowModalAnimationDelay);
+                Device.BeginInvokeOnMainThread(() => entry.Focus());
             });
         }
     }

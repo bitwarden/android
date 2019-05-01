@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.LoginPage"
@@ -31,6 +31,7 @@
                         Text="{u:I18n EmailAddress}"
                         StyleClass="box-label" />
                     <Entry
+                        x:Name="_email"
                         Text="{Binding Email}"
                         StyleClass="box-value" />
                 </StackLayout>
@@ -49,6 +50,7 @@
                         Grid.Row="0"
                         Grid.Column="0" />
                     <controls:MonoEntry
+                        x:Name="_masterPassword"
                         Text="{Binding MasterPassword}"
                         StyleClass="box-value"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
@@ -69,4 +71,4 @@
         </StackLayout>
     </ScrollView>
 
-</ContentPage>
+</pages:BaseContentPage>
