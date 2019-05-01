@@ -298,7 +298,8 @@ namespace Bit.App.Pages
             await _deviceActionService.HideLoadingAsync();
             if(matches > 0)
             {
-                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed, matches));
+                await _platformUtilsService.ShowDialogAsync(string.Format(AppResources.PasswordExposed,
+                    matches.ToString("N0")));
             }
             else
             {

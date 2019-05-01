@@ -29,7 +29,7 @@ namespace Bit.Core.Services
         public async Task<int> PasswordLeakedAsync(string password)
         {
             var hashBytes = await _cryptoFunctionService.HashAsync(password, Enums.CryptoHashAlgorithm.Sha1);
-            var hash = BitConverter.ToString(hashBytes).ToUpperInvariant();
+            var hash = BitConverter.ToString(hashBytes).Replace("-", string.Empty).ToUpperInvariant();
             var hashStart = hash.Substring(0, 5);
             var hashEnding = hash.Substring(5);
             var response = await _httpClient.GetAsync(string.Concat(PwnedPasswordsApi, hashStart));
