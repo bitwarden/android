@@ -345,7 +345,7 @@ namespace Bit.Core.Services
                     var responseJsonString = await response.Content.ReadAsStringAsync();
                     return JsonConvert.DeserializeObject<TResponse>(responseJsonString);
                 }
-                else if(response.IsSuccessStatusCode)
+                else if(!response.IsSuccessStatusCode)
                 {
                     var error = await HandleErrorAsync(response, false);
                     throw new ApiException(error);

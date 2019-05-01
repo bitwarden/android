@@ -33,6 +33,7 @@
                     <Entry
                         x:Name="_email"
                         Text="{Binding Email}"
+                        Keyboard="Email"
                         StyleClass="box-value" />
                 </StackLayout>
                 <Grid StyleClass="box-row">
@@ -66,7 +67,7 @@
                 </Grid>
             </StackLayout>
             <StackLayout Padding="10, 0">
-                <Button Text="{u:I18n GetPasswordHint}"></Button>
+                <Button Text="{u:I18n GetPasswordHint}" Clicked="Hint_Clicked"></Button>
             </StackLayout>
         </StackLayout>
     </ScrollView>

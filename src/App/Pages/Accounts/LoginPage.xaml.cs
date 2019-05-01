@@ -35,5 +35,10 @@ namespace Bit.App.Pages
         {
             await _vm.LogInAsync();
         }
+
+        private void Hint_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new NavigationPage(new HintPage()));
+        }
     }
 }
