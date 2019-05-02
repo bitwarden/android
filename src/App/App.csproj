@@ -34,13 +34,13 @@
     <Compile Update="Pages\Accounts\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\GeneratorPage.xaml.cs">
+    <Compile Update="Pages\Generator\GeneratorPage.xaml.cs">
       <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Vault\ViewPage.xaml.cs">
       <DependentUpon>ViewPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\SettingsPage.xaml.cs">
+    <Compile Update="Pages\Settings\SettingsPage.xaml.cs">
       <DependentUpon>SettingsPage.xaml</DependentUpon>
     </Compile>
     <Compile Update="Pages\Vault\GroupingsPage\GroupingsPage.xaml.cs">
