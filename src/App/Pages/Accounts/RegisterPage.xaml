@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.RegisterPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:RegisterPageViewModel"
+    Title="{Binding PageTitle}">
+    
+    <ContentPage.BindingContext>
+        <pages:RegisterPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Submit}" Clicked="Submit_Clicked" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <StackLayout Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n EmailAddress}"
+                        StyleClass="box-label" />
+                    <Entry
+                        x:Name="_email"
+                        Text="{Binding Email}"
+                        Keyboard="Email"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Grid StyleClass="box-row">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Text="{u:I18n MasterPassword}"
+                        StyleClass="box-label"
+                        Grid.Row="0"
+                        Grid.Column="0" />
+                    <controls:MonoEntry
+                        x:Name="_masterPassword"
+                        Text="{Binding MasterPassword}"
+                        StyleClass="box-value"
+                        IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                        Grid.Row="1"
+                        Grid.Column="0" />
+                    <controls:FaButton
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding ShowPasswordIcon}"
+                        Command="{Binding TogglePasswordCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2" />
+                </Grid>
+                <Label
+                    Text="{u:I18n MasterPasswordDescription}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <Grid StyleClass="box-row">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Text="{u:I18n RetypeMasterPassword}"
+                        StyleClass="box-label"
+                        Grid.Row="0"
+                        Grid.Column="0" />
+                    <controls:MonoEntry
+                        x:Name="_confirmMasterPassword"
+                        Text="{Binding ConfirmMasterPassword}"
+                        StyleClass="box-value"
+                        IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                        Grid.Row="1"
+                        Grid.Column="0" />
+                    <controls:FaButton
+                        StyleClass="box-row-button, box-row-button-platform"
+                        Text="{Binding ShowPasswordIcon}"
+                        Command="{Binding ToggleConfirmPasswordCommand}"
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Grid.RowSpan="2" />
+                </Grid>
+                <StackLayout StyleClass="box-row">
+                    <Label
+                        Text="{u:I18n MasterPasswordHint}"
+                        StyleClass="box-label" />
+                    <Entry
+                        Text="{Binding Hint}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Label
+                    Text="{u:I18n MasterPasswordHintDescription}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</pages:BaseContentPage>

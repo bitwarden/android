@@ -19,5 +19,10 @@ namespace Bit.App.Pages
         {
             Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
         }
+
+        private void Register_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new NavigationPage(new RegisterPage()));
+        }
     }
 }

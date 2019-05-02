@@ -25,6 +25,9 @@
     <Compile Update="Pages\Accounts\HintPage.xaml.cs">
       <DependentUpon>HintPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Accounts\RegisterPage.xaml.cs">
+      <DependentUpon>RegisterPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Accounts\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
