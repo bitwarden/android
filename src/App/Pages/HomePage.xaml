@@ -17,16 +17,18 @@
                            StyleClass="btn-muted, btn-icon, btn-icon-platform"
                            HorizontalOptions="Start"
                            Clicked="Settings_Clicked" />
-        <StackLayout VerticalOptions="CenterAndExpand" Spacing="15">
+        <StackLayout VerticalOptions="CenterAndExpand" Spacing="20">
             <Image Source="logo.png" 
                 VerticalOptions="Center" />
             <Label Text="{u:I18n LoginOrCreateNewAccount}"
                    StyleClass="text-lg"
                    HorizontalTextAlignment="Center"></Label>
-            <Button Text="{u:I18n LogIn}" 
+            <StackLayout Spacing="5">
+                <Button Text="{u:I18n LogIn}" 
                     Clicked="LogIn_Clicked"></Button>
-            <Button Text="{u:I18n CreateAccount}"
+                <Button Text="{u:I18n CreateAccount}"
                     Clicked="Register_Clicked"></Button>
+            </StackLayout>
         </StackLayout>
     </StackLayout>
 
