@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\Accounts\EnvironmentPage.xaml.cs">
+      <DependentUpon>EnvironmentPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Accounts\HintPage.xaml.cs">
       <DependentUpon>HintPage.xaml</DependentUpon>
     </Compile>

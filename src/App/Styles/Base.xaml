@@ -12,41 +12,56 @@
                 Value="{StaticResource TextColor}" />
     </Style>
     <Style TargetType="Label"
-           x:Key="text-default">
+           Class="text-default">
         <Setter Property="TextColor"
                 Value="{StaticResource TextColor}" />
     </Style>
     <Style TargetType="Label"
-           x:Key="text-muted">
+           Class="text-muted">
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
-           x:Key="text-danger">
+           Class="text-danger">
         <Setter Property="TextColor"
                 Value="{StaticResource DangerColor}" />
     </Style>
     <Style TargetType="Label"
-           x:Key="text-success">
+           Class="text-success">
         <Setter Property="TextColor"
                 Value="{StaticResource SuccessColor}" />
     </Style>
     <Style TargetType="Label"
-           x:Key="text-sm">
+           Class="text-sm">
         <Setter Property="FontSize"
                 Value="Small" />
     </Style>
     <Style TargetType="Label"
-           x:Key="text-lg">
+           Class="text-lg">
         <Setter Property="FontSize"
                 Value="Large" />
     </Style>
     <Style TargetType="Label"
-           x:Key="text-bold">
+           Class="text-bold">
         <Setter Property="FontAttributes"
                 Value="Bold" />
     </Style>
-
+    
+    <!-- Buttons -->
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="btn-icon">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-muted"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    
+    
     <!-- List -->
     <Style TargetType="ListView"
            Class="list">

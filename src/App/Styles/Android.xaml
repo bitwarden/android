@@ -7,7 +7,18 @@
         <Setter Property="Margin"
                 Value="-4, 0" />
     </Style>
-
+    
+    <!-- Buttons -->
+    
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="btn-icon-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+    
     <!-- List -->
     
     <Style TargetType="ListView"

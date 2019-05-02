@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Bit.App.Pages
 {
@@ -23,6 +18,11 @@ namespace Bit.App.Pages
         private void Register_Clicked(object sender, EventArgs e)
         {
             Navigation.PushModalAsync(new NavigationPage(new RegisterPage()));
+        }
+
+        private void Settings_Clicked(object sender, EventArgs e)
+        {
+            Navigation.PushModalAsync(new NavigationPage(new EnvironmentPage()));
         }
     }
 }

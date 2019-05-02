@@ -4,23 +4,24 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.HomePage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
-    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
     x:DataType="pages:HomeViewModel"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
         <pages:HomeViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout>
-        <Button Text="&#xf2b9;"
-                class="fa"
-                HorizontalOptions="Start"></Button>
-        <StackLayout VerticalOptions="CenterAndExpand">
+    <StackLayout Spacing="0" Padding="10, 5">
+        <controls:FaButton Text="&#xf013;"
+                           StyleClass="btn-muted, btn-icon, btn-icon-platform"
+                           HorizontalOptions="Start"
+                           Clicked="Settings_Clicked" />
+        <StackLayout VerticalOptions="CenterAndExpand" Spacing="15">
             <Image Source="logo.png" 
                 VerticalOptions="Center" />
             <Label Text="{u:I18n LoginOrCreateNewAccount}"
-                   class="text-lg"
+                   StyleClass="text-lg"
                    HorizontalTextAlignment="Center"></Label>
             <Button Text="{u:I18n LogIn}" 
                     Clicked="LogIn_Clicked"></Button>
