@@ -1393,4 +1393,7 @@
   <data name="Types" xml:space="preserve">
     <value>Types</value>
   </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>No passwords to list.</value>
+  </data>
 </root>

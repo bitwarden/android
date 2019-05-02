@@ -44,6 +44,14 @@
     <Style TargetType="ImageButton"
            Class="list-button-platform">
     </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="list-row-button-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
     
     <!-- Box -->
 

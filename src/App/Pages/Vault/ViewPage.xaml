@@ -584,10 +584,18 @@
                        StyleClass="box-footer-label" />
                 <Label FormattedText="{Binding PasswordUpdatedText}"
                        StyleClass="box-footer-label"
-                       IsVisible="{Binding Cipher.PasswordRevisionDisplayDate, Converter={StaticResource notNull}}" />
+                       IsVisible="{Binding Cipher.PasswordRevisionDisplayDate, Converter={StaticResource notNull}}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="PasswordHistory_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
                 <Label FormattedText="{Binding PasswordHistoryText}"
                        StyleClass="box-footer-label"
-                       IsVisible="{Binding Cipher.HasPasswordHistory}" />
+                       IsVisible="{Binding Cipher.HasPasswordHistory}">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="PasswordHistory_Tapped" />
+                    </Label.GestureRecognizers>
+                </Label>
             </StackLayout>
         </StackLayout>
     </ScrollView>

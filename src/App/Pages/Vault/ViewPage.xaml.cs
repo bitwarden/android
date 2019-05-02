@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -45,6 +46,11 @@ namespace Bit.App.Pages
             base.OnDisappearing();
             _broadcasterService.Unsubscribe(nameof(ViewPage));
             _vm.CleanUp();
+        }
+
+        private async void PasswordHistory_Tapped(object sender, System.EventArgs e)
+        {
+            await Navigation.PushModalAsync(new NavigationPage(new PasswordHistoryPage(_vm.CipherId)));
         }
     }
 }
