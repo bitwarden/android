@@ -12,7 +12,8 @@
                 Value="{StaticResource TextColor}" />
     </Style>
     <Style TargetType="Label"
-           Class="text-default">
+           Class="text-default"
+           x:Key="text-default">
         <Setter Property="TextColor"
                 Value="{StaticResource TextColor}" />
     </Style>
@@ -22,7 +23,8 @@
                 Value="{StaticResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
-           Class="text-danger">
+           Class="text-danger"
+           x:Key="text-danger">
         <Setter Property="TextColor"
                 Value="{StaticResource DangerColor}" />
     </Style>
@@ -84,6 +86,8 @@
     </Style>
     <Style TargetType="Label"
            Class="list-header-sub">
+        <Setter Property="FontSize"
+                Value="Small" />
         <Setter Property="HorizontalTextAlignment"
                 Value="End" />
         <Setter Property="VerticalTextAlignment"
@@ -110,6 +114,8 @@
     </Style>
     <Style TargetType="Label"
            Class="list-sub">
+        <Setter Property="FontSize"
+                Value="Small" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>

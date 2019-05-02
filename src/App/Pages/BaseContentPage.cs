@@ -7,6 +7,7 @@ namespace Bit.App.Pages
     public class BaseContentPage : ContentPage
     {
         protected int AndroidShowModalAnimationDelay = 400;
+        protected int AndroidShowPageAnimationDelay = 100;
 
         protected void SetActivityIndicator()
         {
@@ -28,14 +29,14 @@ namespace Bit.App.Pages
                     Content = viewToSet;
                 }
             }
-            if(!fromModal || Device.RuntimePlatform == Device.iOS)
+            if(Device.RuntimePlatform == Device.iOS)
             {
                 await DoWorkAsync();
                 return;
             }
             await Task.Run(async () =>
             {
-                await Task.Delay(AndroidShowModalAnimationDelay);
+                await Task.Delay(fromModal ? AndroidShowModalAnimationDelay : AndroidShowPageAnimationDelay);
                 Device.BeginInvokeOnMainThread(async () => await DoWorkAsync());
             });
         }
