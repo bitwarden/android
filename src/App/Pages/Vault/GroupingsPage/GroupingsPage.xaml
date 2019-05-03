@@ -13,6 +13,10 @@
         <pages:GroupingsPageViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="&#xf002;" Clicked="Search_Clicked" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <DataTemplate x:Key="cipherTemplate"
@@ -53,7 +57,7 @@
         <StackLayout VerticalOptions="CenterAndExpand"
                      Padding="20, 0"
                      Spacing="20"
-                    IsVisible="{Binding ShowNoData}">
+                     IsVisible="{Binding ShowNoData}">
             <Label Text="{Binding NoDataText}"
                    HorizontalTextAlignment="Center"></Label>
             <Button Text="{u:I18n AddAnItem}"

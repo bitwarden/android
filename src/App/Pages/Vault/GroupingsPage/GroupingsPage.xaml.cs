@@ -95,5 +95,10 @@ namespace Bit.App.Pages
                 await _viewModel.SelectTypeAsync(item.Type.Value);
             }
         }
+
+        private async void Search_Clicked(object sender, System.EventArgs e)
+        {
+            await Navigation.PushModalAsync(new CiphersPage(), false);
+        }
     }
 }

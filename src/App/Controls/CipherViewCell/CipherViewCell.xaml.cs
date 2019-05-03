@@ -49,14 +49,23 @@ namespace Bit.App.Controls
         {
             string icon = null;
             string image = null;
-
             _image.Source = null;
-            if(BindingContext is GroupingsPageListItem groupingsPageListItem && groupingsPageListItem.Cipher != null)
+
+            CipherView cipher = null;
+            if(BindingContext is GroupingsPageListItem groupingsPageListItem)
             {
-                switch(groupingsPageListItem.Cipher.Type)
+                cipher = groupingsPageListItem.Cipher;
+            }
+            else if(BindingContext is CipherView cv)
+            {
+                cipher = cv;
+            }
+            if(cipher != null)
+            {
+                switch(cipher.Type)
                 {
                     case CipherType.Login:
-                        var loginIconImage = GetLoginIconImage(groupingsPageListItem.Cipher);
+                        var loginIconImage = GetLoginIconImage(cipher);
                         icon = loginIconImage.Item1;
                         image = loginIconImage.Item2;
                         break;

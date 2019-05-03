@@ -58,25 +58,28 @@
                    StyleClass="list-subtitle, list-subtitle-platform"
                    Text="{Binding Cipher.SubTitle, Mode=OneWay}" />
 
-            <controls:FaLabel Grid.Column="2"
-                   Grid.Row="0"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Center"
-                   StyleClass="list-title-icon"
-                   Margin="5, 0, 0, 0"
-                   Text="&#xf1e0;"
-                   IsVisible="{Binding Cipher.Shared, Mode=OneWay}" />
-            <controls:FaLabel Grid.Column="3"
-                   Grid.Row="0"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Center"
-                   StyleClass="list-title-icon"
-                   Margin="5, 0, 0, 0"
-                   Text="&#xf0c6;"
-                   IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}" />
-            <ImageButton
-                Source="more.png"
-                StyleClass="list-button, list-button-platform"
+            <controls:FaLabel
+                Grid.Column="2"
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                StyleClass="list-title-icon"
+                Margin="5, 0, 0, 0"
+                Text="&#xf1e0;"
+                IsVisible="{Binding Cipher.Shared, Mode=OneWay}" />
+            <controls:FaLabel
+                Grid.Column="3"
+                Grid.Row="0"
+                HorizontalOptions="Start"
+                VerticalOptions="Center"
+                StyleClass="list-title-icon"
+                Margin="5, 0, 0, 0"
+                Text="&#xf0c6;"
+                IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}" />
+
+            <controls:MiButton
+                Text="&#xe5d4;"
+                StyleClass="list-row-button, list-row-button-platform, btn-disabled"
                 Clicked="ImageButton_Clicked"
                 Grid.Column="4"
                 Grid.Row="0"

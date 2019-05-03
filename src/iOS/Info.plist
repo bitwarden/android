@@ -39,6 +39,7 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>FontAwesome.ttf</string>
+		<string>MaterialIcons_Regular.ttf</string>
 	</array>
 </dict>
 </plist>

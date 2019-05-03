@@ -62,6 +62,12 @@
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
+    <Style TargetType="Button"
+           Class="btn-disabled"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{StaticResource DisabledIconColor}" />
+    </Style>
     
     
     <!-- List -->
@@ -149,18 +155,6 @@
                 Value="Large" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
-    </Style>
-    <Style TargetType="ImageButton"
-           ApplyToDerivedTypes="True"
-           Class="list-button">
-        <Setter Property="BackgroundColor"
-                Value="Transparent" />
-        <Setter Property="Padding"
-                Value="0" />
-        <Setter Property="HorizontalOptions"
-                Value="End" />
-        <Setter Property="VerticalOptions"
-                Value="CenterAndExpand" />
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"

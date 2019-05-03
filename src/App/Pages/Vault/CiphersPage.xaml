@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.CiphersPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    x:DataType="pages:CiphersPageViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+
+    <ContentPage.BindingContext>
+        <pages:CiphersPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:DateTimeConverter x:Key="dateTime" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout x:Name="_mainLayout">
+        <Label IsVisible="{Binding ShowNoData}"
+               Text="{Binding NoDataText}"
+               Margin="20, 0"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand"
+               HorizontalTextAlignment="Center"></Label>
+        <ListView x:Name="_listView"
+                  IsVisible="{Binding ShowNoData, Converter={StaticResource inverseBool}}"
+                  ItemsSource="{Binding Ciphers}"
+                  VerticalOptions="FillAndExpand"
+                  HasUnevenRows="true"
+                  CachingStrategy="RecycleElement"
+                  StyleClass="list, list-platform">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="views:CipherView">
+                    <controls:CipherViewCell
+                        Cipher="{Binding .}"
+                        ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+
+</pages:BaseContentPage>

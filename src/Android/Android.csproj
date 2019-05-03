@@ -99,6 +99,7 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\FontAwesome.ttf" />
     <AndroidAsset Include="Assets\RobotoMono_Regular.ttf" />
+    <AndroidAsset Include="Assets\MaterialIcons_Regular.ttf" />
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
