@@ -79,6 +79,7 @@
     <Compile Include="Autofill\FilledItem.cs" />
     <Compile Include="Autofill\Parser.cs" />
     <Compile Include="Autofill\SavedItem.cs" />
+    <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
     <Compile Include="SplashActivity.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRecyclerAdapter.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRenderer.cs" />

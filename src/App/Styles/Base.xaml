@@ -48,6 +48,16 @@
         <Setter Property="FontAttributes"
                 Value="Bold" />
     </Style>
+    <Style TargetType="SearchBar">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="TextColor"
+                Value="{StaticResource HeaderEntryTextColor}" />
+        <Setter Property="CancelButtonColor"
+                Value="{StaticResource HeaderEntryTextColor}" />
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource HeaderEntryPlaceholderColor}" />
+    </Style>
     
     <!-- Buttons -->
     <Style TargetType="Button"

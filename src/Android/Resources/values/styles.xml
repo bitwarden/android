@@ -18,6 +18,7 @@
     <item name="windowActionModeOverlay">true</item>
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
     <item name="android:colorActivatedHighlight">@android:color/transparent</item>
+    <item name="android:textCursorDrawable">@null</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">

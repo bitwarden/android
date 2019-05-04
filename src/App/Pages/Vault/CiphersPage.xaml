@@ -22,6 +22,27 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <NavigationPage.TitleView>
+        <StackLayout
+            Orientation="Horizontal"
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"
+            Spacing="0"
+            Padding="0">
+            <controls:MiButton
+                Text="&#xe5c4;"
+                BackgroundColor="Transparent"
+                Padding="0"
+                WidthRequest="37"
+                FontSize="25"
+                VerticalOptions="CenterAndExpand" />
+            <SearchBar
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="Transparent"
+                Placeholder="{u:I18n SearchVault}" />
+        </StackLayout>
+    </NavigationPage.TitleView>
+
     <StackLayout x:Name="_mainLayout">
         <Label IsVisible="{Binding ShowNoData}"
                Text="{Binding NoDataText}"

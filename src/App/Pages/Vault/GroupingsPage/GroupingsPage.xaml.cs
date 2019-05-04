@@ -98,7 +98,7 @@ namespace Bit.App.Pages
 
         private async void Search_Clicked(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new CiphersPage(), false);
+            await Navigation.PushModalAsync(new NavigationPage(new CiphersPage()), false);
         }
     }
 }
