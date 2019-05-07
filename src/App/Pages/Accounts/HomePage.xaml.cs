@@ -3,7 +3,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class HomePage : ContentPage
+    public partial class HomePage : BaseContentPage
     {
         public HomePage()
         {
@@ -12,17 +12,26 @@ namespace Bit.App.Pages
 
         private void LogIn_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+            if(DoOnce())
+            {
+                Navigation.PushModalAsync(new NavigationPage(new LoginPage()));
+            }
         }
 
         private void Register_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new NavigationPage(new RegisterPage()));
+            if(DoOnce())
+            {
+                Navigation.PushModalAsync(new NavigationPage(new RegisterPage()));
+            }
         }
 
         private void Settings_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new NavigationPage(new EnvironmentPage()));
+            if(DoOnce())
+            {
+                Navigation.PushModalAsync(new NavigationPage(new EnvironmentPage()));
+            }
         }
     }
 }

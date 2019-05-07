@@ -19,7 +19,7 @@ namespace Bit.App.Pages
         public Entry MasterPasswordEntry { get; set; }
         public Entry ConfirmMasterPasswordEntry { get; set; }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
             RequestFocus(_email);
@@ -27,7 +27,10 @@ namespace Bit.App.Pages
 
         private async void Submit_Clicked(object sender, EventArgs e)
         {
-            await _vm.SubmitAsync();
+            if(DoOnce())
+            {
+                await _vm.SubmitAsync();
+            }
         }
     }
 }

@@ -19,6 +19,7 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
 
         private bool _showPassword;
+        private string _email;
 
         public LoginPageViewModel()
         {
@@ -41,9 +42,14 @@ namespace Bit.App.Pages
                 });
         }
 
+        public string Email
+        {
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
-        public string Email { get; set; }
         public string MasterPassword { get; set; }
         public bool RememberEmail { get; set; }
 

@@ -33,12 +33,18 @@ namespace Bit.App.Pages
 
         private async void LogIn_Clicked(object sender, EventArgs e)
         {
-            await _vm.LogInAsync();
+            if(DoOnce())
+            {
+                await _vm.LogInAsync();
+            }
         }
 
         private void Hint_Clicked(object sender, EventArgs e)
         {
-            Navigation.PushModalAsync(new NavigationPage(new HintPage()));
+            if(DoOnce())
+            {
+                Navigation.PushModalAsync(new NavigationPage(new HintPage()));
+            }
         }
     }
 }
