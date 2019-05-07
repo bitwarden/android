@@ -74,6 +74,11 @@ namespace Bit.App.Pages
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
+            if(!DoOnce())
+            {
+                return;
+            }
+
             if(!(e.SelectedItem is GroupingsPageListItem item))
             {
                 return;

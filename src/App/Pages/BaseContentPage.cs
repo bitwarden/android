@@ -9,6 +9,8 @@ namespace Bit.App.Pages
         protected int AndroidShowModalAnimationDelay = 400;
         protected int AndroidShowPageAnimationDelay = 100;
 
+        public DateTime? LastPageAction { get; set; }
+
         protected void SetActivityIndicator()
         {
             Content = new ActivityIndicator
@@ -53,6 +55,18 @@ namespace Bit.App.Pages
                 await Task.Delay(AndroidShowModalAnimationDelay);
                 Device.BeginInvokeOnMainThread(() => input.Focus());
             });
+        }
+
+        protected bool DoOnce(Action action = null, int milliseconds = 1000)
+        {
+            if(LastPageAction.HasValue && (DateTime.UtcNow - LastPageAction.Value).TotalMilliseconds < milliseconds)
+            {
+                // Last action occurred recently.
+                return false;
+            }
+            LastPageAction = DateTime.UtcNow;
+            action?.Invoke();
+            return true;
         }
     }
 }

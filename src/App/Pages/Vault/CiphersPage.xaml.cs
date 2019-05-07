@@ -76,12 +76,21 @@ namespace Bit.App.Pages
 
         private void GoBack()
         {
+            if(!DoOnce())
+            {
+                return;
+            }
             Navigation.PopModalAsync(false);
         }
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
+            if(!DoOnce())
+            {
+                return;
+            }
+
             if(e.SelectedItem is CipherView cipher)
             {
                 await _vm.SelectCipherAsync(cipher);
