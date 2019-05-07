@@ -3,6 +3,7 @@ using Bit.Core.Models.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Bit.Core.Services
@@ -24,7 +25,7 @@ namespace Bit.Core.Services
 
         public bool IsSearchable(string query)
         {
-            return true;
+            return (query?.Length ?? 0) > 1;
         }
 
         public Task IndexCiphersAsync()
@@ -34,7 +35,7 @@ namespace Bit.Core.Services
         }
 
         public async Task<List<CipherView>> SearchCiphersAsync(string query, Func<CipherView, bool> filter = null,
-            List<CipherView> ciphers = null)
+            List<CipherView> ciphers = null, CancellationToken ct = default(CancellationToken))
         {
             var results = new List<CipherView>();
             if(query != null)
@@ -49,10 +50,14 @@ namespace Bit.Core.Services
             {
                 ciphers = await _cipherService.GetAllDecryptedAsync();
             }
+
+            ct.ThrowIfCancellationRequested();
             if(filter != null)
             {
                 ciphers = ciphers.Where(filter).ToList();
             }
+
+            ct.ThrowIfCancellationRequested();
             if(!IsSearchable(query))
             {
                 return ciphers;
@@ -62,11 +67,14 @@ namespace Bit.Core.Services
             // TODO: advanced searching with index
         }
 
-        public List<CipherView> SearchCiphersBasic(List<CipherView> ciphers, string query)
+        public List<CipherView> SearchCiphersBasic(List<CipherView> ciphers, string query,
+            CancellationToken ct = default(CancellationToken))
         {
+            ct.ThrowIfCancellationRequested();
             query = query.Trim().ToLower();
             return ciphers.Where(c =>
             {
+                ct.ThrowIfCancellationRequested();
                 if(c.Name?.ToLower().Contains(query) ?? false)
                 {
                     return true;

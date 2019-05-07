@@ -41,17 +41,17 @@ namespace Bit.App.Pages
             });
         }
 
-        protected void RequestFocus(Entry entry)
+        protected void RequestFocus(InputView input)
         {
             if(Device.RuntimePlatform == Device.iOS)
             {
-                entry.Focus();
+                input.Focus();
                 return;
             }
             Task.Run(async () =>
             {
                 await Task.Delay(AndroidShowModalAnimationDelay);
-                Device.BeginInvokeOnMainThread(() => entry.Focus());
+                Device.BeginInvokeOnMainThread(() => input.Focus());
             });
         }
     }

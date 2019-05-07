@@ -2473,6 +2473,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no items to list..
+        /// </summary>
+        public static string NoItemsToList {
+            get {
+                return ResourceManager.GetString("NoItemsToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No passwords to list..
         /// </summary>
         public static string NoPasswordsToList {
@@ -2851,7 +2860,34 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search Vault.
+        ///   Looks up a localized string similar to Search collection.
+        /// </summary>
+        public static string SearchCollection {
+            get {
+                return ResourceManager.GetString("SearchCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search folder.
+        /// </summary>
+        public static string SearchFolder {
+            get {
+                return ResourceManager.GetString("SearchFolder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search type.
+        /// </summary>
+        public static string SearchType {
+            get {
+                return ResourceManager.GetString("SearchType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search vault.
         /// </summary>
         public static string SearchVault {
             get {

@@ -17,7 +17,8 @@
 
     <Color x:Key="BoxBorderColor">#f0f0f0</Color>
     <Color x:Key="BoxHeaderTextColor">#3c8dbc</Color>
-    
+
+    <Color x:Key="HeaderTextColor">#ffffff</Color>
     <Color x:Key="HeaderEntryTextColor">#ffffff</Color>
     <Color x:Key="HeaderEntryPlaceholderColor">#707070</Color>
 

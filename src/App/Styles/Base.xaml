@@ -48,16 +48,6 @@
         <Setter Property="FontAttributes"
                 Value="Bold" />
     </Style>
-    <Style TargetType="SearchBar">
-        <Setter Property="BackgroundColor"
-                Value="Transparent" />
-        <Setter Property="TextColor"
-                Value="{StaticResource HeaderEntryTextColor}" />
-        <Setter Property="CancelButtonColor"
-                Value="{StaticResource HeaderEntryTextColor}" />
-        <Setter Property="PlaceholderColor"
-                Value="{StaticResource HeaderEntryPlaceholderColor}" />
-    </Style>
     
     <!-- Buttons -->
     <Style TargetType="Button"
@@ -79,7 +69,32 @@
                 Value="{StaticResource DisabledIconColor}" />
     </Style>
     
-    
+    <!-- Title -->
+    <Style TargetType="Button"
+           Class="btn-title"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TitleTextColor}" />
+    </Style>
+    <Style TargetType="SearchBar">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TitleEntryTextColor}" />
+        <Setter Property="CancelButtonColor"
+                Value="{StaticResource TitleEntryTextColor}" />
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource TitleEntryPlaceholderColor}" />
+    </Style>
+
     <!-- List -->
     <Style TargetType="ListView"
            Class="list">

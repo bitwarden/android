@@ -4,6 +4,7 @@ using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -56,6 +57,7 @@ namespace Bit.App.Pages
         public CipherType? Type { get; set; }
         public string FolderId { get; set; }
         public string CollectionId { get; set; }
+        public Func<CipherView, bool> Filter { get; set; }
 
         public List<CipherView> Ciphers { get; set; }
         public List<CipherView> FavoriteCiphers { get; set; }
@@ -249,6 +251,7 @@ namespace Bit.App.Pages
             _folderCounts.Clear();
             _collectionCounts.Clear();
             _typeCounts.Clear();
+            Filter = null;
 
             if(MainPage)
             {
@@ -267,7 +270,7 @@ namespace Bit.App.Pages
             {
                 if(Type != null)
                 {
-                    Ciphers = _allCiphers.Where(c => c.Type == Type.Value).ToList();
+                    Filter = c => c.Type == Type.Value;
                 }
                 else if(FolderId != null)
                 {
@@ -286,7 +289,7 @@ namespace Bit.App.Pages
                     {
                         PageTitle = AppResources.FolderNone;
                     }
-                    Ciphers = _allCiphers.Where(c => c.FolderId == folderId).ToList();
+                    Filter = c => c.FolderId == folderId;
                 }
                 else if(CollectionId != null)
                 {
@@ -297,13 +300,13 @@ namespace Bit.App.Pages
                     {
                         PageTitle = collectionNode.Node.Name;
                     }
-                    Ciphers = _allCiphers.Where(c => c.CollectionIds?.Contains(CollectionId) ?? false).ToList();
+                    Filter = c => c.CollectionIds?.Contains(CollectionId) ?? false;
                 }
                 else
                 {
                     PageTitle = AppResources.AllItems;
-                    Ciphers = _allCiphers;
                 }
+                Ciphers = Filter != null ? _allCiphers.Where(Filter).ToList() : _allCiphers;
             }
 
             foreach(var c in _allCiphers)

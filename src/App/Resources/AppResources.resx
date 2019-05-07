@@ -656,7 +656,7 @@
     <value>Re-type Master Password</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search Vault</value>
+    <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Security</value>
@@ -1395,5 +1395,17 @@
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
     <value>No passwords to list.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>There are no items to list.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Search collection</value>
+  </data>
+  <data name="SearchFolder" xml:space="preserve">
+    <value>Search folder</value>
+  </data>
+  <data name="SearchType" xml:space="preserve">
+    <value>Search type</value>
   </data>
 </root>

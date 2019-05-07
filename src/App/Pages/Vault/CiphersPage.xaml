@@ -17,7 +17,6 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <u:InverseBoolConverter x:Key="inverseBool" />
             <u:DateTimeConverter x:Key="dateTime" />
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -30,32 +29,34 @@
             Spacing="0"
             Padding="0">
             <controls:MiButton
+                StyleClass="btn-title"
                 Text="&#xe5c4;"
-                BackgroundColor="Transparent"
-                Padding="0"
-                WidthRequest="37"
-                FontSize="25"
-                VerticalOptions="CenterAndExpand" />
+                VerticalOptions="CenterAndExpand"
+                Clicked="BackButton_Clicked" />
             <SearchBar
+                x:Name="_searchBar"
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="Transparent"
-                Placeholder="{u:I18n SearchVault}" />
+                TextChanged="SearchBar_TextChanged"
+                SearchButtonPressed="SearchBar_SearchButtonPressed"
+                Placeholder="{Binding PageTitle}" />
         </StackLayout>
     </NavigationPage.TitleView>
 
     <StackLayout x:Name="_mainLayout">
         <Label IsVisible="{Binding ShowNoData}"
-               Text="{Binding NoDataText}"
+               Text="{u:I18n NoItemsToList}"
                Margin="20, 0"
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
                HorizontalTextAlignment="Center"></Label>
         <ListView x:Name="_listView"
-                  IsVisible="{Binding ShowNoData, Converter={StaticResource inverseBool}}"
+                  IsVisible="{Binding ShowList}"
                   ItemsSource="{Binding Ciphers}"
                   VerticalOptions="FillAndExpand"
                   HasUnevenRows="true"
                   CachingStrategy="RecycleElement"
+                  ItemSelected="RowSelected"
                   StyleClass="list, list-platform">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="views:CipherView">

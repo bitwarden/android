@@ -10,7 +10,7 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
-        private readonly GroupingsPageViewModel _viewModel;
+        private readonly GroupingsPageViewModel _vm;
 
         public GroupingsPage()
             : this(true)
@@ -23,15 +23,15 @@ namespace Bit.App.Pages
             SetActivityIndicator();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
-            _viewModel = BindingContext as GroupingsPageViewModel;
-            _viewModel.Page = this;
-            _viewModel.MainPage = mainPage;
-            _viewModel.Type = type;
-            _viewModel.FolderId = folderId;
-            _viewModel.CollectionId = collectionId;
+            _vm = BindingContext as GroupingsPageViewModel;
+            _vm.Page = this;
+            _vm.MainPage = mainPage;
+            _vm.Type = type;
+            _vm.FolderId = folderId;
+            _vm.CollectionId = collectionId;
             if(pageTitle != null)
             {
-                _viewModel.PageTitle = pageTitle;
+                _vm.PageTitle = pageTitle;
             }
         }
 
@@ -52,14 +52,14 @@ namespace Bit.App.Pages
             {
                 if(!_syncService.SyncInProgress)
                 {
-                    await _viewModel.LoadAsync();
+                    await _vm.LoadAsync();
                 }
                 else
                 {
                     await Task.Delay(5000);
-                    if(!_viewModel.Loaded)
+                    if(!_vm.Loaded)
                     {
-                        await _viewModel.LoadAsync();
+                        await _vm.LoadAsync();
                     }
                 }
             });
@@ -73,6 +73,7 @@ namespace Bit.App.Pages
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
+            ((ListView)sender).SelectedItem = null;
             if(!(e.SelectedItem is GroupingsPageListItem item))
             {
                 return;
@@ -80,25 +81,26 @@ namespace Bit.App.Pages
 
             if(item.Cipher != null)
             {
-                await _viewModel.SelectCipherAsync(item.Cipher);
+                await _vm.SelectCipherAsync(item.Cipher);
             }
             else if(item.Folder != null)
             {
-                await _viewModel.SelectFolderAsync(item.Folder);
+                await _vm.SelectFolderAsync(item.Folder);
             }
             else if(item.Collection != null)
             {
-                await _viewModel.SelectCollectionAsync(item.Collection);
+                await _vm.SelectCollectionAsync(item.Collection);
             }
             else if(item.Type != null)
             {
-                await _viewModel.SelectTypeAsync(item.Type.Value);
+                await _vm.SelectTypeAsync(item.Type.Value);
             }
         }
 
         private async void Search_Clicked(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new CiphersPage()), false);
+            await Navigation.PushModalAsync(new NavigationPage(
+                new CiphersPage(_vm.Filter,_vm.FolderId != null, _vm.CollectionId != null, _vm.Type != null)), false);
         }
     }
 }
