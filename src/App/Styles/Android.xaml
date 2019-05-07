@@ -19,6 +19,17 @@
                 Value="25" />
     </Style>
     
+    <!-- Title -->
+
+    <Style TargetType="Button"
+           Class="btn-title-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="WidthRequest"
+                Value="28" />
+        <Setter Property="FontSize"
+                Value="24" />
+    </Style>
+
     <!-- List -->
     
     <Style TargetType="ListView"

@@ -77,10 +77,6 @@
                 Value="Transparent" />
         <Setter Property="Padding"
                 Value="0" />
-        <Setter Property="WidthRequest"
-                Value="37" />
-        <Setter Property="FontSize"
-                Value="25" />
         <Setter Property="TextColor"
                 Value="{StaticResource TitleTextColor}" />
     </Style>
