@@ -43,6 +43,9 @@
     <Compile Update="Pages\Vault\PasswordHistoryPage.xaml.cs">
       <DependentUpon>PasswordHistoryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Vault\AddEditPage.xaml.cs">
+      <DependentUpon>AddEditPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Vault\ViewPage.xaml.cs">
       <DependentUpon>ViewPage.xaml</DependentUpon>
     </Compile>

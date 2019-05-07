@@ -5,16 +5,16 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public partial class ViewPage : BaseContentPage
+    public partial class AddEditPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
-        private ViewPageViewModel _vm;
+        private AddEditPageViewModel _vm;
 
-        public ViewPage(string cipherId)
+        public AddEditPage(string cipherId)
         {
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
-            _vm = BindingContext as ViewPageViewModel;
+            _vm = BindingContext as AddEditPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
             SetActivityIndicator();
@@ -53,14 +53,6 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await Navigation.PushModalAsync(new NavigationPage(new PasswordHistoryPage(_vm.CipherId)));
-            }
-        }
-
-        private async void EditToolbarItem_Clicked(object sender, System.EventArgs e)
-        {
-            if(DoOnce())
-            {
-                await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
             }
         }
     }

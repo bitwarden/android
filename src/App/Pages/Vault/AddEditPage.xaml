@@ -2,20 +2,21 @@
 <pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Bit.App.Pages.ViewPage"
+    x:Class="Bit.App.Pages.AddEditPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
-    x:DataType="pages:ViewPageViewModel"
+    x:DataType="pages:AddEditPageViewModel"
     x:Name="_page"
     Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
-        <pages:ViewPageViewModel />
+        <pages:AddEditPageViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" />
+        <ToolbarItem Icon="cogs.png" 
+                     Text="{u:I18n Edit}" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -479,7 +480,7 @@
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Fields}">
                     <controls:RepeaterView.ItemTemplate>
-                        <DataTemplate x:DataType="pages:ViewPageFieldViewModel">
+                        <DataTemplate x:DataType="pages:AddEditPageFieldViewModel">
                             <StackLayout Spacing="0" Padding="0">
                                 <Grid StyleClass="box-row">
                                     <Grid.RowDefinitions>
