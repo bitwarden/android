@@ -50,7 +50,10 @@ namespace Bit.App.Pages
 
         private async void PasswordHistory_Tapped(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new PasswordHistoryPage(_vm.CipherId)));
+            if(DoOnce())
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new PasswordHistoryPage(_vm.CipherId)));
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Bit.App.Abstractions;
-using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
@@ -289,6 +288,10 @@ namespace Bit.App.Pages
 
         private async void CheckPasswordAsync()
         {
+            if(!(Page as BaseContentPage).DoOnce())
+            {
+                return;
+            }
             if(string.IsNullOrWhiteSpace(Cipher.Login?.Password))
             {
                 return;
@@ -309,6 +312,10 @@ namespace Bit.App.Pages
 
         private async void DownloadAttachmentAsync(AttachmentView attachment)
         {
+            if(!(Page as BaseContentPage).DoOnce())
+            {
+                return;
+            }
             if(Cipher.OrganizationId == null && !CanAccessPremium)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PremiumRequired);
@@ -411,7 +418,7 @@ namespace Bit.App.Pages
 
         private void LaunchUri(LoginUriView uri)
         {
-            if(uri.CanLaunch)
+            if(uri.CanLaunch && (Page as BaseContentPage).DoOnce())
             {
                 _platformUtilsService.LaunchUri(uri.LaunchUri);
             }
