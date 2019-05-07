@@ -106,6 +106,10 @@ namespace Bit.App.Pages
 
         private async void CipherOptionsAsync(CipherView cipher)
         {
+            if(!(Page as BaseContentPage).DoOnce())
+            {
+                return;
+            }
             var option = await Page.DisplayActionSheet(cipher.Name, AppResources.Cancel, null, "1", "2");
             if(option == AppResources.Cancel)
             {

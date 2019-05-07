@@ -104,8 +104,12 @@ namespace Bit.App.Pages
 
         private async void Search_Clicked(object sender, System.EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(
-                new CiphersPage(_vm.Filter,_vm.FolderId != null, _vm.CollectionId != null, _vm.Type != null)), false);
+            if(DoOnce())
+            {
+                var page = new CiphersPage(_vm.Filter, _vm.FolderId != null, _vm.CollectionId != null,
+                    _vm.Type != null);
+                await Navigation.PushModalAsync(new NavigationPage(page), false);
+            }
         }
     }
 }
