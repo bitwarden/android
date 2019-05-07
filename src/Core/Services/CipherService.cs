@@ -65,7 +65,7 @@ namespace Bit.Core.Services
             {
                 if(value == null)
                 {
-                    _decryptedCipherCache.Clear();
+                    _decryptedCipherCache?.Clear();
                 }
                 _decryptedCipherCache = value;
                 if(_searchService != null)
@@ -120,7 +120,7 @@ namespace Bit.Core.Services
                         }
                         else
                         {
-                            model.Login.PasswordRevisionDate = DateTime.UtcNow;
+                            model.Login.PasswordRevisionDate = existingCipher.Login.PasswordRevisionDate;
                         }
                     }
                     if(existingCipher.HasFields)
@@ -951,6 +951,7 @@ namespace Bit.Core.Services
             if(!attachmentsModel?.Any() ?? true)
             {
                 cipher.Attachments = null;
+                return;
             }
             var tasks = new List<Task>();
             var encAttachments = new List<Attachment>();
@@ -1098,6 +1099,7 @@ namespace Bit.Core.Services
             if(!phModels?.Any() ?? true)
             {
                 cipher.PasswordHistory = null;
+                return;
             }
             var tasks = new List<Task>();
             var encPhs = new List<PasswordHistory>();

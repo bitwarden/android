@@ -38,7 +38,7 @@
                         Text="{u:I18n Name}"
                         StyleClass="box-label" />
                     <Entry
-                        Text="{Binding Cipher.Name, Mode=OneWay}"
+                        Text="{Binding Cipher.Name}"
                         StyleClass="box-value" />
                 </StackLayout>
             </StackLayout>
