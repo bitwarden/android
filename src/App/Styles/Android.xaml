@@ -12,6 +12,11 @@
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
     </Style>
+    <Style TargetType="Editor"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Margin"
+                Value="-4, 0, -4, -4" />
+    </Style>
     
     <!-- Buttons -->
     

@@ -226,6 +226,130 @@
                             Text="{Binding Cipher.Identity.LastName}"
                             StyleClass="box-value" />
                     </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Username}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Username}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Company}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Company}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n SSN}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.SSN}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n PassportNumber}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.PassportNumber}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n LicenseNumber}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.LicenseNumber}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Email}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Email}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Phone}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Phone}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Address1}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Address1}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Address2}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Address2}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Address3}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Address3}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n CityTown}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.City}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n StateProvince}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.State}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n ZipPostalCode}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.PostalCode}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Country}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Country}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Notes}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row">
+                    <Editor
+                        Text="{Binding Cipher.Notes}"
+                        StyleClass="box-value"
+                        HeightRequest="200" />
                 </StackLayout>
             </StackLayout>
         </StackLayout>

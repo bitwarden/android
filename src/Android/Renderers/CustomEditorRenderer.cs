@@ -3,16 +3,16 @@ using Bit.Droid.Renderers.BoxedView;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(Entry), typeof(CustomEntryBarRenderer))]
+[assembly: ExportRenderer(typeof(Entry), typeof(CustomEditorRenderer))]
 namespace Bit.Droid.Renderers.BoxedView
 {
-    public class CustomEntryBarRenderer : EntryRenderer
+    public class CustomEditorRenderer : EditorRenderer
     {
-        public CustomEntryBarRenderer(Context context)
+        public CustomEditorRenderer(Context context)
             : base(context)
         { }
 
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
             if(Control != null && e.NewElement != null)
