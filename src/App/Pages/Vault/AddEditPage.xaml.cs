@@ -20,6 +20,10 @@ namespace Bit.App.Pages
             _vm.OrganizationId = organizationId;
             _vm.Init();
             SetActivityIndicator();
+
+            _cardBrandPicker.ItemDisplayBinding = new Binding("Key");
+            _cardExpMonthPicker.ItemDisplayBinding = new Binding("Key");
+            _identityTitlePicker.ItemDisplayBinding = new Binding("Key");
         }
 
         protected override async void OnAppearing()

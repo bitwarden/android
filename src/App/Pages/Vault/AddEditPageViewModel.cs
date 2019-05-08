@@ -37,6 +37,44 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             CheckPasswordCommand = new Command(CheckPasswordAsync);
+
+            CardBrandOptions = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>($"-- {AppResources.Select} --", null),
+                new KeyValuePair<string, string>("Visa", "Visa"),
+                new KeyValuePair<string, string>("Mastercard", "Mastercard"),
+                new KeyValuePair<string, string>("American Express", "Amex"),
+                new KeyValuePair<string, string>("Discover", "Discover"),
+                new KeyValuePair<string, string>("Diners Club", "Diners Club"),
+                new KeyValuePair<string, string>("JCB", "JCB"),
+                new KeyValuePair<string, string>("Maestro", "Maestro"),
+                new KeyValuePair<string, string>("UnionPay", "UnionPay"),
+                new KeyValuePair<string, string>(AppResources.Other, "Other")
+            };
+            CardExpMonthOptions = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>($"-- {AppResources.Select} --", null),
+                new KeyValuePair<string, string>($"01 - {AppResources.January}", "1"),
+                new KeyValuePair<string, string>($"02 - {AppResources.February}", "2"),
+                new KeyValuePair<string, string>($"03 - {AppResources.March}", "3"),
+                new KeyValuePair<string, string>($"04 - {AppResources.April}", "4"),
+                new KeyValuePair<string, string>($"05 - {AppResources.May}", "5"),
+                new KeyValuePair<string, string>($"06 - {AppResources.June}", "6"),
+                new KeyValuePair<string, string>($"07 - {AppResources.July}", "7"),
+                new KeyValuePair<string, string>($"08 - {AppResources.August}", "8"),
+                new KeyValuePair<string, string>($"09 - {AppResources.September}", "9"),
+                new KeyValuePair<string, string>($"10 - {AppResources.October}", "10"),
+                new KeyValuePair<string, string>($"11 - {AppResources.November}", "11"),
+                new KeyValuePair<string, string>($"12 - {AppResources.December}", "12")
+            };
+            IdentityTitleOptions = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>($"-- {AppResources.Select} --", null),
+                new KeyValuePair<string, string>(AppResources.Mr, AppResources.Mr),
+                new KeyValuePair<string, string>(AppResources.Mrs, AppResources.Mrs),
+                new KeyValuePair<string, string>(AppResources.Ms, AppResources.Ms),
+                new KeyValuePair<string, string>(AppResources.Dr, AppResources.Dr),
+            };
         }
 
         public Command GeneratePasswordCommand { get; set; }
@@ -48,6 +86,9 @@ namespace Bit.App.Pages
         public string FolderId { get; set; }
         public CipherType? Type { get; set; }
         public List<string> CollectionIds { get; set; }
+        public List<KeyValuePair<string, string>> CardBrandOptions { get; set; }
+        public List<KeyValuePair<string, string>> CardExpMonthOptions { get; set; }
+        public List<KeyValuePair<string, string>> IdentityTitleOptions { get; set; }
         public CipherView Cipher
         {
             get => _cipher;
@@ -203,7 +244,7 @@ namespace Bit.App.Pages
 
         public void GeneratePassword()
         {
-
+            // TODO: push modal for generate page
         }
 
         public void TogglePassword()
