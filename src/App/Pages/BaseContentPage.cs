@@ -23,24 +23,40 @@ namespace Bit.App.Pages
             return true;
         }
 
-        protected void SetActivityIndicator()
+        protected void SetActivityIndicator(ContentView targetView = null)
         {
-            Content = new ActivityIndicator
+            var indicator = new ActivityIndicator
             {
                 IsRunning = true,
                 VerticalOptions = LayoutOptions.CenterAndExpand,
                 HorizontalOptions = LayoutOptions.Center
             };
+            if(targetView != null)
+            {
+                targetView.Content = indicator;
+            }
+            else
+            {
+                Content = indicator;
+            }
         }
 
-        protected async Task LoadOnAppearedAsync(View viewToSet, bool fromModal, Func<Task> workFunction)
+        protected async Task LoadOnAppearedAsync(View sourceView, bool fromModal, Func<Task> workFunction,
+            ContentView targetView = null)
         {
             async Task DoWorkAsync()
             {
                 await workFunction.Invoke();
-                if(viewToSet != null)
+                if(sourceView != null)
                 {
-                    Content = viewToSet;
+                    if(targetView != null)
+                    {
+                        targetView.Content = sourceView;
+                    }
+                    else
+                    {
+                        Content = sourceView;
+                    }
                 }
             }
             if(Device.RuntimePlatform == Device.iOS)

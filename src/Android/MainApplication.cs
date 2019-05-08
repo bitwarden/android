@@ -39,6 +39,7 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
+            Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() => FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true));
 

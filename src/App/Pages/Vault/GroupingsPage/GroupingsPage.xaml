@@ -5,6 +5,7 @@
              xmlns:pages="clr-namespace:Bit.App.Pages"
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
              x:DataType="pages:GroupingsPageViewModel"
              Title="{Binding PageTitle}"
              x:Name="_page">
@@ -51,45 +52,69 @@
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" />
+
+            <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
+                <StackLayout
+                    VerticalOptions="CenterAndExpand"
+                    Padding="20, 0"
+                    Spacing="20"
+                    IsVisible="{Binding ShowNoData}">
+                    <Label
+                        Text="{Binding NoDataText}"
+                        HorizontalTextAlignment="Center"></Label>
+                    <Button
+                        Text="{u:I18n AddAnItem}"
+                        Command="{Binding AddCipherCommand}"
+                        IsVisible="{Binding ShowAddCipherButton}"></Button>
+                </StackLayout>
+
+                <ListView
+                    IsVisible="{Binding ShowList}"
+                    ItemsSource="{Binding GroupedItems}"
+                    VerticalOptions="FillAndExpand"
+                    HasUnevenRows="true"
+                    RefreshCommand="{Binding RefreshCommand}"
+                    IsPullToRefreshEnabled="true"
+                    IsRefreshing="{Binding Refreshing}"
+                    CachingStrategy="RecycleElement"
+                    ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                    IsGroupingEnabled="True"
+                    ItemSelected="RowSelected"
+                    StyleClass="list, list-platform">
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate x:DataType="pages:GroupingsPageListGroup">
+                            <ViewCell>
+                                <StackLayout StyleClass="list-row-header">
+                                    <Label
+                                        Text="{Binding Name}"
+                                        StyleClass="list-header, list-header-platform" />
+                                    <Label
+                                        Text="{Binding ItemCount}"
+                                        StyleClass="list-header-sub" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                </ListView>
+            </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <StackLayout x:Name="_mainLayout">
-        <StackLayout VerticalOptions="CenterAndExpand"
-                     Padding="20, 0"
-                     Spacing="20"
-                     IsVisible="{Binding ShowNoData}">
-            <Label Text="{Binding NoDataText}"
-                   HorizontalTextAlignment="Center"></Label>
-            <Button Text="{u:I18n AddAnItem}"
-                    Command="{Binding AddCipherCommand}"
-                    IsVisible="{Binding ShowAddCipherButton}"></Button>
-        </StackLayout>
-        <ListView x:Name="ItemsListView"
-                  IsVisible="{Binding ShowList}"
-                  ItemsSource="{Binding GroupedItems}"
-                  VerticalOptions="FillAndExpand"
-                  HasUnevenRows="true"
-                  RefreshCommand="{Binding RefreshCommand}"
-                  IsPullToRefreshEnabled="true"
-                  IsRefreshing="{Binding Refreshing}"
-                  CachingStrategy="RecycleElement"
-                  ItemTemplate="{StaticResource listItemDataTemplateSelector}"
-                  IsGroupingEnabled="True"
-                  ItemSelected="RowSelected"
-                  StyleClass="list, list-platform">
-            <ListView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                    <ViewCell>
-                        <StackLayout StyleClass="list-row-header">
-                            <Label Text="{Binding Name}"
-                                   StyleClass="list-header, list-header-platform" />
-                            <Label Text="{Binding ItemCount}"
-                                   StyleClass="list-header-sub" />
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.GroupHeaderTemplate>
-        </ListView>
-    </StackLayout>
+
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+        </ContentView>
+        <fab:FloatingActionButtonView
+            x:Name="_fab"
+            ImageName="plus.png"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize">
+        </fab:FloatingActionButtonView>
+    </AbsoluteLayout>
 
 </pages:BaseContentPage>

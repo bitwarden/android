@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    x:Class="Bit.App.Styles.Base">
+                    x:Class="Bit.App.Styles.Base"
+                    xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl">
 
     <!-- General -->
     <Style TargetType="Label"
@@ -67,6 +68,14 @@
            ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
                 Value="{StaticResource DisabledIconColor}" />
+    </Style>
+    <Style TargetType="fab:FloatingActionButtonView">
+        <Setter Property="ColorNormal"
+                Value="{StaticResource FabColor}" />
+        <Setter Property="ColorPressed"
+                Value="{StaticResource FabPressedColor}" />
+        <Setter Property="ColorRipple"
+                Value="{StaticResource FabPressedColor}" />
     </Style>
     
     <!-- Title -->

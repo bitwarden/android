@@ -20,7 +20,7 @@ namespace Bit.App.Pages
             string collectionId = null, string pageTitle = null)
         {
             InitializeComponent();
-            SetActivityIndicator();
+            SetActivityIndicator(_mainContent);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _vm = BindingContext as GroupingsPageViewModel;
@@ -32,6 +32,11 @@ namespace Bit.App.Pages
             if(pageTitle != null)
             {
                 _vm.PageTitle = pageTitle;
+            }
+
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                _absLayout.Children.Remove(_fab);
             }
         }
 
@@ -62,7 +67,7 @@ namespace Bit.App.Pages
                         await _vm.LoadAsync();
                     }
                 }
-            });
+            }, _mainContent);
         }
 
         protected override void OnDisappearing()
