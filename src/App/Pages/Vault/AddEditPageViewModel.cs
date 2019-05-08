@@ -24,6 +24,20 @@ namespace Bit.App.Pages
         private List<AddEditPageFieldViewModel> _fields;
         private bool _showPassword;
         private bool _showCardCode;
+        private int _typeSelectedIndex;
+        private int _cardBrandSelectedIndex;
+        private int _cardExpMonthSelectedIndex;
+        private int _identityTitleSelectedIndex;
+        private string[] _additionalCipherProperties = new string[]
+        {
+            nameof(IsLogin),
+            nameof(IsIdentity),
+            nameof(IsCard),
+            nameof(IsSecureNote),
+            nameof(ShowUris),
+            nameof(ShowAttachments),
+            nameof(ShowIdentityAddress),
+        };
 
         public AddEditPageViewModel()
         {
@@ -38,6 +52,13 @@ namespace Bit.App.Pages
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             CheckPasswordCommand = new Command(CheckPasswordAsync);
 
+            TypeOptions = new List<KeyValuePair<string, CipherType>>
+            {
+                new KeyValuePair<string, CipherType>(AppResources.TypeLogin, CipherType.Login),
+                new KeyValuePair<string, CipherType>(AppResources.TypeCard, CipherType.Card),
+                new KeyValuePair<string, CipherType>(AppResources.TypeIdentity, CipherType.Identity),
+                new KeyValuePair<string, CipherType>(AppResources.TypeSecureNote, CipherType.SecureNote),
+            };
             CardBrandOptions = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>($"-- {AppResources.Select} --", null),
@@ -86,23 +107,50 @@ namespace Bit.App.Pages
         public string FolderId { get; set; }
         public CipherType? Type { get; set; }
         public List<string> CollectionIds { get; set; }
+        public List<KeyValuePair<string, CipherType>> TypeOptions { get; set; }
         public List<KeyValuePair<string, string>> CardBrandOptions { get; set; }
         public List<KeyValuePair<string, string>> CardExpMonthOptions { get; set; }
         public List<KeyValuePair<string, string>> IdentityTitleOptions { get; set; }
+        public int TypeSelectedIndex
+        {
+            get => _typeSelectedIndex;
+            set
+            {
+                SetProperty(ref _typeSelectedIndex, value);
+                TypeChanged();
+            }
+        }
+        public int CardBrandSelectedIndex
+        {
+            get => _cardBrandSelectedIndex;
+            set
+            {
+                SetProperty(ref _cardBrandSelectedIndex, value);
+                CardBrandChanged();
+            }
+        }
+        public int CardExpMonthSelectedIndex
+        {
+            get => _cardExpMonthSelectedIndex;
+            set
+            {
+                SetProperty(ref _cardExpMonthSelectedIndex, value);
+                CardExpMonthChanged();
+            }
+        }
+        public int IdentityTitleSelectedIndex
+        {
+            get => _identityTitleSelectedIndex;
+            set
+            {
+                SetProperty(ref _identityTitleSelectedIndex, value);
+                IdentityTitleChanged();
+            }
+        }
         public CipherView Cipher
         {
             get => _cipher;
-            set => SetProperty(ref _cipher, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(IsLogin),
-                    nameof(IsIdentity),
-                    nameof(IsCard),
-                    nameof(IsSecureNote),
-                    nameof(ShowUris),
-                    nameof(ShowAttachments),
-                    nameof(ShowIdentityAddress),
-                });
+            set => SetProperty(ref _cipher, value, additionalPropertyNames: _additionalCipherProperties);
         }
         public List<AddEditPageFieldViewModel> Fields
         {
@@ -155,6 +203,19 @@ namespace Bit.App.Pages
                 var cipher = await _cipherService.GetAsync(CipherId);
                 Cipher = await cipher.DecryptAsync();
                 Fields = Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(f)).ToList();
+
+                if(Cipher.Card != null)
+                {
+                    CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.Brand) ? 0 :
+                        CardBrandOptions.FindIndex(k => k.Value == Cipher.Card.Brand);
+                    CardExpMonthSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.ExpMonth) ? 0 :
+                        CardExpMonthOptions.FindIndex(k => k.Value == Cipher.Card.ExpMonth);
+                }
+                if(Cipher.Identity != null)
+                {
+                    IdentityTitleSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Identity.Title) ? 0 :
+                        IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
+                }
             }
             else
             {
@@ -171,6 +232,10 @@ namespace Bit.App.Pages
                 Cipher.Login.Uris = new List<LoginUriView>();
                 Cipher.SecureNote.Type = SecureNoteType.Generic;
 
+                TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
+                CardBrandSelectedIndex = 0;
+                CardExpMonthSelectedIndex = 0;
+                IdentityTitleSelectedIndex = 0;
                 // TODO: org/collection stuff
             }
         }
@@ -255,6 +320,44 @@ namespace Bit.App.Pages
         public void ToggleCardCode()
         {
             ShowCardCode = !ShowCardCode;
+        }
+
+        private void TypeChanged()
+        {
+            if(Cipher != null && TypeSelectedIndex > -1)
+            {
+                Cipher.Type = TypeOptions[TypeSelectedIndex].Value;
+                TriggerCipherChanged();
+            }
+        }
+
+        private void CardBrandChanged()
+        {
+            if(Cipher?.Card != null && CardBrandSelectedIndex > -1)
+            {
+                Cipher.Card.Brand = CardBrandOptions[CardBrandSelectedIndex].Value;
+            }
+        }
+
+        private void CardExpMonthChanged()
+        {
+            if(Cipher?.Card != null && CardExpMonthSelectedIndex > -1)
+            {
+                Cipher.Card.ExpMonth = CardExpMonthOptions[CardExpMonthSelectedIndex].Value;
+            }
+        }
+
+        private void IdentityTitleChanged()
+        {
+            if(Cipher?.Identity != null && IdentityTitleSelectedIndex > -1)
+            {
+                Cipher.Identity.Title = IdentityTitleOptions[IdentityTitleSelectedIndex].Value;
+            }
+        }
+
+        private void TriggerCipherChanged()
+        {
+            TriggerPropertyChanged(nameof(Cipher), _additionalCipherProperties);
         }
 
         private async void CheckPasswordAsync()

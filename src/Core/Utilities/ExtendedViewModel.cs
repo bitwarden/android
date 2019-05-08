@@ -18,6 +18,13 @@ namespace Bit.Core.Utilities
             }
 
             backingStore = value;
+            TriggerPropertyChanged(propertyName, additionalPropertyNames);
+            onChanged?.Invoke();
+            return true;
+        }
+
+        protected void TriggerPropertyChanged(string propertyName, string[] additionalPropertyNames = null)
+        {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             if(PropertyChanged != null && additionalPropertyNames != null)
             {
@@ -26,8 +33,6 @@ namespace Bit.Core.Utilities
                     PropertyChanged.Invoke(this, new PropertyChangedEventArgs(prop));
                 }
             }
-            onChanged?.Invoke();
-            return true;
         }
     }
 }

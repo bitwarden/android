@@ -124,37 +124,7 @@ namespace Bit.App.Pages
 
         private async void AddButton_Clicked(object sender, System.EventArgs e)
         {
-            var type = await DisplayActionSheet(AppResources.SelectTypeAdd, AppResources.Cancel, null,
-                AppResources.TypeLogin, AppResources.TypeCard, AppResources.TypeIdentity,
-                AppResources.TypeSecureNote);
-
-            var selectedType = CipherType.SecureNote;
-            if(type == null || type == AppResources.Cancel)
-            {
-                return;
-            }
-            else if(type == AppResources.TypeLogin)
-            {
-                selectedType = CipherType.Login;
-            }
-            else if(type == AppResources.TypeCard)
-            {
-                selectedType = CipherType.Card;
-            }
-            else if(type == AppResources.TypeIdentity)
-            {
-                selectedType = CipherType.Identity;
-            }
-            else if(type == AppResources.TypeSecureNote)
-            {
-                selectedType = CipherType.SecureNote;
-            }
-            else
-            {
-                return;
-            }
-
-            var page = new AddEditPage(null, selectedType);
+            var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
     }

@@ -1408,4 +1408,7 @@
   <data name="SearchType" xml:space="preserve">
     <value>Search type</value>
   </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
 </root>

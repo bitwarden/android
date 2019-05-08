@@ -33,6 +33,17 @@
                     <Label Text="{u:I18n ItemInformation}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input"
+                             IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
+                    <Label
+                        Text="{u:I18n Type}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_typePicker"
+                        ItemsSource="{Binding TypeOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding TypeSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Label
                         Text="{u:I18n Name}"
@@ -127,7 +138,8 @@
                             StyleClass="box-label" />
                         <Picker
                             x:Name="_cardBrandPicker"
-                            ItemsSource="{Binding CardBrandOptions}"
+                            ItemsSource="{Binding CardBrandOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding CardBrandSelectedIndex}"
                             StyleClass="box-value" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
@@ -136,7 +148,8 @@
                             StyleClass="box-label" />
                         <Picker
                             x:Name="_cardExpMonthPicker"
-                            ItemsSource="{Binding CardExpMonthOptions}"
+                            ItemsSource="{Binding CardExpMonthOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding CardExpMonthSelectedIndex}"
                             StyleClass="box-value" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
@@ -185,7 +198,8 @@
                             StyleClass="box-label" />
                         <Picker
                             x:Name="_identityTitlePicker"
-                            ItemsSource="{Binding IdentityTitleOptions}"
+                            ItemsSource="{Binding IdentityTitleOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding IdentityTitleSelectedIndex}"
                             StyleClass="box-value" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-input">
