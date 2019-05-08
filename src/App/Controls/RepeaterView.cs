@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Specialized;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -10,7 +11,7 @@ namespace Bit.App.Controls
 
         public static readonly BindableProperty ItemsSourceProperty = BindableProperty.Create(
             nameof(ItemsSource), typeof(ICollection), typeof(RepeaterView), null, BindingMode.OneWay,
-            propertyChanged: ItemsChanged);
+            propertyChanged: ItemsSourceChanging);
 
         public RepeaterView()
         {
@@ -27,6 +28,27 @@ namespace Bit.App.Controls
         {
             get => GetValue(ItemTemplateProperty) as DataTemplate;
             set => SetValue(ItemTemplateProperty, value);
+        }
+
+        private void OnCollectionChanged(object sender,
+            NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            Populate();
+        }
+
+        protected override void OnPropertyChanged(string propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+            if(propertyName == ItemTemplateProperty.PropertyName || propertyName == ItemsSourceProperty.PropertyName)
+            {
+                Populate();
+            }
+        }
+
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+            Populate();
         }
 
         protected virtual View ViewFor(object item)
@@ -46,18 +68,27 @@ namespace Bit.App.Controls
             return view;
         }
 
-        private static void ItemsChanged(BindableObject bindable, object oldValue, object newValue)
+        private void Populate()
         {
-            if(bindable is RepeaterView control)
+            if(ItemsSource != null)
             {
-                control.Children.Clear();
-                if(newValue is ICollection items)
+                Children.Clear();
+                foreach(var item in ItemsSource)
                 {
-                    foreach(var item in items)
-                    {
-                        control.Children.Add(control.ViewFor(item));
-                    }
+                    Children.Add(ViewFor(item));
                 }
+            }
+        }
+
+        private static void ItemsSourceChanging(BindableObject bindable, object oldValue, object newValue)
+        {
+            if(oldValue != null && oldValue is INotifyCollectionChanged ov)
+            {
+                ov.CollectionChanged -= (bindable as RepeaterView).OnCollectionChanged;
+            }
+            if(newValue != null && newValue is INotifyCollectionChanged nv)
+            {
+                nv.CollectionChanged += (bindable as RepeaterView).OnCollectionChanged;
             }
         }
     }
