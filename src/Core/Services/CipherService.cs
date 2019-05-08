@@ -224,7 +224,7 @@ namespace Bit.Core.Services
             {
                 return Task.FromResult(DecryptedCipherCache);
             }
-            if(_getAllDecryptedTask != null)
+            if(_getAllDecryptedTask != null && !_getAllDecryptedTask.IsCompleted && !_getAllDecryptedTask.IsFaulted)
             {
                 return _getAllDecryptedTask;
             }

@@ -121,7 +121,7 @@ namespace Bit.Core.Services
             {
                 return Task.FromResult(_encKey);
             }
-            if(_getEncKeysTask != null)
+            if(_getEncKeysTask != null && !_getEncKeysTask.IsCompleted && !_getEncKeysTask.IsFaulted)
             {
                 return _getEncKeysTask;
             }
@@ -224,7 +224,7 @@ namespace Bit.Core.Services
             {
                 return Task.FromResult(_orgKeys);
             }
-            if(_getOrgKeysTask != null)
+            if(_getOrgKeysTask != null && !_getOrgKeysTask.IsCompleted && !_getOrgKeysTask.IsFaulted)
             {
                 return _getOrgKeysTask;
             }
