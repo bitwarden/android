@@ -82,6 +82,7 @@
     <Compile Include="Renderers\CustomPickerBarRenderer.cs" />
     <Compile Include="Renderers\CustomEntryBarRenderer.cs" />
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
+    <Compile Include="Renderers\ExtendedListViewRenderer.cs" />
     <Compile Include="SplashActivity.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRecyclerAdapter.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRenderer.cs" />

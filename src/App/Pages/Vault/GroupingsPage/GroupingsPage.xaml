@@ -48,7 +48,7 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-
+            
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" />
@@ -68,7 +68,7 @@
                         IsVisible="{Binding ShowAddCipherButton}"></Button>
                 </StackLayout>
 
-                <ListView
+                <controls:ExtendedListView
                     IsVisible="{Binding ShowList}"
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"
@@ -76,11 +76,14 @@
                     RefreshCommand="{Binding RefreshCommand}"
                     IsPullToRefreshEnabled="true"
                     IsRefreshing="{Binding Refreshing}"
-                    CachingStrategy="RecycleElement"
                     ItemTemplate="{StaticResource listItemDataTemplateSelector}"
                     IsGroupingEnabled="True"
                     ItemSelected="RowSelected"
                     StyleClass="list, list-platform">
+                    <x:Arguments>
+                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+                    </x:Arguments>
+                    
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                             <ViewCell>
@@ -95,7 +98,7 @@
                             </ViewCell>
                         </DataTemplate>
                     </ListView.GroupHeaderTemplate>
-                </ListView>
+                </controls:ExtendedListView>
             </StackLayout>
         </ResourceDictionary>
     </ContentPage.Resources>

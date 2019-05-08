@@ -1,4 +1,5 @@
-﻿using Bit.Core.Abstractions;
+﻿using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
@@ -37,6 +38,10 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
+            }
+            else
+            {
+                _fab.Clicked = AddButton_Clicked;
             }
         }
 
@@ -115,6 +120,42 @@ namespace Bit.App.Pages
                     _vm.Type != null);
                 await Navigation.PushModalAsync(new NavigationPage(page), false);
             }
+        }
+
+        private async void AddButton_Clicked(object sender, System.EventArgs e)
+        {
+            var type = await DisplayActionSheet(AppResources.SelectTypeAdd, AppResources.Cancel, null,
+                AppResources.TypeLogin, AppResources.TypeCard, AppResources.TypeIdentity,
+                AppResources.TypeSecureNote);
+
+            var selectedType = CipherType.SecureNote;
+            if(type == null || type == AppResources.Cancel)
+            {
+                return;
+            }
+            else if(type == AppResources.TypeLogin)
+            {
+                selectedType = CipherType.Login;
+            }
+            else if(type == AppResources.TypeCard)
+            {
+                selectedType = CipherType.Card;
+            }
+            else if(type == AppResources.TypeIdentity)
+            {
+                selectedType = CipherType.Identity;
+            }
+            else if(type == AppResources.TypeSecureNote)
+            {
+                selectedType = CipherType.SecureNote;
+            }
+            else
+            {
+                return;
+            }
+
+            var page = new AddEditPage(null, selectedType);
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
     }
 }

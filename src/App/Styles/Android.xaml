@@ -36,9 +36,10 @@
     </Style>
 
     <!-- List -->
-    
+
     <Style TargetType="ListView"
-           Class="list-platform">
+           Class="list-platform"
+           ApplyToDerivedTypes="True">
         <Setter Property="SeparatorColor"
                 Value="Transparent" />
     </Style>

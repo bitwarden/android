@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using Bit.Core.Enums;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -8,6 +9,7 @@ namespace Bit.App.Pages
 
         public AddEditPage(
             string cipherId = null,
+            CipherType? type = null,
             string folderId = null,
             string collectionId = null,
             string organizationId = null)
@@ -18,6 +20,7 @@ namespace Bit.App.Pages
             _vm.CipherId = cipherId;
             _vm.FolderId = folderId;
             _vm.OrganizationId = organizationId;
+            _vm.Type = type;
             _vm.Init();
             SetActivityIndicator();
 
