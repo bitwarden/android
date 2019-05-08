@@ -56,5 +56,10 @@ namespace Bit.App.Pages
                 await _vm.SubmitAsync();
             }
         }
+
+        private void NewUri_Clicked(object sender, System.EventArgs e)
+        {
+            _vm.AddUri();
+        }
     }
 }

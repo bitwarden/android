@@ -38,6 +38,17 @@ namespace Bit.App.Pages
             nameof(ShowAttachments),
             nameof(ShowIdentityAddress),
         };
+        private List<KeyValuePair<UriMatchType?, string>> _matchDetectionOptions =
+            new List<KeyValuePair<UriMatchType?, string>>
+            {
+                new KeyValuePair<UriMatchType?, string>(null, AppResources.Default),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.Domain, AppResources.BaseDomain),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.Host, AppResources.Host),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.StartsWith, AppResources.StartsWith),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.RegularExpression, AppResources.RegEx),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never),
+            };
 
         public AddEditPageViewModel()
         {
@@ -51,6 +62,8 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             CheckPasswordCommand = new Command(CheckPasswordAsync);
+            UriOptionsCommand = new Command<LoginUriView>(UriOptions);
+            Uris = new ExtendedObservableCollection<LoginUriView>();
 
             TypeOptions = new List<KeyValuePair<string, CipherType>>
             {
@@ -102,6 +115,7 @@ namespace Bit.App.Pages
         public Command TogglePasswordCommand { get; set; }
         public Command ToggleCardCodeCommand { get; set; }
         public Command CheckPasswordCommand { get; set; }
+        public Command UriOptionsCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -111,6 +125,7 @@ namespace Bit.App.Pages
         public List<KeyValuePair<string, string>> CardBrandOptions { get; set; }
         public List<KeyValuePair<string, string>> CardExpMonthOptions { get; set; }
         public List<KeyValuePair<string, string>> IdentityTitleOptions { get; set; }
+        public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -238,6 +253,11 @@ namespace Bit.App.Pages
                 IdentityTitleSelectedIndex = 0;
                 // TODO: org/collection stuff
             }
+
+            if(Cipher.Login.Uris != null)
+            {
+                Uris.ResetWithRange(Cipher.Login.Uris);
+            }
         }
 
         public async Task<bool> SubmitAsync()
@@ -250,6 +270,7 @@ namespace Bit.App.Pages
                 return false;
             }
 
+            Cipher.Login.Uris = Uris.ToList();
             if(!EditMode && Cipher.Type == CipherType.Login && (Cipher.Login.Uris?.Count ?? 0) == 1 &&
                 string.IsNullOrWhiteSpace(Cipher.Login.Uris.First().Uri))
             {
@@ -310,6 +331,44 @@ namespace Bit.App.Pages
         public void GeneratePassword()
         {
             // TODO: push modal for generate page
+        }
+
+        public async void UriOptions(LoginUriView uri)
+        {
+            if(!(Page as AddEditPage).DoOnce())
+            {
+                return;
+            }
+            var selection = await Page.DisplayActionSheet(AppResources.Options, AppResources.Cancel, null,
+                AppResources.MatchDetection, AppResources.Remove);
+            if(selection == AppResources.Remove)
+            {
+                Uris.Remove(uri);
+            }
+            else if(selection == AppResources.MatchDetection)
+            {
+                var options = _matchDetectionOptions.Select(o => o.Key == uri.Match ? $"✓ {o.Value}" : o.Value);
+                var matchSelection = await Page.DisplayActionSheet(AppResources.URIMatchDetection,
+                    AppResources.Cancel, null, options.ToArray());
+                if(matchSelection != null && matchSelection != AppResources.Cancel)
+                {
+                    var matchSelectionClean = matchSelection.Replace("✓ ", string.Empty);
+                    uri.Match = _matchDetectionOptions.FirstOrDefault(o => o.Value == matchSelectionClean).Key;
+                }
+            }
+        }
+
+        public void AddUri()
+        {
+            if(Cipher.Type != CipherType.Login)
+            {
+                return;
+            }
+            if(Uris == null)
+            {
+                Uris = new ExtendedObservableCollection<LoginUriView>();
+            }
+            Uris.Add(new LoginUriView());
         }
 
         public void TogglePassword()

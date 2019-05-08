@@ -340,6 +340,51 @@
                     </StackLayout>
                 </StackLayout>
             </StackLayout>
+            <StackLayout StyleClass="box" IsVisible="{Binding IsLogin}">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n URIs}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <controls:RepeaterView ItemsSource="{Binding Uris}">
+                    <controls:RepeaterView.ItemTemplate>
+                        <DataTemplate x:DataType="views:LoginUriView">
+                            <StackLayout Spacing="0" Padding="0">
+                                <Grid StyleClass="box-row">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{u:I18n URI}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0" />
+                                    <Entry
+                                        Text="{Binding Uri}"
+                                        Keyboard="Url"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0" />
+                                    <controls:FaButton
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="&#xf013;"
+                                        Command="{Binding BindingContext.UriOptionsCommand, Source={x:Reference _page}}"
+                                        CommandParameter="{Binding .}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2" />
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </controls:RepeaterView.ItemTemplate>
+                </controls:RepeaterView>
+                <Button Text="{u:I18n NewUri}" StyleClass="box-button-row"
+                        Clicked="NewUri_Clicked"></Button>
+            </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n Notes}"
