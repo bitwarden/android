@@ -394,9 +394,9 @@ namespace Bit.App.Pages
             }
             else if(selection == AppResources.Edit)
             {
-                var name = "new name";
-                // TODO: prompt for name
-                field.Field.Name = name;
+                var name = await _deviceActionService.DisplayPromptAync(AppResources.CustomFieldName,
+                    null, field.Field.Name);
+                field.Field.Name = name ?? field.Field.Name;
                 field.TriggerFieldChanged();
             }
             else if(selection == AppResources.MoveUp)
@@ -423,9 +423,7 @@ namespace Bit.App.Pages
                 _fieldTypeOptions.Select(f => f.Value).ToArray());
             if(typeSelection != null && typeSelection != AppResources.Cancel)
             {
-                var name = "new field name";
-                // TODO: prompt for name
-
+                var name = await _deviceActionService.DisplayPromptAync(AppResources.CustomFieldName);
                 if(Fields == null)
                 {
                     Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();

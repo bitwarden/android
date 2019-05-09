@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -125,6 +126,32 @@ namespace Bit.iOS.Services
             await _storageService.SaveAsync(Constants.LastFileCacheClearKey, DateTime.UtcNow);
         }
 
+        public Task<string> DisplayPromptAync(string title = null, string description = null,
+            string text = null, string okButtonText = null, string cancelButtonText = null)
+        {
+            var result = new TaskCompletionSource<string>();
+            var alert = UIAlertController.Create(title ?? string.Empty, description, UIAlertControllerStyle.Alert);
+            UITextField input = null;
+            okButtonText = okButtonText ?? AppResources.Ok;
+            cancelButtonText = cancelButtonText ?? AppResources.Cancel;
+            alert.AddAction(UIAlertAction.Create(cancelButtonText, UIAlertActionStyle.Cancel, x =>
+            {
+                result.TrySetResult(null);
+            }));
+            alert.AddAction(UIAlertAction.Create(okButtonText, UIAlertActionStyle.Default, x =>
+            {
+                result.TrySetResult(input.Text ?? string.Empty);
+            }));
+            alert.AddTextField(x =>
+            {
+                input = x;
+                input.Text = text ?? string.Empty;
+            });
+            var vc = GetPresentedViewController();
+            vc?.PresentViewController(alert, true, null);
+            return result.Task;
+        }
+
         private UIViewController GetVisibleViewController(UIViewController controller = null)
         {
             controller = controller ?? UIApplication.SharedApplication.KeyWindow.RootViewController;
@@ -160,7 +187,7 @@ namespace Bit.iOS.Services
             return vc != null && (vc is UITabBarController ||
                 (vc.ChildViewControllers?.Any(c => c is UITabBarController) ?? false));
         }
-        
+
         // ref:  //https://developer.xamarin.com/guides/ios/application_fundamentals/working_with_the_file_system/
         public string GetTempPath()
         {

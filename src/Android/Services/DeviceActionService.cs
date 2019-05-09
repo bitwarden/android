@@ -6,7 +6,9 @@ using Android.Content;
 using Android.Content.PM;
 using Android.Support.V4.Content;
 using Android.Webkit;
+using Android.Widget;
 using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -145,6 +147,50 @@ namespace Bit.Droid.Services
                 await _storageService.SaveAsync(Constants.LastFileCacheClearKey, DateTime.UtcNow);
             }
             catch(Exception) { }
+        }
+
+        public Task<string> DisplayPromptAync(string title = null, string description = null,
+            string text = null, string okButtonText = null, string cancelButtonText = null)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if(activity == null)
+            {
+                return Task.FromResult<string>(null);
+            }
+
+            var alertBuilder = new AlertDialog.Builder(activity);
+            alertBuilder.SetTitle(title);
+            alertBuilder.SetMessage(description);
+            var input = new EditText(activity)
+            {
+                InputType = Android.Text.InputTypes.ClassText
+            };
+            if(text == null)
+            {
+                text = string.Empty;
+            }
+
+            input.Text = text;
+            input.SetSelection(text.Length);
+            var container = new FrameLayout(activity);
+            var lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent,
+                LinearLayout.LayoutParams.MatchParent);
+            lp.SetMargins(25, 0, 25, 0);
+            input.LayoutParameters = lp;
+            container.AddView(input);
+            alertBuilder.SetView(container);
+
+            okButtonText = okButtonText ?? AppResources.Ok;
+            cancelButtonText = cancelButtonText ?? AppResources.Cancel;
+            var result = new TaskCompletionSource<string>();
+            alertBuilder.SetPositiveButton(okButtonText,
+                (sender, args) => result.TrySetResult(input.Text ?? string.Empty));
+            alertBuilder.SetNegativeButton(cancelButtonText, (sender, args) => result.TrySetResult(null));
+
+            var alert = alertBuilder.Create();
+            alert.Window.SetSoftInputMode(Android.Views.SoftInput.StateVisible);
+            alert.Show();
+            return result.Task;
         }
 
         private bool DeleteDir(Java.IO.File dir)
