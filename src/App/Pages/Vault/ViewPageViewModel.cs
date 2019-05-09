@@ -425,7 +425,7 @@ namespace Bit.App.Pages
         }
     }
 
-    public class ViewPageFieldViewModel : BaseViewModel
+    public class ViewPageFieldViewModel : ExtendedViewModel
     {
         private FieldView _field;
         private bool _showHiddenValue;

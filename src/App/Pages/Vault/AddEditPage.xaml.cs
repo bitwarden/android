@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -11,15 +12,14 @@ namespace Bit.App.Pages
             string cipherId = null,
             CipherType? type = null,
             string folderId = null,
-            string collectionId = null,
-            string organizationId = null)
+            string collectionId = null)
         {
             InitializeComponent();
             _vm = BindingContext as AddEditPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
             _vm.FolderId = folderId;
-            _vm.OrganizationId = organizationId;
+            _vm.CollectionIds = collectionId != null ? new HashSet<string>(new List<string> { collectionId }) : null;
             _vm.Type = type;
             _vm.Init();
             SetActivityIndicator();
@@ -29,6 +29,7 @@ namespace Bit.App.Pages
             _cardExpMonthPicker.ItemDisplayBinding = new Binding("Key");
             _identityTitlePicker.ItemDisplayBinding = new Binding("Key");
             _folderPicker.ItemDisplayBinding = new Binding("Key");
+            _ownershipPicker.ItemDisplayBinding = new Binding("Key");
         }
 
         protected override async void OnAppearing()
@@ -66,6 +67,14 @@ namespace Bit.App.Pages
         private void NewField_Clicked(object sender, System.EventArgs e)
         {
             _vm.AddField();
+        }
+
+        private void Attachments_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                // await Navigation.PushModalAsync();
+            }
         }
     }
 }

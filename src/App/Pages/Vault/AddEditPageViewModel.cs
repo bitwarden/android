@@ -17,6 +17,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
         private readonly IFolderService _folderService;
+        private readonly ICollectionService _collectionService;
         private readonly IUserService _userService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
@@ -29,6 +30,9 @@ namespace Bit.App.Pages
         private int _cardExpMonthSelectedIndex;
         private int _identityTitleSelectedIndex;
         private int _folderSelectedIndex;
+        private int _ownershipSelectedIndex;
+        private bool _hasCollections;
+        private List<Core.Models.View.CollectionView> _writeableCollections;
         private string[] _additionalCipherProperties = new string[]
         {
             nameof(IsLogin),
@@ -67,6 +71,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
@@ -75,6 +80,7 @@ namespace Bit.App.Pages
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
+            Collections = new ExtendedObservableCollection<AddEditPageCollectionViewModel>();
 
             TypeOptions = new List<KeyValuePair<string, CipherType>>
             {
@@ -121,6 +127,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(AppResources.Dr, AppResources.Dr),
             };
             FolderOptions = new List<KeyValuePair<string, string>>();
+            OwnershipOptions = new List<KeyValuePair<string, string>>();
         }
 
         public Command GeneratePasswordCommand { get; set; }
@@ -133,21 +140,25 @@ namespace Bit.App.Pages
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
         public CipherType? Type { get; set; }
-        public List<string> CollectionIds { get; set; }
+        public HashSet<string> CollectionIds { get; set; }
         public List<KeyValuePair<string, CipherType>> TypeOptions { get; set; }
         public List<KeyValuePair<string, string>> CardBrandOptions { get; set; }
         public List<KeyValuePair<string, string>> CardExpMonthOptions { get; set; }
         public List<KeyValuePair<string, string>> IdentityTitleOptions { get; set; }
         public List<KeyValuePair<string, string>> FolderOptions { get; set; }
+        public List<KeyValuePair<string, string>> OwnershipOptions { get; set; }
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
+        public ExtendedObservableCollection<AddEditPageCollectionViewModel> Collections { get; set; }
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
             set
             {
-                SetProperty(ref _typeSelectedIndex, value);
-                TypeChanged();
+                if(SetProperty(ref _typeSelectedIndex, value))
+                {
+                    TypeChanged();
+                }
             }
         }
         public int CardBrandSelectedIndex
@@ -155,8 +166,10 @@ namespace Bit.App.Pages
             get => _cardBrandSelectedIndex;
             set
             {
-                SetProperty(ref _cardBrandSelectedIndex, value);
-                CardBrandChanged();
+                if(SetProperty(ref _cardBrandSelectedIndex, value))
+                {
+                    CardBrandChanged();
+                }
             }
         }
         public int CardExpMonthSelectedIndex
@@ -164,8 +177,10 @@ namespace Bit.App.Pages
             get => _cardExpMonthSelectedIndex;
             set
             {
-                SetProperty(ref _cardExpMonthSelectedIndex, value);
-                CardExpMonthChanged();
+                if(SetProperty(ref _cardExpMonthSelectedIndex, value))
+                {
+                    CardExpMonthChanged();
+                }
             }
         }
         public int IdentityTitleSelectedIndex
@@ -173,8 +188,10 @@ namespace Bit.App.Pages
             get => _identityTitleSelectedIndex;
             set
             {
-                SetProperty(ref _identityTitleSelectedIndex, value);
-                IdentityTitleChanged();
+                if(SetProperty(ref _identityTitleSelectedIndex, value))
+                {
+                    IdentityTitleChanged();
+                }
             }
         }
         public int FolderSelectedIndex
@@ -182,8 +199,21 @@ namespace Bit.App.Pages
             get => _folderSelectedIndex;
             set
             {
-                SetProperty(ref _folderSelectedIndex, value);
-                FolderChanged();
+                if(SetProperty(ref _folderSelectedIndex, value))
+                {
+                    FolderChanged();
+                }
+            }
+        }
+        public int OwnershipSelectedIndex
+        {
+            get => _ownershipSelectedIndex;
+            set
+            {
+                if(SetProperty(ref _ownershipSelectedIndex, value))
+                {
+                    OrganizationChanged();
+                }
             }
         }
         public CipherView Cipher
@@ -209,6 +239,11 @@ namespace Bit.App.Pages
                     nameof(ShowCardCodeIcon)
                 });
         }
+        public bool HasCollections
+        {
+            get => _hasCollections;
+            set => SetProperty(ref _hasCollections, value);
+        }
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
         public bool IsLogin => Cipher?.Type == CipherType.Login;
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
@@ -230,7 +265,25 @@ namespace Bit.App.Pages
 
         public async Task LoadAsync()
         {
-            // TODO: load collections
+            var myEmail = await _userService.GetEmailAsync();
+            OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
+            var orgs = await _userService.GetAllOrganizationAsync();
+            foreach(var org in orgs.OrderBy(o => o.Name))
+            {
+                if(org.Enabled && org.Status == OrganizationUserStatusType.Confirmed)
+                {
+                    OwnershipOptions.Add(new KeyValuePair<string, string>(org.Name, org.Id));
+                }
+            }
+
+            var allCollections = await _collectionService.GetAllDecryptedAsync();
+            _writeableCollections = allCollections.Where(c => !c.ReadOnly).ToList();
+            if(CollectionIds?.Any() ?? false)
+            {
+                var colId = CollectionIds.First();
+                var collection = _writeableCollections.FirstOrDefault(c => c.Id == colId);
+                OrganizationId = collection?.OrganizationId;
+            }
             var folders = await _folderService.GetAllDecryptedAsync();
             FolderOptions = folders.Select(f => new KeyValuePair<string, string>(f.Name, f.Id)).ToList();
 
@@ -240,21 +293,6 @@ namespace Bit.App.Pages
                 {
                     var cipher = await _cipherService.GetAsync(CipherId);
                     Cipher = await cipher.DecryptAsync();
-
-                    FolderSelectedIndex = string.IsNullOrWhiteSpace(Cipher.FolderId) ? FolderOptions.Count - 1 :
-                        FolderOptions.FindIndex(k => k.Value == Cipher.FolderId); ;
-                    if(Cipher.Card != null)
-                    {
-                        CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.Brand) ? 0 :
-                            CardBrandOptions.FindIndex(k => k.Value == Cipher.Card.Brand);
-                        CardExpMonthSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.ExpMonth) ? 0 :
-                            CardExpMonthOptions.FindIndex(k => k.Value == Cipher.Card.ExpMonth);
-                    }
-                    if(Cipher.Identity != null)
-                    {
-                        IdentityTitleSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Identity.Title) ? 0 :
-                            IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
-                    }
                 }
                 else
                 {
@@ -270,15 +308,27 @@ namespace Bit.App.Pages
                     };
                     Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView() };
                     Cipher.SecureNote.Type = SecureNoteType.Generic;
-
                     TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
-                    CardBrandSelectedIndex = 0;
-                    CardExpMonthSelectedIndex = 0;
-                    IdentityTitleSelectedIndex = 0;
-                    FolderSelectedIndex = FolderOptions.Count - 1;
-                    // TODO: org/collection stuff
                 }
 
+                FolderSelectedIndex = string.IsNullOrWhiteSpace(Cipher.FolderId) ? FolderOptions.Count - 1 :
+                    FolderOptions.FindIndex(k => k.Value == Cipher.FolderId);
+                CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher?.Card.Brand) ? 0 :
+                    CardBrandOptions.FindIndex(k => k.Value == Cipher.Card.Brand);
+                CardExpMonthSelectedIndex = string.IsNullOrWhiteSpace(Cipher?.Card.ExpMonth) ? 0 :
+                    CardExpMonthOptions.FindIndex(k => k.Value == Cipher.Card.ExpMonth);
+                IdentityTitleSelectedIndex = string.IsNullOrWhiteSpace(Cipher?.Identity.Title) ? 0 :
+                    IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
+                OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
+                    OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);
+
+                if(!EditMode && (CollectionIds?.Any() ?? false))
+                {
+                    foreach(var col in Collections)
+                    {
+                        col.Checked = CollectionIds.Contains(col.Collection.Id);
+                    }
+                }
                 if(Cipher.Login.Uris != null)
                 {
                     Uris.ResetWithRange(Cipher.Login.Uris);
@@ -310,7 +360,8 @@ namespace Bit.App.Pages
 
             if(!EditMode && Cipher.OrganizationId != null)
             {
-                // TODO: filter cipher collection ids
+                Cipher.CollectionIds = Collections.Any() ?
+                    new HashSet<string>(Collections.Where(c => c.Checked).Select(c => c.Collection.Id)) : null;
             }
 
             var cipher = await _cipherService.EncryptAsync(Cipher);
@@ -514,6 +565,26 @@ namespace Bit.App.Pages
             }
         }
 
+        private void OrganizationChanged()
+        {
+            if(Cipher != null && OwnershipSelectedIndex > -1)
+            {
+                Cipher.OrganizationId = OwnershipOptions[OwnershipSelectedIndex].Value;
+                TriggerCipherChanged();
+            }
+            if(Cipher.OrganizationId != null)
+            {
+                var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
+                    .Select(c => new AddEditPageCollectionViewModel { Collection = c }).ToList();
+                Collections.ResetWithRange(cols);
+            }
+            else
+            {
+                Collections.ResetWithRange(new List<AddEditPageCollectionViewModel>());
+            }
+            HasCollections = Collections.Any();
+        }
+
         private void TriggerCipherChanged()
         {
             TriggerPropertyChanged(nameof(Cipher), _additionalCipherProperties);
@@ -544,7 +615,19 @@ namespace Bit.App.Pages
         }
     }
 
-    public class AddEditPageFieldViewModel : BaseViewModel
+    public class AddEditPageCollectionViewModel : ExtendedViewModel
+    {
+        private bool _checked;
+
+        public Core.Models.View.CollectionView Collection { get; set; }
+        public bool Checked
+        {
+            get => _checked;
+            set => SetProperty(ref _checked, value);
+        }
+    }
+
+    public class AddEditPageFieldViewModel : ExtendedViewModel
     {
         private FieldView _field;
         private bool _showHiddenValue;

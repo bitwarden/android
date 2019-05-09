@@ -1420,4 +1420,13 @@
   <data name="Miscellaneous" xml:space="preserve">
     <value>Miscellaneous</value>
   </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Ownership</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Who owns this item?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>There are no collections to list.</value>
+  </data>
 </root>

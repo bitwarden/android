@@ -409,6 +409,9 @@
                         HorizontalOptions="End" />
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator" />
+                <Button Text="{u:I18n Attachments}" StyleClass="box-button-row"
+                        IsVisible="{Binding EditMode}"
+                        Clicked="Attachments_Clicked"></Button>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
@@ -499,6 +502,55 @@
                 </controls:RepeaterView>
                 <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
                         Clicked="NewField_Clicked"></Button>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Ownership}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n WhoOwnsThisItem}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_ownershipPicker"
+                        ItemsSource="{Binding OwnershipOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding OwnershipSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box"
+                         IsVisible="{Binding Cipher.OrganizationId, Converter={StaticResource notNull}}">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Collections}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout Spacing="0" Padding="0"
+                             IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label Text="{u:I18n NoCollectionsToList}" />
+                    </StackLayout>
+                    <BoxView StyleClass="box-row-separator" />
+                </StackLayout>
+                <controls:RepeaterView ItemsSource="{Binding Collections}" IsVisible="{Binding HasCollections}">
+                    <controls:RepeaterView.ItemTemplate>
+                        <DataTemplate x:DataType="pages:AddEditPageCollectionViewModel">
+                            <StackLayout Spacing="0" Padding="0">
+                                <StackLayout StyleClass="box-row, box-row-switch">
+                                    <Label
+                                        Text="{Binding Collection.Name}"
+                                        StyleClass="box-label, box-label-regular"
+                                        HorizontalOptions="StartAndExpand" />
+                                    <Switch
+                                        IsToggled="{Binding Checked}"
+                                        StyleClass="box-value"
+                                        HorizontalOptions="End" />
+                                </StackLayout>
+                                <BoxView StyleClass="box-row-separator" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </controls:RepeaterView.ItemTemplate>
+                </controls:RepeaterView>
             </StackLayout>
         </StackLayout>
     </ScrollView>

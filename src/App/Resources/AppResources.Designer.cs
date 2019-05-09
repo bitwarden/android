@@ -2437,6 +2437,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no collections to list..
+        /// </summary>
+        public static string NoCollectionsToList {
+            get {
+                return ResourceManager.GetString("NoCollectionsToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no favorites in your vault..
         /// </summary>
         public static string NoFavorites {
@@ -2622,6 +2631,15 @@ namespace Bit.App.Resources {
         public static string Other {
             get {
                 return ResourceManager.GetString("Other", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ownership.
+        /// </summary>
+        public static string Ownership {
+            get {
+                return ResourceManager.GetString("Ownership", resourceCulture);
             }
         }
         
@@ -3648,6 +3666,15 @@ namespace Bit.App.Resources {
         public static string WebVaultUrl {
             get {
                 return ResourceManager.GetString("WebVaultUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Who owns this item?.
+        /// </summary>
+        public static string WhoOwnsThisItem {
+            get {
+                return ResourceManager.GetString("WhoOwnsThisItem", resourceCulture);
             }
         }
         
