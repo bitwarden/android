@@ -313,11 +313,11 @@ namespace Bit.App.Pages
 
                 FolderSelectedIndex = string.IsNullOrWhiteSpace(Cipher.FolderId) ? FolderOptions.Count - 1 :
                     FolderOptions.FindIndex(k => k.Value == Cipher.FolderId);
-                CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher?.Card.Brand) ? 0 :
+                CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card?.Brand) ? 0 :
                     CardBrandOptions.FindIndex(k => k.Value == Cipher.Card.Brand);
-                CardExpMonthSelectedIndex = string.IsNullOrWhiteSpace(Cipher?.Card.ExpMonth) ? 0 :
+                CardExpMonthSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card?.ExpMonth) ? 0 :
                     CardExpMonthOptions.FindIndex(k => k.Value == Cipher.Card.ExpMonth);
-                IdentityTitleSelectedIndex = string.IsNullOrWhiteSpace(Cipher?.Identity.Title) ? 0 :
+                IdentityTitleSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Identity?.Title) ? 0 :
                     IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
                 OwnershipSelectedIndex = string.IsNullOrWhiteSpace(Cipher.OrganizationId) ? 0 :
                     OwnershipOptions.FindIndex(k => k.Value == Cipher.OrganizationId);

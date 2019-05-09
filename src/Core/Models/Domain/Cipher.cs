@@ -27,7 +27,7 @@ namespace Bit.Core.Models.Domain
             OrganizationUseTotp = obj.OrganizationUseTotp;
             Edit = obj.Edit;
             RevisionDate = obj.RevisionDate;
-            CollectionIds = new HashSet<string>(obj.CollectionIds);
+            CollectionIds = obj.CollectionIds != null ? new HashSet<string>(obj.CollectionIds) : null;
             LocalData = localData;
 
             switch(Type)
