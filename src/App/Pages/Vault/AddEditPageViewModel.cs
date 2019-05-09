@@ -21,7 +21,6 @@ namespace Bit.App.Pages
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private CipherView _cipher;
-        private List<AddEditPageFieldViewModel> _fields;
         private bool _showPassword;
         private bool _showCardCode;
         private int _typeSelectedIndex;
@@ -47,7 +46,14 @@ namespace Bit.App.Pages
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.StartsWith, AppResources.StartsWith),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.RegularExpression, AppResources.RegEx),
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Exact, AppResources.Exact),
-                new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never),
+                new KeyValuePair<UriMatchType?, string>(UriMatchType.Never, AppResources.Never)
+            };
+        private List<KeyValuePair<FieldType, string>> _fieldTypeOptions =
+            new List<KeyValuePair<FieldType, string>>
+            {
+                new KeyValuePair<FieldType, string>(FieldType.Text, AppResources.FieldTypeText),
+                new KeyValuePair<FieldType, string>(FieldType.Hidden, AppResources.FieldTypeHidden),
+                new KeyValuePair<FieldType, string>(FieldType.Boolean, AppResources.FieldTypeBoolean)
             };
 
         public AddEditPageViewModel()
@@ -63,7 +69,9 @@ namespace Bit.App.Pages
             ToggleCardCodeCommand = new Command(ToggleCardCode);
             CheckPasswordCommand = new Command(CheckPasswordAsync);
             UriOptionsCommand = new Command<LoginUriView>(UriOptions);
+            FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             Uris = new ExtendedObservableCollection<LoginUriView>();
+            Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
 
             TypeOptions = new List<KeyValuePair<string, CipherType>>
             {
@@ -116,6 +124,7 @@ namespace Bit.App.Pages
         public Command ToggleCardCodeCommand { get; set; }
         public Command CheckPasswordCommand { get; set; }
         public Command UriOptionsCommand { get; set; }
+        public Command FieldOptionsCommand { get; set; }
         public string CipherId { get; set; }
         public string OrganizationId { get; set; }
         public string FolderId { get; set; }
@@ -126,6 +135,7 @@ namespace Bit.App.Pages
         public List<KeyValuePair<string, string>> CardExpMonthOptions { get; set; }
         public List<KeyValuePair<string, string>> IdentityTitleOptions { get; set; }
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
+        public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -166,11 +176,6 @@ namespace Bit.App.Pages
         {
             get => _cipher;
             set => SetProperty(ref _cipher, value, additionalPropertyNames: _additionalCipherProperties);
-        }
-        public List<AddEditPageFieldViewModel> Fields
-        {
-            get => _fields;
-            set => SetProperty(ref _fields, value);
         }
         public bool ShowPassword
         {
@@ -217,7 +222,6 @@ namespace Bit.App.Pages
             {
                 var cipher = await _cipherService.GetAsync(CipherId);
                 Cipher = await cipher.DecryptAsync();
-                Fields = Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(f)).ToList();
 
                 if(Cipher.Card != null)
                 {
@@ -244,7 +248,7 @@ namespace Bit.App.Pages
                     Identity = new IdentityView(),
                     SecureNote = new SecureNoteView()
                 };
-                Cipher.Login.Uris = new List<LoginUriView>();
+                Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView() };
                 Cipher.SecureNote.Type = SecureNoteType.Generic;
 
                 TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
@@ -258,6 +262,10 @@ namespace Bit.App.Pages
             {
                 Uris.ResetWithRange(Cipher.Login.Uris);
             }
+            if(Cipher.Fields != null)
+            {
+                Fields.ResetWithRange(Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(f)));
+            }
         }
 
         public async Task<bool> SubmitAsync()
@@ -270,6 +278,7 @@ namespace Bit.App.Pages
                 return false;
             }
 
+            Cipher.Fields = Fields.Any() ? Fields.Select(f => f.Field).ToList() : null;
             Cipher.Login.Uris = Uris.ToList();
             if(!EditMode && Cipher.Type == CipherType.Login && (Cipher.Login.Uris?.Count ?? 0) == 1 &&
                 string.IsNullOrWhiteSpace(Cipher.Login.Uris.First().Uri))
@@ -371,6 +380,61 @@ namespace Bit.App.Pages
             Uris.Add(new LoginUriView());
         }
 
+        public async void FieldOptions(AddEditPageFieldViewModel field)
+        {
+            if(!(Page as AddEditPage).DoOnce())
+            {
+                return;
+            }
+            var selection = await Page.DisplayActionSheet(AppResources.Options, AppResources.Cancel, null,
+                AppResources.Edit, AppResources.MoveUp, AppResources.MoveDown, AppResources.Remove);
+            if(selection == AppResources.Remove)
+            {
+                Fields.Remove(field);
+            }
+            else if(selection == AppResources.Edit)
+            {
+                var name = "new name";
+                // TODO: prompt for name
+                field.Field.Name = name;
+                field.TriggerFieldChanged();
+            }
+            else if(selection == AppResources.MoveUp)
+            {
+                var currentIndex = Fields.IndexOf(field);
+                if(currentIndex > 0)
+                {
+                    Fields.Move(currentIndex, currentIndex - 1);
+                }
+            }
+            else if(selection == AppResources.MoveDown)
+            {
+                var currentIndex = Fields.IndexOf(field);
+                if(currentIndex < Fields.Count - 1)
+                {
+                    Fields.Move(currentIndex, currentIndex + 1);
+                }
+            }
+        }
+
+        public async void AddField()
+        {
+            var typeSelection = await Page.DisplayActionSheet(AppResources.SelectTypeField, AppResources.Cancel, null,
+                _fieldTypeOptions.Select(f => f.Value).ToArray());
+            if(typeSelection != null && typeSelection != AppResources.Cancel)
+            {
+                var name = "new field name";
+                // TODO: prompt for name
+
+                if(Fields == null)
+                {
+                    Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
+                }
+                var type = _fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
+                Fields.Add(new AddEditPageFieldViewModel(new FieldView { Type = type, Name = name }));
+            }
+        }
+
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
@@ -448,25 +512,25 @@ namespace Bit.App.Pages
     {
         private FieldView _field;
         private bool _showHiddenValue;
+        private bool _booleanValue;
+        private string[] _additionalFieldProperties = new string[]
+        {
+            nameof(IsBooleanType),
+            nameof(IsHiddenType),
+            nameof(IsTextType),
+        };
 
         public AddEditPageFieldViewModel(FieldView field)
         {
             Field = field;
             ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
+            BooleanValue = IsBooleanType && field.Value == "true";
         }
 
         public FieldView Field
         {
             get => _field;
-            set => SetProperty(ref _field, value,
-                additionalPropertyNames: new string[]
-                {
-                    nameof(ValueText),
-                    nameof(IsBooleanType),
-                    nameof(IsHiddenType),
-                    nameof(IsTextType),
-                    nameof(ShowCopyButton),
-                });
+            set => SetProperty(ref _field, value, additionalPropertyNames: _additionalFieldProperties);
         }
 
         public bool ShowHiddenValue
@@ -479,19 +543,31 @@ namespace Bit.App.Pages
                 });
         }
 
-        public Command ToggleHiddenValueCommand { get; set; }
+        public bool BooleanValue
+        {
+            get => _booleanValue;
+            set
+            {
+                SetProperty(ref _booleanValue, value);
+                Field.Value = value ? "true" : "false";
+            }
+        }
 
-        public string ValueText => IsBooleanType ? (_field.Value == "true" ? "" : "") : _field.Value;
+        public Command ToggleHiddenValueCommand { get; set; }
+        
         public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
-        public bool IsTextType => _field.Type == Core.Enums.FieldType.Text;
-        public bool IsBooleanType => _field.Type == Core.Enums.FieldType.Boolean;
-        public bool IsHiddenType => _field.Type == Core.Enums.FieldType.Hidden;
-        public bool ShowCopyButton => _field.Type != Core.Enums.FieldType.Boolean &&
-            !string.IsNullOrWhiteSpace(_field.Value);
+        public bool IsTextType => _field.Type == FieldType.Text;
+        public bool IsBooleanType => _field.Type == FieldType.Boolean;
+        public bool IsHiddenType => _field.Type == FieldType.Hidden;
 
         public void ToggleHiddenValue()
         {
             ShowHiddenValue = !ShowHiddenValue;
+        }
+
+        public void TriggerFieldChanged()
+        {
+            TriggerPropertyChanged(nameof(Field), _additionalFieldProperties);
         }
     }
 }

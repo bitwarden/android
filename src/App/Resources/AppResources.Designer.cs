@@ -2293,6 +2293,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move Down.
+        /// </summary>
+        public static string MoveDown {
+            get {
+                return ResourceManager.GetString("MoveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move Up.
+        /// </summary>
+        public static string MoveUp {
+            get {
+                return ResourceManager.GetString("MoveUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mr.
         /// </summary>
         public static string Mr {

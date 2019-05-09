@@ -61,5 +61,10 @@ namespace Bit.App.Pages
         {
             _vm.AddUri();
         }
+
+        private void NewField_Clicked(object sender, System.EventArgs e)
+        {
+            _vm.AddField();
+        }
     }
 }

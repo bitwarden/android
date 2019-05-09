@@ -348,37 +348,35 @@
                 <controls:RepeaterView ItemsSource="{Binding Uris}">
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="views:LoginUriView">
-                            <StackLayout Spacing="0" Padding="0">
-                                <Grid StyleClass="box-row">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Label
-                                        Text="{u:I18n URI}"
-                                        StyleClass="box-label"
-                                        Grid.Row="0"
-                                        Grid.Column="0" />
-                                    <Entry
-                                        Text="{Binding Uri}"
-                                        Keyboard="Url"
-                                        StyleClass="box-value"
-                                        Grid.Row="1"
-                                        Grid.Column="0" />
-                                    <controls:FaButton
-                                        StyleClass="box-row-button, box-row-button-platform"
-                                        Text="&#xf013;"
-                                        Command="{Binding BindingContext.UriOptionsCommand, Source={x:Reference _page}}"
-                                        CommandParameter="{Binding .}"
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        Grid.RowSpan="2" />
-                                </Grid>
-                            </StackLayout>
+                            <Grid StyleClass="box-row">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Text="{u:I18n URI}"
+                                    StyleClass="box-label"
+                                    Grid.Row="0"
+                                    Grid.Column="0" />
+                                <Entry
+                                    Text="{Binding Uri}"
+                                    Keyboard="Url"
+                                    StyleClass="box-value"
+                                    Grid.Row="1"
+                                    Grid.Column="0" />
+                                <controls:FaButton
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="&#xf013;"
+                                    Command="{Binding BindingContext.UriOptionsCommand, Source={x:Reference _page}}"
+                                    CommandParameter="{Binding .}"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2" />
+                            </Grid>
                         </DataTemplate>
                     </controls:RepeaterView.ItemTemplate>
                 </controls:RepeaterView>
@@ -396,6 +394,84 @@
                         StyleClass="box-value"
                         HeightRequest="200" />
                 </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n CustomFields}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <controls:RepeaterView ItemsSource="{Binding Fields}">
+                    <controls:RepeaterView.ItemTemplate>
+                        <DataTemplate x:DataType="pages:AddEditPageFieldViewModel">
+                            <StackLayout Spacing="0" Padding="0">
+                                <Grid StyleClass="box-row">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{Binding Field.Name, Mode=OneWay}"
+                                        IsVisible="{Binding IsBooleanType, Mode=OneWay, Converter={StaticResource inverseBool}}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0" />
+                                    <Label
+                                        Text="{Binding Field.Name, Mode=OneWay}"
+                                        IsVisible="{Binding IsBooleanType, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        VerticalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.RowSpan="2" />
+                                    <Entry
+                                        Text="{Binding Field.Value}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding IsTextType}" />
+                                    <controls:MonoEntry
+                                        Text="{Binding Field.Value}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding IsHiddenType}"
+                                        IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}" />
+                                    <Switch
+                                        IsToggled="{Binding BooleanValue}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        IsVisible="{Binding IsBooleanType}" />
+                                    <controls:FaButton 
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding ShowHiddenValueIcon}"
+                                        Command="{Binding ToggleHiddenValueCommand}"
+                                        IsVisible="{Binding IsHiddenType}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2" />
+                                    <controls:FaButton 
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="&#xf013;"
+                                        Command="{Binding BindingContext.FieldOptionsCommand, Source={x:Reference _page}}"
+                                        CommandParameter="{Binding .}"
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2" />
+                                </Grid>
+                                <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsBooleanType}" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </controls:RepeaterView.ItemTemplate>
+                </controls:RepeaterView>
+                <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
+                        Clicked="NewField_Clicked"></Button>
             </StackLayout>
         </StackLayout>
     </ScrollView>
