@@ -424,12 +424,20 @@ namespace Bit.App.Pages
             if(typeSelection != null && typeSelection != AppResources.Cancel)
             {
                 var name = await _deviceActionService.DisplayPromptAync(AppResources.CustomFieldName);
+                if(name == null)
+                {
+                    return;
+                }
                 if(Fields == null)
                 {
                     Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
                 }
                 var type = _fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
-                Fields.Add(new AddEditPageFieldViewModel(new FieldView { Type = type, Name = name }));
+                Fields.Add(new AddEditPageFieldViewModel(new FieldView
+                {
+                    Type = type,
+                    Name = string.IsNullOrWhiteSpace(name) ? null : name
+                }));
             }
         }
 
@@ -547,12 +555,15 @@ namespace Bit.App.Pages
             set
             {
                 SetProperty(ref _booleanValue, value);
-                Field.Value = value ? "true" : "false";
+                if(IsBooleanType)
+                {
+                    Field.Value = value ? "true" : "false";
+                }
             }
         }
 
         public Command ToggleHiddenValueCommand { get; set; }
-        
+
         public string ShowHiddenValueIcon => _showHiddenValue ? "" : "";
         public bool IsTextType => _field.Type == FieldType.Text;
         public bool IsBooleanType => _field.Type == FieldType.Boolean;
