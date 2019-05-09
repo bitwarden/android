@@ -17,7 +17,18 @@ namespace Bit.App.Pages
             _vm = BindingContext as ViewPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
-            SetActivityIndicator();
+            SetActivityIndicator(_mainContent);
+
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                _absLayout.Children.Remove(_fab);
+            }
+            else
+            {
+                ToolbarItems.RemoveAt(0);
+                _fab.Clicked = EditButton_Clicked;
+                _mainLayout.Padding = new Thickness(0, 0, 0, 75);
+            }
         }
 
         protected override async void OnAppearing()
@@ -38,7 +49,7 @@ namespace Bit.App.Pages
                     }
                 }
             });
-            await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync());
+            await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync(), _mainContent);
         }
 
         protected override void OnDisappearing()
@@ -62,6 +73,11 @@ namespace Bit.App.Pages
             {
                 await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_vm.CipherId)));
             }
+        }
+
+        private void EditButton_Clicked(object sender, System.EventArgs e)
+        {
+            EditToolbarItem_Clicked(sender, e);
         }
     }
 }
