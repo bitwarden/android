@@ -251,6 +251,11 @@
         <Setter Property="Padding"
                 Value="0, 10, 0, 0" />
     </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-switch">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+    </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
            Class="box-row-button">
@@ -278,6 +283,13 @@
                 Value="Small" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-label-regular">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
     </Style>
     <Style TargetType="Label"
            ApplyToDerivedTypes="True"
