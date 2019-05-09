@@ -348,7 +348,7 @@
                 <controls:RepeaterView ItemsSource="{Binding Uris}">
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="views:LoginUriView">
-                            <Grid StyleClass="box-row">
+                            <Grid StyleClass="box-row, box-row-input">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
@@ -385,10 +385,26 @@
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Miscellaneous}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Folder}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_folderPicker"
+                        ItemsSource="{Binding FolderOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding FolderSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n Notes}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
-                <StackLayout StyleClass="box-row">
+                <StackLayout StyleClass="box-row, box-row-input">
                     <Editor
                         Text="{Binding Cipher.Notes}"
                         StyleClass="box-value"
@@ -404,7 +420,7 @@
                     <controls:RepeaterView.ItemTemplate>
                         <DataTemplate x:DataType="pages:AddEditPageFieldViewModel">
                             <StackLayout Spacing="0" Padding="0">
-                                <Grid StyleClass="box-row">
+                                <Grid StyleClass="box-row, box-row-input">
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto" />
                                         <RowDefinition Height="*" />

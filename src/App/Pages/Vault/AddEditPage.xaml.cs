@@ -28,6 +28,7 @@ namespace Bit.App.Pages
             _cardBrandPicker.ItemDisplayBinding = new Binding("Key");
             _cardExpMonthPicker.ItemDisplayBinding = new Binding("Key");
             _identityTitlePicker.ItemDisplayBinding = new Binding("Key");
+            _folderPicker.ItemDisplayBinding = new Binding("Key");
         }
 
         protected override async void OnAppearing()

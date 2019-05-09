@@ -16,6 +16,7 @@ namespace Bit.App.Pages
     {
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
+        private readonly IFolderService _folderService;
         private readonly IUserService _userService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
@@ -27,6 +28,7 @@ namespace Bit.App.Pages
         private int _cardBrandSelectedIndex;
         private int _cardExpMonthSelectedIndex;
         private int _identityTitleSelectedIndex;
+        private int _folderSelectedIndex;
         private string[] _additionalCipherProperties = new string[]
         {
             nameof(IsLogin),
@@ -60,6 +62,7 @@ namespace Bit.App.Pages
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
@@ -117,6 +120,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>(AppResources.Ms, AppResources.Ms),
                 new KeyValuePair<string, string>(AppResources.Dr, AppResources.Dr),
             };
+            FolderOptions = new List<KeyValuePair<string, string>>();
         }
 
         public Command GeneratePasswordCommand { get; set; }
@@ -134,6 +138,7 @@ namespace Bit.App.Pages
         public List<KeyValuePair<string, string>> CardBrandOptions { get; set; }
         public List<KeyValuePair<string, string>> CardExpMonthOptions { get; set; }
         public List<KeyValuePair<string, string>> IdentityTitleOptions { get; set; }
+        public List<KeyValuePair<string, string>> FolderOptions { get; set; }
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
         public int TypeSelectedIndex
@@ -170,6 +175,15 @@ namespace Bit.App.Pages
             {
                 SetProperty(ref _identityTitleSelectedIndex, value);
                 IdentityTitleChanged();
+            }
+        }
+        public int FolderSelectedIndex
+        {
+            get => _folderSelectedIndex;
+            set
+            {
+                SetProperty(ref _folderSelectedIndex, value);
+                FolderChanged();
             }
         }
         public CipherView Cipher
@@ -217,54 +231,62 @@ namespace Bit.App.Pages
         public async Task LoadAsync()
         {
             // TODO: load collections
+            var folders = await _folderService.GetAllDecryptedAsync();
+            FolderOptions = folders.Select(f => new KeyValuePair<string, string>(f.Name, f.Id)).ToList();
 
-            if(EditMode)
+            if(Cipher == null)
             {
-                var cipher = await _cipherService.GetAsync(CipherId);
-                Cipher = await cipher.DecryptAsync();
-
-                if(Cipher.Card != null)
+                if(EditMode)
                 {
-                    CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.Brand) ? 0 :
-                        CardBrandOptions.FindIndex(k => k.Value == Cipher.Card.Brand);
-                    CardExpMonthSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.ExpMonth) ? 0 :
-                        CardExpMonthOptions.FindIndex(k => k.Value == Cipher.Card.ExpMonth);
+                    var cipher = await _cipherService.GetAsync(CipherId);
+                    Cipher = await cipher.DecryptAsync();
+
+                    FolderSelectedIndex = string.IsNullOrWhiteSpace(Cipher.FolderId) ? FolderOptions.Count - 1 :
+                        FolderOptions.FindIndex(k => k.Value == Cipher.FolderId); ;
+                    if(Cipher.Card != null)
+                    {
+                        CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.Brand) ? 0 :
+                            CardBrandOptions.FindIndex(k => k.Value == Cipher.Card.Brand);
+                        CardExpMonthSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card.ExpMonth) ? 0 :
+                            CardExpMonthOptions.FindIndex(k => k.Value == Cipher.Card.ExpMonth);
+                    }
+                    if(Cipher.Identity != null)
+                    {
+                        IdentityTitleSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Identity.Title) ? 0 :
+                            IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
+                    }
                 }
-                if(Cipher.Identity != null)
+                else
                 {
-                    IdentityTitleSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Identity.Title) ? 0 :
-                        IdentityTitleOptions.FindIndex(k => k.Value == Cipher.Identity.Title);
+                    Cipher = new CipherView
+                    {
+                        OrganizationId = OrganizationId,
+                        FolderId = FolderId,
+                        Type = Type.GetValueOrDefault(CipherType.Login),
+                        Login = new LoginView(),
+                        Card = new CardView(),
+                        Identity = new IdentityView(),
+                        SecureNote = new SecureNoteView()
+                    };
+                    Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView() };
+                    Cipher.SecureNote.Type = SecureNoteType.Generic;
+
+                    TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
+                    CardBrandSelectedIndex = 0;
+                    CardExpMonthSelectedIndex = 0;
+                    IdentityTitleSelectedIndex = 0;
+                    FolderSelectedIndex = FolderOptions.Count - 1;
+                    // TODO: org/collection stuff
                 }
-            }
-            else
-            {
-                Cipher = new CipherView
+
+                if(Cipher.Login.Uris != null)
                 {
-                    OrganizationId = OrganizationId,
-                    FolderId = FolderId,
-                    Type = Type.GetValueOrDefault(CipherType.Login),
-                    Login = new LoginView(),
-                    Card = new CardView(),
-                    Identity = new IdentityView(),
-                    SecureNote = new SecureNoteView()
-                };
-                Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView() };
-                Cipher.SecureNote.Type = SecureNoteType.Generic;
-
-                TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
-                CardBrandSelectedIndex = 0;
-                CardExpMonthSelectedIndex = 0;
-                IdentityTitleSelectedIndex = 0;
-                // TODO: org/collection stuff
-            }
-
-            if(Cipher.Login.Uris != null)
-            {
-                Uris.ResetWithRange(Cipher.Login.Uris);
-            }
-            if(Cipher.Fields != null)
-            {
-                Fields.ResetWithRange(Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(f)));
+                    Uris.ResetWithRange(Cipher.Login.Uris);
+                }
+                if(Cipher.Fields != null)
+                {
+                    Fields.ResetWithRange(Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(f)));
+                }
             }
         }
 
@@ -481,6 +503,14 @@ namespace Bit.App.Pages
             if(Cipher?.Identity != null && IdentityTitleSelectedIndex > -1)
             {
                 Cipher.Identity.Title = IdentityTitleOptions[IdentityTitleSelectedIndex].Value;
+            }
+        }
+
+        private void FolderChanged()
+        {
+            if(Cipher != null && FolderSelectedIndex > -1)
+            {
+                Cipher.FolderId = FolderOptions[FolderSelectedIndex].Value;
             }
         }
 

@@ -1417,4 +1417,7 @@
   <data name="MoveUp" xml:space="preserve">
     <value>Move Up</value>
   </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Miscellaneous</value>
+  </data>
 </root>
