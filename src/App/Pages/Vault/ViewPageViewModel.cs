@@ -2,6 +2,7 @@
 using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
@@ -20,6 +21,7 @@ namespace Bit.App.Pages
         private readonly ITotpService _totpService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
+        private readonly IMessagingService _messagingService;
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
@@ -39,6 +41,7 @@ namespace Bit.App.Pages
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
             CopyFieldCommand = new Command<FieldView>(CopyField);
@@ -243,6 +246,31 @@ namespace Bit.App.Pages
         public void ToggleCardCode()
         {
             ShowCardCode = !ShowCardCode;
+        }
+
+        public async Task<bool> DeleteAsync()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
+                null, AppResources.Yes, AppResources.No);
+            if(!confirmed)
+            {
+                return false;
+            }
+            try
+            {
+                await _deviceActionService.ShowLoadingAsync(AppResources.Deleting);
+                await _cipherService.DeleteWithServerAsync(Cipher.Id);
+                await _deviceActionService.HideLoadingAsync();
+                _platformUtilsService.ShowToast("success", null, AppResources.ItemDeleted);
+                _messagingService.Send("deletedCipher");
+                return true;
+            }
+            catch(ApiException e)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
+            }
+            return false;
         }
 
         private async Task TotpUpdateCodeAsync()

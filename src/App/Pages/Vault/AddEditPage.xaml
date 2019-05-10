@@ -15,9 +15,8 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" />
+        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" />
         <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary" />
-        <ToolbarItem Text="{u:I18n Share}" Clicked="Share_Clicked" Order="Secondary" />
         <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True" />
     </ContentPage.ToolbarItems>
 
@@ -26,6 +25,16 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
             <u:IsNotNullConverter x:Key="notNull" />
+            <ToolbarItem Text="{u:I18n Collections}"
+                     x:Key="collectionsItem"
+                     x:Name="_collectionsItem"
+                     Clicked="Collections_Clicked"
+                     Order="Secondary" />
+            <ToolbarItem Text="{u:I18n Share}"
+                     x:Key="shareItem"
+                     x:Name="_shareItem"
+                     Clicked="Share_Clicked"
+                     Order="Secondary" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -412,9 +421,6 @@
                         HorizontalOptions="End" />
                 </StackLayout>
                 <BoxView StyleClass="box-row-separator" />
-                <Button Text="{u:I18n Attachments}" StyleClass="box-button-row"
-                        IsVisible="{Binding EditMode}"
-                        Clicked="Attachments_Clicked"></Button>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">

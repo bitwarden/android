@@ -16,7 +16,9 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" />
+        <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" Order="Primary" />
+        <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary" />
+        <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -24,6 +26,16 @@
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
             <u:IsNotNullConverter x:Key="notNull" />
+            <ToolbarItem Text="{u:I18n Collections}"
+                     x:Key="collectionsItem"
+                     x:Name="_collectionsItem"
+                     Clicked="Collections_Clicked"
+                     Order="Secondary" />
+            <ToolbarItem Text="{u:I18n Share}"
+                     x:Key="shareItem"
+                     x:Name="_shareItem"
+                     Clicked="Share_Clicked"
+                     Order="Secondary" />
 
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20" x:Name="_mainLayout">

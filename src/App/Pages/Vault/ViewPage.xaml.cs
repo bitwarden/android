@@ -50,6 +50,31 @@ namespace Bit.App.Pages
                 }
             });
             await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync(), _mainContent);
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                if(_vm.Cipher.OrganizationId == null)
+                {
+                    if(ToolbarItems.Contains(_collectionsItem))
+                    {
+                        ToolbarItems.Remove(_collectionsItem);
+                    }
+                    if(!ToolbarItems.Contains(_shareItem))
+                    {
+                        ToolbarItems.Insert(1, _shareItem);
+                    }
+                }
+                else
+                {
+                    if(ToolbarItems.Contains(_shareItem))
+                    {
+                        ToolbarItems.Remove(_shareItem);
+                    }
+                    if(!ToolbarItems.Contains(_collectionsItem))
+                    {
+                        ToolbarItems.Insert(1, _collectionsItem);
+                    }
+                }
+            }
         }
 
         protected override void OnDisappearing()
@@ -78,6 +103,39 @@ namespace Bit.App.Pages
         private void EditButton_Clicked(object sender, System.EventArgs e)
         {
             EditToolbarItem_Clicked(sender, e);
+        }
+
+        private void Attachments_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                // await Navigation.PushModalAsync();
+            }
+        }
+
+        private async void Share_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                var page = new SharePage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private async void Delete_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await _vm.DeleteAsync();
+            }
+        }
+
+        private void Collections_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                // TODO
+            }
         }
     }
 }
