@@ -35,9 +35,9 @@ namespace Bit.App.Services
 
         public void Init()
         {
-            _broadcasterService.Subscribe("showDialogResolve", (message) =>
+            _broadcasterService.Subscribe(nameof(MobilePlatformUtilsService), (message) =>
             {
-                if(message.Command == "")
+                if(message.Command == "showDialogResolve")
                 {
                     var details = message.Data as Tuple<int, bool>;
                     var dialogId = details.Item1;
