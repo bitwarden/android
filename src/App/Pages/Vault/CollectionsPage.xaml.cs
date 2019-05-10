@@ -2,18 +2,17 @@
 
 namespace Bit.App.Pages
 {
-    public partial class SharePage : BaseContentPage
+    public partial class CollectionsPage : BaseContentPage
     {
-        private SharePageViewModel _vm;
+        private CollectionsPageViewModel _vm;
 
-        public SharePage(string cipherId)
+        public CollectionsPage(string cipherId)
         {
             InitializeComponent();
-            _vm = BindingContext as SharePageViewModel;
+            _vm = BindingContext as CollectionsPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
             SetActivityIndicator();
-            _organizationPicker.ItemDisplayBinding = new Binding("Key");
         }
 
         protected override async void OnAppearing()

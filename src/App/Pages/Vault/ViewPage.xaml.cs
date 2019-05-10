@@ -130,11 +130,12 @@ namespace Bit.App.Pages
             }
         }
 
-        private void Collections_Clicked(object sender, System.EventArgs e)
+        private async void Collections_Clicked(object sender, System.EventArgs e)
         {
             if(DoOnce())
             {
-                // TODO
+                var page = new CollectionsPage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
     }
