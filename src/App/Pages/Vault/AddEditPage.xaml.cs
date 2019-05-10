@@ -23,6 +23,11 @@ namespace Bit.App.Pages
             _vm.Type = type;
             _vm.Init();
             SetActivityIndicator();
+            if(!_vm.EditMode)
+            {
+                ToolbarItems.Remove(_attachmentsItem);
+                ToolbarItems.Remove(_deleteItem);
+            }
 
             _typePicker.ItemDisplayBinding = new Binding("Key");
             _cardBrandPicker.ItemDisplayBinding = new Binding("Key");
@@ -36,7 +41,7 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync());
-            if(Device.RuntimePlatform == Device.Android)
+            if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
             {
                 if(_vm.Cipher.OrganizationId == null)
                 {

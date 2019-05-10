@@ -16,8 +16,15 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" />
-        <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary" />
-        <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True" />
+        <ToolbarItem Text="{u:I18n Attachments}"
+                     Clicked="Attachments_Clicked"
+                     Order="Secondary"
+                     x:Name="_attachmentsItem" />
+        <ToolbarItem Text="{u:I18n Delete}"
+                     Clicked="Delete_Clicked"
+                     Order="Secondary"
+                     IsDestructive="True"
+                     x:Name="_deleteItem" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -512,7 +519,7 @@
                 <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
                         Clicked="NewField_Clicked"></Button>
             </StackLayout>
-            <StackLayout StyleClass="box">
+            <StackLayout StyleClass="box" IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n Ownership}"
                            StyleClass="box-header, box-header-platform" />
@@ -528,14 +535,13 @@
                         StyleClass="box-value" />
                 </StackLayout>
             </StackLayout>
-            <StackLayout StyleClass="box"
-                         IsVisible="{Binding Cipher.OrganizationId, Converter={StaticResource notNull}}">
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowCollections}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n Collections}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout Spacing="0" Padding="0"
-                             IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
+                                IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label Text="{u:I18n NoCollectionsToList}" />
                     </StackLayout>

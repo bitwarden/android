@@ -41,7 +41,7 @@ namespace Bit.App.Pages
             nameof(IsSecureNote),
             nameof(ShowUris),
             nameof(ShowAttachments),
-            nameof(ShowIdentityAddress),
+            nameof(ShowCollections),
         };
         private List<KeyValuePair<UriMatchType?, string>> _matchDetectionOptions =
             new List<KeyValuePair<UriMatchType?, string>>
@@ -242,18 +242,19 @@ namespace Bit.App.Pages
         public bool HasCollections
         {
             get => _hasCollections;
-            set => SetProperty(ref _hasCollections, value);
+            set => SetProperty(ref _hasCollections, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowCollections)
+                });
         }
+        public bool ShowCollections => !EditMode && Cipher.OrganizationId != null;
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
         public bool IsLogin => Cipher?.Type == CipherType.Login;
         public bool IsIdentity => Cipher?.Type == CipherType.Identity;
         public bool IsCard => Cipher?.Type == CipherType.Card;
         public bool IsSecureNote => Cipher?.Type == CipherType.SecureNote;
         public bool ShowUris => IsLogin && Cipher.Login.HasUris;
-        public bool ShowIdentityAddress => IsIdentity && (
-            !string.IsNullOrWhiteSpace(Cipher.Identity.Address1) ||
-            !string.IsNullOrWhiteSpace(Cipher.Identity.City) ||
-            !string.IsNullOrWhiteSpace(Cipher.Identity.Country));
         public bool ShowAttachments => Cipher.HasAttachments;
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string ShowCardCodeIcon => ShowCardCode ? "" : "";
