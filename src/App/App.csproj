@@ -38,6 +38,9 @@
     <Compile Update="Pages\Generator\GeneratorPage.xaml.cs">
       <DependentUpon>GeneratorPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Vault\SharePage.xaml.cs">
+      <DependentUpon>SharePage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Vault\CiphersPage.xaml.cs">
       <DependentUpon>CiphersPage.xaml</DependentUpon>
     </Compile>

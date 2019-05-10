@@ -76,5 +76,22 @@ namespace Bit.App.Pages
                 // await Navigation.PushModalAsync();
             }
         }
+
+        private async void Share_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                var page = new SharePage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private async void Delete_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await _vm.DeleteAsync();
+            }
+        }
     }
 }

@@ -1429,4 +1429,22 @@
   <data name="NoCollectionsToList" xml:space="preserve">
     <value>There are no collections to list.</value>
   </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Item has been shared.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>You must select at least one collection.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Share Item</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>No organizations to list.</value>
+  </data>
+  <data name="ShareDesc" xml:space="preserve">
+    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+  </data>
 </root>

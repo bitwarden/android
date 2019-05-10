@@ -16,6 +16,9 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" />
+        <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary" />
+        <ToolbarItem Text="{u:I18n Share}" Clicked="Share_Clicked" Order="Secondary" />
+        <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
@@ -534,7 +537,7 @@
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Collections}" IsVisible="{Binding HasCollections}">
                     <controls:RepeaterView.ItemTemplate>
-                        <DataTemplate x:DataType="pages:AddEditPageCollectionViewModel">
+                        <DataTemplate x:DataType="pages:CollectionViewModel">
                             <StackLayout Spacing="0" Padding="0">
                                 <StackLayout StyleClass="box-row, box-row-switch">
                                     <Label

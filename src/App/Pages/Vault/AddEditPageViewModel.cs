@@ -80,7 +80,7 @@ namespace Bit.App.Pages
             FieldOptionsCommand = new Command<AddEditPageFieldViewModel>(FieldOptions);
             Uris = new ExtendedObservableCollection<LoginUriView>();
             Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
-            Collections = new ExtendedObservableCollection<AddEditPageCollectionViewModel>();
+            Collections = new ExtendedObservableCollection<CollectionViewModel>();
 
             TypeOptions = new List<KeyValuePair<string, CipherType>>
             {
@@ -149,7 +149,7 @@ namespace Bit.App.Pages
         public List<KeyValuePair<string, string>> OwnershipOptions { get; set; }
         public ExtendedObservableCollection<LoginUriView> Uris { get; set; }
         public ExtendedObservableCollection<AddEditPageFieldViewModel> Fields { get; set; }
-        public ExtendedObservableCollection<AddEditPageCollectionViewModel> Collections { get; set; }
+        public ExtendedObservableCollection<CollectionViewModel> Collections { get; set; }
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -360,6 +360,13 @@ namespace Bit.App.Pages
 
             if(!EditMode && Cipher.OrganizationId != null)
             {
+                if(!Collections?.Any(c => c.Checked) ?? true)
+                {
+                    await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.SelectOneCollection,
+                        AppResources.Ok);
+                    return false;
+                }
+
                 Cipher.CollectionIds = Collections.Any() ?
                     new HashSet<string>(Collections.Where(c => c.Checked).Select(c => c.Collection.Id)) : null;
             }
@@ -575,12 +582,12 @@ namespace Bit.App.Pages
             if(Cipher.OrganizationId != null)
             {
                 var cols = _writeableCollections.Where(c => c.OrganizationId == Cipher.OrganizationId)
-                    .Select(c => new AddEditPageCollectionViewModel { Collection = c }).ToList();
+                    .Select(c => new CollectionViewModel { Collection = c }).ToList();
                 Collections.ResetWithRange(cols);
             }
             else
             {
-                Collections.ResetWithRange(new List<AddEditPageCollectionViewModel>());
+                Collections.ResetWithRange(new List<CollectionViewModel>());
             }
             HasCollections = Collections.Any();
         }
@@ -612,18 +619,6 @@ namespace Bit.App.Pages
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.PasswordSafe);
             }
-        }
-    }
-
-    public class AddEditPageCollectionViewModel : ExtendedViewModel
-    {
-        private bool _checked;
-
-        public Core.Models.View.CollectionView Collection { get; set; }
-        public bool Checked
-        {
-            get => _checked;
-            set => SetProperty(ref _checked, value);
         }
     }
 

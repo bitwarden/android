@@ -1906,6 +1906,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item has been shared..
+        /// </summary>
+        public static string ItemShared {
+            get {
+                return ResourceManager.GetString("ItemShared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Item updated..
         /// </summary>
         public static string ItemUpdated {
@@ -2518,6 +2527,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No organizations to list..
+        /// </summary>
+        public static string NoOrgsToList {
+            get {
+                return ResourceManager.GetString("NoOrgsToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No passwords to list..
         /// </summary>
         public static string NoPasswordsToList {
@@ -2986,6 +3004,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must select at least one collection..
+        /// </summary>
+        public static string SelectOneCollection {
+            get {
+                return ResourceManager.GetString("SelectOneCollection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to What type of item do you want to add?.
         /// </summary>
         public static string SelectTypeAdd {
@@ -3072,6 +3099,33 @@ namespace Bit.App.Resources {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share.
+        /// </summary>
+        public static string Share {
+            get {
+                return ResourceManager.GetString("Share", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared..
+        /// </summary>
+        public static string ShareDesc {
+            get {
+                return ResourceManager.GetString("ShareDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Share Item.
+        /// </summary>
+        public static string ShareItem {
+            get {
+                return ResourceManager.GetString("ShareItem", resourceCulture);
             }
         }
         
