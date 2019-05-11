@@ -99,11 +99,12 @@ namespace Bit.App.Pages
             _vm.AddField();
         }
 
-        private void Attachments_Clicked(object sender, System.EventArgs e)
+        private async void Attachments_Clicked(object sender, System.EventArgs e)
         {
             if(DoOnce())
             {
-                // await Navigation.PushModalAsync();
+                var page = new AttachmentsPage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
 

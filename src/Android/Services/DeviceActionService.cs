@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.OS;
+using Android.Provider;
+using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Webkit;
 using Android.Widget;
@@ -19,13 +24,28 @@ namespace Bit.Droid.Services
     public class DeviceActionService : IDeviceActionService
     {
         private readonly IStorageService _storageService;
-
+        private readonly IMessagingService _messagingService;
+        private readonly IBroadcasterService _broadcasterService;
         private ProgressDialog _progressDialog;
-        private Android.Widget.Toast _toast;
+        private bool _cameraPermissionsDenied;
+        private Toast _toast;
 
-        public DeviceActionService(IStorageService storageService)
+        public DeviceActionService(
+            IStorageService storageService,
+            IMessagingService messagingService,
+            IBroadcasterService broadcasterService)
         {
             _storageService = storageService;
+            _messagingService = messagingService;
+            _broadcasterService = broadcasterService;
+
+            _broadcasterService.Subscribe(nameof(DeviceActionService), (message) =>
+            {
+                if(message.Command == "selectFileCameraPermissionDenied")
+                {
+                    _cameraPermissionsDenied = true;
+                }
+            });
         }
 
         public DeviceType DeviceType => DeviceType.Android;
@@ -39,7 +59,7 @@ namespace Bit.Droid.Services
                 _toast = null;
             }
             _toast = Android.Widget.Toast.MakeText(CrossCurrentActivity.Current.Activity, text,
-                longDuration ? Android.Widget.ToastLength.Long : Android.Widget.ToastLength.Short);
+                longDuration ? ToastLength.Long : ToastLength.Short);
             _toast.Show();
         }
 
@@ -149,6 +169,54 @@ namespace Bit.Droid.Services
             catch(Exception) { }
         }
 
+        public Task SelectFileAsync()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
+            var additionalIntents = new List<IParcelable>();
+            if(activity.PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
+            {
+                var hasCameraPermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.Camera);
+                if(!_cameraPermissionsDenied && !hasStorageWritePermission)
+                {
+                    AskPermission(Manifest.Permission.WriteExternalStorage);
+                    return Task.FromResult(0);
+                }
+                if(!_cameraPermissionsDenied && !hasCameraPermission)
+                {
+                    AskPermission(Manifest.Permission.Camera);
+                    return Task.FromResult(0);
+                }
+                if(!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
+                {
+                    try
+                    {
+                        var root = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
+                        var file = new Java.IO.File(root, "temp_camera_photo.jpg");
+                        if(!file.Exists())
+                        {
+                            file.ParentFile.Mkdirs();
+                            file.CreateNewFile();
+                        }
+                        var outputFileUri = Android.Net.Uri.FromFile(file);
+                        additionalIntents.AddRange(GetCameraIntents(outputFileUri));
+                    }
+                    catch(Java.IO.IOException) { }
+                }
+            }
+
+            var docIntent = new Intent(Intent.ActionOpenDocument);
+            docIntent.AddCategory(Intent.CategoryOpenable);
+            docIntent.SetType("*/*");
+            var chooserIntent = Intent.CreateChooser(docIntent, AppResources.FileSource);
+            if(additionalIntents.Count > 0)
+            {
+                chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());
+            }
+            activity.StartActivityForResult(chooserIntent, Constants.SelectFileRequestCode);
+            return Task.FromResult(0);
+        }
+
         public Task<string> DisplayPromptAync(string title = null, string description = null,
             string text = null, string okButtonText = null, string cancelButtonText = null)
         {
@@ -216,6 +284,36 @@ namespace Bit.Droid.Services
             {
                 return false;
             }
+        }
+
+        private bool HasPermission(string permission)
+        {
+            return ContextCompat.CheckSelfPermission(
+                CrossCurrentActivity.Current.Activity, permission) == Permission.Granted;
+        }
+
+        private void AskPermission(string permission)
+        {
+            ActivityCompat.RequestPermissions(CrossCurrentActivity.Current.Activity, new string[] { permission },
+                Constants.SelectFilePermissionRequestCode);
+        }
+
+        private List<IParcelable> GetCameraIntents(Android.Net.Uri outputUri)
+        {
+            var intents = new List<IParcelable>();
+            var pm = CrossCurrentActivity.Current.Activity.PackageManager;
+            var captureIntent = new Intent(MediaStore.ActionImageCapture);
+            var listCam = pm.QueryIntentActivities(captureIntent, 0);
+            foreach(var res in listCam)
+            {
+                var packageName = res.ActivityInfo.PackageName;
+                var intent = new Intent(captureIntent);
+                intent.SetComponent(new ComponentName(packageName, res.ActivityInfo.Name));
+                intent.SetPackage(packageName);
+                intent.PutExtra(MediaStore.ExtraOutput, outputUri);
+                intents.Add(intent);
+            }
+            return intents;
         }
     }
 }

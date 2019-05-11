@@ -13,6 +13,7 @@ namespace Bit.App.Abstractions
         bool OpenFile(byte[] fileData, string id, string fileName);
         bool CanOpenFile(string fileName);
         Task ClearCacheAsync();
+        Task SelectFileAsync();
         Task<string> DisplayPromptAync(string title = null, string description = null, string text = null,
             string okButtonText = null, string cancelButtonText = null);
     }

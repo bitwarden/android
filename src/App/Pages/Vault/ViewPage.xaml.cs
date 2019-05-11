@@ -105,11 +105,12 @@ namespace Bit.App.Pages
             EditToolbarItem_Clicked(sender, e);
         }
 
-        private void Attachments_Clicked(object sender, System.EventArgs e)
+        private async void Attachments_Clicked(object sender, System.EventArgs e)
         {
             if(DoOnce())
             {
-                // await Navigation.PushModalAsync();
+                var page = new AttachmentsPage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
 

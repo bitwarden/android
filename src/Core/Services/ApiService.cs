@@ -249,7 +249,7 @@ namespace Bit.Core.Services
         public Task DeleteCipherAttachmentAsync(string id, string attachmentId)
         {
             return SendAsync<object, object>(HttpMethod.Delete,
-                string.Concat("/ciphers/", id, "/attachments/", attachmentId), null, true, false);
+                string.Concat("/ciphers/", id, "/attachment/", attachmentId), null, true, false);
         }
 
         public Task PostShareCipherAttachmentAsync(string id, string attachmentId, MultipartFormDataContent data,

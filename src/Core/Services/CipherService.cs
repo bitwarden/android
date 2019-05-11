@@ -519,22 +519,11 @@ namespace Bit.Core.Services
             var encFileName = await _cryptoService.EncryptAsync(filename, key);
             var dataEncKey = await _cryptoService.MakeEncKeyAsync(key);
             var encData = await _cryptoService.EncryptToBytesAsync(data, dataEncKey.Item1);
-
-            CipherResponse response;
-            try
-            {
-                using(var fd = new MultipartFormDataContent(string.Concat("Upload----", DateTime.UtcNow)))
-                {
-                    fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
-                    fd.Add(new StringContent(string.Empty), "key", dataEncKey.Item2.EncryptedString);
-                    response = await _apiService.PostCipherAttachmentAsync(cipher.Id, fd);
-                }
-            }
-            catch(ApiException e)
-            {
-                throw new Exception(e.Error.GetSingleMessage());
-            }
-
+            var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
+            var fd = new MultipartFormDataContent(boundary);
+            fd.Add(new StringContent(dataEncKey.Item2.EncryptedString), "key");
+            fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
+            var response = await _apiService.PostCipherAttachmentAsync(cipher.Id, fd);
             var userId = await _userService.GetUserIdAsync();
             var cData = new CipherData(response, userId, cipher.CollectionIds);
             await UpsertAsync(cData);
@@ -670,12 +659,13 @@ namespace Bit.Core.Services
             try
             {
                 await _apiService.DeleteCipherAttachmentAsync(id, attachmentId);
+                await DeleteAttachmentAsync(id, attachmentId);
             }
             catch(ApiException e)
             {
-                throw new Exception(e.Error.GetSingleMessage());
+                await DeleteAttachmentAsync(id, attachmentId);
+                throw e;
             }
-            await DeleteAttachmentAsync(id, attachmentId);
         }
 
         public async Task<byte[]> DownloadAndDecryptAttachmentAsync(AttachmentView attachment, string organizationId)
@@ -716,20 +706,11 @@ namespace Bit.Core.Services
             var encFileName = await _cryptoService.EncryptAsync(attachmentView.FileName, key);
             var dataEncKey = await _cryptoService.MakeEncKeyAsync(key);
             var encData = await _cryptoService.EncryptToBytesAsync(decBytes, dataEncKey.Item1);
-
-            try
-            {
-                using(var fd = new MultipartFormDataContent(string.Concat("Upload----", DateTime.UtcNow)))
-                {
-                    fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
-                    fd.Add(new StringContent(string.Empty), "key", dataEncKey.Item2.EncryptedString);
-                    await _apiService.PostShareCipherAttachmentAsync(cipherId, attachmentView.Id, fd, organizationId);
-                }
-            }
-            catch(ApiException e)
-            {
-                throw new Exception(e.Error.GetSingleMessage());
-            }
+            var boundary = string.Concat("--BWMobileFormBoundary", DateTime.UtcNow.Ticks);
+            var fd = new MultipartFormDataContent(boundary);
+            fd.Add(new StringContent(dataEncKey.Item2.EncryptedString), "key");
+            fd.Add(new StreamContent(new MemoryStream(encData)), "data", encFileName.EncryptedString);
+            await _apiService.PostShareCipherAttachmentAsync(cipherId, attachmentView.Id, fd, organizationId);
         }
 
         private bool CheckDefaultUriMatch(CipherView cipher, LoginUriView loginUri,

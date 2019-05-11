@@ -112,6 +112,11 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
             }
+            catch(System.Exception e)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Message, AppResources.Ok);
+            }
             return false;
         }
 
