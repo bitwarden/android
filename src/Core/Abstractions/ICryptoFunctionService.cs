@@ -21,6 +21,8 @@ namespace Bit.Core.Abstractions
         Task<byte[]> RsaExtractPublicKeyAsync(byte[] privateKey);
         Task<Tuple<byte[], byte[]>> RsaGenerateKeyPairAsync(int length);
         Task<byte[]> RandomBytesAsync(int length);
+        byte[] RandomBytes(int length);
         Task<uint> RandomNumberAsync();
+        uint RandomNumber();
     }
 }

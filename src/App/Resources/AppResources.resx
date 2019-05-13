@@ -1447,4 +1447,13 @@
   <data name="ShareDesc" xml:space="preserve">
     <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
   </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Number of Words</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Passphrase</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Word Separator</value>
+  </data>
 </root>

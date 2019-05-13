@@ -22,7 +22,7 @@ namespace Bit.Core.Services
         private readonly ICryptoService _cryptoService;
         private readonly IStorageService _storageService;
         private readonly ICryptoFunctionService _cryptoFunctionService;
-        private PasswordGenerationOptions _defaultOptions = new PasswordGenerationOptions();
+        private PasswordGenerationOptions _defaultOptions = new PasswordGenerationOptions(true);
         private PasswordGenerationOptions _optionsCache;
         private List<GeneratedPasswordHistory> _history;
 
@@ -110,7 +110,7 @@ namespace Bit.Core.Services
 
             // Shuffle
             var positions = positionsBuilder.ToString().ToCharArray()
-                .OrderBy(async a => await _cryptoFunctionService.RandomNumberAsync()).ToArray();
+                .OrderBy(a => _cryptoFunctionService.RandomNumber()).ToArray();
 
             // Build out other character sets
             var allCharSet = string.Empty;
@@ -272,6 +272,73 @@ namespace Bit.Core.Services
         public Task<object> PasswordStrength(string password, List<string> userInputs = null)
         {
             throw new NotImplementedException();
+        }
+
+        public void NormalizeOptions(PasswordGenerationOptions options)
+        {
+            options.MinLowercase = 0;
+            options.MinUppercase = 0;
+
+            if(!options.Uppercase.GetValueOrDefault() && !options.Lowercase.GetValueOrDefault() &&
+                !options.Number.GetValueOrDefault() && !options.Special.GetValueOrDefault())
+            {
+                options.Lowercase = true;
+            }
+
+            var length = options.Length.GetValueOrDefault();
+            if(length < 5)
+            {
+                options.Length = 5;
+            }
+            else if(length > 128)
+            {
+                options.Length = 128;
+            }
+
+            if(options.MinNumber == null)
+            {
+                options.MinNumber = 0;
+            }
+            else if(options.MinNumber > options.Length)
+            {
+                options.MinNumber = options.Length;
+            }
+            else if(options.MinNumber > 9)
+            {
+                options.MinNumber = 9;
+            }
+            
+            if(options.MinSpecial == null)
+            {
+                options.MinSpecial = 0;
+            }
+            else if(options.MinSpecial > options.Length)
+            {
+                options.MinSpecial = options.Length;
+            }
+            else if(options.MinSpecial > 9)
+            {
+                options.MinSpecial = 9;
+            }
+
+            if(options.MinSpecial + options.MinNumber > options.Length)
+            {
+                options.MinSpecial = options.Length - options.MinNumber;
+            }
+
+            if(options.NumWords == null || options.Length < 3)
+            {
+                options.NumWords = 3;
+            }
+            else if(options.NumWords > 20)
+            {
+                options.NumWords = 20;
+            }
+
+            if(options.WordSeparator != null && options.WordSeparator.Length > 1)
+            {
+                options.WordSeparator = options.WordSeparator[0].ToString();
+            }
         }
 
         // Helpers

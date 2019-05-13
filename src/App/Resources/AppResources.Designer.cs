@@ -2590,6 +2590,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of Words.
+        /// </summary>
+        public static string NumberOfWords {
+            get {
+                return ResourceManager.GetString("NumberOfWords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to October.
         /// </summary>
         public static string October {
@@ -2658,6 +2667,15 @@ namespace Bit.App.Resources {
         public static string Ownership {
             get {
                 return ResourceManager.GetString("Ownership", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Passphrase.
+        /// </summary>
+        public static string Passphrase {
+            get {
+                return ResourceManager.GetString("Passphrase", resourceCulture);
             }
         }
         
@@ -3738,6 +3756,15 @@ namespace Bit.App.Resources {
         public static string WindowsHello {
             get {
                 return ResourceManager.GetString("WindowsHello", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Separator.
+        /// </summary>
+        public static string WordSeparator {
+            get {
+                return ResourceManager.GetString("WordSeparator", resourceCulture);
             }
         }
         

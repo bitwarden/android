@@ -40,7 +40,8 @@
                 Value="Small" />
     </Style>
     <Style TargetType="Label"
-           Class="text-lg">
+           Class="text-lg"
+           ApplyToDerivedTypes="True">
         <Setter Property="FontSize"
                 Value="Large" />
     </Style>

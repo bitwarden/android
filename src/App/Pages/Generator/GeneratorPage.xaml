@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<pages:BaseContentPage 
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.GeneratorPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:GeneratorPageViewModel"
     Title="{Binding PageTitle}">
@@ -11,27 +12,45 @@
         <pages:GeneratorPageViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout>
-        <!-- Place new controls here -->
-        <Label
-            Text="Generator!"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand" />
-        <Label
-            Text="{u:I18n AttachmentLargeWarning, P1='10 MB'}"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand" />
-        <Label
-            Text="&#xf2b9;"
-            HorizontalOptions="Center"
-            VerticalOptions="CenterAndExpand">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Select}"
+                     Clicked="Select_Clicked"
+                     Order="Primary"
+                     x:Name="_selectItem" />
+        <ToolbarItem Text="{u:I18n PasswordHistory}"
+                     Clicked="History_Clicked"
+                     Order="Secondary" />
+    </ContentPage.ToolbarItems>
 
-            <Label.FontFamily>
-                <OnPlatform x:TypeArguments="x:String"
-                    Android="FontAwesome.ttf#FontAwesome"
-                    iOS="FontAwesome" />
-            </Label.FontFamily>
-        </Label>
+    <StackLayout Spacing="20">
+        <StackLayout StyleClass="box">
+            <controls:MonoLabel
+                Text="{Binding Password}"
+                Margin="0, 20"
+                StyleClass="text-lg"
+                HorizontalOptions="Center" />
+            <StackLayout Orientation="Horizontal">
+                <Button Text="{u:I18n RegeneratePassword}"
+                    HorizontalOptions="FillAndExpand"
+                    Clicked="Regenerate_Clicked"></Button>
+                <Button Text="{u:I18n CopyPassword}"
+                    HorizontalOptions="FillAndExpand"
+                    Clicked="Copy_Clicked"></Button>
+            </StackLayout>
+            <StackLayout StyleClass="box-row-header">
+                <Label Text="{u:I18n Options}"
+                       StyleClass="box-header, box-header-platform" />
+            </StackLayout>
+            <StackLayout StyleClass="box-row, box-row-input">
+                <Label
+                    Text="{u:I18n Type}"
+                    StyleClass="box-label" />
+                <Picker
+                    ItemsSource="{Binding TypeOptions, Mode=OneTime}"
+                    SelectedIndex="{Binding TypeSelectedIndex}"
+                    StyleClass="box-value" />
+            </StackLayout>
+        </StackLayout>
     </StackLayout>
 
-</ContentPage>
+</pages:BaseContentPage>

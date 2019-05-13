@@ -14,5 +14,6 @@ namespace Bit.Core.Abstractions
         Task<PasswordGenerationOptions> GetOptionsAsync();
         Task<object> PasswordStrength(string password, List<string> userInputs = null);
         Task SaveOptionsAsync(PasswordGenerationOptions options);
+        void NormalizeOptions(PasswordGenerationOptions options);
     }
 }
