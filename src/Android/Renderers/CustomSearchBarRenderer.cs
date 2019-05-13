@@ -1,10 +1,10 @@
 ﻿using Android.Content;
-using Bit.Droid.Renderers.BoxedView;
+using Bit.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
 [assembly: ExportRenderer(typeof(SearchBar), typeof(CustomSearchBarRenderer))]
-namespace Bit.Droid.Renderers.BoxedView
+namespace Bit.Droid.Renderers
 {
     public class CustomSearchBarRenderer : SearchBarRenderer
     {
