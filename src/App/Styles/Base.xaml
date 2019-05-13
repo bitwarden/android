@@ -257,6 +257,13 @@
         <Setter Property="Orientation"
                 Value="Horizontal" />
     </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-stepper">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="Spacing"
+                Value="10" />
+    </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
            Class="box-row-button">
