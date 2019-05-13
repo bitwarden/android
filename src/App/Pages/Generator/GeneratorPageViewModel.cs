@@ -22,8 +22,8 @@ namespace Bit.App.Pages
         private bool _avoidAmbiguous;
         private int _minNumber;
         private int _minSpecial;
-        private int _length;
-        private int _numWords;
+        private int _length = 5;
+        private int _numWords = 3;
         private string _wordSeparator;
         private int _typeSelectedIndex;
         private bool _doneIniting;
@@ -173,9 +173,10 @@ namespace Bit.App.Pages
             get => _wordSeparator;
             set
             {
-                if(SetProperty(ref _wordSeparator, value))
+                var val = value.Trim();
+                if(SetProperty(ref _wordSeparator, val))
                 {
-                    _options.WordSeparator = value;
+                    _options.WordSeparator = val;
                     var task = SaveOptionsAsync();
                 }
             }
@@ -244,6 +245,7 @@ namespace Bit.App.Pages
             WordSeparator = _options.WordSeparator;
             Uppercase = _options.Uppercase.GetValueOrDefault();
             Lowercase = _options.Lowercase.GetValueOrDefault();
+            Length = _options.Length.GetValueOrDefault(5);
         }
 
         private void SetOptions()
@@ -258,6 +260,7 @@ namespace Bit.App.Pages
             _options.WordSeparator = WordSeparator;
             _options.Uppercase = Uppercase;
             _options.Lowercase = Lowercase;
+            _options.Length = Length;
         }
     }
 }

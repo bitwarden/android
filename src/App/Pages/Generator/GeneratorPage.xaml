@@ -35,7 +35,7 @@
                     Text="{Binding Password}"
                     Margin="0, 20"
                     StyleClass="text-lg"
-                    HorizontalOptions="Center"
+                    HorizontalTextAlignment="Center"
                     LineBreakMode="CharacterWrap" />
                 <StackLayout Orientation="Horizontal">
                     <Button Text="{u:I18n RegeneratePassword}"
@@ -78,8 +78,8 @@
                             VerticalTextAlignment="Center" />
                         <Stepper
                             Value="{Binding NumWords}"
-                            Minimum="3"
                             Maximum="20"
+                            Minimum="3"
                             Increment="1" />
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />
@@ -108,8 +108,8 @@
                             StyleClass="box-value"
                             VerticalOptions="CenterAndExpand"
                             HorizontalOptions="FillAndExpand"
-                            Minimum="0"
-                            Maximum="128" />
+                            Maximum="128"
+                            Minimum="5" />
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />
                     <StackLayout StyleClass="box-row, box-row-switch">
@@ -171,8 +171,8 @@
                             VerticalTextAlignment="Center" />
                         <Stepper
                             Value="{Binding MinNumber}"
-                            Minimum="0"
                             Maximum="5"
+                            Minimum="0"
                             Increment="1" />
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />
@@ -191,8 +191,8 @@
                             VerticalTextAlignment="Center" />
                         <Stepper
                             Value="{Binding MinSpecial}"
-                            Minimum="0"
                             Maximum="5"
+                            Minimum="0"
                             Increment="1" />
                     </StackLayout>
                     <BoxView StyleClass="box-row-separator" />

@@ -418,9 +418,24 @@ namespace Bit.App.Pages
             return false;
         }
 
-        public void GeneratePassword()
+        public async void GeneratePassword()
         {
-            // TODO: push modal for generate page
+            if(!string.IsNullOrWhiteSpace(Cipher?.Login?.Password))
+            {
+                var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.PasswordOverrideAlert,
+                    null, AppResources.Yes, AppResources.No);
+                if(!confirmed)
+                {
+                    return;
+                }
+            }
+            var page = new GeneratorPage(async (password) =>
+            {
+                Cipher.Login.Password = password;
+                TriggerCipherChanged();
+                await Page.Navigation.PopModalAsync();
+            });
+            await Page.Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         public async void UriOptions(LoginUriView uri)
