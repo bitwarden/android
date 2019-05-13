@@ -79,6 +79,7 @@
     <Compile Include="Autofill\FilledItem.cs" />
     <Compile Include="Autofill\Parser.cs" />
     <Compile Include="Autofill\SavedItem.cs" />
+    <Compile Include="Renderers\ExtendedSliderRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomPickerRenderer.cs" />
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
@@ -474,6 +475,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\pencil.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\slider_thumb.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

@@ -2,7 +2,8 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Base"
-                    xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl">
+                    xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
+                    xmlns:controls="clr-namespace:Bit.App.Controls">
 
     <!-- General -->
     <Style TargetType="Label"
@@ -49,6 +50,16 @@
            Class="text-bold">
         <Setter Property="FontAttributes"
                 Value="Bold" />
+    </Style>
+    <Style TargetType="controls:ExtendedSlider">
+        <Setter Property="MinimumTrackColor"
+                Value="{StaticResource SliderTrackColor}" />
+        <Setter Property="MaximumTrackColor"
+                Value="{StaticResource SliderTrackColor}" />
+        <Setter Property="ThumbColor"
+                Value="{StaticResource SliderThumbColor}" />
+        <Setter Property="ThumbBorderColor"
+                Value="{StaticResource SliderThumbBorderColor}" />
     </Style>
     
     <!-- Buttons -->
@@ -259,6 +270,13 @@
     </Style>
     <Style TargetType="StackLayout"
            Class="box-row-stepper">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="Spacing"
+                Value="10" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-slider">
         <Setter Property="Orientation"
                 Value="Horizontal" />
         <Setter Property="Spacing"

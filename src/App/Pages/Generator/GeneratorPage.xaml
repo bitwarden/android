@@ -35,7 +35,8 @@
                     Text="{Binding Password}"
                     Margin="0, 20"
                     StyleClass="text-lg"
-                    HorizontalOptions="Center" />
+                    HorizontalOptions="Center"
+                    LineBreakMode="CharacterWrap" />
                 <StackLayout Orientation="Horizontal">
                     <Button Text="{u:I18n RegeneratePassword}"
                         HorizontalOptions="FillAndExpand"
@@ -92,6 +93,25 @@
                     </StackLayout>
                 </StackLayout>
                 <StackLayout Spacing="0" Padding="0" IsVisible="{Binding IsPassword}">
+                    <StackLayout StyleClass="box-row, box-row-slider">
+                        <Label
+                            Text="{u:I18n Length}"
+                            StyleClass="box-label, box-label-regular"
+                            VerticalOptions="CenterAndExpand" />
+                        <Label
+                            Text="{Binding Length}"
+                            StyleClass="box-label, box-sub-label"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalTextAlignment="End" />
+                        <controls:ExtendedSlider
+                            Value="{Binding Length}"
+                            StyleClass="box-value"
+                            VerticalOptions="CenterAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            Minimum="0"
+                            Maximum="128" />
+                    </StackLayout>
+                    <BoxView StyleClass="box-row-separator" />
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
                             Text="A-Z"
