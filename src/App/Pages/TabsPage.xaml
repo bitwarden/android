@@ -5,7 +5,8 @@
     x:Class="Bit.App.Pages.TabsPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
-    android:TabbedPage.ToolbarPlacement="Bottom">
+    android:TabbedPage.ToolbarPlacement="Bottom"
+    android:TabbedPage.IsSwipePagingEnabled="False">
 
     <TabbedPage.Children>
         <NavigationPage Title="My Vault">
