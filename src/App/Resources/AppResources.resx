@@ -1464,4 +1464,7 @@
     <value>Generator</value>
     <comment>Short for "Password Generator"</comment>
   </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>There are no folders to list.</value>
+  </data>
 </root>

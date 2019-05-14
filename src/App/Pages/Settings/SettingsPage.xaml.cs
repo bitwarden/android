@@ -36,6 +36,10 @@ namespace Bit.App.Pages
             {
                 await Navigation.PushModalAsync(new NavigationPage(new SyncPage()));
             }
+            else if(item.Name == AppResources.Folders)
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new FoldersPage()));
+            }
         }
     }
 }

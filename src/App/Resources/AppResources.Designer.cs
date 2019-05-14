@@ -2491,6 +2491,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no folders to list..
+        /// </summary>
+        public static string NoFoldersToList {
+            get {
+                return ResourceManager.GetString("NoFoldersToList", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are no items in your vault..
         /// </summary>
         public static string NoItems {
