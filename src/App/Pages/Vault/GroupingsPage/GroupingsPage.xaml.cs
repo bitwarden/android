@@ -87,7 +87,6 @@ namespace Bit.App.Pages
             {
                 return;
             }
-
             if(!(e.SelectedItem is GroupingsPageListItem item))
             {
                 return;

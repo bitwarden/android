@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Bit.App.Pages.SettingsPage"
              xmlns:pages="clr-namespace:Bit.App.Pages"
@@ -11,39 +11,49 @@
         <pages:SettingsPageViewModel />
     </ContentPage.BindingContext>
 
-    <ScrollView x:Name="_scrollView">
-        <StackLayout Spacing="20">
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Manage}"
-                           StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-            </StackLayout>
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Security}"
-                           StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-            </StackLayout>
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Account}"
-                           StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-            </StackLayout>
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Tools}"
-                           StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-            </StackLayout>
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Other}"
-                           StyleClass="box-header, box-header-platform" />
-                </StackLayout>
-            </StackLayout>
-        </StackLayout>
-    </ScrollView>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <DataTemplate
+                x:Key="regularTemplate"
+                x:DataType="pages:SettingsPageListItem">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal"
+                                 StyleClass="list-row, list-row-platform">
+                        <Label Text="{Binding Name, Mode=OneWay}"
+                               LineBreakMode="TailTruncation"
+                               HorizontalOptions="StartAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               StyleClass="list-title"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
 
-</ContentPage>
+            <pages:SettingsPageListItemSelector
+                x:Key="listItemDataTemplateSelector"
+                RegularTemplate="{StaticResource regularTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ListView
+        ItemsSource="{Binding GroupedItems}"
+        VerticalOptions="FillAndExpand"
+        HasUnevenRows="true"
+        ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+        IsGroupingEnabled="True"
+        ItemSelected="RowSelected"
+        StyleClass="list, list-platform">
+
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate x:DataType="pages:SettingsPageListGroup">
+                <ViewCell>
+                    <StackLayout StyleClass="list-row-header">
+                        <Label
+                            Text="{Binding Name}"
+                            StyleClass="list-header, list-header-platform" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+    </ListView>
+
+</pages:BaseContentPage>
