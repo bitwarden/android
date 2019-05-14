@@ -4,39 +4,46 @@
              x:Class="Bit.App.Pages.SettingsPage"
              xmlns:pages="clr-namespace:Bit.App.Pages"
              xmlns:controls="clr-namespace:Bit.App.Controls"
-             xmlns:bv="clr-namespace:Bit.App.Controls.BoxedView"
+             xmlns:u="clr-namespace:Bit.App.Utilities"
              x:DataType="pages:SettingsPageViewModel"
              Title="{Binding PageTitle}">
     <ContentPage.BindingContext>
         <pages:SettingsPageViewModel />
     </ContentPage.BindingContext>
 
-    <bv:BoxedView HasUnevenRows="True">
-        <bv:BoxedSection Title="The Title"
-                         FooterText="The Footer"
-                         UseDragSort="True">
-            <bv:EntryCell Title="The title"
-                          ValueText="The value for entry"
-                          Button1Icon="cogs"
-                          Button1Command="{Binding ButtonCommand}"
-                          Button2Icon="cogs"
-                          Button2Command="{Binding Button2Command}"
-                          Button3Icon="cogs" />
-            <bv:LabelCell Title="The title"
-                          ValueText="The value" />
-            <bv:LabelCell Title="The title 2"
-                          Button1Icon="cogs"
-                          Button1Command="{Binding ButtonCommand}"
-                          Button3Icon="cogs"
-                          ValueText="The value" />
-            <bv:LabelCell Title="The title 3"
-                          ValueText="The value"
-                          Button3Icon="cogs" />
-            <bv:LabelCell Title="The title 4"
-                          ValueText="The value" />
-            <bv:LabelCell Title="The title 5"
-                          ValueText="The value" />
-        </bv:BoxedSection>
-    </bv:BoxedView>
+    <ScrollView x:Name="_scrollView">
+        <StackLayout Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Manage}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Security}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Account}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Tools}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Other}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 
 </ContentPage>

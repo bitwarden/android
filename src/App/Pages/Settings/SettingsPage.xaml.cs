@@ -10,11 +10,13 @@ namespace Bit.App.Pages
 {
     public partial class SettingsPage : ContentPage
     {
+        private SettingsPageViewModel _vm;
+
         public SettingsPage()
         {
             InitializeComponent();
-            var viewModel = BindingContext as SettingsPageViewModel;
-            viewModel.Page = this;
+            _vm = BindingContext as SettingsPageViewModel;
+            _vm.Page = this;
         }
     }
 }
