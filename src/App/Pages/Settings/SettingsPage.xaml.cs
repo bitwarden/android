@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ namespace Bit.App.Pages
             _vm.Page = this;
         }
 
-        private void RowSelected(object sender, SelectedItemChangedEventArgs e)
+        private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
             if(!DoOnce())
@@ -31,7 +32,10 @@ namespace Bit.App.Pages
                 return;
             }
 
-            // TODO
+            if(item.Name == AppResources.Sync)
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new SyncPage()));
+            }
         }
     }
 }
