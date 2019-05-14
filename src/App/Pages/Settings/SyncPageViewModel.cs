@@ -13,6 +13,8 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ISyncService _syncService;
 
+        private string _lastSync = "--";
+
         public SyncPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
@@ -22,14 +24,42 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Sync;
         }
 
+        public string LastSync
+        {
+            get => _lastSync;
+            set => SetProperty(ref _lastSync, value);
+        }
+
+        public async Task SetLastSyncAsync()
+        {
+            var last = await _syncService.GetLastSyncAsync();
+            if(last != null)
+            {
+                var localDate = last.Value.ToLocalTime();
+                LastSync = string.Format("{0} {1}", localDate.ToShortDateString(), localDate.ToShortTimeString());
+            }
+            else
+            {
+                LastSync = AppResources.Never;
+            }
+        }
+
         public async Task SyncAsync()
         {
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
-                await _syncService.FullSyncAsync(true);
+                var success = await _syncService.FullSyncAsync(true);
                 await _deviceActionService.HideLoadingAsync();
-                _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
+                if(success)
+                {
+                    await SetLastSyncAsync();
+                    _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
+                }
+                else
+                {
+                    await Page.DisplayAlert(null, AppResources.SyncingFailed, AppResources.Ok);
+                }
             }
             catch(ApiException e)
             {

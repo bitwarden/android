@@ -13,6 +13,12 @@ namespace Bit.App.Pages
             _vm.Page = this;
         }
 
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            await _vm.SetLastSyncAsync();
+        }
+
         private async void Sync_Clicked(object sender, EventArgs e)
         {
             if(DoOnce())

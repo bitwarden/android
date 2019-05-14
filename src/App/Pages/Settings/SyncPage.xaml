@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Bit.App.Pages.SyncPage"
     xmlns:pages="clr-namespace:Bit.App.Pages"
-    xmlns:controls="clr-namespace:Bit.App.Controls"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:SyncPageViewModel"
     Title="{Binding PageTitle}">
@@ -12,9 +11,21 @@
         <pages:SyncPageViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout Spacing="0" Padding="10, 5">
+    <StackLayout Spacing="10"
+                 Padding="10, 5"
+                 VerticalOptions="Center"
+                 HorizontalOptions="FillAndExpand">
         <Button Text="{u:I18n SyncVaultNow}"
                 Clicked="Sync_Clicked"></Button>
+        <Label StyleClass="text-muted, text-sm" HorizontalTextAlignment="Center">
+            <Label.FormattedText>
+                <FormattedString>
+                    <Span Text="{u:I18n LastSync}" />
+                    <Span Text=" " />
+                    <Span Text="{Binding LastSync}" />
+                </FormattedString>
+            </Label.FormattedText>
+        </Label>
     </StackLayout>
 
 </pages:BaseContentPage>
