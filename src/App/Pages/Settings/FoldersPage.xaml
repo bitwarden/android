@@ -31,7 +31,7 @@
                           ItemsSource="{Binding Folders}"
                           VerticalOptions="FillAndExpand"
                           CachingStrategy="RecycleElement"
-                          SelectedItem="Row_Selected"
+                          ItemSelected="RowSelected"
                           StyleClass="list, list-platform">
                     <ListView.ItemTemplate>
                         <DataTemplate x:DataType="views:FolderView">

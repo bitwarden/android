@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.Core.Models.View;
+using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -35,12 +36,23 @@ namespace Bit.App.Pages
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
-
+            ((ListView)sender).SelectedItem = null;
+            if(!DoOnce())
+            {
+                return;
+            }
+            if(!(e.SelectedItem is FolderView folder))
+            {
+                return;
+            }
+            var page = new FolderAddEditPage(folder.Id);
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
-
+            var page = new FolderAddEditPage();
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
     }
 }

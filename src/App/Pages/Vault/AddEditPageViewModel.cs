@@ -408,6 +408,7 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.ItemDeleted);
                 _messagingService.Send("deletedCipher");
+                await Page.Navigation.PopModalAsync();
                 return true;
             }
             catch(ApiException e)
