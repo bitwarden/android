@@ -1,9 +1,11 @@
 ﻿using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -42,8 +44,14 @@ namespace Bit.App.Pages
         public string Password
         {
             get => _password;
-            set => SetProperty(ref _password, value);
+            set => SetProperty(ref _password, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ColoredPassword)
+                });
         }
+
+        public FormattedString ColoredPassword => PasswordFormatter.FormatPassword(Password);
 
         public bool IsPassword
         {
