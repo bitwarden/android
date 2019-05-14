@@ -1699,6 +1699,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generator.
+        /// </summary>
+        public static string Generator {
+            get {
+                return ResourceManager.GetString("Generator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Get your master password hint.
         /// </summary>
         public static string GetPasswordHint {

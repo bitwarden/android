@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -6,17 +7,15 @@ namespace Bit.App.Pages
     public partial class GeneratorPage : BaseContentPage
     {
         private GeneratorPageViewModel _vm;
+        private readonly bool _fromTabPage;
         private readonly Action<string> _selectAction;
 
-        public GeneratorPage()
-            : this(null)
-        { }
-
-        public GeneratorPage(Action<string> selectAction)
+        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null)
         {
             InitializeComponent();
             _vm = BindingContext as GeneratorPageViewModel;
             _vm.Page = this;
+            _fromTabPage = fromTabPage;
             _selectAction = selectAction;
             if(selectAction == null)
             {
@@ -24,10 +23,18 @@ namespace Bit.App.Pages
             }
         }
 
+        public async Task InitAsync()
+        {
+            await _vm.InitAsync();
+        }
+
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            await _vm.InitAsync();
+            if(!_fromTabPage)
+            {
+                await InitAsync();
+            }
         }
 
         private async void Regenerate_Clicked(object sender, EventArgs e)

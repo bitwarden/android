@@ -429,7 +429,7 @@ namespace Bit.App.Pages
                     return;
                 }
             }
-            var page = new GeneratorPage(async (password) =>
+            var page = new GeneratorPage(false, async (password) =>
             {
                 Cipher.Login.Password = password;
                 TriggerCipherChanged();

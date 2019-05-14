@@ -68,9 +68,6 @@
     <Compile Update="Pages\Vault\GroupingsPage\GroupingsPage.xaml.cs">
       <DependentUpon>GroupingsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Pages\TabsPage.xaml.cs">
-      <DependentUpon>TabsPage.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>

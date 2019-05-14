@@ -1460,4 +1460,8 @@
     <value>Clear</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Generator</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
 </root>
