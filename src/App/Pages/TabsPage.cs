@@ -38,9 +38,17 @@ namespace Bit.App.Pages
         {
             if(CurrentPage is NavigationPage navPage)
             {
-                if(navPage.RootPage is GeneratorPage genPage)
+                if(navPage.RootPage is GroupingsPage groupingsPage)
+                {
+                    // Load something?
+                }
+                else if(navPage.RootPage is GeneratorPage genPage)
                 {
                     await genPage.InitAsync();
+                }
+                else if(navPage.RootPage is SettingsPage settingsPage)
+                {
+                    // Load something?
                 }
             }
         }
