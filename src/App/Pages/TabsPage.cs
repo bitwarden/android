@@ -7,7 +7,7 @@ namespace Bit.App.Pages
     {
         public TabsPage()
         {
-            var groupingsPage = new NavigationPage(new GroupingsPage())
+            var groupingsPage = new NavigationPage(new GroupingsPage(true))
             {
                 Title = AppResources.MyVault,
                 Icon = "lock.png"

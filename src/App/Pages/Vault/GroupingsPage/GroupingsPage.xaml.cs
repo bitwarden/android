@@ -2,6 +2,7 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -12,14 +13,12 @@ namespace Bit.App.Pages
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
         private readonly GroupingsPageViewModel _vm;
-
-        public GroupingsPage()
-            : this(true)
-        { }
+        private readonly string _pageName;
 
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
             string collectionId = null, string pageTitle = null)
         {
+            _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
             SetActivityIndicator(_mainContent);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -49,7 +48,7 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             // await _syncService.FullSyncAsync(true);
-            _broadcasterService.Subscribe(nameof(GroupingsPage), async (message) =>
+            _broadcasterService.Subscribe(_pageName, async (message) =>
             {
                 if(message.Command == "syncCompleted")
                 {
@@ -78,7 +77,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            _broadcasterService.Unsubscribe(nameof(GroupingsPage));
+            _broadcasterService.Unsubscribe(_pageName);
         }
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
