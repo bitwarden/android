@@ -101,6 +101,7 @@
                         <Label
                             Text="{Binding Length}"
                             StyleClass="box-label, box-sub-label"
+                            WidthRequest="30"
                             VerticalOptions="CenterAndExpand"
                             HorizontalTextAlignment="End" />
                         <controls:ExtendedSlider
