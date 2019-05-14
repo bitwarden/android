@@ -248,12 +248,12 @@ namespace Bit.Core.Services
                 return;
             }
             var currentHistory = await GetHistoryAsync();
-
             // Prevent duplicates
             if(MatchesPrevious(password, currentHistory))
             {
                 return;
             }
+            currentHistory.Insert(0, new GeneratedPasswordHistory { Password = password, Date = DateTime.UtcNow });
             // Remove old items.
             if(currentHistory.Count > MaxPasswordsInHistory)
             {

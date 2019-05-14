@@ -16,7 +16,7 @@ namespace Bit.App.Utilities
             {
                 return string.Empty;
             }
-            var d = (DateTime)value;
+            var d = ((DateTime)value).ToLocalTime();
             return string.Format("{0} {1}", d.ToShortDateString(), d.ToShortTimeString());
         }
 

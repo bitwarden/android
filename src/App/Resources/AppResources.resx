@@ -1456,4 +1456,8 @@
   <data name="WordSeparator" xml:space="preserve">
     <value>Word Separator</value>
   </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
 </root>

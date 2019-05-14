@@ -1,4 +1,5 @@
 ﻿using System;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -44,9 +45,10 @@ namespace Bit.App.Pages
             _selectAction?.Invoke(_vm.Password);
         }
 
-        private void History_Clicked(object sender, EventArgs e)
+        private async void History_Clicked(object sender, EventArgs e)
         {
-
+            var page = new GeneratorHistoryPage();
+            await Navigation.PushModalAsync(new NavigationPage(page));
         }
     }
 }
