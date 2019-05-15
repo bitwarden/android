@@ -34,5 +34,11 @@ namespace Bit.Core.Services
             }
             return Task.FromResult(0);
         }
+
+        public Task PurgeAsync()
+        {
+            _state.Clear();
+            return Task.FromResult(0);
+        }
     }
 }

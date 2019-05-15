@@ -84,6 +84,10 @@ namespace Bit.App.Pages
             {
                 await _vm.LogOutAsync();
             }
+            else if(item.Name == AppResources.LockNow)
+            {
+                await _vm.LockAsync();
+            }
         }
     }
 }

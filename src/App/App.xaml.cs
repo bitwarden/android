@@ -19,12 +19,14 @@ namespace Bit.App
         private readonly IUserService _userService;
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
+        private readonly IStateService _stateService;
 
         public App()
         {
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
 
             InitializeComponent();
@@ -52,6 +54,12 @@ namespace Bit.App
                         await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
                     }
                     _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                }
+                else if(message.Command == "locked")
+                {
+                    await _stateService.PurgeAsync();
+                    // TODO
+                    // MainPage = new LockPage();
                 }
             });
         }

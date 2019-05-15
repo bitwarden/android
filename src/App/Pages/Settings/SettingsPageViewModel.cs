@@ -17,6 +17,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
+        private readonly ILockService _lockService;
 
         public SettingsPageViewModel()
         {
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
 
             PageTitle = AppResources.Settings;
             BuildList();
@@ -127,6 +129,11 @@ namespace Bit.App.Pages
             {
                 _messagingService.Send("logout");
             }
+        }
+
+        public async Task LockAsync()
+        {
+            await _lockService.LockAsync(true);
         }
 
         private void BuildList()
