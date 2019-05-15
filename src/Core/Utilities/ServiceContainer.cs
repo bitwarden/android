@@ -41,7 +41,8 @@ namespace Bit.Core.Utilities
                 i18nService, cipherService);
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
             searchService = new SearchService(cipherService);
-            // TODO: lock service
+            var lockService = new LockService(cryptoService, userService, platformUtilsService, storageService,
+                folderService, cipherService, collectionService, searchService, messagingService);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
                 cipherService, cryptoService, collectionService, storageService, messagingService);
             var passwordGenerationService = new PasswordGenerationService(cryptoService, storageService,
@@ -67,6 +68,7 @@ namespace Bit.Core.Utilities
             Register<ICollectionService>("collectionService", collectionService);
             Register<ISearchService>("searchService", searchService);
             Register<ISyncService>("syncService", syncService);
+            Register<ILockService>("lockService", lockService);
             Register<IPasswordGenerationService>("passwordGenerationService", passwordGenerationService);
             Register<ITotpService>("totpService", totpService);
             Register<IAuthService>("authService", authService);
