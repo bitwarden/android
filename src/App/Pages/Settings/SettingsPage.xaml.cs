@@ -56,6 +56,34 @@ namespace Bit.App.Pages
             {
                 _vm.Rate();
             }
+            else if(item.Name == AppResources.ImportItems)
+            {
+                _vm.Import();
+            }
+            else if(item.Name == AppResources.ExportVault)
+            {
+                _vm.Export();
+            }
+            else if(item.Name == AppResources.ShareVault)
+            {
+                await _vm.ShareAsync();
+            }
+            else if(item.Name == AppResources.WebVault)
+            {
+                _vm.WebVault();
+            }
+            else if(item.Name == AppResources.ChangeMasterPassword)
+            {
+                await _vm.ChangePasswordAsync();
+            }
+            else if(item.Name == AppResources.TwoStepLogin)
+            {
+                await _vm.TwoStepAsync();
+            }
+            else if(item.Name == AppResources.LogOut)
+            {
+                await _vm.LogOutAsync();
+            }
         }
     }
 }

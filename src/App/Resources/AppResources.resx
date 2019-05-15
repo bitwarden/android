@@ -1475,4 +1475,10 @@
     <value>Your account's fingerprint phrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
+  <data name="ShareVaultConfirmation" xml:space="preserve">
+    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Export Vault</value>
+  </data>
 </root>

@@ -1384,6 +1384,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export Vault.
+        /// </summary>
+        public static string ExportVault {
+            get {
+                return ResourceManager.GetString("ExportVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extension Activated!.
         /// </summary>
         public static string ExtensionActivated {
@@ -3189,6 +3198,15 @@ namespace Bit.App.Resources {
         public static string ShareVault {
             get {
                 return ResourceManager.GetString("ShareVault", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?.
+        /// </summary>
+        public static string ShareVaultConfirmation {
+            get {
+                return ResourceManager.GetString("ShareVaultConfirmation", resourceCulture);
             }
         }
         

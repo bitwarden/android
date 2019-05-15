@@ -15,6 +15,8 @@ namespace Bit.App.Pages
         private readonly ICryptoService _cryptoService;
         private readonly IUserService _userService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IEnvironmentService _environmentService;
+        private readonly IMessagingService _messagingService;
 
         public SettingsPageViewModel()
         {
@@ -22,6 +24,8 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
 
             PageTitle = AppResources.Settings;
             BuildList();
@@ -65,6 +69,66 @@ namespace Bit.App.Pages
             _deviceActionService.RateApp();
         }
 
+        public void Import()
+        {
+            _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/import-data/");
+        }
+
+        public void Export()
+        {
+            _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/export-your-data/");
+        }
+
+        public void WebVault()
+        {
+            var url = _environmentService.GetWebVaultUrl();
+            if(url == null)
+            {
+                url = "https://vault.bitwarden.com";
+            }
+            _platformUtilsService.LaunchUri(url);
+        }
+
+        public async Task ShareAsync()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ShareVaultConfirmation,
+                AppResources.ShareVault, AppResources.Yes, AppResources.Cancel);
+            if(confirmed)
+            {
+                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/what-is-an-organization/");
+            }
+        }
+
+        public async Task TwoStepAsync()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.TwoStepLoginConfirmation,
+                AppResources.TwoStepLogin, AppResources.Yes, AppResources.Cancel);
+            if(confirmed)
+            {
+                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/setup-two-step-login/");
+            }
+        }
+
+        public async Task ChangePasswordAsync()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ChangePasswordConfirmation,
+                AppResources.ChangeMasterPassword, AppResources.Yes, AppResources.Cancel);
+            if(confirmed)
+            {
+                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/change-your-master-password/");
+            }
+        }
+
+        public async Task LogOutAsync()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.LogoutConfirmation,
+                AppResources.LogOut, AppResources.Yes, AppResources.Cancel);
+            if(confirmed)
+            {
+                _messagingService.Send("logout");
+            }
+        }
+
         private void BuildList()
         {
             var doUpper = Device.RuntimePlatform != Device.Android;
@@ -87,6 +151,13 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
                 new SettingsPageListItem { Name = AppResources.LogOut }
             };
+            var toolsItems = new List<SettingsPageListItem>
+            {
+                new SettingsPageListItem { Name = AppResources.ImportItems },
+                new SettingsPageListItem { Name = AppResources.ExportVault },
+                new SettingsPageListItem { Name = AppResources.ShareVault },
+                new SettingsPageListItem { Name = AppResources.WebVault }
+            };
             var otherItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.Options },
@@ -99,6 +170,7 @@ namespace Bit.App.Pages
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
                 new SettingsPageListGroup(securityItems, AppResources.Security, doUpper),
                 new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),
+                new SettingsPageListGroup(toolsItems, AppResources.Tools, doUpper),
                 new SettingsPageListGroup(otherItems, AppResources.Other, doUpper)
             };
         }
