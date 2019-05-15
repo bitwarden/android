@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Bit.Core.Services
 {
@@ -790,10 +791,8 @@ namespace Bit.Core.Services
 
         private List<string> HashPhrase(byte[] hash, int minimumEntropy = 64)
         {
-            // TODO: word list
-            var EEFLongWordList = new string[] { };
-
-            var entropyPerWord = Math.Log(EEFLongWordList.Length) / Math.Log(2);
+            var wordLength = Utilities.WordList.EEFLongWordList.Count;
+            var entropyPerWord = Math.Log(wordLength) / Math.Log(2);
             var numWords = (int)Math.Ceiling(minimumEntropy / entropyPerWord);
 
             var entropyAvailable = hash.Length * 4;
@@ -803,13 +802,13 @@ namespace Bit.Core.Services
             }
 
             var phrase = new List<string>();
-            // TODO: big int from array
-            var hashNumber = 123; // bigInt.fromArray(hash, 256);
+            var hashHex = string.Concat("0", BitConverter.ToString(hash).Replace("-", ""));
+            var hashNumber = BigInteger.Parse(hashHex, System.Globalization.NumberStyles.HexNumber);
             while(numWords-- > 0)
             {
-                // var remainder = hashNumber.mod(EEFLongWordList.Length);
-                // hashNumber = hashNumber.divide(EEFLongWordList.Length);
-                // phrase.Add(EEFLongWordList[remainder]);
+                var remainder = (int)(hashNumber % wordLength);
+                hashNumber = hashNumber / wordLength;
+                phrase.Add(Utilities.WordList.EEFLongWordList[remainder]);
             }
             return phrase;
         }
