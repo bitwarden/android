@@ -20,6 +20,18 @@ namespace Bit.App
         private readonly IBroadcasterService _broadcasterService;
         private readonly IMessagingService _messagingService;
         private readonly IStateService _stateService;
+        private readonly ILockService _lockService;
+        private readonly ISyncService _syncService;
+        private readonly ITokenService _tokenService;
+        private readonly ICryptoService _cryptoService;
+        private readonly ICipherService _cipherService;
+        private readonly IFolderService _folderService;
+        private readonly ICollectionService _collectionService;
+        private readonly ISettingsService _settingsService;
+        private readonly IPasswordGenerationService _passwordGenerationService;
+        private readonly ISearchService _searchService;
+        private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IAuthService _authService;
 
         public App()
         {
@@ -27,6 +39,19 @@ namespace Bit.App
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            _tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
+            _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
+            _settingsService = ServiceContainer.Resolve<ISettingsService>("settingsService");
+            _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            _authService = ServiceContainer.Resolve<IAuthService>("authService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
+                "passwordGenerationService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
 
             InitializeComponent();
@@ -58,8 +83,23 @@ namespace Bit.App
                 else if(message.Command == "locked")
                 {
                     await _stateService.PurgeAsync();
+                    MainPage = new NavigationPage(new LockPage());
+                }
+                else if(message.Command == "lockVault")
+                {
+                    await _lockService.LockAsync(true);
+                }
+                else if(message.Command == "logout")
+                {
+                    await LogOutAsync(false);
+                }
+                else if(message.Command == "loggedOut")
+                {
                     // TODO
-                    // MainPage = new LockPage();
+                }
+                else if(message.Command == "unlocked" || message.Command == "loggedIn")
+                {
+                    // TODO
                 }
             });
         }
@@ -87,12 +127,46 @@ namespace Bit.App
             new System.Globalization.UmAlQuraCalendar();
         }
 
+        private async Task LogOutAsync(bool expired)
+        {
+            var userId = await _userService.GetUserIdAsync();
+            await Task.WhenAll(
+                _syncService.SetLastSyncAsync(DateTime.MinValue),
+                _tokenService.ClearTokenAsync(),
+                _cryptoService.ClearKeysAsync(),
+                _userService.ClearAsync(),
+                _settingsService.ClearAsync(userId),
+                _cipherService.ClearAsync(userId),
+                _folderService.ClearAsync(userId),
+                _collectionService.ClearAsync(userId),
+                _passwordGenerationService.ClearAsync(),
+                _lockService.ClearAsync());
+            _lockService.PinLocked = false;
+            _searchService.ClearIndex();
+            _authService.LogOut(() =>
+            {
+                if(expired)
+                {
+                    // TODO: Toast?
+                }
+                MainPage = new HomePage();
+            });
+        }
+
         private async Task SetMainPageAsync()
         {
             var authed = await _userService.IsAuthenticatedAsync();
             if(authed)
             {
-                Current.MainPage = new TabsPage();
+                var locked = await _lockService.IsLockedAsync();
+                if(locked)
+                {
+                    Current.MainPage = new NavigationPage(new LockPage());
+                }
+                else
+                {
+                    Current.MainPage = new TabsPage();
+                }
             }
             else
             {

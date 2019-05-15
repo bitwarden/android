@@ -1484,4 +1484,7 @@
   <data name="LockNow" xml:space="preserve">
     <value>Lock Now</value>
   </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
 </root>

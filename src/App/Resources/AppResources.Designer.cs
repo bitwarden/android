@@ -2851,6 +2851,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PIN.
+        /// </summary>
+        public static string PIN {
+            get {
+                return ResourceManager.GetString("PIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Possible Matching Items.
         /// </summary>
         public static string PossibleMatchingItems {

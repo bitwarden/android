@@ -24,7 +24,7 @@ namespace Bit.Core.Services
 
         public void ClearCache()
         {
-            _settingsCache.Clear();
+            _settingsCache?.Clear();
             _settingsCache = null;
         }
 
