@@ -5,6 +5,8 @@
         public const string AndroidAppProtocol = "androidapp://";
         public const string iOSAppProtocol = "iosapp://";
         public static string LockOptionKey = "lockOption";
+        public static string LastActiveKey = "lastActive";
+        public static string ProtectedPin = "protectedPin";
         public static string PinProtectedKey = "pinProtectedKey";
         public static string DefaultUriMatch = "defaultUriMatch";
         public static string DisableAutoTotpCopyKey = "disableAutoTotpCopy";
