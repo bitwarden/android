@@ -40,6 +40,10 @@ namespace Bit.App.Pages
             {
                 await Navigation.PushModalAsync(new NavigationPage(new FoldersPage()));
             }
+            else if(item.Name == AppResources.About)
+            {
+                await _vm.AboutAsync();
+            }
         }
     }
 }

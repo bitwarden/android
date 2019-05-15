@@ -1,25 +1,39 @@
 ﻿using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Windows.Input;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public class SettingsPageViewModel : BaseViewModel
     {
+        private readonly IPlatformUtilsService _platformUtilsService;
+
         public SettingsPageViewModel()
         {
-            PageTitle = AppResources.Settings;
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
 
-            ButtonCommand = new Command(() => Page.DisplayAlert("Button 1 Command", "Button 1 message", "Cancel"));
-            Button2Command = new Command(() => Page.DisplayAlert("Button 2 Command", "Button 2 message", "Cancel"));
+            PageTitle = AppResources.Settings;
             BuildList();
         }
 
-        public ICommand ButtonCommand { get; }
-        public ICommand Button2Command { get; }
         public List<SettingsPageListGroup> GroupedItems { get; set; }
+
+        public async Task AboutAsync()
+        {
+            var debugText = string.Format("{0}: {1}", AppResources.Version,
+                _platformUtilsService.GetApplicationVersion());
+            var text = string.Format("© 8bit Solutions LLC 2015-{0}\n\n{1}", DateTime.Now.Year, debugText);
+            var copy = await _platformUtilsService.ShowDialogAsync(text, AppResources.Bitwarden, AppResources.Copy,
+                AppResources.Close);
+            if(copy)
+            {
+                await _platformUtilsService.CopyToClipboardAsync(debugText);
+            }
+        }
 
         private void BuildList()
         {
