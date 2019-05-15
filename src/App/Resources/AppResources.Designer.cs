@@ -2050,6 +2050,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Lock Now.
+        /// </summary>
+        public static string LockNow {
+            get {
+                return ResourceManager.GetString("LockNow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 15 minutes.
         /// </summary>
         public static string LockOption15Minutes {

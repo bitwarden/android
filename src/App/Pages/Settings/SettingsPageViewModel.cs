@@ -142,7 +142,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.LockOptions },
                 new SettingsPageListItem { Name = string.Format(AppResources.UnlockWith, AppResources.Fingerprint) },
                 new SettingsPageListItem { Name = AppResources.UnlockWithPIN },
-                new SettingsPageListItem { Name = AppResources.Lock },
+                new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
             var accountItems = new List<SettingsPageListItem>

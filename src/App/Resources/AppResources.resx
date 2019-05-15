@@ -1481,4 +1481,7 @@
   <data name="ExportVault" xml:space="preserve">
     <value>Export Vault</value>
   </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Lock Now</value>
+  </data>
 </root>
