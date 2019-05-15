@@ -48,7 +48,7 @@ namespace Bit.App.Pages
         {
             var fingerprint = await _cryptoService.GetFingerprintAsync(await _userService.GetUserIdAsync());
             var phrase = string.Join("-", fingerprint);
-            var text = string.Format("{0}\n\n{1}", AppResources.YourAccountsFingerprint, phrase);
+            var text = string.Format("{0}:\n\n{1}", AppResources.YourAccountsFingerprint, phrase);
             var learnMore = await _platformUtilsService.ShowDialogAsync(text, AppResources.FingerprintPhrase,
                 AppResources.LearnMore, AppResources.Close);
             if(learnMore)
