@@ -261,6 +261,21 @@ namespace Bit.Droid.Services
             return result.Task;
         }
 
+        public void RateApp()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            try
+            {
+                var rateIntent = RateIntentForUrl("market://details", activity);
+                activity.StartActivity(rateIntent);
+            }
+            catch(ActivityNotFoundException)
+            {
+                var rateIntent = RateIntentForUrl("https://play.google.com/store/apps/details", activity);
+                activity.StartActivity(rateIntent);
+            }
+        }
+
         private bool DeleteDir(Java.IO.File dir)
         {
             if(dir != null && dir.IsDirectory)
@@ -314,6 +329,23 @@ namespace Bit.Droid.Services
                 intents.Add(intent);
             }
             return intents;
+        }
+
+        private Intent RateIntentForUrl(string url, Activity activity)
+        {
+            var intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"{url}?id={activity.PackageName}"));
+            var flags = ActivityFlags.NoHistory | ActivityFlags.MultipleTask;
+            if((int)Build.VERSION.SdkInt >= 21)
+            {
+                flags |= ActivityFlags.NewDocument;
+            }
+            else
+            {
+                // noinspection deprecation
+                flags |= ActivityFlags.ClearWhenTaskReset;
+            }
+            intent.AddFlags(flags);
+            return intent;
         }
     }
 }

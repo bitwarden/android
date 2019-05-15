@@ -16,6 +16,7 @@ using Foundation;
 using MobileCoreServices;
 using Photos;
 using UIKit;
+using Xamarin.Forms;
 
 namespace Bit.iOS.Services
 {
@@ -197,6 +198,21 @@ namespace Bit.iOS.Services
             return result.Task;
         }
 
+        public void RateApp()
+        {
+            string uri = null;
+            if(SystemMajorVersion() < 11)
+            {
+                uri = "itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewContentsUserReviews" +
+                    "?id=1137397744&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software";
+            }
+            else
+            {
+                uri = "itms-apps://itunes.apple.com/us/app/id1137397744?action=write-review";
+            }
+            Device.OpenUri(new Uri(uri));
+        }
+
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if(sender is UIImagePickerController picker)
@@ -312,6 +328,17 @@ namespace Bit.iOS.Services
         {
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             return Path.Combine(documents, "..", "tmp");
+        }
+
+        private int SystemMajorVersion()
+        {
+            var versionParts = UIDevice.CurrentDevice.SystemVersion.Split('.');
+            if(versionParts.Length > 0 && int.TryParse(versionParts[0], out int version))
+            {
+                return version;
+            }
+            // unable to determine version
+            return -1;
         }
     }
 }

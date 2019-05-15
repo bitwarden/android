@@ -1,4 +1,5 @@
-﻿using Bit.App.Resources;
+﻿using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -13,12 +14,14 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly ICryptoService _cryptoService;
         private readonly IUserService _userService;
+        private readonly IDeviceActionService _deviceActionService;
 
         public SettingsPageViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
 
             PageTitle = AppResources.Settings;
             BuildList();
@@ -55,6 +58,11 @@ namespace Bit.App.Pages
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/fingerprint-phrase/");
             }
+        }
+
+        public void Rate()
+        {
+            _deviceActionService.RateApp();
         }
 
         private void BuildList()

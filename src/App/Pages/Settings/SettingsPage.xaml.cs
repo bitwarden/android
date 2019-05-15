@@ -52,6 +52,10 @@ namespace Bit.App.Pages
             {
                 await _vm.FingerprintAsync();
             }
+            else if(item.Name == AppResources.RateTheApp)
+            {
+                _vm.Rate();
+            }
         }
     }
 }

@@ -16,5 +16,6 @@ namespace Bit.App.Abstractions
         Task SelectFileAsync();
         Task<string> DisplayPromptAync(string title = null, string description = null, string text = null,
             string okButtonText = null, string cancelButtonText = null);
+        void RateApp();
     }
 }
