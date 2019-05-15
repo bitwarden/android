@@ -1618,6 +1618,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fingerprint Phrase.
+        /// </summary>
+        public static string FingerprintPhrase {
+            get {
+                return ResourceManager.GetString("FingerprintPhrase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to First Name.
         /// </summary>
         public static string FirstName {
@@ -3810,6 +3819,15 @@ namespace Bit.App.Resources {
         public static string YesAndSave {
             get {
                 return ResourceManager.GetString("YesAndSave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your account&apos;s fingerprint phrase.
+        /// </summary>
+        public static string YourAccountsFingerprint {
+            get {
+                return ResourceManager.GetString("YourAccountsFingerprint", resourceCulture);
             }
         }
         

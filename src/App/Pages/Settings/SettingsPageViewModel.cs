@@ -11,10 +11,14 @@ namespace Bit.App.Pages
     public class SettingsPageViewModel : BaseViewModel
     {
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly ICryptoService _cryptoService;
+        private readonly IUserService _userService;
 
         public SettingsPageViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
 
             PageTitle = AppResources.Settings;
             BuildList();
@@ -32,6 +36,24 @@ namespace Bit.App.Pages
             if(copy)
             {
                 await _platformUtilsService.CopyToClipboardAsync(debugText);
+            }
+        }
+
+        public void Help()
+        {
+            _platformUtilsService.LaunchUri("https://help.bitwarden.com/");
+        }
+
+        public async Task FingerprintAsync()
+        {
+            var fingerprint = await _cryptoService.GetFingerprintAsync(await _userService.GetUserIdAsync());
+            var phrase = string.Join("-", fingerprint);
+            var text = string.Format("{0}\n\n{1}", AppResources.YourAccountsFingerprint, phrase);
+            var learnMore = await _platformUtilsService.ShowDialogAsync(text, AppResources.FingerprintPhrase,
+                AppResources.LearnMore, AppResources.Close);
+            if(learnMore)
+            {
+                _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/fingerprint-phrase/");
             }
         }
 
@@ -54,6 +76,7 @@ namespace Bit.App.Pages
             var accountItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.ChangeMasterPassword },
+                new SettingsPageListItem { Name = AppResources.FingerprintPhrase },
                 new SettingsPageListItem { Name = AppResources.LogOut }
             };
             var otherItems = new List<SettingsPageListItem>

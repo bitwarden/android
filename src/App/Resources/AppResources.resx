@@ -1467,4 +1467,12 @@
   <data name="NoFoldersToList" xml:space="preserve">
     <value>There are no folders to list.</value>
   </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Fingerprint Phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Your account's fingerprint phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
 </root>

@@ -44,6 +44,14 @@ namespace Bit.App.Pages
             {
                 await _vm.AboutAsync();
             }
+            else if(item.Name == AppResources.HelpAndFeedback)
+            {
+                _vm.Help();
+            }
+            else if(item.Name == AppResources.FingerprintPhrase)
+            {
+                await _vm.FingerprintAsync();
+            }
         }
     }
 }
