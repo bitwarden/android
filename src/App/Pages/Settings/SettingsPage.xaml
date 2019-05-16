@@ -13,6 +13,8 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <u:StringHasValueConverter x:Key="stringHasValue" />
+            
             <DataTemplate
                 x:Key="regularTemplate"
                 x:DataType="pages:SettingsPageListItem">
@@ -24,6 +26,12 @@
                                HorizontalOptions="StartAndExpand"
                                VerticalOptions="CenterAndExpand"
                                StyleClass="list-title"/>
+                        <Label Text="{Binding SubLabel, Mode=OneWay}"
+                               IsVisible="{Binding SubLabel, Converter={StaticResource stringHasValue}}"
+                               HorizontalOptions="End"
+                               HorizontalTextAlignment="End"
+                               VerticalOptions="CenterAndExpand"
+                               StyleClass="list-sub"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>

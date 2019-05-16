@@ -20,6 +20,12 @@ namespace Bit.App.Pages
             _vm.Page = this;
         }
 
+        protected async override void OnAppearing()
+        {
+            base.OnAppearing();
+            await _vm.InitAsync();
+        }
+
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)
         {
             ((ListView)sender).SelectedItem = null;
@@ -87,6 +93,10 @@ namespace Bit.App.Pages
             else if(item.Name == AppResources.LockNow)
             {
                 await _vm.LockAsync();
+            }
+            else if(item.Name == AppResources.LockOptions)
+            {
+                await _vm.LockOptionsAsync();
             }
         }
     }

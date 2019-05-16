@@ -1,9 +1,11 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -18,6 +20,25 @@ namespace Bit.App.Pages
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
         private readonly ILockService _lockService;
+        private readonly IStorageService _storageService;
+        private readonly ISyncService _syncService;
+
+        private bool _pin;
+        private bool _fingerprint;
+        private string _lastSyncDate;
+        private string _lockOptionValue;
+        private List<KeyValuePair<string, int?>> _lockOptions =
+            new List<KeyValuePair<string, int?>>
+            {
+                new KeyValuePair<string, int?>(AppResources.LockOptionImmediately, 0),
+                new KeyValuePair<string, int?>(AppResources.LockOption1Minute, 1),
+                new KeyValuePair<string, int?>(AppResources.LockOption5Minutes, 5),
+                new KeyValuePair<string, int?>(AppResources.LockOption15Minutes, 15),
+                new KeyValuePair<string, int?>(AppResources.LockOption30Minutes, 30),
+                new KeyValuePair<string, int?>(AppResources.LockOption1Hour, 60),
+                new KeyValuePair<string, int?>(AppResources.LockOption4Hours, 240),
+                new KeyValuePair<string, int?>(AppResources.Never, null),
+            };
 
         public SettingsPageViewModel()
         {
@@ -28,12 +49,30 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
+            GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
-            BuildList();
         }
 
-        public List<SettingsPageListGroup> GroupedItems { get; set; }
+        public ExtendedObservableCollection<SettingsPageListGroup> GroupedItems { get; set; }
+
+        public async Task InitAsync()
+        {
+            var lastSync = await _syncService.GetLastSyncAsync();
+            if(lastSync != null)
+            {
+                _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
+                    lastSync.Value.ToShortTimeString());
+            }
+            var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+            _lockOptionValue = _lockOptions.FirstOrDefault(o => o.Value == option).Key;
+            var pinSet = await _lockService.IsPinLockSetAsync();
+            _pin = pinSet.Item1 || pinSet.Item2;
+            // TODO: Fingerprint
+            BuildList();
+        }
 
         public async Task AboutAsync()
         {
@@ -136,17 +175,32 @@ namespace Bit.App.Pages
             await _lockService.LockAsync(true);
         }
 
+        public async Task LockOptionsAsync()
+        {
+            var options = _lockOptions.Select(o => o.Key == _lockOptionValue ? $"✓ {o.Key}" : o.Key).ToArray();
+            var selection = await Page.DisplayActionSheet(AppResources.LockOptions, AppResources.Cancel, null, options);
+            if(selection == AppResources.Cancel)
+            {
+                return;
+            }
+            var cleanSelection = selection.Replace("✓ ", string.Empty);
+            var selectionOption = _lockOptions.FirstOrDefault(o => o.Key == cleanSelection);
+            _lockOptionValue = selectionOption.Key;
+            await _storageService.SaveAsync(Constants.LockOptionKey, selectionOption.Value);
+            BuildList();
+        }
+
         private void BuildList()
         {
             var doUpper = Device.RuntimePlatform != Device.Android;
             var manageItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.Folders },
-                new SettingsPageListItem { Name = AppResources.Sync }
+                new SettingsPageListItem { Name = AppResources.Sync, SubLabel = _lastSyncDate }
             };
             var securityItems = new List<SettingsPageListItem>
             {
-                new SettingsPageListItem { Name = AppResources.LockOptions },
+                new SettingsPageListItem { Name = AppResources.LockOptions, SubLabel = _lockOptionValue },
                 new SettingsPageListItem { Name = string.Format(AppResources.UnlockWith, AppResources.Fingerprint) },
                 new SettingsPageListItem { Name = AppResources.UnlockWithPIN },
                 new SettingsPageListItem { Name = AppResources.LockNow },
@@ -172,14 +226,14 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.HelpAndFeedback },
                 new SettingsPageListItem { Name = AppResources.RateTheApp }
             };
-            GroupedItems = new List<SettingsPageListGroup>
+            GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
             {
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
                 new SettingsPageListGroup(securityItems, AppResources.Security, doUpper),
                 new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),
                 new SettingsPageListGroup(toolsItems, AppResources.Tools, doUpper),
                 new SettingsPageListGroup(otherItems, AppResources.Other, doUpper)
-            };
+            });
         }
     }
 }

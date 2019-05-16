@@ -1490,4 +1490,10 @@
   <data name="Unlock" xml:space="preserve">
     <value>Unlock</value>
   </data>
+  <data name="LockOption30Minutes" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="LockOption5Minutes" xml:space="preserve">
+    <value>5 minutes</value>
+  </data>
 </root>

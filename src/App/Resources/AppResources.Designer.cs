@@ -2086,11 +2086,29 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 30 minutes.
+        /// </summary>
+        public static string LockOption30Minutes {
+            get {
+                return ResourceManager.GetString("LockOption30Minutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 4 hours.
         /// </summary>
         public static string LockOption4Hours {
             get {
                 return ResourceManager.GetString("LockOption4Hours", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 5 minutes.
+        /// </summary>
+        public static string LockOption5Minutes {
+            get {
+                return ResourceManager.GetString("LockOption5Minutes", resourceCulture);
             }
         }
         
