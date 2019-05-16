@@ -1,6 +1,9 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Models;
+using Bit.App.Resources;
 using Bit.Core.Abstractions;
+using Plugin.Fingerprint;
+using Plugin.Fingerprint.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -183,6 +186,46 @@ namespace Bit.App.Services
         public async Task<string> ReadFromClipboardAsync(Dictionary<string, object> options = null)
         {
             return await Clipboard.GetTextAsync();
+        }
+
+        public async Task<bool> SupportsFingerprintAsync()
+        {
+            try
+            {
+                return await CrossFingerprint.Current.IsAvailableAsync();
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        public async Task<bool> AuthenticateFingerprintAsync(string text = null, Action fallback = null)
+        {
+            try
+            {
+                if(text == null)
+                {
+                    text = AppResources.FingerprintDirection;
+                }
+                var fingerprintRequest = new AuthenticationRequestConfiguration(text)
+                {
+                    AllowAlternativeAuthentication = true,
+                    CancelTitle = AppResources.Cancel,
+                    FallbackTitle = AppResources.LogOut
+                };
+                var result = await CrossFingerprint.Current.AuthenticateAsync(fingerprintRequest);
+                if(result.Authenticated)
+                {
+                    return true;
+                }
+                else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
+                {
+                    fallback?.Invoke();
+                }
+            }
+            catch { }
+            return false;
         }
     }
 }

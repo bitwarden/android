@@ -9,6 +9,9 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Droid.Services;
+using Plugin.CurrentActivity;
+using Plugin.Fingerprint;
+using Plugin.Fingerprint.Abstractions;
 
 namespace Bit.Droid
 {
@@ -34,14 +37,16 @@ namespace Bit.Droid
         {
             base.OnCreate();
             Bootstrap();
-            Plugin.CurrentActivity.CrossCurrentActivity.Current.Init(this);
+            CrossCurrentActivity.Current.Init(this);
         }
 
         private void RegisterLocalServices()
         {
+            // CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
             Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             // Note: This might cause a race condition. Investigate more.
             Task.Run(() => FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true));
+            CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
 
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);

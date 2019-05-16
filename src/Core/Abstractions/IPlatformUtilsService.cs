@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Bit.Core.Enums;
 
@@ -25,5 +26,7 @@ namespace Bit.Core.Abstractions
         void ShowToast(string type, string title, string[] text, Dictionary<string, object> options = null);
         bool SupportsU2f();
         bool SupportsDuo();
+        Task<bool> SupportsFingerprintAsync();
+        Task<bool> AuthenticateFingerprintAsync(string text = null, Action fallback = null);
     }
 }

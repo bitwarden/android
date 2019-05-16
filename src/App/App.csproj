@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Plugin.Fingerprint" Version="1.4.9" />
     <PackageReference Include="Refractored.FloatingActionButtonForms" Version="2.1.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
     <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.9.961" />

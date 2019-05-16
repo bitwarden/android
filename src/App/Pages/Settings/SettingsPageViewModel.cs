@@ -23,6 +23,8 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
 
+        private string _fingerprintName;
+        private bool _supportsFingerprint;
         private bool _pin;
         private bool _fingerprint;
         private string _lastSyncDate;
@@ -54,12 +56,20 @@ namespace Bit.App.Pages
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
+
+            _fingerprintName = AppResources.Fingerprint;
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                _fingerprintName = AppResources.TouchID;
+                // TODO: face id
+            }
         }
 
         public ExtendedObservableCollection<SettingsPageListGroup> GroupedItems { get; set; }
 
         public async Task InitAsync()
         {
+            _supportsFingerprint = await _platformUtilsService.SupportsFingerprintAsync();
             var lastSync = await _syncService.GetLastSyncAsync();
             if(lastSync != null)
             {
@@ -228,7 +238,7 @@ namespace Bit.App.Pages
                 await _storageService.RemoveAsync(Constants.PinProtectedKey);
                 await _storageService.RemoveAsync(Constants.ProtectedPin);
             }
-            
+
             BuildList();
         }
 
@@ -243,11 +253,19 @@ namespace Bit.App.Pages
             var securityItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.LockOptions, SubLabel = _lockOptionValue },
-                new SettingsPageListItem { Name = string.Format(AppResources.UnlockWith, AppResources.Fingerprint) },
                 new SettingsPageListItem { Name = AppResources.UnlockWithPIN, SubLabel = _pin ? "✓" : null },
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
+            if(_supportsFingerprint)
+            {
+                var item = new SettingsPageListItem
+                {
+                    Name = string.Format(AppResources.UnlockWith, _fingerprintName),
+                    SubLabel = _fingerprint ? "✓" : null
+                };
+                securityItems.Insert(1, item);
+            }
             var accountItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.ChangeMasterPassword },

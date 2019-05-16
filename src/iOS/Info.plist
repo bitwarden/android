@@ -41,5 +41,7 @@
 		<string>FontAwesome.ttf</string>
 		<string>MaterialIcons_Regular.ttf</string>
 	</array>
+	<key>NSFaceIDUsageDescription</key>
+	<string>Use Face ID to unlock your vault.</string>
 </dict>
 </plist>
