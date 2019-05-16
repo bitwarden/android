@@ -193,7 +193,7 @@ namespace Bit.App
             }
             else if(lockOption == 0)
             {
-                // TODO: Lock now?
+                await _lockService.LockAsync(true);
             }
         }
     }
