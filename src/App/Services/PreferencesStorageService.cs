@@ -37,27 +37,27 @@ namespace Bit.App.Services
             else if(objType == typeof(bool) || objType == typeof(bool?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(bool), _sharedName);
-                return Task.FromResult((T)Convert.ChangeType(val, objType));
+                return Task.FromResult(ChangeType<T>(val));
             }
             else if(objType == typeof(int) || objType == typeof(int?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(int), _sharedName);
-                return Task.FromResult((T)Convert.ChangeType(val, objType));
+                return Task.FromResult(ChangeType<T>(val));
             }
             else if(objType == typeof(long) || objType == typeof(long?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(long), _sharedName);
-                return Task.FromResult((T)Convert.ChangeType(val, objType));
+                return Task.FromResult(ChangeType<T>(val));
             }
             else if(objType == typeof(double) || objType == typeof(double?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(double), _sharedName);
-                return Task.FromResult((T)Convert.ChangeType(val, objType));
+                return Task.FromResult(ChangeType<T>(val));
             }
             else if(objType == typeof(DateTime) || objType == typeof(DateTime?))
             {
                 var val = Xamarin.Essentials.Preferences.Get(formattedKey, default(DateTime), _sharedName);
-                return Task.FromResult((T)Convert.ChangeType(val, objType));
+                return Task.FromResult(ChangeType<T>(val));
             }
             else
             {
@@ -115,6 +115,20 @@ namespace Bit.App.Services
                 Xamarin.Essentials.Preferences.Remove(formattedKey, _sharedName);
             }
             return Task.FromResult(0);
+        }
+
+        private static T ChangeType<T>(object value)
+        {
+            var t = typeof(T);
+            if(t.IsGenericType && t.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))
+            {
+                if(value == null)
+                {
+                    return default(T);
+                }
+                t = Nullable.GetUnderlyingType(t);
+            }
+            return (T)Convert.ChangeType(value, t);
         }
     }
 }
