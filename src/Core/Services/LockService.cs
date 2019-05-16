@@ -63,6 +63,10 @@ namespace Bit.Core.Services
             {
                 return;
             }
+            if(await IsLockedAsync())
+            {
+                return;
+            }
             var lockOption = _platformUtilsService.LockTimeout();
             if(lockOption == null)
             {
@@ -77,9 +81,8 @@ namespace Bit.Core.Services
             {
                 return;
             }
-            var lockOptionsSeconds = lockOption.Value * 60;
             var diff = DateTime.UtcNow - lastActive.Value;
-            if(diff.TotalSeconds >= lockOptionsSeconds)
+            if(diff.TotalSeconds >= lockOption.Value)
             {
                 // need to lock now
                 await LockAsync(true);
