@@ -186,7 +186,7 @@ namespace Bit.App.Pages
             var cleanSelection = selection.Replace("✓ ", string.Empty);
             var selectionOption = _lockOptions.FirstOrDefault(o => o.Key == cleanSelection);
             _lockOptionValue = selectionOption.Key;
-            await _storageService.SaveAsync(Constants.LockOptionKey, selectionOption.Value);
+            await _lockService.SetLockOptionAsync(selectionOption.Value);
             BuildList();
         }
 

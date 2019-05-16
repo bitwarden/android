@@ -121,7 +121,7 @@ namespace Bit.Core.Services
             // TODO: locked callback?
         }
 
-        public async Task SetLockOptionAsync(int lockOption)
+        public async Task SetLockOptionAsync(int? lockOption)
         {
             await _storageService.SaveAsync(Constants.LockOptionKey, lockOption);
             await _cryptoService.ToggleKeyAsync();

@@ -12,6 +12,6 @@ namespace Bit.Core.Abstractions
         Task<bool> IsLockedAsync();
         Task<Tuple<bool, bool>> IsPinLockSetAsync();
         Task LockAsync(bool allowSoftLock = false);
-        Task SetLockOptionAsync(int lockOption);
+        Task SetLockOptionAsync(int? lockOption);
     }
 }
