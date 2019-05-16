@@ -27,6 +27,6 @@ namespace Bit.Core.Abstractions
         bool SupportsU2f();
         bool SupportsDuo();
         Task<bool> SupportsFingerprintAsync();
-        Task<bool> AuthenticateFingerprintAsync(string text = null, Action fallback = null);
+        Task<bool> AuthenticateFingerprintAsync(string text = null);
     }
 }

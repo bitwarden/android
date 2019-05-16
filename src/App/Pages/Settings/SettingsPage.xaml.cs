@@ -102,6 +102,11 @@ namespace Bit.App.Pages
             {
                 await _vm.UpdatePinAsync();
             }
+            else if(item.Name.Contains(AppResources.Fingerprint) || item.Name.Contains(AppResources.TouchID) ||
+                item.Name.Contains(AppResources.FaceID))
+            {
+                await _vm.UpdateFingerprintAsync();
+            }
         }
     }
 }

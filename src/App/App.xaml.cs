@@ -147,6 +147,7 @@ namespace Bit.App
                 _passwordGenerationService.ClearAsync(),
                 _lockService.ClearAsync());
             _lockService.PinLocked = false;
+            _lockService.FingerprintLocked = true;
             _searchService.ClearIndex();
             _authService.LogOut(() =>
             {

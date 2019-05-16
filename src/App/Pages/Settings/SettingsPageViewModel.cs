@@ -80,7 +80,7 @@ namespace Bit.App.Pages
             _lockOptionValue = _lockOptions.FirstOrDefault(o => o.Value == option).Key;
             var pinSet = await _lockService.IsPinLockSetAsync();
             _pin = pinSet.Item1 || pinSet.Item2;
-            // TODO: Fingerprint
+            _fingerprint = await _lockService.IsFingerprintLockSetAsync();
             BuildList();
         }
 
@@ -238,7 +238,21 @@ namespace Bit.App.Pages
                 await _storageService.RemoveAsync(Constants.PinProtectedKey);
                 await _storageService.RemoveAsync(Constants.ProtectedPin);
             }
+            BuildList();
+        }
 
+        public async Task UpdateFingerprintAsync()
+        {
+            _fingerprint = !_fingerprint;
+            if(_fingerprint)
+            {
+                await _storageService.SaveAsync(Constants.FingerprintUnlockKey, true);
+            }
+            else
+            {
+                await _storageService.RemoveAsync(Constants.FingerprintUnlockKey);
+            }
+            await _cryptoService.ToggleKeyAsync();
             BuildList();
         }
 

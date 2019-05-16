@@ -39,15 +39,27 @@ namespace Bit.Core.Services
         }
 
         public bool PinLocked { get; set; }
+        public bool FingerprintLocked { get; set; } = true;
 
         // TODO: init timer?
 
         public async Task<bool> IsLockedAsync()
         {
             var hasKey = await _cryptoService.HasKeyAsync();
-            if(hasKey && PinLocked)
+            if(hasKey)
             {
-                return true;
+                if(PinLocked)
+                {
+                    return true;
+                }
+                else
+                {
+                    var fingerprintSet = await IsFingerprintLockSetAsync();
+                    if(fingerprintSet && FingerprintLocked)
+                    {
+                        return true;
+                    }
+                }
             }
             return !hasKey;
         }
@@ -102,6 +114,13 @@ namespace Bit.Core.Services
                 if(pinSet.Item1)
                 {
                     PinLocked = true;
+                }
+                if(await IsFingerprintLockSetAsync())
+                {
+                    FingerprintLocked = true;
+                }
+                if(FingerprintLocked || PinLocked)
+                {
                     _messagingService.Send("locked");
                     // TODO: locked callback?
                     return;
@@ -132,6 +151,12 @@ namespace Bit.Core.Services
             var protectedPin = await _storageService.GetAsync<string>(Constants.ProtectedPin);
             var pinProtectedKey = await _storageService.GetAsync<string>(Constants.PinProtectedKey);
             return new Tuple<bool, bool>(protectedPin != null, pinProtectedKey != null);
+        }
+
+        public async Task<bool> IsFingerprintLockSetAsync()
+        {
+            var fingerprintLock = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
+            return fingerprintLock.GetValueOrDefault();
         }
 
         public async Task ClearAsync()

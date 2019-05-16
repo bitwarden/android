@@ -47,7 +47,8 @@ namespace Bit.Core.Services
         {
             _key = key;
             var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
-            if(option.HasValue)
+            var fingerprint = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
+            if(option.HasValue && !fingerprint.GetValueOrDefault())
             {
                 // If we have a lock option set, we do not store the key
                 return;
@@ -349,7 +350,8 @@ namespace Bit.Core.Services
         {
             var key = await GetKeyAsync();
             var option = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
-            if(option != null || option == 0)
+            var fingerprint = await _storageService.GetAsync<bool?>(Constants.FingerprintUnlockKey);
+            if(!fingerprint.GetValueOrDefault() && (option != null || option == 0))
             {
                 await ClearKeyAsync();
                 _key = key;

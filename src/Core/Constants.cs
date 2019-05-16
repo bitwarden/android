@@ -6,6 +6,7 @@
         public const string iOSAppProtocol = "iosapp://";
         public static string LockOptionKey = "lockOption";
         public static string LastActiveKey = "lastActive";
+        public static string FingerprintUnlockKey = "fingerprintUnlock";
         public static string ProtectedPin = "protectedPin";
         public static string PinProtectedKey = "pinProtectedKey";
         public static string DefaultUriMatch = "defaultUriMatch";

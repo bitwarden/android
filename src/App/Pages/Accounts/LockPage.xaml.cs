@@ -28,7 +28,7 @@ namespace Bit.App.Pages
             {
                 RequestFocus(PinEntry);
             }
-            else
+            else if(!_vm.FingerprintLock)
             {
                 RequestFocus(MasterPasswordEntry);
             }

@@ -24,6 +24,7 @@ namespace Bit.App.Pages
         private string _email;
         private bool _showPassword;
         private bool _pinLock;
+        private bool _fingerprintLock;
         private int _invalidPinAttempts = 0;
         private Tuple<bool, bool> _pinSet;
 
@@ -57,6 +58,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _pinLock, value);
         }
 
+        public bool FingerprintLock
+        {
+            get => _fingerprintLock;
+            set => SetProperty(ref _fingerprintLock, value);
+        }
+
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string MasterPassword { get; set; }
@@ -67,8 +74,25 @@ namespace Bit.App.Pages
             _pinSet = await _lockService.IsPinLockSetAsync();
             var hasKey = await _cryptoService.HasKeyAsync();
             PinLock = (_pinSet.Item1 && hasKey) || _pinSet.Item2;
+            FingerprintLock = await _lockService.IsFingerprintLockSetAsync();
             _email = await _userService.GetEmailAsync();
             PageTitle = PinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
+
+            if(FingerprintLock)
+            {
+                var tasks = Task.Run(async () =>
+                {
+                    await Task.Delay(500);
+                    Device.BeginInvokeOnMainThread(async () => {
+                        var success = await _platformUtilsService.AuthenticateFingerprintAsync();
+                        _lockService.FingerprintLocked = !success;
+                        if(success)
+                        {
+                            DoContinue();
+                        }
+                    });
+                });
+            }
         }
 
         public async Task SubmitAsync()
