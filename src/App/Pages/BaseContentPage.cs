@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -6,10 +9,24 @@ namespace Bit.App.Pages
 {
     public class BaseContentPage : ContentPage
     {
+        private IStorageService _storageService;
+
         protected int AndroidShowModalAnimationDelay = 400;
         protected int AndroidShowPageAnimationDelay = 100;
 
         public DateTime? LastPageAction { get; set; }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            SaveActivity();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            SaveActivity();
+        }
 
         public bool DoOnce(Action action = null, int milliseconds = 1000)
         {
@@ -83,6 +100,20 @@ namespace Bit.App.Pages
                 await Task.Delay(AndroidShowModalAnimationDelay);
                 Device.BeginInvokeOnMainThread(() => input.Focus());
             });
+        }
+
+        private void SetStorageService()
+        {
+            if(_storageService == null)
+            {
+                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            }
+        }
+
+        private void SaveActivity()
+        {
+            SetStorageService();
+            _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
         }
     }
 }
