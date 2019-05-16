@@ -11,6 +11,7 @@ using System.IO;
 using System;
 using Android.Content;
 using Bit.Droid.Utilities;
+using Bit.Droid.Receivers;
 
 namespace Bit.Droid
 {
@@ -25,11 +26,18 @@ namespace Bit.Droid
     {
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
+        private IBroadcasterService _broadcasterService;
+        private PendingIntent _lockAlarmPendingIntent;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            var alarmIntent = new Intent(this, typeof(LockAlarmReceiver));
+            _lockAlarmPendingIntent = PendingIntent.GetBroadcast(this, 0, alarmIntent,
+                PendingIntentFlags.UpdateCurrent);
+
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -38,6 +46,22 @@ namespace Bit.Droid
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App.App());
+
+            _broadcasterService.Subscribe(nameof(MainActivity), (message) =>
+            {
+                if(message.Command == "scheduleLockTimer")
+                {
+                    var lockOptionMs = (int)message.Data * 1000;
+                    var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + lockOptionMs + 10;
+                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+                    alarmManager.Set(AlarmType.RtcWakeup, triggerMs, _lockAlarmPendingIntent);
+                }
+                else if(message.Command == "cancelLockTimer")
+                {
+                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+                    alarmManager.Cancel(_lockAlarmPendingIntent);
+                }
+            });
         }
 
         public async override void OnRequestPermissionsResult(int requestCode, string[] permissions,

@@ -3,6 +3,7 @@ using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System;
@@ -32,6 +33,7 @@ namespace Bit.App
         private readonly ISearchService _searchService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
+        private readonly IStorageService _storageService;
 
         public App()
         {
@@ -50,6 +52,7 @@ namespace Bit.App
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
@@ -106,17 +109,19 @@ namespace Bit.App
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            System.Diagnostics.Debug.WriteLine("XF App: OnStart");
         }
 
-        protected override void OnSleep()
+        protected async override void OnSleep()
         {
-            // Handle when your app sleeps
+            System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
+            await HandleLockingAsync();
         }
 
         protected override void OnResume()
         {
-            // Handle when your app resumes
+            System.Diagnostics.Debug.WriteLine("XF App: OnResume");
+            _messagingService.Send("cancelLockTimer");
         }
 
         private void SetCulture()
@@ -171,6 +176,24 @@ namespace Bit.App
             else
             {
                 Current.MainPage = new HomePage();
+            }
+        }
+
+        private async Task HandleLockingAsync()
+        {
+            var lockOption = _platformUtilsService.LockTimeout();
+            if(lockOption == null)
+            {
+                lockOption = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+            }
+            lockOption = lockOption.GetValueOrDefault(-1);
+            if(lockOption > 0)
+            {
+                _messagingService.Send("scheduleLockTimer", lockOption.Value);
+            }
+            else if(lockOption == 0)
+            {
+                // TODO: Lock now?
             }
         }
     }
