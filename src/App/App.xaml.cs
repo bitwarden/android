@@ -181,6 +181,15 @@ namespace Bit.App
 
         private async Task HandleLockingAsync()
         {
+            if(await _lockService.IsLockedAsync())
+            {
+                return;
+            }
+            var authed = await _userService.IsAuthenticatedAsync();
+            if(!authed)
+            {
+                return;
+            }
             var lockOption = _platformUtilsService.LockTimeout();
             if(lockOption == null)
             {
