@@ -102,7 +102,7 @@ namespace Bit.App.Pages
                         var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin));
                         failed = decPin != Pin;
                         _lockService.PinLocked = failed;
-                        if(failed)
+                        if(!failed)
                         {
                             DoContinue();
                         }

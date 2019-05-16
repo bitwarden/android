@@ -44,6 +44,7 @@
                         x:Name="_pin"
                         Text="{Binding Pin}"
                         StyleClass="box-value"
+                        Keyboard="Numeric"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         Grid.Row="1"
                         Grid.Column="0" />

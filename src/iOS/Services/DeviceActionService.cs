@@ -173,7 +173,8 @@ namespace Bit.iOS.Services
         }
 
         public Task<string> DisplayPromptAync(string title = null, string description = null,
-            string text = null, string okButtonText = null, string cancelButtonText = null)
+            string text = null, string okButtonText = null, string cancelButtonText = null,
+            bool numericKeyboard = false)
         {
             var result = new TaskCompletionSource<string>();
             var alert = UIAlertController.Create(title ?? string.Empty, description, UIAlertControllerStyle.Alert);
@@ -192,6 +193,10 @@ namespace Bit.iOS.Services
             {
                 input = x;
                 input.Text = text ?? string.Empty;
+                if(numericKeyboard)
+                {
+                    input.KeyboardType = UIKeyboardType.NumberPad;
+                }
             });
             var vc = GetPresentedViewController();
             vc?.PresentViewController(alert, true, null);

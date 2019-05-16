@@ -1496,4 +1496,7 @@
   <data name="LockOption5Minutes" xml:space="preserve">
     <value>5 minutes</value>
   </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+  </data>
 </root>

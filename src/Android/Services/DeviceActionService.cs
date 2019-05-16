@@ -10,6 +10,8 @@ using Android.OS;
 using Android.Provider;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
+using Android.Text;
+using Android.Text.Method;
 using Android.Webkit;
 using Android.Widget;
 using Bit.App.Abstractions;
@@ -218,7 +220,8 @@ namespace Bit.Droid.Services
         }
 
         public Task<string> DisplayPromptAync(string title = null, string description = null,
-            string text = null, string okButtonText = null, string cancelButtonText = null)
+            string text = null, string okButtonText = null, string cancelButtonText = null,
+            bool numericKeyboard = false)
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             if(activity == null)
@@ -231,11 +234,18 @@ namespace Bit.Droid.Services
             alertBuilder.SetMessage(description);
             var input = new EditText(activity)
             {
-                InputType = Android.Text.InputTypes.ClassText
+                InputType = InputTypes.ClassText
             };
             if(text == null)
             {
                 text = string.Empty;
+            }
+            if(numericKeyboard)
+            {
+                input.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned;
+#pragma warning disable CS0618 // Type or member is obsolete
+                input.KeyListener = DigitsKeyListener.GetInstance(false, false);
+#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             input.Text = text;

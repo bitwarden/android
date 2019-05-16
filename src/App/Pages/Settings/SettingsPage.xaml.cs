@@ -98,6 +98,10 @@ namespace Bit.App.Pages
             {
                 await _vm.LockOptionsAsync();
             }
+            else if(item.Name == AppResources.UnlockWithPIN)
+            {
+                await _vm.UpdatePinAsync();
+            }
         }
     }
 }

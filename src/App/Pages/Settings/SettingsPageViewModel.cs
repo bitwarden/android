@@ -190,6 +190,48 @@ namespace Bit.App.Pages
             BuildList();
         }
 
+        public async Task UpdatePinAsync()
+        {
+            _pin = !_pin;
+            if(_pin)
+            {
+                var pin = await _deviceActionService.DisplayPromptAync(AppResources.EnterPIN,
+                    AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
+                var masterPassOnRestart = true;
+                if(!string.IsNullOrWhiteSpace(pin))
+                {
+                    if(masterPassOnRestart)
+                    {
+                        var encPin = await _cryptoService.EncryptAsync(pin);
+                        await _storageService.SaveAsync(Constants.ProtectedPin, encPin.EncryptedString);
+                    }
+                    else
+                    {
+                        var kdf = await _userService.GetKdfAsync();
+                        var kdfIterations = await _userService.GetKdfIterationsAsync();
+                        var email = await _userService.GetEmailAsync();
+                        var pinKey = await _cryptoService.MakePinKeyAysnc(pin, email,
+                            kdf.GetValueOrDefault(Core.Enums.KdfType.PBKDF2_SHA256),
+                            kdfIterations.GetValueOrDefault(5000));
+                        var key = await _cryptoService.GetKeyAsync();
+                        var pinProtectedKey = await _cryptoService.EncryptAsync(key.Key, pinKey);
+                        await _storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
+                    }
+                }
+                else
+                {
+                    _pin = false;
+                }
+            }
+            if(!_pin)
+            {
+                await _storageService.RemoveAsync(Constants.PinProtectedKey);
+                await _storageService.RemoveAsync(Constants.ProtectedPin);
+            }
+            
+            BuildList();
+        }
+
         private void BuildList()
         {
             var doUpper = Device.RuntimePlatform != Device.Android;
@@ -202,7 +244,7 @@ namespace Bit.App.Pages
             {
                 new SettingsPageListItem { Name = AppResources.LockOptions, SubLabel = _lockOptionValue },
                 new SettingsPageListItem { Name = string.Format(AppResources.UnlockWith, AppResources.Fingerprint) },
-                new SettingsPageListItem { Name = AppResources.UnlockWithPIN },
+                new SettingsPageListItem { Name = AppResources.UnlockWithPIN, SubLabel = _pin ? "✓" : null },
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };

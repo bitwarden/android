@@ -3184,6 +3184,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application..
+        /// </summary>
+        public static string SetPINDescription {
+            get {
+                return ResourceManager.GetString("SetPINDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enter a 4 digit PIN code to unlock the app with..
         /// </summary>
         public static string SetPINDirection {
