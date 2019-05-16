@@ -24,13 +24,16 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
-            if(_vm.PinLock)
+            if(!_vm.FingerprintLock)
             {
-                RequestFocus(PinEntry);
-            }
-            else if(!_vm.FingerprintLock)
-            {
-                RequestFocus(MasterPasswordEntry);
+                if(_vm.PinLock)
+                {
+                    RequestFocus(PinEntry);
+                }
+                else
+                {
+                    RequestFocus(MasterPasswordEntry);
+                }
             }
         }
 
