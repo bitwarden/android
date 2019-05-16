@@ -169,6 +169,7 @@ namespace Bit.App.Pages
         private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
         {
             await _cryptoService.SetKeyAsync(key);
+            DoContinue();
         }
 
         private void DoContinue()

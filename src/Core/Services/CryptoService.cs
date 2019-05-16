@@ -99,7 +99,7 @@ namespace Bit.Core.Services
             {
                 _key = new SymmetricCryptoKey(Convert.FromBase64String(key));
             }
-            return key == null ? null : _key;
+            return _key;
         }
 
         public async Task<string> GetKeyHashAsync()
@@ -108,12 +108,12 @@ namespace Bit.Core.Services
             {
                 return _keyHash;
             }
-            var keyHash = await _secureStorageService.GetAsync<string>(Keys_KeyHash);
+            var keyHash = await _storageService.GetAsync<string>(Keys_KeyHash);
             if(keyHash != null)
             {
                 _keyHash = keyHash;
             }
-            return keyHash == null ? null : _keyHash;
+            return _keyHash;
         }
 
         public Task<SymmetricCryptoKey> GetEncKeyAsync()

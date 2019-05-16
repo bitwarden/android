@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -33,11 +34,18 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Unlock_Clicked(object sender, EventArgs e)
+        private void Unlock_Clicked(object sender, EventArgs e)
         {
             if(DoOnce())
             {
-                await _vm.SubmitAsync();
+                var tasks = Task.Run(async () =>
+                {
+                    await Task.Delay(50);
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await _vm.SubmitAsync();
+                    });
+                });
             }
         }
 

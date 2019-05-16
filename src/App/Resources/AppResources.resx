@@ -1487,4 +1487,7 @@
   <data name="PIN" xml:space="preserve">
     <value>PIN</value>
   </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
 </root>
