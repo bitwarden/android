@@ -17,5 +17,6 @@ namespace Bit.App.Abstractions
         Task<string> DisplayPromptAync(string title = null, string description = null, string text = null,
             string okButtonText = null, string cancelButtonText = null, bool numericKeyboard = false);
         void RateApp();
+        bool SupportsFaceId();
     }
 }

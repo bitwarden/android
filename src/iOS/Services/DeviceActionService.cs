@@ -13,6 +13,7 @@ using Bit.Core.Enums;
 using Bit.iOS.Core.Views;
 using CoreGraphics;
 using Foundation;
+using LocalAuthentication;
 using MobileCoreServices;
 using Photos;
 using UIKit;
@@ -216,6 +217,20 @@ namespace Bit.iOS.Services
                 uri = "itms-apps://itunes.apple.com/us/app/id1137397744?action=write-review";
             }
             Device.OpenUri(new Uri(uri));
+        }
+
+        public bool SupportsFaceId()
+        {
+            if(SystemMajorVersion() < 11)
+            {
+                return false;
+            }
+            var context = new LAContext();
+            if(!context.CanEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, out NSError e))
+            {
+                return false;
+            }
+            return context.BiometryType == LABiometryType.FaceId;
         }
 
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
