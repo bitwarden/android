@@ -8,7 +8,7 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:LockPageViewModel"
     Title="{Binding PageTitle}">
-    
+
     <ContentPage.BindingContext>
         <pages:LockPageViewModel />
     </ContentPage.BindingContext>
@@ -87,6 +87,8 @@
                 </Grid>
             </StackLayout>
             <StackLayout Padding="10, 0">
+                <Button Text="{Binding FingerprintButtonText}" Clicked="Fingerprint_Clicked"
+                        IsVisible="{Binding FingerprintLock}"></Button>
                 <Button Text="{u:I18n LogOut}" Clicked="LogOut_Clicked"></Button>
             </StackLayout>
         </StackLayout>

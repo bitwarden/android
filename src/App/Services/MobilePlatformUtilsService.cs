@@ -200,7 +200,8 @@ namespace Bit.App.Services
             }
         }
 
-        public async Task<bool> AuthenticateFingerprintAsync(string text = null)
+        public async Task<bool> AuthenticateFingerprintAsync(string text = null, string fallbackText = null,
+            Action fallback = null)
         {
             try
             {
@@ -212,12 +213,17 @@ namespace Bit.App.Services
                 var fingerprintRequest = new AuthenticationRequestConfiguration(text)
                 {
                     AllowAlternativeAuthentication = true,
-                    CancelTitle = AppResources.Cancel
+                    CancelTitle = AppResources.Cancel,
+                    FallbackTitle = fallbackText
                 };
                 var result = await CrossFingerprint.Current.AuthenticateAsync(fingerprintRequest);
                 if(result.Authenticated)
                 {
                     return true;
+                }
+                else if(result.Status == FingerprintAuthenticationResultStatus.FallbackRequested)
+                {
+                    fallback?.Invoke();
                 }
             }
             catch { }

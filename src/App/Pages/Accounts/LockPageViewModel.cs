@@ -21,10 +21,12 @@ namespace Bit.App.Pages
         private readonly IUserService _userService;
         private readonly IMessagingService _messagingService;
 
+        private bool _hasKey;
         private string _email;
         private bool _showPassword;
         private bool _pinLock;
         private bool _fingerprintLock;
+        private string _fingerprintButtonText;
         private int _invalidPinAttempts = 0;
         private Tuple<bool, bool> _pinSet;
 
@@ -64,6 +66,12 @@ namespace Bit.App.Pages
             set => SetProperty(ref _fingerprintLock, value);
         }
 
+        public string FingerprintButtonText
+        {
+            get => _fingerprintButtonText;
+            set => SetProperty(ref _fingerprintButtonText, value);
+        }
+
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string MasterPassword { get; set; }
@@ -72,25 +80,19 @@ namespace Bit.App.Pages
         public async Task InitAsync()
         {
             _pinSet = await _lockService.IsPinLockSetAsync();
-            var hasKey = await _cryptoService.HasKeyAsync();
-            PinLock = (_pinSet.Item1 && hasKey) || _pinSet.Item2;
+            _hasKey = await _cryptoService.HasKeyAsync();
+            PinLock = (_pinSet.Item1 && _hasKey) || _pinSet.Item2;
             FingerprintLock = await _lockService.IsFingerprintLockSetAsync();
             _email = await _userService.GetEmailAsync();
             PageTitle = PinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
 
             if(FingerprintLock)
             {
+                FingerprintButtonText = AppResources.UseFingerprintToUnlock; // TODO: FaceID text
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(async () => {
-                        var success = await _platformUtilsService.AuthenticateFingerprintAsync();
-                        _lockService.FingerprintLocked = !success;
-                        if(success)
-                        {
-                            DoContinue();
-                        }
-                    });
+                    Device.BeginInvokeOnMainThread(async () => await PromptFingerprintAsync());
                 });
             }
         }
@@ -190,9 +192,34 @@ namespace Bit.App.Pages
             entry.Focus();
         }
 
+        public async Task PromptFingerprintAsync()
+        {
+            var success = await _platformUtilsService.AuthenticateFingerprintAsync(null,
+                PinLock ? AppResources.PIN : AppResources.MasterPassword, () =>
+                {
+                    var page = Page as LockPage;
+                    if(PinLock)
+                    {
+                        page.PinEntry.Focus();
+                    }
+                    else
+                    {
+                        page.MasterPasswordEntry.Focus();
+                    }
+                });
+            _lockService.FingerprintLocked = !success;
+            if(success)
+            {
+                DoContinue();
+            }
+        }
+
         private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
         {
-            await _cryptoService.SetKeyAsync(key);
+            if(!_hasKey)
+            {
+                await _cryptoService.SetKeyAsync(key);
+            }
             DoContinue();
         }
 

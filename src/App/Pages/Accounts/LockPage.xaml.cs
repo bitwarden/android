@@ -59,5 +59,13 @@ namespace Bit.App.Pages
                 await _vm.LogOutAsync();
             }
         }
+
+        private async void Fingerprint_Clicked(object sender, EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await _vm.PromptFingerprintAsync();
+            }
+        }
     }
 }
