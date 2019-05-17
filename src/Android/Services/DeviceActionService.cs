@@ -417,8 +417,8 @@ namespace Bit.Droid.Services
                     activity.Finish();
                     return;
                 }
-                var structure = activity.Intent
-                    .GetParcelableExtra(AutofillManager.ExtraAssistStructure) as AssistStructure;
+                var structure = activity.Intent.GetParcelableExtra(
+                    AutofillManager.ExtraAssistStructure) as AssistStructure;
                 if(structure == null)
                 {
                     activity.SetResult(Result.Canceled);
@@ -433,6 +433,7 @@ namespace Bit.Droid.Services
                     activity.Finish();
                     return;
                 }
+                var task = CopyTotpAsync(cipher);
                 var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher));
                 var replyIntent = new Intent();
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);

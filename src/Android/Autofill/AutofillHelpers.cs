@@ -165,7 +165,7 @@ namespace Bit.Droid.Autofill
         {
             var packageName = context.PackageName;
             var view = new RemoteViews(packageName, Resource.Layout.autofill_listitem);
-            view.SetTextViewText(Resource.Id.text, text);
+            view.SetTextViewText(Resource.Id.text1, text);
             view.SetTextViewText(Resource.Id.text2, subtext);
             view.SetImageViewResource(Resource.Id.icon, iconId);
             return view;
