@@ -1,4 +1,5 @@
 ﻿using Bit.App.Models;
+using Bit.Core.Enums;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -33,16 +34,26 @@ namespace Bit.App.Pages
             {
                 return;
             }
-
             if(e.SelectedItem is GroupingsPageListItem item && item.Cipher != null)
             {
-                // TODO
+                await _vm.SelectCipherAsync(item.Cipher, item.FuzzyAutofill);
             }
         }
 
-        private void AddButton_Clicked(object sender, System.EventArgs e)
+        private async void AddButton_Clicked(object sender, System.EventArgs e)
         {
-
+            if(!DoOnce())
+            {
+                return;
+            }
+            if(_appOptions.FillType.HasValue && _appOptions.FillType != CipherType.Login)
+            {
+                var pageForOther = new AddEditPage(type: _appOptions.FillType);
+                await Navigation.PushModalAsync(new NavigationPage(pageForOther));
+                return;
+            }
+            var pageForLogin = new AddEditPage(null, CipherType.Login);
+            await Navigation.PushModalAsync(new NavigationPage(pageForLogin));
         }
 
         private void Search_Clicked(object sender, System.EventArgs e)

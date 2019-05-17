@@ -66,6 +66,10 @@ namespace Bit.Droid
                     var alarmManager = GetSystemService(AlarmService) as AlarmManager;
                     alarmManager.Cancel(_lockAlarmPendingIntent);
                 }
+                else if(message.Command == "finishMainActivity")
+                {
+                    Finish();
+                }
             });
         }
 

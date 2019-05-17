@@ -1,7 +1,10 @@
-﻿using Bit.App.Models;
+﻿using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
@@ -16,9 +19,8 @@ namespace Bit.App.Pages
     public class AutofillCiphersPageViewModel : BaseViewModel
     {
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
-        private readonly ISearchService _searchService;
-        private CancellationTokenSource _searchCancellationTokenSource;
 
         private AppOptions _appOptions;
         private string _name;
@@ -30,7 +32,7 @@ namespace Bit.App.Pages
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
 
             GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
@@ -75,7 +77,8 @@ namespace Bit.App.Pages
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(_uri, null);
             var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
             var matchingGroup = new GroupingsPageListGroup(matching, AppResources.MatchingItems, matching.Count, false);
-            var fuzzy = ciphers.Item2?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+            var fuzzy = ciphers.Item2?.Select(c => new GroupingsPageListItem { Cipher = c, FuzzyAutofill = true })
+                .ToList();
             var fuzzyGroup = new GroupingsPageListGroup(fuzzy, AppResources.PossibleMatchingItems, fuzzy.Count, false);
             GroupedItems.ResetWithRange(new List<GroupingsPageListGroup> { matchingGroup, fuzzyGroup });
 
@@ -83,9 +86,57 @@ namespace Bit.App.Pages
             ShowList = !ShowNoData;
         }
 
-        public async Task SelectCipherAsync(CipherView cipher)
+        public async Task SelectCipherAsync(CipherView cipher, bool fuzzy)
         {
-            // TODO
+            if(_deviceActionService.SystemMajorVersion() < 21)
+            {
+                // TODO
+            }
+            else
+            {
+                var autofillResponse = AppResources.Yes;
+                if(fuzzy)
+                {
+                    var options = new List<string> { AppResources.Yes };
+                    if(cipher.Type == CipherType.Login)
+                    {
+                        options.Add(AppResources.YesAndSave);
+                    }
+                    autofillResponse = await _deviceActionService.DisplayAlertAsync(null,
+                        string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name), AppResources.No,
+                        options.ToArray());
+                }
+                if(autofillResponse == AppResources.YesAndSave && cipher.Type == CipherType.Login)
+                {
+                    var uris = cipher.Login?.Uris?.ToList();
+                    if(uris == null)
+                    {
+                        uris = new List<LoginUriView>();
+                    }
+                    uris.Add(new LoginUriView
+                    {
+                        Uri = _uri,
+                        Match = null
+                    });
+                    cipher.Login.Uris = uris;
+                    try
+                    {
+                        await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                        await _cipherService.SaveWithServerAsync(await _cipherService.EncryptAsync(cipher));
+                        await _deviceActionService.HideLoadingAsync();
+                    }
+                    catch(ApiException e)
+                    {
+                        await _deviceActionService.HideLoadingAsync();
+                        await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(),
+                            AppResources.Ok);
+                    }
+                }
+                if(autofillResponse == AppResources.Yes || autofillResponse == AppResources.YesAndSave)
+                {
+                    _deviceActionService.Autofill(cipher);
+                }
+            }
         }
 
         private async void CipherOptionsAsync(CipherView cipher)
