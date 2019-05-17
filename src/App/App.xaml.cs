@@ -180,6 +180,10 @@ namespace Bit.App
                 {
                     Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
                 }
+                else if(_appOptions.Uri != null)
+                {
+                    Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
+                }
                 else
                 {
                     Current.MainPage = new TabsPage();

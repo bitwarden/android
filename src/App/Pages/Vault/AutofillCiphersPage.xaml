@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Bit.App.Pages.GroupingsPage"
+             x:Class="Bit.App.Pages.AutofillCiphersPage"
              xmlns:pages="clr-namespace:Bit.App.Pages"
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:controls="clr-namespace:Bit.App.Controls"
              xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
-             x:DataType="pages:GroupingsPageViewModel"
+             x:DataType="pages:AutofillCiphersPageViewModel"
              Title="{Binding PageTitle}"
              x:Name="_page">
 
     <ContentPage.BindingContext>
-        <pages:GroupingsPageViewModel />
+        <pages:AutofillCiphersPageViewModel />
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
@@ -27,31 +27,8 @@
                     ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
             </DataTemplate>
 
-            <DataTemplate x:Key="groupTemplate"
-                          x:DataType="pages:GroupingsPageListItem">
-                <ViewCell>
-                    <StackLayout Orientation="Horizontal"
-                                 StyleClass="list-row, list-row-platform">
-                        <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
-                                          HorizontalOptions="Start"
-                                          VerticalOptions="Center"
-                                          StyleClass="list-icon" />
-                        <Label Text="{Binding Name, Mode=OneWay}"
-                               LineBreakMode="TailTruncation"
-                               HorizontalOptions="StartAndExpand"
-                               VerticalOptions="CenterAndExpand"
-                               StyleClass="list-title"/>
-                        <Label Text="{Binding ItemCount, Mode=OneWay}"
-                               HorizontalOptions="End"
-                               HorizontalTextAlignment="End"
-                               StyleClass="list-sub"/>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-            
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
-                                                 CipherTemplate="{StaticResource cipherTemplate}"
-                                                 GroupTemplate="{StaticResource groupTemplate}" />
+                                                 CipherTemplate="{StaticResource cipherTemplate}" />
 
             <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
                 <StackLayout
@@ -60,12 +37,11 @@
                     Spacing="20"
                     IsVisible="{Binding ShowNoData}">
                     <Label
-                        Text="{Binding NoDataText}"
+                        Text="TODO: no data"
                         HorizontalTextAlignment="Center"></Label>
                     <Button
                         Text="{u:I18n AddAnItem}"
-                        Clicked="AddButton_Clicked"
-                        IsVisible="{Binding ShowAddCipherButton}"></Button>
+                        Clicked="AddButton_Clicked"></Button>
                 </StackLayout>
 
                 <controls:ExtendedListView
@@ -73,9 +49,6 @@
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"
                     HasUnevenRows="true"
-                    RefreshCommand="{Binding RefreshCommand}"
-                    IsPullToRefreshEnabled="true"
-                    IsRefreshing="{Binding Refreshing}"
                     ItemTemplate="{StaticResource listItemDataTemplateSelector}"
                     IsGroupingEnabled="True"
                     ItemSelected="RowSelected"
@@ -83,7 +56,7 @@
                     <x:Arguments>
                         <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
                     </x:Arguments>
-                    
+
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                             <ViewCell>

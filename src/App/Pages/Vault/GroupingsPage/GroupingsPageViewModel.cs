@@ -46,7 +46,6 @@ namespace Bit.App.Pages
                 Refreshing = true;
                 await LoadAsync();
             });
-            AddCipherCommand = new Command(() => { /* TODO */ });
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
         }
 
@@ -104,7 +103,6 @@ namespace Bit.App.Pages
         }
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
-        public Command AddCipherCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
 
         public async Task LoadAsync()
