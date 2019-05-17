@@ -15,6 +15,7 @@
         public static string LastFileCacheClearKey = "lastFileCacheClear";
         public static string AccessibilityAutofillPasswordFieldKey = "accessibilityAutofillPasswordField";
         public static string AccessibilityAutofillPersistNotificationKey = "accessibilityAutofillPersistNotification";
+        public static string DisableFaviconKey = "disableFavicon";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
     }
