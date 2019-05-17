@@ -207,8 +207,8 @@ namespace Bit.App.Services
             {
                 if(text == null)
                 {
-                    text = AppResources.FingerprintDirection;
-                    // TODO: face id direction
+                    text = _deviceActionService.SupportsFaceId() ? AppResources.FaceIDDirection :
+                        AppResources.FingerprintDirection;
                 }
                 var fingerprintRequest = new AuthenticationRequestConfiguration(text)
                 {

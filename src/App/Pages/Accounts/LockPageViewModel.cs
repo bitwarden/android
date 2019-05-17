@@ -88,7 +88,8 @@ namespace Bit.App.Pages
 
             if(FingerprintLock)
             {
-                FingerprintButtonText = AppResources.UseFingerprintToUnlock; // TODO: FaceID text
+                FingerprintButtonText = _deviceActionService.SupportsFaceId() ? AppResources.UseFaceIDToUnlock :
+                    AppResources.UseFingerprintToUnlock;
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(500);
