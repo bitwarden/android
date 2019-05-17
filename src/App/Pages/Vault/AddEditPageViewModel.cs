@@ -142,6 +142,8 @@ namespace Bit.App.Pages
         public string FolderId { get; set; }
         public CipherType? Type { get; set; }
         public HashSet<string> CollectionIds { get; set; }
+        public string DefaultName { get; set; }
+        public string DefaultUri { get; set; }
         public List<KeyValuePair<string, CipherType>> TypeOptions { get; set; }
         public List<KeyValuePair<string, string>> CardBrandOptions { get; set; }
         public List<KeyValuePair<string, string>> CardExpMonthOptions { get; set; }
@@ -300,6 +302,7 @@ namespace Bit.App.Pages
                 {
                     Cipher = new CipherView
                     {
+                        Name = DefaultName,
                         OrganizationId = OrganizationId,
                         FolderId = FolderId,
                         Type = Type.GetValueOrDefault(CipherType.Login),
@@ -308,7 +311,7 @@ namespace Bit.App.Pages
                         Identity = new IdentityView(),
                         SecureNote = new SecureNoteView()
                     };
-                    Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView() };
+                    Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView { Uri = DefaultUri } };
                     Cipher.SecureNote.Type = SecureNoteType.Generic;
                     TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
 
@@ -398,7 +401,16 @@ namespace Bit.App.Pages
                 _platformUtilsService.ShowToast("success", null,
                     EditMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode ? "editedCipher" : "addedCipher");
-                await Page.Navigation.PopModalAsync();
+
+                if((Page as AddEditPage).FromAutofillFramework)
+                {
+                    // Close and go back to app
+                    _deviceActionService.CloseAutofill();
+                }
+                else
+                {
+                    await Page.Navigation.PopModalAsync();
+                }
                 return true;
             }
             catch(ApiException e)

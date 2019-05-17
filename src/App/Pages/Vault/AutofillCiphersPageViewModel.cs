@@ -23,8 +23,6 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
 
         private AppOptions _appOptions;
-        private string _name;
-        private string _uri;
         private bool _showList;
         private string _noDataText;
 
@@ -38,6 +36,8 @@ namespace Bit.App.Pages
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
         }
 
+        public string Name { get; set; }
+        public string Uri { get; set; }
         public Command CipherOptionsCommand { get; set; }
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
 
@@ -56,25 +56,27 @@ namespace Bit.App.Pages
         public void Init(AppOptions appOptions)
         {
             _appOptions = appOptions;
-            _uri = appOptions.Uri;
-            if(_uri.StartsWith(Constants.AndroidAppProtocol))
+            Uri = appOptions.Uri;
+            string name = null;
+            if(Uri.StartsWith(Constants.AndroidAppProtocol))
             {
-                _name = _uri.Substring(Constants.AndroidAppProtocol.Length);
+                name = Uri.Substring(Constants.AndroidAppProtocol.Length);
             }
-            else if(!Uri.TryCreate(_uri, UriKind.Absolute, out Uri uri) ||
-                !DomainName.TryParseBaseDomain(uri.Host, out _name))
+            else if(!System.Uri.TryCreate(Uri, UriKind.Absolute, out Uri uri) ||
+                !DomainName.TryParseBaseDomain(uri.Host, out name))
             {
-                _name = "--";
+                name = "--";
             }
-            PageTitle = string.Format(AppResources.ItemsForUri, _name ?? "--");
-            NoDataText = string.Format(AppResources.NoItemsForUri, _name ?? "--");
+            Name = name;
+            PageTitle = string.Format(AppResources.ItemsForUri, Name ?? "--");
+            NoDataText = string.Format(AppResources.NoItemsForUri, Name ?? "--");
         }
 
         public async Task LoadAsync()
         {
             ShowList = false;
             var groupedItems = new List<GroupingsPageListGroup>();
-            var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(_uri, null);
+            var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
             var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
             if(matching?.Any() ?? false)
             {
@@ -109,7 +111,7 @@ namespace Bit.App.Pages
                         options.Add(AppResources.YesAndSave);
                     }
                     autofillResponse = await _deviceActionService.DisplayAlertAsync(null,
-                        string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, _name), AppResources.No,
+                        string.Format(AppResources.BitwardenAutofillServiceMatchConfirm, Name), AppResources.No,
                         options.ToArray());
                 }
                 if(autofillResponse == AppResources.YesAndSave && cipher.Type == CipherType.Login)
@@ -121,7 +123,7 @@ namespace Bit.App.Pages
                     }
                     uris.Add(new LoginUriView
                     {
-                        Uri = _uri,
+                        Uri = Uri,
                         Match = null
                     });
                     cipher.Login.Uris = uris;

@@ -9,15 +9,21 @@ namespace Bit.App.Pages
     {
         private AddEditPageViewModel _vm;
         private readonly AppOptions _appOptions;
+        private bool _fromAutofill;
 
         public AddEditPage(
             string cipherId = null,
             CipherType? type = null,
             string folderId = null,
             string collectionId = null,
+            string name = null,
+            string uri = null,
+            bool fromAutofill = false,
             AppOptions appOptions = null)
         {
             _appOptions = appOptions;
+            _fromAutofill = fromAutofill;
+            FromAutofillFramework = _appOptions?.FromAutofillFramework ?? false;
             InitializeComponent();
             _vm = BindingContext as AddEditPageViewModel;
             _vm.Page = this;
@@ -25,6 +31,8 @@ namespace Bit.App.Pages
             _vm.FolderId = folderId;
             _vm.CollectionIds = collectionId != null ? new HashSet<string>(new List<string> { collectionId }) : null;
             _vm.Type = type;
+            _vm.DefaultName = name ?? appOptions?.SaveName;
+            _vm.DefaultUri = uri ?? appOptions?.Uri;
             _vm.Init();
             SetActivityIndicator();
             if(!_vm.EditMode)
@@ -40,6 +48,8 @@ namespace Bit.App.Pages
             _folderPicker.ItemDisplayBinding = new Binding("Key");
             _ownershipPicker.ItemDisplayBinding = new Binding("Key");
         }
+
+        public bool FromAutofillFramework { get; set; }
 
         protected override async void OnAppearing()
         {
@@ -75,6 +85,16 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if(FromAutofillFramework)
+            {
+                Application.Current.MainPage = new TabsPage();
+                return true;
+            }
+            return base.OnBackButtonPressed();
         }
 
         private async void PasswordHistory_Tapped(object sender, System.EventArgs e)
