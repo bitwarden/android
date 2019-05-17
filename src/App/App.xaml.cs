@@ -164,8 +164,7 @@ namespace Bit.App
             var authed = await _userService.IsAuthenticatedAsync();
             if(authed)
             {
-                var locked = await _lockService.IsLockedAsync();
-                if(locked)
+                if(await _lockService.IsLockedAsync())
                 {
                     Current.MainPage = new NavigationPage(new LockPage());
                 }
