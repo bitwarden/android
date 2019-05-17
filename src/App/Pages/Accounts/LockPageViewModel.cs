@@ -27,6 +27,8 @@ namespace Bit.App.Pages
         private bool _pinLock;
         private bool _fingerprintLock;
         private string _fingerprintButtonText;
+        private string _loggedInAsText;
+        private string _lockedVerifyText;
         private int _invalidPinAttempts = 0;
         private Tuple<bool, bool> _pinSet;
 
@@ -72,6 +74,18 @@ namespace Bit.App.Pages
             set => SetProperty(ref _fingerprintButtonText, value);
         }
 
+        public string LoggedInAsText
+        {
+            get => _loggedInAsText;
+            set => SetProperty(ref _loggedInAsText, value);
+        }
+
+        public string LockedVerifyText
+        {
+            get => _lockedVerifyText;
+            set => SetProperty(ref _lockedVerifyText, value);
+        }
+
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string MasterPassword { get; set; }
@@ -84,7 +98,17 @@ namespace Bit.App.Pages
             PinLock = (_pinSet.Item1 && _hasKey) || _pinSet.Item2;
             FingerprintLock = await _lockService.IsFingerprintLockSetAsync();
             _email = await _userService.GetEmailAsync();
-            PageTitle = PinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
+            LoggedInAsText = string.Format(AppResources.LoggedInAs, _email);
+            if(PinLock)
+            {
+                PageTitle = AppResources.VerifyPIN;
+                LockedVerifyText = AppResources.VaultLockedPIN;
+            }
+            else
+            {
+                PageTitle = AppResources.VerifyMasterPassword;
+                LockedVerifyText = AppResources.VaultLockedMasterPassword;
+            }
 
             if(FingerprintLock)
             {

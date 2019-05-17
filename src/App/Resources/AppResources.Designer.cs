@@ -2131,6 +2131,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Logged in as {0}..
+        /// </summary>
+        public static string LoggedInAs {
+            get {
+                return ResourceManager.GetString("LoggedInAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Logging in....
         /// </summary>
         public static string LoggingIn {
@@ -3684,6 +3693,24 @@ namespace Bit.App.Resources {
         public static string VaultIsLocked {
             get {
                 return ResourceManager.GetString("VaultIsLocked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your vault is locked. Verify your master password to continue..
+        /// </summary>
+        public static string VaultLockedMasterPassword {
+            get {
+                return ResourceManager.GetString("VaultLockedMasterPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your vault is locked. Verify your PIN code to continue..
+        /// </summary>
+        public static string VaultLockedPIN {
+            get {
+                return ResourceManager.GetString("VaultLockedPIN", resourceCulture);
             }
         }
         

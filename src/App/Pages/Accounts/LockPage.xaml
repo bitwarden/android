@@ -85,6 +85,13 @@
                         Grid.Column="1"
                         Grid.RowSpan="2" />
                 </Grid>
+                <Label
+                    Text="{Binding LockedVerifyText}"
+                    StyleClass="box-footer-label" />
+                <Label
+                    Text="{Binding LoggedInAsText}"
+                    StyleClass="box-footer-label"
+                    Margin="0, 10, 0, 0" />
             </StackLayout>
             <StackLayout Padding="10, 0">
                 <Button Text="{Binding FingerprintButtonText}" Clicked="Fingerprint_Clicked"
