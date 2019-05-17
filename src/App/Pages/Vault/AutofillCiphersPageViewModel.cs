@@ -25,8 +25,8 @@ namespace Bit.App.Pages
         private AppOptions _appOptions;
         private string _name;
         private string _uri;
-        private bool _showNoData;
         private bool _showList;
+        private string _noDataText;
 
         public AutofillCiphersPageViewModel()
         {
@@ -41,16 +41,16 @@ namespace Bit.App.Pages
         public Command CipherOptionsCommand { get; set; }
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
 
-        public bool ShowNoData
-        {
-            get => _showNoData;
-            set => SetProperty(ref _showNoData, value);
-        }
-
         public bool ShowList
         {
             get => _showList;
             set => SetProperty(ref _showList, value);
+        }
+
+        public string NoDataText
+        {
+            get => _noDataText;
+            set => SetProperty(ref _noDataText, value);
         }
 
         public void Init(AppOptions appOptions)
@@ -67,23 +67,29 @@ namespace Bit.App.Pages
                 _name = "--";
             }
             PageTitle = string.Format(AppResources.ItemsForUri, _name ?? "--");
+            NoDataText = string.Format(AppResources.NoItemsForUri, _name ?? "--");
         }
 
         public async Task LoadAsync()
         {
-            ShowNoData = false;
             ShowList = false;
-
+            var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(_uri, null);
             var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
-            var matchingGroup = new GroupingsPageListGroup(matching, AppResources.MatchingItems, matching.Count, false);
-            var fuzzy = ciphers.Item2?.Select(c => new GroupingsPageListItem { Cipher = c, FuzzyAutofill = true })
-                .ToList();
-            var fuzzyGroup = new GroupingsPageListGroup(fuzzy, AppResources.PossibleMatchingItems, fuzzy.Count, false);
-            GroupedItems.ResetWithRange(new List<GroupingsPageListGroup> { matchingGroup, fuzzyGroup });
-
-            ShowNoData = !matching.Any() && !fuzzy.Any();
-            ShowList = !ShowNoData;
+            if(matching?.Any() ?? false)
+            {
+                groupedItems.Add(
+                    new GroupingsPageListGroup(matching, AppResources.MatchingItems, matching.Count, false));
+            }
+            var fuzzy = ciphers.Item2?.Select(c =>
+                new GroupingsPageListItem { Cipher = c, FuzzyAutofill = true }).ToList();
+            if(fuzzy?.Any() ?? false)
+            {
+                groupedItems.Add(
+                    new GroupingsPageListGroup(fuzzy, AppResources.PossibleMatchingItems, fuzzy.Count, false));
+            }
+            GroupedItems.ResetWithRange(groupedItems);
+            ShowList = groupedItems.Any();
         }
 
         public async Task SelectCipherAsync(CipherView cipher, bool fuzzy)

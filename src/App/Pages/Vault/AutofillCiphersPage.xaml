@@ -20,6 +20,8 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:CipherViewCell
@@ -35,9 +37,9 @@
                     VerticalOptions="CenterAndExpand"
                     Padding="20, 0"
                     Spacing="20"
-                    IsVisible="{Binding ShowNoData}">
+                    IsVisible="{Binding ShowList, Converter={StaticResource inverseBool}}">
                     <Label
-                        Text="TODO: no data"
+                        Text="{Binding NoDataText}"
                         HorizontalTextAlignment="Center"></Label>
                     <Button
                         Text="{u:I18n AddAnItem}"
