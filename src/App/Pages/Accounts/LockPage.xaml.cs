@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Models;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -6,13 +7,32 @@ namespace Bit.App.Pages
 {
     public partial class LockPage : BaseContentPage
     {
-        private LockPageViewModel _vm;
+        private readonly AppOptions _appOptions;
+        private readonly LockPageViewModel _vm;
 
-        public LockPage()
+        public LockPage(AppOptions appOptions = null)
         {
+            _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
+            _vm.UnlockedAction = () =>
+            {
+                if(_appOptions != null)
+                {
+                    if(_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
+                    {
+                        Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
+                        return;
+                    }
+                    else if(_appOptions.Uri != null)
+                    {
+                        Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
+                        return;
+                    }
+                }
+                Application.Current.MainPage = new TabsPage();
+            };
             MasterPasswordEntry = _masterPassword;
             PinEntry = _pin;
         }

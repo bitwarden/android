@@ -1,4 +1,5 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -90,6 +91,7 @@ namespace Bit.App.Pages
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string MasterPassword { get; set; }
         public string Pin { get; set; }
+        public Action UnlockedAction { get; set; }
 
         public async Task InitAsync()
         {
@@ -251,7 +253,7 @@ namespace Bit.App.Pages
         private void DoContinue()
         {
             _messagingService.Send("unlocked");
-            Application.Current.MainPage = new TabsPage();
+            UnlockedAction?.Invoke();
         }
     }
 }

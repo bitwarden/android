@@ -174,7 +174,7 @@ namespace Bit.App
             {
                 if(await _lockService.IsLockedAsync())
                 {
-                    Current.MainPage = new NavigationPage(new LockPage());
+                    Current.MainPage = new NavigationPage(new LockPage(_appOptions));
                 }
                 else if(_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
                 {
