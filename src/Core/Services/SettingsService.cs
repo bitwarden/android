@@ -1,4 +1,7 @@
 ﻿using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,9 +31,15 @@ namespace Bit.Core.Services
             _settingsCache = null;
         }
 
-        public Task<List<List<string>>> GetEquivalentDomainsAsync()
+        public async Task<List<List<string>>> GetEquivalentDomainsAsync()
         {
-            return GetSettingsKeyAsync<List<List<string>>>(Keys_EquivalentDomains);
+            var settings = await GetSettingsAsync();
+            if(settings != null && settings.ContainsKey(Keys_EquivalentDomains))
+            {
+                var jArray = (settings[Keys_EquivalentDomains] as JArray);
+                return jArray.ToObject<List<List<string>>>();
+            }
+            return null;
         }
 
         public Task SetEquivalentDomainsAsync(List<List<string>> equivalentDomains)
@@ -55,16 +64,6 @@ namespace Bit.Core.Services
                     string.Format(Keys_SettingsFormat, userId));
             }
             return _settingsCache;
-        }
-
-        private async Task<T> GetSettingsKeyAsync<T>(string key)
-        {
-            var settings = await GetSettingsAsync();
-            if(settings != null && settings.ContainsKey(key))
-            {
-                return (T)settings[key];
-            }
-            return (T)(object)null;
         }
 
         private async Task SetSettingsKeyAsync<T>(string key, T value)
