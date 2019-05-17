@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Android;
 using Android.App;
+using Android.App.Assist;
 using Android.Content;
 using Android.Content.PM;
 using Android.Nfc;
@@ -21,6 +23,9 @@ using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.View;
+using Bit.Core.Utilities;
+using Bit.Droid.Autofill;
 using Plugin.CurrentActivity;
 
 namespace Bit.Droid.Services
@@ -401,6 +406,85 @@ namespace Bit.Droid.Services
             return result.Task;
         }
 
+        public void Autofill(CipherView cipher)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
+            {
+                if(cipher == null)
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+                var structure = activity.Intent
+                    .GetParcelableExtra(AutofillManager.ExtraAssistStructure) as AssistStructure;
+                if(structure == null)
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+                var parser = new Parser(structure, activity.ApplicationContext);
+                parser.Parse();
+                if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher));
+                var replyIntent = new Intent();
+                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
+                activity.SetResult(Result.Ok, replyIntent);
+                activity.Finish();
+            }
+            else
+            {
+                var data = new Intent();
+                if(cipher == null)
+                {
+                    data.PutExtra("canceled", "true");
+                }
+                else
+                {
+                    var task = CopyTotpAsync(cipher);
+                    data.PutExtra("uri", cipher.Login.Uri);
+                    data.PutExtra("username", cipher.Login.Username);
+                    data.PutExtra("password", cipher.Login.Password);
+                }
+                if(activity.Parent == null)
+                {
+                    activity.SetResult(Result.Ok, data);
+                }
+                else
+                {
+                    activity.Parent.SetResult(Result.Ok, data);
+                }
+                activity.Finish();
+                _messagingService.Send("finishMainActivity");
+            }
+        }
+
+        public void CloseAutofill()
+        {
+            Autofill(null);
+        }
+
+        public void Background()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
+            {
+                activity.SetResult(Result.Canceled);
+                activity.Finish();
+            }
+            else
+            {
+                activity.MoveTaskToBack(true);
+            }
+        }
+
         private bool DeleteDir(Java.IO.File dir)
         {
             if(dir != null && dir.IsDirectory)
@@ -471,6 +555,29 @@ namespace Bit.Droid.Services
             }
             intent.AddFlags(flags);
             return intent;
+        }
+
+        private async Task CopyTotpAsync(CipherView cipher)
+        {
+            var autoCopyDisabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
+            var canAccessPremium = await ServiceContainer.Resolve<IUserService>("userService").CanAccessPremiumAsync();
+            if(canAccessPremium && !autoCopyDisabled.GetValueOrDefault() &&
+                !string.IsNullOrWhiteSpace(cipher?.Login?.Totp))
+            {
+                var totp = await ServiceContainer.Resolve<ITotpService>("totpService").GetCodeAsync(cipher.Login.Totp);
+                if(totp != null)
+                {
+                    CopyToClipboard(totp);
+                }
+            }
+        }
+
+        private void CopyToClipboard(string text)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var clipboardManager = activity.GetSystemService(
+                Context.ClipboardService) as Android.Content.ClipboardManager;
+            clipboardManager.Text = text;
         }
     }
 }

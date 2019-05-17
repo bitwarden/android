@@ -10,6 +10,7 @@ using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Models.View;
 using Bit.iOS.Core.Views;
 using CoreGraphics;
 using Foundation;
@@ -285,6 +286,21 @@ namespace Bit.iOS.Services
             var vc = GetPresentedViewController();
             vc?.PresentViewController(alert, true, null);
             return result.Task;
+        }
+
+        public void Autofill(CipherView cipher)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CloseAutofill()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Background()
+        {
+            throw new NotImplementedException();
         }
 
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Enums;
+using Bit.Core.Models.View;
 using System.Threading.Tasks;
 
 namespace Bit.App.Abstractions
@@ -24,5 +25,8 @@ namespace Bit.App.Abstractions
         int SystemMajorVersion();
         string SystemModel();
         Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons);
+        void Autofill(CipherView cipher);
+        void CloseAutofill();
+        void Background();
     }
 }
