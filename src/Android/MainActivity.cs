@@ -12,6 +12,9 @@ using System;
 using Android.Content;
 using Bit.Droid.Utilities;
 using Bit.Droid.Receivers;
+using Bit.App.Models;
+using Bit.Core.Enums;
+using Android.Nfc;
 
 namespace Bit.Droid
 {
@@ -28,6 +31,7 @@ namespace Bit.Droid
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private PendingIntent _lockAlarmPendingIntent;
+        private AppOptions _appOptions;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -45,7 +49,8 @@ namespace Bit.Droid
             base.OnCreate(savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            LoadApplication(new App.App());
+            _appOptions = GetOptions();
+            LoadApplication(new App.App(_appOptions));
 
             _broadcasterService.Subscribe(nameof(MainActivity), (message) =>
             {
@@ -121,6 +126,64 @@ namespace Bit.Droid
                     return;
                 }
             }
+        }
+
+        private void ListenYubiKey(bool listen)
+        {
+            if(!_deviceActionService.SupportsNfc())
+            {
+                return;
+            }
+            var adapter = NfcAdapter.GetDefaultAdapter(this);
+            if(listen)
+            {
+                var intent = new Intent(this, Class);
+                intent.AddFlags(ActivityFlags.SingleTop);
+                var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
+                // register for all NDEF tags starting with http och https
+                var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
+                ndef.AddDataScheme("http");
+                ndef.AddDataScheme("https");
+                var filters = new IntentFilter[] { ndef };
+                try
+                {
+                    // register for foreground dispatch so we'll receive tags according to our intent filters
+                    adapter.EnableForegroundDispatch(this, pendingIntent, filters, null);
+                }
+                catch { }
+            }
+            else
+            {
+                adapter.DisableForegroundDispatch(this);
+            }
+        }
+
+        private AppOptions GetOptions()
+        {
+            var options = new AppOptions
+            {
+                Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra("autofillFrameworkUri"),
+                MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
+                FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false)
+            };
+            var fillType = Intent.GetIntExtra("autofillFrameworkFillType", 0);
+            if(fillType > 0)
+            {
+                options.FillType = (CipherType)fillType;
+            }
+            if(Intent.GetBooleanExtra("autofillFrameworkSave", false))
+            {
+                options.SaveType = (CipherType)Intent.GetIntExtra("autofillFrameworkType", 0);
+                options.SaveName = Intent.GetStringExtra("autofillFrameworkName");
+                options.SaveUsername = Intent.GetStringExtra("autofillFrameworkUsername");
+                options.SavePassword = Intent.GetStringExtra("autofillFrameworkPassword");
+                options.SaveCardName = Intent.GetStringExtra("autofillFrameworkCardName");
+                options.SaveCardNumber = Intent.GetStringExtra("autofillFrameworkCardNumber");
+                options.SaveCardExpMonth = Intent.GetStringExtra("autofillFrameworkCardExpMonth");
+                options.SaveCardExpYear = Intent.GetStringExtra("autofillFrameworkCardExpYear");
+                options.SaveCardCode = Intent.GetStringExtra("autofillFrameworkCardCode");
+            }
+            return options;
         }
     }
 }

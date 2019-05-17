@@ -1,4 +1,5 @@
-﻿using Bit.Core.Enums;
+﻿using Bit.App.Models;
+using Bit.Core.Enums;
 using System.Collections.Generic;
 using Xamarin.Forms;
 
@@ -7,13 +8,16 @@ namespace Bit.App.Pages
     public partial class AddEditPage : BaseContentPage
     {
         private AddEditPageViewModel _vm;
+        private readonly AppOptions _appOptions;
 
         public AddEditPage(
             string cipherId = null,
             CipherType? type = null,
             string folderId = null,
-            string collectionId = null)
+            string collectionId = null,
+            AppOptions appOptions = null)
         {
+            _appOptions = appOptions;
             InitializeComponent();
             _vm = BindingContext as AddEditPageViewModel;
             _vm.Page = this;
@@ -40,7 +44,7 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync());
+            await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync(_appOptions));
             if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
             {
                 if(_vm.Cipher.OrganizationId == null)

@@ -6,12 +6,14 @@ using Android;
 using Android.App;
 using Android.Content;
 using Android.Content.PM;
+using Android.Nfc;
 using Android.OS;
 using Android.Provider;
 using Android.Support.V4.App;
 using Android.Support.V4.Content;
 using Android.Text;
 using Android.Text.Method;
+using Android.Views.Autofill;
 using Android.Webkit;
 using Android.Widget;
 using Bit.App.Abstractions;
@@ -289,6 +291,31 @@ namespace Bit.Droid.Services
         public bool SupportsFaceId()
         {
             return false;
+        }
+
+        public bool SupportsNfc()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var manager = activity.GetSystemService(Context.NfcService) as NfcManager;
+            return manager.DefaultAdapter?.IsEnabled ?? false;
+        }
+
+        public bool SupportsCamera()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            return activity.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
+        }
+
+        public bool SupportsAutofillService()
+        {
+            if(Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                return false;
+            }
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var type = Java.Lang.Class.FromType(typeof(AutofillManager));
+            var manager = activity.GetSystemService(type) as AutofillManager;
+            return manager.IsAutofillSupported;
         }
 
         private bool DeleteDir(Java.IO.File dir)

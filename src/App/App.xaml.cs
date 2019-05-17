@@ -1,4 +1,5 @@
-﻿using Bit.App.Models;
+﻿using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
@@ -34,9 +35,12 @@ namespace Bit.App
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
+        private readonly IDeviceActionService _deviceActionService;
+        private readonly AppOptions _appOptions;
 
-        public App()
+        public App(AppOptions appOptions)
         {
+            _appOptions = appOptions ?? new AppOptions();
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
@@ -56,6 +60,7 @@ namespace Bit.App
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
 
             InitializeComponent();
             SetCulture();
@@ -107,21 +112,24 @@ namespace Bit.App
             });
         }
 
-        protected override void OnStart()
+        protected async override void OnStart()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
+            await ClearCacheIfNeededAsync();
         }
 
         protected async override void OnSleep()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
             await HandleLockingAsync();
+            SetTabsPageFromAutofill();
         }
 
-        protected override void OnResume()
+        protected async override void OnResume()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _messagingService.Send("cancelLockTimer");
+            await ClearCacheIfNeededAsync();
         }
 
         private void SetCulture()
@@ -168,6 +176,10 @@ namespace Bit.App
                 {
                     Current.MainPage = new NavigationPage(new LockPage());
                 }
+                else if(_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
+                {
+                    Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
+                }
                 else
                 {
                     Current.MainPage = new TabsPage();
@@ -203,6 +215,31 @@ namespace Bit.App
             else if(lockOption == 0)
             {
                 await _lockService.LockAsync(true);
+            }
+        }
+
+        private async Task ClearCacheIfNeededAsync()
+        {
+            var lastClear = await _storageService.GetAsync<DateTime?>(Constants.LastFileCacheClearKey);
+            if((DateTime.UtcNow - lastClear.GetValueOrDefault(DateTime.MinValue)).TotalDays >= 1)
+            {
+                var task = Task.Run(() => _deviceActionService.ClearCacheAsync());
+            }
+        }
+
+        private void SetTabsPageFromAutofill()
+        {
+            if(Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_appOptions.Uri) &&
+                !_appOptions.FromAutofillFramework)
+            {
+                Task.Run(() =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        Current.MainPage = new TabsPage();
+                        _appOptions.Uri = null;
+                    });
+                });
             }
         }
     }

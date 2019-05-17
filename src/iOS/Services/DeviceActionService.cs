@@ -233,6 +233,21 @@ namespace Bit.iOS.Services
             return context.BiometryType == LABiometryType.FaceId;
         }
 
+        public bool SupportsNfc()
+        {
+            return CoreNFC.NFCNdefReaderSession.ReadingAvailable;
+        }
+
+        public bool SupportsCamera()
+        {
+            return true;
+        }
+
+        public bool SupportsAutofillService()
+        {
+            return true;
+        }
+
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if(sender is UIImagePickerController picker)

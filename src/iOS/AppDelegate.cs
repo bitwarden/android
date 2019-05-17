@@ -26,7 +26,7 @@ namespace Bit.iOS
 
             FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
 
-            LoadApplication(new App.App());
+            LoadApplication(new App.App(null));
 
             return base.FinishedLaunching(app, options);
         }

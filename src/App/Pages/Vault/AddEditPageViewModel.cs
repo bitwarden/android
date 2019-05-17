@@ -1,4 +1,5 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -264,7 +265,7 @@ namespace Bit.App.Pages
             PageTitle = EditMode ? AppResources.EditItem : AppResources.AddItem;
         }
 
-        public async Task LoadAsync()
+        public async Task LoadAsync(AppOptions appOptions = null)
         {
             var myEmail = await _userService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
@@ -310,6 +311,21 @@ namespace Bit.App.Pages
                     Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView() };
                     Cipher.SecureNote.Type = SecureNoteType.Generic;
                     TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
+
+                    if(appOptions != null)
+                    {
+                        Cipher.Type = appOptions.SaveType.GetValueOrDefault(Cipher.Type);
+                        Cipher.Login.Username = appOptions.SaveUsername;
+                        Cipher.Login.Password = appOptions.SavePassword;
+                        Cipher.Card.Code = appOptions.SaveCardCode;
+                        if(int.TryParse(appOptions.SaveCardExpMonth, out int month) && month <= 12 && month >= 1)
+                        {
+                            Cipher.Card.ExpMonth = month.ToString();
+                        }
+                        Cipher.Card.ExpYear = appOptions.SaveCardExpYear;
+                        Cipher.Card.CardholderName = appOptions.SaveCardName;
+                        Cipher.Card.Number = appOptions.SaveCardNumber;
+                    }
                 }
 
                 FolderSelectedIndex = string.IsNullOrWhiteSpace(Cipher.FolderId) ? FolderOptions.Count - 1 :

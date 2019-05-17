@@ -18,5 +18,8 @@ namespace Bit.App.Abstractions
             string okButtonText = null, string cancelButtonText = null, bool numericKeyboard = false);
         void RateApp();
         bool SupportsFaceId();
+        bool SupportsNfc();
+        bool SupportsCamera();
+        bool SupportsAutofillService();
     }
 }
