@@ -23,5 +23,6 @@ namespace Bit.App.Abstractions
         bool SupportsAutofillService();
         int SystemMajorVersion();
         string SystemModel();
+        Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons);
     }
 }
