@@ -14,6 +14,7 @@ namespace Bit.App.Pages
         public CipherView Cipher { get; set; }
         public CipherType? Type { get; set; }
         public string ItemCount { get; set; }
+        public bool FuzzyAutofill { get; set; }
 
         public string Name
         {
