@@ -248,6 +248,22 @@ namespace Bit.iOS.Services
             return true;
         }
 
+        public int SystemMajorVersion()
+        {
+            var versionParts = UIDevice.CurrentDevice.SystemVersion.Split('.');
+            if(versionParts.Length > 0 && int.TryParse(versionParts[0], out int version))
+            {
+                return version;
+            }
+            // unable to determine version
+            return -1;
+        }
+
+        public string SystemModel()
+        {
+            return UIDevice.CurrentDevice.Model;
+        }
+
         private void ImagePicker_FinishedPickingMedia(object sender, UIImagePickerMediaPickedEventArgs e)
         {
             if(sender is UIImagePickerController picker)
@@ -363,17 +379,6 @@ namespace Bit.iOS.Services
         {
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             return Path.Combine(documents, "..", "tmp");
-        }
-
-        private int SystemMajorVersion()
-        {
-            var versionParts = UIDevice.CurrentDevice.SystemVersion.Split('.');
-            if(versionParts.Length > 0 && int.TryParse(versionParts[0], out int version))
-            {
-                return version;
-            }
-            // unable to determine version
-            return -1;
         }
     }
 }

@@ -318,6 +318,16 @@ namespace Bit.Droid.Services
             return manager.IsAutofillSupported;
         }
 
+        public int SystemMajorVersion()
+        {
+            return (int)Build.VERSION.SdkInt;
+        }
+
+        public string SystemModel()
+        {
+            return Build.Model;
+        }
+
         private bool DeleteDir(Java.IO.File dir)
         {
             if(dir != null && dir.IsDirectory)

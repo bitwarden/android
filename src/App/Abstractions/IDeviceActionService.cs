@@ -21,5 +21,7 @@ namespace Bit.App.Abstractions
         bool SupportsNfc();
         bool SupportsCamera();
         bool SupportsAutofillService();
+        int SystemMajorVersion();
+        string SystemModel();
     }
 }
