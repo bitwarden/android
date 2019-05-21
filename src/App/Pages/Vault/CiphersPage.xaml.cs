@@ -1,5 +1,7 @@
-﻿using Bit.App.Resources;
+﻿using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 using System;
 using Xamarin.Forms;
 
@@ -7,16 +9,20 @@ namespace Bit.App.Pages
 {
     public partial class CiphersPage : BaseContentPage
     {
+        private readonly string _autofillUrl;
+        private readonly IDeviceActionService _deviceActionService;
+
         private CiphersPageViewModel _vm;
         private bool _hasFocused;
 
         public CiphersPage(Func<CipherView, bool> filter, bool folder = false, bool collection = false,
-            bool type = false)
+            bool type = false, string autofillUrl = null)
         {
             InitializeComponent();
             _vm = BindingContext as CiphersPageViewModel;
             _vm.Page = this;
             _vm.Filter = filter;
+            _vm.AutofillUrl = _autofillUrl = autofillUrl;
             if(folder)
             {
                 _vm.PageTitle = AppResources.SearchFolder;
@@ -33,6 +39,8 @@ namespace Bit.App.Pages
             {
                 _vm.PageTitle = AppResources.SearchVault;
             }
+
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
         }
 
         public SearchBar SearchBar => _searchBar;
@@ -43,7 +51,10 @@ namespace Bit.App.Pages
             if(!_hasFocused)
             {
                 _hasFocused = true;
-                RequestFocus(_searchBar);
+                if(string.IsNullOrWhiteSpace(_autofillUrl))
+                {
+                    RequestFocus(_searchBar);
+                }
             }
         }
 
@@ -70,6 +81,10 @@ namespace Bit.App.Pages
 
         protected override bool OnBackButtonPressed()
         {
+            if(string.IsNullOrWhiteSpace(_autofillUrl))
+            {
+                return false;
+            }
             GoBack();
             return true;
         }
@@ -80,7 +95,14 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            Navigation.PopModalAsync(false);
+            if(string.IsNullOrWhiteSpace(_autofillUrl))
+            {
+                Navigation.PopModalAsync(false);
+            }
+            else
+            {
+                _deviceActionService.CloseAutofill();
+            }
         }
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)

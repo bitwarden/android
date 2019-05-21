@@ -1,13 +1,18 @@
 ﻿using Bit.App.Models;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public partial class AutofillCiphersPage : BaseContentPage
     {
-        private AutofillCiphersPageViewModel _vm;
         private readonly AppOptions _appOptions;
+        private readonly IPlatformUtilsService _platformUtilsService;
+
+        private AutofillCiphersPageViewModel _vm;
 
         public AutofillCiphersPage(AppOptions appOptions)
         {
@@ -17,6 +22,8 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _fab.Clicked = AddButton_Clicked;
             _vm.Init(appOptions);
+
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
         }
 
         protected async override void OnAppearing()
@@ -60,7 +67,14 @@ namespace Bit.App.Pages
 
         private void Search_Clicked(object sender, System.EventArgs e)
         {
-
+            var page = new CiphersPage(null, autofillUrl: _vm.Uri);
+            Application.Current.MainPage = new NavigationPage(page);
+            _platformUtilsService.ShowToast("info", null,
+                string.Format(AppResources.BitwardenAutofillServiceSearch, _vm.Name),
+                new System.Collections.Generic.Dictionary<string, object>
+                {
+                    ["longDuration"] = true
+                });
         }
     }
 }
