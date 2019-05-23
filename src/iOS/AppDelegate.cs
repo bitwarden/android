@@ -28,6 +28,7 @@ namespace Bit.iOS
 
             LoadApplication(new App.App(null));
 
+            ZXing.Net.Mobile.Forms.iOS.Platform.Init();
             return base.FinishedLaunching(app, options);
         }
     }

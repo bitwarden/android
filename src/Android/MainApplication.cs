@@ -42,10 +42,13 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
-            // CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
             Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             // Note: This might cause a race condition. Investigate more.
-            Task.Run(() => FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true));
+            Task.Run(() =>
+            {
+                FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+                ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            });
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
 
             var preferencesStorage = new PreferencesStorageService(null);

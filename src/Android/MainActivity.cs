@@ -87,6 +87,8 @@ namespace Bit.Droid
             else
             {
                 Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+                ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(
+                    requestCode, permissions, grantResults);
             }
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
