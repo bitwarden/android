@@ -576,6 +576,23 @@ namespace Bit.App.Pages
             ShowCardCode = !ShowCardCode;
         }
 
+        public async Task UpdateTotpKeyAsync(string key)
+        {
+            if(Cipher?.Login != null)
+            {
+                if(!string.IsNullOrWhiteSpace(key))
+                {
+                    Cipher.Login.Totp = key;
+                    TriggerCipherChanged();
+                    _platformUtilsService.ShowToast("info", null, AppResources.AuthenticatorKeyAdded);
+                }
+                else
+                {
+                    await _platformUtilsService.ShowDialogAsync(AppResources.AuthenticatorKeyReadError);
+                }
+            }
+        }
+
         private void TypeChanged()
         {
             if(Cipher != null && TypeSelectedIndex > -1)

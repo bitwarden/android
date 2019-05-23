@@ -157,5 +157,21 @@ namespace Bit.App.Pages
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
+
+        private async void ScanTotp_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                var page = new ScanPage(key =>
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Navigation.PopModalAsync();
+                        await _vm.UpdateTotpKeyAsync(key);
+                    });
+                });
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
     }
 }

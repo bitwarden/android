@@ -46,7 +46,7 @@
                 Grid.Row="0"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
-                BackgroundColor="White" />
+                TextColor="White" />
 
             <BoxView
                 Grid.Column="0"
@@ -70,7 +70,7 @@
                 Grid.Row="2"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
-                BackgroundColor="White" />
+                TextColor="White" />
         </Grid>
 
     </Grid>

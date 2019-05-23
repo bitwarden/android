@@ -124,14 +124,34 @@
                             Grid.Column="3"
                             Grid.RowSpan="2" />
                     </Grid>
-                    <StackLayout StyleClass="box-row">
+
+                    <Grid StyleClass="box-row, box-row-input">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
                         <Label
                             Text="{u:I18n AuthenticatorKey}"
-                            StyleClass="box-label" />
+                            StyleClass="box-label"
+                            Grid.Row="0"
+                            Grid.Column="0" />
                         <controls:MonoEntry
                             Text="{Binding Cipher.Login.Totp}"
-                            StyleClass="box-value" />
-                    </StackLayout>
+                            StyleClass="box-value"
+                            Grid.Row="1"
+                            Grid.Column="0" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="&#xf030;"
+                            Clicked="ScanTotp_Clicked"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2" />
+                    </Grid>
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
                     <StackLayout StyleClass="box-row, box-row-input">

@@ -14,13 +14,13 @@ namespace Bit.App.Pages
         public ScanPage(Action<string> callback)
         {
             _callback = callback;
+            InitializeComponent();
             _zxing.Options = new ZXing.Mobile.MobileBarcodeScanningOptions
             {
                 UseNativeScanning = true,
                 PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
                 AutoRotate = false,
             };
-            InitializeComponent();
         }
 
         protected override void OnAppearing()
