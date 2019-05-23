@@ -23,7 +23,7 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(AttachmentsPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(AttachmentsPage), (message) =>
             {
                 if(message.Command == "selectFileResult")
                 {
