@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.TwoFactorPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:TwoFactorPageViewModel"
+    Title="{Binding PageTitle}">
+
+    <ContentPage.BindingContext>
+        <pages:TwoFactorPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Continue}" Clicked="Continue_Clicked" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+
+    </ScrollView>
+
+</pages:BaseContentPage>
