@@ -92,6 +92,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />

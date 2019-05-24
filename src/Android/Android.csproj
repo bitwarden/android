@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
+    <Reference Include="Mono.Android.Export" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -87,6 +88,7 @@
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Renderers\CustomSearchBarRenderer.cs" />
     <Compile Include="Renderers\ExtendedListViewRenderer.cs" />
+    <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="SplashActivity.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRecyclerAdapter.cs" />
     <Compile Include="Renderers\BoxedView\BoxedViewRenderer.cs" />
