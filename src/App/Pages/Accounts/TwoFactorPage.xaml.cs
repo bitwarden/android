@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Controls;
+using System;
 
 namespace Bit.App.Pages
 {
@@ -11,7 +12,10 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
+            DuoWebView = _duoWebView;
         }
+
+        public HybridWebView DuoWebView { get; set; }
 
         protected override void OnAppearing()
         {

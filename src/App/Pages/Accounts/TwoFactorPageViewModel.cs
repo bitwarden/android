@@ -6,6 +6,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -19,10 +20,12 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly IApiService _apiService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IEnvironmentService _environmentService;
 
         private bool _u2fSupported = false;
         private TwoFactorProviderType? _selectedProviderType;
         private string _twoFactorEmail;
+        private string _webVaultUrl = "https://vault.bitwarden.com";
 
         public TwoFactorPageViewModel()
         {
@@ -32,6 +35,7 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
         }
 
         public string TwoFactorEmail
@@ -52,6 +56,14 @@ namespace Bit.App.Pages
 
         public bool EmailMethod => SelectedProviderType == TwoFactorProviderType.Email;
 
+        public bool TotpMethod => AuthenticatorMethod || EmailMethod;
+
+        public string TotpInstruction => AuthenticatorMethod ? AppResources.EnterVerificationCodeApp :
+            AppResources.EnterVerificationCodeEmail;
+
+        public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
+            AppResources.YubiKeyInstruction;
+
         public TwoFactorProviderType? SelectedProviderType
         {
             get => _selectedProviderType;
@@ -60,7 +72,9 @@ namespace Bit.App.Pages
                 nameof(EmailMethod),
                 nameof(DuoMethod),
                 nameof(YubikeyMethod),
-                nameof(AuthenticatorMethod)
+                nameof(AuthenticatorMethod),
+                nameof(TotpMethod),
+                nameof(TotpInstruction)
             });
         }
 
@@ -74,10 +88,19 @@ namespace Bit.App.Pages
                 return;
             }
 
+            if(!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
+            {
+                _webVaultUrl = _environmentService.BaseUrl;
+            }
+            else if(!string.IsNullOrWhiteSpace(_environmentService.WebVaultUrl))
+            {
+                _webVaultUrl = _environmentService.WebVaultUrl;
+            }
+
             // TODO: init U2F
             _u2fSupported = false;
 
-            var selectedProviderType = _authService.GetDefaultTwoFactorProvider(_u2fSupported);
+            SelectedProviderType = _authService.GetDefaultTwoFactorProvider(_u2fSupported);
             Load();
         }
 
@@ -97,9 +120,15 @@ namespace Bit.App.Pages
                     break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
-                    // TODO: init duo
-                    var host = providerData["Host"] as string;
-                    var signature = providerData["Signature"] as string;
+                    var host = WebUtility.UrlEncode(providerData["Host"] as string);
+                    var req = WebUtility.UrlEncode(providerData["Signature"] as string);
+                    var page = Page as TwoFactorPage;
+                    page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
+                    page.DuoWebView.RegisterAction(async sig =>
+                    {
+                        Token = sig;
+                        await SubmitAsync();
+                    });
                     break;
                 case TwoFactorProviderType.Email:
                     TwoFactorEmail = providerData["Email"] as string;

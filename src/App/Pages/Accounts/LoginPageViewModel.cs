@@ -100,7 +100,8 @@ namespace Bit.App.Pages
                 }
                 if(response.TwoFactor)
                 {
-                    // TODO: 2fa page
+                    var page = new TwoFactorPage();
+                    await Page.Navigation.PushModalAsync(new NavigationPage(page));
                 }
                 else
                 {

@@ -16,15 +16,103 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:IsNullConverter x:Key="isNull" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Continue}" Clicked="Continue_Clicked" />
+        <ToolbarItem Text="{u:I18n Continue}" Clicked="Continue_Clicked" x:Name="_continueItem" />
     </ContentPage.ToolbarItems>
 
     <ScrollView>
-
+        <StackLayout Spacing="0" Padding="0">
+            <StackLayout Spacing="0" Padding="0" IsVisible="{Binding TotpMethod, Mode=OneWay}">
+                <Label
+                    Text="{Binding TotpInstruction, Mode=OneWay}"
+                    Margin="20, 0"
+                    HorizontalTextAlignment="Center" />
+                <StackLayout StyleClass="box">
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n VerificationCode}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Token}"
+                            Keyboard="Numeric"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label
+                            Text="{u:I18n RememberMe}"
+                            StyleClass="box-label, box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding Remember}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout Spacing="0" Padding="0" IsVisible="{Binding YubikeyMethod, Mode=OneWay}">
+                <Label
+                    Text="{Binding YubikeyInstruction, Mode=OneWay}"
+                    Margin="20, 0"
+                    HorizontalTextAlignment="Center" />
+                <Image
+                    Source="yubikey.png"
+                    Margin="20, 0"
+                    WidthRequest="266"
+                    HeightRequest="160"
+                    HorizontalOptions="Center" />
+                <StackLayout StyleClass="box">
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Entry
+                            Text="{Binding Token}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label
+                            Text="{u:I18n RememberMe}"
+                            StyleClass="box-label, box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding Remember}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout Spacing="0" Padding="0" IsVisible="{Binding DuoMethod, Mode=OneWay}">
+                <controls:HybridWebView
+                    x:Name="_duoWebView"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    MinimumHeightRequest="400" />
+                <StackLayout StyleClass="box">
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label
+                            Text="{u:I18n RememberMe}"
+                            StyleClass="box-label, box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding Remember}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout
+                Spacing="0"
+                Padding="0"
+                IsVisible="{Binding SelectedProviderType, Mode=OneWay, Converter={StaticResource isNull}}">
+                <Label
+                    Text="{u:I18n NoTwoStepAvailable}"
+                    Margin="20, 0"
+                    HorizontalTextAlignment="Center" />
+            </StackLayout>
+            <Button Text="{u:I18n UseAnotherTwoStepMethod}"
+                    Clicked="Methods_Clicked"></Button>
+        </StackLayout>
     </ScrollView>
 
 </pages:BaseContentPage>
