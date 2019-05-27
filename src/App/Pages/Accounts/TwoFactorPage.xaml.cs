@@ -1,5 +1,4 @@
 ﻿using System;
-using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -14,25 +13,33 @@ namespace Bit.App.Pages
             _vm.Page = this;
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
-            await _vm.InitAsync();
+            _vm.Init();
         }
 
-        private void Continue_Clicked(object sender, EventArgs e)
+        private async void Continue_Clicked(object sender, EventArgs e)
         {
             if(DoOnce())
             {
-
+                await _vm.SubmitAsync();
             }
         }
 
-        private void Methods_Clicked(object sender, EventArgs e)
+        private async void Methods_Clicked(object sender, EventArgs e)
         {
             if(DoOnce())
             {
+                await _vm.AnotherMethodAsync();
+            }
+        }
 
+        private async void ResendEmail_Clicked(object sender, EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await _vm.SendEmailAsync(true, true);
             }
         }
     }

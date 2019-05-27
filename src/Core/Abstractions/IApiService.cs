@@ -44,5 +44,6 @@ namespace Bit.Core.Abstractions
         Task PostShareCipherAttachmentAsync(string id, string attachmentId, MultipartFormDataContent data,
             string organizationId);
         Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username);
+        Task PostTwoFactorEmailAsync(TwoFactorEmailRequest request);
     }
 }

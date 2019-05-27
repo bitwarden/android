@@ -24,7 +24,6 @@ namespace Bit.Core.Services
         private SymmetricCryptoKey _key;
         private KdfType? _kdf;
         private int? _kdfIterations;
-        private Dictionary<TwoFactorProviderType, TwoFactorProvider> _twoFactorProviders;
 
         public AuthService(
             ICryptoService cryptoService,
@@ -47,21 +46,21 @@ namespace Bit.Core.Services
             _messagingService = messagingService;
             _setCryptoKeys = setCryptoKeys;
 
-            _twoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
-            _twoFactorProviders.Add(TwoFactorProviderType.Authenticator, new TwoFactorProvider
+            TwoFactorProviders = new Dictionary<TwoFactorProviderType, TwoFactorProvider>();
+            TwoFactorProviders.Add(TwoFactorProviderType.Authenticator, new TwoFactorProvider
             {
                 Type = TwoFactorProviderType.Authenticator,
                 Priority = 1,
                 Sort = 1
             });
-            _twoFactorProviders.Add(TwoFactorProviderType.YubiKey, new TwoFactorProvider
+            TwoFactorProviders.Add(TwoFactorProviderType.YubiKey, new TwoFactorProvider
             {
                 Type = TwoFactorProviderType.YubiKey,
                 Priority = 3,
                 Sort = 2,
                 Premium = true
             });
-            _twoFactorProviders.Add(TwoFactorProviderType.Duo, new TwoFactorProvider
+            TwoFactorProviders.Add(TwoFactorProviderType.Duo, new TwoFactorProvider
             {
                 Type = TwoFactorProviderType.Duo,
                 Name = "Duo",
@@ -69,21 +68,21 @@ namespace Bit.Core.Services
                 Sort = 3,
                 Premium = true
             });
-            _twoFactorProviders.Add(TwoFactorProviderType.OrganizationDuo, new TwoFactorProvider
+            TwoFactorProviders.Add(TwoFactorProviderType.OrganizationDuo, new TwoFactorProvider
             {
                 Type = TwoFactorProviderType.OrganizationDuo,
                 Name = "Duo (Organization)",
                 Priority = 10,
                 Sort = 4
             });
-            _twoFactorProviders.Add(TwoFactorProviderType.U2f, new TwoFactorProvider
+            TwoFactorProviders.Add(TwoFactorProviderType.U2f, new TwoFactorProvider
             {
                 Type = TwoFactorProviderType.U2f,
                 Priority = 4,
                 Sort = 5,
                 Premium = true
             });
-            _twoFactorProviders.Add(TwoFactorProviderType.Email, new TwoFactorProvider
+            TwoFactorProviders.Add(TwoFactorProviderType.Email, new TwoFactorProvider
             {
                 Type = TwoFactorProviderType.Email,
                 Priority = 0,
@@ -93,25 +92,26 @@ namespace Bit.Core.Services
 
         public string Email { get; set; }
         public string MasterPasswordHash { get; set; }
-        public Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProviders { get; set; }
+        public Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
+        public Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
         public TwoFactorProviderType? SelectedTwoFactorProviderType { get; set; }
 
         public void Init()
         {
-            _twoFactorProviders[TwoFactorProviderType.Email].Name = _i18nService.T("EmailTitle");
-            _twoFactorProviders[TwoFactorProviderType.Email].Description = _i18nService.T("EmailDesc");
-            _twoFactorProviders[TwoFactorProviderType.Authenticator].Name = _i18nService.T("AuthenticatorAppTitle");
-            _twoFactorProviders[TwoFactorProviderType.Authenticator].Description =
+            TwoFactorProviders[TwoFactorProviderType.Email].Name = _i18nService.T("EmailTitle");
+            TwoFactorProviders[TwoFactorProviderType.Email].Description = _i18nService.T("EmailDesc");
+            TwoFactorProviders[TwoFactorProviderType.Authenticator].Name = _i18nService.T("AuthenticatorAppTitle");
+            TwoFactorProviders[TwoFactorProviderType.Authenticator].Description =
                 _i18nService.T("AuthenticatorAppDesc");
-            _twoFactorProviders[TwoFactorProviderType.Duo].Description = _i18nService.T("DuoDesc");
-            _twoFactorProviders[TwoFactorProviderType.OrganizationDuo].Name =
+            TwoFactorProviders[TwoFactorProviderType.Duo].Description = _i18nService.T("DuoDesc");
+            TwoFactorProviders[TwoFactorProviderType.OrganizationDuo].Name =
                 string.Format("Duo ({0})", _i18nService.T("Organization"));
-            _twoFactorProviders[TwoFactorProviderType.OrganizationDuo].Description =
+            TwoFactorProviders[TwoFactorProviderType.OrganizationDuo].Description =
                 _i18nService.T("DuoOrganizationDesc");
-            _twoFactorProviders[TwoFactorProviderType.U2f].Name = _i18nService.T("U2fTitle");
-            _twoFactorProviders[TwoFactorProviderType.U2f].Description = _i18nService.T("U2fDesc");
-            _twoFactorProviders[TwoFactorProviderType.YubiKey].Name = _i18nService.T("YubiKeyTitle");
-            _twoFactorProviders[TwoFactorProviderType.YubiKey].Description = _i18nService.T("YubiKeyDesc");
+            TwoFactorProviders[TwoFactorProviderType.U2f].Name = _i18nService.T("U2fTitle");
+            TwoFactorProviders[TwoFactorProviderType.U2f].Description = _i18nService.T("U2fDesc");
+            TwoFactorProviders[TwoFactorProviderType.YubiKey].Name = _i18nService.T("YubiKeyTitle");
+            TwoFactorProviders[TwoFactorProviderType.YubiKey].Description = _i18nService.T("YubiKeyDesc");
         }
 
         public async Task<AuthResult> LogInAsync(string email, string masterPassword)
@@ -146,56 +146,56 @@ namespace Bit.Core.Services
         public List<TwoFactorProvider> GetSupportedTwoFactorProviders()
         {
             var providers = new List<TwoFactorProvider>();
-            if(TwoFactorProviders == null)
+            if(TwoFactorProvidersData == null)
             {
                 return providers;
             }
-            if(TwoFactorProviders.ContainsKey(TwoFactorProviderType.OrganizationDuo) &&
+            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.OrganizationDuo) &&
                 _platformUtilsService.SupportsDuo())
             {
-                providers.Add(_twoFactorProviders[TwoFactorProviderType.OrganizationDuo]);
+                providers.Add(TwoFactorProviders[TwoFactorProviderType.OrganizationDuo]);
             }
-            if(TwoFactorProviders.ContainsKey(TwoFactorProviderType.Authenticator))
+            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Authenticator))
             {
-                providers.Add(_twoFactorProviders[TwoFactorProviderType.Authenticator]);
+                providers.Add(TwoFactorProviders[TwoFactorProviderType.Authenticator]);
             }
-            if(TwoFactorProviders.ContainsKey(TwoFactorProviderType.YubiKey))
+            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.YubiKey))
             {
-                providers.Add(_twoFactorProviders[TwoFactorProviderType.YubiKey]);
+                providers.Add(TwoFactorProviders[TwoFactorProviderType.YubiKey]);
             }
-            if(TwoFactorProviders.ContainsKey(TwoFactorProviderType.Duo) && _platformUtilsService.SupportsDuo())
+            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Duo) && _platformUtilsService.SupportsDuo())
             {
-                providers.Add(_twoFactorProviders[TwoFactorProviderType.Duo]);
+                providers.Add(TwoFactorProviders[TwoFactorProviderType.Duo]);
             }
-            if(TwoFactorProviders.ContainsKey(TwoFactorProviderType.U2f) && _platformUtilsService.SupportsU2f())
+            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.U2f) && _platformUtilsService.SupportsU2f())
             {
-                providers.Add(_twoFactorProviders[TwoFactorProviderType.U2f]);
+                providers.Add(TwoFactorProviders[TwoFactorProviderType.U2f]);
             }
-            if(TwoFactorProviders.ContainsKey(TwoFactorProviderType.Email))
+            if(TwoFactorProvidersData.ContainsKey(TwoFactorProviderType.Email))
             {
-                providers.Add(_twoFactorProviders[TwoFactorProviderType.Email]);
+                providers.Add(TwoFactorProviders[TwoFactorProviderType.Email]);
             }
             return providers;
         }
 
         public TwoFactorProviderType? GetDefaultTwoFactorProvider(bool u2fSupported)
         {
-            if(TwoFactorProviders == null)
+            if(TwoFactorProvidersData == null)
             {
                 return null;
             }
             if(SelectedTwoFactorProviderType != null &&
-                TwoFactorProviders.ContainsKey(SelectedTwoFactorProviderType.Value))
+                TwoFactorProvidersData.ContainsKey(SelectedTwoFactorProviderType.Value))
             {
                 return SelectedTwoFactorProviderType.Value;
             }
             TwoFactorProviderType? providerType = null;
             var providerPriority = -1;
-            foreach(var providerKvp in TwoFactorProviders)
+            foreach(var providerKvp in TwoFactorProvidersData)
             {
-                if(_twoFactorProviders.ContainsKey(providerKvp.Key))
+                if(TwoFactorProviders.ContainsKey(providerKvp.Key))
                 {
-                    var provider = _twoFactorProviders[providerKvp.Key];
+                    var provider = TwoFactorProviders[providerKvp.Key];
                     if(provider.Priority > providerPriority)
                     {
                         if(providerKvp.Key == TwoFactorProviderType.U2f && !u2fSupported)
@@ -274,7 +274,7 @@ namespace Bit.Core.Services
                 Email = email;
                 MasterPasswordHash = hashedPassword;
                 _key = _setCryptoKeys ? key : null;
-                TwoFactorProviders = twoFactorResponse.TwoFactorProviders2;
+                TwoFactorProvidersData = twoFactorResponse.TwoFactorProviders2;
                 result.TwoFactorProviders = twoFactorResponse.TwoFactorProviders2;
                 return result;
             }
@@ -320,7 +320,7 @@ namespace Bit.Core.Services
         {
             Email = null;
             MasterPasswordHash = null;
-            TwoFactorProviders = null;
+            TwoFactorProvidersData = null;
             SelectedTwoFactorProviderType = null;
         }
     }

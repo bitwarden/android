@@ -271,6 +271,16 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region Two Factor APIs
+
+        public Task PostTwoFactorEmailAsync(TwoFactorEmailRequest request)
+        {
+            return SendAsync<TwoFactorEmailRequest, object>(
+                HttpMethod.Post, "/two-factor/send-email-login", request, false, false);
+        }
+
+        #endregion
+
         #region HIBP APIs
 
         public Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username)

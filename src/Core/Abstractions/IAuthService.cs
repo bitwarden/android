@@ -11,7 +11,8 @@ namespace Bit.Core.Abstractions
         string Email { get; set; }
         string MasterPasswordHash { get; set; }
         TwoFactorProviderType? SelectedTwoFactorProviderType { get; set; }
-        Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProviders { get; set; }
+        Dictionary<TwoFactorProviderType, TwoFactorProvider> TwoFactorProviders { get; set; }
+        Dictionary<TwoFactorProviderType, Dictionary<string, object>> TwoFactorProvidersData { get; set; }
 
         TwoFactorProviderType? GetDefaultTwoFactorProvider(bool u2fSupported);
         List<TwoFactorProvider> GetSupportedTwoFactorProviders();
