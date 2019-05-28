@@ -67,6 +67,10 @@ namespace Bit.App.Pages
             await LoadOnAppearedAsync(_scrollView, true, () =>
             {
                 _vm.Init();
+                if(_vm.TotpMethod)
+                {
+                    RequestFocus(_totpEntry);
+                }
                 return Task.FromResult(0);
             });
         }

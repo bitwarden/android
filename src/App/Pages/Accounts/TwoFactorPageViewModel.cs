@@ -26,7 +26,7 @@ namespace Bit.App.Pages
 
         private bool _u2fSupported = false;
         private TwoFactorProviderType? _selectedProviderType;
-        private string _twoFactorEmail;
+        private string _totpInstruction;
         private string _webVaultUrl = "https://vault.bitwarden.com";
 
         public TwoFactorPageViewModel()
@@ -44,10 +44,10 @@ namespace Bit.App.Pages
             PageTitle = AppResources.TwoStepLogin;
         }
 
-        public string TwoFactorEmail
+        public string TotpInstruction
         {
-            get => _twoFactorEmail;
-            set => SetProperty(ref _twoFactorEmail, value);
+            get => _totpInstruction;
+            set => SetProperty(ref _totpInstruction, value);
         }
 
         public bool Remember { get; set; }
@@ -65,9 +65,6 @@ namespace Bit.App.Pages
 
         public bool TotpMethod => AuthenticatorMethod || EmailMethod;
 
-        public string TotpInstruction => AuthenticatorMethod ? AppResources.EnterVerificationCodeApp :
-            AppResources.EnterVerificationCodeEmail;
-
         public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
 
@@ -81,7 +78,6 @@ namespace Bit.App.Pages
                 nameof(YubikeyMethod),
                 nameof(AuthenticatorMethod),
                 nameof(TotpMethod),
-                nameof(TotpInstruction)
             });
         }
 
@@ -141,11 +137,15 @@ namespace Bit.App.Pages
                     });
                     break;
                 case TwoFactorProviderType.Email:
-                    TwoFactorEmail = providerData["Email"] as string;
+                    TotpInstruction = string.Format(AppResources.EnterVerificationCodeEmail,
+                        providerData["Email"] as string);
                     if(_authService.TwoFactorProvidersData.Count > 1)
                     {
                         var emailTask = Task.Run(() => SendEmailAsync(false, false));
                     }
+                    break;
+                case TwoFactorProviderType.Authenticator:
+                    TotpInstruction = AppResources.EnterVerificationCodeApp;
                     break;
                 default:
                     break;
@@ -212,9 +212,15 @@ namespace Bit.App.Pages
             {
                 _platformUtilsService.LaunchUri("https://help.bitwarden.com/article/lost-two-step-device/");
             }
-            else
+            else if(method != AppResources.Cancel)
             {
-                SelectedProviderType = supportedProviders.FirstOrDefault(p => p.Name == method)?.Type;
+                var selected = supportedProviders.FirstOrDefault(p => p.Name == method)?.Type;
+                if(selected == SelectedProviderType)
+                {
+                    // Nothing changed
+                    return;
+                }
+                SelectedProviderType = selected;
                 Load();
             }
         }

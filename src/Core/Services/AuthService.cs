@@ -98,7 +98,7 @@ namespace Bit.Core.Services
 
         public void Init()
         {
-            TwoFactorProviders[TwoFactorProviderType.Email].Name = _i18nService.T("EmailTitle");
+            TwoFactorProviders[TwoFactorProviderType.Email].Name = _i18nService.T("Email");
             TwoFactorProviders[TwoFactorProviderType.Email].Description = _i18nService.T("EmailDesc");
             TwoFactorProviders[TwoFactorProviderType.Authenticator].Name = _i18nService.T("AuthenticatorAppTitle");
             TwoFactorProviders[TwoFactorProviderType.Authenticator].Description =

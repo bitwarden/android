@@ -36,6 +36,7 @@
                             StyleClass="box-label" />
                         <Entry
                             Text="{Binding Token}"
+                            x:Name="_totpEntry"
                             Keyboard="Numeric"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -109,6 +110,10 @@
                     Margin="10, 20, 10, 10"
                     HorizontalTextAlignment="Center" />
             </StackLayout>
+            <Button Text="{u:I18n SendVerificationCodeAgain}"
+                    IsVisible="{Binding EmailMethod}"
+                    Clicked="ResendEmail_Clicked"
+                    Margin="10, 0"></Button>
             <Button Text="{u:I18n UseAnotherTwoStepMethod}"
                     Clicked="Methods_Clicked"
                     Margin="10, 0"></Button>
