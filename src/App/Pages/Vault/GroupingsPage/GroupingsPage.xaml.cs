@@ -1,4 +1,6 @@
-﻿using Bit.App.Resources;
+﻿using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
@@ -12,6 +14,8 @@ namespace Bit.App.Pages
     {
         private readonly IBroadcasterService _broadcasterService;
         private readonly ISyncService _syncService;
+        private readonly IPushNotificationService _pushNotificationService;
+        private readonly IStorageService _storageService;
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
 
@@ -23,6 +27,8 @@ namespace Bit.App.Pages
             SetActivityIndicator(_mainContent);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _vm = BindingContext as GroupingsPageViewModel;
             _vm.Page = this;
             _vm.MainPage = mainPage;
@@ -71,6 +77,30 @@ namespace Bit.App.Pages
                     }
                 }
             }, _mainContent);
+
+            // Push registration
+            var lastPushRegistration = await _storageService.GetAsync<DateTime?>(Constants.PushLastRegistrationDateKey);
+            lastPushRegistration = lastPushRegistration.GetValueOrDefault(DateTime.MinValue);
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                var pushPromptShow = await _storageService.GetAsync<bool?>(Constants.PushInitialPromptShownKey);
+                if(!pushPromptShow.GetValueOrDefault(false))
+                {
+                    await _storageService.SaveAsync(Constants.PushInitialPromptShownKey, true);
+                    await DisplayAlert(AppResources.EnableAutomaticSyncing, AppResources.PushNotificationAlert,
+                        AppResources.OkGotIt);
+                }
+                if(!pushPromptShow.GetValueOrDefault(false) ||
+                    DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                {
+                    await _pushNotificationService.RegisterAsync();
+                }
+            }
+            else if(Device.RuntimePlatform == Device.Android &&
+                DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+            {
+                await _pushNotificationService.RegisterAsync();
+            }
         }
 
         protected override void OnDisappearing()

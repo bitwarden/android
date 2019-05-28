@@ -16,6 +16,10 @@
         public static string AccessibilityAutofillPasswordFieldKey = "accessibilityAutofillPasswordField";
         public static string AccessibilityAutofillPersistNotificationKey = "accessibilityAutofillPersistNotification";
         public static string DisableFaviconKey = "disableFavicon";
+        public static string PushRegisteredTokenKey = "pushRegisteredToken";
+        public static string PushCurrentTokenKey = "pushCurrentToken";
+        public static string PushLastRegistrationDateKey = "pushLastRegistrationDate";
+        public static string PushInitialPromptShownKey = "pushInitialPromptShown";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
     }

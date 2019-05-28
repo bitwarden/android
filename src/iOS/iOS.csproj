@@ -94,6 +94,8 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
+    <Compile Include="Services\iOSPushNotificationHandler.cs" />
+    <Compile Include="Services\iOSPushNotificationService.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />

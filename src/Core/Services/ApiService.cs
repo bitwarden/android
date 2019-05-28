@@ -281,6 +281,16 @@ namespace Bit.Core.Services
 
         #endregion
 
+        #region Device APIs
+
+        public Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request)
+        {
+            return SendAsync<DeviceTokenRequest, object>(
+                HttpMethod.Post, $"identifier/{identifier}/token", request, true, false);
+        }
+
+        #endregion
+
         #region HIBP APIs
 
         public Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username)

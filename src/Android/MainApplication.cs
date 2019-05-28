@@ -76,6 +76,20 @@ namespace Bit.Droid
             ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
             ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
             ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
+
+            // Push
+#if FDROID
+            container.RegisterSingleton<IPushNotificationListener, NoopPushNotificationListener>();
+            container.RegisterSingleton<IPushNotificationService, NoopPushNotificationService>();
+#else
+            var notificationListenerService = new PushNotificationListenerService();
+            ServiceContainer.Register<IPushNotificationListenerService>(
+                "pushNotificationListenerService", notificationListenerService);
+            var androidPushNotificationService = new AndroidPushNotificationService(
+                mobileStorageService, notificationListenerService);
+            ServiceContainer.Register<IPushNotificationService>(
+                "pushNotificationService", androidPushNotificationService);
+#endif
         }
 
         private void Bootstrap()

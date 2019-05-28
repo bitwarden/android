@@ -45,5 +45,6 @@ namespace Bit.Core.Abstractions
             string organizationId);
         Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username);
         Task PostTwoFactorEmailAsync(TwoFactorEmailRequest request);
+        Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
     }
 }

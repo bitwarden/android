@@ -4,10 +4,12 @@ using System.Collections.Generic;
 
 namespace Bit.Core.Models.Response
 {
-    public class PushNotificationResponse
+    public class NotificationResponse
     {
+        public string ContextId { get; set; }
         public NotificationType Type { get; set; }
         public string Payload { get; set; }
+        public object PayloadObject { get; set; }
     }
 
     public class SyncCipherNotification
