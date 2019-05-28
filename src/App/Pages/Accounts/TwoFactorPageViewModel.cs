@@ -21,6 +21,8 @@ namespace Bit.App.Pages
         private readonly IApiService _apiService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IEnvironmentService _environmentService;
+        private readonly IMessagingService _messagingService;
+        private readonly IBroadcasterService _broadcasterService;
 
         private bool _u2fSupported = false;
         private TwoFactorProviderType? _selectedProviderType;
@@ -36,6 +38,8 @@ namespace Bit.App.Pages
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
 
             PageTitle = AppResources.TwoStepLogin;
         }
@@ -122,9 +126,11 @@ namespace Bit.App.Pages
                 case TwoFactorProviderType.U2f:
                     // TODO
                     break;
+                case TwoFactorProviderType.YubiKey:
+                    _messagingService.Send("listenYubiKeyOTP", true);
+                    break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
-                    page.RemoveContinueButton();
                     var host = WebUtility.UrlEncode(providerData["Host"] as string);
                     var req = WebUtility.UrlEncode(providerData["Signature"] as string);
                     page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
@@ -135,7 +141,6 @@ namespace Bit.App.Pages
                     });
                     break;
                 case TwoFactorProviderType.Email:
-                    page.AddContinueButton();
                     TwoFactorEmail = providerData["Email"] as string;
                     if(_authService.TwoFactorProvidersData.Count > 1)
                     {
@@ -143,8 +148,20 @@ namespace Bit.App.Pages
                     }
                     break;
                 default:
-                    page.AddContinueButton();
                     break;
+            }
+
+            if(!YubikeyMethod)
+            {
+                _messagingService.Send("listenYubiKeyOTP", false);
+            }
+            if(DuoMethod)
+            {
+                page.RemoveContinueButton();
+            }
+            else
+            {
+                page.AddContinueButton();
             }
         }
 
@@ -172,6 +189,8 @@ namespace Bit.App.Pages
                 await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, Remember);
                 await _deviceActionService.HideLoadingAsync();
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
+                _messagingService.Send("listenYubiKeyOTP", false);
+                _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
                 Application.Current.MainPage = new TabsPage();
             }
             catch(ApiException e)
@@ -202,7 +221,7 @@ namespace Bit.App.Pages
 
         public async Task<bool> SendEmailAsync(bool showLoading, bool doToast)
         {
-            if(SelectedProviderType != TwoFactorProviderType.Email)
+            if(!EmailMethod)
             {
                 return false;
             }

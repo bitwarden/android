@@ -32,6 +32,8 @@ namespace Bit.Droid
         private IBroadcasterService _broadcasterService;
         private PendingIntent _lockAlarmPendingIntent;
         private AppOptions _appOptions;
+        private Java.Util.Regex.Pattern _otpPattern =
+            Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -70,7 +72,36 @@ namespace Bit.Droid
                 {
                     Finish();
                 }
+                else if(message.Command == "listenYubiKeyOTP")
+                {
+                    ListenYubiKey((bool)message.Data);
+                }
             });
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+            ListenYubiKey(false);
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            if(_deviceActionService.SupportsNfc())
+            {
+                try
+                {
+                    _messagingService.Send("resumeYubiKey");
+                }
+                catch { }
+            }
+        }
+
+        protected override void OnNewIntent(Intent intent)
+        {
+            base.OnNewIntent(intent);
+            ParseYubiKey(intent.DataString);
         }
 
         public async override void OnRequestPermissionsResult(int requestCode, string[] permissions,
@@ -190,6 +221,20 @@ namespace Bit.Droid
                 options.SaveCardCode = Intent.GetStringExtra("autofillFrameworkCardCode");
             }
             return options;
+        }
+
+        private void ParseYubiKey(string data)
+        {
+            if(data == null)
+            {
+                return;
+            }
+            var otpMatch = _otpPattern.Matcher(data);
+            if(otpMatch.Matches())
+            {
+                var otp = otpMatch.Group(1);
+                _messagingService.Send("gotYubiKeyOTP", otp);
+            }
         }
     }
 }
