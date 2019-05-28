@@ -191,12 +191,12 @@ namespace Bit.Core.Services
             {
                 options.WordSeparator = " ";
             }
-            var listLength = WordList.EEFLongWordList.Count - 1;
+            var listLength = EEFLongWordList.Instance.List.Count - 1;
             var wordList = new List<string>();
             for(int i = 0; i < options.NumWords.GetValueOrDefault(); i++)
             {
                 var wordIndex = await _cryptoService.RandomNumberAsync(0, listLength);
-                wordList.Add(WordList.EEFLongWordList[wordIndex]);
+                wordList.Add(EEFLongWordList.Instance.List[wordIndex]);
             }
             return string.Join(options.WordSeparator, wordList);
         }

@@ -13,10 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\eff_long_word_list.txt" />
     <None Remove="Resources\public_suffix_list.dat" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Resources\eff_long_word_list.txt" />
     <EmbeddedResource Include="Resources\public_suffix_list.dat" />
   </ItemGroup>
 
