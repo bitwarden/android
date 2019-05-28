@@ -13,12 +13,12 @@ namespace Bit.Droid.Push
     [IntentFilter(new[] { "com.google.firebase.INSTANCE_ID_EVENT" })]
     public class FirebaseInstanceIdService : Firebase.Iid.FirebaseInstanceIdService
     {
-        public override void OnTokenRefresh()
+        public async override void OnTokenRefresh()
         {
             var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             var pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
-            storageService.SaveAsync(Constants.PushRegisteredTokenKey, FirebaseInstanceId.Instance.Token);
-            pushNotificationService.RegisterAsync();
+            await storageService.SaveAsync(Constants.PushRegisteredTokenKey, FirebaseInstanceId.Instance.Token);
+            await pushNotificationService.RegisterAsync();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Bit.Droid.Push
     [IntentFilter(new[] { "com.google.firebase.MESSAGING_EVENT" })]
     public class FirebaseMessagingService : Firebase.Messaging.FirebaseMessagingService
     {
-        public override void OnMessageReceived(RemoteMessage message)
+        public async override void OnMessageReceived(RemoteMessage message)
         {
             if(message?.Data == null)
             {
@@ -30,7 +30,7 @@ namespace Bit.Droid.Push
                 var obj = JObject.Parse(data);
                 var listener = ServiceContainer.Resolve<IPushNotificationListenerService>(
                     "pushNotificationListenerService");
-                listener.OnMessageAsync(obj, Device.Android);
+                await listener.OnMessageAsync(obj, Device.Android);
             }
             catch(JsonReaderException ex)
             {
