@@ -5,20 +5,20 @@ using Android.OS;
 using Android.Runtime;
 using Android.Service.Autofill;
 using Android.Widget;
-using Bit.App;
-using Bit.App.Abstractions;
-using Bit.App.Enums;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Linq;
-using XLabs.Ioc;
 
-namespace Bit.Android.Autofill
+namespace Bit.Droid.Autofill
 {
     [Service(Permission = Manifest.Permission.BindAutofillService, Label = "Bitwarden")]
     [IntentFilter(new string[] { "android.service.autofill.AutofillService" })]
     [MetaData("android.autofill", Resource = "@xml/autofillservice")]
     [Register("com.x8bit.bitwarden.Autofill.AutofillService")]
-    public class AutofillService : global::Android.Service.Autofill.AutofillService
+    public class AutofillService : Android.Service.Autofill.AutofillService
     {
         private ICipherService _cipherService;
         private ILockService _lockService;
@@ -31,33 +31,32 @@ namespace Bit.Android.Autofill
                 return;
             }
 
-            var parser = new Parser(structure);
+            var parser = new Parser(structure, ApplicationContext);
             parser.Parse();
 
             if(!parser.ShouldAutofill)
             {
                 return;
             }
-
+            
             if(_lockService == null)
             {
-                _lockService = Resolver.Resolve<ILockService>();
+                 _lockService = ServiceContainer.Resolve<ILockService>("lockService");
             }
 
             List<FilledItem> items = null;
-            var locked = (await _lockService.GetLockTypeAsync(false)) != LockType.None;
+            var locked = await _lockService.IsLockedAsync();
             if(!locked)
             {
                 if(_cipherService == null)
                 {
-                    _cipherService = Resolver.Resolve<ICipherService>();
+                    _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
                 }
-
                 items = await AutofillHelpers.GetFillItemsAsync(parser, _cipherService);
             }
 
             // build response
-            var response = AutofillHelpers.BuildFillResponse(this, parser, items, locked);
+            var response = AutofillHelpers.BuildFillResponse(parser, items, locked);
             callback.OnSuccess(response);
         }
 
@@ -69,7 +68,7 @@ namespace Bit.Android.Autofill
                 return;
             }
 
-            var parser = new Parser(structure);
+            var parser = new Parser(structure, ApplicationContext);
             parser.Parse();
 
             var savedItem = parser.FieldCollection.GetSavedItem();

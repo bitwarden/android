@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Globalization;
-using System.Threading;
-using Foundation;
 using Bit.App.Abstractions;
 using Bit.App.Models;
+using Foundation;
 
 namespace Bit.iOS.Core.Services
 {
     public class LocalizeService : ILocalizeService
     {
-        public void SetLocale(CultureInfo ci)
-        {
-            Thread.CurrentThread.CurrentCulture = ci;
-            Thread.CurrentThread.CurrentUICulture = ci;
-            Console.WriteLine("CurrentCulture set: " + ci.Name);
-        }
-
         public CultureInfo GetCurrentCultureInfo()
         {
             var netLanguage = "en";
@@ -26,7 +18,7 @@ namespace Bit.iOS.Core.Services
                 netLanguage = iOSToDotnetLanguage(pref);
             }
 
-            // this gets called a lot - try/catch can be expensive so consider caching or something
+            // This gets called a lot - try/catch can be expensive so consider caching or something
             CultureInfo ci = null;
             try
             {
@@ -57,7 +49,6 @@ namespace Bit.iOS.Core.Services
         {
             Console.WriteLine("iOS Language:" + iOSLanguage);
             var netLanguage = iOSLanguage;
-
             if(iOSLanguage.StartsWith("zh-Hant") || iOSLanguage.StartsWith("zh-HK"))
             {
                 netLanguage = "zh-Hant";
@@ -68,7 +59,7 @@ namespace Bit.iOS.Core.Services
             }
             else
             {
-                //certain languages need to be converted to CultureInfo equivalent
+                // Certain languages need to be converted to CultureInfo equivalent
                 switch(iOSLanguage)
                 {
                     case "ms-MY": // "Malaysian (Malaysia)" not supported .NET culture
@@ -90,8 +81,8 @@ namespace Bit.iOS.Core.Services
         private string ToDotnetFallbackLanguage(PlatformCulture platCulture)
         {
             Console.WriteLine(".NET Fallback Language:" + platCulture.LanguageCode);
-            var netLanguage = platCulture.LanguageCode; // use the first part of the identifier (two chars, usually);
-
+            // Use the first part of the identifier (two chars, usually);
+            var netLanguage = platCulture.LanguageCode;
             switch(platCulture.LanguageCode)
             {
                 case "pt":
@@ -103,7 +94,6 @@ namespace Bit.iOS.Core.Services
                     // add more application-specific cases here (if required)
                     // ONLY use cultures that have been tested and known to work
             }
-
             Console.WriteLine(".NET Fallback Language/Locale:" + netLanguage + " (application-specific)");
             return netLanguage;
         }

@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Bit.App.Styles.Android">
+    <Style TargetType="Entry"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Margin"
+                Value="-4, 0, -4, -4" />
+    </Style>
+    <Style TargetType="Picker"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Margin"
+                Value="-4, 0, -4, -4" />
+    </Style>
+    <Style TargetType="Editor"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Margin"
+                Value="-4, 0, -4, -4" />
+    </Style>
+    
+    <!-- Buttons -->
+    
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="btn-icon-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+    
+    <!-- Title -->
+
+    <Style TargetType="Button"
+           Class="btn-title-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="WidthRequest"
+                Value="28" />
+        <Setter Property="FontSize"
+                Value="24" />
+    </Style>
+
+    <!-- List -->
+
+    <Style TargetType="ListView"
+           Class="list-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="SeparatorColor"
+                Value="Transparent" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header-platform">
+        <Setter Property="TextColor"
+                Value="{StaticResource ListHeaderTextColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="Grid"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="list-row-button-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+    
+    <!-- Box -->
+
+    <Style TargetType="Label"
+           Class="box-header-platform">
+        <Setter Property="TextColor"
+                Value="{StaticResource BoxHeaderTextColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-row-button-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+</ResourceDictionary>

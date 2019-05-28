@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.HomePage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:HomeViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:HomeViewModel />
+    </ContentPage.BindingContext>
+
+    <StackLayout Spacing="0" Padding="10, 5">
+        <controls:FaButton Text="&#xf013;"
+                           StyleClass="btn-muted, btn-icon, btn-icon-platform"
+                           HorizontalOptions="Start"
+                           Clicked="Settings_Clicked" />
+        <StackLayout VerticalOptions="CenterAndExpand" Spacing="20">
+            <Image Source="logo.png" 
+                VerticalOptions="Center" />
+            <Label Text="{u:I18n LoginOrCreateNewAccount}"
+                   StyleClass="text-lg"
+                   HorizontalTextAlignment="Center"></Label>
+            <StackLayout Spacing="5">
+                <Button Text="{u:I18n LogIn}" 
+                    Clicked="LogIn_Clicked"></Button>
+                <Button Text="{u:I18n CreateAccount}"
+                    Clicked="Register_Clicked"></Button>
+            </StackLayout>
+        </StackLayout>
+    </StackLayout>
+
+</pages:BaseContentPage>

@@ -24,7 +24,6 @@ namespace Bit.App.Utilities
         public static FormattedString FormatPassword(String password)
         {
             var result = new FormattedString();
-
             // Start off with an empty span to prevent possible NPEs. Due to the way the state machine
             // works, this will actually always be replaced by a new span anyway.
             var currentSpan = new Span();
@@ -61,17 +60,15 @@ namespace Bit.App.Utilities
                     switch(currentType)
                     {
                         case CharType.Number:
-                            currentSpan.TextColor = Color.DodgerBlue;
+                            currentSpan.TextColor = (Color)Application.Current.Resources["PasswordNumberColor"];
                             break;
                         case CharType.Special:
-                            currentSpan.TextColor = Color.Firebrick;
+                            currentSpan.TextColor = (Color)Application.Current.Resources["PasswordSpecialColor"];
                             break;
                     }
                 }
-
                 currentSpan.Text += c;
             }
-
             return result;
         }
     }

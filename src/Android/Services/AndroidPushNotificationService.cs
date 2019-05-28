@@ -1,43 +1,49 @@
 ﻿#if !FDROID
 using System;
-using Bit.App;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
-using Plugin.Settings.Abstractions;
+using Bit.Core;
+using Bit.Core.Abstractions;
 using Xamarin.Forms;
 
-namespace Bit.Android.Services
+namespace Bit.Droid.Services
 {
     public class AndroidPushNotificationService : IPushNotificationService
     {
-        private readonly IPushNotificationListener _pushNotificationListener;
-        private readonly ISettings _settings;
+        private readonly IStorageService _storageService;
+        private readonly IPushNotificationListenerService _pushNotificationListenerService;
 
         public AndroidPushNotificationService(
-            IPushNotificationListener pushNotificationListener,
-            ISettings settings)
+            IStorageService storageService,
+            IPushNotificationListenerService pushNotificationListenerService)
         {
-            _pushNotificationListener = pushNotificationListener;
-            _settings = settings;
+            _storageService = storageService;
+            _pushNotificationListenerService = pushNotificationListenerService;
         }
 
-        public string Token => _settings.GetValueOrDefault(Constants.PushCurrentToken, null);
-
-        public void Register()
+        public async Task<string> GetTokenAsync()
         {
-            var registeredToken = _settings.GetValueOrDefault(Constants.PushRegisteredToken, null);
-            if(!string.IsNullOrWhiteSpace(registeredToken) && registeredToken != Token)
+            return await _storageService.GetAsync<string>(Constants.PushCurrentTokenKey);
+        }
+
+        public async Task RegisterAsync()
+        {
+            var registeredToken = await _storageService.GetAsync<string>(Constants.PushRegisteredTokenKey);
+            var currentToken = await GetTokenAsync();
+            if(!string.IsNullOrWhiteSpace(registeredToken) && registeredToken != currentToken)
             {
-                _pushNotificationListener.OnRegistered(registeredToken, Device.Android);
+                await _pushNotificationListenerService.OnRegisteredAsync(registeredToken, Device.Android);
             }
             else
             {
-                _settings.AddOrUpdateValue(Constants.PushLastRegistrationDate, DateTime.UtcNow);
+                await _storageService.SaveAsync(Constants.PushLastRegistrationDateKey, DateTime.UtcNow);
             }
         }
 
-        public void Unregister()
+        public Task UnregisterAsync()
         {
             // Do we ever need to unregister?
+            return Task.FromResult(0);
         }
     }
 }

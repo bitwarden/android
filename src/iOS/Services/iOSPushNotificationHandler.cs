@@ -12,19 +12,18 @@ namespace Bit.iOS.Services
         private const string TokenSetting = "token";
         private const string DomainName = "iOSPushNotificationService";
 
-        private readonly IPushNotificationListener _pushNotificationListener;
+        private readonly IPushNotificationListenerService _pushNotificationListenerService;
 
         public iOSPushNotificationHandler(
-            IPushNotificationListener pushNotificationListener)
+            IPushNotificationListenerService pushNotificationListenerService)
         {
-            _pushNotificationListener = pushNotificationListener;
+            _pushNotificationListenerService = pushNotificationListenerService;
         }
 
         public void OnMessageReceived(NSDictionary userInfo)
         {
             var json = DictionaryToJson(userInfo);
             var values = JObject.Parse(json);
-
             var keyAps = new NSString("aps");
             if(userInfo.ContainsKey(keyAps) && userInfo.ValueForKey(keyAps) is NSDictionary aps)
             {
@@ -36,28 +35,25 @@ namespace Bit.iOS.Services
                     }
                 }
             }
-
-            _pushNotificationListener.OnMessage(values, Device.iOS);
+            _pushNotificationListenerService.OnMessageAsync(values, Device.iOS);
         }
 
         public void OnErrorReceived(NSError error)
         {
             Debug.WriteLine("{0} - Registration Failed.", DomainName);
-            _pushNotificationListener.OnError(error.LocalizedDescription, Device.iOS);
+            _pushNotificationListenerService.OnError(error.LocalizedDescription, Device.iOS);
         }
 
         public void OnRegisteredSuccess(NSData token)
         {
             Debug.WriteLine("{0} - Successfully Registered.", DomainName);
-
             var trimmedDeviceToken = token.Description;
             if(!string.IsNullOrWhiteSpace(trimmedDeviceToken))
             {
                 trimmedDeviceToken = trimmedDeviceToken.Trim('<').Trim('>').Trim().Replace(" ", string.Empty);
             }
-
             Console.WriteLine("{0} - Token: {1}", DomainName, trimmedDeviceToken);
-            _pushNotificationListener.OnRegistered(trimmedDeviceToken, Device.iOS);
+            _pushNotificationListenerService.OnRegisteredAsync(trimmedDeviceToken, Device.iOS);
             NSUserDefaults.StandardUserDefaults.SetString(trimmedDeviceToken, TokenSetting);
             NSUserDefaults.StandardUserDefaults.Synchronize();
         }

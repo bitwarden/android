@@ -1,200 +1,146 @@
-﻿using System;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
-using Android.Views;
+using Android.Runtime;
 using Android.OS;
-using Bit.App.Abstractions;
-using XLabs.Ioc;
-using Plugin.Settings.Abstractions;
-using Plugin.Connectivity.Abstractions;
-using Android.Content;
-using System.Reflection;
-using Xamarin.Forms.Platform.Android;
-using Xamarin.Forms;
-using System.Threading.Tasks;
-using Bit.App;
-using Android.Nfc;
-using System.IO;
+using Bit.Core;
 using System.Linq;
+using Bit.App.Abstractions;
+using Bit.Core.Utilities;
+using Bit.Core.Abstractions;
+using System.IO;
+using System;
+using Android.Content;
+using Bit.Droid.Utilities;
+using Bit.Droid.Receivers;
 using Bit.App.Models;
-using Bit.App.Enums;
+using Bit.Core.Enums;
+using Android.Nfc;
 
-namespace Bit.Android
+namespace Bit.Droid
 {
-    [Activity(ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, Exported = false)]
-    public class MainActivity : FormsAppCompatActivity
+    [Activity(
+        Label = "Bitwarden",
+        Icon = "@mipmap/ic_launcher",
+        Theme = "@style/MainTheme",
+        Exported = false,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Register("com.x8bit.bitwarden.MainActivity")]
+    public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
-        private Java.Util.Regex.Pattern _otpPattern = Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
         private IDeviceActionService _deviceActionService;
-        private IDeviceInfoService _deviceInfoService;
-        private IAppSettingsService _appSettingsService;
-        private ISettings _settings;
+        private IMessagingService _messagingService;
+        private IBroadcasterService _broadcasterService;
+        private PendingIntent _lockAlarmPendingIntent;
         private AppOptions _appOptions;
+        private Java.Util.Regex.Pattern _otpPattern =
+            Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnCreate(Bundle savedInstanceState)
         {
-            if(!Resolver.IsSet)
-            {
-                MainApplication.SetIoc(Application);
-            }
+            var alarmIntent = new Intent(this, typeof(LockAlarmReceiver));
+            _lockAlarmPendingIntent = PendingIntent.GetBroadcast(this, 0, alarmIntent,
+                PendingIntentFlags.UpdateCurrent);
 
-            var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
-            StrictMode.SetThreadPolicy(policy);
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
 
-            ToolbarResource = Resource.Layout.toolbar;
-            TabLayoutResource = Resource.Layout.tabs;
+            TabLayoutResource = Resource.Layout.Tabbar;
+            ToolbarResource = Resource.Layout.Toolbar;
 
-            base.OnCreate(bundle);
-
-            // workaround for app compat bug
-            // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
-            Task.Delay(10).Wait();
-
-            Console.WriteLine("A OnCreate");
-            if(!App.Utilities.Helpers.InDebugMode())
-            {
-                Window.AddFlags(WindowManagerFlags.Secure);
-            }
-
-            var appIdService = Resolver.Resolve<IAppIdService>();
-            var authService = Resolver.Resolve<IAuthService>();
-
-#if !FDROID
-            HockeyApp.Android.CrashManager.Register(this, HockeyAppId,
-                new HockeyAppCrashManagerListener(appIdService, authService));
-#endif
-
-            Forms.Init(this, bundle);
-
-            typeof(Color).GetProperty("Accent", BindingFlags.Public | BindingFlags.Static)
-                .SetValue(null, Color.FromHex("d2d6de"));
-
-            _deviceActionService = Resolver.Resolve<IDeviceActionService>();
-            _deviceInfoService = Resolver.Resolve<IDeviceInfoService>();
-            _appSettingsService = Resolver.Resolve<IAppSettingsService>();
-            _settings = Resolver.Resolve<ISettings>();
+            base.OnCreate(savedInstanceState);
+            Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
-            LoadApplication(new App.App(
-                _appOptions,
-                Resolver.Resolve<IAuthService>(),
-                Resolver.Resolve<IConnectivity>(),
-                Resolver.Resolve<IDatabaseService>(),
-                Resolver.Resolve<ISyncService>(),
-                _settings,
-                Resolver.Resolve<ILockService>(),
-                Resolver.Resolve<ILocalizeService>(),
-                Resolver.Resolve<IAppInfoService>(),
-                _appSettingsService,
-                _deviceActionService));
+            LoadApplication(new App.App(_appOptions));
 
-            if(_appOptions?.Uri == null)
+            _broadcasterService.Subscribe(nameof(MainActivity), (message) =>
             {
-                MessagingCenter.Subscribe<Xamarin.Forms.Application, bool>(Xamarin.Forms.Application.Current,
-                    "ListenYubiKeyOTP", (sender, listen) => ListenYubiKey(listen));
-
-                MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                    "FinishMainActivity", (sender) => Finish());
-            }
+                if(message.Command == "scheduleLockTimer")
+                {
+                    var lockOptionMs = (int)message.Data * 1000;
+                    var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + lockOptionMs + 10;
+                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+                    alarmManager.Set(AlarmType.RtcWakeup, triggerMs, _lockAlarmPendingIntent);
+                }
+                else if(message.Command == "cancelLockTimer")
+                {
+                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+                    alarmManager.Cancel(_lockAlarmPendingIntent);
+                }
+                else if(message.Command == "finishMainActivity")
+                {
+                    Finish();
+                }
+                else if(message.Command == "listenYubiKeyOTP")
+                {
+                    ListenYubiKey((bool)message.Data);
+                }
+            });
         }
 
         protected override void OnPause()
         {
-            Console.WriteLine("A OnPause");
             base.OnPause();
             ListenYubiKey(false);
-        }
-
-        protected override void OnDestroy()
-        {
-            Console.WriteLine("A OnDestroy");
-            base.OnDestroy();
-        }
-
-        protected override void OnRestart()
-        {
-            Console.WriteLine("A OnRestart");
-            base.OnRestart();
-        }
-
-        protected override void OnStart()
-        {
-            Console.WriteLine("A OnStart");
-            base.OnStart();
-        }
-
-        protected override void OnStop()
-        {
-            Console.WriteLine("A OnStop");
-            base.OnStop();
         }
 
         protected override void OnResume()
         {
             base.OnResume();
-            Console.WriteLine("A OnResume");
-
-            // workaround for app compat bug
-            // ref https://bugzilla.xamarin.com/show_bug.cgi?id=36907
-            Task.Delay(10).Wait();
-
-            if(_deviceInfoService.NfcEnabled)
+            if(_deviceActionService.SupportsNfc())
             {
                 try
                 {
-                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "ResumeYubiKey");
+                    _messagingService.Send("resumeYubiKey");
                 }
-                catch(Exception e)
-                {
-                    System.Diagnostics.Debug.WriteLine(e);
-                }
-            }
-
-            if(_appSettingsService.Locked)
-            {
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "Resumed", false);
+                catch { }
             }
         }
 
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            Console.WriteLine("A OnNewIntent");
             ParseYubiKey(intent.DataString);
         }
 
-        public async override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
+        public async override void OnRequestPermissionsResult(int requestCode, string[] permissions,
+            [GeneratedEnum] Permission[] grantResults)
         {
             if(requestCode == Constants.SelectFilePermissionRequestCode)
             {
                 if(grantResults.Any(r => r != Permission.Granted))
                 {
-                    MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileCameraPermissionDenied");
+                    _messagingService.Send("selectFileCameraPermissionDenied");
                 }
                 await _deviceActionService.SelectFileAsync();
-                return;
             }
-
-            ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            else
+            {
+                Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+                ZXing.Net.Mobile.Forms.Android.PermissionsHandler.OnRequestPermissionsResult(
+                    requestCode, permissions, grantResults);
+            }
+            base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
 
         protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
         {
             if(requestCode == Constants.SelectFileRequestCode && resultCode == Result.Ok)
             {
-                global::Android.Net.Uri uri = null;
+                Android.Net.Uri uri = null;
                 string fileName = null;
                 if(data != null && data.Data != null)
                 {
                     uri = data.Data;
-                    fileName = Utilities.GetFileName(ApplicationContext, uri);
+                    fileName = AndroidHelpers.GetFileName(ApplicationContext, uri);
                 }
                 else
                 {
                     // camera
-                    var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
+                    var root = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
                     var file = new Java.IO.File(root, "temp_camera_photo.jpg");
-                    uri = global::Android.Net.Uri.FromFile(file);
+                    uri = Android.Net.Uri.FromFile(file);
                     fileName = $"photo_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.jpg";
                 }
 
@@ -202,18 +148,17 @@ namespace Bit.Android
                 {
                     return;
                 }
-
                 try
                 {
                     using(var stream = ContentResolver.OpenInputStream(uri))
                     using(var memoryStream = new MemoryStream())
                     {
                         stream.CopyTo(memoryStream);
-                        MessagingCenter.Send(Xamarin.Forms.Application.Current, "SelectFileResult",
+                        _messagingService.Send("selectFileResult",
                             new Tuple<byte[], string>(memoryStream.ToArray(), fileName ?? "unknown_file_name"));
                     }
                 }
-                catch (Java.IO.FileNotFoundException)
+                catch(Java.IO.FileNotFoundException)
                 {
                     return;
                 }
@@ -222,24 +167,21 @@ namespace Bit.Android
 
         private void ListenYubiKey(bool listen)
         {
-            if(!_deviceInfoService.NfcEnabled)
+            if(!_deviceActionService.SupportsNfc())
             {
                 return;
             }
-
             var adapter = NfcAdapter.GetDefaultAdapter(this);
             if(listen)
             {
                 var intent = new Intent(this, Class);
                 intent.AddFlags(ActivityFlags.SingleTop);
                 var pendingIntent = PendingIntent.GetActivity(this, 0, intent, 0);
-
                 // register for all NDEF tags starting with http och https
                 var ndef = new IntentFilter(NfcAdapter.ActionNdefDiscovered);
                 ndef.AddDataScheme("http");
                 ndef.AddDataScheme("https");
                 var filters = new IntentFilter[] { ndef };
-
                 try
                 {
                     // register for foreground dispatch so we'll receive tags according to our intent filters
@@ -253,21 +195,6 @@ namespace Bit.Android
             }
         }
 
-        private void ParseYubiKey(string data)
-        {
-            if(data == null)
-            {
-                return;
-            }
-
-            var otpMatch = _otpPattern.Matcher(data);
-            if(otpMatch.Matches())
-            {
-                var otp = otpMatch.Group(1);
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "GotYubiKeyOTP", otp);
-            }
-        }
-
         private AppOptions GetOptions()
         {
             var options = new AppOptions
@@ -276,13 +203,11 @@ namespace Bit.Android
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false)
             };
-
             var fillType = Intent.GetIntExtra("autofillFrameworkFillType", 0);
             if(fillType > 0)
             {
                 options.FillType = (CipherType)fillType;
             }
-
             if(Intent.GetBooleanExtra("autofillFrameworkSave", false))
             {
                 options.SaveType = (CipherType)Intent.GetIntExtra("autofillFrameworkType", 0);
@@ -295,8 +220,21 @@ namespace Bit.Android
                 options.SaveCardExpYear = Intent.GetStringExtra("autofillFrameworkCardExpYear");
                 options.SaveCardCode = Intent.GetStringExtra("autofillFrameworkCardCode");
             }
-
             return options;
+        }
+
+        private void ParseYubiKey(string data)
+        {
+            if(data == null)
+            {
+                return;
+            }
+            var otpMatch = _otpPattern.Matcher(data);
+            if(otpMatch.Matches())
+            {
+                var otp = otpMatch.Group(1);
+                _messagingService.Send("gotYubiKeyOTP", otp);
+            }
         }
     }
 }

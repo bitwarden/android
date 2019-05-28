@@ -1,0 +1,593 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.AddEditPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
+    x:DataType="pages:AddEditPageViewModel"
+    x:Name="_page"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:AddEditPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Save}" Clicked="Save_Clicked" Order="Primary" />
+        <ToolbarItem Text="{u:I18n Attachments}"
+                     Clicked="Attachments_Clicked"
+                     Order="Secondary"
+                     x:Name="_attachmentsItem" />
+        <ToolbarItem Text="{u:I18n Delete}"
+                     Clicked="Delete_Clicked"
+                     Order="Secondary"
+                     IsDestructive="True"
+                     x:Name="_deleteItem" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            <u:StringHasValueConverter x:Key="stringHasValue" />
+            <u:IsNotNullConverter x:Key="notNull" />
+            <ToolbarItem Text="{u:I18n Collections}"
+                     x:Key="collectionsItem"
+                     x:Name="_collectionsItem"
+                     Clicked="Collections_Clicked"
+                     Order="Secondary" />
+            <ToolbarItem Text="{u:I18n Share}"
+                     x:Key="shareItem"
+                     x:Name="_shareItem"
+                     Clicked="Share_Clicked"
+                     Order="Secondary" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView x:Name="_scrollView">
+        <StackLayout Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n ItemInformation}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input"
+                             IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
+                    <Label
+                        Text="{u:I18n Type}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_typePicker"
+                        ItemsSource="{Binding TypeOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding TypeSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Name}"
+                        StyleClass="box-label" />
+                    <Entry
+                        Text="{Binding Cipher.Name}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout IsVisible="{Binding IsLogin}" Spacing="0" Padding="0">
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Username}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Login.Username}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <Grid StyleClass="box-row, box-row-input">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Text="{u:I18n Password}"
+                            StyleClass="box-label"
+                            Grid.Row="0"
+                            Grid.Column="0" />
+                        <controls:MonoEntry
+                            Text="{Binding Cipher.Login.Password}"
+                            StyleClass="box-value"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="&#xf058;"
+                            Command="{Binding CheckPasswordCommand}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding ShowPasswordIcon}"
+                            Command="{Binding TogglePasswordCommand}"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Grid.RowSpan="2" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="&#xf021;"
+                            Command="{Binding GeneratePasswordCommand}"
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Grid.RowSpan="2" />
+                    </Grid>
+
+                    <Grid StyleClass="box-row, box-row-input">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Text="{u:I18n AuthenticatorKey}"
+                            StyleClass="box-label"
+                            Grid.Row="0"
+                            Grid.Column="0" />
+                        <controls:MonoEntry
+                            Text="{Binding Cipher.Login.Totp}"
+                            StyleClass="box-value"
+                            Grid.Row="1"
+                            Grid.Column="0" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="&#xf030;"
+                            Clicked="ScanTotp_Clicked"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2" />
+                    </Grid>
+                </StackLayout>
+                <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n CardholderName}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Card.CardholderName}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Number}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Card.Number}"
+                            StyleClass="box-value"
+                            Keyboard="Numeric" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Brand}"
+                            StyleClass="box-label" />
+                        <Picker
+                            x:Name="_cardBrandPicker"
+                            ItemsSource="{Binding CardBrandOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding CardBrandSelectedIndex}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n ExpirationMonth}"
+                            StyleClass="box-label" />
+                        <Picker
+                            x:Name="_cardExpMonthPicker"
+                            ItemsSource="{Binding CardExpMonthOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding CardExpMonthSelectedIndex}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n ExpirationYear}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Card.ExpYear}"
+                            StyleClass="box-value"
+                            Keyboard="Numeric" />
+                    </StackLayout>
+                    <Grid StyleClass="box-row, box-row-input">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Text="{u:I18n SecurityCode}"
+                            StyleClass="box-label"
+                            Grid.Row="0"
+                            Grid.Column="0" />
+                        <controls:MonoEntry
+                            Text="{Binding Cipher.Card.Code}"
+                            StyleClass="box-value"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Keyboard="Numeric"
+                            IsPassword="{Binding ShowCardCode, Converter={StaticResource inverseBool}}" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding ShowCardCodeIcon}"
+                            Command="{Binding ToggleCardCodeCommand}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2" />
+                    </Grid>
+                </StackLayout>
+                <StackLayout IsVisible="{Binding IsIdentity}" Spacing="0" Padding="0">
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Title}"
+                            StyleClass="box-label" />
+                        <Picker
+                            x:Name="_identityTitlePicker"
+                            ItemsSource="{Binding IdentityTitleOptions, Mode=OneTime}"
+                            SelectedIndex="{Binding IdentityTitleSelectedIndex}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n FirstName}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.FirstName}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n MiddleName}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.MiddleName}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n LastName}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.LastName}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Username}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Username}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Company}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Company}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n SSN}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.SSN}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n PassportNumber}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.PassportNumber}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n LicenseNumber}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.LicenseNumber}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Email}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Email}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Phone}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Phone}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Address1}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Address1}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Address2}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Address2}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Address3}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Address3}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n CityTown}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.City}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n StateProvince}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.State}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n ZipPostalCode}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.PostalCode}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label
+                            Text="{u:I18n Country}"
+                            StyleClass="box-label" />
+                        <Entry
+                            Text="{Binding Cipher.Identity.Country}"
+                            StyleClass="box-value" />
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box" IsVisible="{Binding IsLogin}">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n URIs}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <controls:RepeaterView ItemsSource="{Binding Uris}">
+                    <controls:RepeaterView.ItemTemplate>
+                        <DataTemplate x:DataType="views:LoginUriView">
+                            <Grid StyleClass="box-row, box-row-input">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label
+                                    Text="{u:I18n URI}"
+                                    StyleClass="box-label"
+                                    Grid.Row="0"
+                                    Grid.Column="0" />
+                                <Entry
+                                    Text="{Binding Uri}"
+                                    Keyboard="Url"
+                                    StyleClass="box-value"
+                                    Grid.Row="1"
+                                    Grid.Column="0" />
+                                <controls:FaButton
+                                    StyleClass="box-row-button, box-row-button-platform"
+                                    Text="&#xf013;"
+                                    Command="{Binding BindingContext.UriOptionsCommand, Source={x:Reference _page}}"
+                                    CommandParameter="{Binding .}"
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="2" />
+                            </Grid>
+                        </DataTemplate>
+                    </controls:RepeaterView.ItemTemplate>
+                </controls:RepeaterView>
+                <Button Text="{u:I18n NewUri}" StyleClass="box-button-row"
+                        Clicked="NewUri_Clicked"></Button>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Miscellaneous}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Folder}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_folderPicker"
+                        ItemsSource="{Binding FolderOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding FolderSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-switch">
+                    <Label
+                        Text="{u:I18n Favorite}"
+                        StyleClass="box-label, box-label-regular"
+                        HorizontalOptions="StartAndExpand" />
+                    <Switch
+                        IsToggled="{Binding Cipher.Favorite}"
+                        StyleClass="box-value"
+                        HorizontalOptions="End" />
+                </StackLayout>
+                <BoxView StyleClass="box-row-separator" />
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Notes}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Editor
+                        Text="{Binding Cipher.Notes}"
+                        StyleClass="box-value"
+                        HeightRequest="200" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n CustomFields}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <controls:RepeaterView ItemsSource="{Binding Fields}">
+                    <controls:RepeaterView.ItemTemplate>
+                        <DataTemplate x:DataType="pages:AddEditPageFieldViewModel">
+                            <StackLayout Spacing="0" Padding="0">
+                                <Grid StyleClass="box-row, box-row-input">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Label
+                                        Text="{Binding Field.Name, Mode=OneWay}"
+                                        IsVisible="{Binding IsBooleanType, Mode=OneWay, Converter={StaticResource inverseBool}}"
+                                        StyleClass="box-label"
+                                        Grid.Row="0"
+                                        Grid.Column="0" />
+                                    <Label
+                                        Text="{Binding Field.Name, Mode=OneWay}"
+                                        IsVisible="{Binding IsBooleanType, Mode=OneWay}"
+                                        StyleClass="box-value"
+                                        VerticalOptions="FillAndExpand"
+                                        VerticalTextAlignment="Center"
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.RowSpan="2" />
+                                    <Entry
+                                        Text="{Binding Field.Value}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding IsTextType}" />
+                                    <controls:MonoEntry
+                                        Text="{Binding Field.Value}"
+                                        StyleClass="box-value"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        IsVisible="{Binding IsHiddenType}"
+                                        IsPassword="{Binding ShowHiddenValue, Converter={StaticResource inverseBool}}" />
+                                    <Switch
+                                        IsToggled="{Binding BooleanValue}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2"
+                                        IsVisible="{Binding IsBooleanType}" />
+                                    <controls:FaButton 
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="{Binding ShowHiddenValueIcon}"
+                                        Command="{Binding ToggleHiddenValueCommand}"
+                                        IsVisible="{Binding IsHiddenType}"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        Grid.RowSpan="2" />
+                                    <controls:FaButton 
+                                        StyleClass="box-row-button, box-row-button-platform"
+                                        Text="&#xf013;"
+                                        Command="{Binding BindingContext.FieldOptionsCommand, Source={x:Reference _page}}"
+                                        CommandParameter="{Binding .}"
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2" />
+                                </Grid>
+                                <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsBooleanType}" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </controls:RepeaterView.ItemTemplate>
+                </controls:RepeaterView>
+                <Button Text="{u:I18n NewCustomField}" StyleClass="box-button-row"
+                        Clicked="NewField_Clicked"></Button>
+            </StackLayout>
+            <StackLayout StyleClass="box" IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Ownership}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n WhoOwnsThisItem}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_ownershipPicker"
+                        ItemsSource="{Binding OwnershipOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding OwnershipSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowCollections}">
+                <StackLayout StyleClass="box-row-header">
+                    <Label Text="{u:I18n Collections}"
+                           StyleClass="box-header, box-header-platform" />
+                </StackLayout>
+                <StackLayout Spacing="0" Padding="0"
+                                IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label Text="{u:I18n NoCollectionsToList}" />
+                    </StackLayout>
+                    <BoxView StyleClass="box-row-separator" />
+                </StackLayout>
+                <controls:RepeaterView ItemsSource="{Binding Collections}" IsVisible="{Binding HasCollections}">
+                    <controls:RepeaterView.ItemTemplate>
+                        <DataTemplate x:DataType="pages:CollectionViewModel">
+                            <StackLayout Spacing="0" Padding="0">
+                                <StackLayout StyleClass="box-row, box-row-switch">
+                                    <Label
+                                        Text="{Binding Collection.Name}"
+                                        StyleClass="box-label, box-label-regular"
+                                        HorizontalOptions="StartAndExpand" />
+                                    <Switch
+                                        IsToggled="{Binding Checked}"
+                                        StyleClass="box-value"
+                                        HorizontalOptions="End" />
+                                </StackLayout>
+                                <BoxView StyleClass="box-row-separator" />
+                            </StackLayout>
+                        </DataTemplate>
+                    </controls:RepeaterView.ItemTemplate>
+                </controls:RepeaterView>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+
+</pages:BaseContentPage>

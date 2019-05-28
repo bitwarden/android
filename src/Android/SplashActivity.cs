@@ -1,16 +1,22 @@
-using System;
-using Android.App;
+﻿using Android.App;
+using Android.Content.PM;
+using Android.Runtime;
 using Android.OS;
-using Android.Content;
 using Android.Support.V7.App;
 using System.Threading.Tasks;
+using Android.Content;
 
-namespace Bit.Android
+namespace Bit.Droid
 {
-    [Activity(Theme = "@style/BitwardenTheme.Splash",
+    [Activity(
+        Label = "Bitwarden",
         MainLauncher = true,
         NoHistory = true,
-        WindowSoftInputMode = global::Android.Views.SoftInput.StateHidden)]
+        Icon = "@mipmap/ic_launcher",
+        Theme = "@style/MainTheme.Splash",
+        WindowSoftInputMode = Android.Views.SoftInput.StateHidden,
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Register("com.x8bit.bitwarden.SplashActivity")]
     public class SplashActivity : AppCompatActivity
     {
         public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
@@ -27,7 +33,6 @@ namespace Bit.Android
                 mainIntent.PutExtra("myVaultTile", Intent.GetBooleanExtra("myVaultTile", false));
                 StartActivity(mainIntent);
             });
-
             startupWork.Start();
         }
     }

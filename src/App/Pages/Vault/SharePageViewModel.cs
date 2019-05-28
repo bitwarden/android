@@ -1,0 +1,147 @@
+﻿using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Exceptions;
+using Bit.Core.Models.View;
+using Bit.Core.Utilities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Bit.App.Pages
+{
+    public class SharePageViewModel : BaseViewModel
+    {
+        private readonly IDeviceActionService _deviceActionService;
+        private readonly ICipherService _cipherService;
+        private readonly ICollectionService _collectionService;
+        private readonly IUserService _userService;
+        private readonly IPlatformUtilsService _platformUtilsService;
+        private CipherView _cipher;
+        private int _organizationSelectedIndex;
+        private bool _hasCollections;
+        private bool _hasOrganizations;
+        private List<Core.Models.View.CollectionView> _writeableCollections;
+
+        public SharePageViewModel()
+        {
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            Collections = new ExtendedObservableCollection<CollectionViewModel>();
+            OrganizationOptions = new List<KeyValuePair<string, string>>();
+            PageTitle = AppResources.Share;
+        }
+
+        public string CipherId { get; set; }
+        public string OrganizationId { get; set; }
+        public List<KeyValuePair<string, string>> OrganizationOptions { get; set; }
+        public ExtendedObservableCollection<CollectionViewModel> Collections { get; set; }
+        public int OrganizationSelectedIndex
+        {
+            get => _organizationSelectedIndex;
+            set
+            {
+                if(SetProperty(ref _organizationSelectedIndex, value))
+                {
+                    OrganizationChanged();
+                }
+            }
+        }
+        public bool HasCollections
+        {
+            get => _hasCollections;
+            set => SetProperty(ref _hasCollections, value);
+        }
+        public bool HasOrganizations
+        {
+            get => _hasOrganizations;
+            set => SetProperty(ref _hasOrganizations, value);
+        }
+
+        public async Task LoadAsync()
+        {
+            var allCollections = await _collectionService.GetAllDecryptedAsync();
+            _writeableCollections = allCollections.Where(c => !c.ReadOnly).ToList();
+
+            var orgs = await _userService.GetAllOrganizationAsync();
+            OrganizationOptions = orgs.OrderBy(o => o.Name)
+                .Where(o => o.Enabled && o.Status == OrganizationUserStatusType.Confirmed)
+                .Select(o => new KeyValuePair<string, string>(o.Name, o.Id)).ToList();
+            HasOrganizations = OrganizationOptions.Any();
+
+            var cipherDomain = await _cipherService.GetAsync(CipherId);
+            _cipher = await cipherDomain.DecryptAsync();
+            if(OrganizationId == null && OrganizationOptions.Any())
+            {
+                OrganizationId = OrganizationOptions.First().Value;
+            }
+            OrganizationSelectedIndex = string.IsNullOrWhiteSpace(OrganizationId) ? 0 :
+                OrganizationOptions.FindIndex(k => k.Value == OrganizationId);
+            FilterCollections();
+        }
+
+        public async Task<bool> SubmitAsync()
+        {
+            if(!Collections?.Any(c => c.Checked) ?? true)
+            {
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.SelectOneCollection,
+                    AppResources.Ok);
+                return false;
+            }
+
+            var cipherDomain = await _cipherService.GetAsync(CipherId);
+            var cipherView = await cipherDomain.DecryptAsync();
+
+            var checkedCollectionIds = new HashSet<string>(
+                Collections.Where(c => c.Checked).Select(c => c.Collection.Id));
+            try
+            {
+                await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                await _cipherService.ShareWithServerAsync(cipherView, OrganizationId, checkedCollectionIds);
+                await _deviceActionService.HideLoadingAsync();
+                _platformUtilsService.ShowToast("success", null, AppResources.ItemShared);
+                await Page.Navigation.PopModalAsync();
+                return true;
+            }
+            catch(ApiException e)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Error.GetSingleMessage(), AppResources.Ok);
+            }
+            catch(System.Exception e)
+            {
+                await _deviceActionService.HideLoadingAsync();
+                await Page.DisplayAlert(AppResources.AnErrorHasOccurred, e.Message, AppResources.Ok);
+            }
+            return false;
+        }
+
+        private void OrganizationChanged()
+        {
+            if(OrganizationSelectedIndex > -1)
+            {
+                OrganizationId = OrganizationOptions[OrganizationSelectedIndex].Value;
+                FilterCollections();
+            }
+        }
+
+        private void FilterCollections()
+        {
+            if(OrganizationId == null || !_writeableCollections.Any())
+            {
+                Collections.ResetWithRange(new List<CollectionViewModel>());
+            }
+            else
+            {
+                var cols = _writeableCollections.Where(c => c.OrganizationId == OrganizationId)
+                    .Select(c => new CollectionViewModel { Collection = c }).ToList();
+                Collections.ResetWithRange(cols);
+            }
+            HasCollections = Collections.Any();
+        }
+    }
+}

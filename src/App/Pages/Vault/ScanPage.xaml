@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.ScanPage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    x:Name="_page"
+    Title="{u:I18n ScanQrTitle}">
+
+    <Grid
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+
+        <zxing:ZXingScannerView
+            x:Name="_zxing"
+            HorizontalOptions="FillAndExpand"
+            VerticalOptions="FillAndExpand"
+            AutomationId="zxingScannerView"
+            OnScanResult="OnScanResult">
+        </zxing:ZXingScannerView>
+
+        <Grid
+            VerticalOptions="FillAndExpand"
+            HorizontalOptions="FillAndExpand"
+            AutomationId="zxingDefaultOverlay">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <BoxView
+                Grid.Column="0"
+                Grid.Row="0"
+                VerticalOptions="Fill"
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="Black"
+                Opacity="0.7" />
+
+            <Label
+                Text="{u:I18n CameraInstructionTop}"
+                AutomationId="zxingDefaultOverlay_TopTextLabel"
+                Grid.Column="0"
+                Grid.Row="0"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                TextColor="White" />
+
+            <BoxView
+                Grid.Column="0"
+                Grid.Row="1"
+                VerticalOptions="Fill"
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="Transparent" />
+
+            <BoxView
+                Grid.Column="0"
+                Grid.Row="2"
+                VerticalOptions="Fill"
+                HorizontalOptions="FillAndExpand"
+                BackgroundColor="Black"
+                Opacity="0.7" />
+
+            <Label
+                Text="{u:I18n CameraInstructionBottom}"
+                AutomationId="zxingDefaultOverlay_BottomTextLabel"
+                Grid.Column="0"
+                Grid.Row="2"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                TextColor="White" />
+        </Grid>
+
+    </Grid>
+
+</pages:BaseContentPage>

@@ -1,4 +1,4 @@
-﻿using Bit.App.Enums;
+﻿using Bit.Core.Enums;
 
 namespace Bit.App.Models
 {

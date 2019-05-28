@@ -1,147 +1,108 @@
-using System;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
-using Android.OS;
 using Android.Runtime;
-using Bit.Android.Services;
 using Bit.App.Abstractions;
-using Bit.App.Repositories;
 using Bit.App.Services;
-using Plugin.Connectivity;
+using Bit.Core.Abstractions;
+using Bit.Core.Services;
+using Bit.Core.Utilities;
+using Bit.Droid.Services;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
-using Plugin.Settings;
-using XLabs.Ioc;
-using System.Threading.Tasks;
-using XLabs.Ioc.SimpleInjectorContainer;
-using SimpleInjector;
-using Android.Gms.Security;
+using Plugin.Fingerprint.Abstractions;
 
-namespace Bit.Android
+namespace Bit.Droid
 {
 #if DEBUG
     [Application(Debuggable = true)]
 #else
     [Application(Debuggable = false)]
 #endif
-    public class MainApplication : Application, ProviderInstaller.IProviderInstallListener
+    [Register("com.x8bit.bitwarden.MainApplication")]
+    public class MainApplication : Application
     {
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
         {
-            //AndroidEnvironment.UnhandledExceptionRaiser += AndroidEnvironment_UnhandledExceptionRaiser;
-
-            if(!Resolver.IsSet)
+            if(ServiceContainer.RegisteredServices.Count == 0)
             {
-                SetIoc(this);
+                RegisterLocalServices();
+                ServiceContainer.Init();
             }
-
-            if(Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
-            {
-                ProviderInstaller.InstallIfNeededAsync(ApplicationContext, this);
-            }
-        }
-
-        private void AndroidEnvironment_UnhandledExceptionRaiser(object sender, RaiseThrowableEventArgs e)
-        {
-            var message = Utilities.AppendExceptionToMessage("", e.Exception);
-            //Utilities.SaveCrashFile(message, true);
-            Utilities.SendCrashEmail(message, false);
         }
 
         public override void OnCreate()
         {
             base.OnCreate();
-
-            // workaround for app compat bug
-            // ref https://forums.xamarin.com/discussion/62414/app-resuming-results-in-crash-with-formsappcompatactivity
-            Task.Delay(10).Wait();
+            Bootstrap();
             CrossCurrentActivity.Current.Init(this);
         }
 
-        public static void SetIoc(Application application)
+        private void RegisterLocalServices()
         {
             Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
-            FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
-            ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            // Note: This might cause a race condition. Investigate more.
+            Task.Run(() =>
+            {
+                FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+                ZXing.Net.Mobile.Forms.Android.Platform.Init();
+            });
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
 
-            //var container = new UnityContainer();
-            var container = new Container();
+            var preferencesStorage = new PreferencesStorageService(null);
+            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
+            liteDbStorage.InitAsync();
+            var localizeService = new LocalizeService();
+            var broadcasterService = new BroadcasterService();
+            var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
+            var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
+            var secureStorageService = new SecureStorageService();
+            var cryptoPrimitiveService = new CryptoPrimitiveService();
+            var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
+            var deviceActionService = new DeviceActionService(mobileStorageService, messagingService,
+                broadcasterService);
+            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
+                broadcasterService);
 
-            // Android Stuff
-            container.RegisterInstance(application.ApplicationContext);
-            container.RegisterInstance<Application>(application);
-
-            // Services
-            container.RegisterSingleton<IDatabaseService, DatabaseService>();
-            container.RegisterSingleton<ISqlService, SqlService>();
-            container.RegisterSingleton<ISecureStorageService, AndroidKeyStoreStorageService>();
-            container.RegisterSingleton<ICryptoService, CryptoService>();
-            container.RegisterSingleton<IKeyDerivationService, BouncyCastleKeyDerivationService>();
-            container.RegisterSingleton<IAuthService, AuthService>();
-            container.RegisterSingleton<IFolderService, FolderService>();
-            container.RegisterSingleton<ICollectionService, CollectionService>();
-            container.RegisterSingleton<ICipherService, CipherService>();
-            container.RegisterSingleton<ISyncService, SyncService>();
-            container.RegisterSingleton<IDeviceActionService, DeviceActionService>();
-            container.RegisterSingleton<IAppIdService, AppIdService>();
-            container.RegisterSingleton<IPasswordGenerationService, PasswordGenerationService>();
-            container.RegisterSingleton<ILockService, LockService>();
-            container.RegisterSingleton<IAppInfoService, AppInfoService>();
-#if FDROID
-            container.RegisterSingleton<IGoogleAnalyticsService, NoopGoogleAnalyticsService>();
-#else
-            container.RegisterSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();
-#endif
-            container.RegisterSingleton<IDeviceInfoService, DeviceInfoService>();
-            container.RegisterSingleton<ILocalizeService, LocalizeService>();
-            container.RegisterSingleton<ILogService, LogService>();
-            container.RegisterSingleton<IHttpService, HttpService>();
-            container.RegisterSingleton<ITokenService, TokenService>();
-            container.RegisterSingleton<ISettingsService, SettingsService>();
-            container.RegisterSingleton<IAppSettingsService, AppSettingsService>();
-
-            // Repositories
-            container.RegisterSingleton<IFolderRepository, FolderRepository>();
-            container.RegisterSingleton<IFolderApiRepository, FolderApiRepository>();
-            container.RegisterSingleton<ICipherRepository, CipherRepository>();
-            container.RegisterSingleton<IAttachmentRepository, AttachmentRepository>();
-            container.RegisterSingleton<IConnectApiRepository, ConnectApiRepository>();
-            container.RegisterSingleton<IDeviceApiRepository, DeviceApiRepository>();
-            container.RegisterSingleton<IAccountsApiRepository, AccountsApiRepository>();
-            container.RegisterSingleton<ICipherApiRepository, CipherApiRepository>();
-            container.RegisterSingleton<ISettingsRepository, SettingsRepository>();
-            container.RegisterSingleton<ISettingsApiRepository, SettingsApiRepository>();
-            container.RegisterSingleton<ITwoFactorApiRepository, TwoFactorApiRepository>();
-            container.RegisterSingleton<ISyncApiRepository, SyncApiRepository>();
-            container.RegisterSingleton<ICollectionRepository, CollectionRepository>();
-            container.RegisterSingleton<ICipherCollectionRepository, CipherCollectionRepository>();
-
-            // Other
-            container.RegisterInstance(CrossSettings.Current);
-            container.RegisterInstance(CrossConnectivity.Current);
-            container.RegisterInstance(CrossFingerprint.Current);
+            ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
+            ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
+            ServiceContainer.Register<ILocalizeService>("localizeService", localizeService);
+            ServiceContainer.Register<II18nService>("i18nService", i18nService);
+            ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
+            ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
+            ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
+            ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
+            ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
 
             // Push
 #if FDROID
             container.RegisterSingleton<IPushNotificationListener, NoopPushNotificationListener>();
             container.RegisterSingleton<IPushNotificationService, NoopPushNotificationService>();
 #else
-            container.RegisterSingleton<IPushNotificationListener, PushNotificationListener>();
-            container.RegisterSingleton<IPushNotificationService, AndroidPushNotificationService>();
+            var notificationListenerService = new PushNotificationListenerService();
+            ServiceContainer.Register<IPushNotificationListenerService>(
+                "pushNotificationListenerService", notificationListenerService);
+            var androidPushNotificationService = new AndroidPushNotificationService(
+                mobileStorageService, notificationListenerService);
+            ServiceContainer.Register<IPushNotificationService>(
+                "pushNotificationService", androidPushNotificationService);
 #endif
-
-            container.Verify();
-            Resolver.SetResolver(new SimpleInjectorResolver(container));
         }
 
-        public void OnProviderInstallFailed(int errorCode, Intent recoveryIntent)
+        private void Bootstrap()
         {
+            (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService).Init();
+            ServiceContainer.Resolve<IAuthService>("authService").Init();
+            // Note: This is not awaited
+            var bootstrapTask = BootstrapAsync();
         }
 
-        public void OnProviderInstalled()
+        private async Task BootstrapAsync()
         {
+            await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
         }
     }
 }

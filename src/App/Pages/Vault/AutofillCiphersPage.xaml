@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bit.App.Pages.AutofillCiphersPage"
+             xmlns:pages="clr-namespace:Bit.App.Pages"
+             xmlns:u="clr-namespace:Bit.App.Utilities"
+             xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
+             x:DataType="pages:AutofillCiphersPageViewModel"
+             Title="{Binding PageTitle}"
+             x:Name="_page">
+
+    <ContentPage.BindingContext>
+        <pages:AutofillCiphersPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="&#xf002;" Clicked="Search_Clicked" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            
+            <DataTemplate x:Key="cipherTemplate"
+                          x:DataType="pages:GroupingsPageListItem">
+                <controls:CipherViewCell
+                    Cipher="{Binding Cipher}"
+                    ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
+            </DataTemplate>
+
+            <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
+                                                 CipherTemplate="{StaticResource cipherTemplate}" />
+
+            <StackLayout x:Key="mainLayout" x:Name="_mainLayout">
+                <StackLayout
+                    VerticalOptions="CenterAndExpand"
+                    Padding="20, 0"
+                    Spacing="20"
+                    IsVisible="{Binding ShowList, Converter={StaticResource inverseBool}}">
+                    <Label
+                        Text="{Binding NoDataText}"
+                        HorizontalTextAlignment="Center"></Label>
+                    <Button
+                        Text="{u:I18n AddAnItem}"
+                        Clicked="AddButton_Clicked"></Button>
+                </StackLayout>
+
+                <controls:ExtendedListView
+                    IsVisible="{Binding ShowList}"
+                    ItemsSource="{Binding GroupedItems}"
+                    VerticalOptions="FillAndExpand"
+                    HasUnevenRows="true"
+                    ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+                    IsGroupingEnabled="True"
+                    ItemSelected="RowSelected"
+                    StyleClass="list, list-platform">
+                    <x:Arguments>
+                        <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
+                    </x:Arguments>
+
+                    <ListView.GroupHeaderTemplate>
+                        <DataTemplate x:DataType="pages:GroupingsPageListGroup">
+                            <ViewCell>
+                                <StackLayout StyleClass="list-row-header">
+                                    <Label
+                                        Text="{Binding Name}"
+                                        StyleClass="list-header, list-header-platform" />
+                                    <Label
+                                        Text="{Binding ItemCount}"
+                                        StyleClass="list-header-sub" />
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.GroupHeaderTemplate>
+                </controls:ExtendedListView>
+            </StackLayout>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <AbsoluteLayout
+        x:Name="_absLayout"
+        VerticalOptions="FillAndExpand"
+        HorizontalOptions="FillAndExpand">
+        <ContentView
+            x:Name="_mainContent"
+            AbsoluteLayout.LayoutFlags="All"
+            AbsoluteLayout.LayoutBounds="0, 0, 1, 1">
+        </ContentView>
+        <fab:FloatingActionButtonView
+            x:Name="_fab"
+            ImageName="plus.png"
+            AbsoluteLayout.LayoutFlags="PositionProportional"
+            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize">
+        </fab:FloatingActionButtonView>
+    </AbsoluteLayout>
+
+</pages:BaseContentPage>

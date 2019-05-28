@@ -1,29 +1,31 @@
 ﻿using static Android.App.Assist.AssistStructure;
 using Android.App.Assist;
-using Bit.App;
 using System.Collections.Generic;
+using Bit.Core;
+using Android.Content;
 
-namespace Bit.Android.Autofill
+namespace Bit.Droid.Autofill
 {
     public class Parser
     {
-
-        public static HashSet<string> ExcludedPackageIds = new HashSet<string>
+        public static HashSet<string> _excludedPackageIds = new HashSet<string>
         {
             "android"
         };
-
         private readonly AssistStructure _structure;
         private string _uri;
         private string _packageName;
         private string _webDomain;
 
-        public Parser(AssistStructure structure)
+        public Parser(AssistStructure structure, Context applicationContext)
         {
             _structure = structure;
+            ApplicationContext = applicationContext;
         }
 
+        public Context ApplicationContext { get; set; }
         public FieldCollection FieldCollection { get; private set; } = new FieldCollection();
+
         public string Uri
         {
             get
@@ -32,12 +34,12 @@ namespace Bit.Android.Autofill
                 {
                     return _uri;
                 }
-
-                if(string.IsNullOrWhiteSpace(WebDomain) && string.IsNullOrWhiteSpace(PackageName))
+                var webDomainNull = string.IsNullOrWhiteSpace(WebDomain);
+                if(webDomainNull && string.IsNullOrWhiteSpace(PackageName))
                 {
                     _uri = null;
                 }
-                else if(!string.IsNullOrWhiteSpace(WebDomain))
+                else if(!webDomainNull)
                 {
                     _uri = string.Concat("http://", WebDomain);
                 }
@@ -45,10 +47,10 @@ namespace Bit.Android.Autofill
                 {
                     _uri = string.Concat(Constants.AndroidAppProtocol, PackageName);
                 }
-
                 return _uri;
             }
         }
+
         public string PackageName
         {
             get => _packageName;
@@ -58,10 +60,10 @@ namespace Bit.Android.Autofill
                 {
                     _packageName = _uri = null;
                 }
-
                 _packageName = value;
             }
         }
+
         public string WebDomain
         {
             get => _webDomain;
@@ -71,19 +73,12 @@ namespace Bit.Android.Autofill
                 {
                     _webDomain = _uri = null;
                 }
-
                 _webDomain = value;
             }
         }
 
-        public bool ShouldAutofill
-        {
-            get
-            {
-                return !string.IsNullOrWhiteSpace(Uri) && !AutofillHelpers.BlacklistedUris.Contains(Uri) &&
-                    FieldCollection != null && FieldCollection.Fillable;
-            }
-        }
+        public bool ShouldAutofill => !string.IsNullOrWhiteSpace(Uri) &&
+            !AutofillHelpers.BlacklistedUris.Contains(Uri) && FieldCollection != null && FieldCollection.Fillable;
 
         public void Parse()
         {
@@ -92,7 +87,6 @@ namespace Bit.Android.Autofill
                 var node = _structure.GetWindowNodeAt(i);
                 ParseNode(node.RootViewNode);
             }
-
             if(!AutofillHelpers.TrustedBrowsers.Contains(PackageName) &&
                 !AutofillHelpers.CompatBrowsers.Contains(PackageName))
             {
@@ -123,7 +117,7 @@ namespace Bit.Android.Autofill
         private void SetPackageAndDomain(ViewNode node)
         {
             if(string.IsNullOrWhiteSpace(PackageName) && !string.IsNullOrWhiteSpace(node.IdPackage) &&
-                !ExcludedPackageIds.Contains(node.IdPackage))
+                !_excludedPackageIds.Contains(node.IdPackage))
             {
                 PackageName = node.IdPackage;
             }

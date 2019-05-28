@@ -1,9 +1,0 @@
-﻿namespace Bit.App.Enums
-{
-    public enum FieldType : byte
-    {
-        Text = 0,
-        Hidden = 1,
-        Boolean = 2
-    }
-}

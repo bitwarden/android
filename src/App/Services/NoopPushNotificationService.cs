@@ -1,17 +1,23 @@
-﻿using Bit.App.Abstractions;
+﻿using System.Threading.Tasks;
+using Bit.App.Abstractions;
 
 namespace Bit.App.Services
 {
     public class NoopPushNotificationService : IPushNotificationService
     {
-        public string Token => null;
-
-        public void Register()
+        public Task<string> GetTokenAsync()
         {
+            return Task.FromResult(null as string);
         }
 
-        public void Unregister()
+        public Task RegisterAsync()
         {
+            return Task.FromResult(0);
+        }
+
+        public Task UnregisterAsync()
+        {
+            return Task.FromResult(0);
         }
     }
 }

@@ -7,7 +7,7 @@ using static Android.App.Assist.AssistStructure;
 using Android.Text;
 using static Android.Views.ViewStructure;
 
-namespace Bit.Android.Autofill
+namespace Bit.Droid.Autofill
 {
     public class Field
     {
@@ -86,6 +86,69 @@ namespace Bit.Android.Autofill
         public HtmlInfo HtmlInfo { get; private set; }
         public ViewNode Node { get; private set; }
 
+        public bool ValueIsNull()
+        {
+            return TextValue == null && DateValue == null && ToggleValue == null;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(this == obj)
+            {
+                return true;
+            }
+            if(obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+            var field = obj as Field;
+            if(TextValue != null ? !TextValue.Equals(field.TextValue) : field.TextValue != null)
+            {
+                return false;
+            }
+            if(DateValue != null ? !DateValue.Equals(field.DateValue) : field.DateValue != null)
+            {
+                return false;
+            }
+            return ToggleValue != null ? ToggleValue.Equals(field.ToggleValue) : field.ToggleValue == null;
+        }
+
+        public override int GetHashCode()
+        {
+            var result = TextValue != null ? TextValue.GetHashCode() : 0;
+            result = 31 * result + (DateValue != null ? DateValue.GetHashCode() : 0);
+            result = 31 * result + (ToggleValue != null ? ToggleValue.GetHashCode() : 0);
+            return result;
+        }
+
+        private static List<string> FilterForSupportedHints(string[] hints)
+        {
+            return hints?.Where(h => IsValidHint(h)).ToList() ?? new List<string>();
+        }
+
+        private static bool IsValidHint(string hint)
+        {
+            switch(hint)
+            {
+                case View.AutofillHintCreditCardExpirationDate:
+                case View.AutofillHintCreditCardExpirationDay:
+                case View.AutofillHintCreditCardExpirationMonth:
+                case View.AutofillHintCreditCardExpirationYear:
+                case View.AutofillHintCreditCardNumber:
+                case View.AutofillHintCreditCardSecurityCode:
+                case View.AutofillHintEmailAddress:
+                case View.AutofillHintPhone:
+                case View.AutofillHintName:
+                case View.AutofillHintPassword:
+                case View.AutofillHintPostalAddress:
+                case View.AutofillHintPostalCode:
+                case View.AutofillHintUsername:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         private void UpdateSaveTypeFromHints()
         {
             SaveType = SaveDataType.Generic;
@@ -126,73 +189,6 @@ namespace Bit.Android.Autofill
                         SaveType |= SaveDataType.Username;
                         break;
                 }
-            }
-        }
-
-        public bool ValueIsNull()
-        {
-            return TextValue == null && DateValue == null && ToggleValue == null;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if(this == obj)
-            {
-                return true;
-            }
-
-            if(obj == null || GetType() != obj.GetType())
-            {
-                return false;
-            }
-
-            var field = obj as Field;
-            if(TextValue != null ? !TextValue.Equals(field.TextValue) : field.TextValue != null)
-            {
-                return false;
-            }
-
-            if(DateValue != null ? !DateValue.Equals(field.DateValue) : field.DateValue != null)
-            {
-                return false;
-            }
-
-            return ToggleValue != null ? ToggleValue.Equals(field.ToggleValue) : field.ToggleValue == null;
-        }
-
-        public override int GetHashCode()
-        {
-            var result = TextValue != null ? TextValue.GetHashCode() : 0;
-            result = 31 * result + (DateValue != null ? DateValue.GetHashCode() : 0);
-            result = 31 * result + (ToggleValue != null ? ToggleValue.GetHashCode() : 0);
-            return result;
-        }
-
-        private static List<string> FilterForSupportedHints(string[] hints)
-        {
-            return hints?.Where(h => IsValidHint(h)).ToList() ?? new List<string>();
-        }
-
-        private static bool IsValidHint(string hint)
-        {
-            switch(hint)
-            {
-                case View.AutofillHintCreditCardExpirationDate:
-                case View.AutofillHintCreditCardExpirationDay:
-                case View.AutofillHintCreditCardExpirationMonth:
-                case View.AutofillHintCreditCardExpirationYear:
-                case View.AutofillHintCreditCardNumber:
-                case View.AutofillHintCreditCardSecurityCode:
-                case View.AutofillHintEmailAddress:
-                case View.AutofillHintPhone:
-                case View.AutofillHintName:
-                case View.AutofillHintPassword:
-                case View.AutofillHintPostalAddress:
-                case View.AutofillHintPostalCode:
-                case View.AutofillHintUsername:
-                    return true;
-                default:
-                    return false;
             }
         }
     }

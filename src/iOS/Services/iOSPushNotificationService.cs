@@ -1,7 +1,7 @@
-﻿using Bit.App.Abstractions;
+﻿using System.Threading.Tasks;
+using Bit.App.Abstractions;
 using Foundation;
 using UIKit;
-using Xamarin.Forms;
 
 namespace Bit.iOS.Services
 {
@@ -9,30 +9,28 @@ namespace Bit.iOS.Services
     {
         private const string TokenSetting = "token";
 
-        private readonly IPushNotificationListener _pushNotificationListener;
-
-        public iOSPushNotificationService(
-            IPushNotificationListener pushNotificationListener)
+        public Task<string> GetTokenAsync()
         {
-            _pushNotificationListener = pushNotificationListener;
+            return Task.FromResult(NSUserDefaults.StandardUserDefaults.StringForKey(TokenSetting));
         }
 
-        public string Token => NSUserDefaults.StandardUserDefaults.StringForKey(TokenSetting);
-
-        public void Register()
+        public Task RegisterAsync()
         {
             var userNotificationTypes = UIUserNotificationType.Alert | UIUserNotificationType.Badge |
                 UIUserNotificationType.Sound;
             var settings = UIUserNotificationSettings.GetSettingsForTypes(userNotificationTypes, null);
             UIApplication.SharedApplication.RegisterUserNotificationSettings(settings);
+            return Task.FromResult(0);
         }
 
-        public void Unregister()
+        public Task UnregisterAsync()
         {
             UIApplication.SharedApplication.UnregisterForRemoteNotifications();
-            _pushNotificationListener.OnUnregistered(Device.iOS);
+            // TODO: unregister call
+            // _pushNotificationListener.OnUnregistered(Device.iOS);
             NSUserDefaults.StandardUserDefaults.SetString(string.Empty, TokenSetting);
             NSUserDefaults.StandardUserDefaults.Synchronize();
+            return Task.FromResult(0);
         }
     }
 }

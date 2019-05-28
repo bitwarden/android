@@ -656,7 +656,7 @@
     <value>Re-type Master Password</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Search Vault</value>
+    <value>Search vault</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Security</value>
@@ -1345,5 +1345,168 @@
   </data>
   <data name="BitwardenAutofillAlert" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Invalid email address.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Identities</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Logins</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Secure Notes</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>All Items</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>URIs</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Checking password...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Check if password has been exposed.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Identity Name</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Password History</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Types</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>No passwords to list.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>There are no items to list.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Search collection</value>
+  </data>
+  <data name="SearchFolder" xml:space="preserve">
+    <value>Search folder</value>
+  </data>
+  <data name="SearchType" xml:space="preserve">
+    <value>Search type</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Miscellaneous</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Ownership</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Who owns this item?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>There are no collections to list.</value>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Item has been shared.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>You must select at least one collection.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Share Item</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>No organizations to list.</value>
+  </data>
+  <data name="ShareDesc" xml:space="preserve">
+    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Number of Words</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Passphrase</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Word Separator</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Generator</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>There are no folders to list.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Fingerprint Phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Your account's fingerprint phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="ShareVaultConfirmation" xml:space="preserve">
+    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Export Vault</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Lock Now</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="LockOption30Minutes" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="LockOption5Minutes" xml:space="preserve">
+    <value>5 minutes</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+  </data>
+  <data name="LoggedInAs" xml:space="preserve">
+    <value>Logged in as {0}.</value>
+    <comment>ex: Logged in as user@example.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Your vault is locked. Verify your master password to continue.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Your vault is locked. Verify your PIN code to continue.</value>
   </data>
 </root>

@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Bit.App.Pages.SettingsPage"
+             xmlns:pages="clr-namespace:Bit.App.Pages"
+             xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:u="clr-namespace:Bit.App.Utilities"
+             x:DataType="pages:SettingsPageViewModel"
+             Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:SettingsPageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:StringHasValueConverter x:Key="stringHasValue" />
+            
+            <DataTemplate
+                x:Key="regularTemplate"
+                x:DataType="pages:SettingsPageListItem">
+                <ViewCell>
+                    <StackLayout Orientation="Horizontal"
+                                 StyleClass="list-row, list-row-platform">
+                        <Label Text="{Binding Name, Mode=OneWay}"
+                               LineBreakMode="TailTruncation"
+                               HorizontalOptions="StartAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               StyleClass="list-title"/>
+                        <Label Text="{Binding SubLabel, Mode=OneWay}"
+                               IsVisible="{Binding SubLabel, Converter={StaticResource stringHasValue}}"
+                               HorizontalOptions="End"
+                               HorizontalTextAlignment="End"
+                               VerticalOptions="CenterAndExpand"
+                               StyleClass="list-sub"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+
+            <pages:SettingsPageListItemSelector
+                x:Key="listItemDataTemplateSelector"
+                RegularTemplate="{StaticResource regularTemplate}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ListView
+        ItemsSource="{Binding GroupedItems}"
+        VerticalOptions="FillAndExpand"
+        HasUnevenRows="true"
+        ItemTemplate="{StaticResource listItemDataTemplateSelector}"
+        IsGroupingEnabled="True"
+        ItemSelected="RowSelected"
+        StyleClass="list, list-platform">
+
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate x:DataType="pages:SettingsPageListGroup">
+                <ViewCell>
+                    <StackLayout StyleClass="list-row-header">
+                        <Label
+                            Text="{Binding Name}"
+                            StyleClass="list-header, list-header-platform" />
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+    </ListView>
+
+</pages:BaseContentPage>

@@ -1,49 +1,63 @@
 ﻿using System;
-using Android.Content;
-using Bit.App.Abstractions;
-using Xamarin.Forms;
-using Android.Webkit;
-using Plugin.CurrentActivity;
-using System.IO;
-using Android.Support.V4.Content;
-using Bit.App;
-using Bit.App.Resources;
-using Android.Provider;
-using System.Threading.Tasks;
-using Android.OS;
 using System.Collections.Generic;
-using Android;
-using Android.Content.PM;
-using Android.Support.V4.App;
-using Bit.App.Models.Page;
-using XLabs.Ioc;
-using Android.App;
-using Android.Views.Autofill;
-using Android.App.Assist;
-using Bit.Android.Autofill;
+using System.IO;
 using System.Linq;
-using Plugin.Settings.Abstractions;
-using Android.Views.InputMethods;
+using System.Threading.Tasks;
+using Android;
+using Android.App;
+using Android.App.Assist;
+using Android.Content;
+using Android.Content.PM;
+using Android.Nfc;
+using Android.OS;
+using Android.Provider;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
+using Android.Text;
+using Android.Text.Method;
+using Android.Views.Autofill;
+using Android.Webkit;
 using Android.Widget;
-using Bit.App.Utilities;
+using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Enums;
+using Bit.Core.Models.View;
+using Bit.Core.Utilities;
+using Bit.Droid.Autofill;
+using Plugin.CurrentActivity;
 
-namespace Bit.Android.Services
+namespace Bit.Droid.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
-        private readonly IAppSettingsService _appSettingsService;
-        private bool _cameraPermissionsDenied;
-        private DateTime? _lastAction;
+        private readonly IStorageService _storageService;
+        private readonly IMessagingService _messagingService;
+        private readonly IBroadcasterService _broadcasterService;
         private ProgressDialog _progressDialog;
-        private global::Android.Widget.Toast _toast;
+        private bool _cameraPermissionsDenied;
+        private Toast _toast;
 
         public DeviceActionService(
-            IAppSettingsService appSettingsService)
+            IStorageService storageService,
+            IMessagingService messagingService,
+            IBroadcasterService broadcasterService)
         {
-            _appSettingsService = appSettingsService;
+            _storageService = storageService;
+            _messagingService = messagingService;
+            _broadcasterService = broadcasterService;
+
+            _broadcasterService.Subscribe(nameof(DeviceActionService), (message) =>
+            {
+                if(message.Command == "selectFileCameraPermissionDenied")
+                {
+                    _cameraPermissionsDenied = true;
+                }
+            });
         }
 
-        private Context CurrentContext => CrossCurrentActivity.Current.Activity;
+        public DeviceType DeviceType => DeviceType.Android;
 
         public void Toast(string text, bool longDuration = false)
         {
@@ -53,396 +67,21 @@ namespace Bit.Android.Services
                 _toast.Dispose();
                 _toast = null;
             }
-
-            _toast = global::Android.Widget.Toast.MakeText(CurrentContext, text,
-                longDuration ? global::Android.Widget.ToastLength.Long : global::Android.Widget.ToastLength.Short);
+            _toast = Android.Widget.Toast.MakeText(CrossCurrentActivity.Current.Activity, text,
+                longDuration ? ToastLength.Long : ToastLength.Short);
             _toast.Show();
         }
 
-        public void CopyToClipboard(string text)
+        public bool LaunchApp(string appName)
         {
-            var clipboardManager = (ClipboardManager)CurrentContext.GetSystemService(Context.ClipboardService);
-            clipboardManager.Text = text;
-        }
-
-        public bool OpenFile(byte[] fileData, string id, string fileName)
-        {
-            if(!CanOpenFile(fileName))
-            {
-                return false;
-            }
-
-            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
-            if(extension == null)
-            {
-                return false;
-            }
-
-            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
-            if(mimeType == null)
-            {
-                return false;
-            }
-
-            var cachePath = CrossCurrentActivity.Current.Activity.CacheDir;
-            var filePath = Path.Combine(cachePath.Path, fileName);
-            File.WriteAllBytes(filePath, fileData);
-            var file = new Java.IO.File(cachePath, fileName);
-            if(!file.IsFile)
-            {
-                return false;
-            }
-
-            try
-            {
-                var intent = new Intent(Intent.ActionView);
-                var uri = FileProvider.GetUriForFile(CrossCurrentActivity.Current.Activity.ApplicationContext,
-                    "com.x8bit.bitwarden.fileprovider", file);
-                intent.SetDataAndType(uri, mimeType);
-                intent.SetFlags(ActivityFlags.GrantReadUriPermission);
-                CrossCurrentActivity.Current.Activity.StartActivity(intent);
-                return true;
-            }
-            catch { }
-
-            return false;
-        }
-
-        public bool CanOpenFile(string fileName)
-        {
-            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
-            if(extension == null)
-            {
-                return false;
-            }
-
-            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
-            if(mimeType == null)
-            {
-                return false;
-            }
-
-            var pm = CrossCurrentActivity.Current.Activity.PackageManager;
-            var intent = new Intent(Intent.ActionView);
-            intent.SetType(mimeType);
-            var activities = pm.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
-            return (activities?.Count ?? 0) > 0;
-        }
-
-        public void ClearCache()
-        {
-            try
-            {
-                DeleteDir(CrossCurrentActivity.Current.Activity.CacheDir);
-                _appSettingsService.LastCacheClear = DateTime.UtcNow;
-            }
-            catch(Exception) { }
-        }
-
-        public Task SelectFileAsync()
-        {
-            MessagingCenter.Unsubscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                "SelectFileCameraPermissionDenied");
-
-            var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
-
-            var additionalIntents = new List<IParcelable>();
-            if(CurrentContext.PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
-            {
-                var hasCameraPermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.Camera);
-
-                if(!_cameraPermissionsDenied && !hasStorageWritePermission)
-                {
-                    AskCameraPermission(Manifest.Permission.WriteExternalStorage);
-                    return Task.FromResult(0);
-                }
-
-                if(!_cameraPermissionsDenied && !hasCameraPermission)
-                {
-                    AskCameraPermission(Manifest.Permission.Camera);
-                    return Task.FromResult(0);
-                }
-
-                if(!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
-                {
-                    try
-                    {
-                        var root = new Java.IO.File(global::Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
-                        var file = new Java.IO.File(root, "temp_camera_photo.jpg");
-                        if(!file.Exists())
-                        {
-                            file.ParentFile.Mkdirs();
-                            file.CreateNewFile();
-                        }
-                        var outputFileUri = global::Android.Net.Uri.FromFile(file);
-                        additionalIntents.AddRange(GetCameraIntents(outputFileUri));
-                    }
-                    catch(Java.IO.IOException) { }
-                }
-            }
-
-            var docIntent = new Intent(Intent.ActionOpenDocument);
-            docIntent.AddCategory(Intent.CategoryOpenable);
-            docIntent.SetType("*/*");
-
-            var chooserIntent = Intent.CreateChooser(docIntent, AppResources.FileSource);
-            if(additionalIntents.Count > 0)
-            {
-                chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());
-            }
-
-            CrossCurrentActivity.Current.Activity.StartActivityForResult(chooserIntent, Constants.SelectFileRequestCode);
-            return Task.FromResult(0);
-        }
-
-        public void Autofill(VaultListPageModel.Cipher cipher)
-        {
-            var activity = (MainActivity)CurrentContext;
-            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
-            {
-                if(cipher == null)
-                {
-                    activity.SetResult(Result.Canceled);
-                    activity.Finish();
-                    return;
-                }
-
-                var structure = activity.Intent.GetParcelableExtra(
-                    AutofillManager.ExtraAssistStructure) as AssistStructure;
-                if(structure == null)
-                {
-                    activity.SetResult(Result.Canceled);
-                    activity.Finish();
-                    return;
-                }
-
-                var parser = new Parser(structure);
-                parser.Parse();
-                if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
-                {
-                    activity.SetResult(Result.Canceled);
-                    activity.Finish();
-                    return;
-                }
-
-                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection,
-                    new FilledItem(cipher.CipherModel));
-                var replyIntent = new Intent();
-                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
-                activity.SetResult(Result.Ok, replyIntent);
-                activity.Finish();
-            }
-            else
-            {
-                var data = new Intent();
-                if(cipher == null)
-                {
-                    data.PutExtra("canceled", "true");
-                }
-                else
-                {
-                    var settings = Resolver.Resolve<ISettings>();
-                    var autoCopyEnabled = !settings.GetValueOrDefault(Constants.SettingDisableTotpCopy, false);
-                    if(Helpers.CanAccessPremium() && autoCopyEnabled && cipher.LoginTotp?.Value != null)
-                    {
-                        CopyToClipboard(App.Utilities.Crypto.Totp(cipher.LoginTotp.Value));
-                    }
-
-                    data.PutExtra("uri", cipher.LoginUri);
-                    data.PutExtra("username", cipher.LoginUsername);
-                    data.PutExtra("password", cipher.LoginPassword?.Value ?? null);
-                }
-
-                if(activity.Parent == null)
-                {
-                    activity.SetResult(Result.Ok, data);
-                }
-                else
-                {
-                    activity.Parent.SetResult(Result.Ok, data);
-                }
-
-                activity.Finish();
-                MessagingCenter.Send(Xamarin.Forms.Application.Current, "FinishMainActivity");
-            }
-        }
-
-        public void CloseAutofill()
-        {
-            Autofill(null);
-        }
-
-        public void Background()
-        {
-            var activity = (MainActivity)CurrentContext;
-            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
-            {
-                activity.SetResult(Result.Canceled);
-                activity.Finish();
-            }
-            else
-            {
-                activity.MoveTaskToBack(true);
-            }
-        }
-
-        public void RateApp()
-        {
-            var activity = (MainActivity)CurrentContext;
-            try
-            {
-                var rateIntent = RateIntentForUrl("market://details", activity);
-                activity.StartActivity(rateIntent);
-            }
-            catch(ActivityNotFoundException)
-            {
-                var rateIntent = RateIntentForUrl("https://play.google.com/store/apps/details", activity);
-                activity.StartActivity(rateIntent);
-            }
-        }
-
-        public void DismissKeyboard()
-        {
-            try
-            {
-                var activity = (MainActivity)CurrentContext;
-                var imm = (InputMethodManager)activity.GetSystemService(Context.InputMethodService);
-                imm.HideSoftInputFromWindow(activity.CurrentFocus.WindowToken, 0);
-            }
-            catch { }
-        }
-
-        public void OpenAccessibilitySettings()
-        {
-            var activity = (MainActivity)CurrentContext;
-            var intent = new Intent(Settings.ActionAccessibilitySettings);
-            activity.StartActivity(intent);
-        }
-
-        public async Task LaunchAppAsync(string appName, Page page)
-        {
-            var activity = (MainActivity)CurrentContext;
-            if(_lastAction.LastActionWasRecent())
-            {
-                return;
-            }
-            _lastAction = DateTime.UtcNow;
-
+            var activity = CrossCurrentActivity.Current.Activity;
             appName = appName.Replace("androidapp://", string.Empty);
             var launchIntent = activity.PackageManager.GetLaunchIntentForPackage(appName);
-            if(launchIntent == null)
-            {
-                await page.DisplayAlert(null, string.Format(AppResources.CannotOpenApp, appName), AppResources.Ok);
-            }
-            else
+            if(launchIntent != null)
             {
                 activity.StartActivity(launchIntent);
             }
-        }
-
-        private Intent RateIntentForUrl(string url, Activity activity)
-        {
-            var intent = new Intent(Intent.ActionView, global::Android.Net.Uri.Parse($"{url}?id={activity.PackageName}"));
-            var flags = ActivityFlags.NoHistory | ActivityFlags.MultipleTask;
-            if((int)Build.VERSION.SdkInt >= 21)
-            {
-                flags |= ActivityFlags.NewDocument;
-            }
-            else
-            {
-                // noinspection deprecation
-                flags |= ActivityFlags.ClearWhenTaskReset;
-            }
-
-            intent.AddFlags(flags);
-            return intent;
-        }
-
-        private bool DeleteDir(Java.IO.File dir)
-        {
-            if(dir != null && dir.IsDirectory)
-            {
-                var children = dir.List();
-                for(int i = 0; i < children.Length; i++)
-                {
-                    var success = DeleteDir(new Java.IO.File(dir, children[i]));
-                    if(!success)
-                    {
-                        return false;
-                    }
-                }
-                return dir.Delete();
-            }
-            else if(dir != null && dir.IsFile)
-            {
-                return dir.Delete();
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        private List<IParcelable> GetCameraIntents(global::Android.Net.Uri outputUri)
-        {
-            var intents = new List<IParcelable>();
-            var pm = CrossCurrentActivity.Current.Activity.PackageManager;
-            var captureIntent = new Intent(MediaStore.ActionImageCapture);
-            var listCam = pm.QueryIntentActivities(captureIntent, 0);
-            foreach(var res in listCam)
-            {
-                var packageName = res.ActivityInfo.PackageName;
-                var intent = new Intent(captureIntent);
-                intent.SetComponent(new ComponentName(packageName, res.ActivityInfo.Name));
-                intent.SetPackage(packageName);
-                intent.PutExtra(MediaStore.ExtraOutput, outputUri);
-                intents.Add(intent);
-            }
-            return intents;
-        }
-
-        private bool HasPermission(string permission)
-        {
-            return ContextCompat.CheckSelfPermission(CrossCurrentActivity.Current.Activity, permission) == Permission.Granted;
-        }
-
-        private void AskCameraPermission(string permission)
-        {
-            MessagingCenter.Subscribe<Xamarin.Forms.Application>(Xamarin.Forms.Application.Current,
-                "SelectFileCameraPermissionDenied", (sender) =>
-                {
-                    _cameraPermissionsDenied = true;
-                });
-
-            AskPermission(permission);
-        }
-
-        private void AskPermission(string permission)
-        {
-            ActivityCompat.RequestPermissions(CrossCurrentActivity.Current.Activity, new string[] { permission },
-                Constants.SelectFilePermissionRequestCode);
-        }
-
-        public void OpenAutofillSettings()
-        {
-            try
-            {
-                var activity = (MainActivity)CurrentContext;
-                var intent = new Intent(Settings.ActionRequestSetAutofillService);
-                intent.SetData(global::Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
-                activity.StartActivity(intent);
-            }
-            catch(ActivityNotFoundException)
-            {
-                var alertBuilder = new AlertDialog.Builder((MainActivity)CurrentContext);
-                alertBuilder.SetMessage(AppResources.BitwardenAutofillGoToSettings);
-                alertBuilder.SetCancelable(true);
-                alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
-                {
-                    (sender as AlertDialog)?.Cancel();
-                });
-                alertBuilder.Create().Show();
-            }
+            return launchIntent != null;
         }
 
         public async Task ShowLoadingAsync(string text)
@@ -451,8 +90,7 @@ namespace Bit.Android.Services
             {
                 await HideLoadingAsync();
             }
-
-            var activity = (MainActivity)CurrentContext;
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             _progressDialog = new ProgressDialog(activity);
             _progressDialog.SetMessage(text);
             _progressDialog.SetCancelable(false);
@@ -467,13 +105,132 @@ namespace Bit.Android.Services
                 _progressDialog.Dispose();
                 _progressDialog = null;
             }
-
             return Task.FromResult(0);
         }
 
-        public Task<string> DisplayPromptAync(string title = null, string description = null, string text = null)
+        public bool OpenFile(byte[] fileData, string id, string fileName)
         {
-            var activity = (MainActivity)CurrentContext;
+            if(!CanOpenFile(fileName))
+            {
+                return false;
+            }
+            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
+            if(extension == null)
+            {
+                return false;
+            }
+            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
+            if(mimeType == null)
+            {
+                return false;
+            }
+
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var cachePath = activity.CacheDir;
+            var filePath = Path.Combine(cachePath.Path, fileName);
+            File.WriteAllBytes(filePath, fileData);
+            var file = new Java.IO.File(cachePath, fileName);
+            if(!file.IsFile)
+            {
+                return false;
+            }
+
+            try
+            {
+                var intent = new Intent(Intent.ActionView);
+                var uri = FileProvider.GetUriForFile(activity.ApplicationContext,
+                    "com.x8bit.bitwarden.fileprovider", file);
+                intent.SetDataAndType(uri, mimeType);
+                intent.SetFlags(ActivityFlags.GrantReadUriPermission);
+                activity.StartActivity(intent);
+                return true;
+            }
+            catch { }
+            return false;
+        }
+
+        public bool CanOpenFile(string fileName)
+        {
+            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
+            if(extension == null)
+            {
+                return false;
+            }
+            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
+            if(mimeType == null)
+            {
+                return false;
+            }
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var intent = new Intent(Intent.ActionView);
+            intent.SetType(mimeType);
+            var activities = activity.PackageManager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
+            return (activities?.Count ?? 0) > 0;
+        }
+
+        public async Task ClearCacheAsync()
+        {
+            try
+            {
+                DeleteDir(CrossCurrentActivity.Current.Activity.CacheDir);
+                await _storageService.SaveAsync(Constants.LastFileCacheClearKey, DateTime.UtcNow);
+            }
+            catch(Exception) { }
+        }
+
+        public Task SelectFileAsync()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
+            var additionalIntents = new List<IParcelable>();
+            if(activity.PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
+            {
+                var hasCameraPermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.Camera);
+                if(!_cameraPermissionsDenied && !hasStorageWritePermission)
+                {
+                    AskPermission(Manifest.Permission.WriteExternalStorage);
+                    return Task.FromResult(0);
+                }
+                if(!_cameraPermissionsDenied && !hasCameraPermission)
+                {
+                    AskPermission(Manifest.Permission.Camera);
+                    return Task.FromResult(0);
+                }
+                if(!_cameraPermissionsDenied && hasCameraPermission && hasStorageWritePermission)
+                {
+                    try
+                    {
+                        var root = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
+                        var file = new Java.IO.File(root, "temp_camera_photo.jpg");
+                        if(!file.Exists())
+                        {
+                            file.ParentFile.Mkdirs();
+                            file.CreateNewFile();
+                        }
+                        var outputFileUri = Android.Net.Uri.FromFile(file);
+                        additionalIntents.AddRange(GetCameraIntents(outputFileUri));
+                    }
+                    catch(Java.IO.IOException) { }
+                }
+            }
+
+            var docIntent = new Intent(Intent.ActionOpenDocument);
+            docIntent.AddCategory(Intent.CategoryOpenable);
+            docIntent.SetType("*/*");
+            var chooserIntent = Intent.CreateChooser(docIntent, AppResources.FileSource);
+            if(additionalIntents.Count > 0)
+            {
+                chooserIntent.PutExtra(Intent.ExtraInitialIntents, additionalIntents.ToArray());
+            }
+            activity.StartActivityForResult(chooserIntent, Constants.SelectFileRequestCode);
+            return Task.FromResult(0);
+        }
+
+        public Task<string> DisplayPromptAync(string title = null, string description = null,
+            string text = null, string okButtonText = null, string cancelButtonText = null,
+            bool numericKeyboard = false)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             if(activity == null)
             {
                 return Task.FromResult<string>(null);
@@ -482,42 +239,103 @@ namespace Bit.Android.Services
             var alertBuilder = new AlertDialog.Builder(activity);
             alertBuilder.SetTitle(title);
             alertBuilder.SetMessage(description);
-
             var input = new EditText(activity)
             {
-                InputType = global::Android.Text.InputTypes.ClassText
+                InputType = InputTypes.ClassText
             };
-
             if(text == null)
             {
                 text = string.Empty;
             }
+            if(numericKeyboard)
+            {
+                input.InputType = InputTypes.ClassNumber | InputTypes.NumberFlagDecimal | InputTypes.NumberFlagSigned;
+#pragma warning disable CS0618 // Type or member is obsolete
+                input.KeyListener = DigitsKeyListener.GetInstance(false, false);
+#pragma warning restore CS0618 // Type or member is obsolete
+            }
 
             input.Text = text;
             input.SetSelection(text.Length);
+            var container = new FrameLayout(activity);
+            var lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MatchParent,
+                LinearLayout.LayoutParams.MatchParent);
+            lp.SetMargins(25, 0, 25, 0);
+            input.LayoutParameters = lp;
+            container.AddView(input);
+            alertBuilder.SetView(container);
 
-            alertBuilder.SetView(input);
-
+            okButtonText = okButtonText ?? AppResources.Ok;
+            cancelButtonText = cancelButtonText ?? AppResources.Cancel;
             var result = new TaskCompletionSource<string>();
-            alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
-            {
-                result.TrySetResult(input.Text ?? string.Empty);
-            });
-
-            alertBuilder.SetNegativeButton(AppResources.Cancel, (sender, args) =>
-            {
-                result.TrySetResult(null);
-            });
+            alertBuilder.SetPositiveButton(okButtonText,
+                (sender, args) => result.TrySetResult(input.Text ?? string.Empty));
+            alertBuilder.SetNegativeButton(cancelButtonText, (sender, args) => result.TrySetResult(null));
 
             var alert = alertBuilder.Create();
-            alert.Window.SetSoftInputMode(global::Android.Views.SoftInput.StateVisible);
+            alert.Window.SetSoftInputMode(Android.Views.SoftInput.StateVisible);
             alert.Show();
             return result.Task;
         }
 
+        public void RateApp()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            try
+            {
+                var rateIntent = RateIntentForUrl("market://details", activity);
+                activity.StartActivity(rateIntent);
+            }
+            catch(ActivityNotFoundException)
+            {
+                var rateIntent = RateIntentForUrl("https://play.google.com/store/apps/details", activity);
+                activity.StartActivity(rateIntent);
+            }
+        }
+
+        public bool SupportsFaceId()
+        {
+            return false;
+        }
+
+        public bool SupportsNfc()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var manager = activity.GetSystemService(Context.NfcService) as NfcManager;
+            return manager.DefaultAdapter?.IsEnabled ?? false;
+        }
+
+        public bool SupportsCamera()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            return activity.PackageManager.HasSystemFeature(PackageManager.FeatureCamera);
+        }
+
+        public bool SupportsAutofillService()
+        {
+            if(Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                return false;
+            }
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var type = Java.Lang.Class.FromType(typeof(AutofillManager));
+            var manager = activity.GetSystemService(type) as AutofillManager;
+            return manager.IsAutofillSupported;
+        }
+
+        public int SystemMajorVersion()
+        {
+            return (int)Build.VERSION.SdkInt;
+        }
+
+        public string SystemModel()
+        {
+            return Build.Model;
+        }
+
         public Task<string> DisplayAlertAsync(string title, string message, string cancel, params string[] buttons)
         {
-            var activity = (MainActivity)CurrentContext;
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             if(activity == null)
             {
                 return Task.FromResult<string>(null);
@@ -586,6 +404,181 @@ namespace Bit.Android.Services
             alert.CancelEvent += (o, args) => { result.TrySetResult(null); };
             alert.Show();
             return result.Task;
+        }
+
+        public void Autofill(CipherView cipher)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
+            {
+                if(cipher == null)
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+                var structure = activity.Intent.GetParcelableExtra(
+                    AutofillManager.ExtraAssistStructure) as AssistStructure;
+                if(structure == null)
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+                var parser = new Parser(structure, activity.ApplicationContext);
+                parser.Parse();
+                if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
+                {
+                    activity.SetResult(Result.Canceled);
+                    activity.Finish();
+                    return;
+                }
+                var task = CopyTotpAsync(cipher);
+                var dataset = AutofillHelpers.BuildDataset(activity, parser.FieldCollection, new FilledItem(cipher));
+                var replyIntent = new Intent();
+                replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
+                activity.SetResult(Result.Ok, replyIntent);
+                activity.Finish();
+            }
+            else
+            {
+                var data = new Intent();
+                if(cipher == null)
+                {
+                    data.PutExtra("canceled", "true");
+                }
+                else
+                {
+                    var task = CopyTotpAsync(cipher);
+                    data.PutExtra("uri", cipher.Login.Uri);
+                    data.PutExtra("username", cipher.Login.Username);
+                    data.PutExtra("password", cipher.Login.Password);
+                }
+                if(activity.Parent == null)
+                {
+                    activity.SetResult(Result.Ok, data);
+                }
+                else
+                {
+                    activity.Parent.SetResult(Result.Ok, data);
+                }
+                activity.Finish();
+                _messagingService.Send("finishMainActivity");
+            }
+        }
+
+        public void CloseAutofill()
+        {
+            Autofill(null);
+        }
+
+        public void Background()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if(activity.Intent.GetBooleanExtra("autofillFramework", false))
+            {
+                activity.SetResult(Result.Canceled);
+                activity.Finish();
+            }
+            else
+            {
+                activity.MoveTaskToBack(true);
+            }
+        }
+
+        private bool DeleteDir(Java.IO.File dir)
+        {
+            if(dir != null && dir.IsDirectory)
+            {
+                var children = dir.List();
+                for(int i = 0; i < children.Length; i++)
+                {
+                    var success = DeleteDir(new Java.IO.File(dir, children[i]));
+                    if(!success)
+                    {
+                        return false;
+                    }
+                }
+                return dir.Delete();
+            }
+            else if(dir != null && dir.IsFile)
+            {
+                return dir.Delete();
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private bool HasPermission(string permission)
+        {
+            return ContextCompat.CheckSelfPermission(
+                CrossCurrentActivity.Current.Activity, permission) == Permission.Granted;
+        }
+
+        private void AskPermission(string permission)
+        {
+            ActivityCompat.RequestPermissions(CrossCurrentActivity.Current.Activity, new string[] { permission },
+                Constants.SelectFilePermissionRequestCode);
+        }
+
+        private List<IParcelable> GetCameraIntents(Android.Net.Uri outputUri)
+        {
+            var intents = new List<IParcelable>();
+            var pm = CrossCurrentActivity.Current.Activity.PackageManager;
+            var captureIntent = new Intent(MediaStore.ActionImageCapture);
+            var listCam = pm.QueryIntentActivities(captureIntent, 0);
+            foreach(var res in listCam)
+            {
+                var packageName = res.ActivityInfo.PackageName;
+                var intent = new Intent(captureIntent);
+                intent.SetComponent(new ComponentName(packageName, res.ActivityInfo.Name));
+                intent.SetPackage(packageName);
+                intent.PutExtra(MediaStore.ExtraOutput, outputUri);
+                intents.Add(intent);
+            }
+            return intents;
+        }
+
+        private Intent RateIntentForUrl(string url, Activity activity)
+        {
+            var intent = new Intent(Intent.ActionView, Android.Net.Uri.Parse($"{url}?id={activity.PackageName}"));
+            var flags = ActivityFlags.NoHistory | ActivityFlags.MultipleTask;
+            if((int)Build.VERSION.SdkInt >= 21)
+            {
+                flags |= ActivityFlags.NewDocument;
+            }
+            else
+            {
+                // noinspection deprecation
+                flags |= ActivityFlags.ClearWhenTaskReset;
+            }
+            intent.AddFlags(flags);
+            return intent;
+        }
+
+        private async Task CopyTotpAsync(CipherView cipher)
+        {
+            var autoCopyDisabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
+            var canAccessPremium = await ServiceContainer.Resolve<IUserService>("userService").CanAccessPremiumAsync();
+            if(canAccessPremium && !autoCopyDisabled.GetValueOrDefault() &&
+                !string.IsNullOrWhiteSpace(cipher?.Login?.Totp))
+            {
+                var totp = await ServiceContainer.Resolve<ITotpService>("totpService").GetCodeAsync(cipher.Login.Totp);
+                if(totp != null)
+                {
+                    CopyToClipboard(totp);
+                }
+            }
+        }
+
+        private void CopyToClipboard(string text)
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var clipboardManager = activity.GetSystemService(
+                Context.ClipboardService) as Android.Content.ClipboardManager;
+            clipboardManager.Text = text;
         }
     }
 }

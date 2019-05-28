@@ -1,0 +1,342 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Bit.App.Styles.Base"
+                    xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
+                    xmlns:controls="clr-namespace:Bit.App.Controls">
+
+    <!-- General -->
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-default"
+           x:Key="text-default">
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-muted">
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-danger"
+           x:Key="text-danger">
+        <Setter Property="TextColor"
+                Value="{StaticResource DangerColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-success">
+        <Setter Property="TextColor"
+                Value="{StaticResource SuccessColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-sm">
+        <Setter Property="FontSize"
+                Value="Small" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-lg"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="Large" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-bold">
+        <Setter Property="FontAttributes"
+                Value="Bold" />
+    </Style>
+    <Style TargetType="controls:ExtendedSlider">
+        <Setter Property="MinimumTrackColor"
+                Value="{StaticResource SliderTrackColor}" />
+        <Setter Property="MaximumTrackColor"
+                Value="{StaticResource SliderTrackColor}" />
+        <Setter Property="ThumbColor"
+                Value="{StaticResource SliderThumbColor}" />
+        <Setter Property="ThumbBorderColor"
+                Value="{StaticResource SliderThumbBorderColor}" />
+    </Style>
+    
+    <!-- Buttons -->
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="btn-icon">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-muted"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Button"
+           Class="btn-disabled"
+           ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{StaticResource DisabledIconColor}" />
+    </Style>
+    <Style TargetType="fab:FloatingActionButtonView">
+        <Setter Property="ColorNormal"
+                Value="{StaticResource FabColor}" />
+        <Setter Property="ColorPressed"
+                Value="{StaticResource FabPressedColor}" />
+        <Setter Property="ColorRipple"
+                Value="{StaticResource FabPressedColor}" />
+    </Style>
+    
+    <!-- Title -->
+    <Style TargetType="Button"
+           Class="btn-title"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TitleTextColor}" />
+    </Style>
+    <Style TargetType="SearchBar">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TitleEntryTextColor}" />
+        <Setter Property="CancelButtonColor"
+                Value="{StaticResource TitleEntryTextColor}" />
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource TitleEntryPlaceholderColor}" />
+    </Style>
+
+    <!-- List -->
+    <Style TargetType="ListView"
+           Class="list">
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-header">
+        <Setter Property="Padding"
+                Value="10, 12" />
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header">
+        <Setter Property="HorizontalOptions"
+                Value="StartAndExpand" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header-sub">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="HorizontalTextAlignment"
+                Value="End" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="10, 12" />
+    </Style>
+    <Style TargetType="Grid"
+           Class="list-row">
+        <Setter Property="Padding"
+                Value="2, 5" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-title">
+    </Style>
+    <Style TargetType="Label"
+           Class="list-sub">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="list-title-icon">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-subtitle">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-icon"
+           ApplyToDerivedTypes="True">
+        <Setter Property="WidthRequest"
+                Value="26" />
+        <Setter Property="HeightRequest"
+                Value="26" />
+        <Setter Property="HorizontalTextAlignment"
+                Value="Center" />
+        <Setter Property="VerticalTextAlignment"
+                Value="Center" />
+        <Setter Property="FontSize"
+                Value="Large" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="list-row-button">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{StaticResource PrimaryColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    
+    <!-- Box -->
+
+    <Style TargetType="StackLayout"
+           Class="box">
+        <Setter Property="Padding"
+                Value="10, 0" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-bottom">
+        <Setter Property="Padding"
+                Value="10, 0, 10, 10" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-header">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 5" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-header">
+    </Style>
+    <Style TargetType="Grid"
+           Class="box-row">
+        <Setter Property="Padding"
+                Value="0, 10" />
+        <Setter Property="RowSpacing"
+                Value="0" />
+        <Setter Property="ColumnSpacing"
+                Value="10" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row">
+        <Setter Property="Padding"
+                Value="0, 10" />
+        <Setter Property="Spacing"
+                Value="0" />
+    </Style>
+    <Style TargetType="Grid"
+           Class="box-row-input">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-input">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 0" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-switch">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-stepper">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="Spacing"
+                Value="10" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-slider">
+        <Setter Property="Orientation"
+                Value="Horizontal" />
+        <Setter Property="Spacing"
+                Value="10" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="box-row-button">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="Padding"
+                Value="0" />
+        <Setter Property="TextColor"
+                Value="{StaticResource PrimaryColor}" />
+        <Setter Property="HorizontalOptions"
+                Value="End" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="box-row-separator">
+        <Setter Property="HeightRequest"
+                Value="1" />
+        <Setter Property="Color"
+                Value="{StaticResource BoxBorderColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-label-regular">
+        <Setter Property="FontSize"
+                Value="Medium" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           ApplyToDerivedTypes="True"
+           Class="box-value">
+        <Setter Property="LineBreakMode"
+                Value="CharacterWrap" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 0" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-sub-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="box-footer-label">
+        <Setter Property="FontSize"
+                Value="Small" />
+        <Setter Property="TextColor"
+                Value="{StaticResource MutedColor}" />
+    </Style>
+</ResourceDictionary>

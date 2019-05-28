@@ -1,18 +1,28 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="BitwardenTheme.Splash" parent="BitwardenTheme.Base">
+  <style name="MainTheme.Splash" parent="MainTheme.Base">
     <item name="android:windowBackground">@drawable/splash_screen</item>
     <item name="android:windowNoTitle">true</item>
   </style>
-  <style name="BitwardenTheme" parent="BitwardenTheme.Base">
+
+  <style name="MainTheme" parent="MainTheme.Base">
   </style>
-  <style name="BitwardenTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
+
+  <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
     <item name="colorPrimary">@color/primary</item>
     <item name="colorPrimaryDark">@color/accent</item>
     <item name="colorAccent">@color/primary</item>
-    <item name="android:windowBackground">@color/lightgray</item>
+    <item name="colorControlNormal">@color/border</item>
     <item name="windowActionModeOverlay">true</item>
-    <item name="android:navigationBarColor">@color/darkaccent</item>
-    <item name="android:actionModeBackground">@color/darkaccent</item>
+    <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
+    <item name="android:colorActivatedHighlight">@android:color/transparent</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+  </style>
+
+  <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+    <item name="colorAccent">#FF4081</item>
   </style>
 </resources>

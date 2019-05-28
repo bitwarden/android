@@ -5,7 +5,7 @@ using System.Linq;
 using Android.Text;
 using Android.Views;
 
-namespace Bit.Android.Autofill
+namespace Bit.Droid.Autofill
 {
     public class FieldCollection
     {
@@ -47,7 +47,6 @@ namespace Bit.Android.Autofill
                 {
                     return _passwordFields;
                 }
-
                 if(Hints.Any())
                 {
                     _passwordFields = new List<Field>();
@@ -64,7 +63,6 @@ namespace Bit.Android.Autofill
                         _passwordFields = Fields.Where(f => FieldHasPasswordTerms(f)).ToList();
                     }
                 }
-
                 return _passwordFields;
             }
         }
@@ -77,7 +75,6 @@ namespace Bit.Android.Autofill
                 {
                     return _usernameFields;
                 }
-
                 _usernameFields = new List<Field>();
                 if(Hints.Any())
                 {
@@ -102,20 +99,29 @@ namespace Bit.Android.Autofill
                         }
                     }
                 }
-
                 return _usernameFields;
             }
         }
 
-        public bool FillableForLogin => FocusedHintsContain(
-            new string[] { View.AutofillHintUsername, View.AutofillHintEmailAddress, View.AutofillHintPassword }) ||
-            UsernameFields.Any(f => f.Focused) || PasswordFields.Any(f => f.Focused);
-        public bool FillableForCard => FocusedHintsContain(
-            new string[] { View.AutofillHintCreditCardNumber, View.AutofillHintCreditCardExpirationMonth,
-                View.AutofillHintCreditCardExpirationYear, View.AutofillHintCreditCardSecurityCode});
-        public bool FillableForIdentity => FocusedHintsContain(
-            new string[] { View.AutofillHintName, View.AutofillHintPhone, View.AutofillHintPostalAddress,
-                View.AutofillHintPostalCode });
+        public bool FillableForLogin => FocusedHintsContain(new string[] {
+            View.AutofillHintUsername,
+            View.AutofillHintEmailAddress,
+            View.AutofillHintPassword
+        }) || UsernameFields.Any(f => f.Focused) || PasswordFields.Any(f => f.Focused);
+
+        public bool FillableForCard => FocusedHintsContain(new string[] {
+            View.AutofillHintCreditCardNumber,
+            View.AutofillHintCreditCardExpirationMonth,
+            View.AutofillHintCreditCardExpirationYear,
+            View.AutofillHintCreditCardSecurityCode
+        });
+
+        public bool FillableForIdentity => FocusedHintsContain(new string[] {
+            View.AutofillHintName,
+            View.AutofillHintPhone,
+            View.AutofillHintPostalAddress,
+            View.AutofillHintPostalCode
+        });
 
         public bool Fillable => FillableForLogin || FillableForCard || FillableForIdentity;
 
@@ -127,7 +133,6 @@ namespace Bit.Android.Autofill
             }
 
             _passwordFields = _usernameFields = null;
-
             FieldTrackingIds.Add(field.TrackingId);
             Fields.Add(field);
             AutofillIds.Add(field.AutofillId);
@@ -141,12 +146,10 @@ namespace Bit.Android.Autofill
                     {
                         FocusedHints.Add(hint);
                     }
-
                     if(!HintToFieldsMap.ContainsKey(hint))
                     {
                         HintToFieldsMap.Add(hint, new List<Field>());
                     }
-
                     HintToFieldsMap[hint].Add(field);
                 }
             }
@@ -164,7 +167,7 @@ namespace Bit.Android.Autofill
 
                 var savedItem = new SavedItem
                 {
-                    Type = App.Enums.CipherType.Login,
+                    Type = Core.Enums.CipherType.Login,
                     Login = new SavedItem.LoginItem
                     {
                         Password = GetFieldValue(passwordField)
@@ -173,14 +176,13 @@ namespace Bit.Android.Autofill
 
                 var usernameField = Fields.TakeWhile(f => f.AutofillId != passwordField.AutofillId).LastOrDefault();
                 savedItem.Login.Username = GetFieldValue(usernameField);
-
                 return savedItem;
             }
             else if(SaveType == SaveDataType.CreditCard)
             {
                 var savedItem = new SavedItem
                 {
-                    Type = App.Enums.CipherType.Card,
+                    Type = Core.Enums.CipherType.Card,
                     Card = new SavedItem.CardItem
                     {
                         Number = GetFieldValue(View.AutofillHintCreditCardNumber),
@@ -190,10 +192,8 @@ namespace Bit.Android.Autofill
                         Code = GetFieldValue(View.AutofillHintCreditCardSecurityCode)
                     }
                 };
-
                 return savedItem;
             }
-
             return null;
         }
 
@@ -224,7 +224,6 @@ namespace Bit.Android.Autofill
                 }
                 return fieldList.Select(f => f.AutofillId).ToArray();
             }
-
             return new AutofillId[0];
         }
 
@@ -238,7 +237,6 @@ namespace Bit.Android.Autofill
             {
                 return HintToFieldsMap[View.AutofillHintCreditCardNumber].Select(f => f.AutofillId).ToArray();
             }
-
             return new AutofillId[0];
         }
 
@@ -260,7 +258,6 @@ namespace Bit.Android.Autofill
                     }
                 }
             }
-
             return null;
         }
 
@@ -270,7 +267,6 @@ namespace Bit.Android.Autofill
             {
                 return null;
             }
-
             if(!string.IsNullOrWhiteSpace(field.TextValue))
             {
                 if(field.AutofillType == AutofillType.List && field.ListValue.HasValue && monthValue)
@@ -294,7 +290,6 @@ namespace Bit.Android.Autofill
             {
                 return field.ToggleValue.Value.ToString();
             }
-
             return null;
         }
 
@@ -340,7 +335,6 @@ namespace Bit.Android.Autofill
             {
                 return false;
             }
-
             var lowerValue = value.ToLowerInvariant();
             return terms.Any(t => lowerValue.Contains(t));
         }

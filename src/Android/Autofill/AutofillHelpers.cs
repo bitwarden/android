@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Android.Content;
 using Android.Service.Autofill;
 using Android.Widget;
 using System.Linq;
 using Android.App;
-using Bit.App.Abstractions;
 using System.Threading.Tasks;
 using Bit.App.Resources;
-using Bit.App.Enums;
+using Bit.Core.Enums;
 using Android.Views.Autofill;
+using Bit.Core.Abstractions;
 
-namespace Bit.Android.Autofill
+namespace Bit.Droid.Autofill
 {
     public static class AutofillHelpers
     {
@@ -20,74 +19,91 @@ namespace Bit.Android.Autofill
         // These browser work natively with the autofill framework
         public static HashSet<string> TrustedBrowsers = new HashSet<string>
         {
-            "org.mozilla.focus","org.mozilla.klar","com.duckduckgo.mobile.android"
+            "org.mozilla.focus",
+            "org.mozilla.klar",
+            "com.duckduckgo.mobile.android",
         };
 
         // These browsers work using the compatibility shim for the autofill framework
         public static HashSet<string> CompatBrowsers = new HashSet<string>
         {
-            "org.mozilla.firefox","org.mozilla.firefox_beta","com.microsoft.emmx","com.android.chrome",
-            "com.chrome.beta","com.android.browser","com.brave.browser","com.opera.browser",
-            "com.opera.browser.beta","com.opera.mini.native","com.chrome.dev","com.chrome.canary",
-            "com.google.android.apps.chrome","com.google.android.apps.chrome_dev","com.yandex.browser",
-            "com.sec.android.app.sbrowser","com.sec.android.app.sbrowser.beta","org.codeaurora.swe.browser",
-            "com.amazon.cloud9","mark.via.gp","org.bromite.bromite","org.chromium.chrome","com.kiwibrowser.browser",
-            "com.ecosia.android","com.opera.mini.native.beta","org.mozilla.fennec_aurora","org.mozilla.fennec_fdroid",
-	    "com.qwant.liberty", "com.opera.touch","org.mozilla.fenix","org.mozilla.reference.browser",
-	    "org.mozilla.rocket"
+            "org.mozilla.firefox",
+            "org.mozilla.firefox_beta",
+            "com.microsoft.emmx",
+            "com.android.chrome",
+            "com.chrome.beta",
+            "com.android.browser",
+            "com.brave.browser",
+            "com.opera.browser",
+            "com.opera.browser.beta",
+            "com.opera.mini.native",
+            "com.chrome.dev",
+            "com.chrome.canary",
+            "com.google.android.apps.chrome",
+            "com.google.android.apps.chrome_dev",
+            "com.yandex.browser",
+            "com.sec.android.app.sbrowser",
+            "com.sec.android.app.sbrowser.beta",
+            "org.codeaurora.swe.browser",
+            "com.amazon.cloud9",
+            "mark.via.gp",
+            "org.bromite.bromite",
+            "org.chromium.chrome",
+            "com.kiwibrowser.browser",
+            "com.ecosia.android",
+            "com.opera.mini.native.beta",
+            "org.mozilla.fennec_aurora",
+            "com.qwant.liberty",
+            "com.opera.touch",
+            "org.mozilla.fenix",
+            "org.mozilla.reference.browser",
+            "org.mozilla.rocket",
         };
 
         // The URLs are blacklisted from autofilling
         public static HashSet<string> BlacklistedUris = new HashSet<string>
         {
-            "androidapp://android", "androidapp://com.x8bit.bitwarden", "androidapp://com.oneplus.applocker"
+            "androidapp://android",
+            "androidapp://com.x8bit.bitwarden",
+            "androidapp://com.oneplus.applocker",
         };
 
-        public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService service)
+        public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService cipherService)
         {
-            var items = new List<FilledItem>();
-
             if(parser.FieldCollection.FillableForLogin)
             {
-                var ciphers = await service.GetAllAsync(parser.Uri);
+                var ciphers = await cipherService.GetAllDecryptedByUrlAsync(parser.Uri);
                 if(ciphers.Item1.Any() || ciphers.Item2.Any())
                 {
                     var allCiphers = ciphers.Item1.ToList();
                     allCiphers.AddRange(ciphers.Item2.ToList());
-                    foreach(var cipher in allCiphers)
-                    {
-                        items.Add(new FilledItem(cipher));
-                    }
+                    return allCiphers.Select(c => new FilledItem(c)).ToList();
                 }
             }
             else if(parser.FieldCollection.FillableForCard)
             {
-                var ciphers = await service.GetAllAsync();
-                foreach(var cipher in ciphers.Where(c => c.Type == CipherType.Card))
-                {
-                    items.Add(new FilledItem(cipher));
-                }
+                var ciphers = await cipherService.GetAllDecryptedAsync();
+                return ciphers.Where(c => c.Type == CipherType.Card).Select(c => new FilledItem(c)).ToList();
             }
-
-            return items;
+            return new List<FilledItem>();
         }
 
-        public static FillResponse BuildFillResponse(Context context, Parser parser, List<FilledItem> items, bool locked)
+        public static FillResponse BuildFillResponse(Parser parser, List<FilledItem> items, bool locked)
         {
             var responseBuilder = new FillResponse.Builder();
             if(items != null && items.Count > 0)
             {
                 foreach(var item in items)
                 {
-                    var dataset = BuildDataset(context, parser.FieldCollection, item);
+                    var dataset = BuildDataset(parser.ApplicationContext, parser.FieldCollection, item);
                     if(dataset != null)
                     {
                         responseBuilder.AddDataset(dataset);
                     }
                 }
             }
-
-            responseBuilder.AddDataset(BuildVaultDataset(context, parser.FieldCollection, parser.Uri, locked));
+            responseBuilder.AddDataset(BuildVaultDataset(parser.ApplicationContext, parser.FieldCollection,
+                parser.Uri, locked));
             AddSaveInfo(parser, responseBuilder, parser.FieldCollection);
             responseBuilder.SetIgnoredIds(parser.FieldCollection.IgnoreAutofillIds.ToArray());
             return responseBuilder.Build();
@@ -96,7 +112,7 @@ namespace Bit.Android.Autofill
         public static Dataset BuildDataset(Context context, FieldCollection fields, FilledItem filledItem)
         {
             var datasetBuilder = new Dataset.Builder(
-                BuildListView(context.PackageName, filledItem.Name, filledItem.Subtitle, filledItem.Icon));
+                BuildListView(filledItem.Name, filledItem.Subtitle, filledItem.Icon, context));
             if(filledItem.ApplyToFields(fields, datasetBuilder))
             {
                 return datasetBuilder.Build();
@@ -128,8 +144,11 @@ namespace Bit.Android.Autofill
             var pendingIntent = PendingIntent.GetActivity(context, ++_pendingIntentId, intent,
                 PendingIntentFlags.CancelCurrent);
 
-            var view = BuildListView(context.PackageName, AppResources.AutofillWithBitwarden,
-                locked ? AppResources.VaultIsLocked : AppResources.GoToMyVault, Resource.Drawable.icon);
+            var view = BuildListView(
+                AppResources.AutofillWithBitwarden,
+                locked ? AppResources.VaultIsLocked : AppResources.GoToMyVault,
+                Resource.Drawable.icon,
+                context);
 
             var datasetBuilder = new Dataset.Builder(view);
             datasetBuilder.SetAuthentication(pendingIntent.IntentSender);
@@ -139,14 +158,14 @@ namespace Bit.Android.Autofill
             {
                 datasetBuilder.SetValue(autofillId, AutofillValue.ForText("PLACEHOLDER"));
             }
-
             return datasetBuilder.Build();
         }
 
-        public static RemoteViews BuildListView(string packageName, string text, string subtext, int iconId)
+        public static RemoteViews BuildListView(string text, string subtext, int iconId, Context context)
         {
+            var packageName = context.PackageName;
             var view = new RemoteViews(packageName, Resource.Layout.autofill_listitem);
-            view.SetTextViewText(Resource.Id.text, text);
+            view.SetTextViewText(Resource.Id.text1, text);
             view.SetTextViewText(Resource.Id.text2, subtext);
             view.SetImageViewResource(Resource.Id.icon, iconId);
             return view;

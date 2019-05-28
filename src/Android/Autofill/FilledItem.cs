@@ -1,107 +1,56 @@
-﻿using System;
-using Android.Service.Autofill;
+﻿using Android.Service.Autofill;
 using Android.Views.Autofill;
 using System.Linq;
-using Bit.App.Models;
-using Bit.App.Enums;
+using Bit.Core.Enums;
 using Android.Views;
+using Bit.Core.Models.View;
 
-namespace Bit.Android.Autofill
+namespace Bit.Droid.Autofill
 {
     public class FilledItem
     {
-        private Lazy<string> _password;
-        private Lazy<string> _cardName;
+        private string _password;
+        private string _cardName;
         private string _cardNumber;
-        private Lazy<string> _cardExpMonth;
-        private Lazy<string> _cardExpYear;
-        private Lazy<string> _cardCode;
-        private Lazy<string> _idPhone;
-        private Lazy<string> _idEmail;
-        private Lazy<string> _idUsername;
-        private Lazy<string> _idAddress;
-        private Lazy<string> _idPostalCode;
+        private string _cardExpMonth;
+        private string _cardExpYear;
+        private string _cardCode;
+        private string _idPhone;
+        private string _idEmail;
+        private string _idUsername;
+        private string _idAddress;
+        private string _idPostalCode;
 
-        public FilledItem(Cipher cipher)
+        public FilledItem(CipherView cipher)
         {
-            Name = cipher.Name?.Decrypt(cipher.OrganizationId) ?? "--";
+            Name = cipher.Name;
             Type = cipher.Type;
+            Subtitle = cipher.SubTitle;
 
             switch(Type)
             {
                 case CipherType.Login:
-                    Subtitle = cipher.Login.Username?.Decrypt(cipher.OrganizationId) ?? string.Empty;
                     Icon = Resource.Drawable.login;
-                    _password = new Lazy<string>(() => cipher.Login.Password?.Decrypt(cipher.OrganizationId));
+                    _password = cipher.Login.Password;
                     break;
                 case CipherType.Card:
-                    Subtitle = cipher.Card.Brand?.Decrypt(cipher.OrganizationId);
-                    _cardNumber = cipher.Card.Number?.Decrypt(cipher.OrganizationId);
-                    if(!string.IsNullOrWhiteSpace(_cardNumber) && _cardNumber.Length >= 4)
-                    {
-                        if(!string.IsNullOrWhiteSpace(_cardNumber))
-                        {
-                            Subtitle += ", ";
-                        }
-                        Subtitle += ("*" + _cardNumber.Substring(_cardNumber.Length - 4));
-                    }
+                    _cardNumber = cipher.Card.Number;
                     Icon = Resource.Drawable.card;
-                    _cardName = new Lazy<string>(() => cipher.Card.CardholderName?.Decrypt(cipher.OrganizationId));
-                    _cardCode = new Lazy<string>(() => cipher.Card.Code?.Decrypt(cipher.OrganizationId));
-                    _cardExpMonth = new Lazy<string>(() => cipher.Card.ExpMonth?.Decrypt(cipher.OrganizationId));
-                    _cardExpYear = new Lazy<string>(() => cipher.Card.ExpYear?.Decrypt(cipher.OrganizationId));
+                    _cardName = cipher.Card.CardholderName;
+                    _cardCode = cipher.Card.Code;
+                    _cardExpMonth = cipher.Card.ExpMonth;
+                    _cardExpYear = cipher.Card.ExpYear;
                     break;
                 case CipherType.Identity:
-                    var firstName = cipher.Identity?.FirstName?.Decrypt(cipher.OrganizationId) ?? " ";
-                    var lastName = cipher.Identity?.LastName?.Decrypt(cipher.OrganizationId) ?? " ";
-                    Subtitle = " ";
-                    if(!string.IsNullOrWhiteSpace(firstName))
-                    {
-                        Subtitle = firstName;
-                    }
-                    if(!string.IsNullOrWhiteSpace(lastName))
-                    {
-                        if(!string.IsNullOrWhiteSpace(Subtitle))
-                        {
-                            Subtitle += " ";
-                        }
-                        Subtitle += lastName;
-                    }
                     Icon = Resource.Drawable.id;
-                    _idPhone = new Lazy<string>(() => cipher.Identity.Phone?.Decrypt(cipher.OrganizationId));
-                    _idEmail = new Lazy<string>(() => cipher.Identity.Email?.Decrypt(cipher.OrganizationId));
-                    _idUsername = new Lazy<string>(() => cipher.Identity.Username?.Decrypt(cipher.OrganizationId));
-                    _idAddress = new Lazy<string>(() =>
-                    {
-                        var address = cipher.Identity.Address1?.Decrypt(cipher.OrganizationId);
-
-                        var address2 = cipher.Identity.Address2?.Decrypt(cipher.OrganizationId);
-                        if(!string.IsNullOrWhiteSpace(address2))
-                        {
-                            if(!string.IsNullOrWhiteSpace(address))
-                            {
-                                address += ", ";
-                            }
-
-                            address += address2;
-                        }
-
-                        var address3 = cipher.Identity.Address3?.Decrypt(cipher.OrganizationId);
-                        if(!string.IsNullOrWhiteSpace(address3))
-                        {
-                            if(!string.IsNullOrWhiteSpace(address))
-                            {
-                                address += ", ";
-                            }
-
-                            address += address3;
-                        }
-
-                        return address;
-                    });
-                    _idPostalCode = new Lazy<string>(() => cipher.Identity.PostalCode?.Decrypt(cipher.OrganizationId));
+                    _idPhone = cipher.Identity.Phone;
+                    _idEmail = cipher.Identity.Email;
+                    _idUsername = cipher.Identity.Username;
+                    _idAddress = cipher.Identity.FullAddress;
+                    _idPostalCode = cipher.Identity.PostalCode;
                     break;
                 default:
+                    Icon = Resource.Drawable.login;
                     break;
             }
         }
@@ -121,11 +70,11 @@ namespace Bit.Android.Autofill
             var setValues = false;
             if(Type == CipherType.Login)
             {
-                if(fieldCollection.PasswordFields.Any() && !string.IsNullOrWhiteSpace(_password.Value))
+                if(fieldCollection.PasswordFields.Any() && !string.IsNullOrWhiteSpace(_password))
                 {
                     foreach(var f in fieldCollection.PasswordFields)
                     {
-                        var val = ApplyValue(f, _password.Value);
+                        var val = ApplyValue(f, _password);
                         if(val != null)
                         {
                             setValues = true;
@@ -133,7 +82,6 @@ namespace Bit.Android.Autofill
                         }
                     }
                 }
-
                 if(fieldCollection.UsernameFields.Any() && !string.IsNullOrWhiteSpace(Subtitle))
                 {
                     foreach(var f in fieldCollection.UsernameFields)
@@ -149,68 +97,73 @@ namespace Bit.Android.Autofill
             }
             else if(Type == CipherType.Card)
             {
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintCreditCardNumber,
-                    new Lazy<string>(() => _cardNumber)))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardNumber,
+                    _cardNumber))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintCreditCardSecurityCode, _cardCode))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardSecurityCode,
+                    _cardCode))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintCreditCardExpirationMonth, _cardExpMonth, true))
+                if(ApplyValue(datasetBuilder, fieldCollection,
+                    Android.Views.View.AutofillHintCreditCardExpirationMonth, _cardExpMonth, true))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintCreditCardExpirationYear, _cardExpYear))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintCreditCardExpirationYear,
+                    _cardExpYear))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintName, _cardName))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, _cardName))
                 {
                     setValues = true;
                 }
             }
             else if(Type == CipherType.Identity)
             {
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintPhone, _idPhone))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPhone, _idPhone))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintEmailAddress, _idEmail))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintEmailAddress, _idEmail))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintUsername, _idUsername))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintUsername,
+                    _idUsername))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintPostalAddress, _idAddress))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalAddress,
+                    _idAddress))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintPostalCode, _idPostalCode))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintPostalCode,
+                    _idPostalCode))
                 {
                     setValues = true;
                 }
-                if(ApplyValue(datasetBuilder, fieldCollection, View.AutofillHintName, new Lazy<string>(() => Subtitle)))
+                if(ApplyValue(datasetBuilder, fieldCollection, Android.Views.View.AutofillHintName, Subtitle))
                 {
                     setValues = true;
                 }
             }
-
             return setValues;
         }
 
         private static bool ApplyValue(Dataset.Builder builder, FieldCollection fieldCollection,
-            string hint, Lazy<string> value, bool monthValue = false)
+            string hint, string value, bool monthValue = false)
         {
             bool setValues = false;
-            if(fieldCollection.HintToFieldsMap.ContainsKey(hint) && !string.IsNullOrWhiteSpace(value.Value))
+            if(fieldCollection.HintToFieldsMap.ContainsKey(hint) && !string.IsNullOrWhiteSpace(value))
             {
                 foreach(var f in fieldCollection.HintToFieldsMap[hint])
                 {
-                    var val = ApplyValue(f, value.Value, monthValue);
+                    var val = ApplyValue(f, value, monthValue);
                     if(val != null)
                     {
                         setValues = true;
@@ -245,7 +198,6 @@ namespace Bit.Android.Autofill
                                 return AutofillValue.ForList(monthIndex - 1);
                             }
                         }
-
                         for(var i = 0; i < field.AutofillOptions.Count; i++)
                         {
                             if(field.AutofillOptions[i].Equals(value))
@@ -266,7 +218,6 @@ namespace Bit.Android.Autofill
                 default:
                     break;
             }
-
             return null;
         }
     }

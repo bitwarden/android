@@ -1,6 +1,6 @@
-﻿using Bit.App.Enums;
+﻿using Bit.Core.Enums;
 
-namespace Bit.Android.Autofill
+namespace Bit.Droid.Autofill
 {
     public class SavedItem
     {

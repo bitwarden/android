@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                    x:Class="Bit.App.Styles.Light">
+    <Color x:Key="TextColor">#000000</Color>
+    <Color x:Key="PrimaryColor">#3c8dbc</Color>
+    <Color x:Key="DangerColor">#dd4b39</Color>
+    <Color x:Key="SuccessColor">#00a65a</Color>
+    <Color x:Key="InfoColor">#555555</Color>
+    <Color x:Key="WarningColor">#bf7e16</Color>
+    <Color x:Key="MutedColor">#777777</Color>
+    <Color x:Key="PasswordNumberColor">#007fde</Color>
+    <Color x:Key="PasswordSpecialColor">#c40800</Color>
+
+    <Color x:Key="BorderColor">#dddddd</Color>
+    <Color x:Key="DisabledIconColor">#c7c7cd</Color>
+
+    <Color x:Key="BoxBorderColor">#dddddd</Color>
+    <Color x:Key="BoxHeaderTextColor">#3c8dbc</Color>
+
+    <Color x:Key="TitleTextColor">#ffffff</Color>
+    <Color x:Key="TitleEntryTextColor">#ffffff</Color>
+    <Color x:Key="TitleEntryPlaceholderColor">#c0dbeb</Color>
+
+    <Color x:Key="ListItemBorderColor">#f0f0f0</Color>
+    <Color x:Key="ListHeaderTextColor">#3c8dbc</Color>
+
+    <Color x:Key="SliderThumbColor">#ffffff</Color>
+    <Color x:Key="SliderThumbBorderColor">#b5b5b5</Color>
+    <Color x:Key="SliderTrackColor">#dddddd</Color>
+
+    <Color x:Key="FabColor">#3c8dbc</Color>
+    <Color x:Key="FabPressedColor">#3883af</Color>
+</ResourceDictionary>
