@@ -286,7 +286,7 @@ namespace Bit.Core.Services
         public Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request)
         {
             return SendAsync<DeviceTokenRequest, object>(
-                HttpMethod.Post, $"identifier/{identifier}/token", request, true, false);
+                HttpMethod.Put, $"/devices/identifier/{identifier}/token", request, true, false);
         }
 
         #endregion
