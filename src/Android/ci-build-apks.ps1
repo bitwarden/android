@@ -32,7 +32,7 @@ $signedApkPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Sig
 $signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-" + $env:APPVEYOR_BUILD_NUMBER + ".apk");
 
 Copy-Item $signedApkPath $signedApkDestPath
-
+<#
 echo "##### Clean Android and App"
 
 msbuild "$($androidPath)" "/t:Clean" "/p:Configuration=FDroid"
@@ -70,7 +70,7 @@ echo "##### Restore NuGet"
 
 $nugetPath = $($rootPath + "\nuget.exe");
 
-Invoke-Expression "& `"$nugetPath`" restore"
+Invoke-Expression "& nuget restore"
 
 echo "##### Build and Sign FDroid Configuration"
 
@@ -83,5 +83,5 @@ $signedApkPath = $($rootPath + "\src\Android\bin\FDroid\com.x8bit.bitwarden-Sign
 $signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-fdroid-" + $env:APPVEYOR_BUILD_NUMBER + ".apk");
 
 Copy-Item $signedApkPath $signedApkDestPath
-
+#>
 echo "##### Done"
