@@ -35,5 +35,21 @@
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/filepaths" />
     </provider>
+
+    <receiver
+      android:name="com.google.firebase.iid.FirebaseInstanceIdInternalReceiver"
+      android:exported="false" />
+    <receiver
+      android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+      android:exported="true"
+      android:permission="com.google.android.c2dm.permission.SEND">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
+        <category android:name="com.x8bit.bitwarden" />
+      </intent-filter>
+    </receiver>
+
+    <meta-data android:name="android.max_aspect" android:value="2.1" />
   </application>
 </manifest>
