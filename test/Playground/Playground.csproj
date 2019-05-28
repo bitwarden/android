@@ -5,6 +5,7 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <AssemblyName>BitwardenPlayground</AssemblyName>
     <RootNamespace>Bit.Playground</RootNamespace>
+    <Configurations>Debug;Release;FDroid</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

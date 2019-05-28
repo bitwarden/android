@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>Bit.Core</RootNamespace>
     <AssemblyName>BitwardenCore</AssemblyName>
+    <Configurations>Debug;Release;FDroid</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

@@ -79,8 +79,10 @@ namespace Bit.Droid
 
             // Push
 #if FDROID
-            container.RegisterSingleton<IPushNotificationListener, NoopPushNotificationListener>();
-            container.RegisterSingleton<IPushNotificationService, NoopPushNotificationService>();
+            ServiceContainer.Register<IPushNotificationListenerService>(
+                "pushNotificationListenerService", new NoopPushNotificationListenerService());
+            ServiceContainer.Register<IPushNotificationService>(
+                "pushNotificationService", new NoopPushNotificationService());
 #else
             var notificationListenerService = new PushNotificationListenerService();
             ServiceContainer.Register<IPushNotificationListenerService>(
