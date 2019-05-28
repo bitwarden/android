@@ -116,11 +116,7 @@ namespace Bit.App
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
             await ClearCacheIfNeededAsync();
-            // Prime the word list
-            var wordTask = Task.Run(() =>
-            {
-                // var word = WordList.EEFLongWordList[1];
-            });
+            Prime();
         }
 
         protected async override void OnSleep()
@@ -135,6 +131,7 @@ namespace Bit.App
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             _messagingService.Send("cancelLockTimer");
             await ClearCacheIfNeededAsync();
+            Prime();
         }
 
         private void SetCulture()
@@ -250,6 +247,15 @@ namespace Bit.App
                     });
                 });
             }
+        }
+
+        private void Prime()
+        {
+            Task.Run(() =>
+            {
+                var word = EEFLongWordList.Instance.List[1];
+                var parsedDomain = DomainName.TryParse("https://bitwarden.com", out var domainName);
+            });
         }
     }
 }
