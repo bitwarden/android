@@ -17,12 +17,10 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:IsNullConverter x:Key="isNull" />
+            <ToolbarItem Text="{u:I18n Continue}" Clicked="Continue_Clicked"
+                         x:Name="_continueItem" x:Key="continueItem" />
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Continue}" Clicked="Continue_Clicked" x:Name="_continueItem" />
-    </ContentPage.ToolbarItems>
 
     <ScrollView x:Name="_scrollView">
         <StackLayout Spacing="10" Padding="0, 0, 0, 10" VerticalOptions="FillAndExpand">
@@ -108,7 +106,7 @@
                 IsVisible="{Binding SelectedProviderType, Mode=OneWay, Converter={StaticResource isNull}}">
                 <Label
                     Text="{u:I18n NoTwoStepAvailable}"
-                    Margin="10, 20, 10, 0"
+                    Margin="10, 20, 10, 10"
                     HorizontalTextAlignment="Center" />
             </StackLayout>
             <Button Text="{u:I18n UseAnotherTwoStepMethod}"

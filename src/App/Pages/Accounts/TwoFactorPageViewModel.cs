@@ -114,6 +114,7 @@ namespace Bit.App.Pages
                 PageTitle = AppResources.LoginUnavailable;
                 return;
             }
+            var page = Page as TwoFactorPage;
             PageTitle = _authService.TwoFactorProviders[SelectedProviderType.Value].Name;
             var providerData = _authService.TwoFactorProvidersData[SelectedProviderType.Value];
             switch(SelectedProviderType.Value)
@@ -123,9 +124,9 @@ namespace Bit.App.Pages
                     break;
                 case TwoFactorProviderType.Duo:
                 case TwoFactorProviderType.OrganizationDuo:
+                    page.RemoveContinueButton();
                     var host = WebUtility.UrlEncode(providerData["Host"] as string);
                     var req = WebUtility.UrlEncode(providerData["Signature"] as string);
-                    var page = Page as TwoFactorPage;
                     page.DuoWebView.Uri = $"{_webVaultUrl}/duo-connector.html?host={host}&request={req}";
                     page.DuoWebView.RegisterAction(async sig =>
                     {
@@ -134,6 +135,7 @@ namespace Bit.App.Pages
                     });
                     break;
                 case TwoFactorProviderType.Email:
+                    page.AddContinueButton();
                     TwoFactorEmail = providerData["Email"] as string;
                     if(_authService.TwoFactorProvidersData.Count > 1)
                     {
@@ -141,6 +143,7 @@ namespace Bit.App.Pages
                     }
                     break;
                 default:
+                    page.AddContinueButton();
                     break;
             }
         }

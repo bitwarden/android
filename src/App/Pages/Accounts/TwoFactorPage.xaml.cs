@@ -19,6 +19,21 @@ namespace Bit.App.Pages
 
         public HybridWebView DuoWebView { get; set; }
 
+        public void AddContinueButton()
+        {
+            if(ToolbarItems.Count == 0)
+            {
+                ToolbarItems.Add(_continueItem);
+            }
+        }
+
+        public void RemoveContinueButton()
+        {
+            if(ToolbarItems.Count > 0)
+            {
+                ToolbarItems.Remove(_continueItem);
+            }
+        }
         protected async override void OnAppearing()
         {
             base.OnAppearing();
