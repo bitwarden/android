@@ -56,16 +56,16 @@ $firebaseNode.ParentNode.RemoveChild($firebaseNode);
 
 $xml.Save($androidPath);
 
-echo "##### Uninstall from App.csproj"
-
-$xml=New-Object XML;
-$xml.Load($appPath);
-
-$hockeyNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='HockeySDK.Xamarin']");
-$hockeyNode.ParentNode.RemoveChild($hockeyNode);
-
-$xml.Save($appPath);
-
+#echo "##### Uninstall from App.csproj"
+#
+#$xml=New-Object XML;
+#$xml.Load($appPath);
+#
+#$hockeyNode=$xml.SelectSingleNode("/Project/ItemGroup/PackageReference[@Include='HockeySDK.Xamarin']");
+#$hockeyNode.ParentNode.RemoveChild($hockeyNode);
+#
+#$xml.Save($appPath);
+#
 echo "##### Restore NuGet"
 
 $nugetPath = $($rootPath + "\nuget.exe");
