@@ -20,6 +20,7 @@ namespace Bit.App.Pages
 
         private bool _showPassword;
         private string _email;
+        private string _masterPassword;
 
         public LoginPageViewModel()
         {
@@ -48,9 +49,14 @@ namespace Bit.App.Pages
             set => SetProperty(ref _email, value);
         }
 
+        public string MasterPassword
+        {
+            get => _masterPassword;
+            set => SetProperty(ref _masterPassword, value);
+        }
+
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
-        public string MasterPassword { get; set; }
         public bool RememberEmail { get; set; }
 
         public async Task InitAsync()
@@ -89,6 +95,7 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
                 var response = await _authService.LogInAsync(Email, MasterPassword);
+                MasterPassword = string.Empty;
                 if(RememberEmail)
                 {
                     await _storageService.SaveAsync(Keys_RememberedEmail, Email);
