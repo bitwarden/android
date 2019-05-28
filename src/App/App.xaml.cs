@@ -116,6 +116,11 @@ namespace Bit.App
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
             await ClearCacheIfNeededAsync();
+            // Prime the word list
+            var workTask = Task.Run(() =>
+            {
+                var word = WordList.EEFLongWordList[1];
+            });
         }
 
         protected async override void OnSleep()
