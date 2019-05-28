@@ -1,5 +1,6 @@
 ﻿using Bit.App.Controls;
 using System;
+using System.Threading.Tasks;
 
 namespace Bit.App.Pages
 {
@@ -13,14 +14,19 @@ namespace Bit.App.Pages
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             DuoWebView = _duoWebView;
+            SetActivityIndicator();
         }
 
         public HybridWebView DuoWebView { get; set; }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
-            _vm.Init();
+            await LoadOnAppearedAsync(_scrollView, true, () =>
+            {
+                _vm.Init();
+                return Task.FromResult(0);
+            });
         }
 
         private async void Continue_Clicked(object sender, EventArgs e)

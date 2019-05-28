@@ -7,6 +7,7 @@ using AWebkit = Android.Webkit;
 using Java.Interop;
 using Android.Content;
 using Bit.Droid.Renderers;
+using System.ComponentModel;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
 namespace Bit.Droid.Renderers
@@ -43,6 +44,15 @@ namespace Bit.Droid.Renderers
             if(e.NewElement != null)
             {
                 Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
+                Control.LoadUrl(Element.Uri);
+            }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+            if(e.PropertyName == HybridWebView.UriProperty.PropertyName)
+            {
                 Control.LoadUrl(Element.Uri);
             }
         }

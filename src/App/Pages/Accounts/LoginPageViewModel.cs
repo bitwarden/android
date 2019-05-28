@@ -89,7 +89,6 @@ namespace Bit.App.Pages
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
                 var response = await _authService.LogInAsync(Email, MasterPassword);
-                await _deviceActionService.HideLoadingAsync();
                 if(RememberEmail)
                 {
                     await _storageService.SaveAsync(Keys_RememberedEmail, Email);
@@ -98,6 +97,7 @@ namespace Bit.App.Pages
                 {
                     await _storageService.RemoveAsync(Keys_RememberedEmail);
                 }
+                await _deviceActionService.HideLoadingAsync();
                 if(response.TwoFactor)
                 {
                     var page = new TwoFactorPage();

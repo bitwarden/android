@@ -4,6 +4,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 using Bit.App.Controls;
 using Bit.iOS.Renderers;
+using System.ComponentModel;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(HybridWebViewRenderer))]
 namespace Bit.iOS.Renderers
@@ -38,6 +39,15 @@ namespace Bit.iOS.Renderers
                 hybridWebView.Cleanup();
             }
             if(e.NewElement != null)
+            {
+                Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
+            }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+            if(e.PropertyName == HybridWebView.UriProperty.PropertyName)
             {
                 Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
             }

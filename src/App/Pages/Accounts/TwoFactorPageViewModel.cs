@@ -36,6 +36,8 @@ namespace Bit.App.Pages
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+
+            PageTitle = AppResources.TwoStepLogin;
         }
 
         public string TwoFactorEmail
@@ -48,7 +50,8 @@ namespace Bit.App.Pages
 
         public string Token { get; set; }
 
-        public bool DuoMethod => SelectedProviderType == TwoFactorProviderType.Email;
+        public bool DuoMethod => SelectedProviderType == TwoFactorProviderType.Duo ||
+            SelectedProviderType == TwoFactorProviderType.OrganizationDuo;
 
         public bool YubikeyMethod => SelectedProviderType == TwoFactorProviderType.YubiKey;
 
