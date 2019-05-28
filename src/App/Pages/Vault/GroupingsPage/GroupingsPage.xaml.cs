@@ -58,7 +58,7 @@ namespace Bit.App.Pages
                 if(message.Command == "syncCompleted")
                 {
                     await Task.Delay(500);
-                    // await _viewModel.LoadAsync();
+                    await _vm.LoadAsync();
                 }
             });
 
