@@ -57,6 +57,9 @@
     <Compile Update="Pages\Settings\FoldersPage.xaml.cs">
       <DependentUpon>FoldersPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Settings\OptionsPage.xaml.cs">
+      <DependentUpon>OptionsPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Settings\SyncPage.xaml.cs">
       <DependentUpon>SyncPage.xaml</DependentUpon>
     </Compile>
