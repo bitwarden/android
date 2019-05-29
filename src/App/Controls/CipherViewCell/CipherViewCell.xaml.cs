@@ -1,9 +1,11 @@
 ﻿using Bit.App.Pages;
 using Bit.Core;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -16,12 +18,18 @@ namespace Bit.App.Controls
         public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
             nameof(ButtonCommand), typeof(Command<CipherView>), typeof(CipherViewCell));
 
+        private readonly IStateService _stateService;
+        private readonly IEnvironmentService _environmentService;
+
         private CipherViewCellViewModel _viewModel;
 
         public CipherViewCell()
         {
             InitializeComponent();
             _viewModel = _grid.BindingContext as CipherViewCellViewModel;
+
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
         }
 
         public CipherView Cipher
@@ -45,7 +53,7 @@ namespace Bit.App.Controls
             }
         }
 
-        protected override void OnBindingContextChanged()
+        protected async override void OnBindingContextChanged()
         {
             string icon = null;
             string image = null;
@@ -65,7 +73,7 @@ namespace Bit.App.Controls
                 switch(cipher.Type)
                 {
                     case CipherType.Login:
-                        var loginIconImage = GetLoginIconImage(cipher);
+                        var loginIconImage = await GetLoginIconImage(cipher);
                         icon = loginIconImage.Item1;
                         image = loginIconImage.Item2;
                         break;
@@ -99,11 +107,11 @@ namespace Bit.App.Controls
             base.OnBindingContextChanged();
         }
 
-        private Tuple<string, string> GetLoginIconImage(CipherView cipher)
+        private async Task<Tuple<string, string>> GetLoginIconImage(CipherView cipher)
         {
             string icon = "";
             string image = null;
-            var imageEnabled = true;
+            var imageEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey)).GetValueOrDefault();
             if(cipher.Login.Uri != null)
             {
                 var hostnameUri = cipher.Login.Uri;
@@ -130,7 +138,18 @@ namespace Bit.App.Controls
                 if(imageEnabled && isWebsite)
                 {
                     var hostname = CoreHelpers.GetHostname(hostnameUri);
-                    var iconsUrl = "https://icons.bitwarden.net";
+                    var iconsUrl = _environmentService.IconsUrl;
+                    if(string.IsNullOrWhiteSpace(iconsUrl))
+                    {
+                        if(!string.IsNullOrWhiteSpace(_environmentService.BaseUrl))
+                        {
+                            iconsUrl = string.Format("{0}/icons", _environmentService.BaseUrl);
+                        }
+                        else
+                        {
+                            iconsUrl = "https://icons.bitwarden.net";
+                        }
+                    }
                     image = string.Format("{0}/{1}/icon.png", iconsUrl, hostname);
                 }
             }

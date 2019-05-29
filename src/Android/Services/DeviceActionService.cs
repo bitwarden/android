@@ -562,7 +562,7 @@ namespace Bit.Droid.Services
         {
             var autoCopyDisabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
             var canAccessPremium = await ServiceContainer.Resolve<IUserService>("userService").CanAccessPremiumAsync();
-            if(canAccessPremium && !autoCopyDisabled.GetValueOrDefault() &&
+            if((canAccessPremium || cipher.OrganizationUseTotp) && !autoCopyDisabled.GetValueOrDefault() &&
                 !string.IsNullOrWhiteSpace(cipher?.Login?.Totp))
             {
                 var totp = await ServiceContainer.Resolve<ITotpService>("totpService").GetCodeAsync(cipher.Login.Totp);
