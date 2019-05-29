@@ -2,33 +2,33 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Dark">
-    <Color x:Key="TextColor">#5DAA00</Color>
-    <Color x:Key="PrimaryColor">#3c8dbc</Color>
-    <Color x:Key="DangerColor">#dd4b39</Color>
+    <Color x:Key="TextColor">#ffffff</Color>
+    <Color x:Key="PrimaryColor">#52bdfb</Color>
+    <Color x:Key="DangerColor">#ff3e24</Color>
     <Color x:Key="SuccessColor">#00a65a</Color>
     <Color x:Key="InfoColor">#555555</Color>
     <Color x:Key="WarningColor">#bf7e16</Color>
-    <Color x:Key="MutedColor">#777777</Color>
-    <Color x:Key="PasswordNumberColor">#007fde</Color>
-    <Color x:Key="PasswordSpecialColor">#c40800</Color>
+    <Color x:Key="MutedColor">#a3a3a3</Color>
+    <Color x:Key="PasswordNumberColor">#52bdfb</Color>
+    <Color x:Key="PasswordSpecialColor">#ff7c70</Color>
 
-    <Color x:Key="BorderColor">#dddddd</Color>
+    <Color x:Key="BorderColor">#111111</Color>
     <Color x:Key="DisabledIconColor">#c7c7cd</Color>
 
-    <Color x:Key="BoxBorderColor">#f0f0f0</Color>
-    <Color x:Key="BoxHeaderTextColor">#3c8dbc</Color>
+    <Color x:Key="BoxBorderColor">#2f2f2f</Color>
+    <Color x:Key="BoxHeaderTextColor">#52bdfb</Color>
 
-    <Color x:Key="HeaderTextColor">#ffffff</Color>
-    <Color x:Key="HeaderEntryTextColor">#ffffff</Color>
-    <Color x:Key="HeaderEntryPlaceholderColor">#707070</Color>
+    <Color x:Key="TitleTextColor">#ffffff</Color>
+    <Color x:Key="TitleEntryTextColor">#ffffff</Color>
+    <Color x:Key="TitleEntryPlaceholderColor">#707070</Color>
 
-    <Color x:Key="ListItemBorderColor">#f0f0f0</Color>
-    <Color x:Key="ListHeaderTextColor">#3c8dbc</Color>
+    <Color x:Key="ListItemBorderColor">#2f2f2f</Color>
+    <Color x:Key="ListHeaderTextColor">#52bdfb</Color>
 
     <Color x:Key="SliderThumbColor">#ffffff</Color>
     <Color x:Key="SliderThumbBorderColor">#b5b5b5</Color>
-    <Color x:Key="SliderTrackColor">#3c8dbc</Color>
+    <Color x:Key="SliderTrackColor">#52bdfb</Color>
 
-    <Color x:Key="FabColor">#3c8dbc</Color>
-    <Color x:Key="FabPressedColor">#3883af</Color>
+    <Color x:Key="FabColor">#52bdfb</Color>
+    <Color x:Key="FabPressedColor">#52bdfb</Color>
 </ResourceDictionary>

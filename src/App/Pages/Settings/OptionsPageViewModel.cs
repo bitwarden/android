@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -19,10 +20,10 @@ namespace Bit.App.Pages
 
         private bool _disableFavicon;
         private bool _disableAutoTotpCopy;
-
         private int _clearClipboardSelectedIndex;
         private int _themeSelectedIndex;
         private int _uriMatchSelectedIndex;
+        private bool _inited;
 
         public OptionsPageViewModel()
         {
@@ -136,22 +137,29 @@ namespace Bit.App.Pages
                 UriMatchOptions.FindIndex(k => (int?)k.Key == defaultUriMatch);
             var clearClipboard = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
             ClearClipboardSelectedIndex = ClearClipboardOptions.FindIndex(k => k.Key == clearClipboard);
+            _inited = true;
         }
 
         private async Task UpdateAutoTotpCopyAsync()
         {
-            await _storageService.SaveAsync(Constants.DisableAutoTotpCopyKey, DisableAutoTotpCopy);
+            if(_inited)
+            {
+                await _storageService.SaveAsync(Constants.DisableAutoTotpCopyKey, DisableAutoTotpCopy);
+            }
         }
 
         private async Task UpdateDisableFaviconAsync()
         {
-            await _storageService.SaveAsync(Constants.DisableFaviconKey, DisableFavicon);
-            await _stateService.SaveAsync(Constants.DisableFaviconKey, DisableFavicon);
+            if(_inited)
+            {
+                await _storageService.SaveAsync(Constants.DisableFaviconKey, DisableFavicon);
+                await _stateService.SaveAsync(Constants.DisableFaviconKey, DisableFavicon);
+            }
         }
 
         private async Task SaveClipboardChangedAsync()
         {
-            if(ClearClipboardSelectedIndex > -1)
+            if(_inited && ClearClipboardSelectedIndex > -1)
             {
                 await _storageService.SaveAsync(Constants.ClearClipboardKey,
                     ClearClipboardOptions[ClearClipboardSelectedIndex].Key);
@@ -160,16 +168,17 @@ namespace Bit.App.Pages
 
         private async Task SaveThemeAsync()
         {
-            if(ThemeSelectedIndex > -1)
+            if(_inited && ThemeSelectedIndex > -1)
             {
-                await _storageService.SaveAsync(Constants.ThemeKey, ThemeOptions[ThemeSelectedIndex].Key);
-                // TODO: change theme
+                var theme = ThemeOptions[ThemeSelectedIndex].Key;
+                await _storageService.SaveAsync(Constants.ThemeKey, theme);
+                ThemeManager.SetThemeStyle(theme);
             }
         }
 
         private async Task SaveDefaultUriAsync()
         {
-            if(UriMatchSelectedIndex > -1)
+            if(_inited && UriMatchSelectedIndex > -1)
             {
                 await _storageService.SaveAsync(Constants.DefaultUriMatch, UriMatchOptions[UriMatchSelectedIndex].Key);
             }

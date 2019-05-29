@@ -1,8 +1,5 @@
 ﻿using Bit.App.Styles;
-using System;
-using System.Reflection;
 using Xamarin.Forms;
-using Xamarin.Forms.StyleSheets;
 
 namespace Bit.App.Utilities
 {
