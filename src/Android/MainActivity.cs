@@ -52,6 +52,11 @@ namespace Bit.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            if(!CoreHelpers.InDebugMode())
+            {
+                Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
+            }
+
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             _appOptions = GetOptions();
