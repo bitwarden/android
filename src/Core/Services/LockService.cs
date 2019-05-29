@@ -66,7 +66,7 @@ namespace Bit.Core.Services
 
         public async Task CheckLockAsync()
         {
-            if(false) // TODO: view is open?
+            if(_platformUtilsService.IsViewOpen())
             {
                 return;
             }

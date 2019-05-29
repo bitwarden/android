@@ -27,7 +27,6 @@ namespace Bit.Core.Services
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly Func<bool, Task> _logoutCallbackAsync;
         private string _deviceType;
-        private bool _usingBaseUrl = false;
 
         public ApiService(
             ITokenService tokenService,
@@ -50,7 +49,6 @@ namespace Bit.Core.Services
             UrlsSet = true;
             if(!string.IsNullOrWhiteSpace(urls.Base))
             {
-                _usingBaseUrl = true;
                 ApiBaseUrl = urls.Base + "/api";
                 IdentityBaseUrl = urls.Base + "/identity";
                 return;
