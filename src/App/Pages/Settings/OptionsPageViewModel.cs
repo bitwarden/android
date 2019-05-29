@@ -7,6 +7,7 @@ using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -17,6 +18,7 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly ITotpService _totpService;
         private readonly IStateService _stateService;
+        private readonly IMessagingService _messagingService;
 
         private bool _disableFavicon;
         private bool _disableAutoTotpCopy;
@@ -32,6 +34,7 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
 
             PageTitle = AppResources.Options;
 
@@ -172,7 +175,11 @@ namespace Bit.App.Pages
             {
                 var theme = ThemeOptions[ThemeSelectedIndex].Key;
                 await _storageService.SaveAsync(Constants.ThemeKey, theme);
-                ThemeManager.SetThemeStyle(theme);
+                if(Device.RuntimePlatform == Device.Android)
+                {
+                    await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                }
+                _messagingService.Send("updatedTheme", theme);
             }
         }
 

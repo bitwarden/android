@@ -349,7 +349,7 @@ namespace Bit.App.Pages
                         col.Checked = CollectionIds.Contains(col.Collection.Id);
                     }
                 }
-                if(Cipher.Login.Uris != null)
+                if(Cipher.Login?.Uris != null)
                 {
                     Uris.ResetWithRange(Cipher.Login.Uris);
                 }

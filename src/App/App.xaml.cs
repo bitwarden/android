@@ -62,13 +62,7 @@ namespace Bit.App
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
 
-            InitializeComponent();
-            SetCulture();
-            ThemeManager.SetThemeStyle("light");
-            MainPage = new HomePage();
-            var mainPageTask = SetMainPageAsync();
-
-            ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
+            Bootstrap();
             _broadcasterService.Subscribe(nameof(App), async (message) =>
             {
                 if(message.Command == "showDialog")
@@ -256,6 +250,16 @@ namespace Bit.App
                 var word = EEFLongWordList.Instance.List[1];
                 var parsedDomain = DomainName.TryParse("https://bitwarden.com", out var domainName);
             });
+        }
+
+        private void Bootstrap()
+        {
+            InitializeComponent();
+            SetCulture();
+            ThemeManager.SetTheme();
+            MainPage = new HomePage();
+            var mainPageTask = SetMainPageAsync();
+            ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
         }
     }
 }

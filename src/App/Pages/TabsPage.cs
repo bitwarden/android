@@ -32,6 +32,10 @@ namespace Bit.App.Pages
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
             Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSwipePagingEnabled(this, false);
             Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSmoothScrollEnabled(this, false);
+            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarSelectedItemColor(this, 
+                (Color)Application.Current.Resources["TabBarSelectedItemColor"]);
+            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarItemColor(this,
+                (Color)Application.Current.Resources["TabBarItemColor"]);
         }
 
         protected async override void OnCurrentPageChanged()

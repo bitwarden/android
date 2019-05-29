@@ -22,6 +22,23 @@
     <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
   </style>
 
+  <style name="DarkTheme" parent="DarkTheme.Base">
+  </style>
+  
+  <style name="DarkTheme.Base" parent="Theme.AppCompat">
+    <item name="windowNoTitle">true</item>
+    <item name="windowActionBar">false</item>
+    <!--<item name="colorPrimary">@color/dark_primary</item>
+    <item name="colorPrimaryDark">@color/dark_accent</item>-->
+    <item name="colorAccent">@color/dark_primary</item>
+    <item name="colorControlNormal">@color/dark_border</item>
+    <item name="windowActionModeOverlay">true</item>
+    <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
+    <item name="android:colorActivatedHighlight">@android:color/transparent</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+  </style>
+
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
     <item name="colorAccent">#FF4081</item>
   </style>

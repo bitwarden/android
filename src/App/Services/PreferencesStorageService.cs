@@ -8,7 +8,8 @@ namespace Bit.App.Services
 {
     public class PreferencesStorageService : IStorageService
     {
-        private readonly string _keyFormat = "bwPreferencesStorage:{0}";
+        public static string KeyFormat = "bwPreferencesStorage:{0}";
+        
         private readonly string _sharedName;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
@@ -22,7 +23,7 @@ namespace Bit.App.Services
 
         public Task<T> GetAsync<T>(string key)
         {
-            var formattedKey = string.Format(_keyFormat, key);
+            var formattedKey = string.Format(KeyFormat, key);
             if(!Xamarin.Essentials.Preferences.ContainsKey(formattedKey, _sharedName))
             {
                 return Task.FromResult(default(T));
@@ -73,7 +74,7 @@ namespace Bit.App.Services
                 return RemoveAsync(key);
             }
 
-            var formattedKey = string.Format(_keyFormat, key);
+            var formattedKey = string.Format(KeyFormat, key);
             var objType = typeof(T);
             if(objType == typeof(string))
             {
@@ -109,7 +110,7 @@ namespace Bit.App.Services
 
         public Task RemoveAsync(string key)
         {
-            var formattedKey = string.Format(_keyFormat, key);
+            var formattedKey = string.Format(KeyFormat, key);
             if(Xamarin.Essentials.Preferences.ContainsKey(formattedKey, _sharedName))
             {
                 Xamarin.Essentials.Preferences.Remove(formattedKey, _sharedName);

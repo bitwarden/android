@@ -12,7 +12,17 @@ namespace Bit.App.Services
 
         private readonly HashSet<string> _preferenceStorageKeys = new HashSet<string>
         {
-            Constants.LockOptionKey
+            Constants.LockOptionKey,
+            Constants.ThemeKey,
+            Constants.DefaultUriMatch,
+            Constants.DisableAutoTotpCopyKey,
+            Constants.DisableFaviconKey,
+            Constants.ClearClipboardKey,
+            Constants.AccessibilityAutofillPasswordFieldKey,
+            Constants.AccessibilityAutofillPersistNotificationKey,
+            Constants.LastActiveKey,
+            Constants.PushInitialPromptShownKey,
+            Constants.LastFileCacheClearKey
         };
 
         public MobileStorageService(

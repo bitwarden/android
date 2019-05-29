@@ -15,6 +15,7 @@ using Bit.Droid.Receivers;
 using Bit.App.Models;
 using Bit.Core.Enums;
 using Android.Nfc;
+using Bit.App.Utilities;
 
 namespace Bit.Droid
 {
@@ -56,6 +57,7 @@ namespace Bit.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
+            UpdateTheme(ThemeManager.GetTheme());
             base.OnCreate(savedInstanceState);
             if(!CoreHelpers.InDebugMode())
             {
@@ -94,6 +96,10 @@ namespace Bit.Droid
                 else if(message.Command == "listenYubiKeyOTP")
                 {
                     ListenYubiKey((bool)message.Data);
+                }
+                else if(message.Command == "updatedTheme")
+                {
+                    Recreate();
                 }
             });
         }
@@ -253,6 +259,18 @@ namespace Bit.Droid
             {
                 var otp = otpMatch.Group(1);
                 _messagingService.Send("gotYubiKeyOTP", otp);
+            }
+        }
+
+        private void UpdateTheme(string theme)
+        {
+            if(theme == "dark")
+            {
+                SetTheme(Resource.Style.DarkTheme);
+            }
+            else
+            {
+                SetTheme(Resource.Style.MainTheme);
             }
         }
     }

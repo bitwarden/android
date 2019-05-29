@@ -15,14 +15,14 @@
     <Color x:Key="BorderColor">#111111</Color>
     <Color x:Key="DisabledIconColor">#c7c7cd</Color>
 
-    <Color x:Key="BoxBorderColor">#2f2f2f</Color>
+    <Color x:Key="BoxBorderColor">#545454</Color>
     <Color x:Key="BoxHeaderTextColor">#52bdfb</Color>
 
     <Color x:Key="TitleTextColor">#ffffff</Color>
     <Color x:Key="TitleEntryTextColor">#ffffff</Color>
     <Color x:Key="TitleEntryPlaceholderColor">#707070</Color>
 
-    <Color x:Key="ListItemBorderColor">#2f2f2f</Color>
+    <Color x:Key="ListItemBorderColor">#545454</Color>
     <Color x:Key="ListHeaderTextColor">#52bdfb</Color>
 
     <Color x:Key="SliderThumbColor">#ffffff</Color>
@@ -30,5 +30,9 @@
     <Color x:Key="SliderTrackColor">#52bdfb</Color>
 
     <Color x:Key="FabColor">#52bdfb</Color>
-    <Color x:Key="FabPressedColor">#52bdfb</Color>
+    <Color x:Key="FabPressedColor">#449BCE</Color>
+
+    <Color x:Key="TabBarBackgroundColor">#212121</Color>
+    <Color x:Key="TabBarItemColor">#C0C0C0</Color>
+    <Color x:Key="TabBarSelectedItemColor">#52bdfb</Color>
 </ResourceDictionary>

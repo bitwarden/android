@@ -1,4 +1,6 @@
-﻿using Bit.App.Styles;
+﻿using Bit.App.Services;
+using Bit.App.Styles;
+using Bit.Core;
 using Xamarin.Forms;
 
 namespace Bit.App.Utilities
@@ -36,6 +38,17 @@ namespace Bit.App.Utilities
             {
                 Application.Current.Resources.MergedDictionaries.Add(new iOS());
             }
+        }
+
+        public static void SetTheme()
+        {
+            SetThemeStyle(GetTheme());
+        }
+
+        public static string GetTheme()
+        {
+            return Xamarin.Essentials.Preferences.Get(
+                string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string));
         }
     }
 }
