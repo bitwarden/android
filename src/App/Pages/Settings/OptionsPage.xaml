@@ -7,10 +7,42 @@
     xmlns:u="clr-namespace:Bit.App.Utilities"
     x:DataType="pages:OptionsPageViewModel"
     Title="{Binding PageTitle}">
+
     <ContentPage.BindingContext>
         <pages:OptionsPageViewModel />
     </ContentPage.BindingContext>
 
-    
+    <StackLayout Padding="0" Spacing="0">
+        <StackLayout StyleClass="box">
+            <StackLayout StyleClass="box-row, box-row-switch">
+                <Label
+                    Text="{u:I18n DisableWebsiteIcons}"
+                    StyleClass="box-label, box-label-regular"
+                    HorizontalOptions="StartAndExpand" />
+                <Switch
+                    IsToggled="{Binding DisableFavicon}"
+                    StyleClass="box-value"
+                    HorizontalOptions="End" />
+            </StackLayout>
+            <Label
+                Text="{u:I18n DisableWebsiteIconsDescription}"
+                StyleClass="box-footer-label" />
+        </StackLayout>
+        <StackLayout StyleClass="box">
+            <StackLayout StyleClass="box-row, box-row-switch">
+                <Label
+                    Text="{u:I18n DisableAutoTotpCopy}"
+                    StyleClass="box-label, box-label-regular"
+                    HorizontalOptions="StartAndExpand" />
+                <Switch
+                    IsToggled="{Binding DisableAutoTotpCopy}"
+                    StyleClass="box-value"
+                    HorizontalOptions="End" />
+            </StackLayout>
+            <Label
+                Text="{u:I18n DisableAutoTotpCopyDescription}"
+                StyleClass="box-footer-label" />
+        </StackLayout>
+    </StackLayout>
 
 </pages:BaseContentPage>

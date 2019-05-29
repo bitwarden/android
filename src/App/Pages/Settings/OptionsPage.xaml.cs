@@ -13,9 +13,10 @@ namespace Bit.App.Pages
             _vm.Page = this;
         }
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
+            await _vm.InitAsync();
         }
     }
 }
