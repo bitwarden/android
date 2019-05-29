@@ -30,8 +30,11 @@ namespace Bit.Droid
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
+        private IUserService _userService;
+        private IAppIdService _appIdService;
         private PendingIntent _lockAlarmPendingIntent;
         private AppOptions _appOptions;
+        private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
         private Java.Util.Regex.Pattern _otpPattern =
             Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
@@ -47,6 +50,8 @@ namespace Bit.Droid
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -56,6 +61,12 @@ namespace Bit.Droid
             {
                 Window.AddFlags(Android.Views.WindowManagerFlags.Secure);
             }
+
+#if !FDROID
+            var hockeyAppListener = new HockeyAppCrashManagerListener(_appIdService, _userService);
+            var hockeyAppTask = hockeyAppListener.InitAsync();
+            HockeyApp.Android.CrashManager.Register(this, HockeyAppId, hockeyAppListener);
+#endif
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);

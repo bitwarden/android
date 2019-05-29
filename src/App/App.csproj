@@ -13,10 +13,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="HockeySDK.Xamarin" Version="5.2.0" />
     <PackageReference Include="Plugin.Fingerprint" Version="1.4.9" />
     <PackageReference Include="Refractored.FloatingActionButtonForms" Version="2.1.0" />
     <PackageReference Include="Xamarin.Essentials" Version="1.1.0" />
-    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.10.972" />
+    <PackageReference Include="Xamarin.FFImageLoading.Forms" Version="2.4.11.982" />
     <PackageReference Include="Xamarin.Forms" Version="3.6.0.344457" />
     <PackageReference Include="ZXing.Net.Mobile.Forms" Version="2.1.47" />
   </ItemGroup>

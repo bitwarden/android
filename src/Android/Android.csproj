@@ -139,6 +139,7 @@
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />
+    <Compile Include="Utilities\HockeyAppCrashManagerListener.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\FontAwesome.ttf" />
