@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="launcher_background">#FFFFFF</color>
-  <color name="white">#FFFFFF</color>
-  <color name="black">#000000</color>
-  <color name="darkgray">#333333</color>
-  <color name="gray">#738182</color>
-  <color name="lightgray">#efeff4</color>
-
   <color name="colorPrimary">#3c8dbc</color>
   <color name="colorPrimaryDark">#222d32</color>
   <color name="colorAccent">#3883af</color>
@@ -22,4 +15,11 @@
   <color name="dark_darkaccent">#222d32</color>
   <color name="dark_accent">#449BCE</color>
   <color name="dark_border">#545454</color>
+
+  <color name="launcher_background">#FFFFFF</color>
+  <color name="white">#FFFFFF</color>
+  <color name="black">#000000</color>
+  <color name="darkgray">#333333</color>
+  <color name="gray">#738182</color>
+  <color name="lightgray">#efeff4</color>
 </resources>

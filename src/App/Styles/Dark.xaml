@@ -27,7 +27,7 @@
 
     <Color x:Key="SliderThumbColor">#ffffff</Color>
     <Color x:Key="SliderThumbBorderColor">#b5b5b5</Color>
-    <Color x:Key="SliderTrackColor">#52bdfb</Color>
+    <Color x:Key="SliderTrackColor">#111111</Color>
 
     <Color x:Key="FabColor">#52bdfb</Color>
     <Color x:Key="FabPressedColor">#449BCE</Color>

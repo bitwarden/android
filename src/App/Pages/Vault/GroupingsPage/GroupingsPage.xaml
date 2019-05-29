@@ -15,7 +15,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="&#xf002;" Clicked="Search_Clicked" />
+        <ToolbarItem Icon="search.png" Clicked="Search_Clicked" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>

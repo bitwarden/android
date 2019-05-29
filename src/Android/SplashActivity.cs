@@ -5,6 +5,7 @@ using Android.OS;
 using Android.Support.V7.App;
 using System.Threading.Tasks;
 using Android.Content;
+using Bit.App.Utilities;
 
 namespace Bit.Droid
 {
@@ -21,6 +22,7 @@ namespace Bit.Droid
     {
         public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
         {
+            UpdateTheme(ThemeManager.GetTheme());
             base.OnCreate(savedInstanceState, persistentState);
         }
 
@@ -34,6 +36,18 @@ namespace Bit.Droid
                 StartActivity(mainIntent);
             });
             startupWork.Start();
+        }
+
+        private void UpdateTheme(string theme)
+        {
+            if(theme == "dark")
+            {
+                SetTheme(Resource.Style.DarkTheme_Splash);
+            }
+            else
+            {
+                SetTheme(Resource.Style.MainTheme_Splash);
+            }
         }
     }
 }

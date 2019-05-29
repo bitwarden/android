@@ -2,4 +2,6 @@
 <resources>
   <style name="MainTheme" parent="MainTheme.Base">
   </style>
+  <style name="DarkTheme" parent="DarkTheme.Base">
+  </style>
 </resources>

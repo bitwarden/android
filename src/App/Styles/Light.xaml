@@ -33,6 +33,6 @@
     <Color x:Key="FabPressedColor">#3883af</Color>
 
     <Color x:Key="TabBarBackgroundColor">#ffffff</Color>
-    <Color x:Key="TabBarItemColor">#C0C0C0</Color>
+    <Color x:Key="TabBarItemColor">#757575</Color>
     <Color x:Key="TabBarSelectedItemColor">#3c8dbc</Color>
 </ResourceDictionary>
