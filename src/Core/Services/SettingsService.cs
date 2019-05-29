@@ -37,7 +37,7 @@ namespace Bit.Core.Services
             if(settings != null && settings.ContainsKey(Keys_EquivalentDomains))
             {
                 var jArray = (settings[Keys_EquivalentDomains] as JArray);
-                return jArray.ToObject<List<List<string>>>();
+                return jArray?.ToObject<List<List<string>>>();
             }
             return null;
         }

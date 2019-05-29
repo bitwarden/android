@@ -15,6 +15,7 @@ namespace Bit.App.Pages
     public class GroupingsPageViewModel : BaseViewModel
     {
         private bool _refreshing;
+        private bool _doingLoad;
         private bool _loading;
         private bool _loaded;
         private bool _showAddCipherButton;
@@ -107,6 +108,11 @@ namespace Bit.App.Pages
 
         public async Task LoadAsync()
         {
+            if(_doingLoad)
+            {
+                return;
+            }
+            _doingLoad = true;
             ShowNoData = false;
             Loading = true;
             ShowList = false;
@@ -190,6 +196,7 @@ namespace Bit.App.Pages
             }
             finally
             {
+                _doingLoad = false;
                 ShowNoData = !groupedItems.Any();
                 ShowList = !ShowNoData;
                 Loaded = true;
