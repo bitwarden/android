@@ -18,7 +18,9 @@
                            HorizontalOptions="Start"
                            Clicked="Settings_Clicked" />
         <StackLayout VerticalOptions="CenterAndExpand" Spacing="20">
-            <Image Source="logo.png" 
+            <Image
+                x:Name="_logo"
+                Source="logo.png"
                 VerticalOptions="Center" />
             <Label Text="{u:I18n LoginOrCreateNewAccount}"
                    StyleClass="text-lg"

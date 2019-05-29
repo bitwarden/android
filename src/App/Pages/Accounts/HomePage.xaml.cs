@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Utilities;
+using System;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -8,6 +9,7 @@ namespace Bit.App.Pages
         public HomePage()
         {
             InitializeComponent();
+            _logo.Source = ThemeManager.GetTheme() == "dark" ? "logo_white.png" : "logo.png";
         }
 
         private void LogIn_Clicked(object sender, EventArgs e)
