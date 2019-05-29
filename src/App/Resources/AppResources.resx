@@ -1509,4 +1509,52 @@
   <data name="VaultLockedPIN" xml:space="preserve">
     <value>Your vault is locked. Verify your PIN code to continue.</value>
   </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Dark</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 minutes</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 minute</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 seconds</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 seconds</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 seconds</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 minutes</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Clear Clipboard</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Automatically clear copied values from your clipboard.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Default URI Match Detection</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Change the application's color theme.</value>
+  </data>
 </root>

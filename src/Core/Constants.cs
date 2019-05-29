@@ -20,6 +20,8 @@
         public static string PushCurrentTokenKey = "pushCurrentToken";
         public static string PushLastRegistrationDateKey = "pushLastRegistrationDate";
         public static string PushInitialPromptShownKey = "pushInitialPromptShown";
+        public static string ThemeKey = "theme";
+        public static string ClearClipboardKey = "clearClipboard";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
     }

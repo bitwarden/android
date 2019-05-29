@@ -880,6 +880,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Clipboard.
+        /// </summary>
+        public static string ClearClipboard {
+            get {
+                return ResourceManager.GetString("ClearClipboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Automatically clear copied values from your clipboard..
+        /// </summary>
+        public static string ClearClipboardDescription {
+            get {
+                return ResourceManager.GetString("ClearClipboardDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string Close {
@@ -1087,6 +1105,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        public static string Dark {
+            get {
+                return ResourceManager.GetString("Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password Updated.
         /// </summary>
         public static string DatePasswordUpdated {
@@ -1119,6 +1146,24 @@ namespace Bit.App.Resources {
         public static string Default {
             get {
                 return ResourceManager.GetString("Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default URI Match Detection.
+        /// </summary>
+        public static string DefaultUriMatchDetection {
+            get {
+                return ResourceManager.GetString("DefaultUriMatchDetection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill..
+        /// </summary>
+        public static string DefaultUriMatchDetectionDescription {
+            get {
+                return ResourceManager.GetString("DefaultUriMatchDetectionDescription", resourceCulture);
             }
         }
         
@@ -1645,6 +1690,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 5 minutes.
+        /// </summary>
+        public static string FiveMinutes {
+            get {
+                return ResourceManager.GetString("FiveMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Folder.
         /// </summary>
         public static string Folder {
@@ -2037,6 +2091,15 @@ namespace Bit.App.Resources {
         public static string LicenseNumber {
             get {
                 return ResourceManager.GetString("LicenseNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string Light {
+            get {
+                return ResourceManager.GetString("Light", resourceCulture);
             }
         }
         
@@ -2703,6 +2766,15 @@ namespace Bit.App.Resources {
         public static string OkGotIt {
             get {
                 return ResourceManager.GetString("OkGotIt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 1 minute.
+        /// </summary>
+        public static string OneMinute {
+            get {
+                return ResourceManager.GetString("OneMinute", resourceCulture);
             }
         }
         
@@ -3382,11 +3454,47 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 10 seconds.
+        /// </summary>
+        public static string TenSeconds {
+            get {
+                return ResourceManager.GetString("TenSeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thank You.
         /// </summary>
         public static string ThankYou {
             get {
                 return ResourceManager.GetString("ThankYou", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theme.
+        /// </summary>
+        public static string Theme {
+            get {
+                return ResourceManager.GetString("Theme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change the application&apos;s color theme..
+        /// </summary>
+        public static string ThemeDescription {
+            get {
+                return ResourceManager.GetString("ThemeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 30 seconds.
+        /// </summary>
+        public static string ThirtySeconds {
+            get {
+                return ResourceManager.GetString("ThirtySeconds", resourceCulture);
             }
         }
         
@@ -3432,6 +3540,24 @@ namespace Bit.App.Resources {
         public static string TryAgain {
             get {
                 return ResourceManager.GetString("TryAgain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 20 seconds.
+        /// </summary>
+        public static string TwentySeconds {
+            get {
+                return ResourceManager.GetString("TwentySeconds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 2 minutes.
+        /// </summary>
+        public static string TwoMinutes {
+            get {
+                return ResourceManager.GetString("TwoMinutes", resourceCulture);
             }
         }
         

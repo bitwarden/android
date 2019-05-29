@@ -12,37 +12,84 @@
         <pages:OptionsPageViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout Padding="0" Spacing="0">
-        <StackLayout StyleClass="box">
-            <StackLayout StyleClass="box-row, box-row-switch">
+    <ScrollView>
+        <StackLayout Padding="0" Spacing="20">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n DefaultUriMatchDetection}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_uriMatchPicker"
+                        ItemsSource="{Binding UriMatchOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding UriMatchSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
                 <Label
-                    Text="{u:I18n DisableWebsiteIcons}"
-                    StyleClass="box-label, box-label-regular"
-                    HorizontalOptions="StartAndExpand" />
-                <Switch
-                    IsToggled="{Binding DisableFavicon}"
-                    StyleClass="box-value"
-                    HorizontalOptions="End" />
+                    Text="{u:I18n DefaultUriMatchDetectionDescription}"
+                    StyleClass="box-footer-label" />
             </StackLayout>
-            <Label
-                Text="{u:I18n DisableWebsiteIconsDescription}"
-                StyleClass="box-footer-label" />
-        </StackLayout>
-        <StackLayout StyleClass="box">
-            <StackLayout StyleClass="box-row, box-row-switch">
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n ClearClipboard}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_clearClipboardPicker"
+                        ItemsSource="{Binding ClearClipboardOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding ClearClipboardSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
                 <Label
-                    Text="{u:I18n DisableAutoTotpCopy}"
-                    StyleClass="box-label, box-label-regular"
-                    HorizontalOptions="StartAndExpand" />
-                <Switch
-                    IsToggled="{Binding DisableAutoTotpCopy}"
-                    StyleClass="box-value"
-                    HorizontalOptions="End" />
+                    Text="{u:I18n ClearClipboardDescription}"
+                    StyleClass="box-footer-label" />
             </StackLayout>
-            <Label
-                Text="{u:I18n DisableAutoTotpCopyDescription}"
-                StyleClass="box-footer-label" />
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-switch">
+                    <Label
+                        Text="{u:I18n DisableAutoTotpCopy}"
+                        StyleClass="box-label, box-label-regular"
+                        HorizontalOptions="StartAndExpand" />
+                    <Switch
+                        IsToggled="{Binding DisableAutoTotpCopy}"
+                        StyleClass="box-value"
+                        HorizontalOptions="End" />
+                </StackLayout>
+                <Label
+                    Text="{u:I18n DisableAutoTotpCopyDescription}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-switch">
+                    <Label
+                        Text="{u:I18n DisableWebsiteIcons}"
+                        StyleClass="box-label, box-label-regular"
+                        HorizontalOptions="StartAndExpand" />
+                    <Switch
+                        IsToggled="{Binding DisableFavicon}"
+                        StyleClass="box-value"
+                        HorizontalOptions="End" />
+                </StackLayout>
+                <Label
+                    Text="{u:I18n DisableWebsiteIconsDescription}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
+            <StackLayout StyleClass="box">
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label
+                        Text="{u:I18n Theme}"
+                        StyleClass="box-label" />
+                    <Picker
+                        x:Name="_themePicker"
+                        ItemsSource="{Binding ThemeOptions, Mode=OneTime}"
+                        SelectedIndex="{Binding ThemeSelectedIndex}"
+                        StyleClass="box-value" />
+                </StackLayout>
+                <Label
+                    Text="{u:I18n ThemeDescription}"
+                    StyleClass="box-footer-label" />
+            </StackLayout>
         </StackLayout>
-    </StackLayout>
+    </ScrollView>
 
 </pages:BaseContentPage>
