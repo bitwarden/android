@@ -41,6 +41,9 @@ namespace Bit.Droid
             _lockAlarmPendingIntent = PendingIntent.GetBroadcast(this, 0, alarmIntent,
                 PendingIntentFlags.UpdateCurrent);
 
+            var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
+            StrictMode.SetThreadPolicy(policy);
+
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
