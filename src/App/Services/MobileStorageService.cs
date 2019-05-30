@@ -22,7 +22,8 @@ namespace Bit.App.Services
             Constants.AccessibilityAutofillPersistNotificationKey,
             Constants.LastActiveKey,
             Constants.PushInitialPromptShownKey,
-            Constants.LastFileCacheClearKey
+            Constants.LastFileCacheClearKey,
+            Constants.LastBuildKey
         };
 
         public MobileStorageService(

@@ -28,5 +28,8 @@ namespace Bit.App.Abstractions
         void Autofill(CipherView cipher);
         void CloseAutofill();
         void Background();
+        bool AutofillAccessibilityServiceRunning();
+        bool AutofillServiceEnabled();
+        string GetBuildNumber();
     }
 }

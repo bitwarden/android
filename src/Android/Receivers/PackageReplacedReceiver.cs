@@ -1,6 +1,10 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
+using Bit.App.Abstractions;
+using Bit.App.Utilities;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 
 namespace Bit.Droid.Receivers
 {
@@ -8,9 +12,11 @@ namespace Bit.Droid.Receivers
     [IntentFilter(new[] { Intent.ActionMyPackageReplaced })]
     public class PackageReplacedReceiver : BroadcastReceiver
     {
-        public override void OnReceive(Context context, Intent intent)
+        public override async void OnReceive(Context context, Intent intent)
         {
-            System.Diagnostics.Debug.WriteLine("PackageReplacedReceiver OnReceive");
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            await AppHelpers.PerformUpdateTasksAsync(ServiceContainer.Resolve<ISyncService>("syncService"),
+                ServiceContainer.Resolve<IDeviceActionService>("deviceActionService"), storageService);
         }
     }
 }

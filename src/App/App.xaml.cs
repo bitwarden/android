@@ -106,6 +106,13 @@ namespace Bit.App
                 {
                     // TODO
                 }
+                else if(message.Command == "resumed")
+                {
+                    if(Device.RuntimePlatform == Device.iOS)
+                    {
+                        SyncIfNeeded();
+                    }
+                }
             });
         }
 
@@ -114,6 +121,15 @@ namespace Bit.App
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
             await ClearCacheIfNeededAsync();
             Prime();
+            if(string.IsNullOrWhiteSpace(_appOptions.Uri))
+            {
+                var updated = await AppHelpers.PerformUpdateTasksAsync(_syncService, _deviceActionService,
+                    _storageService);
+                if(!updated)
+                {
+                    SyncIfNeeded();
+                }
+            }
         }
 
         protected async override void OnSleep()
@@ -129,6 +145,10 @@ namespace Bit.App
             _messagingService.Send("cancelLockTimer");
             await ClearCacheIfNeededAsync();
             Prime();
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                SyncIfNeeded();
+            }
         }
 
         private void SetCulture()
@@ -263,6 +283,18 @@ namespace Bit.App
             MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
+        }
+
+        private void SyncIfNeeded()
+        {
+            Task.Run(async () =>
+            {
+                var lastSync = await _syncService.GetLastSyncAsync();
+                if(DateTime.UtcNow - lastSync > TimeSpan.FromMinutes(30))
+                {
+                    await _syncService.FullSyncAsync(false);
+                }
+            });
         }
     }
 }

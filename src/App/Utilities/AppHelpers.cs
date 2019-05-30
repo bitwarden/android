@@ -1,5 +1,7 @@
-﻿using Bit.App.Pages;
+﻿using Bit.App.Abstractions;
+using Bit.App.Pages;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -107,6 +109,29 @@ namespace Bit.App.Utilities
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.Notes));
             }
             return selection;
+        }
+
+        public static async Task<bool> PerformUpdateTasksAsync(ISyncService syncService,
+            IDeviceActionService deviceActionService, IStorageService storageService)
+        {
+            var lastSync = await syncService.GetLastSyncAsync();
+            var currentBuild = deviceActionService.GetBuildNumber();
+            var lastBuild = await storageService.GetAsync<string>(Constants.LastBuildKey);
+            if(lastBuild == null)
+            {
+                // Installed
+            }
+            else if(lastBuild != currentBuild)
+            {
+                // Updated
+                var tasks = Task.Run(() => syncService.FullSyncAsync(true));
+            }
+            if(lastBuild != currentBuild)
+            {
+                await storageService.SaveAsync(Constants.LastBuildKey, currentBuild);
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -293,6 +293,12 @@ namespace Bit.Droid.Services
             }
         }
 
+        public string GetBuildNumber()
+        {
+            return Application.Context.ApplicationContext.PackageManager.GetPackageInfo(
+                Application.Context.PackageName, 0).VersionCode.ToString();
+        }
+
         public bool SupportsFaceId()
         {
             return false;
@@ -484,6 +490,26 @@ namespace Bit.Droid.Services
             {
                 activity.MoveTaskToBack(true);
             }
+        }
+
+        public bool AutofillAccessibilityServiceRunning()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var manager = activity.GetSystemService(Context.ActivityService) as ActivityManager;
+            var services = manager.GetRunningServices(int.MaxValue);
+            return services.Any(s => s.Process.ToLowerInvariant().Contains("bitwarden") &&
+                s.Service.ClassName.ToLowerInvariant().Contains("autofill"));
+        }
+
+        private bool AutofillServiceEnabled()
+        {
+            if(Build.VERSION.SdkInt < BuildVersionCodes.O)
+            {
+                return false;
+            }
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var afm = (AutofillManager)activity.GetSystemService(Java.Lang.Class.FromType(typeof(AutofillManager)));
+            return afm.IsEnabled && afm.HasEnabledAutofillServices;
         }
 
         private bool DeleteDir(Java.IO.File dir)
