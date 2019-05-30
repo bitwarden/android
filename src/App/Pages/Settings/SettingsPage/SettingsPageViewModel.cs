@@ -189,7 +189,7 @@ namespace Bit.App.Pages
         {
             var options = _lockOptions.Select(o => o.Key == _lockOptionValue ? $"✓ {o.Key}" : o.Key).ToArray();
             var selection = await Page.DisplayActionSheet(AppResources.LockOptions, AppResources.Cancel, null, options);
-            if(selection == AppResources.Cancel)
+            if(selection == null || selection == AppResources.Cancel)
             {
                 return;
             }

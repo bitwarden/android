@@ -173,16 +173,10 @@ namespace Bit.App.Pages
 
         private async void CipherOptionsAsync(CipherView cipher)
         {
-            if(!(Page as BaseContentPage).DoOnce())
+            if((Page as BaseContentPage).DoOnce())
             {
-                return;
+                await Utilities.AppHelpers.CipherListOptions(Page, cipher);
             }
-            var option = await Page.DisplayActionSheet(cipher.Name, AppResources.Cancel, null, "1", "2");
-            if(option == AppResources.Cancel)
-            {
-                return;
-            }
-            // TODO: process options
         }
     }
 }
