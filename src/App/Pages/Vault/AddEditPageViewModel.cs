@@ -424,7 +424,7 @@ namespace Bit.App.Pages
         public async Task<bool> DeleteAsync()
         {
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
-                null, AppResources.Yes, AppResources.No);
+                null, AppResources.Yes, AppResources.Cancel);
             if(!confirmed)
             {
                 return false;
@@ -436,7 +436,6 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.ItemDeleted);
                 _messagingService.Send("deletedCipher");
-                await Page.Navigation.PopModalAsync();
                 return true;
             }
             catch(ApiException e)

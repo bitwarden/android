@@ -145,7 +145,10 @@ namespace Bit.App.Pages
         {
             if(DoOnce())
             {
-                await _vm.DeleteAsync();
+                if(await _vm.DeleteAsync())
+                {
+                    await Navigation.PopModalAsync();
+                }
             }
         }
 
