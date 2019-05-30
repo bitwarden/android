@@ -63,7 +63,10 @@ namespace Bit.App.Pages
                 if(message.Command == "syncCompleted")
                 {
                     await Task.Delay(500);
-                    await _vm.LoadAsync();
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var task = _vm.LoadAsync();
+                    });
                 }
             });
 

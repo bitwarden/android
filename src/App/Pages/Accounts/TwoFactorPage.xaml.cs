@@ -46,14 +46,17 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(TwoFactorPage), async (message) =>
+            _broadcasterService.Subscribe(nameof(TwoFactorPage), (message) =>
             {
                 if(message.Command == "gotYubiKeyOTP")
                 {
                     if(_vm.YubikeyMethod)
                     {
-                        _vm.Token = (string)message.Data;
-                        await _vm.SubmitAsync();
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            _vm.Token = (string)message.Data;
+                            await _vm.SubmitAsync();
+                        });
                     }
                 }
                 else if(message.Command == "resumeYubiKey")

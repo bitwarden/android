@@ -38,15 +38,18 @@ namespace Bit.App.Pages
             {
                 if(message.Command == "syncCompleted")
                 {
-                    var data = message.Data as Dictionary<string, object>;
-                    if(data.ContainsKey("successfully"))
+                    Device.BeginInvokeOnMainThread(() =>
                     {
-                        var success = data["successfully"] as bool?;
-                        if(success.HasValue && success.Value)
+                        var data = message.Data as Dictionary<string, object>;
+                        if(data.ContainsKey("successfully"))
                         {
-                            await _vm.LoadAsync();
+                            var success = data["successfully"] as bool?;
+                            if(success.HasValue && success.Value)
+                            {
+                                var task = _vm.LoadAsync();
+                            }
                         }
-                    }
+                    });
                 }
             });
             await LoadOnAppearedAsync(_scrollView, true, async () =>

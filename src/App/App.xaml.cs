@@ -71,21 +71,24 @@ namespace Bit.App
                     var confirmed = true;
                     var confirmText = string.IsNullOrWhiteSpace(details.ConfirmText) ?
                         AppResources.Ok : details.ConfirmText;
-                    if(!string.IsNullOrWhiteSpace(details.CancelText))
+                    Device.BeginInvokeOnMainThread(async () =>
                     {
-                        confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
-                            details.CancelText);
-                    }
-                    else
-                    {
-                        await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
-                    }
-                    _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                        if(!string.IsNullOrWhiteSpace(details.CancelText))
+                        {
+                            confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
+                                details.CancelText);
+                        }
+                        else
+                        {
+                            await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
+                        }
+                        _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
+                    });
                 }
                 else if(message.Command == "locked")
                 {
                     await _stateService.PurgeAsync();
-                    MainPage = new NavigationPage(new LockPage());
+                    Device.BeginInvokeOnMainThread(() => MainPage = new NavigationPage(new LockPage()));
                 }
                 else if(message.Command == "lockVault")
                 {

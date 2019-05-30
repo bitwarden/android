@@ -2,6 +2,7 @@
 using Bit.Core.Models.Domain;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Bit.App.Services
 {
@@ -15,13 +16,13 @@ namespace Bit.App.Services
             {
                 if(_subscribers.ContainsKey(id))
                 {
-                    _subscribers[id].Invoke(message);
+                    Task.Run(() => _subscribers[id].Invoke(message));
                 }
                 return;
             }
             foreach(var sub in _subscribers)
             {
-                sub.Value.Invoke(message);
+                Task.Run(() => sub.Value.Invoke(message));
             }
         }
 

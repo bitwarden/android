@@ -27,9 +27,12 @@ namespace Bit.App.Pages
             {
                 if(message.Command == "selectFileResult")
                 {
-                    var data = message.Data as Tuple<byte[], string>;
-                    _vm.FileData = data.Item1;
-                    _vm.FileName = data.Item2;
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var data = message.Data as Tuple<byte[], string>;
+                        _vm.FileData = data.Item1;
+                        _vm.FileName = data.Item2;
+                    });
                 }
             });
             await LoadOnAppearedAsync(_scrollView, true, () => _vm.InitAsync());
