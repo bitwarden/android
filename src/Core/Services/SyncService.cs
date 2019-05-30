@@ -23,6 +23,7 @@ namespace Bit.Core.Services
         private readonly ICollectionService _collectionService;
         private readonly IStorageService _storageService;
         private readonly IMessagingService _messagingService;
+        private readonly Action _logoutCallback;
 
         public SyncService(
             IUserService userService,
@@ -33,7 +34,8 @@ namespace Bit.Core.Services
             ICryptoService cryptoService,
             ICollectionService collectionService,
             IStorageService storageService,
-            IMessagingService messagingService)
+            IMessagingService messagingService,
+            Action logoutCallback)
         {
             _userService = userService;
             _apiService = apiService;
@@ -44,6 +46,7 @@ namespace Bit.Core.Services
             _collectionService = collectionService;
             _storageService = storageService;
             _messagingService = messagingService;
+            _logoutCallback = logoutCallback;
         }
 
         public bool SyncInProgress { get; set; }
@@ -297,8 +300,8 @@ namespace Bit.Core.Services
             var stamp = await _userService.GetSecurityStampAsync();
             if(stamp != null && stamp != response.SecurityStamp)
             {
-                // TODO logout callback
-                throw new Exception("Stamp has changed.");
+                _logoutCallback?.Invoke();
+                return;
             }
             await _cryptoService.SetEncKeyAsync(response.Key);
             await _cryptoService.SetEncPrivateKeyAsync(response.PrivateKey);

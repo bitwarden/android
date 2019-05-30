@@ -44,7 +44,8 @@ namespace Bit.Core.Utilities
             var lockService = new LockService(cryptoService, userService, platformUtilsService, storageService,
                 folderService, cipherService, collectionService, searchService, messagingService);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
-                cipherService, cryptoService, collectionService, storageService, messagingService);
+                cipherService, cryptoService, collectionService, storageService, messagingService,
+                () => messagingService.Send("logout"));
             var passwordGenerationService = new PasswordGenerationService(cryptoService, storageService,
                 cryptoFunctionService);
             var totpService = new TotpService(storageService, cryptoFunctionService);
