@@ -501,7 +501,7 @@ namespace Bit.Droid.Services
                 s.Service.ClassName.ToLowerInvariant().Contains("autofill"));
         }
 
-        private bool AutofillServiceEnabled()
+        public bool AutofillServiceEnabled()
         {
             if(Build.VERSION.SdkInt < BuildVersionCodes.O)
             {
