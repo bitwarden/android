@@ -12,6 +12,7 @@ using Java.Util;
 using Javax.Crypto.Spec;
 using Android.Preferences;
 using Bit.App.Migration;
+using Bit.Core.Utilities;
 
 namespace Bit.Droid.Migration
 {
@@ -39,7 +40,7 @@ namespace Bit.Droid.Migration
             _oldAndroid = Build.VERSION.SdkInt < BuildVersionCodes.M;
             _rsaMode = _oldAndroid ? "RSA/ECB/PKCS1Padding" : "RSA/ECB/OAEPWithSHA-1AndMGF1Padding";
 
-            _settings = new SettingsShim();
+            _settings = ServiceContainer.Resolve<SettingsShim>("settingsShim");
 
             _keyStore = KeyStore.GetInstance(AndroidKeyStore);
             _keyStore.Load(null);
