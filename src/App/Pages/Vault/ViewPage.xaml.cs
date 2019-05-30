@@ -49,7 +49,14 @@ namespace Bit.App.Pages
                     }
                 }
             });
-            await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync(), _mainContent);
+            await LoadOnAppearedAsync(_scrollView, true, async () =>
+            {
+                var success = await _vm.LoadAsync();
+                if(!success)
+                {
+                    await Navigation.PopModalAsync();
+                }
+            }, _mainContent);
             if(Device.RuntimePlatform == Device.Android)
             {
                 if(_vm.Cipher.OrganizationId == null)

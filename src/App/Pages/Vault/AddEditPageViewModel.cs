@@ -267,7 +267,7 @@ namespace Bit.App.Pages
             PageTitle = EditMode ? AppResources.EditItem : AppResources.AddItem;
         }
 
-        public async Task LoadAsync(AppOptions appOptions = null)
+        public async Task<bool> LoadAsync(AppOptions appOptions = null)
         {
             var myEmail = await _userService.GetEmailAsync();
             OwnershipOptions.Add(new KeyValuePair<string, string>(myEmail, null));
@@ -296,6 +296,10 @@ namespace Bit.App.Pages
                 if(EditMode)
                 {
                     var cipher = await _cipherService.GetAsync(CipherId);
+                    if(cipher == null)
+                    {
+                        return false;
+                    }
                     Cipher = await cipher.DecryptAsync();
                 }
                 else
@@ -358,6 +362,7 @@ namespace Bit.App.Pages
                     Fields.ResetWithRange(Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(f)));
                 }
             }
+            return true;
         }
 
         public async Task<bool> SubmitAsync()

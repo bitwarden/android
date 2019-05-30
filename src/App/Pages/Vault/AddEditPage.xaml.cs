@@ -54,7 +54,14 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await LoadOnAppearedAsync(_scrollView, true, () => _vm.LoadAsync(_appOptions));
+            await LoadOnAppearedAsync(_scrollView, true, async () =>
+            {
+                var success = await _vm.LoadAsync();
+                if(!success)
+                {
+                    await Navigation.PopModalAsync();
+                }
+            });
             if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
             {
                 if(_vm.Cipher.OrganizationId == null)

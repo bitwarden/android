@@ -206,10 +206,14 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task LoadAsync()
+        public async Task<bool> LoadAsync()
         {
             CleanUp();
             var cipher = await _cipherService.GetAsync(CipherId);
+            if(cipher == null)
+            {
+                return false;
+            }
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _userService.CanAccessPremiumAsync();
             Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(f)).ToList();
@@ -231,6 +235,7 @@ namespace Bit.App.Pages
                     return true;
                 });
             }
+            return true;
         }
 
         public void CleanUp()
