@@ -177,7 +177,8 @@ namespace Bit.App.Pages
                 await _storageService.SaveAsync(Constants.ThemeKey, theme);
                 if(Device.RuntimePlatform == Device.Android)
                 {
-                    await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
+                    await _deviceActionService.ShowLoadingAsync(AppResources.Restarting);
+                    await Task.Delay(1000);
                 }
                 _messagingService.Send("updatedTheme", theme);
             }

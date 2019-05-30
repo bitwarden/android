@@ -3058,6 +3058,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Restarting....
+        /// </summary>
+        public static string Restarting {
+            get {
+                return ResourceManager.GetString("Restarting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Restart is required..
+        /// </summary>
+        public static string RestartIsRequired {
+            get {
+                return ResourceManager.GetString("RestartIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Re-type Master Password.
         /// </summary>
         public static string RetypeMasterPassword {

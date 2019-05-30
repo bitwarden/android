@@ -86,8 +86,9 @@
                         StyleClass="box-value" />
                 </StackLayout>
                 <Label
+                    StyleClass="box-footer-label"
                     Text="{u:I18n ThemeDescription}"
-                    StyleClass="box-footer-label" />
+                    x:Name="_themeDescriptionLabel" />
             </StackLayout>
         </StackLayout>
     </ScrollView>

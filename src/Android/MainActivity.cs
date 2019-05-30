@@ -99,7 +99,7 @@ namespace Bit.Droid
                 }
                 else if(message.Command == "updatedTheme")
                 {
-                    Recreate();
+                    RestartApp();
                 }
             });
         }
@@ -272,6 +272,16 @@ namespace Bit.Droid
             {
                 SetTheme(Resource.Style.MainTheme);
             }
+        }
+
+        private void RestartApp()
+        {
+            var intent = new Intent(this, typeof(SplashActivity));
+            var pendingIntent = PendingIntent.GetActivity(this, 5923650, intent, PendingIntentFlags.CancelCurrent);
+            var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+            var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + 500;
+            alarmManager.Set(AlarmType.Rtc, triggerMs, pendingIntent);
+            Java.Lang.JavaSystem.Exit(0);
         }
     }
 }
