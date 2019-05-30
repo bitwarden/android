@@ -21,7 +21,8 @@
                 Value="{StaticResource TextColor}" />
     </Style>
     <Style TargetType="Label"
-           Class="text-muted">
+           Class="text-muted"
+           ApplyToDerivedTypes="True">
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>

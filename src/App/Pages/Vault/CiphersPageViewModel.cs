@@ -51,14 +51,22 @@ namespace Bit.App.Pages
         public bool ShowNoData
         {
             get => _showNoData;
-            set => SetProperty(ref _showNoData, value);
+            set => SetProperty(ref _showNoData, value, additionalPropertyNames: new string[]
+            {
+                nameof(ShowSearchDirection)
+            });
         }
 
         public bool ShowList
         {
             get => _showList;
-            set => SetProperty(ref _showList, value);
+            set => SetProperty(ref _showList, value, additionalPropertyNames: new string[]
+            {
+                nameof(ShowSearchDirection)
+            });
         }
+
+        public bool ShowSearchDirection => !ShowList && !ShowNoData;
 
         public void Search(string searchText, int? timeout = null)
         {

@@ -44,12 +44,19 @@
     </NavigationPage.TitleView>
 
     <StackLayout x:Name="_mainLayout">
+        <controls:FaLabel IsVisible="{Binding ShowSearchDirection}"
+               Text="&#xf002;"
+               StyleClass="text-muted"
+               FontSize="50"
+               VerticalOptions="CenterAndExpand"
+               HorizontalOptions="CenterAndExpand"
+               HorizontalTextAlignment="Center" />
         <Label IsVisible="{Binding ShowNoData}"
                Text="{u:I18n NoItemsToList}"
                Margin="20, 0"
                VerticalOptions="CenterAndExpand"
                HorizontalOptions="CenterAndExpand"
-               HorizontalTextAlignment="Center"></Label>
+               HorizontalTextAlignment="Center" />
         <ListView x:Name="_listView"
                   IsVisible="{Binding ShowList}"
                   ItemsSource="{Binding Ciphers}"
