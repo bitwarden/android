@@ -9,7 +9,6 @@ namespace Bit.Droid.Receivers
     {
         public async override void OnReceive(Context context, Intent intent)
         {
-            System.Diagnostics.Debug.WriteLine("LockAlarmReceiver OnReceive");
             var lockService = ServiceContainer.Resolve<ILockService>("lockService");
             await lockService.CheckLockAsync();
         }

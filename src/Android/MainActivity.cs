@@ -16,6 +16,7 @@ using Bit.App.Models;
 using Bit.Core.Enums;
 using Android.Nfc;
 using Bit.App.Utilities;
+using System.Threading.Tasks;
 
 namespace Bit.Droid
 {
@@ -33,7 +34,10 @@ namespace Bit.Droid
         private IBroadcasterService _broadcasterService;
         private IUserService _userService;
         private IAppIdService _appIdService;
+        private IStorageService _storageService;
+        private IStateService _stateService;
         private PendingIntent _lockAlarmPendingIntent;
+        private PendingIntent _clearClipboardPendingIntent;
         private AppOptions _appOptions;
         private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
         private Java.Util.Regex.Pattern _otpPattern =
@@ -44,6 +48,9 @@ namespace Bit.Droid
             var alarmIntent = new Intent(this, typeof(LockAlarmReceiver));
             _lockAlarmPendingIntent = PendingIntent.GetBroadcast(this, 0, alarmIntent,
                 PendingIntentFlags.UpdateCurrent);
+            var clearClipboardIntent = new Intent(this, typeof(ClearClipboardAlarmReceiver));
+            _clearClipboardPendingIntent = PendingIntent.GetBroadcast(this, 0, clearClipboardIntent,
+                PendingIntentFlags.UpdateCurrent);
 
             var policy = new StrictMode.ThreadPolicy.Builder().PermitAll().Build();
             StrictMode.SetThreadPolicy(policy);
@@ -53,6 +60,8 @@ namespace Bit.Droid
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -104,6 +113,10 @@ namespace Bit.Droid
                 else if(message.Command == "exit")
                 {
                     ExitApp();
+                }
+                else if(message.Command == "copiedToClipboard")
+                {
+                    var task = ClearClipboardAlarmAsync(message.Data as Tuple<string, int?, bool>);
                 }
             });
         }
@@ -292,6 +305,31 @@ namespace Bit.Droid
         {
             FinishAffinity();
             Java.Lang.JavaSystem.Exit(0);
+        }
+
+        private async Task ClearClipboardAlarmAsync(Tuple<string, int?, bool> data)
+        {
+            if(data.Item3)
+            {
+                return;
+            }
+            var clearMs = data.Item2;
+            if(clearMs == null)
+            {
+                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
+                if(clearSeconds != null)
+                {
+                    clearMs = clearSeconds.Value * 1000;
+                }
+            }
+            if(clearMs == null)
+            {
+                return;
+            }
+            await _stateService.SaveAsync(Constants.LastClipboardValueKey, data.Item1);
+            var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + clearMs.Value;
+            var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+            alarmManager.Set(AlarmType.Rtc, triggerMs, _clearClipboardPendingIntent);
         }
     }
 }

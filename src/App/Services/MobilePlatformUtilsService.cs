@@ -179,8 +179,12 @@ namespace Bit.App.Services
         public async Task CopyToClipboardAsync(string text, Dictionary<string, object> options = null)
         {
             var clearMs = options != null && options.ContainsKey("clearMs") ? (int?)options["clearMs"] : null;
+            var clearing = options != null && options.ContainsKey("clearing") ? (bool)options["clearing"] : false;
             await Clipboard.SetTextAsync(text);
-            _messagingService.Send("copiedToClipboard", new Tuple<string, int?>(text, clearMs));
+            if(!clearing)
+            {
+                _messagingService.Send("copiedToClipboard", new Tuple<string, int?, bool>(text, clearMs, clearing));
+            }
         }
 
         public async Task<string> ReadFromClipboardAsync(Dictionary<string, object> options = null)

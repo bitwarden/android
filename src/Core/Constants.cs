@@ -22,6 +22,7 @@
         public static string PushInitialPromptShownKey = "pushInitialPromptShown";
         public static string ThemeKey = "theme";
         public static string ClearClipboardKey = "clearClipboard";
+        public static string LastClipboardValueKey = "lastClipboardValue";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
     }
