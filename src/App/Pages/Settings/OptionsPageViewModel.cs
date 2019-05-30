@@ -20,12 +20,17 @@ namespace Bit.App.Pages
         private readonly IStateService _stateService;
         private readonly IMessagingService _messagingService;
 
+
+        private bool _autofillAlwaysScan;
+        private bool _autofillPersistNotification;
+        private bool _autofillPasswordField;
         private bool _disableFavicon;
         private bool _disableAutoTotpCopy;
         private int _clearClipboardSelectedIndex;
         private int _themeSelectedIndex;
         private int _uriMatchSelectedIndex;
         private bool _inited;
+        private bool _updatingAutofill;
 
         public OptionsPageViewModel()
         {
@@ -129,10 +134,51 @@ namespace Bit.App.Pages
             }
         }
 
+        public bool AutofillAlwaysScan
+        {
+            get => _autofillAlwaysScan;
+            set
+            {
+                if(SetProperty(ref _autofillAlwaysScan, value))
+                {
+                    var task = UpdateAutofillAsync(false, false);
+                }
+            }
+        }
+
+        public bool AutofillPersistNotification
+        {
+            get => _autofillPersistNotification;
+            set
+            {
+                if(SetProperty(ref _autofillPersistNotification, value))
+                {
+                    var task = UpdateAutofillAsync(value, false);
+                }
+            }
+        }
+
+        public bool AutofillPasswordField
+        {
+            get => _autofillPasswordField;
+            set
+            {
+                if(SetProperty(ref _autofillPasswordField, value))
+                {
+                    var task = UpdateAutofillAsync(false, value);
+                }
+            }
+        }
+
         public async Task InitAsync()
         {
+            AutofillPersistNotification = (await _storageService.GetAsync<bool?>(
+                Constants.AccessibilityAutofillPersistNotificationKey)).GetValueOrDefault();
+            AutofillPasswordField = (await _storageService.GetAsync<bool?>(
+                Constants.AccessibilityAutofillPasswordFieldKey)).GetValueOrDefault();
+            AutofillAlwaysScan = !AutofillPersistNotification && !AutofillPasswordField;
             DisableAutoTotpCopy = !(await _totpService.IsAutoCopyEnabledAsync());
-            DisableFavicon = await _storageService.GetAsync<bool>(Constants.DisableFaviconKey);
+            DisableFavicon = (await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey)).GetValueOrDefault();
             var theme = await _storageService.GetAsync<string>(Constants.ThemeKey);
             ThemeSelectedIndex = ThemeOptions.FindIndex(k => k.Key == theme);
             var defaultUriMatch = await _storageService.GetAsync<int?>(Constants.DefaultUriMatch);
@@ -141,6 +187,35 @@ namespace Bit.App.Pages
             var clearClipboard = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
             ClearClipboardSelectedIndex = ClearClipboardOptions.FindIndex(k => k.Key == clearClipboard);
             _inited = true;
+        }
+
+        private async Task UpdateAutofillAsync(bool persistNotification, bool passwordField)
+        {
+            if(_inited && !_updatingAutofill)
+            {
+                _updatingAutofill = true;
+                if(persistNotification)
+                {
+                    AutofillAlwaysScan = false;
+                    AutofillPasswordField = false;
+                }
+                else if(passwordField)
+                {
+                    AutofillAlwaysScan = false;
+                    AutofillPersistNotification = false;
+                }
+                else
+                {
+                    AutofillAlwaysScan = true;
+                    AutofillPersistNotification = false;
+                    AutofillPasswordField = false;
+                }
+                await _storageService.SaveAsync(Constants.AccessibilityAutofillPersistNotificationKey,
+                    AutofillPersistNotification);
+                await _storageService.SaveAsync(Constants.AccessibilityAutofillPasswordFieldKey,
+                    AutofillPasswordField);
+                _updatingAutofill = false;
+            }
         }
 
         private async Task UpdateAutoTotpCopyAsync()
