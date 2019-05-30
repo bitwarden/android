@@ -64,12 +64,14 @@ namespace Bit.App.Utilities
             else if(selection == AppResources.CopyUsername)
             {
                 await platformUtilsService.CopyToClipboardAsync(cipher.Login.Username);
-                platformUtilsService.ShowToast("info", null, AppResources.CopiedUsername);
+                platformUtilsService.ShowToast("info", null,
+                    string.Format(AppResources.ValueHasBeenCopied, AppResources.Username));
             }
             else if(selection == AppResources.CopyPassword)
             {
                 await platformUtilsService.CopyToClipboardAsync(cipher.Login.Password);
-                platformUtilsService.ShowToast("info", null, AppResources.CopiedPassword);
+                platformUtilsService.ShowToast("info", null,
+                    string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
             }
             else if(selection == AppResources.CopyTotp)
             {
@@ -78,7 +80,8 @@ namespace Bit.App.Utilities
                 if(!string.IsNullOrWhiteSpace(totp))
                 {
                     await platformUtilsService.CopyToClipboardAsync(totp);
-                    platformUtilsService.ShowToast("info", null, AppResources.CopiedTotp);
+                    platformUtilsService.ShowToast("info", null,
+                        string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
                 }
             }
             else if(selection == AppResources.Launch)
