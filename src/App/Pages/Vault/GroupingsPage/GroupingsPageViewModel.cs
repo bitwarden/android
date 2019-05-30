@@ -3,6 +3,7 @@ using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -268,16 +269,13 @@ namespace Bit.App.Pages
         public async Task SyncAsync()
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
-            var success = await _syncService.FullSyncAsync(false);
+            try
+            {
+                await _syncService.FullSyncAsync(false);
+            }
+            catch(ApiException) { }
             await _deviceActionService.HideLoadingAsync();
-            if(success)
-            {
-                _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
-            }
-            else
-            {
-                await Page.DisplayAlert(null, AppResources.SyncingFailed, AppResources.Ok);
-            }
+            _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
         }
 
         private async Task LoadDataAsync()
