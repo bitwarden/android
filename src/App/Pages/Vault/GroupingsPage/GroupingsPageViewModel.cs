@@ -1,4 +1,5 @@
-﻿using Bit.App.Resources;
+﻿using Bit.App.Abstractions;
+using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -32,6 +33,9 @@ namespace Bit.App.Pages
         private readonly IFolderService _folderService;
         private readonly ICollectionService _collectionService;
         private readonly ISyncService _syncService;
+        private readonly IDeviceActionService _deviceActionService;
+        private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IMessagingService _messagingService;
 
         public GroupingsPageViewModel()
         {
@@ -39,6 +43,9 @@ namespace Bit.App.Pages
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
 
             Loading = true;
             PageTitle = AppResources.MyVault;
@@ -246,6 +253,31 @@ namespace Bit.App.Pages
         {
             var page = new GroupingsPage(false, null, null, collection.Id, collection.Name);
             await Page.Navigation.PushAsync(page);
+        }
+
+        public async Task ExitAsync()
+        {
+            var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.ExitConfirmation,
+                   AppResources.Exit, AppResources.Yes, AppResources.Cancel);
+            if(confirmed)
+            {
+                _messagingService.Send("exit");
+            }
+        }
+
+        public async Task SyncAsync()
+        {
+            await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
+            var success = await _syncService.FullSyncAsync(false);
+            await _deviceActionService.HideLoadingAsync();
+            if(success)
+            {
+                _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
+            }
+            else
+            {
+                await Page.DisplayAlert(null, AppResources.SyncingFailed, AppResources.Ok);
+            }
         }
 
         private async Task LoadDataAsync()

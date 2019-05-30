@@ -16,6 +16,7 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IStorageService _storageService;
+        private readonly ILockService _lockService;
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
 
@@ -29,6 +30,7 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
             _vm = BindingContext as GroupingsPageViewModel;
             _vm.Page = this;
             _vm.MainPage = mainPage;
@@ -47,6 +49,9 @@ namespace Bit.App.Pages
             else
             {
                 _fab.Clicked = AddButton_Clicked;
+                ToolbarItems.Add(_syncItem);
+                ToolbarItems.Add(_lockItem);
+                ToolbarItems.Add(_exitItem);
             }
         }
 
@@ -147,6 +152,21 @@ namespace Bit.App.Pages
                     _vm.Type != null);
                 await Navigation.PushModalAsync(new NavigationPage(page), false);
             }
+        }
+
+        private async void Sync_Clicked(object sender, System.EventArgs e)
+        {
+            await _vm.SyncAsync();
+        }
+
+        private async void Lock_Clicked(object sender, System.EventArgs e)
+        {
+            await _lockService.LockAsync(true);
+        }
+
+        private async void Exit_Clicked(object sender, System.EventArgs e)
+        {
+            await _vm.ExitAsync();
         }
 
         private async void AddButton_Clicked(object sender, System.EventArgs e)

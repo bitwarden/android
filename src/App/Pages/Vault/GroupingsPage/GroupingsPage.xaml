@@ -20,6 +20,13 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
+                         Clicked="Sync_Clicked" Order="Secondary" />
+            <ToolbarItem x:Name="_lockItem" x:Key="lockItem" Text="{u:I18n Lock}"
+                         Clicked="Lock_Clicked" Order="Secondary" />
+            <ToolbarItem x:Name="_exitItem" x:Key="exitItem" Text="{u:I18n Exit}"
+                         Clicked="Exit_Clicked" Order="Secondary" />
+
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:CipherViewCell

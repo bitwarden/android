@@ -1402,6 +1402,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Exit.
+        /// </summary>
+        public static string Exit {
+            get {
+                return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to exit Bitwarden?.
+        /// </summary>
+        public static string ExitConfirmation {
+            get {
+                return ResourceManager.GetString("ExitConfirmation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Re-enable App Extension.
         /// </summary>
         public static string ExntesionReenable {

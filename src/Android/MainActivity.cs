@@ -101,6 +101,10 @@ namespace Bit.Droid
                 {
                     RestartApp();
                 }
+                else if(message.Command == "exit")
+                {
+                    ExitApp();
+                }
             });
         }
 
@@ -281,6 +285,12 @@ namespace Bit.Droid
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + 500;
             alarmManager.Set(AlarmType.Rtc, triggerMs, pendingIntent);
+            Java.Lang.JavaSystem.Exit(0);
+        }
+
+        private void ExitApp()
+        {
+            FinishAffinity();
             Java.Lang.JavaSystem.Exit(0);
         }
     }

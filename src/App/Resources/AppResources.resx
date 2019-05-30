@@ -1567,4 +1567,10 @@
   <data name="CopyNotes" xml:space="preserve">
     <value>Copy Notes</value>
   </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Are you sure you want to exit Bitwarden?</value>
+  </data>
 </root>
