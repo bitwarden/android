@@ -23,7 +23,7 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Folders;
             Folders = new ExtendedObservableCollection<FolderView>();
         }
-        
+
         public ExtendedObservableCollection<FolderView> Folders { get; set; }
 
         public bool ShowNoData
@@ -38,7 +38,7 @@ namespace Bit.App.Pages
             // Remove "No Folder"
             if(folders?.Any() ?? false)
             {
-                folders.Remove(folders.Last());
+                folders = folders.GetRange(0, folders.Count - 1);
             }
             Folders.ResetWithRange(folders ?? new List<FolderView>());
             ShowNoData = Folders.Count == 0;
