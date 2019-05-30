@@ -75,12 +75,12 @@ namespace Bit.App
                     {
                         if(!string.IsNullOrWhiteSpace(details.CancelText))
                         {
-                            confirmed = await MainPage.DisplayAlert(details.Title, details.Text, confirmText,
+                            confirmed = await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText,
                                 details.CancelText);
                         }
                         else
                         {
-                            await MainPage.DisplayAlert(details.Title, details.Text, confirmText);
+                            await Current.MainPage.DisplayAlert(details.Title, details.Text, confirmText);
                         }
                         _messagingService.Send("showDialogResolve", new Tuple<int, bool>(details.DialogId, confirmed));
                     });
@@ -88,7 +88,7 @@ namespace Bit.App
                 else if(message.Command == "locked")
                 {
                     await _stateService.PurgeAsync();
-                    Device.BeginInvokeOnMainThread(() => MainPage = new NavigationPage(new LockPage()));
+                    Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(new LockPage()));
                 }
                 else if(message.Command == "lockVault")
                 {
@@ -182,7 +182,7 @@ namespace Bit.App
                 {
                     // TODO: Toast?
                 }
-                MainPage = new HomePage();
+                Current.MainPage = new HomePage();
             });
         }
 
@@ -280,7 +280,7 @@ namespace Bit.App
             InitializeComponent();
             SetCulture();
             ThemeManager.SetTheme();
-            MainPage = new HomePage();
+            Current.MainPage = new HomePage();
             var mainPageTask = SetMainPageAsync();
             ServiceContainer.Resolve<MobilePlatformUtilsService>("platformUtilsService").Init();
         }
