@@ -91,6 +91,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            ShowPassword = false;
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);

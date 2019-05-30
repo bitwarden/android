@@ -188,7 +188,8 @@ namespace Bit.App.Pages
         {
             if(_inited && UriMatchSelectedIndex > -1)
             {
-                await _storageService.SaveAsync(Constants.DefaultUriMatch, UriMatchOptions[UriMatchSelectedIndex].Key);
+                await _storageService.SaveAsync(Constants.DefaultUriMatch,
+                    (int?)UriMatchOptions[UriMatchSelectedIndex].Key);
             }
         }
     }
