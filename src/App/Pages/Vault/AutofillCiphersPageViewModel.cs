@@ -1,6 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
@@ -98,7 +99,7 @@ namespace Bit.App.Pages
         {
             if(_deviceActionService.SystemMajorVersion() < 21)
             {
-                // TODO
+                await AppHelpers.CipherListOptions(Page, cipher);
             }
             else
             {

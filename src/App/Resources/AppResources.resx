@@ -1564,4 +1564,7 @@
   <data name="Restarting" xml:space="preserve">
     <value>Restarting...</value>
   </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Copy Notes</value>
+  </data>
 </root>

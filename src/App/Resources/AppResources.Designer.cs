@@ -988,6 +988,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy Notes.
+        /// </summary>
+        public static string CopyNotes {
+            get {
+                return ResourceManager.GetString("CopyNotes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Copy Number.
         /// </summary>
         public static string CopyNumber {
