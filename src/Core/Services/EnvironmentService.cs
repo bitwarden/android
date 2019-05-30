@@ -89,7 +89,6 @@ namespace Bit.Core.Services
             }
 
             _apiService.SetUrls(envUrls);
-            // TODO: init notifications service
             return urls;
         }
 

@@ -41,8 +41,6 @@ namespace Bit.Core.Services
         public bool PinLocked { get; set; }
         public bool FingerprintLocked { get; set; } = true;
 
-        // TODO: init timer?
-
         public async Task<bool> IsLockedAsync()
         {
             var hasKey = await _cryptoService.HasKeyAsync();

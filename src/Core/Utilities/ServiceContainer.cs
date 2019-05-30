@@ -53,7 +53,6 @@ namespace Bit.Core.Utilities
             // TODO: export service
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, storageService);
-            // TODO: notification service
 
             Register<IStateService>("stateService", stateService);
             Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
