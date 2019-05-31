@@ -243,7 +243,19 @@ namespace Bit.App.Pages
 
         public async Task UpdateFingerprintAsync()
         {
-            _fingerprint = !_fingerprint;
+            var current = _fingerprint;
+            if(_fingerprint)
+            {
+                _fingerprint = false;
+            }
+            else if(await _platformUtilsService.SupportsFingerprintAsync())
+            {
+                _fingerprint = await _platformUtilsService.AuthenticateFingerprintAsync();
+            }
+            if(_fingerprint == current)
+            {
+                return;
+            }
             if(_fingerprint)
             {
                 await _storageService.SaveAsync(Constants.FingerprintUnlockKey, true);
