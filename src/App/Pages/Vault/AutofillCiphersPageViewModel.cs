@@ -63,8 +63,11 @@ namespace Bit.App.Pages
             {
                 name = Uri.Substring(Constants.AndroidAppProtocol.Length);
             }
-            else if(!System.Uri.TryCreate(Uri, UriKind.Absolute, out Uri uri) ||
-                !DomainName.TryParseBaseDomain(uri.Host, out name))
+            else
+            {
+                name = CoreHelpers.GetDomain(Uri);
+            }
+            if(string.IsNullOrWhiteSpace(name))
             {
                 name = "--";
             }

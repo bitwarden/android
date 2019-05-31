@@ -63,7 +63,7 @@ namespace Bit.Core.Utilities
                 return null;
             }
 
-            if(uri.Host == "localhost" || Regex.IsMatch(uriString, IpRegex))
+            if(uri.Host == "localhost" || Regex.IsMatch(uri.Host, IpRegex))
             {
                 return uri.Host;
             }
