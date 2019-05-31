@@ -45,6 +45,7 @@ namespace Bit.App.Pages
         public async Task ClearAsync()
         {
             History.ResetWithRange(new List<GeneratedPasswordHistory>());
+            ShowNoData = true;
             await _passwordGenerationService.ClearAsync();
         }
 

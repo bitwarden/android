@@ -31,7 +31,6 @@ namespace Bit.App.Pages
         private string _wordSeparator;
         private int _typeSelectedIndex;
         private bool _doneIniting;
-        private CancellationTokenSource _sliderCancellationTokenSource;
 
         public GeneratorPageViewModel()
         {
@@ -70,7 +69,7 @@ namespace Bit.App.Pages
                 if(SetProperty(ref _length, value))
                 {
                     _options.Length = value;
-                    var task = SaveOptionsSliderAsync();
+                    var task = SliderInputAsync();
                 }
             }
         }
@@ -236,37 +235,17 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task SaveOptionsSliderAsync()
+        public async Task SliderChangedAsync()
         {
-            if(!_doneIniting)
-            {
-                return;
-            }
+            await SaveOptionsAsync(false);
+            await _passwordGenerationService.AddHistoryAsync(Password);
+        }
+
+        public async Task SliderInputAsync()
+        {
             SetOptions();
             _passwordGenerationService.NormalizeOptions(_options);
-            LoadFromOptions();
             Password = await _passwordGenerationService.GeneratePasswordAsync(_options);
-
-            var page = Page as GeneratorPage;
-            var previousCts = _sliderCancellationTokenSource;
-            var cts = new CancellationTokenSource();
-            var task = Task.Run(async () =>
-            {
-                await Task.Delay(500);
-                if(DateTime.UtcNow - page.LastLengthSliderChange < TimeSpan.FromMilliseconds(450))
-                {
-                    return;
-                }
-                else
-                {
-                    previousCts?.Cancel();
-                }
-                cts.Token.ThrowIfCancellationRequested();
-                await _passwordGenerationService.SaveOptionsAsync(_options);
-                cts.Token.ThrowIfCancellationRequested();
-                await _passwordGenerationService.AddHistoryAsync(Password, cts.Token);
-            }, cts.Token);
-            _sliderCancellationTokenSource = cts;
         }
 
         public async Task CopyAsync()

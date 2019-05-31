@@ -23,8 +23,6 @@ namespace Bit.App.Pages
             }
         }
 
-        public DateTime LastLengthSliderChange { get; set; } = DateTime.MinValue;
-
         public async Task InitAsync()
         {
             await _vm.InitAsync();
@@ -60,12 +58,9 @@ namespace Bit.App.Pages
             await Navigation.PushModalAsync(new NavigationPage(page));
         }
 
-        private void LengthSlider_ValueChanged(object sender, ValueChangedEventArgs e)
+        private async void LengthSlider_DragCompleted(object sender, EventArgs e)
         {
-            if(e.NewValue != e.OldValue)
-            {
-                LastLengthSliderChange = DateTime.UtcNow;
-            }
+            await _vm.SliderChangedAsync();
         }
     }
 }
