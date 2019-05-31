@@ -8,11 +8,12 @@ namespace Bit.App.Pages
     public partial class SettingsPage : BaseContentPage
     {
         private readonly IDeviceActionService _deviceActionService;
-
+        private readonly TabsPage _tabsPage;
         private SettingsPageViewModel _vm;
 
-        public SettingsPage()
+        public SettingsPage(TabsPage tabsPage)
         {
+            _tabsPage = tabsPage;
             InitializeComponent();
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vm = BindingContext as SettingsPageViewModel;
@@ -23,6 +24,16 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if(Device.RuntimePlatform == Device.Android && _tabsPage != null)
+            {
+                _tabsPage.ResetToVaultPage();
+                return true;
+            }
+            return base.OnBackButtonPressed();
         }
 
         private async void RowSelected(object sender, SelectedItemChangedEventArgs e)

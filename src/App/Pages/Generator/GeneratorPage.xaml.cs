@@ -9,9 +9,11 @@ namespace Bit.App.Pages
         private GeneratorPageViewModel _vm;
         private readonly bool _fromTabPage;
         private readonly Action<string> _selectAction;
+        private readonly TabsPage _tabsPage;
 
-        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null)
+        public GeneratorPage(bool fromTabPage, Action<string> selectAction = null, TabsPage tabsPage = null)
         {
+            _tabsPage = tabsPage;
             InitializeComponent();
             _vm = BindingContext as GeneratorPageViewModel;
             _vm.Page = this;
@@ -35,6 +37,16 @@ namespace Bit.App.Pages
             {
                 await InitAsync();
             }
+        }
+
+        protected override bool OnBackButtonPressed()
+        {
+            if(Device.RuntimePlatform == Device.Android && _tabsPage != null)
+            {
+                _tabsPage.ResetToVaultPage();
+                return true;
+            }
+            return base.OnBackButtonPressed();
         }
 
         private async void Regenerate_Clicked(object sender, EventArgs e)

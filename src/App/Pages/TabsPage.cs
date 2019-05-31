@@ -6,23 +6,25 @@ namespace Bit.App.Pages
 {
     public class TabsPage : TabbedPage
     {
+        private NavigationPage _groupingsPage;
+
         public TabsPage()
         {
-            var groupingsPage = new NavigationPage(new GroupingsPage(true))
+            _groupingsPage = new NavigationPage(new GroupingsPage(true))
             {
                 Title = AppResources.MyVault,
                 Icon = "lock.png"
             };
-            Children.Add(groupingsPage);
+            Children.Add(_groupingsPage);
 
-            var generatorPage = new NavigationPage(new GeneratorPage(true, null))
+            var generatorPage = new NavigationPage(new GeneratorPage(true, null, this))
             {
                 Title = AppResources.Generator,
                 Icon = "refresh.png"
             };
             Children.Add(generatorPage);
 
-            var settingsPage = new NavigationPage(new SettingsPage())
+            var settingsPage = new NavigationPage(new SettingsPage(this))
             {
                 Title = AppResources.Settings,
                 Icon = "cog.png"
@@ -42,6 +44,11 @@ namespace Bit.App.Pages
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarItemColor(this,
                     (Color)Application.Current.Resources["TabBarItemColor"]);
             }
+        }
+
+        public void ResetToVaultPage()
+        {
+            CurrentPage = _groupingsPage;
         }
 
         protected async override void OnCurrentPageChanged()
