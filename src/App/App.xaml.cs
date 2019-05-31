@@ -35,6 +35,7 @@ namespace Bit.App
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuthService _authService;
         private readonly IStorageService _storageService;
+        private readonly IStorageService _secureStorageService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly AppOptions _appOptions;
 
@@ -57,6 +58,7 @@ namespace Bit.App
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
             _i18nService = ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService;
@@ -100,7 +102,8 @@ namespace Bit.App
                 }
                 else if(message.Command == "loggedOut")
                 {
-                    // TODO
+                    // Clean up old migrated key if they ever log out.
+                    await _secureStorageService.RemoveAsync("oldKey");
                 }
                 else if(message.Command == "unlocked" || message.Command == "loggedIn")
                 {

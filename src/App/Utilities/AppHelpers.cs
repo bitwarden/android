@@ -13,8 +13,6 @@ namespace Bit.App.Utilities
 {
     public static class AppHelpers
     {
-        public static bool NeedsMigration = false;
-
         public static async Task<string> CipherListOptions(ContentPage page, CipherView cipher)
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
@@ -118,7 +116,7 @@ namespace Bit.App.Utilities
         {
             var currentBuild = deviceActionService.GetBuildNumber();
             var lastBuild = await storageService.GetAsync<string>(Constants.LastBuildKey);
-            if(!NeedsMigration)
+            if(!Migration.MigrationHelpers.NeedsMigration())
             {
                 if(lastBuild == null)
                 {

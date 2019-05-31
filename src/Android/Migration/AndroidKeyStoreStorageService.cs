@@ -13,10 +13,11 @@ using Javax.Crypto.Spec;
 using Android.Preferences;
 using Bit.App.Migration;
 using Bit.Core.Utilities;
+using Bit.App.Migration.Abstractions;
 
 namespace Bit.Droid.Migration
 {
-    public class AndroidKeyStoreStorageService
+    public class AndroidKeyStoreStorageService : IOldSecureStorageService
     {
         private const string AndroidKeyStore = "AndroidKeyStore";
         private const string AesMode = "AES/GCM/NoPadding";

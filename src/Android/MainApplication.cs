@@ -43,10 +43,12 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
-            var settingsShim = new App.Migration.SettingsShim();
-            ServiceContainer.Register("settingsShim", settingsShim);
-            App.Utilities.AppHelpers.NeedsMigration =
-                settingsShim.GetValueOrDefault(Constants.OldLastActivityKey, DateTime.MinValue) > DateTime.MinValue;
+            ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim());
+            if(App.Migration.MigrationHelpers.NeedsMigration())
+            {
+                ServiceContainer.Register<App.Migration.Abstractions.IOldSecureStorageService>(
+                    "oldSecureStorageService", new Migration.AndroidKeyStoreStorageService());
+            }
 
             Refractored.FabControl.Droid.FloatingActionButtonViewRenderer.Init();
             // Note: This might cause a race condition. Investigate more.
