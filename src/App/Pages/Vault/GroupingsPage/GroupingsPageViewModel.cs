@@ -269,11 +269,7 @@ namespace Bit.App.Pages
         public async Task SyncAsync()
         {
             await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
-            try
-            {
-                await _syncService.FullSyncAsync(false);
-            }
-            catch(ApiException) { }
+            await _syncService.FullSyncAsync(false);
             await _deviceActionService.HideLoadingAsync();
             _platformUtilsService.ShowToast("success", null, AppResources.SyncingComplete);
         }
