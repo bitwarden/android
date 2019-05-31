@@ -141,6 +141,7 @@
     <Compile Include="Services\CryptoPrimitiveService.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
+    <Compile Include="Tile\MyVaultTileService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />
     <Compile Include="Utilities\HockeyAppCrashManagerListener.cs" />
   </ItemGroup>
