@@ -166,6 +166,13 @@
         <Setter Property="Padding"
                 Value="2, 5" />
     </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator">
+        <Setter Property="HeightRequest"
+                Value="1" />
+        <Setter Property="Color"
+                Value="{StaticResource ListItemBorderColor}" />
+    </Style>
     <Style TargetType="Label"
            Class="list-title">
     </Style>
