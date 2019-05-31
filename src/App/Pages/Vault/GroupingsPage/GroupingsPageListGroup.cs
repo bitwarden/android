@@ -4,12 +4,12 @@ namespace Bit.App.Pages
 {
     public class GroupingsPageListGroup : List<GroupingsPageListItem>
     {
-        public GroupingsPageListGroup(string name, int count, bool doUpper = true)
-            : this(new List<GroupingsPageListItem>(), name, count, doUpper)
+        public GroupingsPageListGroup(string name, int count, bool doUpper = true, bool first = false)
+            : this(new List<GroupingsPageListItem>(), name, count, doUpper, first)
         { }
 
         public GroupingsPageListGroup(List<GroupingsPageListItem> groupItems, string name, int count,
-            bool doUpper = true)
+            bool doUpper = true, bool first = false)
         {
             AddRange(groupItems);
             if(string.IsNullOrWhiteSpace(name))
@@ -25,8 +25,10 @@ namespace Bit.App.Pages
                 Name = name;
             }
             ItemCount = count.ToString("N0");
+            First = first;
         }
 
+        public bool First { get; set; }
         public string Name { get; set; }
         public string NameShort => string.IsNullOrWhiteSpace(Name) || Name.Length == 0 ? "-" : Name[0].ToString();
         public string ItemCount { get; set; }

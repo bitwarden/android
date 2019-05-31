@@ -20,6 +20,8 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+            
             <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
                          Clicked="Sync_Clicked" Order="Secondary" />
             <ToolbarItem x:Name="_lockItem" x:Key="lockItem" Text="{u:I18n Lock}"
@@ -95,13 +97,17 @@
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                             <ViewCell>
-                                <StackLayout StyleClass="list-row-header">
-                                    <Label
-                                        Text="{Binding Name}"
-                                        StyleClass="list-header, list-header-platform" />
-                                    <Label
-                                        Text="{Binding ItemCount}"
-                                        StyleClass="list-header-sub" />
+                                <StackLayout Spacing="0" Padding="0">
+                                    <BoxView StyleClass="box-row-separator"
+                                             IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
+                                    <StackLayout StyleClass="list-row-header">
+                                        <Label
+                                            Text="{Binding Name}"
+                                            StyleClass="list-header, list-header-platform" />
+                                        <Label
+                                            Text="{Binding ItemCount}"
+                                            StyleClass="list-header-sub" />
+                                    </StackLayout>
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>

@@ -150,15 +150,16 @@ namespace Bit.App.Pages
                         _collectionCounts[c.Node.Id] : 0).ToString("N0")
                 }).ToList();
 
+                var hasFavorites = favListItems?.Any() ?? false;
                 if(favListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites,
-                        favListItems.Count, Device.RuntimePlatform == Device.iOS));
+                        favListItems.Count, Device.RuntimePlatform == Device.iOS, true));
                 }
                 if(MainPage)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(
-                        AppResources.Types, 4, Device.RuntimePlatform == Device.iOS)
+                        AppResources.Types, 4, Device.RuntimePlatform == Device.iOS, !hasFavorites)
                     {
                         new GroupingsPageListItem
                         {
@@ -189,17 +190,18 @@ namespace Bit.App.Pages
                 if(folderListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(folderListItems, AppResources.Folders,
-                        folderListItems.Count, Device.RuntimePlatform == Device.iOS));
+                        folderListItems.Count, Device.RuntimePlatform == Device.iOS, !MainPage));
                 }
                 if(collectionListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(collectionListItems, AppResources.Collections,
-                        collectionListItems.Count, Device.RuntimePlatform == Device.iOS));
+                        collectionListItems.Count, Device.RuntimePlatform == Device.iOS, !MainPage));
                 }
                 if(ciphersListItems?.Any() ?? false)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
-                        ciphersListItems.Count, Device.RuntimePlatform == Device.iOS));
+                        ciphersListItems.Count, Device.RuntimePlatform == Device.iOS,
+                        !MainPage && !groupedItems.Any()));
                 }
                 GroupedItems.ResetWithRange(groupedItems);
             }

@@ -82,17 +82,19 @@ namespace Bit.App.Pages
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);
             var matching = ciphers.Item1?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
+            var hasMatching = matching?.Any() ?? false;
             if(matching?.Any() ?? false)
             {
                 groupedItems.Add(
-                    new GroupingsPageListGroup(matching, AppResources.MatchingItems, matching.Count, false));
+                    new GroupingsPageListGroup(matching, AppResources.MatchingItems, matching.Count, false, true));
             }
             var fuzzy = ciphers.Item2?.Select(c =>
                 new GroupingsPageListItem { Cipher = c, FuzzyAutofill = true }).ToList();
             if(fuzzy?.Any() ?? false)
             {
                 groupedItems.Add(
-                    new GroupingsPageListGroup(fuzzy, AppResources.PossibleMatchingItems, fuzzy.Count, false));
+                    new GroupingsPageListGroup(fuzzy, AppResources.PossibleMatchingItems, fuzzy.Count, false,
+                    !hasMatching));
             }
             GroupedItems.ResetWithRange(groupedItems);
             ShowList = groupedItems.Any();
