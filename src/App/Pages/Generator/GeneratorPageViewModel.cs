@@ -3,7 +3,9 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -29,6 +31,7 @@ namespace Bit.App.Pages
         private string _wordSeparator;
         private int _typeSelectedIndex;
         private bool _doneIniting;
+        private CancellationTokenSource _sliderCancellationTokenSource;
 
         public GeneratorPageViewModel()
         {
@@ -67,7 +70,7 @@ namespace Bit.App.Pages
                 if(SetProperty(ref _length, value))
                 {
                     _options.Length = value;
-                    var task = SaveOptionsAsync();
+                    var task = SaveOptionsSliderAsync();
                 }
             }
         }
@@ -207,8 +210,7 @@ namespace Bit.App.Pages
         {
             _options = await _passwordGenerationService.GetOptionsAsync();
             LoadFromOptions();
-            Password = await _passwordGenerationService.GeneratePasswordAsync(_options);
-            await _passwordGenerationService.AddHistoryAsync(Password);
+            await RegenerateAsync();
             _doneIniting = true;
         }
 
@@ -232,6 +234,39 @@ namespace Bit.App.Pages
             {
                 await RegenerateAsync();
             }
+        }
+
+        public async Task SaveOptionsSliderAsync()
+        {
+            if(!_doneIniting)
+            {
+                return;
+            }
+            SetOptions();
+            _passwordGenerationService.NormalizeOptions(_options);
+            LoadFromOptions();
+            Password = await _passwordGenerationService.GeneratePasswordAsync(_options);
+
+            var page = Page as GeneratorPage;
+            var previousCts = _sliderCancellationTokenSource;
+            var cts = new CancellationTokenSource();
+            var task = Task.Run(async () =>
+            {
+                await Task.Delay(500);
+                if(DateTime.UtcNow - page.LastLengthSliderChange < TimeSpan.FromMilliseconds(450))
+                {
+                    return;
+                }
+                else
+                {
+                    previousCts?.Cancel();
+                }
+                cts.Token.ThrowIfCancellationRequested();
+                await _passwordGenerationService.SaveOptionsAsync(_options);
+                cts.Token.ThrowIfCancellationRequested();
+                await _passwordGenerationService.AddHistoryAsync(Password, cts.Token);
+            }, cts.Token);
+            _sliderCancellationTokenSource = cts;
         }
 
         public async Task CopyAsync()

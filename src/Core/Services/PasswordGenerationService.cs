@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Bit.Core.Services
@@ -240,7 +241,7 @@ namespace Bit.Core.Services
             return _history ?? new List<GeneratedPasswordHistory>();
         }
 
-        public async Task AddHistoryAsync(string password)
+        public async Task AddHistoryAsync(string password, CancellationToken token = default(CancellationToken))
         {
             var hasKey = await _cryptoService.HasKeyAsync();
             if(!hasKey)
@@ -253,6 +254,7 @@ namespace Bit.Core.Services
             {
                 return;
             }
+            token.ThrowIfCancellationRequested();
             currentHistory.Insert(0, new GeneratedPasswordHistory { Password = password, Date = DateTime.UtcNow });
             // Remove old items.
             if(currentHistory.Count > MaxPasswordsInHistory)
@@ -260,6 +262,7 @@ namespace Bit.Core.Services
                 currentHistory.RemoveAt(currentHistory.Count - 1);
             }
             var newHistory = await EncryptHistoryAsync(currentHistory);
+            token.ThrowIfCancellationRequested();
             await _storageService.SaveAsync(Keys_History, newHistory);
         }
 

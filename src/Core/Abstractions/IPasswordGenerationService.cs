@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Bit.Core.Models.Domain;
 
@@ -6,7 +7,7 @@ namespace Bit.Core.Abstractions
 {
     public interface IPasswordGenerationService
     {
-        Task AddHistoryAsync(string password);
+        Task AddHistoryAsync(string password, CancellationToken token = default(CancellationToken));
         Task ClearAsync();
         Task<string> GeneratePassphraseAsync(PasswordGenerationOptions options);
         Task<string> GeneratePasswordAsync(PasswordGenerationOptions options);

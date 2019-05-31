@@ -105,6 +105,7 @@
                             VerticalOptions="CenterAndExpand"
                             HorizontalTextAlignment="End" />
                         <controls:ExtendedSlider
+                            ValueChanged="LengthSlider_ValueChanged"
                             Value="{Binding Length}"
                             StyleClass="box-value"
                             VerticalOptions="CenterAndExpand"
