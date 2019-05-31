@@ -68,6 +68,7 @@
                         Text="{u:I18n Name}"
                         StyleClass="box-label" />
                     <Entry
+                        x:Name="_nameEntry"
                         Text="{Binding Cipher.Name}"
                         StyleClass="box-value" />
                 </StackLayout>
@@ -77,6 +78,7 @@
                             Text="{u:I18n Username}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_loginUsernameEntry"
                             Text="{Binding Cipher.Login.Username}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -97,6 +99,7 @@
                             Grid.Row="0"
                             Grid.Column="0" />
                         <controls:MonoEntry
+                            x:Name="_loginPasswordEntry"
                             Text="{Binding Cipher.Login.Password}"
                             StyleClass="box-value"
                             Grid.Row="1"
@@ -140,6 +143,7 @@
                             Grid.Row="0"
                             Grid.Column="0" />
                         <controls:MonoEntry
+                            x:Name="_loginTotpEntry"
                             Text="{Binding Cipher.Login.Totp}"
                             StyleClass="box-value"
                             Grid.Row="1"
@@ -159,6 +163,7 @@
                             Text="{u:I18n CardholderName}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_cardholderNameEntry"
                             Text="{Binding Cipher.Card.CardholderName}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -167,6 +172,7 @@
                             Text="{u:I18n Number}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_cardNumberEntry"
                             Text="{Binding Cipher.Card.Number}"
                             StyleClass="box-value"
                             Keyboard="Numeric" />
@@ -196,6 +202,7 @@
                             Text="{u:I18n ExpirationYear}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_cardExpYearEntry"
                             Text="{Binding Cipher.Card.ExpYear}"
                             StyleClass="box-value"
                             Keyboard="Numeric" />
@@ -215,6 +222,7 @@
                             Grid.Row="0"
                             Grid.Column="0" />
                         <controls:MonoEntry
+                            x:Name="_cardCodeEntry"
                             Text="{Binding Cipher.Card.Code}"
                             StyleClass="box-value"
                             Grid.Row="1"
@@ -246,6 +254,7 @@
                             Text="{u:I18n FirstName}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityFirstNameEntry"
                             Text="{Binding Cipher.Identity.FirstName}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -254,6 +263,7 @@
                             Text="{u:I18n MiddleName}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityMiddleNameEntry"
                             Text="{Binding Cipher.Identity.MiddleName}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -262,6 +272,7 @@
                             Text="{u:I18n LastName}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityLastNameEntry"
                             Text="{Binding Cipher.Identity.LastName}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -270,6 +281,7 @@
                             Text="{u:I18n Username}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityUsernameEntry"
                             Text="{Binding Cipher.Identity.Username}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -278,6 +290,7 @@
                             Text="{u:I18n Company}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityCompanyEntry"
                             Text="{Binding Cipher.Identity.Company}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -286,6 +299,7 @@
                             Text="{u:I18n SSN}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identitySsnEntry"
                             Text="{Binding Cipher.Identity.SSN}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -294,6 +308,7 @@
                             Text="{u:I18n PassportNumber}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityPassportNumberEntry"
                             Text="{Binding Cipher.Identity.PassportNumber}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -302,6 +317,7 @@
                             Text="{u:I18n LicenseNumber}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityLicenseNumberEntry"
                             Text="{Binding Cipher.Identity.LicenseNumber}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -310,6 +326,7 @@
                             Text="{u:I18n Email}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityEmailEntry"
                             Text="{Binding Cipher.Identity.Email}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -318,6 +335,7 @@
                             Text="{u:I18n Phone}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityPhoneEntry"
                             Text="{Binding Cipher.Identity.Phone}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -326,6 +344,7 @@
                             Text="{u:I18n Address1}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityAddress1Entry"
                             Text="{Binding Cipher.Identity.Address1}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -334,6 +353,7 @@
                             Text="{u:I18n Address2}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityAddress2Entry"
                             Text="{Binding Cipher.Identity.Address2}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -342,6 +362,7 @@
                             Text="{u:I18n Address3}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityAddress3Entry"
                             Text="{Binding Cipher.Identity.Address3}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -350,6 +371,7 @@
                             Text="{u:I18n CityTown}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityCityEntry"
                             Text="{Binding Cipher.Identity.City}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -358,6 +380,7 @@
                             Text="{u:I18n StateProvince}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityStateEntry"
                             Text="{Binding Cipher.Identity.State}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -366,6 +389,7 @@
                             Text="{u:I18n ZipPostalCode}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityPostalCodeEntry"
                             Text="{Binding Cipher.Identity.PostalCode}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -374,6 +398,7 @@
                             Text="{u:I18n Country}"
                             StyleClass="box-label" />
                         <Entry
+                            x:Name="_identityCountryEntry"
                             Text="{Binding Cipher.Identity.Country}"
                             StyleClass="box-value" />
                     </StackLayout>
@@ -456,6 +481,7 @@
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Editor
+                        x:Name="_notesEditor"
                         Text="{Binding Cipher.Notes}"
                         StyleClass="box-value"
                         HeightRequest="200" />

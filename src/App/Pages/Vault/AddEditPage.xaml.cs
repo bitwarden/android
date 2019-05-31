@@ -47,6 +47,62 @@ namespace Bit.App.Pages
             _identityTitlePicker.ItemDisplayBinding = new Binding("Key");
             _folderPicker.ItemDisplayBinding = new Binding("Key");
             _ownershipPicker.ItemDisplayBinding = new Binding("Key");
+
+            _nameEntry.ReturnType = ReturnType.Next;
+            _nameEntry.ReturnCommand = new Command(() =>
+            {
+                if(_vm.Cipher.Type == CipherType.Login)
+                {
+                    _loginUsernameEntry.Focus();
+                }
+                else if(_vm.Cipher.Type == CipherType.Card)
+                {
+                    _cardholderNameEntry.Focus();
+                }
+            });
+
+            _loginUsernameEntry.ReturnType = ReturnType.Next;
+            _loginUsernameEntry.ReturnCommand = new Command(() => _loginPasswordEntry.Focus());
+            _loginPasswordEntry.ReturnType = ReturnType.Next;
+            _loginPasswordEntry.ReturnCommand = new Command(() => _loginTotpEntry.Focus());
+
+            _cardholderNameEntry.ReturnType = ReturnType.Next;
+            _cardholderNameEntry.ReturnCommand = new Command(() => _cardNumberEntry.Focus());
+            _cardExpYearEntry.ReturnType = ReturnType.Next;
+            _cardExpYearEntry.ReturnCommand = new Command(() => _cardCodeEntry.Focus());
+
+            _identityFirstNameEntry.ReturnType = ReturnType.Next;
+            _identityFirstNameEntry.ReturnCommand = new Command(() => _identityMiddleNameEntry.Focus());
+            _identityMiddleNameEntry.ReturnType = ReturnType.Next;
+            _identityMiddleNameEntry.ReturnCommand = new Command(() => _identityLastNameEntry.Focus());
+            _identityLastNameEntry.ReturnType = ReturnType.Next;
+            _identityLastNameEntry.ReturnCommand = new Command(() => _identityUsernameEntry.Focus());
+            _identityUsernameEntry.ReturnType = ReturnType.Next;
+            _identityUsernameEntry.ReturnCommand = new Command(() => _identityCompanyEntry.Focus());
+            _identityCompanyEntry.ReturnType = ReturnType.Next;
+            _identityCompanyEntry.ReturnCommand = new Command(() => _identitySsnEntry.Focus());
+            _identitySsnEntry.ReturnType = ReturnType.Next;
+            _identitySsnEntry.ReturnCommand = new Command(() => _identityPassportNumberEntry.Focus());
+            _identityPassportNumberEntry.ReturnType = ReturnType.Next;
+            _identityPassportNumberEntry.ReturnCommand = new Command(() => _identityLicenseNumberEntry.Focus());
+            _identityLicenseNumberEntry.ReturnType = ReturnType.Next;
+            _identityLicenseNumberEntry.ReturnCommand = new Command(() => _identityEmailEntry.Focus());
+            _identityEmailEntry.ReturnType = ReturnType.Next;
+            _identityEmailEntry.ReturnCommand = new Command(() => _identityPhoneEntry.Focus());
+            _identityPhoneEntry.ReturnType = ReturnType.Next;
+            _identityPhoneEntry.ReturnCommand = new Command(() => _identityAddress1Entry.Focus());
+            _identityAddress1Entry.ReturnType = ReturnType.Next;
+            _identityAddress1Entry.ReturnCommand = new Command(() => _identityAddress2Entry.Focus());
+            _identityAddress2Entry.ReturnType = ReturnType.Next;
+            _identityAddress2Entry.ReturnCommand = new Command(() => _identityAddress3Entry.Focus());
+            _identityAddress3Entry.ReturnType = ReturnType.Next;
+            _identityAddress3Entry.ReturnCommand = new Command(() => _identityCityEntry.Focus());
+            _identityCityEntry.ReturnType = ReturnType.Next;
+            _identityCityEntry.ReturnCommand = new Command(() => _identityStateEntry.Focus());
+            _identityStateEntry.ReturnType = ReturnType.Next;
+            _identityStateEntry.ReturnCommand = new Command(() => _identityPostalCodeEntry.Focus());
+            _identityPostalCodeEntry.ReturnType = ReturnType.Next;
+            _identityPostalCodeEntry.ReturnCommand = new Command(() => _identityCountryEntry.Focus());
         }
 
         public bool FromAutofillFramework { get; set; }
@@ -60,6 +116,10 @@ namespace Bit.App.Pages
                 if(!success)
                 {
                     await Navigation.PopModalAsync();
+                }
+                else if(!_vm.EditMode)
+                {
+                    RequestFocus(_nameEntry);
                 }
             });
             if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
