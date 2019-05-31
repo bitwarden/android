@@ -5,6 +5,7 @@ using Bit.Core.Exceptions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -20,8 +21,11 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+
+            SubmitCommand = new Command(async () => await SubmitAsync());
         }
 
+        public Command SubmitCommand { get; }
         public string FolderId { get; set; }
         public FolderView Folder
         {

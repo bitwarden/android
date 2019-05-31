@@ -31,7 +31,9 @@
                     <Entry
                         Text="{Binding Folder.Name}"
                         StyleClass="box-value"
-                        x:Name="_nameEntry" />
+                        x:Name="_nameEntry"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}" />
                 </StackLayout>
             </StackLayout>
         </StackLayout>
