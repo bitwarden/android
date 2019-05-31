@@ -104,8 +104,11 @@
                         Text="{u:I18n MasterPasswordHint}"
                         StyleClass="box-label" />
                     <Entry
+                        x:Name="_hint"
                         Text="{Binding Hint}"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n MasterPasswordHintDescription}"

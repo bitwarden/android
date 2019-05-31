@@ -4,6 +4,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -18,8 +19,10 @@ namespace Bit.App.Pages
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
 
             PageTitle = AppResources.PasswordHint;
+            SubmitCommand = new Command(async () => await SubmitAsync());
         }
 
+        public Command SubmitCommand { get; }
         public string Email { get; set; }
 
         public async Task SubmitAsync()

@@ -27,6 +27,7 @@ namespace Bit.App.Pages
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
+            SubmitCommand = new Command(async () => await SubmitAsync());
         }
 
         public bool ShowPassword
@@ -39,6 +40,7 @@ namespace Bit.App.Pages
                 });
         }
 
+        public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public Command ToggleConfirmPasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";

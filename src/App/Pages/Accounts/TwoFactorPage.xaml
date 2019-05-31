@@ -38,7 +38,9 @@
                             Text="{Binding Token}"
                             x:Name="_totpEntry"
                             Keyboard="Numeric"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            ReturnType="Go"
+                            ReturnCommand="{Binding SubmitCommand}" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label
@@ -67,7 +69,9 @@
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Entry
                             Text="{Binding Token}"
-                            StyleClass="box-value" />
+                            StyleClass="box-value"
+                            ReturnType="Go"
+                            ReturnCommand="{Binding SubmitCommand}" />
                     </StackLayout>
                     <StackLayout StyleClass="box-row, box-row-switch">
                         <Label

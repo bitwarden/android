@@ -42,6 +42,7 @@ namespace Bit.App.Pages
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
 
             PageTitle = AppResources.TwoStepLogin;
+            SubmitCommand = new Command(async () => await SubmitAsync());
         }
 
         public string TotpInstruction
@@ -80,6 +81,7 @@ namespace Bit.App.Pages
                 nameof(TotpMethod),
             });
         }
+        public Command SubmitCommand { get; }
 
         public void Init()
         {

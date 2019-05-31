@@ -47,7 +47,9 @@
                         Keyboard="Numeric"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}" />
                     <controls:FaButton
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowPasswordIcon}"
@@ -76,7 +78,9 @@
                         StyleClass="box-value"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         Grid.Row="1"
-                        Grid.Column="0" />
+                        Grid.Column="0"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}" />
                     <controls:FaButton
                         StyleClass="box-row-button, box-row-button-platform"
                         Text="{Binding ShowPasswordIcon}"

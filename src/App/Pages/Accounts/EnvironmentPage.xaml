@@ -31,7 +31,9 @@
                         Text="{Binding BaseUrl}"
                         Keyboard="Url"
                         Placeholder="ex. https://bitwarden.company.com"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n SelfHostedEnvironmentFooter}"
@@ -47,6 +49,7 @@
                         Text="{u:I18n WebVaultUrl}"
                         StyleClass="box-label" />
                     <Entry
+                        x:Name="_webVaultEntry"
                         Text="{Binding WebVaultUrl}"
                         Keyboard="Url"
                         StyleClass="box-value" />
@@ -56,6 +59,7 @@
                         Text="{u:I18n ApiUrl}"
                         StyleClass="box-label" />
                     <Entry
+                        x:Name="_apiEntry"
                         Text="{Binding ApiUrl}"
                         Keyboard="Url"
                         StyleClass="box-value" />
@@ -65,6 +69,7 @@
                         Text="{u:I18n IdentityUrl}"
                         StyleClass="box-label" />
                     <Entry
+                        x:Name="_identityEntry"
                         Text="{Binding IdentityUrl}"
                         Keyboard="Url"
                         StyleClass="box-value" />
@@ -74,9 +79,12 @@
                         Text="{u:I18n IconsUrl}"
                         StyleClass="box-label" />
                     <Entry
+                        x:Name="_iconsEntry"
                         Text="{Binding IconsUrl}"
                         Keyboard="Url"
-                        StyleClass="box-value" />
+                        StyleClass="box-value"
+                        ReturnType="Go"
+                        ReturnCommand="{Binding SubmitCommand}" />
                 </StackLayout>
                 <Label
                     Text="{u:I18n CustomEnvironmentFooter}"

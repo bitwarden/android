@@ -25,7 +25,9 @@
                 <Entry
                     Text="{Binding Email}"
                     Keyboard="Email"
-                    StyleClass="box-value" />
+                    StyleClass="box-value"
+                    ReturnType="Go"
+                    ReturnCommand="{Binding SubmitCommand}" />
             </StackLayout>
             <Label
                 Text="{u:I18n EnterEmailForHint}"

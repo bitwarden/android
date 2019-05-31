@@ -45,6 +45,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
+            SubmitCommand = new Command(async () => await SubmitAsync());
         }
 
         public bool ShowPassword
@@ -87,6 +88,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _lockedVerifyText, value);
         }
 
+        public Command SubmitCommand { get; }
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public string MasterPassword { get; set; }

@@ -2,6 +2,7 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -22,8 +23,10 @@ namespace Bit.App.Pages
             IdentityUrl = _environmentService.IdentityUrl;
             IconsUrl = _environmentService.IconsUrl;
             NotificationsUrls = _environmentService.NotificationsUrl;
+            SubmitCommand = new Command(async () => await SubmitAsync());
         }
 
+        public Command SubmitCommand { get; }
         public string BaseUrl { get; set; }
         public string ApiUrl { get; set; }
         public string IdentityUrl { get; set; }
