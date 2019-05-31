@@ -1,21 +1,20 @@
-﻿using Bit.App.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Bit.App.Pages
 {
     public partial class SettingsPage : BaseContentPage
     {
+        private readonly IDeviceActionService _deviceActionService;
+
         private SettingsPageViewModel _vm;
 
         public SettingsPage()
         {
             InitializeComponent();
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vm = BindingContext as SettingsPageViewModel;
             _vm.Page = this;
         }
@@ -41,6 +40,22 @@ namespace Bit.App.Pages
             if(item.Name == AppResources.Sync)
             {
                 await Navigation.PushModalAsync(new NavigationPage(new SyncPage()));
+            }
+            else if(item.Name == AppResources.AutofillAccessibilityService)
+            {
+                // await Navigation.PushModalAsync(new NavigationPage(new OptionsPage()));
+            }
+            else if(item.Name == AppResources.AutofillService)
+            {
+                // await Navigation.PushModalAsync(new NavigationPage(new OptionsPage()));
+            }
+            else if(item.Name == AppResources.PasswordAutofill)
+            {
+                // await Navigation.PushModalAsync(new NavigationPage(new OptionsPage()));
+            }
+            else if(item.Name == AppResources.AppExtension)
+            {
+                // await Navigation.PushModalAsync(new NavigationPage(new OptionsPage()));
             }
             else if(item.Name == AppResources.Options)
             {

@@ -259,6 +259,31 @@ namespace Bit.App.Pages
         private void BuildList()
         {
             var doUpper = Device.RuntimePlatform != Device.Android;
+            var autofillItems = new List<SettingsPageListItem>();
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                if(_deviceActionService.SupportsAutofillService())
+                {
+                    autofillItems.Add(new SettingsPageListItem
+                    {
+                        Name = AppResources.AutofillService,
+                        SubLabel = _deviceActionService.AutofillServiceEnabled() ? "✓" : null
+                    });
+                }
+                autofillItems.Add(new SettingsPageListItem
+                {
+                    Name = AppResources.AutofillAccessibilityService,
+                    SubLabel = _deviceActionService.AutofillAccessibilityServiceRunning() ? "✓" : null
+                });
+            }
+            else
+            {
+                if(_deviceActionService.SystemMajorVersion() >= 12)
+                {
+                    autofillItems.Add(new SettingsPageListItem { Name = AppResources.PasswordAutofill });
+                }
+                autofillItems.Add(new SettingsPageListItem { Name = AppResources.AppExtension });
+            }
             var manageItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.Folders },
@@ -302,6 +327,7 @@ namespace Bit.App.Pages
             };
             GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
             {
+                new SettingsPageListGroup(autofillItems, AppResources.Autofill, doUpper),
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
                 new SettingsPageListGroup(securityItems, AppResources.Security, doUpper),
                 new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),

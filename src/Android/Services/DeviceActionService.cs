@@ -498,7 +498,7 @@ namespace Bit.Droid.Services
             var manager = activity.GetSystemService(Context.ActivityService) as ActivityManager;
             var services = manager.GetRunningServices(int.MaxValue);
             return services.Any(s => s.Process.ToLowerInvariant().Contains("bitwarden") &&
-                s.Service.ClassName.ToLowerInvariant().Contains("autofill"));
+                s.Service.ClassName.ToLowerInvariant().Contains("accessibilityservice"));
         }
 
         public bool AutofillServiceEnabled()
