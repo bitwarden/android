@@ -339,7 +339,7 @@ namespace Bit.App.Pages
             };
             GroupedItems.ResetWithRange(new List<SettingsPageListGroup>
             {
-                new SettingsPageListGroup(autofillItems, AppResources.Autofill, doUpper),
+                new SettingsPageListGroup(autofillItems, AppResources.Autofill, doUpper, true),
                 new SettingsPageListGroup(manageItems, AppResources.Manage, doUpper),
                 new SettingsPageListGroup(securityItems, AppResources.Security, doUpper),
                 new SettingsPageListGroup(accountItems, AppResources.Account, doUpper),

@@ -13,6 +13,7 @@
 
     <ContentPage.Resources>
         <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
             
             <DataTemplate
@@ -54,10 +55,14 @@
         <ListView.GroupHeaderTemplate>
             <DataTemplate x:DataType="pages:SettingsPageListGroup">
                 <ViewCell>
-                    <StackLayout StyleClass="list-row-header">
-                        <Label
-                            Text="{Binding Name}"
-                            StyleClass="list-header, list-header-platform" />
+                    <StackLayout Padding="0" Spacing="0">
+                        <BoxView StyleClass="list-section-separator"
+                                 IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
+                        <StackLayout StyleClass="list-row-header">
+                            <Label
+                                Text="{Binding Name}"
+                                StyleClass="list-header, list-header-platform" />
+                        </StackLayout>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
