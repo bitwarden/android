@@ -29,7 +29,7 @@
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row"
                              IsVisible="{Binding HasOrganizations, Converter={StaticResource inverseBool}}">
-                    <Label Text="{u:I18n NoOrganizationsToList}" />
+                    <Label Text="{u:I18n NoOrgsToList}" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Label
