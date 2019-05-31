@@ -135,6 +135,10 @@ namespace Bit.App
         protected async override void OnSleep()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                await _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
+            }
             await HandleLockingAsync();
             SetTabsPageFromAutofill();
         }

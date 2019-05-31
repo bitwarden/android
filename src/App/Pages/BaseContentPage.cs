@@ -22,12 +22,6 @@ namespace Bit.App.Pages
             SaveActivity();
         }
 
-        protected override void OnDisappearing()
-        {
-            base.OnDisappearing();
-            SaveActivity();
-        }
-
         public bool DoOnce(Action action = null, int milliseconds = 1000)
         {
             if(LastPageAction.HasValue && (DateTime.UtcNow - LastPageAction.Value).TotalMilliseconds < milliseconds)
