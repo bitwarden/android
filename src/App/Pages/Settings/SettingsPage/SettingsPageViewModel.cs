@@ -207,9 +207,11 @@ namespace Bit.App.Pages
             {
                 var pin = await _deviceActionService.DisplayPromptAync(AppResources.EnterPIN,
                     AppResources.SetPINDescription, null, AppResources.Submit, AppResources.Cancel, true);
-                var masterPassOnRestart = true;
                 if(!string.IsNullOrWhiteSpace(pin))
                 {
+                    var masterPassOnRestart = await _platformUtilsService.ShowDialogAsync(
+                       AppResources.PINRequireMasterPasswordRestart, AppResources.UnlockWithPIN,
+                       AppResources.Yes, AppResources.No);
                     if(masterPassOnRestart)
                     {
                         var encPin = await _cryptoService.EncryptAsync(pin);
