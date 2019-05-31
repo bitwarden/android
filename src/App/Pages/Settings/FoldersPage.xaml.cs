@@ -51,8 +51,11 @@ namespace Bit.App.Pages
 
         private async void AddButton_Clicked(object sender, EventArgs e)
         {
-            var page = new FolderAddEditPage();
-            await Navigation.PushModalAsync(new NavigationPage(page));
+            if(DoOnce())
+            {
+                var page = new FolderAddEditPage();
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
         }
     }
 }

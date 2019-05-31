@@ -174,8 +174,11 @@ namespace Bit.App.Pages
 
         private async void AddButton_Clicked(object sender, System.EventArgs e)
         {
-            var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
-            await Navigation.PushModalAsync(new NavigationPage(page));
+            if(DoOnce())
+            {
+                var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
         }
     }
 }
