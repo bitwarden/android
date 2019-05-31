@@ -65,7 +65,7 @@ namespace Bit.App.Pages
                 }
                 else if(navPage.RootPage is SettingsPage settingsPage)
                 {
-                    // Load something?
+                    await settingsPage.InitAsync();
                 }
             }
         }

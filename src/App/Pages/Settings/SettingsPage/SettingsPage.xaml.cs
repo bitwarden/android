@@ -1,6 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Utilities;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -20,9 +21,8 @@ namespace Bit.App.Pages
             _vm.Page = this;
         }
 
-        protected async override void OnAppearing()
+        public async Task InitAsync()
         {
-            base.OnAppearing();
             await _vm.InitAsync();
         }
 
