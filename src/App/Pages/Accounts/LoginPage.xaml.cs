@@ -13,6 +13,9 @@ namespace Bit.App.Pages
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
             MasterPasswordEntry = _masterPassword;
+
+            _email.ReturnType = ReturnType.Next;
+            _email.ReturnCommand = new Command(() => _masterPassword.Focus());
         }
 
         public Entry MasterPasswordEntry { get; set; }

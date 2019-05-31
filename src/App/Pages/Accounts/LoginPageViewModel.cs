@@ -31,6 +31,7 @@ namespace Bit.App.Pages
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
+            LogInCommand = new Command(async () => await LogInAsync());
         }
 
         public bool ShowPassword
@@ -55,6 +56,7 @@ namespace Bit.App.Pages
             set => SetProperty(ref _masterPassword, value);
         }
 
+        public Command LogInCommand { get; }
         public Command TogglePasswordCommand { get; }
         public string ShowPasswordIcon => ShowPassword ? "" : "";
         public bool RememberEmail { get; set; }
