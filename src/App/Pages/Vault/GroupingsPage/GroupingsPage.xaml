@@ -50,6 +50,7 @@
                                StyleClass="list-title"/>
                         <Label Text="{Binding ItemCount, Mode=OneWay}"
                                HorizontalOptions="End"
+                               VerticalOptions="CenterAndExpand"
                                HorizontalTextAlignment="End"
                                StyleClass="list-sub"/>
                     </StackLayout>
