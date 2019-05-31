@@ -1,4 +1,5 @@
-﻿using Bit.App.Resources;
+﻿using Bit.App.Effect;
+using Bit.App.Resources;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -24,18 +25,23 @@ namespace Bit.App.Pages
             var settingsPage = new NavigationPage(new SettingsPage())
             {
                 Title = AppResources.Settings,
-                Icon = "cogs.png"
+                Icon = "cog.png"
             };
             Children.Add(settingsPage);
 
-            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
-                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
-            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSwipePagingEnabled(this, false);
-            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSmoothScrollEnabled(this, false);
-            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarSelectedItemColor(this, 
-                (Color)Application.Current.Resources["TabBarSelectedItemColor"]);
-            Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarItemColor(this,
-                (Color)Application.Current.Resources["TabBarItemColor"]);
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                Effects.Add(new TabBarEffect());
+
+                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetToolbarPlacement(this,
+                    Xamarin.Forms.PlatformConfiguration.AndroidSpecific.ToolbarPlacement.Bottom);
+                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSwipePagingEnabled(this, false);
+                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetIsSmoothScrollEnabled(this, false);
+                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarSelectedItemColor(this,
+                    (Color)Application.Current.Resources["TabBarSelectedItemColor"]);
+                Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarItemColor(this,
+                    (Color)Application.Current.Resources["TabBarItemColor"]);
+            }
         }
 
         protected async override void OnCurrentPageChanged()

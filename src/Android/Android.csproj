@@ -110,6 +110,7 @@
     <Compile Include="Autofill\FilledItem.cs" />
     <Compile Include="Autofill\Parser.cs" />
     <Compile Include="Autofill\SavedItem.cs" />
+    <Compile Include="Effects\TabBarEffect.cs" />
     <Compile Include="Migration\AndroidKeyStoreStorageService.cs" />
     <Compile Include="Push\FirebaseInstanceIdService.cs" />
     <Compile Include="Push\FirebaseMessagingService.cs" />
@@ -567,6 +568,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\cog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\dimens.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
