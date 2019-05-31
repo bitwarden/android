@@ -141,6 +141,7 @@ namespace Bit.App.Pages
                 return;
             }
 
+            ShowPassword = false;
             var kdf = await _userService.GetKdfAsync();
             var kdfIterations = await _userService.GetKdfIterationsAsync();
 
@@ -157,6 +158,7 @@ namespace Bit.App.Pages
                         _lockService.PinLocked = failed;
                         if(!failed)
                         {
+                            Pin = string.Empty;
                             DoContinue();
                         }
                     }
@@ -165,6 +167,7 @@ namespace Bit.App.Pages
                         var key = await _cryptoService.MakeKeyFromPinAsync(Pin, _email,
                             kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
                         failed = false;
+                        Pin = string.Empty;
                         await SetKeyAndContinueAsync(key);
                     }
                 }
@@ -191,6 +194,7 @@ namespace Bit.App.Pages
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
                 if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
                 {
+                    MasterPassword = string.Empty;
                     await SetKeyAndContinueAsync(key);
                 }
                 else
