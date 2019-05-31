@@ -100,7 +100,7 @@ namespace Bit.Droid
                 }
                 else if(message.Command == "finishMainActivity")
                 {
-                    Finish();
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() => Finish());
                 }
                 else if(message.Command == "listenYubiKeyOTP")
                 {
