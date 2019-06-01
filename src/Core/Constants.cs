@@ -24,7 +24,7 @@
         public static string ClearClipboardKey = "clearClipboard";
         public static string LastClipboardValueKey = "lastClipboardValue";
         public static string LastBuildKey = "lastBuild";
-        public static string OldLastActivityKey = "other:lastActivityDate";
+        public static string OldUserIdKey = "userId";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
     }

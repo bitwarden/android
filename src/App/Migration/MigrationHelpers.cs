@@ -14,7 +14,7 @@ namespace Bit.App.Migration
         public static bool NeedsMigration()
         {
             return ServiceContainer.Resolve<SettingsShim>("settingsShim")
-                .GetValueOrDefault(Constants.OldLastActivityKey, DateTime.MinValue) > DateTime.MinValue;
+                .GetValueOrDefault(Constants.OldUserIdKey, DateTime.MinValue) > DateTime.MinValue;
         }
 
         public static async Task<bool> PerformMigrationAsync()
@@ -158,7 +158,7 @@ namespace Bit.App.Migration
             await cryptoService.SetEncPrivateKeyAsync(oldEncPrivateKey);
 
             // Remove "needs migration" flag
-            settingsShim.Remove(Constants.OldLastActivityKey);
+            settingsShim.Remove(Constants.OldUserIdKey);
             return true;
         }
     }
