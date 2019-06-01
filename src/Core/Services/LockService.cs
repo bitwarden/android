@@ -99,7 +99,7 @@ namespace Bit.Core.Services
             }
         }
 
-        public async Task LockAsync(bool allowSoftLock = false)
+        public async Task LockAsync(bool allowSoftLock = false, bool userInitiated = false)
         {
             var authed = await _userService.IsAuthenticatedAsync();
             if(!authed)
@@ -119,7 +119,7 @@ namespace Bit.Core.Services
                 }
                 if(FingerprintLocked || PinLocked)
                 {
-                    _messagingService.Send("locked");
+                    _messagingService.Send("locked", userInitiated);
                     // TODO: locked callback?
                     return;
                 }
@@ -134,7 +134,7 @@ namespace Bit.Core.Services
             _cipherService.ClearCache();
             _collectionService.ClearCache();
             _searchService.ClearIndex();
-            _messagingService.Send("locked");
+            _messagingService.Send("locked", userInitiated);
             // TODO: locked callback?
         }
 

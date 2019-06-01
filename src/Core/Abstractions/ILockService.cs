@@ -13,7 +13,7 @@ namespace Bit.Core.Abstractions
         Task<bool> IsLockedAsync();
         Task<Tuple<bool, bool>> IsPinLockSetAsync();
         Task<bool> IsFingerprintLockSetAsync();
-        Task LockAsync(bool allowSoftLock = false);
+        Task LockAsync(bool allowSoftLock = false, bool userInitiated = false);
         Task SetLockOptionAsync(int? lockOption);
     }
 }

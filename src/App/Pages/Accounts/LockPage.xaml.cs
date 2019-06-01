@@ -8,11 +8,13 @@ namespace Bit.App.Pages
     public partial class LockPage : BaseContentPage
     {
         private readonly AppOptions _appOptions;
+        private readonly bool _autoPromptFingerprint;
         private readonly LockPageViewModel _vm;
 
-        public LockPage(AppOptions appOptions = null)
+        public LockPage(AppOptions appOptions = null, bool autoPromptFingerprint = true)
         {
             _appOptions = appOptions;
+            _autoPromptFingerprint = autoPromptFingerprint;
             InitializeComponent();
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
@@ -43,7 +45,7 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            await _vm.InitAsync();
+            await _vm.InitAsync(_autoPromptFingerprint);
             if(!_vm.FingerprintLock)
             {
                 if(_vm.PinLock)

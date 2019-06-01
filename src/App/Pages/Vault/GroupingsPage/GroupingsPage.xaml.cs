@@ -147,7 +147,7 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Search_Clicked(object sender, System.EventArgs e)
+        private async void Search_Clicked(object sender, EventArgs e)
         {
             if(DoOnce())
             {
@@ -157,22 +157,22 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Sync_Clicked(object sender, System.EventArgs e)
+        private async void Sync_Clicked(object sender, EventArgs e)
         {
             await _vm.SyncAsync();
         }
 
-        private async void Lock_Clicked(object sender, System.EventArgs e)
+        private async void Lock_Clicked(object sender, EventArgs e)
         {
-            await _lockService.LockAsync(true);
+            await _lockService.LockAsync(true, true);
         }
 
-        private async void Exit_Clicked(object sender, System.EventArgs e)
+        private async void Exit_Clicked(object sender, EventArgs e)
         {
             await _vm.ExitAsync();
         }
 
-        private async void AddButton_Clicked(object sender, System.EventArgs e)
+        private async void AddButton_Clicked(object sender, EventArgs e)
         {
             if(DoOnce())
             {

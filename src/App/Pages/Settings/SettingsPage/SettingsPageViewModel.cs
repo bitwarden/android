@@ -182,7 +182,7 @@ namespace Bit.App.Pages
 
         public async Task LockAsync()
         {
-            await _lockService.LockAsync(true);
+            await _lockService.LockAsync(true, true);
         }
 
         public async Task LockOptionsAsync()

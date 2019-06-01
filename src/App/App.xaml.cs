@@ -90,7 +90,8 @@ namespace Bit.App
                 else if(message.Command == "locked")
                 {
                     await _stateService.PurgeAsync();
-                    Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(new LockPage()));
+                    var lockPage = new LockPage(null, !(message.Data as bool?).GetValueOrDefault());
+                    Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
                 }
                 else if(message.Command == "lockVault")
                 {

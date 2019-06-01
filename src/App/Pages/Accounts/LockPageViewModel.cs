@@ -97,7 +97,7 @@ namespace Bit.App.Pages
         public string Pin { get; set; }
         public Action UnlockedAction { get; set; }
 
-        public async Task InitAsync()
+        public async Task InitAsync(bool autoPromptFingerprint)
         {
             _pinSet = await _lockService.IsPinLockSetAsync();
             _hasKey = await _cryptoService.HasKeyAsync();
@@ -120,11 +120,14 @@ namespace Bit.App.Pages
             {
                 FingerprintButtonText = _deviceActionService.SupportsFaceId() ? AppResources.UseFaceIDToUnlock :
                     AppResources.UseFingerprintToUnlock;
-                var tasks = Task.Run(async () =>
+                if(autoPromptFingerprint)
                 {
-                    await Task.Delay(500);
-                    Device.BeginInvokeOnMainThread(async () => await PromptFingerprintAsync());
-                });
+                    var tasks = Task.Run(async () =>
+                    {
+                        await Task.Delay(500);
+                        Device.BeginInvokeOnMainThread(async () => await PromptFingerprintAsync());
+                    });
+                }
             }
         }
 
