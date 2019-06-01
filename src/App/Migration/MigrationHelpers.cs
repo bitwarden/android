@@ -157,6 +157,8 @@ namespace Bit.App.Migration
             await cryptoService.SetEncKeyAsync(oldEncKey);
             await cryptoService.SetEncPrivateKeyAsync(oldEncPrivateKey);
 
+            // Remove "needs migration" flag
+            settingsShim.Remove(Constants.OldLastActivityKey);
             return true;
         }
     }
