@@ -14,7 +14,7 @@ namespace Bit.App.Migration
         public static bool NeedsMigration()
         {
             return ServiceContainer.Resolve<SettingsShim>("settingsShim")
-                .GetValueOrDefault(Constants.OldUserIdKey, DateTime.MinValue) > DateTime.MinValue;
+                .GetValueOrDefault(Constants.OldUserIdKey, null) != null;
         }
 
         public static async Task<bool> PerformMigrationAsync()
