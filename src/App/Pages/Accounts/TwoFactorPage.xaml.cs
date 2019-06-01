@@ -70,7 +70,7 @@ namespace Bit.App.Pages
             await LoadOnAppearedAsync(_scrollView, true, () =>
             {
                 _vm.Init();
-                if(_vm.TotpMethod)
+                if(_vm.TotpMethod || _vm.YubikeyMethod)
                 {
                     RequestFocus(_totpEntry);
                 }

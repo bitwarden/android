@@ -187,7 +187,7 @@ namespace Bit.App.Pages
 
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
+                await _deviceActionService.ShowLoadingAsync(AppResources.Validating);
                 await _authService.LogInTwoFactorAsync(SelectedProviderType.Value, Token, Remember);
                 await _deviceActionService.HideLoadingAsync();
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
