@@ -21,6 +21,7 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly IUserService _userService;
         private readonly IMessagingService _messagingService;
+        private readonly IStorageService _secureStorageService;
 
         private bool _hasKey;
         private string _email;
@@ -42,6 +43,7 @@ namespace Bit.App.Pages
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -194,6 +196,16 @@ namespace Bit.App.Pages
                 var key = await _cryptoService.MakeKeyAsync(MasterPassword, _email, kdf, kdfIterations);
                 var keyHash = await _cryptoService.HashPasswordAsync(MasterPassword, key);
                 var storedKeyHash = await _cryptoService.GetKeyHashAsync();
+                if(storedKeyHash == null)
+                {
+                    var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
+                    if(key.KeyB64 == oldKey)
+                    {
+                        await _secureStorageService.RemoveAsync("oldKey");
+                        await _cryptoService.SetKeyHashAsync(keyHash);
+                        storedKeyHash = keyHash;
+                    }
+                }
                 if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
                 {
                     MasterPassword = string.Empty;
