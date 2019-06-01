@@ -68,6 +68,7 @@
                 <StackLayout StyleClass="box">
                     <StackLayout StyleClass="box-row, box-row-input">
                         <Entry
+                            x:Name="_yubikeyTokenEntry"
                             Text="{Binding Token}"
                             StyleClass="box-value"
                             ReturnType="Go"
