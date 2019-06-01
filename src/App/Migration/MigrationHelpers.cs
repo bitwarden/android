@@ -23,6 +23,7 @@ namespace Bit.App.Migration
             {
                 return false;
             }
+
             var settingsShim = ServiceContainer.Resolve<SettingsShim>("settingsShim");
             var oldSecureStorageService = ServiceContainer.Resolve<Abstractions.IOldSecureStorageService>(
                 "oldSecureStorageService");
@@ -32,6 +33,9 @@ namespace Bit.App.Migration
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             var tokenService = ServiceContainer.Resolve<ITokenService>("tokenService");
             var userService = ServiceContainer.Resolve<IUserService>("userService");
+            var environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
+                "passwordGenerationService");
 
             // Get old data
 
@@ -67,9 +71,78 @@ namespace Bit.App.Migration
             var oldTwoFactorToken = oldTwoFactorTokenBytes == null ? null : Encoding.UTF8.GetString(
                 oldTwoFactorTokenBytes, 0, oldTwoFactorTokenBytes.Length);
 
+            var oldAppIdBytes = oldSecureStorageService.Retrieve("appId");
+            var oldAppId = oldAppIdBytes == null ? null : new Guid(oldAppIdBytes).ToString();
+            var oldAnonAppIdBytes = oldSecureStorageService.Retrieve("anonymousAppId");
+            var oldAnonAppId = oldAnonAppIdBytes == null ? null : new Guid(oldAnonAppIdBytes).ToString();
+
             // Save settings
 
+            await storageService.SaveAsync(Constants.AccessibilityAutofillPersistNotificationKey,
+                settingsShim.GetValueOrDefault("setting:persistNotification", false));
+            await storageService.SaveAsync(Constants.AccessibilityAutofillPasswordFieldKey,
+                settingsShim.GetValueOrDefault("setting:autofillPasswordField", false));
+            await storageService.SaveAsync(Constants.DisableAutoTotpCopyKey,
+                settingsShim.GetValueOrDefault("setting:disableAutoCopyTotp", false));
+            await storageService.SaveAsync(Constants.DisableFaviconKey,
+                settingsShim.GetValueOrDefault("setting:disableWebsiteIcons", false));
+            await storageService.SaveAsync(Constants.PushInitialPromptShownKey,
+                settingsShim.GetValueOrDefault("push:initialPromptShown", false));
+            await storageService.SaveAsync(Constants.PushCurrentTokenKey,
+                settingsShim.GetValueOrDefault("push:currentToken", null));
+            await storageService.SaveAsync(Constants.PushRegisteredTokenKey,
+                settingsShim.GetValueOrDefault("push:registeredToken", null));
+            await storageService.SaveAsync(Constants.PushLastRegistrationDateKey,
+                settingsShim.GetValueOrDefault("push:lastRegistrationDate", null));
+            await storageService.SaveAsync("rememberedEmail",
+                settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
+            await storageService.SaveAsync(Constants.FingerprintUnlockKey,
+                settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false));
 
+
+            await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
+            {
+                Base = settingsShim.GetValueOrDefault("other:baseUrl", null),
+                Api = settingsShim.GetValueOrDefault("other:apiUrl", null),
+                WebVault = settingsShim.GetValueOrDefault("other:webVaultUrl", null),
+                Identity = settingsShim.GetValueOrDefault("other:identityUrl", null),
+                Icons = settingsShim.GetValueOrDefault("other:iconsUrl", null)
+            });
+
+            await passwordGenerationService.SaveOptionsAsync(new Core.Models.Domain.PasswordGenerationOptions
+            {
+                Ambiguous = settingsShim.GetValueOrDefault("pwGenerator:ambiguous", false),
+                Length = settingsShim.GetValueOrDefault("pwGenerator:length", 15),
+                Uppercase = settingsShim.GetValueOrDefault("pwGenerator:uppercase", false),
+                Lowercase = settingsShim.GetValueOrDefault("pwGenerator:lowercase", true),
+                Number = settingsShim.GetValueOrDefault("pwGenerator:numbers", false),
+                MinNumber = settingsShim.GetValueOrDefault("pwGenerator:minNumbers", 0),
+                Special = settingsShim.GetValueOrDefault("pwGenerator:special", false),
+                MinSpecial = settingsShim.GetValueOrDefault("pwGenerator:minSpecial", 0)
+            });
+
+            int? lockOptionsSeconds = settingsShim.GetValueOrDefault("setting:lockSeconds", -2);
+            if(lockOptionsSeconds == -2)
+            {
+                lockOptionsSeconds = 60 * 15;
+            }
+            else if(lockOptionsSeconds == -1)
+            {
+                lockOptionsSeconds = null;
+            }
+            await storageService.SaveAsync(Constants.LockOptionKey,
+                lockOptionsSeconds == null ? (int?)null : lockOptionsSeconds.Value / 60);
+
+            // Save app ids
+
+            await storageService.SaveAsync("appId", oldAppId);
+            await storageService.SaveAsync("anonymousAppId", oldAnonAppId);
+
+            // Save pin
+
+            var pinKey = await cryptoService.MakePinKeyAysnc(oldPin, oldEmail, oldKdf, oldKdfIterations);
+            var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
+            await storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
 
             // Save new authed data
 
