@@ -9,7 +9,8 @@ namespace Bit.App.Pages
         public HomePage()
         {
             InitializeComponent();
-            _logo.Source = ThemeManager.GetTheme() == "dark" ? "logo_white.png" : "logo.png";
+            var theme = ThemeManager.GetTheme();
+            _logo.Source = theme == "dark" || theme == "black" ? "logo_white.png" : "logo.png";
         }
 
         private void LogIn_Clicked(object sender, EventArgs e)

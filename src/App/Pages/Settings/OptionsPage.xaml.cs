@@ -1,5 +1,6 @@
 ﻿using Bit.App.Resources;
 using System;
+using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages

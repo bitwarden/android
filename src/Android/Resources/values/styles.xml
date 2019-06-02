@@ -49,6 +49,7 @@
   </style>
 
   <style name="BlackTheme.Base" parent="DarkTheme.Base">
+    <item name="android:windowBackground">@android:color/black</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">

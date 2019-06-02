@@ -59,6 +59,10 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, string>("light", AppResources.Light),
                 new KeyValuePair<string, string>("dark", AppResources.Dark),
             };
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ThemeOptions.Add(new KeyValuePair<string, string>("black", AppResources.Black));
+            }
             UriMatchOptions = new List<KeyValuePair<UriMatchType?, string>>
             {
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Domain, AppResources.BaseDomain),
