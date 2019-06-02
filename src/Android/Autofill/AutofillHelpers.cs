@@ -66,6 +66,7 @@ namespace Bit.Droid.Autofill
             "androidapp://android",
             "androidapp://com.x8bit.bitwarden",
             "androidapp://com.oneplus.applocker",
+            "androidapp://com.android.settings",
         };
 
         public static async Task<List<FilledItem>> GetFillItemsAsync(Parser parser, ICipherService cipherService)
