@@ -45,11 +45,12 @@
     <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
   </style>
 
-  <style name="BlackTheme" parent="DarkTheme.Base">
+  <style name="BlackTheme" parent="BlackTheme.Base">
   </style>
 
   <style name="BlackTheme.Base" parent="DarkTheme.Base">
     <item name="android:windowBackground">@android:color/black</item>
+    <item name="colorPrimary">@android:color/black</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
