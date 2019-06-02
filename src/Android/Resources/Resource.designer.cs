@@ -11066,8 +11066,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0e016d
 			public const int Animation_Design_BottomSheetDialog = 2131624301;
 			
-			// aapt resource value: 0x7f0e0208
-			public const int AppCompatDialogStyle = 2131624456;
+			// aapt resource value: 0x7f0e020b
+			public const int AppCompatDialogStyle = 2131624459;
 			
 			// aapt resource value: 0x7f0e009d
 			public const int Base_AlertDialog_AppCompat = 2131624093;
@@ -11633,6 +11633,15 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0e018b
 			public const int Base_Widget_MaterialComponents_TextInputLayout = 2131624331;
 			
+			// aapt resource value: 0x7f0e0209
+			public const int BlackTheme = 2131624457;
+			
+			// aapt resource value: 0x7f0e020a
+			public const int BlackTheme_Base = 2131624458;
+			
+			// aapt resource value: 0x7f0e0204
+			public const int BlackTheme_Splash = 2131624452;
+			
 			// aapt resource value: 0x7f0e000b
 			public const int CardView = 2131623947;
 			
@@ -11642,11 +11651,11 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0e000e
 			public const int CardView_Light = 2131623950;
 			
-			// aapt resource value: 0x7f0e0206
-			public const int DarkTheme = 2131624454;
-			
 			// aapt resource value: 0x7f0e0207
-			public const int DarkTheme_Base = 2131624455;
+			public const int DarkTheme = 2131624455;
+			
+			// aapt resource value: 0x7f0e0208
+			public const int DarkTheme_Base = 2131624456;
 			
 			// aapt resource value: 0x7f0e0203
 			public const int DarkTheme_Splash = 2131624451;
@@ -11660,11 +11669,11 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0e0201
 			public const int HockeyApp_SingleLineInputStyle = 2131624449;
 			
-			// aapt resource value: 0x7f0e0204
-			public const int MainTheme = 2131624452;
-			
 			// aapt resource value: 0x7f0e0205
-			public const int MainTheme_Base = 2131624453;
+			public const int MainTheme = 2131624453;
+			
+			// aapt resource value: 0x7f0e0206
+			public const int MainTheme_Base = 2131624454;
 			
 			// aapt resource value: 0x7f0e0202
 			public const int MainTheme_Splash = 2131624450;
