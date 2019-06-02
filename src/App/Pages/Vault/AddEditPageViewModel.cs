@@ -317,7 +317,6 @@ namespace Bit.App.Pages
                     };
                     Cipher.Login.Uris = new List<LoginUriView> { new LoginUriView { Uri = DefaultUri } };
                     Cipher.SecureNote.Type = SecureNoteType.Generic;
-                    TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
 
                     if(appOptions != null)
                     {
@@ -335,6 +334,7 @@ namespace Bit.App.Pages
                     }
                 }
 
+                TypeSelectedIndex = TypeOptions.FindIndex(k => k.Value == Cipher.Type);
                 FolderSelectedIndex = string.IsNullOrWhiteSpace(Cipher.FolderId) ? FolderOptions.Count - 1 :
                     FolderOptions.FindIndex(k => k.Value == Cipher.FolderId);
                 CardBrandSelectedIndex = string.IsNullOrWhiteSpace(Cipher.Card?.Brand) ? 0 :
