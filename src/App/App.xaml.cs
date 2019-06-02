@@ -99,6 +99,10 @@ namespace Bit.App
                 }
                 else if(message.Command == "logout")
                 {
+                    if(Migration.MigrationHelpers.Migrating)
+                    {
+                        return;
+                    }
                     await LogOutAsync(false);
                 }
                 else if(message.Command == "loggedOut")
@@ -116,6 +120,11 @@ namespace Bit.App
                     {
                         SyncIfNeeded();
                     }
+                }
+                else if(message.Command == "migrated")
+                {
+                    await Task.Delay(1000);
+                    await SetMainPageAsync();
                 }
             });
         }
@@ -295,6 +304,10 @@ namespace Bit.App
 
         private void SyncIfNeeded()
         {
+            if(Migration.MigrationHelpers.Migrating)
+            {
+                return;
+            }
             Task.Run(async () =>
             {
                 var lastSync = await _syncService.GetLastSyncAsync();

@@ -31,7 +31,11 @@ namespace Bit.Droid
             {
                 RegisterLocalServices();
                 ServiceContainer.Init();
-                var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
+                if(App.Migration.MigrationHelpers.NeedsMigration())
+                {
+                    var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
+                    Task.Delay(2000).Wait();
+                }
             }
         }
 

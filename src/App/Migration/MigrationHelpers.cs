@@ -5,12 +5,13 @@ using Bit.Core.Utilities;
 using System;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace Bit.App.Migration
 {
     public static class MigrationHelpers
     {
+        public static bool Migrating = false;
+
         public static bool NeedsMigration()
         {
             return ServiceContainer.Resolve<SettingsShim>("settingsShim")
@@ -24,10 +25,12 @@ namespace Bit.App.Migration
                 return false;
             }
 
+            Migrating = true;
             var settingsShim = ServiceContainer.Resolve<SettingsShim>("settingsShim");
             var oldSecureStorageService = ServiceContainer.Resolve<Abstractions.IOldSecureStorageService>(
                 "oldSecureStorageService");
 
+            var messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             var secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             var cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
@@ -159,6 +162,8 @@ namespace Bit.App.Migration
 
             // Remove "needs migration" flag
             settingsShim.Remove(Constants.OldUserIdKey);
+            Migrating = false;
+            messagingService.Send("migrated");
             return true;
         }
     }
