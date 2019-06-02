@@ -21,6 +21,10 @@ namespace Bit.App.Utilities
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Dark());
             }
+            else if(name == "black")
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new Black());
+            }
             else
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Light());
