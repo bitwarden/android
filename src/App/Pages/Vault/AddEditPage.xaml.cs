@@ -112,12 +112,12 @@ namespace Bit.App.Pages
             base.OnAppearing();
             await LoadOnAppearedAsync(_scrollView, true, async () =>
             {
-                var success = await _vm.LoadAsync();
+                var success = await _vm.LoadAsync(_appOptions);
                 if(!success)
                 {
                     await Navigation.PopModalAsync();
                 }
-                else if(!_vm.EditMode)
+                else if(!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Cipher.Name))
                 {
                     RequestFocus(_nameEntry);
                 }
