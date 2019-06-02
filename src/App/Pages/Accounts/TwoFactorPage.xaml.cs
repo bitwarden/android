@@ -74,10 +74,6 @@ namespace Bit.App.Pages
                 {
                     RequestFocus(_totpEntry);
                 }
-                else if(_vm.YubikeyMethod)
-                {
-                    RequestFocus(_yubikeyTokenEntry);
-                }
                 return Task.FromResult(0);
             });
         }
