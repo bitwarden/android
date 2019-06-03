@@ -20,6 +20,7 @@ namespace Bit.App.Services
             Constants.ClearClipboardKey,
             Constants.AccessibilityAutofillPasswordFieldKey,
             Constants.AccessibilityAutofillPersistNotificationKey,
+            Constants.AutofillDisableSavePromptKey,
             Constants.LastActiveKey,
             Constants.PushInitialPromptShownKey,
             Constants.LastFileCacheClearKey,
