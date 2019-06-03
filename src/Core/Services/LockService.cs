@@ -65,69 +65,50 @@ namespace Bit.Core.Services
 
         public async Task CheckLockAsync()
         {
-            var logService = ServiceContainer.Resolve<ILogService>("logService");
-            logService.Info("CheckLockAsync 1");
             if(_platformUtilsService.IsViewOpen())
             {
-                logService.Info("CheckLockAsync 2");
                 return;
             }
             var authed = await _userService.IsAuthenticatedAsync();
             if(!authed)
             {
-                logService.Info("CheckLockAsync 3");
                 return;
             }
             if(await IsLockedAsync())
             {
-                logService.Info("CheckLockAsync 4");
                 return;
             }
-            logService.Info("CheckLockAsync 5");
             var lockOption = _platformUtilsService.LockTimeout();
             if(lockOption == null)
             {
-                logService.Info("CheckLockAsync 6");
                 lockOption = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
             }
-            logService.Info("CheckLockAsync 7");
             if(lockOption.GetValueOrDefault(-1) < 0)
             {
-                logService.Info("CheckLockAsync 8");
                 return;
             }
-            logService.Info("CheckLockAsync 9");
             var lastActive = await _storageService.GetAsync<DateTime?>(Constants.LastActiveKey);
             if(lastActive == null)
             {
-                logService.Info("CheckLockAsync 10");
                 return;
             }
-            logService.Info("CheckLockAsync 11");
             var diff = DateTime.UtcNow - lastActive.Value;
             if(diff.TotalSeconds >= lockOption.Value)
             {
-                logService.Info("CheckLockAsync 12");
                 // need to lock now
                 await LockAsync(true);
             }
-            logService.Info("CheckLockAsync 13");
         }
 
         public async Task LockAsync(bool allowSoftLock = false, bool userInitiated = false)
         {
-            var logService = ServiceContainer.Resolve<ILogService>("logService");
-            logService.Info("LockAsync 1");
             var authed = await _userService.IsAuthenticatedAsync();
             if(!authed)
             {
-                logService.Info("LockAsync 2");
                 return;
             }
-            logService.Info("LockAsync 3");
             if(allowSoftLock)
             {
-                logService.Info("LockAsync 4");
                 var pinSet = await IsPinLockSetAsync();
                 if(pinSet.Item1)
                 {
@@ -139,13 +120,11 @@ namespace Bit.Core.Services
                 }
                 if(FingerprintLocked || PinLocked)
                 {
-                    logService.Info("LockAsync 5");
                     _messagingService.Send("locked", userInitiated);
                     // TODO: locked callback?
                     return;
                 }
             }
-            logService.Info("LockAsync 6");
             await Task.WhenAll(
                 _cryptoService.ClearKeyAsync(),
                 _cryptoService.ClearOrgKeysAsync(true),
@@ -158,7 +137,6 @@ namespace Bit.Core.Services
             _searchService.ClearIndex();
             _messagingService.Send("locked", userInitiated);
             // TODO: locked callback?
-            logService.Info("LockAsync 7");
         }
 
         public async Task SetLockOptionAsync(int? lockOption)
