@@ -25,7 +25,6 @@ namespace Bit.App.Migration
                 return false;
             }
 
-            Log("Start migrating.");
             Migrating = true;
             var settingsShim = ServiceContainer.Resolve<SettingsShim>("settingsShim");
             var oldSecureStorageService = ServiceContainer.Resolve<Abstractions.IOldSecureStorageService>(
@@ -99,10 +98,10 @@ namespace Bit.App.Migration
                 settingsShim.GetValueOrDefault("push:currentToken", null));
             await storageService.SaveAsync(Constants.PushRegisteredTokenKey,
                 settingsShim.GetValueOrDefault("push:registeredToken", null));
-            //Log("Migrating 6.9");
-            // var lastReg = settingsShim.GetValueOrDefault("push:lastRegistrationDate", DateTime.MinValue);
-            //Log("Migrating 6.9.1 " + lastReg);
-            // await storageService.SaveAsync(Constants.PushLastRegistrationDateKey, lastReg);
+            Log("Migrating 6.9");
+            var lastReg = settingsShim.GetValueOrDefault("push:lastRegistrationDate", DateTime.MinValue);
+            Log("Migrating 6.9.1 = " + lastReg);
+            await storageService.SaveAsync(Constants.PushLastRegistrationDateKey, lastReg);
             Log("Migrating 6.10");
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
@@ -166,9 +165,9 @@ namespace Bit.App.Migration
 
             if(oldFingerprint)
             {
-                await storageService.SaveAsync(Constants.FingerprintUnlockKey, oldFingerprint);
+                await storageService.SaveAsync(Constants.FingerprintUnlockKey, true);
             }
-            else if(!string.IsNullOrWhiteSpace(oldPin) && !oldFingerprint)
+            else if(!string.IsNullOrWhiteSpace(oldPin))
             {
                 var pinKey = await cryptoService.MakePinKeyAysnc(oldPin, oldEmail, oldKdf, oldKdfIterations);
                 var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
@@ -182,7 +181,6 @@ namespace Bit.App.Migration
             Migrating = false;
             messagingService.Send("migrated");
             var task = Task.Run(() => syncService.FullSyncAsync(true));
-            Log("Done migrating.");
             return true;
         }
 
