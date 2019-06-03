@@ -20,7 +20,7 @@ namespace Bit.App.Migration
 
         public static async Task<bool> PerformMigrationAsync()
         {
-            if(!NeedsMigration())
+            if(!NeedsMigration() || Migrating)
             {
                 return false;
             }
@@ -112,7 +112,7 @@ namespace Bit.App.Migration
                 settingsShim.GetValueOrDefault("push:registeredToken", null));
             Log("Migrating 6.9");
             await storageService.SaveAsync(Constants.PushLastRegistrationDateKey,
-                settingsShim.GetValueOrDefault("push:lastRegistrationDate", null));
+                settingsShim.GetValueOrDefault("push:lastRegistrationDate", DateTime.MinValue));
             Log("Migrating 6.10");
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
