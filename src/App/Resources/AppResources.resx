@@ -1592,9 +1592,6 @@
   <data name="DisableSavePromptDescription" xml:space="preserve">
     <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
   </data>
-  <data name="LockOptionOnDeviceLock" xml:space="preserve">
-    <value>On Device Lock</value>
-  </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>On App Restart</value>
   </data>
