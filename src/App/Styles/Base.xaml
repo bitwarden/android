@@ -15,8 +15,12 @@
                 Value="{StaticResource TextColor}" />
     </Style>
     <Style TargetType="Label"
-           Class="text-default"
            x:Key="text-default">
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-default">
         <Setter Property="TextColor"
                 Value="{StaticResource TextColor}" />
     </Style>
@@ -27,8 +31,12 @@
                 Value="{StaticResource MutedColor}" />
     </Style>
     <Style TargetType="Label"
-           Class="text-danger"
            x:Key="text-danger">
+        <Setter Property="TextColor"
+                Value="{StaticResource DangerColor}" />
+    </Style>
+    <Style TargetType="Label"
+           Class="text-danger">
         <Setter Property="TextColor"
                 Value="{StaticResource DangerColor}" />
     </Style>
@@ -63,7 +71,7 @@
         <Setter Property="ThumbBorderColor"
                 Value="{StaticResource SliderThumbBorderColor}" />
     </Style>
-    
+
     <!-- Pages -->
     <Style TargetType="TabbedPage"
            ApplyToDerivedTypes="True">

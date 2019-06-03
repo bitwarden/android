@@ -4,16 +4,16 @@ using Bit.Core.Utilities;
 
 namespace Bit.App.Pages
 {
-    public class AccessibilityServicePageViewModel : BaseViewModel
+    public class AutofillServicePageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
 
         private bool _enabled;
 
-        public AccessibilityServicePageViewModel()
+        public AutofillServicePageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
-            PageTitle = AppResources.AutofillAccessibilityService;
+            PageTitle = AppResources.AutofillService;
         }
 
         public bool Enabled
@@ -24,12 +24,12 @@ namespace Bit.App.Pages
 
         public void OpenSettings()
         {
-            _deviceActionService.OpenAccessibilitySettings();
+            _deviceActionService.OpenAutofillSettings();
         }
 
         public void UpdateEnabled()
         {
-            Enabled = _deviceActionService.AutofillAccessibilityServiceRunning();
+            Enabled = _deviceActionService.AutofillServiceEnabled();
         }
     }
 }

@@ -51,6 +51,9 @@
     <Compile Update="Pages\Generator\GeneratorHistoryPage.xaml.cs">
       <DependentUpon>GeneratorHistoryPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Settings\AutofillServicePage.xaml.cs">
+      <DependentUpon>AutofillServicePage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Settings\FolderAddEditPage.xaml.cs">
       <DependentUpon>FolderAddEditPage.xaml</DependentUpon>
     </Compile>
