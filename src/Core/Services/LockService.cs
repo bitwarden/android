@@ -44,29 +44,22 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLockedAsync()
         {
-            var logService = ServiceContainer.Resolve<ILogService>("logService");
-            logService.Info("IsLockedAsync 1");
             var hasKey = await _cryptoService.HasKeyAsync();
             if(hasKey)
             {
-                logService.Info("IsLockedAsync 2");
                 if(PinLocked)
                 {
-                    logService.Info("IsLockedAsync 3");
                     return true;
                 }
                 else
                 {
-                    logService.Info("IsLockedAsync 4");
                     var fingerprintSet = await IsFingerprintLockSetAsync();
                     if(fingerprintSet && FingerprintLocked)
                     {
-                        logService.Info("IsLockedAsync 5");
                         return true;
                     }
                 }
             }
-            logService.Info("IsLockedAsync 6");
             return !hasKey;
         }
 
@@ -109,8 +102,6 @@ namespace Bit.Core.Services
 
         public async Task LockAsync(bool allowSoftLock = false, bool userInitiated = false)
         {
-            var logService = ServiceContainer.Resolve<ILogService>("logService");
-            logService.Info("LockAsync 1");
             var authed = await _userService.IsAuthenticatedAsync();
             if(!authed)
             {
@@ -118,23 +109,19 @@ namespace Bit.Core.Services
             }
             if(allowSoftLock)
             {
-                logService.Info("LockAsync 2");
                 var pinSet = await IsPinLockSetAsync();
                 if(pinSet.Item1)
                 {
-                    logService.Info("LockAsync PinLocked = true");
                     PinLocked = true;
                 }
                 FingerprintLocked = await IsFingerprintLockSetAsync();
                 if(FingerprintLocked || PinLocked)
                 {
-                    logService.Info("LockAsync 4");
                     _messagingService.Send("locked", userInitiated);
                     // TODO: locked callback?
                     return;
                 }
             }
-            logService.Info("LockAsync 5");
             await Task.WhenAll(
                 _cryptoService.ClearKeyAsync(),
                 _cryptoService.ClearOrgKeysAsync(true),
