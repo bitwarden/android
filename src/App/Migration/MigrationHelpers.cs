@@ -118,8 +118,8 @@ namespace Bit.App.Migration
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
             Log("Migrating 6.11");
-            await storageService.SaveAsync(Constants.FingerprintUnlockKey,
-                settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false));
+            var oldFingerprint = settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false);
+            await storageService.SaveAsync(Constants.FingerprintUnlockKey, oldFingerprint);
 
             Log("Migrating 7");
             await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
@@ -163,9 +163,12 @@ namespace Bit.App.Migration
 
             // Save pin
 
-            var pinKey = await cryptoService.MakePinKeyAysnc(oldPin, oldEmail, oldKdf, oldKdfIterations);
-            var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
-            await storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
+            if(!string.IsNullOrWhiteSpace(oldPin) && !oldFingerprint)
+            {
+                var pinKey = await cryptoService.MakePinKeyAysnc(oldPin, oldEmail, oldKdf, oldKdfIterations);
+                var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
+                await storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
+            }
 
             // Save new authed data
 

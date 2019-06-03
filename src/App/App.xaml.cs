@@ -124,6 +124,7 @@ namespace Bit.App
                 else if(message.Command == "migrated")
                 {
                     await Task.Delay(1000);
+                    SyncIfNeeded();
                     await SetMainPageAsync();
                 }
             });
