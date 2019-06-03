@@ -14,11 +14,8 @@ namespace Bit.App.Migration
 
         public static bool NeedsMigration()
         {
-            var needsMigration = ServiceContainer.Resolve<SettingsShim>("settingsShim")
-                .GetValueOrDefault(Constants.OldUserIdKey, null) != null;
-            ServiceContainer.Resolve<ILogService>("logService").Info("Needs Migration: " + needsMigration);
-            System.Diagnostics.Debug.WriteLine("Needs Migration: " + needsMigration);
-            return needsMigration;
+            return ServiceContainer.Resolve<SettingsShim>("settingsShim")
+                .GetValueOrDefault(Constants.OldUserIdKey, null) != null; ;
         }
 
         public static async Task<bool> PerformMigrationAsync()
@@ -28,6 +25,7 @@ namespace Bit.App.Migration
                 return false;
             }
 
+            Log("Migrating 1");
             Migrating = true;
             var settingsShim = ServiceContainer.Resolve<SettingsShim>("settingsShim");
             var oldSecureStorageService = ServiceContainer.Resolve<Abstractions.IOldSecureStorageService>(
@@ -43,6 +41,7 @@ namespace Bit.App.Migration
             var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
 
+            Log("Migrating 2");
             // Get old data
 
             var oldTokenBytes = oldSecureStorageService.Retrieve("accessToken");
@@ -52,13 +51,17 @@ namespace Bit.App.Migration
             var oldKey = oldKeyBytes == null ? null : new Models.SymmetricCryptoKey(oldKeyBytes);
             var oldUserId = settingsShim.GetValueOrDefault("userId", null);
 
+            Log("Migrating 3");
             var isAuthenticated = oldKey != null && !string.IsNullOrWhiteSpace(oldToken) &&
                 !string.IsNullOrWhiteSpace(oldUserId);
             if(!isAuthenticated)
             {
+                Log("Migrating 4");
+                Migrating = false;
                 return false;
             }
 
+            Log("Migrating 5");
             var oldRefreshTokenBytes = oldSecureStorageService.Retrieve("refreshToken");
             var oldRefreshToken = oldRefreshTokenBytes == null ? null : Encoding.UTF8.GetString(
                 oldRefreshTokenBytes, 0, oldRefreshTokenBytes.Length);
@@ -82,6 +85,7 @@ namespace Bit.App.Migration
             var oldAnonAppIdBytes = oldSecureStorageService.Retrieve("anonymousAppId");
             var oldAnonAppId = oldAnonAppIdBytes == null ? null : new Guid(oldAnonAppIdBytes).ToString();
 
+            Log("Migrating 6");
             // Save settings
 
             await storageService.SaveAsync(Constants.AccessibilityAutofillPersistNotificationKey,
@@ -105,7 +109,7 @@ namespace Bit.App.Migration
             await storageService.SaveAsync(Constants.FingerprintUnlockKey,
                 settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false));
 
-
+            Log("Migrating 7");
             await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
             {
                 Base = settingsShim.GetValueOrDefault("other:baseUrl", null),
@@ -139,6 +143,7 @@ namespace Bit.App.Migration
             await storageService.SaveAsync(Constants.LockOptionKey,
                 lockOptionsSeconds == null ? (int?)null : lockOptionsSeconds.Value / 60);
 
+            Log("Migrating 8");
             // Save app ids
 
             await storageService.SaveAsync("appId", oldAppId);
@@ -156,6 +161,7 @@ namespace Bit.App.Migration
             await tokenService.SetTokensAsync(oldToken, oldRefreshToken);
             await userService.SetInformationAsync(oldUserId, oldEmail, oldKdf, oldKdfIterations);
 
+            Log("Migrating 9");
             var newKey = new Core.Models.Domain.SymmetricCryptoKey(oldKey.Key);
             await cryptoService.SetKeyAsync(newKey);
             // Key hash is unavailable in old version, store old key until we can move it to key hash
@@ -163,11 +169,19 @@ namespace Bit.App.Migration
             await cryptoService.SetEncKeyAsync(oldEncKey);
             await cryptoService.SetEncPrivateKeyAsync(oldEncPrivateKey);
 
+            Log("Migrating 10");
             // Remove "needs migration" flag
             settingsShim.Remove(Constants.OldUserIdKey);
             Migrating = false;
             messagingService.Send("migrated");
+            Log("Migrating 11");
             return true;
+        }
+
+        private static void Log(string message)
+        {
+            ServiceContainer.Resolve<ILogService>("logService").Info(message);
+            System.Diagnostics.Debug.WriteLine(message);
         }
     }
 }
