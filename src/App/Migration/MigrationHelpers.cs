@@ -14,8 +14,10 @@ namespace Bit.App.Migration
 
         public static bool NeedsMigration()
         {
-            return ServiceContainer.Resolve<SettingsShim>("settingsShim")
+            var needsMigration = ServiceContainer.Resolve<SettingsShim>("settingsShim")
                 .GetValueOrDefault(Constants.OldUserIdKey, null) != null;
+            ServiceContainer.Resolve<ILogService>("logService").Info("Needs Migration: " + needsMigration);
+            return needsMigration;
         }
 
         public static async Task<bool> PerformMigrationAsync()
