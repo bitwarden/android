@@ -22,6 +22,7 @@ namespace Bit.Droid.Autofill
     {
         private ICipherService _cipherService;
         private ILockService _lockService;
+        private IStorageService _storageService;
 
         public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal, FillCallback callback)
         {
@@ -38,10 +39,10 @@ namespace Bit.Droid.Autofill
             {
                 return;
             }
-            
+
             if(_lockService == null)
             {
-                 _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+                _lockService = ServiceContainer.Resolve<ILockService>("lockService");
             }
 
             List<FilledItem> items = null;
@@ -60,10 +61,21 @@ namespace Bit.Droid.Autofill
             callback.OnSuccess(response);
         }
 
-        public override void OnSaveRequest(SaveRequest request, SaveCallback callback)
+        public async override void OnSaveRequest(SaveRequest request, SaveCallback callback)
         {
             var structure = request.FillContexts?.LastOrDefault()?.Structure;
             if(structure == null)
+            {
+                return;
+            }
+
+            if(_storageService == null)
+            {
+                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            }
+
+            var disableSavePrompt = await _storageService.GetAsync<bool?>(Constants.AutofillDisableSavePromptKey);
+            if(disableSavePrompt.GetValueOrDefault())
             {
                 return;
             }
