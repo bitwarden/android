@@ -125,11 +125,7 @@ namespace Bit.Core.Services
                     logService.Info("LockAsync PinLocked = true");
                     PinLocked = true;
                 }
-                if(await IsFingerprintLockSetAsync())
-                {
-                    logService.Info("LockAsync 3");
-                    FingerprintLocked = true;
-                }
+                FingerprintLocked = await IsFingerprintLockSetAsync();
                 if(FingerprintLocked || PinLocked)
                 {
                     logService.Info("LockAsync 4");
