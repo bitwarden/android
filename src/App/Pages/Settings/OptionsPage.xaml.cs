@@ -19,6 +19,7 @@ namespace Bit.App.Pages
             _clearClipboardPicker.ItemDisplayBinding = new Binding("Value");
             if(Device.RuntimePlatform == Device.Android)
             {
+                _vm.AndroidOptions = true;
                 _themeDescriptionLabel.Text = string.Concat(_themeDescriptionLabel.Text, " ",
                     AppResources.RestartIsRequired);
             }
@@ -28,6 +29,17 @@ namespace Bit.App.Pages
         {
             base.OnAppearing();
             await _vm.InitAsync();
+        }
+
+        protected async override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            await _vm.UpdateAutofillBlacklistedUris();
+        }
+
+        private async void BlacklistedUrisEditor_Unfocused(object sender, FocusEventArgs e)
+        {
+            await _vm.UpdateAutofillBlacklistedUris();
         }
     }
 }

@@ -24,6 +24,8 @@ namespace Bit.App.Pages
         private bool _autofillAlwaysScan;
         private bool _autofillPersistNotification;
         private bool _autofillPasswordField;
+        private bool _autofillDisableSavePrompt;
+        private string _autofillBlacklistedUris;
         private bool _disableFavicon;
         private bool _disableAutoTotpCopy;
         private int _clearClipboardSelectedIndex;
@@ -31,6 +33,7 @@ namespace Bit.App.Pages
         private int _uriMatchSelectedIndex;
         private bool _inited;
         private bool _updatingAutofill;
+        private bool _androidOptions;
 
         public OptionsPageViewModel()
         {
@@ -174,8 +177,37 @@ namespace Bit.App.Pages
             }
         }
 
+        public bool AutofillDisableSavePrompt
+        {
+            get => _autofillDisableSavePrompt;
+            set
+            {
+                if(SetProperty(ref _autofillDisableSavePrompt, value))
+                {
+                    var task = UpdateAutofillDisableSavePromptAsync();
+                }
+            }
+        }
+
+        public string AutofillBlacklistedUris
+        {
+            get => _autofillBlacklistedUris;
+            set => SetProperty(ref _autofillBlacklistedUris, value);
+        }
+
+        public bool AndroidOptions
+        {
+            get => _androidOptions;
+            set => SetProperty(ref _androidOptions, value);
+        }
+
         public async Task InitAsync()
         {
+            AutofillDisableSavePrompt = (await _storageService.GetAsync<bool?>(
+                Constants.AutofillDisableSavePromptKey)).GetValueOrDefault();
+            var blacklistedUrisList = await _storageService.GetAsync<List<string>>(
+                Constants.AutofillBlacklistedUrisKey);
+            AutofillBlacklistedUris = blacklistedUrisList != null ? string.Join(", ", blacklistedUrisList) : null;
             AutofillPersistNotification = (await _storageService.GetAsync<bool?>(
                 Constants.AccessibilityAutofillPersistNotificationKey)).GetValueOrDefault();
             AutofillPasswordField = (await _storageService.GetAsync<bool?>(
@@ -269,6 +301,44 @@ namespace Bit.App.Pages
             {
                 await _storageService.SaveAsync(Constants.DefaultUriMatch,
                     (int?)UriMatchOptions[UriMatchSelectedIndex].Key);
+            }
+        }
+
+        private async Task UpdateAutofillDisableSavePromptAsync()
+        {
+            if(_inited)
+            {
+                await _storageService.SaveAsync(Constants.AutofillDisableSavePromptKey, AutofillDisableSavePrompt);
+            }
+        }
+
+        public async Task UpdateAutofillBlacklistedUris()
+        {
+            if(_inited)
+            {
+                if(string.IsNullOrWhiteSpace(AutofillBlacklistedUris))
+                {
+                    await _storageService.RemoveAsync(Constants.AutofillBlacklistedUrisKey);
+                    AutofillBlacklistedUris = null;
+                    return;
+                }
+                try
+                {
+                    var csv = AutofillBlacklistedUris;
+                    var urisList = new List<string>();
+                    foreach(var uri in csv.Split(','))
+                    {
+                        if(!uri.StartsWith("http://") && !uri.StartsWith("https://") &&
+                            !uri.StartsWith(Constants.AndroidAppProtocol))
+                        {
+                            continue;
+                        }
+                        urisList.Add(uri.Replace("\\n", string.Empty).Trim());
+                    }
+                    await _storageService.SaveAsync(Constants.AutofillBlacklistedUrisKey, urisList);
+                    AutofillBlacklistedUris = string.Join(", ", urisList);
+                }
+                catch { }
             }
         }
     }

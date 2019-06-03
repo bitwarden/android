@@ -736,6 +736,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Blacklisted URIs.
+        /// </summary>
+        public static string BlacklistedUris {
+            get {
+                return ResourceManager.GetString("BlacklistedUris", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: &quot;https://twitter.com, androidapp://com.twitter.android&quot;..
+        /// </summary>
+        public static string BlacklistedUrisDescription {
+            get {
+                return ResourceManager.GetString("BlacklistedUrisDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Brand.
         /// </summary>
         public static string Brand {
@@ -1227,6 +1245,24 @@ namespace Bit.App.Resources {
         public static string Disabled {
             get {
                 return ResourceManager.GetString("Disabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable Save Prompt.
+        /// </summary>
+        public static string DisableSavePrompt {
+            get {
+                return ResourceManager.GetString("DisableSavePrompt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The &quot;Save Prompt&quot; automatically prompts you to save new items to your vault whenever you enter them for the first time..
+        /// </summary>
+        public static string DisableSavePromptDescription {
+            get {
+                return ResourceManager.GetString("DisableSavePromptDescription", resourceCulture);
             }
         }
         
