@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:BaseContentPage 
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Bit.App.Pages.AccessibilityServicePage"
+    xmlns:pages="clr-namespace:Bit.App.Pages"
+    xmlns:u="clr-namespace:Bit.App.Utilities"
+    x:DataType="pages:AccessibilityServicePageViewModel"
+    Title="{Binding PageTitle}">
+    <ContentPage.BindingContext>
+        <pages:AccessibilityServicePageViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <StackLayout Spacing="20"
+                 Padding="10, 30"
+                 VerticalOptions="FillAndExpand">
+            <Label Text="{u:I18n AutofillAccessibilityDescription}"
+                   VerticalOptions="Start"
+                   HorizontalTextAlignment="Center"
+                   LineBreakMode="WordWrap" />
+            <StackLayout IsVisible="{Binding Enabled, Converter={StaticResource inverseBool}}"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                    <Label Text="{u:I18n Status}" />
+                    <Label Text="{u:I18n Disabled}"
+                           StyleClass="text-danger, text-bold" />
+                </StackLayout>
+                <Image Source="accessibility_step1.png"
+                       HorizontalOptions="Center"
+                       Margin="0, 20, 0, 0"
+                       WidthRequest="300"
+                       HeightRequest="98" />
+                <Label Text="{u:I18n BitwardenAutofillServiceStep1}"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap"
+                       StyleClass="text-sm" />
+                <Image Source="accessibility_step2.png"
+                       HorizontalOptions="Center"
+                       Margin="0, 20, 0, 0"
+                       WidthRequest="300"
+                       HeightRequest="67" />
+                <Label Text="{u:I18n BitwardenAutofillServiceStep2}"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap"
+                       StyleClass="text-sm" />
+            </StackLayout>
+            <StackLayout IsVisible="{Binding Enabled}"
+                         VerticalOptions="CenterAndExpand"
+                         HorizontalOptions="Center">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+                    <Label Text="{u:I18n Status}" />
+                    <Label Text="{u:I18n Enabled}"
+                           StyleClass="text-success, text-bold" />
+                </StackLayout>
+                <Image Source="accessibility_notification_icon.png"
+                       HorizontalOptions="Center"
+                       Margin="0, 20, 0, 0"
+                       WidthRequest="300"
+                       HeightRequest="54" />
+                <Image Source="accessibility_notification.png"
+                       HorizontalOptions="Center"
+                       Margin="0, 20, 0, 0"
+                       WidthRequest="300"
+                       HeightRequest="74" />
+                <Label Text="{u:I18n BitwardenAutofillServiceNotification}"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap"
+                       StyleClass="text-sm" />
+            </StackLayout>
+            <Button Text="{u:I18n BitwardenAutofillServiceOpenAccessibilitySettings}"
+                    Clicked="Settings_Clicked"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="End"></Button>
+        </StackLayout>
+    </ScrollView>
+
+</pages:BaseContentPage>

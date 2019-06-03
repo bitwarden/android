@@ -512,6 +512,35 @@ namespace Bit.Droid.Services
             return afm.IsEnabled && afm.HasEnabledAutofillServices;
         }
 
+        public void OpenAccessibilitySettings()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            var intent = new Intent(Settings.ActionAccessibilitySettings);
+            activity.StartActivity(intent);
+        }
+
+        public void OpenAutofillSettings()
+        {
+            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            try
+            {
+                var intent = new Intent(Settings.ActionRequestSetAutofillService);
+                intent.SetData(Android.Net.Uri.Parse("package:com.x8bit.bitwarden"));
+                activity.StartActivity(intent);
+            }
+            catch(ActivityNotFoundException)
+            {
+                var alertBuilder = new AlertDialog.Builder(activity);
+                alertBuilder.SetMessage(AppResources.BitwardenAutofillGoToSettings);
+                alertBuilder.SetCancelable(true);
+                alertBuilder.SetPositiveButton(AppResources.Ok, (sender, args) =>
+                {
+                    (sender as AlertDialog)?.Cancel();
+                });
+                alertBuilder.Create().Show();
+            }
+        }
+
         private bool DeleteDir(Java.IO.File dir)
         {
             if(dir != null && dir.IsDirectory)

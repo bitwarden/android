@@ -270,7 +270,7 @@ namespace Bit.App.Pages
             BuildList();
         }
 
-        private void BuildList()
+        public void BuildList()
         {
             var doUpper = Device.RuntimePlatform != Device.Android;
             var autofillItems = new List<SettingsPageListItem>();

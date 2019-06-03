@@ -26,6 +26,11 @@ namespace Bit.App.Pages
             await _vm.InitAsync();
         }
 
+        public void BuildList()
+        {
+            _vm.BuildList();
+        }
+
         protected override bool OnBackButtonPressed()
         {
             if(Device.RuntimePlatform == Device.Android && _tabsPage != null)
@@ -54,7 +59,7 @@ namespace Bit.App.Pages
             }
             else if(item.Name == AppResources.AutofillAccessibilityService)
             {
-                // await Navigation.PushModalAsync(new NavigationPage(new OptionsPage()));
+                await Navigation.PushModalAsync(new NavigationPage(new AccessibilityServicePage(this)));
             }
             else if(item.Name == AppResources.AutofillService)
             {
