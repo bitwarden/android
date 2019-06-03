@@ -116,13 +116,18 @@ namespace Bit.Core.Services
 
         public async Task LockAsync(bool allowSoftLock = false, bool userInitiated = false)
         {
+            var logService = ServiceContainer.Resolve<ILogService>("logService");
+            logService.Info("LockAsync 1");
             var authed = await _userService.IsAuthenticatedAsync();
             if(!authed)
             {
+                logService.Info("LockAsync 2");
                 return;
             }
+            logService.Info("LockAsync 3");
             if(allowSoftLock)
             {
+                logService.Info("LockAsync 4");
                 var pinSet = await IsPinLockSetAsync();
                 if(pinSet.Item1)
                 {
@@ -134,11 +139,13 @@ namespace Bit.Core.Services
                 }
                 if(FingerprintLocked || PinLocked)
                 {
+                    logService.Info("LockAsync 5");
                     _messagingService.Send("locked", userInitiated);
                     // TODO: locked callback?
                     return;
                 }
             }
+            logService.Info("LockAsync 6");
             await Task.WhenAll(
                 _cryptoService.ClearKeyAsync(),
                 _cryptoService.ClearOrgKeysAsync(true),
@@ -151,6 +158,7 @@ namespace Bit.Core.Services
             _searchService.ClearIndex();
             _messagingService.Send("locked", userInitiated);
             // TODO: locked callback?
+            logService.Info("LockAsync 7");
         }
 
         public async Task SetLockOptionAsync(int? lockOption)
