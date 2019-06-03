@@ -88,8 +88,11 @@ namespace Bit.App.Migration
             Log("Migrating 6");
             // Save settings
 
+            var oldPersistNotification = settingsShim.GetValueOrDefault("setting:persistNotification", false);
+            Log("Migrating 6.1");
             await storageService.SaveAsync(Constants.AccessibilityAutofillPersistNotificationKey,
-                settingsShim.GetValueOrDefault("setting:persistNotification", false));
+                oldPersistNotification);
+            Log("Migrating 6.2");
             await storageService.SaveAsync(Constants.AccessibilityAutofillPasswordFieldKey,
                 settingsShim.GetValueOrDefault("setting:autofillPasswordField", false));
             await storageService.SaveAsync(Constants.DisableAutoTotpCopyKey,
