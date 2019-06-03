@@ -135,11 +135,11 @@ namespace Bit.App.Migration
             {
                 Ambiguous = settingsShim.GetValueOrDefault("pwGenerator:ambiguous", false),
                 Length = settingsShim.GetValueOrDefault("pwGenerator:length", 15),
-                Uppercase = settingsShim.GetValueOrDefault("pwGenerator:uppercase", false),
+                Uppercase = settingsShim.GetValueOrDefault("pwGenerator:uppercase", true),
                 Lowercase = settingsShim.GetValueOrDefault("pwGenerator:lowercase", true),
-                Number = settingsShim.GetValueOrDefault("pwGenerator:numbers", false),
+                Number = settingsShim.GetValueOrDefault("pwGenerator:numbers", true),
                 MinNumber = settingsShim.GetValueOrDefault("pwGenerator:minNumbers", 0),
-                Special = settingsShim.GetValueOrDefault("pwGenerator:special", false),
+                Special = settingsShim.GetValueOrDefault("pwGenerator:special", true),
                 MinSpecial = settingsShim.GetValueOrDefault("pwGenerator:minSpecial", 0)
             });
 
