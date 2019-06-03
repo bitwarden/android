@@ -3,6 +3,8 @@ using Android.App.Assist;
 using System.Collections.Generic;
 using Bit.Core;
 using Android.Content;
+using Bit.Core.Abstractions;
+using System.Threading.Tasks;
 
 namespace Bit.Droid.Autofill
 {
@@ -77,8 +79,20 @@ namespace Bit.Droid.Autofill
             }
         }
 
-        public bool ShouldAutofill => !string.IsNullOrWhiteSpace(Uri) &&
-            !AutofillHelpers.BlacklistedUris.Contains(Uri) && FieldCollection != null && FieldCollection.Fillable;
+        public async Task<bool> ShouldAutofillAsync(IStorageService storageService)
+        {
+            var fillable = !string.IsNullOrWhiteSpace(Uri) && !AutofillHelpers.BlacklistedUris.Contains(Uri) &&
+                FieldCollection != null && FieldCollection.Fillable;
+            if(fillable)
+            {
+                var blacklistedUris = await storageService.GetAsync<List<string>>(Constants.AutofillBlacklistedUrisKey);
+                if(blacklistedUris != null && blacklistedUris.Count > 0)
+                {
+                    fillable = !new HashSet<string>(blacklistedUris).Contains(Uri);
+                }
+            }
+            return fillable;
+        }
 
         public void Parse()
         {

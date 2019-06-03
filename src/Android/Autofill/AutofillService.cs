@@ -24,7 +24,8 @@ namespace Bit.Droid.Autofill
         private ILockService _lockService;
         private IStorageService _storageService;
 
-        public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal, FillCallback callback)
+        public async override void OnFillRequest(FillRequest request, CancellationSignal cancellationSignal,
+            FillCallback callback)
         {
             var structure = request.FillContexts?.LastOrDefault()?.Structure;
             if(structure == null)
@@ -35,7 +36,13 @@ namespace Bit.Droid.Autofill
             var parser = new Parser(structure, ApplicationContext);
             parser.Parse();
 
-            if(!parser.ShouldAutofill)
+            if(_storageService == null)
+            {
+                _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            }
+
+            var shouldAutofill = await parser.ShouldAutofillAsync(_storageService);
+            if(!shouldAutofill)
             {
                 return;
             }
