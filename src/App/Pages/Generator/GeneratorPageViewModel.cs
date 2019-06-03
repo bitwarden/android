@@ -183,6 +183,10 @@ namespace Bit.App.Pages
             get => _wordSeparator;
             set
             {
+                if(value == null)
+                {
+                    return;
+                }
                 var val = value.Trim();
                 if(SetProperty(ref _wordSeparator, val))
                 {
