@@ -17,6 +17,7 @@ namespace Bit.App.Migration
             var needsMigration = ServiceContainer.Resolve<SettingsShim>("settingsShim")
                 .GetValueOrDefault(Constants.OldUserIdKey, null) != null;
             ServiceContainer.Resolve<ILogService>("logService").Info("Needs Migration: " + needsMigration);
+            System.Diagnostics.Debug.WriteLine("Needs Migration: " + needsMigration);
             return needsMigration;
         }
 
