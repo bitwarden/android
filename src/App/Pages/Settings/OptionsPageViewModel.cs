@@ -328,12 +328,17 @@ namespace Bit.App.Pages
                     var urisList = new List<string>();
                     foreach(var uri in csv.Split(','))
                     {
-                        if(!uri.StartsWith("http://") && !uri.StartsWith("https://") &&
-                            !uri.StartsWith(Constants.AndroidAppProtocol))
+                        if(string.IsNullOrWhiteSpace(uri))
                         {
                             continue;
                         }
-                        urisList.Add(uri.Replace("\\n", string.Empty).Trim());
+                        var cleanedUri = uri.Replace(System.Environment.NewLine, string.Empty).Trim();
+                        if(!cleanedUri.StartsWith("http://") && !cleanedUri.StartsWith("https://") &&
+                            !cleanedUri.StartsWith(Constants.AndroidAppProtocol))
+                        {
+                            continue;
+                        }
+                        urisList.Add(cleanedUri);
                     }
                     await _storageService.SaveAsync(Constants.AutofillBlacklistedUrisKey, urisList);
                     AutofillBlacklistedUris = string.Join(", ", urisList);
