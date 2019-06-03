@@ -1499,9 +1499,9 @@
   <data name="SetPINDescription" xml:space="preserve">
     <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
   </data>
-  <data name="LoggedInAs" xml:space="preserve">
-    <value>Logged in as {0}.</value>
-    <comment>ex: Logged in as user@example.com.</comment>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Logged in as {0} on {1}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
     <value>Your vault is locked. Verify your master password to continue.</value>

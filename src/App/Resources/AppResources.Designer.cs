@@ -2230,11 +2230,11 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Logged in as {0}..
+        ///   Looks up a localized string similar to Logged in as {0} on {1}..
         /// </summary>
-        public static string LoggedInAs {
+        public static string LoggedInAsOn {
             get {
-                return ResourceManager.GetString("LoggedInAs", resourceCulture);
+                return ResourceManager.GetString("LoggedInAsOn", resourceCulture);
             }
         }
         

@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IUserService _userService;
         private readonly IMessagingService _messagingService;
         private readonly IStorageService _secureStorageService;
+        private readonly IEnvironmentService _environmentService;
 
         private bool _hasKey;
         private string _email;
@@ -44,6 +45,7 @@ namespace Bit.App.Pages
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
+            _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -104,7 +106,13 @@ namespace Bit.App.Pages
             PinLock = (_pinSet.Item1 && _hasKey) || _pinSet.Item2;
             FingerprintLock = await _lockService.IsFingerprintLockSetAsync();
             _email = await _userService.GetEmailAsync();
-            LoggedInAsText = string.Format(AppResources.LoggedInAs, _email);
+            var webVault = _environmentService.GetWebVaultUrl();
+            if(string.IsNullOrWhiteSpace(webVault))
+            {
+                webVault = "https://bitwarden.com";
+            }
+            var webVaultHostname = CoreHelpers.GetHostname(webVault);
+            LoggedInAsText = string.Format(AppResources.LoggedInAsOn, _email, webVaultHostname);
             if(PinLock)
             {
                 PageTitle = AppResources.VerifyPIN;
