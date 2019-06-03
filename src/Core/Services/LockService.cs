@@ -44,22 +44,29 @@ namespace Bit.Core.Services
 
         public async Task<bool> IsLockedAsync()
         {
+            var logService = ServiceContainer.Resolve<ILogService>("logService");
+            logService.Info("IsLockedAsync 1");
             var hasKey = await _cryptoService.HasKeyAsync();
             if(hasKey)
             {
+                logService.Info("IsLockedAsync 2");
                 if(PinLocked)
                 {
+                    logService.Info("IsLockedAsync 3");
                     return true;
                 }
                 else
                 {
+                    logService.Info("IsLockedAsync 4");
                     var fingerprintSet = await IsFingerprintLockSetAsync();
                     if(fingerprintSet && FingerprintLocked)
                     {
+                        logService.Info("IsLockedAsync 5");
                         return true;
                     }
                 }
             }
+            logService.Info("IsLockedAsync 6");
             return !hasKey;
         }
 
@@ -112,6 +119,8 @@ namespace Bit.Core.Services
                 var pinSet = await IsPinLockSetAsync();
                 if(pinSet.Item1)
                 {
+                    var logService = ServiceContainer.Resolve<ILogService>("logService");
+                    logService.Info("LockAsync PinLocked = true");
                     PinLocked = true;
                 }
                 if(await IsFingerprintLockSetAsync())
