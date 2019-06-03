@@ -176,7 +176,7 @@ namespace Bit.App.Migration
             
             // Post migration tasks
             await cryptoService.ToggleKeyAsync();
-            await storageService.SaveAsync(Constants.LastActiveKey, DateTime.MinValue);
+            await storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow.AddYears(-1));
             await lockService.CheckLockAsync();
 
             // Remove "needs migration" flag
