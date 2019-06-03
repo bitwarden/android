@@ -111,8 +111,9 @@ namespace Bit.App.Migration
             await storageService.SaveAsync(Constants.PushRegisteredTokenKey,
                 settingsShim.GetValueOrDefault("push:registeredToken", null));
             Log("Migrating 6.9");
-            await storageService.SaveAsync(Constants.PushLastRegistrationDateKey,
-                settingsShim.GetValueOrDefault("push:lastRegistrationDate", DateTime.MinValue));
+            var lastReg = settingsShim.GetValueOrDefault("push:lastRegistrationDate", DateTime.MinValue);
+            Log("Migrating 6.9.1 " + lastReg);
+            await storageService.SaveAsync(Constants.PushLastRegistrationDateKey, lastReg);
             Log("Migrating 6.10");
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));

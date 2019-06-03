@@ -23,6 +23,9 @@ namespace Bit.App.Services
             Constants.LastActiveKey,
             Constants.PushInitialPromptShownKey,
             Constants.LastFileCacheClearKey,
+            Constants.PushLastRegistrationDateKey,
+            Constants.PushRegisteredTokenKey,
+            Constants.PushCurrentTokenKey,
             Constants.LastBuildKey
         };
 
