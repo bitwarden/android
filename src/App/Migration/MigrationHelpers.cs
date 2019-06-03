@@ -173,15 +173,18 @@ namespace Bit.App.Migration
                 var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
                 await storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
             }
-
+            
+            // Post migration tasks
             await cryptoService.ToggleKeyAsync();
+            await storageService.SaveAsync(Constants.LastActiveKey, DateTime.MinValue);
+            await lockService.CheckLockAsync();
 
             // Remove "needs migration" flag
             settingsShim.Remove(Constants.OldUserIdKey);
             Migrating = false;
             messagingService.Send("migrated");
-            await lockService.CheckLockAsync();
             var task = Task.Run(() => syncService.FullSyncAsync(true));
+
             return true;
         }
     }
