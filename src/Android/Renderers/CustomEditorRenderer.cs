@@ -20,7 +20,8 @@ namespace Bit.Droid.Renderers
             {
                 Control.SetPadding(Control.PaddingLeft, Control.PaddingTop - 10, Control.PaddingRight,
                     Control.PaddingBottom + 20);
-                Control.ImeOptions = Control.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning;
+                Control.ImeOptions = Control.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning |
+                    (ImeAction)ImeFlags.NoExtractUi;
             }
         }
     }

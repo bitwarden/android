@@ -1,4 +1,5 @@
 ﻿using Android.Content;
+using Android.Views.InputMethods;
 using Bit.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -24,6 +25,8 @@ namespace Bit.Droid.Renderers
                     magImage.LayoutParameters = new Android.Widget.LinearLayout.LayoutParams(0, 0);
                 }
                 catch { }
+                Control.SetImeOptions(Control.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning |
+                    (ImeAction)ImeFlags.NoExtractUi);
             }
         }
     }
