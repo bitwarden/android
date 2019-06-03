@@ -121,7 +121,11 @@ namespace Bit.App.Utilities
                 if(lastBuild == null)
                 {
                     // Installed
-                    await storageService.SaveAsync(Constants.LockOptionKey, -1);
+                    var currentLock = await storageService.GetAsync<int?>(Constants.LockOptionKey);
+                    if(currentLock == null)
+                    {
+                        await storageService.SaveAsync(Constants.LockOptionKey, -1);
+                    }
                 }
                 else if(lastBuild != currentBuild)
                 {
