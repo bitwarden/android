@@ -40,6 +40,7 @@ namespace Bit.App.Migration
             var passwordGenerationService = ServiceContainer.Resolve<IPasswordGenerationService>(
                 "passwordGenerationService");
             var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
+            var lockService = ServiceContainer.Resolve<ILockService>("lockService");
 
             // Get old data
 
@@ -179,6 +180,7 @@ namespace Bit.App.Migration
             settingsShim.Remove(Constants.OldUserIdKey);
             Migrating = false;
             messagingService.Send("migrated");
+            await lockService.CheckLockAsync();
             var task = Task.Run(() => syncService.FullSyncAsync(true));
             return true;
         }
