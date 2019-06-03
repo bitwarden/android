@@ -98,11 +98,10 @@ namespace Bit.App.Migration
                 settingsShim.GetValueOrDefault("push:currentToken", null));
             await storageService.SaveAsync(Constants.PushRegisteredTokenKey,
                 settingsShim.GetValueOrDefault("push:registeredToken", null));
-            Log("Migrating 6.9");
-            var lastReg = settingsShim.GetValueOrDefault("push:lastRegistrationDate", DateTime.MinValue);
-            Log("Migrating 6.9.1 = " + lastReg);
-            await storageService.SaveAsync(Constants.PushLastRegistrationDateKey, lastReg);
-            Log("Migrating 6.10");
+            // For some reason "push:lastRegistrationDate" isn't getting pulled from settingsShim correctly.
+            // We don't really need it anyways.
+            // var lastReg = settingsShim.GetValueOrDefault("push:lastRegistrationDate", DateTime.MinValue);
+            // await storageService.SaveAsync(Constants.PushLastRegistrationDateKey, lastReg);
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
 
@@ -182,12 +181,6 @@ namespace Bit.App.Migration
             messagingService.Send("migrated");
             var task = Task.Run(() => syncService.FullSyncAsync(true));
             return true;
-        }
-
-        private static void Log(string message)
-        {
-            ServiceContainer.Resolve<ILogService>("logService").Info(message);
-            System.Diagnostics.Debug.WriteLine(message);
         }
     }
 }
