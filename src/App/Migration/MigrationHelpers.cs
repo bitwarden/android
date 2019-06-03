@@ -25,7 +25,7 @@ namespace Bit.App.Migration
                 return false;
             }
 
-            Log("Migrating 1");
+            Log("Start migrating.");
             Migrating = true;
             var settingsShim = ServiceContainer.Resolve<SettingsShim>("settingsShim");
             var oldSecureStorageService = ServiceContainer.Resolve<Abstractions.IOldSecureStorageService>(
@@ -42,7 +42,6 @@ namespace Bit.App.Migration
                 "passwordGenerationService");
             var syncService = ServiceContainer.Resolve<ISyncService>("syncService");
 
-            Log("Migrating 2");
             // Get old data
 
             var oldTokenBytes = oldSecureStorageService.Retrieve("accessToken");
@@ -52,17 +51,14 @@ namespace Bit.App.Migration
             var oldKey = oldKeyBytes == null ? null : new Models.SymmetricCryptoKey(oldKeyBytes);
             var oldUserId = settingsShim.GetValueOrDefault("userId", null);
 
-            Log("Migrating 3");
             var isAuthenticated = oldKey != null && !string.IsNullOrWhiteSpace(oldToken) &&
                 !string.IsNullOrWhiteSpace(oldUserId);
             if(!isAuthenticated)
             {
-                Log("Migrating 4");
                 Migrating = false;
                 return false;
             }
 
-            Log("Migrating 5");
             var oldRefreshTokenBytes = oldSecureStorageService.Retrieve("refreshToken");
             var oldRefreshToken = oldRefreshTokenBytes == null ? null : Encoding.UTF8.GetString(
                 oldRefreshTokenBytes, 0, oldRefreshTokenBytes.Length);
@@ -85,30 +81,22 @@ namespace Bit.App.Migration
             var oldAppId = oldAppIdBytes == null ? null : new Guid(oldAppIdBytes).ToString();
             var oldAnonAppIdBytes = oldSecureStorageService.Retrieve("anonymousAppId");
             var oldAnonAppId = oldAnonAppIdBytes == null ? null : new Guid(oldAnonAppIdBytes).ToString();
+            var oldFingerprint = settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false);
 
-            Log("Migrating 6");
             // Save settings
-
-            var oldPersistNotification = settingsShim.GetValueOrDefault("setting:persistNotification", false);
-            Log("Migrating 6.1");
+            
             await storageService.SaveAsync(Constants.AccessibilityAutofillPersistNotificationKey,
-                oldPersistNotification);
-            Log("Migrating 6.2");
+                settingsShim.GetValueOrDefault("setting:persistNotification", false));
             await storageService.SaveAsync(Constants.AccessibilityAutofillPasswordFieldKey,
                 settingsShim.GetValueOrDefault("setting:autofillPasswordField", false));
-            Log("Migrating 6.4");
             await storageService.SaveAsync(Constants.DisableAutoTotpCopyKey,
                 settingsShim.GetValueOrDefault("setting:disableAutoCopyTotp", false));
-            Log("Migrating 6.5");
             await storageService.SaveAsync(Constants.DisableFaviconKey,
                 settingsShim.GetValueOrDefault("setting:disableWebsiteIcons", false));
-            Log("Migrating 6.6");
             await storageService.SaveAsync(Constants.PushInitialPromptShownKey,
                 settingsShim.GetValueOrDefault("push:initialPromptShown", false));
-            Log("Migrating 6.7");
             await storageService.SaveAsync(Constants.PushCurrentTokenKey,
                 settingsShim.GetValueOrDefault("push:currentToken", null));
-            Log("Migrating 6.8");
             await storageService.SaveAsync(Constants.PushRegisteredTokenKey,
                 settingsShim.GetValueOrDefault("push:registeredToken", null));
             //Log("Migrating 6.9");
@@ -118,11 +106,7 @@ namespace Bit.App.Migration
             Log("Migrating 6.10");
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
-            Log("Migrating 6.11");
-            var oldFingerprint = settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false);
-            await storageService.SaveAsync(Constants.FingerprintUnlockKey, oldFingerprint);
 
-            Log("Migrating 7");
             await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
             {
                 Base = settingsShim.GetValueOrDefault("other:baseUrl", null),
@@ -146,8 +130,10 @@ namespace Bit.App.Migration
                 NumWords = 3
             });
 
-            int? lockOptionsSeconds = settingsShim.GetValueOrDefault("setting:lockSeconds", -2);
-            if(lockOptionsSeconds == -2)
+            // Save lock options
+
+            int? lockOptionsSeconds = settingsShim.GetValueOrDefault("setting:lockSeconds", -10);
+            if(lockOptionsSeconds == -10)
             {
                 lockOptionsSeconds = 60 * 15;
             }
@@ -158,20 +144,10 @@ namespace Bit.App.Migration
             await storageService.SaveAsync(Constants.LockOptionKey,
                 lockOptionsSeconds == null ? (int?)null : lockOptionsSeconds.Value / 60);
 
-            Log("Migrating 8");
             // Save app ids
 
             await storageService.SaveAsync("appId", oldAppId);
             await storageService.SaveAsync("anonymousAppId", oldAnonAppId);
-
-            // Save pin
-
-            if(!string.IsNullOrWhiteSpace(oldPin) && !oldFingerprint)
-            {
-                var pinKey = await cryptoService.MakePinKeyAysnc(oldPin, oldEmail, oldKdf, oldKdfIterations);
-                var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
-                await storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
-            }
 
             // Save new authed data
 
@@ -179,7 +155,6 @@ namespace Bit.App.Migration
             await tokenService.SetTokensAsync(oldToken, oldRefreshToken);
             await userService.SetInformationAsync(oldUserId, oldEmail, oldKdf, oldKdfIterations);
 
-            Log("Migrating 9");
             var newKey = new Core.Models.Domain.SymmetricCryptoKey(oldKey.Key);
             await cryptoService.SetKeyAsync(newKey);
             // Key hash is unavailable in old version, store old key until we can move it to key hash
@@ -187,13 +162,27 @@ namespace Bit.App.Migration
             await cryptoService.SetEncKeyAsync(oldEncKey);
             await cryptoService.SetEncPrivateKeyAsync(oldEncPrivateKey);
 
-            Log("Migrating 10");
+            // Save fingerprint/pin
+
+            if(oldFingerprint)
+            {
+                await storageService.SaveAsync(Constants.FingerprintUnlockKey, oldFingerprint);
+            }
+            else if(!string.IsNullOrWhiteSpace(oldPin) && !oldFingerprint)
+            {
+                var pinKey = await cryptoService.MakePinKeyAysnc(oldPin, oldEmail, oldKdf, oldKdfIterations);
+                var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
+                await storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
+            }
+
+            await cryptoService.ToggleKeyAsync();
+
             // Remove "needs migration" flag
             settingsShim.Remove(Constants.OldUserIdKey);
             Migrating = false;
             messagingService.Send("migrated");
             var task = Task.Run(() => syncService.FullSyncAsync(true));
-            Log("Migrating 11");
+            Log("Done migrating.");
             return true;
         }
 
