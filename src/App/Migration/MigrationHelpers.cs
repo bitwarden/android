@@ -141,7 +141,9 @@ namespace Bit.App.Migration
                 Number = settingsShim.GetValueOrDefault("pwGenerator:numbers", true),
                 MinNumber = settingsShim.GetValueOrDefault("pwGenerator:minNumbers", 0),
                 Special = settingsShim.GetValueOrDefault("pwGenerator:special", true),
-                MinSpecial = settingsShim.GetValueOrDefault("pwGenerator:minSpecial", 0)
+                MinSpecial = settingsShim.GetValueOrDefault("pwGenerator:minSpecial", 0),
+                WordSeparator = "-",
+                NumWords = 3
             });
 
             int? lockOptionsSeconds = settingsShim.GetValueOrDefault("setting:lockSeconds", -2);
