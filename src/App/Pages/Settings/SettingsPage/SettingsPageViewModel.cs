@@ -281,13 +281,15 @@ namespace Bit.App.Pages
                     autofillItems.Add(new SettingsPageListItem
                     {
                         Name = AppResources.AutofillService,
-                        SubLabel = _deviceActionService.AutofillServiceEnabled() ? "✓" : null
+                        SubLabel = _deviceActionService.AutofillServiceEnabled() ?
+                            AppResources.Enabled : AppResources.Disabled
                     });
                 }
                 autofillItems.Add(new SettingsPageListItem
                 {
                     Name = AppResources.AutofillAccessibilityService,
-                    SubLabel = _deviceActionService.AutofillAccessibilityServiceRunning() ? "✓" : null
+                    SubLabel = _deviceActionService.AutofillAccessibilityServiceRunning() ?
+                        AppResources.Enabled : AppResources.Disabled
                 });
             }
             else
@@ -306,7 +308,11 @@ namespace Bit.App.Pages
             var securityItems = new List<SettingsPageListItem>
             {
                 new SettingsPageListItem { Name = AppResources.LockOptions, SubLabel = _lockOptionValue },
-                new SettingsPageListItem { Name = AppResources.UnlockWithPIN, SubLabel = _pin ? "✓" : null },
+                new SettingsPageListItem
+                {
+                    Name = AppResources.UnlockWithPIN,
+                    SubLabel = _pin ? AppResources.Enabled : AppResources.Disabled
+                },
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
@@ -315,7 +321,7 @@ namespace Bit.App.Pages
                 var item = new SettingsPageListItem
                 {
                     Name = string.Format(AppResources.UnlockWith, _fingerprintName),
-                    SubLabel = _fingerprint ? "✓" : null
+                    SubLabel = _fingerprint ? AppResources.Enabled : AppResources.Disabled
                 };
                 securityItems.Insert(1, item);
             }

@@ -15,7 +15,7 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:StringHasValueConverter x:Key="stringHasValue" />
-            
+
             <DataTemplate
                 x:Key="regularTemplate"
                 x:DataType="pages:SettingsPageListItem">
@@ -32,7 +32,8 @@
                                HorizontalOptions="End"
                                HorizontalTextAlignment="End"
                                VerticalOptions="CenterAndExpand"
-                               StyleClass="list-sub"/>
+                               TextColor="{Binding SubLabelColor}"
+                               StyleClass="list-sub" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
