@@ -125,6 +125,7 @@
     <Compile Include="Renderers\ExtendedListViewRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\AndroidPushNotificationService.cs" />
+    <Compile Include="Services\AndroidLogService.cs" />
     <Compile Include="SplashActivity.cs" />
     <Compile Include="MainApplication.cs" />
     <Compile Include="MainActivity.cs" />

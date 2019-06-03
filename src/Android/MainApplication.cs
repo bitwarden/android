@@ -48,6 +48,7 @@ namespace Bit.Droid
 
         private void RegisterLocalServices()
         {
+            ServiceContainer.Register<ILogService>("logService", new AndroidLogService());
             ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim());
             if(App.Migration.MigrationHelpers.NeedsMigration())
             {
