@@ -39,6 +39,7 @@ namespace Bit.App.Pages
                 new KeyValuePair<string, int?>(AppResources.LockOption30Minutes, 30),
                 new KeyValuePair<string, int?>(AppResources.LockOption1Hour, 60),
                 new KeyValuePair<string, int?>(AppResources.LockOption4Hours, 240),
+                new KeyValuePair<string, int?>(AppResources.LockOptionOnRestart, -1),
                 new KeyValuePair<string, int?>(AppResources.Never, null),
             };
 

@@ -2257,6 +2257,24 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On Device Lock.
+        /// </summary>
+        public static string LockOptionOnDeviceLock {
+            get {
+                return ResourceManager.GetString("LockOptionOnDeviceLock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On App Restart.
+        /// </summary>
+        public static string LockOptionOnRestart {
+            get {
+                return ResourceManager.GetString("LockOptionOnRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Lock Options.
         /// </summary>
         public static string LockOptions {
