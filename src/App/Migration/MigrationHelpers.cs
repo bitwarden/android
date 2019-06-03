@@ -95,20 +95,28 @@ namespace Bit.App.Migration
             Log("Migrating 6.2");
             await storageService.SaveAsync(Constants.AccessibilityAutofillPasswordFieldKey,
                 settingsShim.GetValueOrDefault("setting:autofillPasswordField", false));
+            Log("Migrating 6.4");
             await storageService.SaveAsync(Constants.DisableAutoTotpCopyKey,
                 settingsShim.GetValueOrDefault("setting:disableAutoCopyTotp", false));
+            Log("Migrating 6.5");
             await storageService.SaveAsync(Constants.DisableFaviconKey,
                 settingsShim.GetValueOrDefault("setting:disableWebsiteIcons", false));
+            Log("Migrating 6.6");
             await storageService.SaveAsync(Constants.PushInitialPromptShownKey,
                 settingsShim.GetValueOrDefault("push:initialPromptShown", false));
+            Log("Migrating 6.7");
             await storageService.SaveAsync(Constants.PushCurrentTokenKey,
                 settingsShim.GetValueOrDefault("push:currentToken", null));
+            Log("Migrating 6.8");
             await storageService.SaveAsync(Constants.PushRegisteredTokenKey,
                 settingsShim.GetValueOrDefault("push:registeredToken", null));
+            Log("Migrating 6.9");
             await storageService.SaveAsync(Constants.PushLastRegistrationDateKey,
                 settingsShim.GetValueOrDefault("push:lastRegistrationDate", null));
+            Log("Migrating 6.10");
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
+            Log("Migrating 6.11");
             await storageService.SaveAsync(Constants.FingerprintUnlockKey,
                 settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false));
 
