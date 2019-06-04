@@ -45,7 +45,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView x:Name="_scrollView">
+    <ScrollView x:Name="_scrollView" Padding="0, 0, 0, 20">
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">

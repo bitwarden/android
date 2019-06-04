@@ -6722,44 +6722,44 @@ namespace Bit.Droid
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0b0082
-			public const int abc_background_cache_hint_selector_material_dark = 2131427458;
-			
 			// aapt resource value: 0x7f0b0083
-			public const int abc_background_cache_hint_selector_material_light = 2131427459;
+			public const int abc_background_cache_hint_selector_material_dark = 2131427459;
 			
 			// aapt resource value: 0x7f0b0084
-			public const int abc_btn_colored_borderless_text_material = 2131427460;
+			public const int abc_background_cache_hint_selector_material_light = 2131427460;
 			
 			// aapt resource value: 0x7f0b0085
-			public const int abc_btn_colored_text_material = 2131427461;
+			public const int abc_btn_colored_borderless_text_material = 2131427461;
 			
 			// aapt resource value: 0x7f0b0086
-			public const int abc_color_highlight_material = 2131427462;
+			public const int abc_btn_colored_text_material = 2131427462;
 			
 			// aapt resource value: 0x7f0b0087
-			public const int abc_hint_foreground_material_dark = 2131427463;
+			public const int abc_color_highlight_material = 2131427463;
 			
 			// aapt resource value: 0x7f0b0088
-			public const int abc_hint_foreground_material_light = 2131427464;
+			public const int abc_hint_foreground_material_dark = 2131427464;
+			
+			// aapt resource value: 0x7f0b0089
+			public const int abc_hint_foreground_material_light = 2131427465;
 			
 			// aapt resource value: 0x7f0b000c
 			public const int abc_input_method_navigation_guard = 2131427340;
 			
-			// aapt resource value: 0x7f0b0089
-			public const int abc_primary_text_disable_only_material_dark = 2131427465;
-			
 			// aapt resource value: 0x7f0b008a
-			public const int abc_primary_text_disable_only_material_light = 2131427466;
+			public const int abc_primary_text_disable_only_material_dark = 2131427466;
 			
 			// aapt resource value: 0x7f0b008b
-			public const int abc_primary_text_material_dark = 2131427467;
+			public const int abc_primary_text_disable_only_material_light = 2131427467;
 			
 			// aapt resource value: 0x7f0b008c
-			public const int abc_primary_text_material_light = 2131427468;
+			public const int abc_primary_text_material_dark = 2131427468;
 			
 			// aapt resource value: 0x7f0b008d
-			public const int abc_search_url_text = 2131427469;
+			public const int abc_primary_text_material_light = 2131427469;
+			
+			// aapt resource value: 0x7f0b008e
+			public const int abc_search_url_text = 2131427470;
 			
 			// aapt resource value: 0x7f0b000d
 			public const int abc_search_url_text_normal = 2131427341;
@@ -6770,29 +6770,29 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b000f
 			public const int abc_search_url_text_selected = 2131427343;
 			
-			// aapt resource value: 0x7f0b008e
-			public const int abc_secondary_text_material_dark = 2131427470;
-			
 			// aapt resource value: 0x7f0b008f
-			public const int abc_secondary_text_material_light = 2131427471;
+			public const int abc_secondary_text_material_dark = 2131427471;
 			
 			// aapt resource value: 0x7f0b0090
-			public const int abc_tint_btn_checkable = 2131427472;
+			public const int abc_secondary_text_material_light = 2131427472;
 			
 			// aapt resource value: 0x7f0b0091
-			public const int abc_tint_default = 2131427473;
+			public const int abc_tint_btn_checkable = 2131427473;
 			
 			// aapt resource value: 0x7f0b0092
-			public const int abc_tint_edittext = 2131427474;
+			public const int abc_tint_default = 2131427474;
 			
 			// aapt resource value: 0x7f0b0093
-			public const int abc_tint_seek_thumb = 2131427475;
+			public const int abc_tint_edittext = 2131427475;
 			
 			// aapt resource value: 0x7f0b0094
-			public const int abc_tint_spinner = 2131427476;
+			public const int abc_tint_seek_thumb = 2131427476;
 			
 			// aapt resource value: 0x7f0b0095
-			public const int abc_tint_switch_track = 2131427477;
+			public const int abc_tint_spinner = 2131427477;
+			
+			// aapt resource value: 0x7f0b0096
+			public const int abc_tint_switch_track = 2131427478;
 			
 			// aapt resource value: 0x7f0b0072
 			public const int accent = 2131427442;
@@ -6815,8 +6815,11 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0015
 			public const int background_material_light = 2131427349;
 			
-			// aapt resource value: 0x7f0b007d
-			public const int black = 2131427453;
+			// aapt resource value: 0x7f0b007e
+			public const int black = 2131427454;
+			
+			// aapt resource value: 0x7f0b007b
+			public const int black_border = 2131427451;
 			
 			// aapt resource value: 0x7f0b0073
 			public const int border = 2131427443;
@@ -6878,8 +6881,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b006e
 			public const int colorPrimaryDark = 2131427438;
 			
-			// aapt resource value: 0x7f0b0096
-			public const int common_google_signin_btn_text_dark = 2131427478;
+			// aapt resource value: 0x7f0b0097
+			public const int common_google_signin_btn_text_dark = 2131427479;
 			
 			// aapt resource value: 0x7f0b0000
 			public const int common_google_signin_btn_text_dark_default = 2131427328;
@@ -6893,8 +6896,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0003
 			public const int common_google_signin_btn_text_dark_pressed = 2131427331;
 			
-			// aapt resource value: 0x7f0b0097
-			public const int common_google_signin_btn_text_light = 2131427479;
+			// aapt resource value: 0x7f0b0098
+			public const int common_google_signin_btn_text_light = 2131427480;
 			
 			// aapt resource value: 0x7f0b0004
 			public const int common_google_signin_btn_text_light_default = 2131427332;
@@ -6908,8 +6911,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0007
 			public const int common_google_signin_btn_text_light_pressed = 2131427335;
 			
-			// aapt resource value: 0x7f0b0098
-			public const int common_google_signin_btn_tint = 2131427480;
+			// aapt resource value: 0x7f0b0099
+			public const int common_google_signin_btn_tint = 2131427481;
 			
 			// aapt resource value: 0x7f0b0079
 			public const int dark_accent = 2131427449;
@@ -6935,8 +6938,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0071
 			public const int darkaccent = 2131427441;
 			
-			// aapt resource value: 0x7f0b007e
-			public const int darkgray = 2131427454;
+			// aapt resource value: 0x7f0b007f
+			public const int darkgray = 2131427455;
 			
 			// aapt resource value: 0x7f0b0049
 			public const int design_bottom_navigation_shadow_color = 2131427401;
@@ -6947,8 +6950,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b004b
 			public const int design_default_color_primary_dark = 2131427403;
 			
-			// aapt resource value: 0x7f0b0099
-			public const int design_error = 2131427481;
+			// aapt resource value: 0x7f0b009a
+			public const int design_error = 2131427482;
 			
 			// aapt resource value: 0x7f0b004c
 			public const int design_fab_shadow_end_color = 2131427404;
@@ -6974,8 +6977,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0053
 			public const int design_snackbar_background_color = 2131427411;
 			
-			// aapt resource value: 0x7f0b009a
-			public const int design_tint_password_toggle = 2131427482;
+			// aapt resource value: 0x7f0b009b
+			public const int design_tint_password_toggle = 2131427483;
 			
 			// aapt resource value: 0x7f0b001e
 			public const int dim_foreground_disabled_material_dark = 2131427358;
@@ -7004,8 +7007,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0025
 			public const int foreground_material_light = 2131427365;
 			
-			// aapt resource value: 0x7f0b007f
-			public const int gray = 2131427455;
+			// aapt resource value: 0x7f0b0080
+			public const int gray = 2131427456;
 			
 			// aapt resource value: 0x7f0b0026
 			public const int highlighted_text_material_dark = 2131427366;
@@ -7043,14 +7046,14 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b006c
 			public const int hockeyapp_text_white = 2131427436;
 			
+			// aapt resource value: 0x7f0b0082
+			public const int ic_launcher_background = 2131427458;
+			
+			// aapt resource value: 0x7f0b007c
+			public const int launcher_background = 2131427452;
+			
 			// aapt resource value: 0x7f0b0081
-			public const int ic_launcher_background = 2131427457;
-			
-			// aapt resource value: 0x7f0b007b
-			public const int launcher_background = 2131427451;
-			
-			// aapt resource value: 0x7f0b0080
-			public const int lightgray = 2131427456;
+			public const int lightgray = 2131427457;
 			
 			// aapt resource value: 0x7f0b0028
 			public const int material_blue_grey_800 = 2131427368;
@@ -7088,71 +7091,71 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0033
 			public const int material_grey_900 = 2131427379;
 			
-			// aapt resource value: 0x7f0b009b
-			public const int mtrl_bottom_nav_colored_item_tint = 2131427483;
-			
 			// aapt resource value: 0x7f0b009c
-			public const int mtrl_bottom_nav_item_tint = 2131427484;
+			public const int mtrl_bottom_nav_colored_item_tint = 2131427484;
+			
+			// aapt resource value: 0x7f0b009d
+			public const int mtrl_bottom_nav_item_tint = 2131427485;
 			
 			// aapt resource value: 0x7f0b0054
 			public const int mtrl_btn_bg_color_disabled = 2131427412;
 			
-			// aapt resource value: 0x7f0b009d
-			public const int mtrl_btn_bg_color_selector = 2131427485;
-			
 			// aapt resource value: 0x7f0b009e
-			public const int mtrl_btn_ripple_color = 2131427486;
+			public const int mtrl_btn_bg_color_selector = 2131427486;
 			
 			// aapt resource value: 0x7f0b009f
-			public const int mtrl_btn_stroke_color_selector = 2131427487;
+			public const int mtrl_btn_ripple_color = 2131427487;
 			
 			// aapt resource value: 0x7f0b00a0
-			public const int mtrl_btn_text_btn_ripple_color = 2131427488;
+			public const int mtrl_btn_stroke_color_selector = 2131427488;
+			
+			// aapt resource value: 0x7f0b00a1
+			public const int mtrl_btn_text_btn_ripple_color = 2131427489;
 			
 			// aapt resource value: 0x7f0b0055
 			public const int mtrl_btn_text_color_disabled = 2131427413;
 			
-			// aapt resource value: 0x7f0b00a1
-			public const int mtrl_btn_text_color_selector = 2131427489;
+			// aapt resource value: 0x7f0b00a2
+			public const int mtrl_btn_text_color_selector = 2131427490;
 			
 			// aapt resource value: 0x7f0b0056
 			public const int mtrl_btn_transparent_bg_color = 2131427414;
 			
-			// aapt resource value: 0x7f0b00a2
-			public const int mtrl_chip_background_color = 2131427490;
-			
 			// aapt resource value: 0x7f0b00a3
-			public const int mtrl_chip_close_icon_tint = 2131427491;
+			public const int mtrl_chip_background_color = 2131427491;
 			
 			// aapt resource value: 0x7f0b00a4
-			public const int mtrl_chip_ripple_color = 2131427492;
+			public const int mtrl_chip_close_icon_tint = 2131427492;
 			
 			// aapt resource value: 0x7f0b00a5
-			public const int mtrl_chip_text_color = 2131427493;
+			public const int mtrl_chip_ripple_color = 2131427493;
 			
 			// aapt resource value: 0x7f0b00a6
-			public const int mtrl_fab_ripple_color = 2131427494;
+			public const int mtrl_chip_text_color = 2131427494;
+			
+			// aapt resource value: 0x7f0b00a7
+			public const int mtrl_fab_ripple_color = 2131427495;
 			
 			// aapt resource value: 0x7f0b0057
 			public const int mtrl_scrim_color = 2131427415;
 			
-			// aapt resource value: 0x7f0b00a7
-			public const int mtrl_tabs_colored_ripple_color = 2131427495;
-			
 			// aapt resource value: 0x7f0b00a8
-			public const int mtrl_tabs_icon_color_selector = 2131427496;
+			public const int mtrl_tabs_colored_ripple_color = 2131427496;
 			
 			// aapt resource value: 0x7f0b00a9
-			public const int mtrl_tabs_icon_color_selector_colored = 2131427497;
+			public const int mtrl_tabs_icon_color_selector = 2131427497;
 			
 			// aapt resource value: 0x7f0b00aa
-			public const int mtrl_tabs_legacy_text_color_selector = 2131427498;
+			public const int mtrl_tabs_icon_color_selector_colored = 2131427498;
 			
 			// aapt resource value: 0x7f0b00ab
-			public const int mtrl_tabs_ripple_color = 2131427499;
+			public const int mtrl_tabs_legacy_text_color_selector = 2131427499;
 			
 			// aapt resource value: 0x7f0b00ac
-			public const int mtrl_text_btn_text_color_selector = 2131427500;
+			public const int mtrl_tabs_ripple_color = 2131427500;
+			
+			// aapt resource value: 0x7f0b00ad
+			public const int mtrl_text_btn_text_color_selector = 2131427501;
 			
 			// aapt resource value: 0x7f0b0058
 			public const int mtrl_textinput_default_box_stroke_color = 2131427416;
@@ -7226,11 +7229,11 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0043
 			public const int switch_thumb_disabled_material_light = 2131427395;
 			
-			// aapt resource value: 0x7f0b00ad
-			public const int switch_thumb_material_dark = 2131427501;
-			
 			// aapt resource value: 0x7f0b00ae
-			public const int switch_thumb_material_light = 2131427502;
+			public const int switch_thumb_material_dark = 2131427502;
+			
+			// aapt resource value: 0x7f0b00af
+			public const int switch_thumb_material_light = 2131427503;
 			
 			// aapt resource value: 0x7f0b0044
 			public const int switch_thumb_normal_material_dark = 2131427396;
@@ -7244,8 +7247,8 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f0b0047
 			public const int tooltip_background_light = 2131427399;
 			
-			// aapt resource value: 0x7f0b007c
-			public const int white = 2131427452;
+			// aapt resource value: 0x7f0b007d
+			public const int white = 2131427453;
 			
 			static Color()
 			{

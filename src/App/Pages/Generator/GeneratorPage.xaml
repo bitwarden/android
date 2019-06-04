@@ -28,7 +28,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <ScrollView>
+    <ScrollView Padding="0, 0, 0, 20">
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
                 <controls:MonoLabel

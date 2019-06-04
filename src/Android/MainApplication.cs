@@ -10,6 +10,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.Droid.Services;
+using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
 using Plugin.Fingerprint.Abstractions;
@@ -64,6 +65,7 @@ namespace Bit.Droid
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
             });
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
+            CrossFingerprint.SetDialogFragmentType<CustomFingerprintDialogFragment>();
 
             var preferencesStorage = new PreferencesStorageService(null);
             var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);

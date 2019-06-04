@@ -12,7 +12,7 @@
         <pages:OptionsPageViewModel />
     </ContentPage.BindingContext>
 
-    <ScrollView>
+    <ScrollView Padding="0, 0, 0, 20">
         <StackLayout Padding="0" Spacing="20">
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-input">
@@ -73,7 +73,7 @@
                 </StackLayout>
                 <Label
                     Text="{u:I18n DisableAutoTotpCopyDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row, box-row-switch">
@@ -88,7 +88,7 @@
                 </StackLayout>
                 <Label
                     Text="{u:I18n DisableWebsiteIconsDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
                 <StackLayout StyleClass="box-row-header">
@@ -107,7 +107,7 @@
                 </StackLayout>
                 <Label
                     Text="{u:I18n DisableSavePromptDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
                 <StackLayout StyleClass="box-row, box-row-input">
@@ -145,7 +145,7 @@
                 </StackLayout>
                 <Label
                     Text="{u:I18n AutofillAlwaysDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
                 <StackLayout StyleClass="box-row, box-row-switch">
@@ -160,7 +160,7 @@
                 </StackLayout>
                 <Label
                     Text="{u:I18n AutofillPersistNotificationDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
                 <StackLayout StyleClass="box-row, box-row-switch">
@@ -175,7 +175,7 @@
                 </StackLayout>
                 <Label
                     Text="{u:I18n AutofillPasswordFieldDescription}"
-                    StyleClass="box-footer-label" />
+                    StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
         </StackLayout>
     </ScrollView>

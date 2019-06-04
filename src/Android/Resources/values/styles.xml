@@ -34,8 +34,6 @@
   <style name="DarkTheme.Base" parent="Theme.AppCompat">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
-    <!--<item name="colorPrimary">@color/dark_primary</item>
-    <item name="colorPrimaryDark">@color/dark_accent</item>-->
     <item name="colorAccent">@color/dark_primary</item>
     <item name="colorControlNormal">@color/dark_border</item>
     <item name="windowActionModeOverlay">true</item>
@@ -51,6 +49,7 @@
   <style name="BlackTheme.Base" parent="DarkTheme.Base">
     <item name="android:windowBackground">@android:color/black</item>
     <item name="colorPrimary">@android:color/black</item>
+    <item name="colorControlNormal">@color/black_border</item>
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">

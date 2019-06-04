@@ -136,6 +136,7 @@
     <Compile Include="Services\LocalizeService.cs" />
     <Compile Include="Tile\MyVaultTileService.cs" />
     <Compile Include="Utilities\AndroidHelpers.cs" />
+    <Compile Include="Utilities\CustomFingerprintDialogFragment.cs" />
     <Compile Include="Utilities\HockeyAppCrashManagerListener.cs" />
   </ItemGroup>
   <ItemGroup>

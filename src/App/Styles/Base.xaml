@@ -363,4 +363,9 @@
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
+    <Style TargetType="Label"
+           Class="box-footer-label-switch">
+        <Setter Property="Margin"
+                Value="0, -10, 0, 0" />
+    </Style>
 </ResourceDictionary>
