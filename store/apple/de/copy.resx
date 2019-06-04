@@ -122,13 +122,15 @@
     <comment>Max 30 characters</comment>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>bitwarden bietet Ihnen die einfachste und sicherste Möglichkeit, alle Ihre Benutzernamen und Passwörter zu speichern und zwischen Ihren Geräten zu synchronisieren.
+    <value>Bitwarden bietet dir die einfachste und sicherste Möglichkeit, alle Ihre Benutzernamen und Passwörter zu speichern und zwischen deinen Geräten zu synchronisieren. Die Bitwarden App Erweiterung ermöglicht den Zugriff auf den Tresor in Safari und Chrome sowie hunderten weiteren Apps.
 
-Passwortdiebstahl ist ein echtes Problem. Die von Ihnen verwendeten Webseiten und Apps werden jeden Tag angegriffen und oftmals werden Ihre Passwörter dabei gestohlen. Wenn Sie das gleiche Passwort bei mehreren Apps und Websites verwenden, können Hacker sich damit ganz einfach auch in Ihre E-Mails oder Ihr Online-Banking einloggen.
+Passwortdiebstahl ist ein echtes Problem. Die von dir verwendeten Webseiten und Apps werden jeden Tag angegriffen und oftmals werden Ihre Passwörter dabei gestohlen. Wenn du das gleiche Passwort bei mehreren Apps und Websites verwendest, können Hacker sich damit ganz einfach auch in deine E-Mails oder dein Online-Banking einloggen.
 
-Sicherheitsexperten empfehlen daher, dass Sie für jeden Account ein anderes, zufällig generiertes Passwort verwenden. Aber wie sollen Sie sich all diese Passwörter merken? bitwarden hilft Ihnen dabei, Ihre Passwörter zu erstellen, speichern und zu verwalten.
+Sicherheitsexperten empfehlen daher, dass für jeden Account ein anderes, zufällig generiertes Passwort verwendet wird. Aber wie sollst du dir all diese Passwörter merken? Bitwarden hilft dir dabei, deine Passwörter zu erstellen, speichern und zu verwalten.
 
-bitwarden speichert all Ihre Zugangsdaten in einem verschlüsselten Tresor, der mit allen Geräten synchronisiert wird. Da er komplett verschlüsselt ist, bevor er überhaupt Ihr Gerät verlässt, haben nur Sie Zugriff auf Ihre Daten. Nicht einmal bitwarden kann Ihre Daten lesen, selbst, wenn wir es wollten. Ihre Daten sind mit einer AES-256-Bit-Verschlüsselung, sowie Salted Hashing und PBKDR2 SHA-256 abgesichert.</value>
+Bitwarden speichert all deine Zugangsdaten in einem verschlüsselten Tresor, der mit allen Geräten synchronisiert wird. Da er komplett verschlüsselt ist, bevor er überhaupt dein Gerät verlässt, hast nur du Zugriff auf deine Daten. Nicht einmal Bitwarden kann deine Daten lesen, selbst, wenn wir es wollten. Deine Daten sind mit einer AES-256-Bit-Verschlüsselung, sowie Salted Hashing und PBKDR2 SHA-256 abgesichert.
+
+Bitwarden ist zu 100% Open Source. Der Source-Code ist auf GitHub verfügbar - jeder kann den Code einsehen, überprüfen und zum Projekt beitragen.</value>
     <comment>Max 4000 characters</comment>
   </data>
   <data name="Keywords" xml:space="preserve">
