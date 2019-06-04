@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Tanca</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Molt aviat!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Continua</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>S'ha copiat!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>S'ha copiat la contrasenya!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Nom d'usuari copiat!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Crea un compte</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Esteu a punt per iniciar la sessió!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Veure aplicacions compatibles</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Ara, els inicis de sessió són fàcilment accessibles des de Safari, Chrome i altres aplicacions compatibles.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Considereu ajudar-nos amb una bona valoració!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Les classificacions de l'App Store es reinicien amb cada nova versió de Bitwarden. Considera ajudar-nos amb una bona valoració!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenera contrasenya</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Seguretat</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Mostra el desenvolupament en progrés</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Selecciona</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Caixa forta web de Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Administreu els vostres elements des de qualsevol navegador amb la caixa forta web de Bitwarden.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Heu perdut l'aplicació autenticadora?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Estat</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Compartiu la vostra caixa forta</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Crea una organització per compartir de manera segura els elements amb altres usuaris.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Escaneja quan un camp de contrasenya está ressaltat</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Fotos</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>S'ha copiat TOTP!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Copia TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Codi de seguretat</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Quin tipus d'element voleu afegir?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Targeta</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Comprova Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Desbloqueja amb Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Comprova amb Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
