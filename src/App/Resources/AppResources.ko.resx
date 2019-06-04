@@ -411,8 +411,8 @@
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden 앱 확장 프로그램</value>
   </data>
-  <data name="BitwardenAppExtensionAlert" xml:space="preserve">
-    <value>보관함에 새 설정을 추가하는 가장 쉬운 방법은 Bitwarden 앱 확장 프로그램을 사용하는 것입니다. "도구" 화면으로 이동하여 Bitwarden 앱 확장 프로그램에 대해 더 자세히 알아보세요.</value>
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Safari 및 다른 앱에서 Bitwarden을 사용하여 로그인을 자동 완성하세요.</value>
@@ -779,8 +779,8 @@
   <data name="Beta" xml:space="preserve">
     <value>베타</value>
   </data>
-  <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
-    <value>보관함에 새 설정을 추가하는 가장 쉬운 방법은 Bitwarden 자동 완성 서비스를 사용하는 것입니다. "도구" 화면으로 이동하여 Bitwarden 자동 완성 서비스에 대해 더 자세히 알아보세요.</value>
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>자동 완성</value>
@@ -1308,31 +1308,31 @@
     <comment>ex. Date this item was updated</comment>
   </data>
   <data name="AutofillActivated" xml:space="preserve">
-    <value>AutoFill Activated!</value>
+    <value>자동 완성 활성화!</value>
   </data>
   <data name="MustLogInMainAppAutofill" xml:space="preserve">
-    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+    <value>자동 완성을 사용하려면 먼저 Bitwarden 앱에 로그인해야 합니다.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>앱과 웹 사이트에 로그인할 때 키보드에서 바로 실행할 수 있습니다.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>다른 자동 완성 앱을 사용할 계획이 없다면 설정에서 비활성화하는 것이 좋습니다.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>키보드에서 빠르게 비밀번호를 자동 완성 하려면 보관함에 액세스하십시오.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>장치에서 비밀번호 자동 완성을 사용하려면 다음 안내사항을 따르십시오:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
-    <value>1. Go to the iOS "Settings" app</value>
+    <value>1. iOS "설정" 앱으로 이동</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. "암호 및 계정" 탭하기</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
-    <value>3. Tap "AutoFill Passwords"</value>
+    <value>3. "암호 자동 완성" 탭하기</value>
   </data>
   <data name="AutofillTurnOn4" xml:space="preserve">
     <value>4. 자동 완성을 켜세요.</value>
@@ -1343,7 +1343,256 @@
   <data name="PasswordAutofill" xml:space="preserve">
     <value>비밀번호 자동 완성</value>
   </data>
-  <data name="BitwardenAutofillAlert" xml:space="preserve">
-    <value>보관함에 새 로그인을 추가하는 가장 쉬운 방법은 Bitwarden 비밀번호 자동 완성 확장 프로그램을 사용하는 것입니다. "도구" 화면으로 이동하여 Bitwarden 비밀번호 자동 완성 확장 프로그램에 대해 더 자세히 알아보세요.</value>
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+  </data>
+  <data name="InvalidEmail" xml:space="preserve">
+    <value>Invalid email address.</value>
+  </data>
+  <data name="Cards" xml:space="preserve">
+    <value>Cards</value>
+  </data>
+  <data name="Identities" xml:space="preserve">
+    <value>Identities</value>
+  </data>
+  <data name="Logins" xml:space="preserve">
+    <value>Logins</value>
+  </data>
+  <data name="SecureNotes" xml:space="preserve">
+    <value>Secure Notes</value>
+  </data>
+  <data name="AllItems" xml:space="preserve">
+    <value>All Items</value>
+  </data>
+  <data name="URIs" xml:space="preserve">
+    <value>URIs</value>
+    <comment>Plural form of a URI</comment>
+  </data>
+  <data name="CheckingPassword" xml:space="preserve">
+    <value>Checking password...</value>
+    <comment>A loading message when doing an exposed password check.</comment>
+  </data>
+  <data name="CheckPassword" xml:space="preserve">
+    <value>Check if password has been exposed.</value>
+  </data>
+  <data name="PasswordExposed" xml:space="preserve">
+    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+  </data>
+  <data name="PasswordSafe" xml:space="preserve">
+    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+  </data>
+  <data name="IdentityName" xml:space="preserve">
+    <value>Identity Name</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+  </data>
+  <data name="PasswordHistory" xml:space="preserve">
+    <value>Password History</value>
+  </data>
+  <data name="Types" xml:space="preserve">
+    <value>Types</value>
+  </data>
+  <data name="NoPasswordsToList" xml:space="preserve">
+    <value>No passwords to list.</value>
+  </data>
+  <data name="NoItemsToList" xml:space="preserve">
+    <value>There are no items to list.</value>
+  </data>
+  <data name="SearchCollection" xml:space="preserve">
+    <value>Search collection</value>
+  </data>
+  <data name="SearchFolder" xml:space="preserve">
+    <value>Search folder</value>
+  </data>
+  <data name="SearchType" xml:space="preserve">
+    <value>Search type</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="MoveDown" xml:space="preserve">
+    <value>Move Down</value>
+  </data>
+  <data name="MoveUp" xml:space="preserve">
+    <value>Move Up</value>
+  </data>
+  <data name="Miscellaneous" xml:space="preserve">
+    <value>Miscellaneous</value>
+  </data>
+  <data name="Ownership" xml:space="preserve">
+    <value>Ownership</value>
+  </data>
+  <data name="WhoOwnsThisItem" xml:space="preserve">
+    <value>Who owns this item?</value>
+  </data>
+  <data name="NoCollectionsToList" xml:space="preserve">
+    <value>There are no collections to list.</value>
+  </data>
+  <data name="ItemShared" xml:space="preserve">
+    <value>Item has been shared.</value>
+  </data>
+  <data name="SelectOneCollection" xml:space="preserve">
+    <value>You must select at least one collection.</value>
+  </data>
+  <data name="Share" xml:space="preserve">
+    <value>Share</value>
+  </data>
+  <data name="ShareItem" xml:space="preserve">
+    <value>Share Item</value>
+  </data>
+  <data name="NoOrgsToList" xml:space="preserve">
+    <value>No organizations to list.</value>
+  </data>
+  <data name="ShareDesc" xml:space="preserve">
+    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+  </data>
+  <data name="NumberOfWords" xml:space="preserve">
+    <value>Number of Words</value>
+  </data>
+  <data name="Passphrase" xml:space="preserve">
+    <value>Passphrase</value>
+  </data>
+  <data name="WordSeparator" xml:space="preserve">
+    <value>Word Separator</value>
+  </data>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
+    <comment>To clear something out. example: To clear browser history.</comment>
+  </data>
+  <data name="Generator" xml:space="preserve">
+    <value>Generator</value>
+    <comment>Short for "Password Generator"</comment>
+  </data>
+  <data name="NoFoldersToList" xml:space="preserve">
+    <value>There are no folders to list.</value>
+  </data>
+  <data name="FingerprintPhrase" xml:space="preserve">
+    <value>Fingerprint Phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="YourAccountsFingerprint" xml:space="preserve">
+    <value>Your account's fingerprint phrase</value>
+    <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
+  </data>
+  <data name="ShareVaultConfirmation" xml:space="preserve">
+    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+  </data>
+  <data name="ExportVault" xml:space="preserve">
+    <value>Export Vault</value>
+  </data>
+  <data name="LockNow" xml:space="preserve">
+    <value>Lock Now</value>
+  </data>
+  <data name="PIN" xml:space="preserve">
+    <value>PIN</value>
+  </data>
+  <data name="Unlock" xml:space="preserve">
+    <value>Unlock</value>
+  </data>
+  <data name="LockOption30Minutes" xml:space="preserve">
+    <value>30 minutes</value>
+  </data>
+  <data name="LockOption5Minutes" xml:space="preserve">
+    <value>5 minutes</value>
+  </data>
+  <data name="SetPINDescription" xml:space="preserve">
+    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+  </data>
+  <data name="LoggedInAsOn" xml:space="preserve">
+    <value>Logged in as {0} on {1}.</value>
+    <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
+  </data>
+  <data name="VaultLockedMasterPassword" xml:space="preserve">
+    <value>Your vault is locked. Verify your master password to continue.</value>
+  </data>
+  <data name="VaultLockedPIN" xml:space="preserve">
+    <value>Your vault is locked. Verify your PIN code to continue.</value>
+  </data>
+  <data name="Dark" xml:space="preserve">
+    <value>Dark</value>
+    <comment>A dark color</comment>
+  </data>
+  <data name="Light" xml:space="preserve">
+    <value>Light</value>
+    <comment>A light color</comment>
+  </data>
+  <data name="FiveMinutes" xml:space="preserve">
+    <value>5 minutes</value>
+  </data>
+  <data name="OneMinute" xml:space="preserve">
+    <value>1 minute</value>
+  </data>
+  <data name="TenSeconds" xml:space="preserve">
+    <value>10 seconds</value>
+  </data>
+  <data name="ThirtySeconds" xml:space="preserve">
+    <value>30 seconds</value>
+  </data>
+  <data name="TwentySeconds" xml:space="preserve">
+    <value>20 seconds</value>
+  </data>
+  <data name="TwoMinutes" xml:space="preserve">
+    <value>2 minutes</value>
+  </data>
+  <data name="ClearClipboard" xml:space="preserve">
+    <value>Clear Clipboard</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="ClearClipboardDescription" xml:space="preserve">
+    <value>Automatically clear copied values from your clipboard.</value>
+    <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
+  </data>
+  <data name="DefaultUriMatchDetection" xml:space="preserve">
+    <value>Default URI Match Detection</value>
+    <comment>Default URI match detection for auto-fill.</comment>
+  </data>
+  <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
+    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+  </data>
+  <data name="Theme" xml:space="preserve">
+    <value>Theme</value>
+    <comment>Color theme</comment>
+  </data>
+  <data name="ThemeDescription" xml:space="preserve">
+    <value>Change the application's color theme.</value>
+  </data>
+  <data name="RestartIsRequired" xml:space="preserve">
+    <value>Restart is required.</value>
+    <comment>Referring to restarting the application.</comment>
+  </data>
+  <data name="Restarting" xml:space="preserve">
+    <value>Restarting...</value>
+  </data>
+  <data name="CopyNotes" xml:space="preserve">
+    <value>Copy Notes</value>
+  </data>
+  <data name="Exit" xml:space="preserve">
+    <value>Exit</value>
+  </data>
+  <data name="ExitConfirmation" xml:space="preserve">
+    <value>Are you sure you want to exit Bitwarden?</value>
+  </data>
+  <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
+    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+  </data>
+  <data name="Black" xml:space="preserve">
+    <value>Black</value>
+    <comment>The color black</comment>
+  </data>
+  <data name="BlacklistedUris" xml:space="preserve">
+    <value>Blacklisted URIs</value>
+  </data>
+  <data name="BlacklistedUrisDescription" xml:space="preserve">
+    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+  </data>
+  <data name="DisableSavePrompt" xml:space="preserve">
+    <value>Disable Save Prompt</value>
+  </data>
+  <data name="DisableSavePromptDescription" xml:space="preserve">
+    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+  </data>
+  <data name="LockOptionOnRestart" xml:space="preserve">
+    <value>On App Restart</value>
   </data>
 </root>
