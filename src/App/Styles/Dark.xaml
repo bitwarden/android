@@ -23,7 +23,7 @@
     <Color x:Key="TitleEntryTextColor">#ffffff</Color>
     <Color x:Key="TitleEntryPlaceholderColor">#707070</Color>
 
-    <Color x:Key="ListItemBorderColor">#191919</Color>
+    <Color x:Key="ListItemBorderColor">#262626</Color>
     <Color x:Key="ListHeaderTextColor">#52bdfb</Color>
 
     <Color x:Key="SliderThumbColor">#B9B9B9</Color>
