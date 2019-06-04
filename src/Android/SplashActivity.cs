@@ -14,7 +14,7 @@ namespace Bit.Droid
         MainLauncher = true,
         NoHistory = true,
         Icon = "@mipmap/ic_launcher",
-        Theme = "@style/MainTheme.Splash",
+        Theme = "@style/LightTheme.Splash",
         WindowSoftInputMode = Android.Views.SoftInput.StateHidden,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     [Register("com.x8bit.bitwarden.SplashActivity")]
@@ -44,9 +44,13 @@ namespace Bit.Droid
             {
                 SetTheme(Resource.Style.DarkTheme_Splash);
             }
+            else if(theme == "black")
+            {
+                SetTheme(Resource.Style.BlackTheme_Splash);
+            }
             else
             {
-                SetTheme(Resource.Style.MainTheme_Splash);
+                SetTheme(Resource.Style.LightTheme_Splash);
             }
         }
     }

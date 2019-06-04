@@ -11673,13 +11673,13 @@ namespace Bit.Droid
 			public const int HockeyApp_SingleLineInputStyle = 2131624449;
 			
 			// aapt resource value: 0x7f0e0205
-			public const int MainTheme = 2131624453;
+			public const int LightTheme = 2131624453;
 			
 			// aapt resource value: 0x7f0e0206
-			public const int MainTheme_Base = 2131624454;
+			public const int LightTheme_Base = 2131624454;
 			
 			// aapt resource value: 0x7f0e0202
-			public const int MainTheme_Splash = 2131624450;
+			public const int LightTheme_Splash = 2131624450;
 			
 			// aapt resource value: 0x7f0e007e
 			public const int Platform_AppCompat = 2131624062;

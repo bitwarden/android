@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="MainTheme" parent="MainTheme.Base">
+  <style name="LightTheme" parent="LightTheme.Base">
   </style>
   <style name="DarkTheme" parent="DarkTheme.Base">
+  </style>
+  <style name="BlackTheme" parent="BlackTheme.Base">
   </style>
 </resources>

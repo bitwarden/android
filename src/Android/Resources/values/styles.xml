@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="MainTheme.Splash" parent="MainTheme.Base">
+  <style name="LightTheme.Splash" parent="LightTheme.Base">
     <item name="android:windowBackground">@drawable/splash_screen</item>
     <item name="android:windowNoTitle">true</item>
   </style>
@@ -11,10 +11,10 @@
   <style name="BlackTheme.Splash" parent="DarkTheme.Splash">
   </style>
 
-  <style name="MainTheme" parent="MainTheme.Base">
+  <style name="LightTheme" parent="LightTheme.Base">
   </style>
 
-  <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="LightTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="colorPrimary">@color/primary</item>
