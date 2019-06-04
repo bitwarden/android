@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>닫기</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>곧 출시됩니다!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>계속</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>복사했습니다!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>비밀번호를 복사했습니다!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>사용자 이름을 복사했습니다!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>계정 만들기</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>로그인할 준비가 되었습니다!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>지원하는 앱 보기</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>이제 Safari, Chrome 및 다른 앱에서 로그인에 간단히 접근할 수 있습니다.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>좋은 리뷰를 남겨 저희를 도와주세요!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store의 평점은 Bitwarden의 새 버전이 나올 때마다 초기화됩니다. 좋은 리뷰를 남겨 저희를 도와주세요!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>비밀번호 재생성</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>보안</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>개발 상황 보기</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>선택</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden 웹 보관함</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Bitwarden 웹 보관함을 사용하여 다양한 종류의 브라우저에서 항목을 관리합니다.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>인증 앱에 접근할 수 없는 상황인가요?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>상태</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>베타</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>내 보관함 공유</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>조직을 만들어 당신의 항목을 다른 사용자들과 안전하게 공유하세요.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>비밀번호 필드 선택 시 스캔</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>사진</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP를 복사했습니다!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP 복사</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>보안 코드</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>어떤 항목을 추가하시겠습니까?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>카드</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Face ID를 사용하여 인증</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Windows Hello를 사용하여 잠금 해제</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Windows Hello를 사용하여 인증</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
