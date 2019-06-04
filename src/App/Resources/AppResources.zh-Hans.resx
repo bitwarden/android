@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>关闭</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>即将提供！</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>继续</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>已复制！</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>已复制的密码！</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>已复制的用户名！</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>创建账号</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>您已经准备好登录了！</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>受支持的应用</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>现在可以在 Safari、Chrome 以及其他支持的应用中方便的访问您的登录项目了。</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>请给我们好评！</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store 评分会在 Bitwarden 发布新版本时重置。请给我们好评！</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>重新生成密码</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>安全</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>查看开发进度</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>选择</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden 网页版密码库</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>使用 Bitwarden 网页版可以从任何浏览器管理您的登录项目。</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>认证应用已丢失？</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>状态</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>测试版</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>分享你的密码库</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>创建一个组织来安全地分享您的登录项目。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>当焦点在密码字段时扫描</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>照片</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP 已复制！</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>复制 TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>安全码</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>要添加哪种类型的项目？</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>卡片</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>验证面容 ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>使用 Windows Hello 解锁。</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>使用 Windows Hello 验证。</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
