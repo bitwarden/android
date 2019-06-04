@@ -382,11 +382,14 @@ namespace Bit.App.Pages
             }
 
             Cipher.Fields = Fields.Any() ? Fields.Select(f => f.Field).ToList() : null;
-            Cipher.Login.Uris = Uris.ToList();
-            if(!EditMode && Cipher.Type == CipherType.Login && (Cipher.Login.Uris?.Count ?? 0) == 1 &&
-                string.IsNullOrWhiteSpace(Cipher.Login.Uris.First().Uri))
+            if(Cipher.Login != null)
             {
-                Cipher.Login.Uris = null;
+                Cipher.Login.Uris = Uris.ToList();
+                if(!EditMode && Cipher.Type == CipherType.Login && (Cipher.Login.Uris?.Count ?? 0) == 1 &&
+                    string.IsNullOrWhiteSpace(Cipher.Login.Uris.First().Uri))
+                {
+                    Cipher.Login.Uris = null;
+                }
             }
 
             if(!EditMode && Cipher.OrganizationId != null)
