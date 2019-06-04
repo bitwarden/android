@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Закрити</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Незабаром!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Продовжити</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Скопійовано!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Пароль скопійовано!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Ім'я користувача скопійовано!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Створити обліковий запис</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Ви готові до входу!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Дивитися підтримувані програми</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Тепер ви можете легко отримувати доступ до своїх записів з Safari, Chrome та інших підтримуваних програм.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Будь ласка, подумайте про те, щоб допомогти нам хорошим відгуком!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Оцінки в App Store скидаються з кожною новою версією Bitwarden. Чи не бажаєте залишити про нас гарний відгук?</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Генерувати новий</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Безпека</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Процес розробки</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Обрати</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Веб-сховище Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Керуйте своїми паролями з будь-якого браузера за допомогою веб-сховища Bitwarden.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Втратили доступ до програми перевірки?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Статус</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Бета</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Поділитися своїм сховищем</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Створіть організацію, щоб безпечно ділитися записами з іншими користувачами.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Сканувати коли вибрано поле пароля</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Фотографії</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP скопійовано!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Копіювати TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Код безпеки</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Який тип запису ви хочете додати?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Картка</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Підтвердження розпізнавання обличчя</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Розблокувати з Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Підтвердити з Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
