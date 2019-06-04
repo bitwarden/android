@@ -1462,10 +1462,10 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Din Boks er låst. Bekræft din hovedadgangskode for at fortsætte.</value>
+    <value>Din boks er låst. Bekræft din hovedadgangskode for at fortsætte.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Din Boks er låst. Bekræft din PIN-kode for at fortsætte.</value>
+    <value>Din boks er låst. Bekræft din pinkode for at fortsætte.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Mørk</value>
@@ -1494,7 +1494,7 @@
     <value>2 minutter</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Ryd Udklipsholder</value>
+    <value>Ryd udklipsholder</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
@@ -1529,7 +1529,7 @@
     <value>Afslut</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Sikker på, at du vil afslutte Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>You you want to require unlocking with your master password when the application is restarted?</value>
