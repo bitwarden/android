@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Bezár</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Hamarosan!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Folytatás</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Másolva!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Jelszó másolva!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Másolt felhasználónév!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Fiók létrehozása</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Készen állsz a bejelentkezéshez!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Lásd: támogatott alkalmazások</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>A bejelentkezéseid mostantól könnyen hozzáférhetők a Safari-ból, Chrome-ból és más támogatott alkalmazásból.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Egy jó értékeléssel mindig segíted a munkánkat!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Az App áruházban az értékelések mindig alaphelyzetre állnak egy új verzió megjelenésével. Egy jó értékeléssel mindig segíted a munkánkat!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Jelszó újragenerálása</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Biztonság</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Fejlesztési folyamat megtekintése</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Kijelölés</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden webes széf</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Kezeld az összes bejelentkezésedet bármely böngészőből a bitwarden webes széfével.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Elveszett hitelesítő alkalmazás?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Állapot</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Béta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Széfed megosztása</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Hozz létre egy szervezetet, hogy biztonságosan megoszthasd bejelentkezéseidet másokkal.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Szkennelés, amikor a jelszó mezőre fókuszált</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Képek</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>Egyszeri jelszó másolva!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Egyszeri jelszó másolása</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Biztonsági Kód</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Milyen típusú tételt szeretnél hozzáadni?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Kártya</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Arc-azonosító megerősítése</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Kinyitás Windows Hello-val</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Ellenőrzés Windows Hello-val</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
