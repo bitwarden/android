@@ -1,5 +1,10 @@
-﻿using Bit.App.Models;
+﻿using Bit.App.Abstractions;
+using Bit.App.Models;
+using Bit.App.Resources;
+using Bit.Core;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
+using Bit.Core.Utilities;
 using System.Collections.Generic;
 using Xamarin.Forms;
 
@@ -7,8 +12,11 @@ namespace Bit.App.Pages
 {
     public partial class AddEditPage : BaseContentPage
     {
-        private AddEditPageViewModel _vm;
         private readonly AppOptions _appOptions;
+        private readonly IStorageService _storageService;
+        private readonly IDeviceActionService _deviceActionService;
+
+        private AddEditPageViewModel _vm;
         private bool _fromAutofill;
 
         public AddEditPage(
@@ -21,6 +29,8 @@ namespace Bit.App.Pages
             bool fromAutofill = false,
             AppOptions appOptions = null)
         {
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _appOptions = appOptions;
             _fromAutofill = fromAutofill;
             FromAutofillFramework = _appOptions?.FromAutofillFramework ?? false;
@@ -144,6 +154,34 @@ namespace Bit.App.Pages
                     if(!ToolbarItems.Contains(_collectionsItem))
                     {
                         ToolbarItems.Insert(2, _collectionsItem);
+                    }
+                }
+            }
+            if(!_vm.EditMode)
+            {
+                var addLoginShown = await _storageService.GetAsync<bool?>(Constants.AddSitePromptShownKey);
+                if(_vm.Cipher.Type == CipherType.Login && !_fromAutofill && !addLoginShown.GetValueOrDefault())
+                {
+                    await _storageService.SaveAsync(Constants.AddSitePromptShownKey, true);
+                    if(Device.RuntimePlatform == Device.iOS)
+                    {
+                        if(_deviceActionService.SystemMajorVersion() < 12)
+                        {
+                            await DisplayAlert(AppResources.BitwardenAppExtension,
+                                AppResources.BitwardenAppExtensionAlert2, AppResources.Ok);
+                        }
+                        else
+                        {
+                            await DisplayAlert(AppResources.PasswordAutofill,
+                                AppResources.BitwardenAutofillAlert2, AppResources.Ok);
+                        }
+                    }
+                    else if(Device.RuntimePlatform == Device.Android &&
+                        !_deviceActionService.AutofillAccessibilityServiceRunning() &&
+                        !_deviceActionService.AutofillServiceEnabled())
+                    {
+                        await DisplayAlert(AppResources.BitwardenAutofillService,
+                            AppResources.BitwardenAutofillServiceAlert2, AppResources.Ok);
                     }
                 }
             }

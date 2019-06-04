@@ -558,9 +558,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the &quot;Tools&quot; screen..
         /// </summary>
-        public static string BitwardenAppExtensionAlert {
+        public static string BitwardenAppExtensionAlert2 {
             get {
-                return ResourceManager.GetString("BitwardenAppExtensionAlert", resourceCulture);
+                return ResourceManager.GetString("BitwardenAppExtensionAlert2", resourceCulture);
             }
         }
         
@@ -594,9 +594,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the &quot;Tools&quot; screen..
         /// </summary>
-        public static string BitwardenAutofillAlert {
+        public static string BitwardenAutofillAlert2 {
             get {
-                return ResourceManager.GetString("BitwardenAutofillAlert", resourceCulture);
+                return ResourceManager.GetString("BitwardenAutofillAlert2", resourceCulture);
             }
         }
         
@@ -630,9 +630,9 @@ namespace Bit.App.Resources {
         /// <summary>
         ///   Looks up a localized string similar to The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the &quot;Tools&quot; screen..
         /// </summary>
-        public static string BitwardenAutofillServiceAlert {
+        public static string BitwardenAutofillServiceAlert2 {
             get {
-                return ResourceManager.GetString("BitwardenAutofillServiceAlert", resourceCulture);
+                return ResourceManager.GetString("BitwardenAutofillServiceAlert2", resourceCulture);
             }
         }
         

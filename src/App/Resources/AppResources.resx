@@ -411,7 +411,7 @@
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>Bitwarden App Extension</value>
   </data>
-  <data name="BitwardenAppExtensionAlert" xml:space="preserve">
+  <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Tools" screen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
@@ -779,7 +779,7 @@
   <data name="Beta" xml:space="preserve">
     <value>Beta</value>
   </data>
-  <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
+  <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
@@ -1343,7 +1343,7 @@
   <data name="PasswordAutofill" xml:space="preserve">
     <value>Password AutoFill</value>
   </data>
-  <data name="BitwardenAutofillAlert" xml:space="preserve">
+  <data name="BitwardenAutofillAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">

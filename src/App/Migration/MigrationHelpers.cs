@@ -93,6 +93,8 @@ namespace Bit.App.Migration
                 settingsShim.GetValueOrDefault("setting:disableAutoCopyTotp", false));
             await storageService.SaveAsync(Constants.DisableFaviconKey,
                 settingsShim.GetValueOrDefault("setting:disableWebsiteIcons", false));
+            await storageService.SaveAsync(Constants.AddSitePromptShownKey,
+                settingsShim.GetValueOrDefault("addedSiteAlert", false));
             await storageService.SaveAsync(Constants.PushInitialPromptShownKey,
                 settingsShim.GetValueOrDefault("push:initialPromptShown", false));
             await storageService.SaveAsync(Constants.PushCurrentTokenKey,
