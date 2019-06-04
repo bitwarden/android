@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Sulge</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Peagi lisandumas!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Jätka</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Kopeeritud!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Parool on kopeeritud!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Kasutajanimi on kopeeritud!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Loo konto</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Oled sisselogimiseks valmis!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Vaata toetatud rakendusi</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Pääsed nüüd oma kontoandmetele lihtsasti ligi nii Safaris, Chromes kui ka teistes toetatud rakendustes.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Soovi korral võid meid positiivse hinnanguga toetada!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store reitingud nullitakse iga uue Bitwardeni versiooniga. Palume Sul võimalusel meie rakendust hea hinnanguga toetada!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Genereeri salasõna uuesti</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Turvalisus</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Vaata arenduse edenemist</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Vali</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwardeni Veebihoidla</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Halda oma Bitwardeni kontot ja selle sisu mistahes brauseris.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kaotasid autentiseerimise rakenduse?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Olek:</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beeta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Jaga oma hoidlat</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Loo organisatsioon, et saaksid oma andmeid teiste inimestega turvaliselt jagada.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Paku täitmist, kui valitud on parooliväli</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Fotod</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP kopeeritud!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopeeri TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Turvakood</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Millist tüüpi kirjet soovid lisada?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Pangakaart</value>
@@ -1210,12 +1174,6 @@
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Kinnita Face ID</value>
   </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Lukusta lahti Windows Helloga</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Kinnita Windows Helloga</value>
-  </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
@@ -1347,39 +1305,39 @@
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>Vigane e-posti aadress.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>Kaardid</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>Identiteedid</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Kontod</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>Turvalised märkmed</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>Kõik kirjed</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URL-id</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Parooli kontrollimine...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Vaata, kas parool on lekkinud.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>See parool on erinevates andmeleketes kokku {0} korda lekkinud. Peaksid selle ära muutma.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Seda parooli ei õnnestu andmeleketest leida. Parooli edasi kasutamine peaks olema turvaline.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Identity Name</value>
