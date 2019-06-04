@@ -2,9 +2,9 @@
 #  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 #on_finish:
 #  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-#install:
-#  - choco install cloc --no-progress
-#  - "cloc --vcs git --exclude-dir Resources,store,test,UWP,Properties --include-lang C#,JavaScript,TypeScript,PowerShell"
+install:
+  - choco install cloc --no-progress
+  - "cloc --vcs git --exclude-dir Resources,store,test,UWP,Properties --include-lang C#,JavaScript,TypeScript,PowerShell"
 #  - appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 #  - appveyor DownloadFile https://aka.ms/vs/15/release/vs_community.exe
 #  - vs_community.exe update --wait --quiet --norestart --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
@@ -20,7 +20,7 @@ on_success:
   - IF DEFINED play_dec_secret dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
 artifacts:
   - path: com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk
-#  - path: com.x8bit.bitwarden-fdroid-%APPVEYOR_BUILD_NUMBER%.apk
+  - path: com.x8bit.bitwarden-fdroid-%APPVEYOR_BUILD_NUMBER%.apk
 branches:
   except:
     - l10n_master
