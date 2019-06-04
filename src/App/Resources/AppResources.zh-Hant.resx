@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>關閉</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>即將推出！</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>繼續</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>已複製！</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>已複製密碼！</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>已複製使用者名稱！</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>建立帳戶</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>您已經準備好登入了！</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>支援的程式</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>現在可以在 Safari、Chrome 以及其他支援的程式中方便地存取您的登入資料了。</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>給我們留個好評吧！</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store 評分會在 Bitwarden 每次更新時重設。給我們留個好評吧！</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>重新產生密碼</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>安全</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>瀏覽開發進度</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>選擇</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden 網頁版密碼庫</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>使用 Bitwarden 網頁版，從瀏覽器管理您的登入資料。</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>遺失了驗證碼程式？</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>狀態</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>測試版</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>分享您的密碼庫</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>新增組織以安全地分享您的登入資料。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>選取密碼欄位時掃描</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>相片</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>複製了 TOTP ！</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>複製 TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>安全代碼</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>您要新增哪種類型的項目？</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>信用卡</value>
@@ -1210,12 +1174,6 @@
   <data name="VerifyFaceID" xml:space="preserve">
     <value>驗證 Face ID</value>
   </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>使用 Windows Hello 解鎖</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>使用 Windows Hello 驗證</value>
-  </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
@@ -1350,19 +1308,19 @@
     <value>Invalid email address.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>信用卡</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>身分</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>登入資料</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
     <value>Secure Notes</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>所有項目</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URIs</value>
@@ -1385,31 +1343,31 @@
     <value>Identity Name</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>值</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>密碼歷史記錄</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>類型</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
     <value>No passwords to list.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>沒有可顯示的項目。</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>搜尋收藏</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>搜尋資料夾</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+    <value>搜尋類型</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>類型</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
     <value>Move Down</value>
@@ -1457,7 +1415,7 @@
     <value>Word Separator</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>清除</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
@@ -1485,16 +1443,16 @@
     <value>Lock Now</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN</value>
+    <value>PIN 碼</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>解鎖</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 分鐘</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 分鐘</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
@@ -1510,30 +1468,30 @@
     <value>Your vault is locked. Verify your PIN code to continue.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>深色</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>淺色</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 分鐘</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 分鐘</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 秒鐘</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 秒鐘</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 秒鐘</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 分鐘</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
     <value>Clear Clipboard</value>
