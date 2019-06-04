@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Fermer</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Prochainement !</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Continuer</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Copié!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Mot de passe copié !</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Nom d'utilisateur copié !</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Créer un compte</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Vous êtes prêt à vous identifier !</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Voir les applications supportées</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Vos identifiants sont désormais facilement accessibles depuis Safari, Chrome, et d'autres applications supportées.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Merci de nous aider en rédigeant un commentaire positif !</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Les notes des magasins d'applications sont réinitialisées à chaque nouvelle version de Bitwarden. Merci de nous aider en rédigeant un commentaire positif !</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regénérer un mot de passe</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Sécurité</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Voir le suivi du développement</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Sélectionner</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Coffre web Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gérer vos identifiants depuis n'importe quel navigateur avec le coffre web Bitwarden.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Application d'authentification perdue ?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>État</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Bêta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Partager votre coffre</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Créez une organisation pour partager de manière sécurisée vos identifiants avec d'autres utilisateurs.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scanner quand le champ Mot de passe est sélectionné</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Photos</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP copié !</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Copier le TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Code de sécurité</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Quel type d'élément voulez-vous ajouter ?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Carte de paiement</value>
@@ -1210,12 +1174,6 @@
   <data name="VerifyFaceID" xml:space="preserve">
     <value>S'authentifier avec Face ID</value>
   </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Déverouiller avec Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>S'authentifier avec Windows Hello</value>
-  </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
   </data>
@@ -1347,36 +1305,36 @@
     <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>Adresse e-mail invalide.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>Cartes</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>Identités</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Identifiants</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>Notes sécurisées</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>Tous les éléments</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URIs</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Vérification du mot de passe...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Vérifier si le mot de passe a été exposé.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Ce mot de passe a été exposé {0} fois dans des fuites de données. Vous devriez le changer.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
     <value>This password was not found in any known data breaches. It should be safe to use.</value>
