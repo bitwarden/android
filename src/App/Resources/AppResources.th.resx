@@ -1,0 +1,1349 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>เกี่ยวกับ</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>เพิ่ม</value>
+    <comment>Add/create a new entity (verb).</comment>
+  </data>
+  <data name="AddFolder" xml:space="preserve">
+    <value>เพิ่มโฟลเดอร์</value>
+  </data>
+  <data name="AddItem" xml:space="preserve">
+    <value>เพิ่มรายการ</value>
+    <comment>The title for the add item page.</comment>
+  </data>
+  <data name="AnErrorHasOccurred" xml:space="preserve">
+    <value>พบข้อผิดพลาด</value>
+    <comment>Alert title when something goes wrong.</comment>
+  </data>
+  <data name="Back" xml:space="preserve">
+    <value>ย้อนกลับ</value>
+    <comment>Navigate back to the previous screen.</comment>
+  </data>
+  <data name="Bitwarden" xml:space="preserve">
+    <value>bitwarden</value>
+    <comment>App name. Shouldn't ever change.</comment>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>ยกเลิก</value>
+    <comment>Cancel an operation.</comment>
+  </data>
+  <data name="Copy" xml:space="preserve">
+    <value>คัดลอก</value>
+    <comment>Copy some value to your clipboard.</comment>
+  </data>
+  <data name="CopyPassword" xml:space="preserve">
+    <value>คัดลอกรหัสผ่าน</value>
+    <comment>The button text that allows a user to copy the login's password to their clipboard.</comment>
+  </data>
+  <data name="CopyUsername" xml:space="preserve">
+    <value>คัดลอกชื่อผู้ใช้</value>
+    <comment>The button text that allows a user to copy the login's username to their clipboard.</comment>
+  </data>
+  <data name="Credits" xml:space="preserve">
+    <value>เครดิต</value>
+    <comment>Title for page that we use to give credit to resources that we use.</comment>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>ลบ</value>
+    <comment>Delete an entity (verb).</comment>
+  </data>
+  <data name="Deleting" xml:space="preserve">
+    <value>กำลังลบ...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="DoYouReallyWantToDelete" xml:space="preserve">
+    <value>คุณแน่ใจหรือไม่ว่าต้องการลบ? การกระทำนี้ไม่สามารถเลิกทำได้</value>
+    <comment>Confirmation alert message when deleteing something.</comment>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>แก้ไข</value>
+  </data>
+  <data name="EditFolder" xml:space="preserve">
+    <value>แก้ไขโฟลเดอร์</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>อีเมล</value>
+    <comment>Short label for an email address.</comment>
+  </data>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>ที่อยู่อีเมล์</value>
+    <comment>Full label for a email address.</comment>
+  </data>
+  <data name="EmailUs" xml:space="preserve">
+    <value>ส่งอีเมลถึงเรา</value>
+  </data>
+  <data name="EmailUsDescription" xml:space="preserve">
+    <value>ส่งอีเมลถึงเราโดยตรงได้เพื่อรับความช่วยเหลือ หรือแสดงความคิดเห็น</value>
+  </data>
+  <data name="EnterPIN" xml:space="preserve">
+    <value>ป้อนรหัส PIN ของคุณ</value>
+  </data>
+  <data name="Favorites" xml:space="preserve">
+    <value>รายการโปรด</value>
+    <comment>Title for your favorite items in the vault.</comment>
+  </data>
+  <data name="FileBugReport" xml:space="preserve">
+    <value>รายงานข้อบกพร่อง</value>
+  </data>
+  <data name="FileBugReportDescription" xml:space="preserve">
+    <value>เปิดประเด็นที่เก็บ GitHub ของเรา</value>
+  </data>
+  <data name="FingerprintDirection" xml:space="preserve">
+    <value>ใช้ลายนิ้วมือเพื่อตรวจสอบ</value>
+  </data>
+  <data name="Folder" xml:space="preserve">
+    <value>โฟลเดอร์</value>
+    <comment>Label for a folder.</comment>
+  </data>
+  <data name="FolderCreated" xml:space="preserve">
+    <value>สร้างโฟลเดอร์ใหม่แล้ว</value>
+  </data>
+  <data name="FolderDeleted" xml:space="preserve">
+    <value>ลบโฟลเดอร์แล้ว.</value>
+  </data>
+  <data name="FolderNone" xml:space="preserve">
+    <value>ไม่มีโฟลเดอร์</value>
+    <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
+  </data>
+  <data name="Folders" xml:space="preserve">
+    <value>โฟลเดอร์</value>
+  </data>
+  <data name="FolderUpdated" xml:space="preserve">
+    <value>ปรับปรุงโฟลเดอร์แล้ว</value>
+  </data>
+  <data name="GoToWebsite" xml:space="preserve">
+    <value>ไปที่เว็บไซต์</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="HelpAndFeedback" xml:space="preserve">
+    <value>ช่วยเหลือ &amp; ข้อเสนอแนะ</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>ซ่อน</value>
+    <comment>Hide a secret value that is currently shown (password).</comment>
+  </data>
+  <data name="InternetConnectionRequiredMessage" xml:space="preserve">
+    <value>โปรดเชื่อมต่ออินเทอร์เน็ตก่อนดำเนินการต่อ</value>
+    <comment>Description message for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InternetConnectionRequiredTitle" xml:space="preserve">
+    <value>ต้องการการเชื่อมต่ออินเทอร์เน็ต</value>
+    <comment>Title for the alert when internet connection is required to continue.</comment>
+  </data>
+  <data name="InvalidMasterPassword" xml:space="preserve">
+    <value>รหัสผ่านหลักไม่ถูกต้อง ลองอีกครั้ง</value>
+  </data>
+  <data name="InvalidPIN" xml:space="preserve">
+    <value>PIN ไม่ถูกต้อง ลองอีกครั้ง</value>
+  </data>
+  <data name="Launch" xml:space="preserve">
+    <value>เปิด</value>
+    <comment>The button text that allows user to launch the website to their web browser.</comment>
+  </data>
+  <data name="LogIn" xml:space="preserve">
+    <value>เข้าสู่ระบบ</value>
+    <comment>The login button text (verb).</comment>
+  </data>
+  <data name="LogInNoun" xml:space="preserve">
+    <value>เข้าสู่ระบบ</value>
+    <comment>Title for login page. (noun)</comment>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>ออกจากระบบ</value>
+    <comment>The log out button text (verb).</comment>
+  </data>
+  <data name="LogoutConfirmation" xml:space="preserve">
+    <value>คุณแน่ใจว่าต้องการออกจากระบบ</value>
+  </data>
+  <data name="MasterPassword" xml:space="preserve">
+    <value>รหัสผ่านหลัก</value>
+    <comment>Label for a master password.</comment>
+  </data>
+  <data name="More" xml:space="preserve">
+    <value>เพิ่มเติม</value>
+    <comment>Text to define that there are more options things to see.</comment>
+  </data>
+  <data name="MyVault" xml:space="preserve">
+    <value>ห้องนิรภัยของฉัน</value>
+    <comment>The title for the vault page.</comment>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>ชื่อ</value>
+    <comment>Label for an entity name.</comment>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>ไม่ใช่</value>
+  </data>
+  <data name="Notes" xml:space="preserve">
+    <value>หมายเหตุ</value>
+    <comment>Label for notes.</comment>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>ตกลง</value>
+    <comment>Acknowledgement.</comment>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>รหัสผ่าน</value>
+    <comment>Label for a password.</comment>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>บันทึก</value>
+    <comment>Button text for a save operation (verb).</comment>
+  </data>
+  <data name="Saving" xml:space="preserve">
+    <value>กำลังบันทึก...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>การตั้งค่า</value>
+    <comment>The title for the settings page.</comment>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>แสดง</value>
+    <comment>Reveal a hidden value (password).</comment>
+  </data>
+  <data name="ItemDeleted" xml:space="preserve">
+    <value>รายการถูกลบแล้ว</value>
+    <comment>Confirmation message after successfully deleting a login.</comment>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>ส่งข้อมูล</value>
+  </data>
+  <data name="Sync" xml:space="preserve">
+    <value>การซิงค์</value>
+    <comment>The title for the sync page.</comment>
+  </data>
+  <data name="ThankYou" xml:space="preserve">
+    <value>ขอบคุณ</value>
+  </data>
+  <data name="Tools" xml:space="preserve">
+    <value>เครื่องมือ</value>
+    <comment>The title for the tools page.</comment>
+  </data>
+  <data name="URI" xml:space="preserve">
+    <value>URI</value>
+    <comment>Label for a uri/url.</comment>
+  </data>
+  <data name="UseFingerprintToUnlock" xml:space="preserve">
+    <value>ใช้ลายนิ้วมือเพื่อปลดล็อก</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>ชื่อผู้ใช้</value>
+    <comment>Label for a username.</comment>
+  </data>
+  <data name="ValidationFieldRequired" xml:space="preserve">
+    <value>เขตข้อมูล {0} จำเป็นต้องระบุ</value>
+    <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
+  </data>
+  <data name="ValueHasBeenCopied" xml:space="preserve">
+    <value>{0} ถูกคัดลอกแล้ว</value>
+    <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
+  </data>
+  <data name="VerifyFingerprint" xml:space="preserve">
+    <value>ยืนยันลายนิ้วมือ</value>
+  </data>
+  <data name="VerifyMasterPassword" xml:space="preserve">
+    <value>ยืนยันรหัสผ่านหลัก</value>
+  </data>
+  <data name="VerifyPIN" xml:space="preserve">
+    <value>ยืนยัน PIN</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>เวอร์ชัน</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>แสดง</value>
+  </data>
+  <data name="VisitOurWebsite" xml:space="preserve">
+    <value>เยี่ยมชมเว็บไซต์</value>
+  </data>
+  <data name="VisitOurWebsiteDescription" xml:space="preserve">
+    <value>Visit our website to get help, news, email us, and/or learn more about how to use bitwarden.</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>เว็บไซต์</value>
+    <comment>Label for a website.</comment>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>ใช่</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>บัญชี</value>
+  </data>
+  <data name="AccountCreated" xml:space="preserve">
+    <value>บัญชีของคุณได้เปิดใช้แล้ว. ตอนนี้คุณสามารถเข้าสู่ระบบได้แล้ว.</value>
+  </data>
+  <data name="AddAnItem" xml:space="preserve">
+    <value>เพิ่มรายการ</value>
+  </data>
+  <data name="AppExtension" xml:space="preserve">
+    <value>แอปส่วนขยาย</value>
+  </data>
+  <data name="AutofillAccessibilityDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins across apps and the web.</value>
+  </data>
+  <data name="AutofillService" xml:space="preserve">
+    <value>บริการกรอกข้อมูลอัตโนมัติ</value>
+  </data>
+  <data name="AvoidAmbiguousCharacters" xml:space="preserve">
+    <value>หลีกเลี่ยงอักขระที่ไม่ชัดเจน</value>
+  </data>
+  <data name="BitwardenAppExtension" xml:space="preserve">
+    <value>ส่วนขยายแอปพลิเคชัน bitwarden</value>
+  </data>
+  <data name="BitwardenAppExtensionAlert" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is from the bitwarden App Extension. Learn more about using the bitwarden App Extension by navigating to the "Tools" screen.</value>
+  </data>
+  <data name="BitwardenAppExtensionDescription" xml:space="preserve">
+    <value>Use bitwarden in Safari and other apps to auto-fill your logins.</value>
+  </data>
+  <data name="BitwardenAutofillService" xml:space="preserve">
+    <value>bitwarden Auto-fill Service</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+  </data>
+  <data name="ChangeEmail" xml:space="preserve">
+    <value>เปลี่ยนอีเมล</value>
+  </data>
+  <data name="ChangeEmailConfirmation" xml:space="preserve">
+    <value>คุณสามารถเปลี่ยนที่อยู่อีเมลของคุณบน เว็บนิรภัย bitwarden.com คุณต้องการเยี่ยมชมเว็บไซต์เดี๋ยวนี้หรือไม่</value>
+  </data>
+  <data name="ChangeMasterPassword" xml:space="preserve">
+    <value>เปลี่ยนรหัสผ่านหลัก</value>
+  </data>
+  <data name="ChangePasswordConfirmation" xml:space="preserve">
+    <value>คุณสามารถเปลี่ยนรหัสผ่านหลักของคุณบน เว็บนิรภัย bitwarden.com คุณต้องการเยี่ยมชมเว็บไซต์เดี๋ยวนี้หรือไม่</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>ปิด</value>
+  </data>
+  <data name="ComingSoon" xml:space="preserve">
+    <value>เร็วๆ นี้!</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>ดำเนินการต่อไป</value>
+  </data>
+  <data name="Copied" xml:space="preserve">
+    <value>Copied!</value>
+  </data>
+  <data name="CopiedPassword" xml:space="preserve">
+    <value>คัดลอกรหัสผ่านแล้ว!</value>
+  </data>
+  <data name="CopiedUsername" xml:space="preserve">
+    <value>ชื่อผู้ใช้คัดลอกแล้ว!</value>
+  </data>
+  <data name="CreateAccount" xml:space="preserve">
+    <value>สร้างบัญชี</value>
+  </data>
+  <data name="CreatingAccount" xml:space="preserve">
+    <value>กำลังสร้างบัญชี...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="EditItem" xml:space="preserve">
+    <value>แก้ไขรายการ</value>
+  </data>
+  <data name="EnableAutomaticSyncing" xml:space="preserve">
+    <value>เปิดใช้การซิงค์อัตโนมัติ</value>
+  </data>
+  <data name="EnterEmailForHint" xml:space="preserve">
+    <value>ป้อนที่อยู่อีเมลบัญชีของคุณเพื่อรับคำแนะนำเกี่ยวกับรหัสผ่านหลักของคุณ</value>
+  </data>
+  <data name="ExntesionReenable" xml:space="preserve">
+    <value>เปิดใช้งานส่วนขยายแอปอีกครั้ง</value>
+  </data>
+  <data name="ExtensionAlmostDone" xml:space="preserve">
+    <value>เกือบเสร็จแล้ว!</value>
+  </data>
+  <data name="ExtensionEnable" xml:space="preserve">
+    <value>เปิดใช้งานแอปส่วนขยาย</value>
+  </data>
+  <data name="ExtensionInSafari" xml:space="preserve">
+    <value>In Safari, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the menu).</value>
+    <comment>Safari is the name of apple's web browser</comment>
+  </data>
+  <data name="ExtensionInstantAccess" xml:space="preserve">
+    <value>รับสิทธิ์เข้าถึงรหัสผ่านของคุณได้ทันที!</value>
+  </data>
+  <data name="ExtensionReady" xml:space="preserve">
+    <value>คุณพร้อมที่จะเข้าระบบแล้ว!</value>
+  </data>
+  <data name="ExtensionSeeApps" xml:space="preserve">
+    <value>ดูแอปที่สนับสนุน</value>
+  </data>
+  <data name="ExtensionSetup" xml:space="preserve">
+    <value>ขณะนี้คุณสามารถเข้าสู่ระบบอยู่ในได้อย่างง่ายดายจาก Safari, Chrome และปพลิเคชันอื่นๆที่ได้รับการสนับสนุน</value>
+  </data>
+  <data name="ExtensionSetup2" xml:space="preserve">
+    <value>In Safari and Chrome, find bitwarden using the share icon (hint: scroll to the right on the bottom row of the share menu).</value>
+  </data>
+  <data name="ExtensionTapIcon" xml:space="preserve">
+    <value>Tap the bitwarden icon in the menu to launch the extension.</value>
+  </data>
+  <data name="ExtensionTurnOn" xml:space="preserve">
+    <value>To turn on bitwarden in Safari and other apps, tap the "more" icon on the bottom row of the menu.</value>
+  </data>
+  <data name="Favorite" xml:space="preserve">
+    <value>รายการโปรด</value>
+  </data>
+  <data name="Fingerprint" xml:space="preserve">
+    <value>ลายนิ้วมือ</value>
+  </data>
+  <data name="GeneratePassword" xml:space="preserve">
+    <value>สร้างรหัสผ่าน</value>
+  </data>
+  <data name="GetPasswordHint" xml:space="preserve">
+    <value>รับคำใบ้เกี่ยวกับรหัสผ่านหลักของคุณ</value>
+  </data>
+  <data name="ImportItems" xml:space="preserve">
+    <value>นำเข้ารายการ</value>
+  </data>
+  <data name="ImportItemsConfirmation" xml:space="preserve">
+    <value>คุณสามารถนำเข้ารายการจำนวนมากจาก เว็บนิรภัย bitwarden.com คุณต้องการเยี่ยมชมเว็บไซต์เดี๋ยวนี้หรือไม่</value>
+  </data>
+  <data name="ImportItemsDescription" xml:space="preserve">
+    <value>นำเข้ารายการจำนวนมากจากรายการจัดการรหัสผ่านอื่น ๆ ได้อย่างรวดเร็ว</value>
+  </data>
+  <data name="LastSync" xml:space="preserve">
+    <value>การซิงค์ครั้งล่าสุด:</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>ความยาว</value>
+  </data>
+  <data name="Lock" xml:space="preserve">
+    <value>ล็อค</value>
+  </data>
+  <data name="LockOption15Minutes" xml:space="preserve">
+    <value>15 นาที</value>
+  </data>
+  <data name="LockOption1Hour" xml:space="preserve">
+    <value>1 ชั่วโมง</value>
+  </data>
+  <data name="LockOption1Minute" xml:space="preserve">
+    <value>1 นาที</value>
+  </data>
+  <data name="LockOption4Hours" xml:space="preserve">
+    <value>4 ชั่วโมง</value>
+  </data>
+  <data name="LockOptionImmediately" xml:space="preserve">
+    <value>ทันที</value>
+  </data>
+  <data name="LockOptions" xml:space="preserve">
+    <value>ตัวเลือกการล็อก</value>
+  </data>
+  <data name="LoggingIn" xml:space="preserve">
+    <value>กำลังเข้าสู่ระบบ...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="LoginOrCreateNewAccount" xml:space="preserve">
+    <value>ลงชื่อเข้าใช้หรือสร้างบัญชีใหม่เพื่อเข้าสู่ห้องนิรภัยที่ปลอดภัยของคุณ</value>
+  </data>
+  <data name="Manage" xml:space="preserve">
+    <value>จัดการ</value>
+  </data>
+  <data name="MasterPasswordConfirmationValMessage" xml:space="preserve">
+    <value>การยืนยันรหัสผ่านไม่ถูกต้อง</value>
+  </data>
+  <data name="MasterPasswordDescription" xml:space="preserve">
+    <value>รหัสผ่านหลักคือรหัสผ่านที่คุณใช้เพื่อเข้าถึงห้องนิรภัยของคุณ เป็นเรื่องสำคัญมากที่คุณจะไม่ลืมรหัสผ่านหลักของคุณ ไม่มีวิธีการกู้คืนรหัสผ่านในกรณีที่คุณลืมรหัสผ่าน</value>
+  </data>
+  <data name="MasterPasswordHint" xml:space="preserve">
+    <value>คำใบ้รหัสผ่านหลัก (ไม่จำเป็น)</value>
+  </data>
+  <data name="MasterPasswordHintDescription" xml:space="preserve">
+    <value>คำแนะนำเกี่ยวกับรหัสผ่านหลักสามารถช่วยให้คุณจดจำรหัสผ่านได้หากลืม</value>
+  </data>
+  <data name="MasterPasswordLengthValMessage" xml:space="preserve">
+    <value>รหัสผ่านหลักต้องมีความยาวอย่างน้อย8อักขระ</value>
+  </data>
+  <data name="MinNumbers" xml:space="preserve">
+    <value>จำนวนตัวเลขต่ำสุด</value>
+    <comment>Minimum numeric characters for password generator settings</comment>
+  </data>
+  <data name="MinSpecial" xml:space="preserve">
+    <value>จำนวนตัวพิเศษขั้นต่ำ</value>
+    <comment>Minimum special characters for password generator settings</comment>
+  </data>
+  <data name="MoreSettings" xml:space="preserve">
+    <value>การตั้งค่าเพิ่มเติม</value>
+  </data>
+  <data name="MustLogInMainApp" xml:space="preserve">
+    <value>You must log into the main bitwarden app before you can use the extension.</value>
+  </data>
+  <data name="Never" xml:space="preserve">
+    <value>ไม่เคย</value>
+  </data>
+  <data name="NewItemCreated" xml:space="preserve">
+    <value>สร้างรายการใหม่แล้ว</value>
+  </data>
+  <data name="NoFavorites" xml:space="preserve">
+    <value>ไม่มีรายการโปรดในห้องนิรภัยของคุณ</value>
+  </data>
+  <data name="NoItems" xml:space="preserve">
+    <value>ไม่มีรายการในห้องนิรภัยของคุณ</value>
+  </data>
+  <data name="NoItemsTap" xml:space="preserve">
+    <value>ไม่มีรายการอยู่ในห้องนิรภัยของคุณสำหรับเว็บไซต์นี้ แตะเพื่อเพิ่ม</value>
+  </data>
+  <data name="NoUsernamePasswordConfigured" xml:space="preserve">
+    <value>การเข้าสู่ระบบนี้ไม่มีการตั้งค่าชื่อผู้ใช้หรือรหัสผ่าน</value>
+  </data>
+  <data name="OkGotIt" xml:space="preserve">
+    <value>ตกลง, เข้าใจแล้ว</value>
+    <comment>Confirmation, like "Ok, I understand it"</comment>
+  </data>
+  <data name="OptionDefaults" xml:space="preserve">
+    <value>Option defaults are set from the main bitwarden app's password generator tool.</value>
+  </data>
+  <data name="Options" xml:space="preserve">
+    <value>ตัวเลือก</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>อื่น ๆ</value>
+  </data>
+  <data name="PasswordGenerated" xml:space="preserve">
+    <value>ตัวสร้างรหัสผ่าน</value>
+  </data>
+  <data name="PasswordGenerator" xml:space="preserve">
+    <value>ตัวสร้างรหัสผ่าน</value>
+  </data>
+  <data name="PasswordHint" xml:space="preserve">
+    <value>คำใบ้รหัสผ่าน</value>
+  </data>
+  <data name="PasswordHintAlert" xml:space="preserve">
+    <value>เราได้ส่งอีเมลที่ มีคำใบ้รหัสผ่านหลักของคุณแล้ว</value>
+  </data>
+  <data name="PasswordOverrideAlert" xml:space="preserve">
+    <value>คุณแน่ใจว่าต้องการเขียนทับรหัสผ่านปัจจุบัน?</value>
+  </data>
+  <data name="PushNotificationAlert" xml:space="preserve">
+    <value>bitwarden keeps your vault automatically synced by using push notifications. For the best possible experience, please select "Ok" on the following prompt when asked to enable push notifications.</value>
+    <comment>Push notifications for apple products</comment>
+  </data>
+  <data name="RateTheApp" xml:space="preserve">
+    <value>ให้คะแนนแอพนี้</value>
+  </data>
+  <data name="RateTheAppDescription" xml:space="preserve">
+    <value>โปรดพิจารณาช่วยเหลือเราด้วยความคิดเห็นที่ดี!</value>
+  </data>
+  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
+    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
+  </data>
+  <data name="RegeneratePassword" xml:space="preserve">
+    <value>สร้างรหัสผ่านใหม่</value>
+  </data>
+  <data name="RetypeMasterPassword" xml:space="preserve">
+    <value>ยืนยันรหัสผ่านหลัก</value>
+  </data>
+  <data name="SearchVault" xml:space="preserve">
+    <value>Search vault</value>
+  </data>
+  <data name="Security" xml:space="preserve">
+    <value>ความปลอดภัย</value>
+  </data>
+  <data name="SeeDevProgress" xml:space="preserve">
+    <value>ดูความคืบหน้าในการพัฒนา</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>เลือก</value>
+  </data>
+  <data name="SetPIN" xml:space="preserve">
+    <value>ตั้งรหัส PIN</value>
+  </data>
+  <data name="SetPINDirection" xml:space="preserve">
+    <value>ป้อนรหัส PIN 4 หลักเพื่อปลดล็อคแอพพลิเคชั่น</value>
+  </data>
+  <data name="ItemInformation" xml:space="preserve">
+    <value>ข้อมูลรายการ</value>
+  </data>
+  <data name="ItemUpdated" xml:space="preserve">
+    <value>ปรับปรุงรายการการแล้ว</value>
+  </data>
+  <data name="Submitting" xml:space="preserve">
+    <value>กำลังส่ง...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="Syncing" xml:space="preserve">
+    <value>กำลังซิงค์...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="SyncingComplete" xml:space="preserve">
+    <value>ทำการซิงค์เสร็จสมบูรณ์</value>
+  </data>
+  <data name="SyncingFailed" xml:space="preserve">
+    <value>ทำการซิงค์ล้มเหลว</value>
+  </data>
+  <data name="SyncVaultNow" xml:space="preserve">
+    <value>ซิงค์ตู้นิรภัยเดี๋ยวนี้</value>
+  </data>
+  <data name="TouchID" xml:space="preserve">
+    <value>Touch ID</value>
+    <comment>What Apple calls their fingerprint reader.</comment>
+  </data>
+  <data name="TwoStepLogin" xml:space="preserve">
+    <value>เข้าสู่ระบบแบบสองขั้นตอน</value>
+  </data>
+  <data name="TwoStepLoginConfirmation" xml:space="preserve">
+    <value>การเข้าสู่ระบบแบบสองขั้นตอนทำให้บัญชีของคุณมีความปลอดภัยมากขึ้นด้วยการให้คุณตรวจสอบการเข้าสู่ระบบของคุณกับอุปกรณ์อื่นเช่นคีย์ความปลอดภัย, แอพ authenticator, SMS, โทรศัพท์หรืออีเมล. เข้าสู่ระบบแบบสองขั้นตอนสามารถเปิดใช้งานบน เว็บนิรภัย bitwarden.com คุณต้องการเยี่ยมชมเว็บไซต์เดี๋ยวนี้หรือไม่</value>
+  </data>
+  <data name="UnlockWith" xml:space="preserve">
+    <value>ปลดล็อก ด้วย {0}</value>
+  </data>
+  <data name="UnlockWithPIN" xml:space="preserve">
+    <value>ปลดล็อก ด้วยรหัส PIN</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>กำลังตรวจสอบ...</value>
+    <comment>Message shown when interacting with the server</comment>
+  </data>
+  <data name="VerificationCode" xml:space="preserve">
+    <value>รหัสยืนยัน</value>
+  </data>
+  <data name="ViewItem" xml:space="preserve">
+    <value>ดูรายการ</value>
+  </data>
+  <data name="WebVault" xml:space="preserve">
+    <value>bitwarden Web Vault</value>
+  </data>
+  <data name="WebVaultDescription" xml:space="preserve">
+    <value>จัดการรายการของคุณจากเว็บเบราเซอร์ใดๆกับ เว็บนิรภัย bitwarden</value>
+  </data>
+  <data name="Lost2FAApp" xml:space="preserve">
+    <value>แอปตรวจสอบการยืนยันหายไป?</value>
+  </data>
+  <data name="Items" xml:space="preserve">
+    <value>รายการ</value>
+    <comment>Screen title</comment>
+  </data>
+  <data name="ExtensionActivated" xml:space="preserve">
+    <value>เปิดใช้งานส่วนขยายแล้ว!</value>
+  </data>
+  <data name="Icons" xml:space="preserve">
+    <value>ไอคอน</value>
+  </data>
+  <data name="Translations" xml:space="preserve">
+    <value>การแปลภาษา</value>
+  </data>
+  <data name="ItemsForUri" xml:space="preserve">
+    <value>รายการสำหรับ {0}</value>
+    <comment>This is used for the autofill service. ex. "Logins for twitter.com"</comment>
+  </data>
+  <data name="NoItemsForUri" xml:space="preserve">
+    <value>ไม่มีรายการ {0} ในห้องนิรภัยของคุณ</value>
+    <comment>This is used for the autofill service. ex. "There are no items in your vault for twitter.com".</comment>
+  </data>
+  <data name="BitwardenAutofillServiceNotification" xml:space="preserve">
+    <value>When you see a bitwarden auto-fill notification, you can tap it to launch the auto-fill service.</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
+    <value>Tap this notification to auto-fill a login from your vault.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
+    <value>เปิดการตั้งค่าการเข้าถึง</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep1" xml:space="preserve">
+    <value>1. On the Android Accessibility Settings screen, touch "bitwarden" under the Services heading.</value>
+  </data>
+  <data name="BitwardenAutofillServiceStep2" xml:space="preserve">
+    <value>2. สลับเปิดสวิตช์และกดตกลงเพื่อยอมรับ</value>
+  </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>ปิดการใช้งาน</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>เปิดใช้งาน</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>สถานะ</value>
+  </data>
+  <data name="Beta" xml:space="preserve">
+    <value>เบต้า</value>
+  </data>
+  <data name="BitwardenAutofillServiceAlert" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is from the bitwarden Auto-fill Service. Learn more about using the bitwarden Auto-fill Service by navigating to the "Tools" screen.</value>
+  </data>
+  <data name="Autofill" xml:space="preserve">
+    <value>กรอกข้อมูลอัตโนมัติ</value>
+  </data>
+  <data name="AutofillOrView" xml:space="preserve">
+    <value>คุณต้องการกรอกข้อมูลอัตโนมัติหรือดูรายการนี้หรือไม่?</value>
+  </data>
+  <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
+    <value>Are you sure you want to auto-fill this login? It is not a complete match for "{0}".</value>
+  </data>
+  <data name="MatchingItems" xml:space="preserve">
+    <value>รายการที่ตรงกัน</value>
+  </data>
+  <data name="PossibleMatchingItems" xml:space="preserve">
+    <value>รายการที่ตรงกันที่เป็นไปได้</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>ค้นหา</value>
+  </data>
+  <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
+    <value>You are searching for an auto-fill login for "{0}".</value>
+  </data>
+  <data name="ShareVault" xml:space="preserve">
+    <value>แบ่งปันห้องนิรภัยของคุณ</value>
+  </data>
+  <data name="ShareVaultDescription" xml:space="preserve">
+    <value>Create an organization to securely share your logins with other users.</value>
+  </data>
+  <data name="AutofillPasswordField" xml:space="preserve">
+    <value>สแกนเมื่อเน้นช่องรหัสผ่าน</value>
+  </data>
+  <data name="AutofillPasswordFieldDescription" xml:space="preserve">
+    <value>เพียงสแกนหน้าจอสำหรับเขตข้อมูล และมีการแจ้งเตือนการกรอกข้อมูลอัตโนมัติเมื่อคุณเลือกเขตข้อมูลรหัสผ่าน การตั้งค่านี้อาจช่วยประหยัดแบตเตอรี่</value>
+  </data>
+  <data name="AutofillPersistNotification" xml:space="preserve">
+    <value>การแจ้งเตือนแบบคงที่</value>
+  </data>
+  <data name="AutofillPersistNotificationDescription" xml:space="preserve">
+    <value>มีการแจ้งให้ทราบโดยอัตโนมัติเสมอและสแกนเฉพาะเขตข้อมูลหลังจากพยายามเติมอัตโนมัติ การตั้งค่านี้อาจช่วยประหยัดอายุการใช้งานแบตเตอรี่</value>
+  </data>
+  <data name="AutofillAlways" xml:space="preserve">
+    <value>สแกนเสมอ</value>
+  </data>
+  <data name="AutofillAlwaysDescription" xml:space="preserve">
+    <value>จะสแกนหน้าจอสำหรับเขตข้อมูลเท่านั้น และ ให้แจ้งการกรอกข้อมูลอัตโนมัติหากพบเขตข้อมูลรหัสผ่าน นี้เป็นค่าเริ่มต้น</value>
+  </data>
+  <data name="CannotOpenApp" xml:space="preserve">
+    <value>ไม่สามารถเปิดแอป "{0}".</value>
+    <comment>Message shown when trying to launch an app that does not exist on the user's device.</comment>
+  </data>
+  <data name="AuthenticatorAppTitle" xml:space="preserve">
+    <value>แอป Authenticator</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeApp" xml:space="preserve">
+    <value>ป้อนรหัสยืนยัน 6 หลักจากคุณแอป authenticator</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="EnterVerificationCodeEmail" xml:space="preserve">
+    <value>ป้อนรหัสยืนยัน6หลักที่ส่งอีเมลไปที่ {0}</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="LoginUnavailable" xml:space="preserve">
+    <value>เข้าสู่ระบบไม่พร้อมใช้งาน</value>
+    <comment>For 2FA whenever there are no available providers on this device.</comment>
+  </data>
+  <data name="NoTwoStepAvailable" xml:space="preserve">
+    <value>บัญชีนี้มีการเปิดใช้งานการเข้าสู่ระบบสองขั้นตอนอย่างไรก็ตามไม่มีการกำหนดค่าผู้ให้บริการสองขั้นตอนที่ได้รับการสนับสนุนบนอุปกรณ์นี้ โปรดใช้อุปกรณ์ที่รองรับและ/หรือเพิ่มผู้ให้บริการเพิ่มเติมที่ได้รับการสนับสนุนให้ดีขึ้นในอุปกรณ์ต่างๆ (เช่นแอป authenticator)</value>
+  </data>
+  <data name="RecoveryCodeTitle" xml:space="preserve">
+    <value>รหัสกู้คืน</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>จำการเข้าระบบของฉันไว้</value>
+    <comment>Remember my two-step login</comment>
+  </data>
+  <data name="SendVerificationCodeAgain" xml:space="preserve">
+    <value>ส่งอีเมล์ยืนยันรหัสอีกครั้ง</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="TwoStepLoginOptions" xml:space="preserve">
+    <value>ตัวเลือกการเข้าสู่ระบบแบบสองขั้นตอน</value>
+  </data>
+  <data name="UseAnotherTwoStepMethod" xml:space="preserve">
+    <value>ใช้วิธีลงชื่อเข้าใช้แบบสองขั้นตอนวิธีอื่น</value>
+  </data>
+  <data name="VerificationEmailNotSent" xml:space="preserve">
+    <value>ไม่สามารถส่งอีเมลการตรวจสอบได้ ลองอีกครั้ง</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="VerificationEmailSent" xml:space="preserve">
+    <value>ส่งอีเมลยืนยันแล้ว</value>
+    <comment>For 2FA</comment>
+  </data>
+  <data name="YubiKeyInstruction" xml:space="preserve">
+    <value>Hold your YubiKey NEO against the back of the device to continue.</value>
+  </data>
+  <data name="YubiKeyTitle" xml:space="preserve">
+    <value>YubiKey NEO Security Key</value>
+    <comment>"YubiKey" is the product name and should not be translated.</comment>
+  </data>
+  <data name="AddNewAttachment" xml:space="preserve">
+    <value>เพิ่มไฟล์แนบใหม่</value>
+  </data>
+  <data name="Attachments" xml:space="preserve">
+    <value>สิ่งที่แนบมา</value>
+  </data>
+  <data name="UnableToDownloadFile" xml:space="preserve">
+    <value>ไม่สามารถโหลดไฟล์ได้</value>
+  </data>
+  <data name="UnableToOpenFile" xml:space="preserve">
+    <value>อุปกรณ์ของคุณไม่สามารถเปิดแฟ้มชนิดนี้ได้</value>
+  </data>
+  <data name="Downloading" xml:space="preserve">
+    <value>กำลังดาวน์โหลด...</value>
+    <comment>Message shown when downloading a file</comment>
+  </data>
+  <data name="AttachmentLargeWarning" xml:space="preserve">
+    <value>ไฟล์แนบนี้มีขนาด {0} คุณแน่ใจหรือไม่ว่าต้องการดาวน์โหลดลงในอุปกรณ์ของคุณ?</value>
+    <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
+  </data>
+  <data name="AuthenticatorKey" xml:space="preserve">
+    <value>คีย์ Authenticator (TOTP)</value>
+  </data>
+  <data name="VerificationCodeTotp" xml:space="preserve">
+    <value>รหัสยืนยัน (TOTP)</value>
+    <comment>Totp code label</comment>
+  </data>
+  <data name="AuthenticatorKeyAdded" xml:space="preserve">
+    <value>คีย์ Authenticator ที่เพิ่ม</value>
+  </data>
+  <data name="AuthenticatorKeyReadError" xml:space="preserve">
+    <value>ไม่สามารถอ่านคีย์ authenticator ได้</value>
+  </data>
+  <data name="CameraInstructionBottom" xml:space="preserve">
+    <value>การสแกนจะเกิดโดยอัตโนมัติ</value>
+  </data>
+  <data name="CameraInstructionTop" xml:space="preserve">
+    <value>เล็งกล้องไปที่รหัส QR</value>
+  </data>
+  <data name="ScanQrTitle" xml:space="preserve">
+    <value>สแกน QR Code</value>
+  </data>
+  <data name="Camera" xml:space="preserve">
+    <value>กล้องถ่ายรูป</value>
+  </data>
+  <data name="Photos" xml:space="preserve">
+    <value>รูปภาพ</value>
+  </data>
+  <data name="CopiedTotp" xml:space="preserve">
+    <value>คัดลอก TOTP แล้ว!</value>
+  </data>
+  <data name="CopyTotp" xml:space="preserve">
+    <value>คัดลอก TOTP</value>
+  </data>
+  <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
+    <value>ถ้าการเข้าสู่ระบบของคุณมีคีย์การรับรองความถูกต้องที่แนบอยู่กับรหัสยืนยัน TOTP จะถูกคัดลอกไปยังคลิปบอร์ดของคุณโดยอัตโนมัติเมื่อคุณกรอกข้อมูลเข้าสู่ระบบโดยอัตโนมัติ</value>
+  </data>
+  <data name="DisableAutoTotpCopy" xml:space="preserve">
+    <value>ปิดใช้งานการคัดลอก TOTP โดยอัตโนมัติ</value>
+  </data>
+  <data name="PremiumRequired" xml:space="preserve">
+    <value>จำเป็นต้องมีสมาชิกระดับพรีเมียมเพื่อใช้คุณลักษณะนี้</value>
+  </data>
+  <data name="AttachementAdded" xml:space="preserve">
+    <value>เพิ่มสิ่งที่แนบมา</value>
+  </data>
+  <data name="AttachmentDeleted" xml:space="preserve">
+    <value>ลบสิ่งที่แนบมา</value>
+  </data>
+  <data name="ChooseFile" xml:space="preserve">
+    <value>เลือกไฟล์</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>ไฟล์</value>
+  </data>
+  <data name="NoFileChosen" xml:space="preserve">
+    <value>ไม่มีไฟล์ที่เลือก</value>
+  </data>
+  <data name="NoAttachments" xml:space="preserve">
+    <value>ไม่มีสิ่งที่แนบมา</value>
+  </data>
+  <data name="FileSource" xml:space="preserve">
+    <value>แหล่งที่มาของไฟล์</value>
+  </data>
+  <data name="FeatureUnavailable" xml:space="preserve">
+    <value>ไม่สามารถใช้คุณสมบัตินี้ได้</value>
+  </data>
+  <data name="MaxFileSize" xml:space="preserve">
+    <value>ขนาดไฟล์สูงสุดคือ 100 MB</value>
+  </data>
+  <data name="UpdateKey" xml:space="preserve">
+    <value>คุณไม่สามารถใช้คุณลักษณะนี้ได้จนกว่าคุณปรับปรุงคีย์การเข้ารหัสลับของคุณ</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+    <value>เรียน​รู้​เพิ่ม​เติม</value>
+  </data>
+  <data name="ApiUrl" xml:space="preserve">
+    <value>URL เซิร์ฟเวอร์ API</value>
+  </data>
+  <data name="CustomEnvironment" xml:space="preserve">
+    <value>สภาพแวดล้อมแบบกำหนดเอง</value>
+  </data>
+  <data name="CustomEnvironmentFooter" xml:space="preserve">
+    <value>สำหรับผู้ใช้ขั้นสูง คุณสามารถระบุ URL พื้นฐานของแต่ละบริการได้อย่างอิสระ</value>
+  </data>
+  <data name="EnvironmentSaved" xml:space="preserve">
+    <value>มีการบันทึก URL ของสภาพแวดล้อมแล้ว</value>
+  </data>
+  <data name="FormattedIncorrectly" xml:space="preserve">
+    <value>{0} ไม่ได้จัดรูปแบบอย่างถูกต้อง</value>
+    <comment>Validation error when something is not formatted correctly, such as a URL or email address.</comment>
+  </data>
+  <data name="IdentityUrl" xml:space="preserve">
+    <value>URL เซิร์ฟเวอร์ข้อมูลประจำตัว</value>
+    <comment>"Identity" refers to an identity server. See more context here https://en.wikipedia.org/wiki/Identity_management</comment>
+  </data>
+  <data name="SelfHostedEnvironment" xml:space="preserve">
+    <value>จัดสภาพแวดล้อมโฮสต์ด้วยตนเอง</value>
+  </data>
+  <data name="SelfHostedEnvironmentFooter" xml:space="preserve">
+    <value>Specify the base URL of your on-premise hosted bitwarden installation.</value>
+  </data>
+  <data name="ServerUrl" xml:space="preserve">
+    <value>URL ของเซิร์ฟเวอร์</value>
+  </data>
+  <data name="WebVaultUrl" xml:space="preserve">
+    <value>URL เซิร์ฟเวอร์ของเว็บนิรภัย</value>
+  </data>
+  <data name="BitwardenAutofillServiceNotificationContentOld" xml:space="preserve">
+    <value>แตะการแจ้งเตือนนี้เพื่อดูรายการจากห้องนิรภัยของคุณ</value>
+  </data>
+  <data name="CustomFields" xml:space="preserve">
+    <value>เขตข้อมูลแบบระบุเอง</value>
+  </data>
+  <data name="CopyNumber" xml:space="preserve">
+    <value>คัดลอกหมายเลข</value>
+  </data>
+  <data name="CopySecurityCode" xml:space="preserve">
+    <value>คัดลอกรหัสรักษาความปลอดภัย</value>
+  </data>
+  <data name="Number" xml:space="preserve">
+    <value>หมายเลข</value>
+  </data>
+  <data name="SecurityCode" xml:space="preserve">
+    <value>รหัสความปลอดภัย</value>
+  </data>
+  <data name="SelectTypeAdd" xml:space="preserve">
+    <value>คุณต้องการเพิ่มประเภทรายการใด?</value>
+  </data>
+  <data name="TypeCard" xml:space="preserve">
+    <value>บัตร</value>
+  </data>
+  <data name="TypeIdentity" xml:space="preserve">
+    <value>ข้อมูลระบุตัวตน</value>
+  </data>
+  <data name="TypeLogin" xml:space="preserve">
+    <value>เข้าสู่ระบบ</value>
+  </data>
+  <data name="TypeSecureNote" xml:space="preserve">
+    <value>บันทึกการรักษาปลอดภัย</value>
+  </data>
+  <data name="Address1" xml:space="preserve">
+    <value>ที่อยู่ 1</value>
+  </data>
+  <data name="Address2" xml:space="preserve">
+    <value>ที่อยู่ 2</value>
+  </data>
+  <data name="Address3" xml:space="preserve">
+    <value>ที่อยู่ 3</value>
+  </data>
+  <data name="April" xml:space="preserve">
+    <value>เมษายน</value>
+  </data>
+  <data name="August" xml:space="preserve">
+    <value>สิงหาคม</value>
+  </data>
+  <data name="Brand" xml:space="preserve">
+    <value>แบรนด์</value>
+  </data>
+  <data name="CardholderName" xml:space="preserve">
+    <value>ชื่อผู้ถือบัตร</value>
+  </data>
+  <data name="CityTown" xml:space="preserve">
+    <value>เมือง</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>บริษัท</value>
+  </data>
+  <data name="Country" xml:space="preserve">
+    <value>ประเทศ</value>
+  </data>
+  <data name="December" xml:space="preserve">
+    <value>ธันวาคม</value>
+  </data>
+  <data name="Dr" xml:space="preserve">
+    <value>ดร.</value>
+  </data>
+  <data name="ExpirationMonth" xml:space="preserve">
+    <value>เดือนที่หมดอายุ</value>
+  </data>
+  <data name="ExpirationYear" xml:space="preserve">
+    <value>ปีที่หมดอายุ</value>
+  </data>
+  <data name="February" xml:space="preserve">
+    <value>กุมภาพันธ์</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>ชื่อจริง</value>
+  </data>
+  <data name="January" xml:space="preserve">
+    <value>มกราคม</value>
+  </data>
+  <data name="July" xml:space="preserve">
+    <value>กรกฎาคม</value>
+  </data>
+  <data name="June" xml:space="preserve">
+    <value>มิถุนายน</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>นามสกุล</value>
+  </data>
+  <data name="LicenseNumber" xml:space="preserve">
+    <value>หมายเลขใบอนุญาต</value>
+  </data>
+  <data name="March" xml:space="preserve">
+    <value>มีนาคม</value>
+  </data>
+  <data name="May" xml:space="preserve">
+    <value>พฤษภาคม</value>
+  </data>
+  <data name="MiddleName" xml:space="preserve">
+    <value>ชื่อกลาง</value>
+  </data>
+  <data name="Mr" xml:space="preserve">
+    <value>นาย</value>
+  </data>
+  <data name="Mrs" xml:space="preserve">
+    <value>นาง</value>
+  </data>
+  <data name="Ms" xml:space="preserve">
+    <value>นางสาว</value>
+  </data>
+  <data name="November" xml:space="preserve">
+    <value>พฤศจิกายน</value>
+  </data>
+  <data name="October" xml:space="preserve">
+    <value>ตุลาคม</value>
+  </data>
+  <data name="PassportNumber" xml:space="preserve">
+    <value>หมายเลขหนังสือเดินทาง</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>โทรศัพท์</value>
+  </data>
+  <data name="September" xml:space="preserve">
+    <value>กันยายน</value>
+  </data>
+  <data name="SSN" xml:space="preserve">
+    <value>หมายเลขประกันสังคม</value>
+  </data>
+  <data name="StateProvince" xml:space="preserve">
+    <value>รัฐ / จังหวัด</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>คำนำหน้า</value>
+  </data>
+  <data name="ZipPostalCode" xml:space="preserve">
+    <value>รหัสไปรษณีย์</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>ที่อยู่</value>
+  </data>
+  <data name="Expiration" xml:space="preserve">
+    <value>วันหมดอายุ</value>
+  </data>
+  <data name="DisableWebsiteIcons" xml:space="preserve">
+    <value>ปิดใช้งานไอคอนเว็บไซต์</value>
+  </data>
+  <data name="DisableWebsiteIconsDescription" xml:space="preserve">
+    <value>ไอคอนเว็บไซต์จะให้ภาพที่รู้จักถัดจากแต่ละรายการเข้าสู่ระบบในห้องนิรภัยของคุณ</value>
+  </data>
+  <data name="IconsUrl" xml:space="preserve">
+    <value>URL ของเซิร์ฟเวอร์ไอคอน</value>
+  </data>
+  <data name="AutofillWithBitwarden" xml:space="preserve">
+    <value>Auto-fill with bitwarden</value>
+  </data>
+  <data name="VaultIsLocked" xml:space="preserve">
+    <value>ห้องนิรภัยถูกล็อก</value>
+  </data>
+  <data name="GoToMyVault" xml:space="preserve">
+    <value>ไปที่ห้องนิรภัยของฉัน</value>
+  </data>
+  <data name="Collections" xml:space="preserve">
+    <value>คอลเลกชัน</value>
+  </data>
+  <data name="NoItemsCollection" xml:space="preserve">
+    <value>ไม่มีรายการในคอลเล็กชันนี้</value>
+  </data>
+  <data name="NoItemsFolder" xml:space="preserve">
+    <value>ไม่มีรายการในโฟลเดอร์นี้</value>
+  </data>
+  <data name="AutofillAccessibilityService" xml:space="preserve">
+    <value>เติมข้อมูลบริการการเข้าถึงได้โดยอัตโนมัติ</value>
+  </data>
+  <data name="AutofillServiceDescription" xml:space="preserve">
+    <value>The bitwarden auto-fill service uses the Android Autofill Framework to assist in filling logins, credit cards, and identity information into other apps on your device.</value>
+  </data>
+  <data name="BitwardenAutofillServiceDescription" xml:space="preserve">
+    <value>Use the bitwarden accessibility service to auto-fill your logins.</value>
+  </data>
+  <data name="BitwardenAutofillServiceOpenAutofillSettings" xml:space="preserve">
+    <value>เปิดการตั้งค่าการป้อนอัตโนมัติ</value>
+  </data>
+  <data name="FaceID" xml:space="preserve">
+    <value>Face ID</value>
+    <comment>What Apple calls their facial recognition reader.</comment>
+  </data>
+  <data name="FaceIDDirection" xml:space="preserve">
+    <value>ใช้ Face ID เพื่อตรวจสอบ</value>
+  </data>
+  <data name="UseFaceIDToUnlock" xml:space="preserve">
+    <value>ใช้ Face ID เพื่อปลดล็อก</value>
+  </data>
+  <data name="VerifyFaceID" xml:space="preserve">
+    <value>ยืนยันรหัส Face ID</value>
+  </data>
+  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
+    <value>ปลดล็อก ด้วย Windows Hello</value>
+  </data>
+  <data name="VerifyWindowsHello" xml:space="preserve">
+    <value>ยืนยันด้วย Windows Hello</value>
+  </data>
+  <data name="WindowsHello" xml:space="preserve">
+    <value>Windows Hello</value>
+  </data>
+  <data name="BitwardenAutofillGoToSettings" xml:space="preserve">
+    <value>ไม่สามารถเปิดเมนูการตั้งค่าการป้อนอัตโนมัติของ Android ให้คุณได้โดยอัตโนมัติ, คุณสามารถไปที่เมนูการตั้งค่าการป้อนข้อมูลอัตโนมัติด้วยตนเองได้จากการตั้งค่าของ Android &gt; ระบบ &gt; ภาษาด้วยตนเองและป้อนข้อมูล &gt; ขั้นสูง &gt; บริการป้อนข้อความอัตโนมัติ</value>
+  </data>
+  <data name="CustomFieldName" xml:space="preserve">
+    <value>ชื่อเขตข้อมูล ที่กำหนดเอง</value>
+  </data>
+  <data name="FieldTypeBoolean" xml:space="preserve">
+    <value>ค่าบูลีน</value>
+  </data>
+  <data name="FieldTypeHidden" xml:space="preserve">
+    <value>ซ่อน</value>
+  </data>
+  <data name="FieldTypeText" xml:space="preserve">
+    <value>ข้อความ</value>
+  </data>
+  <data name="NewCustomField" xml:space="preserve">
+    <value>สร้างเขตข้อมูลที่กำหนดเองใหม่</value>
+  </data>
+  <data name="SelectTypeField" xml:space="preserve">
+    <value>คุณต้องการเพิ่มเขตข้อมูลแบบกำหนดเองชนิดใด</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>เอาออก</value>
+  </data>
+  <data name="NewUri" xml:space="preserve">
+    <value>URI ใหม่</value>
+  </data>
+  <data name="URIPosition" xml:space="preserve">
+    <value>URI {0}</value>
+    <comment>Label for a uri/url with position. i.e. URI 1, URI 2, etc</comment>
+  </data>
+  <data name="BaseDomain" xml:space="preserve">
+    <value>โดเมนพื้นฐาน</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>ค่าเริ่มต้น</value>
+  </data>
+  <data name="Exact" xml:space="preserve">
+    <value>ถูกต้อง</value>
+  </data>
+  <data name="Host" xml:space="preserve">
+    <value>โฮสต์</value>
+    <comment>A URL's host value. For example, the host of https://sub.domain.com:443 is 'sub.domain.com:443'.</comment>
+  </data>
+  <data name="RegEx" xml:space="preserve">
+    <value>นิพจน์ทั่วไป</value>
+    <comment>A programming term, also known as 'RegEx'.</comment>
+  </data>
+  <data name="StartsWith" xml:space="preserve">
+    <value>เริ่มต้นด้วย</value>
+  </data>
+  <data name="URIMatchDetection" xml:space="preserve">
+    <value>ตรวจพบการจับคู่ URL</value>
+  </data>
+  <data name="MatchDetection" xml:space="preserve">
+    <value>ตรวจพบการจับคู่</value>
+    <comment>URI match detection for auto-fill.</comment>
+  </data>
+  <data name="YesAndSave" xml:space="preserve">
+    <value>Yes, and Save</value>
+  </data>
+  <data name="AutofillAndSave" xml:space="preserve">
+    <value>Auto-fill and save</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organization</value>
+    <comment>An entity of multiple related people (ex. a team or business organization).</comment>
+  </data>
+  <data name="HoldYubikeyNearTop" xml:space="preserve">
+    <value>Hold your Yubikey near the top of the device.</value>
+  </data>
+  <data name="TryAgain" xml:space="preserve">
+    <value>Try Again</value>
+  </data>
+  <data name="YubiKeyInstructionIos" xml:space="preserve">
+    <value>To continue, hold your YubiKey NEO against the back of the device.</value>
+  </data>
+  <data name="BitwardenAutofillAccessibilityServiceDescription2" xml:space="preserve">
+    <value>The accessibility service may be helpful to use when apps do not support the standard auto-fill service.</value>
+  </data>
+  <data name="DatePasswordUpdated" xml:space="preserve">
+    <value>Password Updated</value>
+    <comment>ex. Date this password was updated</comment>
+  </data>
+  <data name="DateUpdated" xml:space="preserve">
+    <value>Updated</value>
+    <comment>ex. Date this item was updated</comment>
+  </data>
+  <data name="AutofillActivated" xml:space="preserve">
+    <value>AutoFill Activated!</value>
+  </data>
+  <data name="MustLogInMainAppAutofill" xml:space="preserve">
+    <value>You must log into the main Bitwarden app before you can use AutoFill.</value>
+  </data>
+  <data name="AutofillSetup" xml:space="preserve">
+    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+  </data>
+  <data name="AutofillSetup2" xml:space="preserve">
+    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+  </data>
+  <data name="BitwardenAutofillDescription" xml:space="preserve">
+    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+  </data>
+  <data name="AutofillTurnOn" xml:space="preserve">
+    <value>To enable password autofill on your device, follow these instructions:</value>
+  </data>
+  <data name="AutofillTurnOn1" xml:space="preserve">
+    <value>1. Go to the iOS "Settings" app</value>
+  </data>
+  <data name="AutofillTurnOn2" xml:space="preserve">
+    <value>2. Tap "Passwords &amp; Accounts"</value>
+  </data>
+  <data name="AutofillTurnOn3" xml:space="preserve">
+    <value>3. Tap "AutoFill Passwords"</value>
+  </data>
+  <data name="AutofillTurnOn4" xml:space="preserve">
+    <value>4. Turn on AutoFill</value>
+  </data>
+  <data name="AutofillTurnOn5" xml:space="preserve">
+    <value>5. Select "Bitwarden"</value>
+  </data>
+  <data name="PasswordAutofill" xml:space="preserve">
+    <value>Password AutoFill</value>
+  </data>
+  <data name="BitwardenAutofillAlert" xml:space="preserve">
+    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Tools" screen.</value>
+  </data>
+</root>
