@@ -84,7 +84,7 @@ namespace Bit.App.Migration
             var oldFingerprint = settingsShim.GetValueOrDefault("setting:fingerprintUnlockOn", false);
 
             // Save settings
-            
+
             await storageService.SaveAsync(Constants.AccessibilityAutofillPersistNotificationKey,
                 settingsShim.GetValueOrDefault("setting:persistNotification", false));
             await storageService.SaveAsync(Constants.AccessibilityAutofillPasswordFieldKey,
@@ -175,7 +175,7 @@ namespace Bit.App.Migration
                 var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
                 await storageService.SaveAsync(Constants.PinProtectedKey, pinProtectedKey.EncryptedString);
             }
-            
+
             // Post migration tasks
             await cryptoService.ToggleKeyAsync();
             await storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow.AddYears(-1));
@@ -185,8 +185,10 @@ namespace Bit.App.Migration
             settingsShim.Remove(Constants.OldUserIdKey);
             Migrating = false;
             messagingService.Send("migrated");
-            var task = Task.Run(() => syncService.FullSyncAsync(true));
-
+            if(Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
+            {
+                var task = Task.Run(() => syncService.FullSyncAsync(true));
+            }
             return true;
         }
     }
