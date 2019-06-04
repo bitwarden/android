@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Zavřít</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Již brzy!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Pokračovat</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Zkopírováno!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Heslo bylo úspěšně zkopírováno!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Uživatelské jméno bylo úspěšně zkopírováno!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Vytvořit účet</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Jste připraveni se přihlásit!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Zobrazit podporované aplikace</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Vaše přihlašovací údaje jsou nyní snadno přístupné ze Safari, Chromu a dalších podporovaných aplikací.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Pomozte nám napsáním dobré recenze!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>S každou novou verzí aplikace Bitwarden se v App Store obnovuje hodnocení. Pomozte nám prosím dobrou recenzí!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Vygenerovat další heslo</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Zabezpečení</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Viz vývoj aplikace</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Vybrat</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Webová aplikace</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Spravujte přihlašovací údaje z jakéhokoliv prohlížeče pomocí webové aplikace Bitwarden.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Ztratili jste ověřovací aplikaci?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Stav</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Sdílet trezor</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Vytvořte organizaci pro bezpečné sdílení přihlašovacích údajů s dalšími uživateli.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Prohledávat jen při vybrání pole hesla</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Fotografie</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>Ověřovací kód (TOTP) byl zkopírován!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Zkopírovat ověřovací kód (TOTP)</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Bezpečnostní kód</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Jaký typ položky chcete přidat?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Kreditní karta</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Ověření Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Odemknout pomocí Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Ověřit pomocí Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
