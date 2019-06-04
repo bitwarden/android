@@ -529,15 +529,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Beta.
-        /// </summary>
-        public static string Beta {
-            get {
-                return ResourceManager.GetString("Beta", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Bitwarden.
         /// </summary>
         public static string Bitwarden {
@@ -943,15 +934,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Coming Soon!.
-        /// </summary>
-        public static string ComingSoon {
-            get {
-                return ResourceManager.GetString("ComingSoon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string Company {
@@ -966,42 +948,6 @@ namespace Bit.App.Resources {
         public static string Continue {
             get {
                 return ResourceManager.GetString("Continue", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Copied!.
-        /// </summary>
-        public static string Copied {
-            get {
-                return ResourceManager.GetString("Copied", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Copied password!.
-        /// </summary>
-        public static string CopiedPassword {
-            get {
-                return ResourceManager.GetString("CopiedPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Copied TOTP!.
-        /// </summary>
-        public static string CopiedTotp {
-            get {
-                return ResourceManager.GetString("CopiedTotp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Copied username!.
-        /// </summary>
-        public static string CopiedUsername {
-            get {
-                return ResourceManager.GetString("CopiedUsername", resourceCulture);
             }
         }
         
@@ -1560,15 +1506,6 @@ namespace Bit.App.Resources {
         public static string ExtensionReady {
             get {
                 return ResourceManager.GetString("ExtensionReady", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to See Supported Apps.
-        /// </summary>
-        public static string ExtensionSeeApps {
-            get {
-                return ResourceManager.GetString("ExtensionSeeApps", resourceCulture);
             }
         }
         
@@ -3094,15 +3031,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to App Store ratings are reset with every new version of Bitwarden. Please consider helping us out with a good review!.
-        /// </summary>
-        public static string RateTheAppDescriptionAppStore {
-            get {
-                return ResourceManager.GetString("RateTheAppDescriptionAppStore", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Recovery Code.
         /// </summary>
         public static string RecoveryCodeTitle {
@@ -3274,15 +3202,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to See Development Progress.
-        /// </summary>
-        public static string SeeDevProgress {
-            get {
-                return ResourceManager.GetString("SeeDevProgress", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Select.
         /// </summary>
         public static string Select {
@@ -3297,15 +3216,6 @@ namespace Bit.App.Resources {
         public static string SelectOneCollection {
             get {
                 return ResourceManager.GetString("SelectOneCollection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to What type of item do you want to add?.
-        /// </summary>
-        public static string SelectTypeAdd {
-            get {
-                return ResourceManager.GetString("SelectTypeAdd", resourceCulture);
             }
         }
         
@@ -3441,15 +3351,6 @@ namespace Bit.App.Resources {
         public static string ShareVaultConfirmation {
             get {
                 return ResourceManager.GetString("ShareVaultConfirmation", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Create an organization to securely share your items with other users..
-        /// </summary>
-        public static string ShareVaultDescription {
-            get {
-                return ResourceManager.GetString("ShareVaultDescription", resourceCulture);
             }
         }
         
@@ -3877,15 +3778,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unlock with Windows Hello.
-        /// </summary>
-        public static string UseWindowsHelloToUnlock {
-            get {
-                return ResourceManager.GetString("UseWindowsHelloToUnlock", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Validating.
         /// </summary>
         public static string Validating {
@@ -4021,15 +3913,6 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Verify with Windows Hello.
-        /// </summary>
-        public static string VerifyWindowsHello {
-            get {
-                return ResourceManager.GetString("VerifyWindowsHello", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Version.
         /// </summary>
         public static string Version {
@@ -4089,15 +3972,6 @@ namespace Bit.App.Resources {
         public static string WebVault {
             get {
                 return ResourceManager.GetString("WebVault", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Manage your items from any web browser with the Bitwarden web vault..
-        /// </summary>
-        public static string WebVaultDescription {
-            get {
-                return ResourceManager.GetString("WebVaultDescription", resourceCulture);
             }
         }
         
