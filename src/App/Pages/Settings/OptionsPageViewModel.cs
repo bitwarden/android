@@ -33,7 +33,8 @@ namespace Bit.App.Pages
         private int _uriMatchSelectedIndex;
         private bool _inited;
         private bool _updatingAutofill;
-        private bool _androidOptions;
+        private bool _showAndroidAccessibilitySettings;
+        private bool _showAndroidAutofillSettings;
 
         public OptionsPageViewModel()
         {
@@ -195,10 +196,16 @@ namespace Bit.App.Pages
             set => SetProperty(ref _autofillBlacklistedUris, value);
         }
 
-        public bool AndroidOptions
+        public bool ShowAndroidAccessibilitySettings
         {
-            get => _androidOptions;
-            set => SetProperty(ref _androidOptions, value);
+            get => _showAndroidAccessibilitySettings;
+            set => SetProperty(ref _showAndroidAccessibilitySettings, value);
+        }
+
+        public bool ShowAndroidAutofillSettings
+        {
+            get => _showAndroidAutofillSettings;
+            set => SetProperty(ref _showAndroidAutofillSettings, value);
         }
 
         public async Task InitAsync()

@@ -90,7 +90,7 @@
                     Text="{u:I18n DisableWebsiteIconsDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n AutofillService}"
                             StyleClass="box-header, box-header-platform" />
@@ -109,7 +109,7 @@
                     Text="{u:I18n DisableSavePromptDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Label
                         Text="{u:I18n BlacklistedUris}"
@@ -128,7 +128,7 @@
                     Text="{u:I18n BlacklistedUrisDescription}"
                     StyleClass="box-footer-label" />
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAccessibilitySettings}">
                 <StackLayout StyleClass="box-row-header">
                     <Label Text="{u:I18n AutofillAccessibilityService}"
                             StyleClass="box-header, box-header-platform" />
@@ -147,7 +147,7 @@
                     Text="{u:I18n AutofillAlwaysDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAccessibilitySettings}">
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n AutofillPersistNotification}"
@@ -162,7 +162,7 @@
                     Text="{u:I18n AutofillPersistNotificationDescription}"
                     StyleClass="box-footer-label, box-footer-label-switch" />
             </StackLayout>
-            <StackLayout StyleClass="box" IsVisible="{Binding AndroidOptions}">
+            <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAccessibilitySettings}">
                 <StackLayout StyleClass="box-row, box-row-switch">
                     <Label
                         Text="{u:I18n AutofillPasswordField}"

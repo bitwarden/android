@@ -1,16 +1,18 @@
-﻿using Bit.App.Resources;
-using System;
-using System.Collections.Generic;
+﻿using Bit.App.Abstractions;
+using Bit.App.Resources;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
     public partial class OptionsPage : BaseContentPage
     {
+        private readonly IDeviceActionService _deviceActionService;
         private readonly OptionsPageViewModel _vm;
 
         public OptionsPage()
         {
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             InitializeComponent();
             _vm = BindingContext as OptionsPageViewModel;
             _vm.Page = this;
@@ -19,7 +21,8 @@ namespace Bit.App.Pages
             _clearClipboardPicker.ItemDisplayBinding = new Binding("Value");
             if(Device.RuntimePlatform == Device.Android)
             {
-                _vm.AndroidOptions = true;
+                _vm.ShowAndroidAccessibilitySettings = true;
+                _vm.ShowAndroidAutofillSettings = _deviceActionService.SupportsAutofillService();
                 _themeDescriptionLabel.Text = string.Concat(_themeDescriptionLabel.Text, " ",
                     AppResources.RestartIsRequired);
             }
