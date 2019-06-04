@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string"/>
+              <xsd:attribute name="type" type="xsd:string"/>
+              <xsd:attribute name="mimetype" type="xsd:string"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string"/>
+              <xsd:attribute name="name" type="xsd:string"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+              <xsd:attribute ref="xml:space"/>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required"/>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Title" xml:space="preserve">
+    <value>Bitwarden - Administrador de contrasenyes</value>
+    <comment>Max 30 characters</comment>
+  </data>
+  <data name="ShortDescription" xml:space="preserve">
+    <value>Bitwarden és un administrador d'usuaris i contrasenyes que us ajuda a mantenir-vos segur mentre esteu en línia.</value>
+    <comment>Max 80 characters</comment>
+  </data>
+  <data name="FullDesciption" xml:space="preserve">
+    <value>Bitwarden és la manera més senzilla i segura d'emmagatzemar tots els vostres usuaris i contrasenyes mentre es mantenen sincronitzats entre tots els vostres dispositius.
+
+El robatori de la contrasenya és un problema greu. Els llocs web i les aplicacions que utilitzeu estan sota atac cada dia. Hi ha filtracions de seguretat i les vostres contrasenyes es roben. Quan reutilitzeu les mateixes contrasenyes en aplicacions i llocs web, els pirates informàtics poden accedir fàcilment al vostre correu electrònic, banc i altres comptes importants.
+
+Els experts en seguretat recomanen que utilitzeu una contrasenya diferent, generada aleatòriament per a cada compte que creeu. Però, com gestioneu totes aquestes contrasenyes? Bitwarden us facilita la seua creació, emmagatzemament i accés.
+
+Bitwarden emmagatzema tots els inicis de sessió en una caixa forta xifrada que sincronitza tots els dispositius. Com que està totalment xifrada abans de deixar el vostre dispositiu, només vosaltres tindreu accés a les dades. Ni tan sols l'equip de Bitwarden pot llegir-les, fins i tot si volguérem. Les vostres dades estan segellades amb encriptació AES de 256 bits, amb llavor i PBKDF2 SHA-256.
+
+Bitwarden és programari 100% de codi obert. El codi font de Bitwarden està allotjat a GitHub i tothom pot revisar, auditar i contribuir a la base de codis Bitwarden.</value>
+    <comment>Max 4000 characters</comment>
+  </data>
+  <data name="FeatureGraphic" xml:space="preserve">
+    <value>Administrador de contrasenyes segur i gratuït per a tots els vostres dispositius</value>
+  </data>
+  <data name="Screenshot1" xml:space="preserve">
+    <value>Administreu tots els inicis de sessió i contrasenyes des d'una caixa forta segura</value>
+  </data>
+  <data name="Screenshot2" xml:space="preserve">
+    <value>Genera automàticament contrasenyes fortes, aleatòries i segures</value>
+  </data>
+  <data name="Screenshot3" xml:space="preserve">
+    <value>Protegiu la vostra caixa forta amb l'empremta digital, el codi PIN o la contrasenya mestra</value>
+  </data>
+  <data name="Screenshot4" xml:space="preserve">
+    <value>Emplenament automàtic i ràpid d'inicis de sessió des del navegador web i altres aplicacions</value>
+  </data>
+  <data name="Screenshot5" xml:space="preserve">
+    <value>Sincronitzeu i accediu a la vostra caixa forta des de diversos dispositius
+
+- Telèfon
+- Tauleta
+- Escriptori
+- Web</value>
+  </data>
+</root>
