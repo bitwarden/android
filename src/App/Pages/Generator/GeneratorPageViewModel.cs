@@ -255,7 +255,8 @@ namespace Bit.App.Pages
         public async Task CopyAsync()
         {
             await _platformUtilsService.CopyToClipboardAsync(Password);
-            _platformUtilsService.ShowToast("success", null, AppResources.CopiedPassword);
+            _platformUtilsService.ShowToast("success", null,
+                string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
         }
 
         private void LoadFromOptions()
