@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Đóng</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Sắp tới!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Tiếp tục</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Đã sao chép!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Đã sao chép mật khẩu!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Đã sao chép tên người dùng!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Tạo Tài Khoản</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Bạn đã sẵn sàng để đăng nhập!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Xem các ứng dụng được hỗ trợ</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Thông tin đăng nhập của bạn giờ đây có thể dễ dàng truy cập từ Safari, Chrome và các ứng dụng được hỗ trợ khác.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Xin hãy nhìn nhận và đánh giá tốt cho chúng tôi!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Xếp hạng trên App Store sẽ được đặt lại sau mỗi bản cập nhật của Bitwarden. Bạn có thể cảm ơn chúng tôi bằng cách đánh giá 5 sao cho Bitwarden!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Tạo lại mật khẩu</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Bảo mật</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Xem lịch sử phát triển</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Chọn</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Trang web Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Quản lý mật khẩu của bạn từ mọi nơi.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Mất ứng dụng xác thực?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Trạng thái</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Chia sẻ kho mật khẩu của bạn</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Tạo một tổ chức để chia sẻ các thông tin đăng nhập của bạn một cách an toàn với những người dùng khác.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Quét khi bạn chọn trường Mật khẩu</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Ảnh</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>Đã sao chép TOTP!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Sao chép TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Mã bảo mật</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Bạn muốn thêm loại mục nào?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Thẻ</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Xác thực Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Mở khóa với Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Xác minh với Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
