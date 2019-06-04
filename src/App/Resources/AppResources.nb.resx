@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Lukk</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Kommer snart!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Fortsett</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Kopiert!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Kopierte passordet!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Kopierte brukernavnet!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Opprett en konto</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Du er klar til å logge på!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Se støttede apper</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Dine innlogginger er nå lett tilgjengelige fra Safari, Chrome, og mange andre støttede apper.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Tenk gjerne på om du vil skrive en anmeldelse om oss!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store-rangeringer blir tilbakestilt etter hver nye versjon av Bitwarden. Tenk gjerne på om du vil skrive en anmeldelse om oss!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Omgenerer et passord</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Sikkerhet</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Se utviklingsfremgangen</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Velg</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden Netthvelv</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Behandle dine gjenstander fra enhver nettleser med Bitwarden sitt netthvelv.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Har du mistet din autentiseringsapp?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Del hvelvet ditt</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Opprett en organisasjon for å sikkert dele dine gjenstander med andre brukere.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Skann når passordfeltet er i fokus</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Bilder</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>Kopierte TOTP-en!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopier TOTP-en</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Sikkerhetskode</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Hva slags gjenstandstype vil du legge til?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Kort</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verifiser din Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Lås opp med Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verifiser med Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
