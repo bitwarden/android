@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>閉じる</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>近日公開！</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>続行</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>コピーしました！</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>パスワードをコピーしました！</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>ユーザー名をコピーしました！</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>アカウントの作成</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>ログインする準備が出来ました！</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>対応アプリを表示</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Safari やChrome などの対応アプリでログイン情報に簡単にアクセスできます。</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>良いレビューで私たちを助けてください！</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store は Bitwarden の新しいバージョンが公開される毎に評価をリセットします。良いレビューで私たちを助けてください！</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>パスワードの再生成</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>セキュリティ</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>開発状況を表示</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>選択</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden ウェブ保管庫</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Bitwarden ウェブ保管庫であらゆるブラウザのログイン情報を管理します。</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>認証アプリを無くしてしまった場合</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>状態</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>ベータ</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>保管庫の共有</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>他のユーザーとアイテムを安全に共有する組織を作成します。</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>パスワードフィールドのフォーカス時にスキャン</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>写真</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP をコピーしました！</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP のコピー</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>セキュリティコード</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>どのタイプのアイテムを追加しますか？</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>カード</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Face ID で認証</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Windows Hello でロック解除</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Windows Hello で認証</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
