@@ -74,6 +74,7 @@ namespace Bit.App.Pages
             var lastSync = await _syncService.GetLastSyncAsync();
             if(lastSync != null)
             {
+                lastSync = lastSync.Value.ToLocalTime();
                 _lastSyncDate = string.Format("{0} {1}", lastSync.Value.ToShortDateString(),
                     lastSync.Value.ToShortTimeString());
             }
