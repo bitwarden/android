@@ -1,7 +1,23 @@
-#init:
-#  - ps: iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-#on_finish:
-#  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+image: Visual Studio 2017
+
+branches:
+  except:
+    - l10n_master
+
+configuration: Release
+
+init:
+- ps: |
+    if($env:DEBUG_RDP -eq "true") {
+      iex ((new-object net.webclient).DownloadString(`
+        'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    }
+- ps: |
+    if($env:APPVEYOR_REPO_TAG -eq "true") {
+      $tagName = $env:APPVEYOR_REPO_TAG_NAME.TrimStart("v")
+      $env:RELEASE_NAME = "Version ${tagName}"
+    }
+
 install:
   - choco install cloc --no-progress
   - "cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML"
@@ -9,21 +25,41 @@ install:
 #  - appveyor DownloadFile https://aka.ms/vs/15/release/vs_community.exe
 #  - vs_community.exe update --wait --quiet --norestart --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
 #  - ps: .\src\Android\update-android.ps1
+
 before_build:
   - nuget restore
-  - IF DEFINED keystore_dec_secret nuget install secure-file -ExcludeVersion
-  - IF DEFINED google_services_dec_secret secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc -secret %google_services_dec_secret%
+  - IF DEFINED KEYSTORE_DEC_SECRET nuget install secure-file -ExcludeVersion
+  - IF DEFINED GOOGLE_SERVICES_DEC_SECRET secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc -secret %GOOGLE_SERVICES_DEC_SECRET%
+
 after_build:
-  - ps: IF($env:keystore_dec_secret) { .\src\Android\ci-build-apks.ps1 }
+  - ps: |
+      if($env:KEYSTORE_DEC_SECRET) {
+        .\src\Android\ci-build-apks.ps1
+      }
+
 on_success:
-  - IF DEFINED play_dec_secret secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %play_dec_secret%
-  - IF DEFINED play_dec_secret dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
+  - IF DEFINED PLAY_DEC_SECRET secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %PLAY_DEC_SECRET%
+  - IF DEFINED PLAY_DEC_SECRET dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
+
+on_finish:
+  - ps: |
+      if($isWindows -and $env:DEBUG_RDP -eq "true") {
+        $blockRdp = $true
+        iex ((new-object net.webclient).DownloadString(`
+          'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+      }
+
 artifacts:
   - path: com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk
   - path: com.x8bit.bitwarden-fdroid-%APPVEYOR_BUILD_NUMBER%.apk
-branches:
-  except:
-    - l10n_master
-skip_tags: true
-configuration: Release
-image: Visual Studio 2017
+
+deploy:
+  tag: $(APPVEYOR_REPO_TAG_NAME)
+  release: $(RELEASE_NAME)
+  provider: GitHub
+  auth_token: $(GH_TOKEN)
+  artifact: /.*/
+  force_update: true
+  on:
+    branch: master
+    APPVEYOR_REPO_TAG: true
