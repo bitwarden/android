@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>ปิด</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>เร็วๆ นี้!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>ดำเนินการต่อไป</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Copied!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>คัดลอกรหัสผ่านแล้ว!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>ชื่อผู้ใช้คัดลอกแล้ว!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>สร้างบัญชี</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>คุณพร้อมที่จะเข้าระบบแล้ว!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>ดูแอปที่สนับสนุน</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>ขณะนี้คุณสามารถเข้าสู่ระบบอยู่ในได้อย่างง่ายดายจาก Safari, Chrome และปพลิเคชันอื่นๆที่ได้รับการสนับสนุน</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>โปรดพิจารณาช่วยเหลือเราด้วยความคิดเห็นที่ดี!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of bitwarden. Please consider helping us out with a good review!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>สร้างรหัสผ่านใหม่</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>ความปลอดภัย</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>ดูความคืบหน้าในการพัฒนา</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>เลือก</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>bitwarden Web Vault</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>จัดการรายการของคุณจากเว็บเบราเซอร์ใดๆกับ เว็บนิรภัย bitwarden</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>แอปตรวจสอบการยืนยันหายไป?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>สถานะ</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>เบต้า</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>แบ่งปันห้องนิรภัยของคุณ</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your logins with other users.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>สแกนเมื่อเน้นช่องรหัสผ่าน</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>รูปภาพ</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>คัดลอก TOTP แล้ว!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>คัดลอก TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>รหัสความปลอดภัย</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>คุณต้องการเพิ่มประเภทรายการใด?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>บัตร</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>ยืนยันรหัส Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>ปลดล็อก ด้วย Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>ยืนยันด้วย Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>

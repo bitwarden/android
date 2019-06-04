@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Sulje</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Tulossa pian!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Jatka</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Kopioitu!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Salasana kopioitu!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Käyttäjänimi kopioitu!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Luo tili</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Olet valmis kirjautumaan sisään!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Katso tuetut sovellukset</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Kirjautumistietosi ovat nyt helposti saatavilla Safarissa, Chromessa ja muissa tuetuissa sovelluksissa.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Harkitsethan auttamistamme jättämällä positiivisen arvostelun!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Storen arvostelut nollautuvat Bitwardenin jokaisen päivityksen yhteydessä. Autathan meitä jättämällä hyvän arvostelun!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Luo uusi salasana</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Turvallisuus</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Seuraa kehityksen edistymistä</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Valitse</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwardenin verkkoholvi</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Hallitse kohteitasi millä tahansa selaimella Bitwardenin verkkoholvissa.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Etkö pysty käyttämään todennussovellustasi?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Tila</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beeta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Jaa holvisi</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Luo organisaatio jakaaksesi kirjautumistiedot turvallisesti muiden käyttäjien kanssa.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Lue, kun salasanakenttä on aktiivinen</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Kuvat</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP kopioitu!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Kopioi TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Turvakoodi</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Minkä kohteen haluat lisätä?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Kortti</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Tunnistaudu Face ID:llä</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Avaa holvi Windows Hellolla</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Tunnistaudu Windows Hellolla</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>

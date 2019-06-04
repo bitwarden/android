@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>סגירה</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>בקרוב!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>המשך</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>הועתק!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>הסיסמה הועתקה!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>שם משתמש הועתק!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>צור חשבון</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>You're ready to log in!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>See Supported Apps</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Your logins are now easily accessible from Safari, Chrome, and other supported apps.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Please consider helping us out with a good review!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>App Store ratings are reset with every new version of Bitwarden. Please consider helping us out with a good review!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerate Password</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Security</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>See Development Progress</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Select</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden Web Vault</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Manage your items from any web browser with the Bitwarden web vault.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Lost authenticator app?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Share Your Vault</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Create an organization to securely share your items with other users.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scan When Password Field Focused</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Photos</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>Copied TOTP!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Copy TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Security Code</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>What type of item do you want to add?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Card</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verify Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Unlock with Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verify with Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
