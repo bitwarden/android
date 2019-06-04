@@ -308,6 +308,10 @@ namespace Bit.App
             {
                 return;
             }
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                return;
+            }
             Task.Run(async () =>
             {
                 var lastSync = await _syncService.GetLastSyncAsync();
