@@ -421,6 +421,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the &quot;Settings&quot; screen..
+        /// </summary>
+        public static string AutofillServiceNotEnabled {
+            get {
+                return ResourceManager.GetString("AutofillServiceNotEnabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your logins are now easily accessible right from your keyboard while logging into apps and websites..
         /// </summary>
         public static string AutofillSetup {

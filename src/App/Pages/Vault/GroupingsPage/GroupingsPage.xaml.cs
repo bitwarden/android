@@ -17,6 +17,7 @@ namespace Bit.App.Pages
         private readonly IPushNotificationService _pushNotificationService;
         private readonly IStorageService _storageService;
         private readonly ILockService _lockService;
+        private readonly IDeviceActionService _deviceActionService;
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
 
@@ -31,6 +32,7 @@ namespace Bit.App.Pages
             _pushNotificationService = ServiceContainer.Resolve<IPushNotificationService>("pushNotificationService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _vm = BindingContext as GroupingsPageViewModel;
             _vm.Page = this;
             _vm.MainPage = mainPage;
@@ -104,10 +106,28 @@ namespace Bit.App.Pages
                     await _pushNotificationService.RegisterAsync();
                 }
             }
-            else if(Device.RuntimePlatform == Device.Android &&
-                DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+            else if(Device.RuntimePlatform == Device.Android)
             {
-                await _pushNotificationService.RegisterAsync();
+                if(DateTime.UtcNow - lastPushRegistration > TimeSpan.FromDays(1))
+                {
+                    await _pushNotificationService.RegisterAsync();
+                }
+                if(!_deviceActionService.AutofillAccessibilityServiceRunning()
+                    && !_deviceActionService.AutofillServiceEnabled())
+                {
+                    var migratedFromV1 = await _storageService.GetAsync<bool?>(Constants.MigratedFromV1);
+                    if(migratedFromV1.GetValueOrDefault())
+                    {
+                        var migratedFromV1AutofillPromptShown = await _storageService.GetAsync<bool?>(
+                            Constants.MigratedFromV1AutofillPromptShown);
+                        if(!migratedFromV1AutofillPromptShown.GetValueOrDefault())
+                        {
+                            await DisplayAlert(AppResources.Autofill,
+                                AppResources.AutofillServiceNotEnabled, AppResources.Ok);
+                        }
+                    }
+                }
+                await _storageService.SaveAsync(Constants.MigratedFromV1AutofillPromptShown, true);
             }
         }
 

@@ -183,6 +183,7 @@ namespace Bit.App.Migration
 
             // Remove "needs migration" flag
             settingsShim.Remove(Constants.OldUserIdKey);
+            await storageService.SaveAsync(Constants.MigratedFromV1, true);
             Migrating = false;
             messagingService.Send("migrated");
             if(Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)

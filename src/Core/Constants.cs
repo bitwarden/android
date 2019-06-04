@@ -28,6 +28,8 @@
         public static string LastBuildKey = "lastBuild";
         public static string OldUserIdKey = "userId";
         public static string AddSitePromptShownKey = "addSitePromptShown";
+        public static string MigratedFromV1 = "migratedFromV1";
+        public static string MigratedFromV1AutofillPromptShown = "migratedV1AutofillPromptShown";
         public const int SelectFileRequestCode = 42;
         public const int SelectFilePermissionRequestCode = 43;
     }
