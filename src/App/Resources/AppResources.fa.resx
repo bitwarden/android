@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>بستن</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>به زودی می آید!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>ادامه</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>کپی انجام شد!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>رمز عبور کپی شد!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>نام کاربری کپی شد!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>ایجاد حساب کاربری</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>برای ورود آماده اید!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>مشاهده برنامه های پشتیبانی شده</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>اطلاعات ورود شما حالا از سافاری، کروم، و دیگر برنامه های پشتیبانی شده به راحتی قابل دسترسی است.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>لطفاً با یک بررسی خوب به ما کمک کنید!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>رتبه بندی فروشگاه App Store با هر نسخه جدید از Bitwarden تنظیم می شود. لطفاً با بررسی خوب به ما کمک کنید!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>تولید رمز عبور</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>امنیت</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>دیدن پیشرفت و توسعه</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>انتخاب</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>گاوصندوق وب Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>مورد های خود را از هر مرورگر وب با گاوصندوق وب Bitwarden مدیریت کنید.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>برنامه تأیید کننده از دست رفته؟</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>وضعیت</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>آزمایشی</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>اشتراک گذاری گاوصندوقتان</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>ایجاد یک تشکیلات برای اشتراک گذاری ایمن موارد خود با سایر کاربران.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>اسکن زمانی که در فیلد پسورد متمرکز شده</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>عکس ها</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP کپی شد!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>کپی TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>کد امنیتی</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>چه نوع موردی میخواهید اضافه کنید؟</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>کارت</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>تأیید Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>قفل گشایی با Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>تأیید با Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
