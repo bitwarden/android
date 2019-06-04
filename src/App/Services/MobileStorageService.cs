@@ -27,7 +27,9 @@ namespace Bit.App.Services
             Constants.PushLastRegistrationDateKey,
             Constants.PushRegisteredTokenKey,
             Constants.PushCurrentTokenKey,
-            Constants.LastBuildKey
+            Constants.LastBuildKey,
+            Constants.MigratedFromV1,
+            Constants.MigratedFromV1AutofillPromptShown,
         };
 
         public MobileStorageService(
