@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Închideţi</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>În curând!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Continuare</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Copiat!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Parolă copiată!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Nume de utilizator copiat!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Creare cont</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Sunteţi gata să vă autentificaţi!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Vedeţi aplicaţiile acceptate</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Datele dvs. de conectare sunt acum uşor accesibile din Safari, Chrome şi alte aplicaţii suportate.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Vă rugăm să luați în considerare să ne ajutați cu o recenzie bună!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Statisticile App Store sunt resetate cu fiecare nouă versiune Bitwarden. Vă rugăm să luați în considerare să ne ajutați cu o recenzie bună!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerare parolă</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Securitate</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Vizualizaţi progresul de dezvoltare</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Selectare</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Seif Web Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gestionați datele de conectare din orice browser web cu seiful web Bitwarden.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Ai pierdut aplicația de autentificare?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Stare</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Partajaţi seiful</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Creați o organizație pentru a partaja în siguranță accesul la datele de conectare cu alţi utilizatori.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scanare atunci când câmpul pentru parole este focalizat</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Fotografii</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP copiat!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Copiere TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Cod CVV2/CVC2</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Ce tip de articol doriți să adaugați?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Tip card</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verificare ID facial</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Deblocare cu Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verificare cu Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
