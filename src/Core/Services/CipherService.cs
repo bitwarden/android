@@ -319,7 +319,7 @@ namespace Bit.Core.Services
             var others = new List<CipherView>();
             var ciphers = await ciphersTask;
 
-            var defaultMatch = await _storageService.GetAsync<UriMatchType?>(Constants.DefaultUriMatch);
+            var defaultMatch = (UriMatchType?)(await _storageService.GetAsync<int?>(Constants.DefaultUriMatch));
             if(defaultMatch == null)
             {
                 defaultMatch = UriMatchType.Domain;
