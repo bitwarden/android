@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Fechar</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Brevemente!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Continuar</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Copiado!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Palavra-passe copiada!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Nome de utilizador copiado!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Criar conta</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Está pronto para iniciar sessão!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Ver aplicações suportadas</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>As suas credenciais estão agora facilmente acessíveis a partir do Safari, Chrome, e outras aplicações suportadas.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Por favor considere ajudar-nos com uma boa análise!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>As avaliações da App Store são repostas a cada versão do Bitwarden. Por favor considere ajudar-nos com uma boa análise!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Regenerar palavra-passe</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Segurança</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Ver progresso do desenvolvimento</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Selecionar</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Cofre Web Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Gira os seus itens a partir de qualquer navegador web com o cofre web Bitwarden.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Perdeu a aplicação do autenticador?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Estado</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Partilhar o seu cofre</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Crie uma organização para partilhar os seus itens em segurança com outros utilizadores.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Scanear quando o campo de palavra-passe está focado</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Fotografias</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP copiado!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Copiar TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Código de segurança</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Que tipo de item pretende adicionar?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Cartão</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verificar Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Desbloquear com o Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verificar com o Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
