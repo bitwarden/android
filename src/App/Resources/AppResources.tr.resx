@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Kapat</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Çok Yakında!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Devam</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Kopyalandı!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Parola kopyalandı!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Kullanıcı adı kopyalandı!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Hesap Oluştur</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Oturum açmak için hazırsınız!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Desteklenen Uygulamaları Gör</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Artık oturum açma işlemlerinizi Safari, Chrome ve diğer desteklenen uygulamalardan kolayca yapabilirsiniz.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Lütfen iyi bir yorum yazarak bize yardım edin!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Uygulama Mağazası oylamaları yeni bitwarden sürümü yayınlandıktan sonra sıfırlanır. Lütfen güzel incelemeler yazarak gelişmemize katkı sağlayın!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Tekrar Parola Oluştur</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Güvenlik</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Gelişim Sürecine Gözatın</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Seç</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Bitwarden Web Kasası</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>bitwarden web kasası ile herhangi bir internet tarayıcısından oturumlarınızı yönetin.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kimlik doğrulama uygulamanızı kayıp mı ettiniz?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Durum</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Kasanızı Paylaşın</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Diğer kullanıcılar ile giriş bilgilerinizi güvenle paylaşmak için bir organizasyon oluşturun.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Parola alanına odaklanıldığında tara</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Fotoğraflar</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP Kopyalandı!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>TOTP Kopyala</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Güvenlik Kodu</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Ne tür bir öğe eklemek istiyorsunuz?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Kart</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Face ID Doğrula</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Windows Hello ile Kilit Aç</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Windows Hello ile Doğrula</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
