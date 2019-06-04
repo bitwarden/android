@@ -64,6 +64,12 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return false;
             }
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
 
             _cipherDomain.CollectionIds = new HashSet<string>(
                 Collections.Where(c => c.Checked).Select(c => c.Collection.Id));

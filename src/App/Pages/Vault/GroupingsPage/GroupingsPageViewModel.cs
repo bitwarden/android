@@ -270,6 +270,12 @@ namespace Bit.App.Pages
 
         public async Task SyncAsync()
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return;
+            }
             await _deviceActionService.ShowLoadingAsync(AppResources.Syncing);
             await _syncService.FullSyncAsync(false);
             await _deviceActionService.HideLoadingAsync();

@@ -83,6 +83,12 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
             if(!_hasUpdatedKey)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.UpdateKey,
@@ -130,6 +136,12 @@ namespace Bit.App.Pages
 
         private async void DeleteAsync(AttachmentView attachment)
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return;
+            }
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
                 null, AppResources.Yes, AppResources.No);
             if(!confirmed)

@@ -173,11 +173,18 @@ namespace Bit.App.Pages
             {
                 return;
             }
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return;
+            }
             if(string.IsNullOrWhiteSpace(Token))
             {
                 await _platformUtilsService.ShowDialogAsync(
                     string.Format(AppResources.ValidationFieldRequired, AppResources.VerificationCode),
                     AppResources.AnErrorHasOccurred);
+                return;
             }
             if(SelectedProviderType == TwoFactorProviderType.Email ||
                 SelectedProviderType == TwoFactorProviderType.Authenticator)
@@ -231,6 +238,12 @@ namespace Bit.App.Pages
         {
             if(!EmailMethod)
             {
+                return false;
+            }
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
                 return false;
             }
             try

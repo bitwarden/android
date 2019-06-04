@@ -92,6 +92,12 @@ namespace Bit.App.Pages
                     AppResources.Ok);
                 return false;
             }
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
 
             var cipherDomain = await _cipherService.GetAsync(CipherId);
             var cipherView = await cipherDomain.DecryptAsync();

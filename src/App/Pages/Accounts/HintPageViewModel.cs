@@ -11,11 +11,13 @@ namespace Bit.App.Pages
     public class HintPageViewModel : BaseViewModel
     {
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IApiService _apiService;
 
         public HintPageViewModel()
         {
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _apiService = ServiceContainer.Resolve<IApiService>("apiService");
 
             PageTitle = AppResources.PasswordHint;
@@ -27,6 +29,12 @@ namespace Bit.App.Pages
 
         public async Task SubmitAsync()
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return;
+            }
             if(string.IsNullOrWhiteSpace(Email))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,

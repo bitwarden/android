@@ -17,6 +17,7 @@ namespace Bit.App.Pages
         private readonly IAuthService _authService;
         private readonly ISyncService _syncService;
         private readonly IStorageService _storageService;
+        private readonly IPlatformUtilsService _platformUtilsService;
 
         private bool _showPassword;
         private string _email;
@@ -28,6 +29,7 @@ namespace Bit.App.Pages
             _authService = ServiceContainer.Resolve<IAuthService>("authService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -73,6 +75,12 @@ namespace Bit.App.Pages
 
         public async Task LogInAsync()
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return;
+            }
             if(string.IsNullOrWhiteSpace(Email))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,

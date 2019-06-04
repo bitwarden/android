@@ -119,7 +119,8 @@ namespace Bit.App.Pages
             if(!string.IsNullOrWhiteSpace(AutofillUrl))
             {
                 var options = new List<string> { AppResources.Autofill };
-                if(cipher.Type == CipherType.Login)
+                if(cipher.Type == CipherType.Login && 
+                    Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
                     options.Add(AppResources.AutofillAndSave);
                 }
@@ -162,7 +163,7 @@ namespace Bit.App.Pages
                 }
                 if(_deviceActionService.SystemMajorVersion() < 21)
                 {
-                    // TODO
+                    await Utilities.AppHelpers.CipherListOptions(Page, cipher);
                 }
                 else
                 {

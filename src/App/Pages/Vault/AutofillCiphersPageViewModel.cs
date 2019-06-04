@@ -112,7 +112,8 @@ namespace Bit.App.Pages
                 if(fuzzy)
                 {
                     var options = new List<string> { AppResources.Yes };
-                    if(cipher.Type == CipherType.Login)
+                    if(cipher.Type == CipherType.Login &&
+                        Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                     {
                         options.Add(AppResources.YesAndSave);
                     }

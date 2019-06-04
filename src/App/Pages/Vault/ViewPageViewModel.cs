@@ -255,6 +255,12 @@ namespace Bit.App.Pages
 
         public async Task<bool> DeleteAsync()
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
                 null, AppResources.Yes, AppResources.Cancel);
             if(!confirmed)
@@ -329,6 +335,12 @@ namespace Bit.App.Pages
             {
                 return;
             }
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return;
+            }
             await _deviceActionService.ShowLoadingAsync(AppResources.CheckingPassword);
             var matches = await _auditService.PasswordLeakedAsync(Cipher.Login.Password);
             await _deviceActionService.HideLoadingAsync();
@@ -347,6 +359,12 @@ namespace Bit.App.Pages
         {
             if(!(Page as BaseContentPage).DoOnce())
             {
+                return;
+            }
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
                 return;
             }
             if(Cipher.OrganizationId == null && !CanAccessPremium)

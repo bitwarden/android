@@ -57,6 +57,12 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
             if(string.IsNullOrWhiteSpace(Folder.Name))
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred,
@@ -87,6 +93,12 @@ namespace Bit.App.Pages
 
         public async Task<bool> DeleteAsync()
         {
+            if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
+            {
+                await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
+                    AppResources.InternetConnectionRequiredTitle);
+                return false;
+            }
             var confirmed = await _platformUtilsService.ShowDialogAsync(AppResources.DoYouReallyWantToDelete,
                 null, AppResources.Yes, AppResources.No);
             if(!confirmed)
