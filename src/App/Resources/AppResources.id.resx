@@ -438,20 +438,8 @@
   <data name="Close" xml:space="preserve">
     <value>Tutup</value>
   </data>
-  <data name="ComingSoon" xml:space="preserve">
-    <value>Segera Hadir!</value>
-  </data>
   <data name="Continue" xml:space="preserve">
     <value>Lanjutkan</value>
-  </data>
-  <data name="Copied" xml:space="preserve">
-    <value>Tersalin!</value>
-  </data>
-  <data name="CopiedPassword" xml:space="preserve">
-    <value>Kata sandi tersalin!</value>
-  </data>
-  <data name="CopiedUsername" xml:space="preserve">
-    <value>Nama pengguna tersalin!</value>
   </data>
   <data name="CreateAccount" xml:space="preserve">
     <value>Buat Akun</value>
@@ -487,9 +475,6 @@
   </data>
   <data name="ExtensionReady" xml:space="preserve">
     <value>Anda siap untuk masuk!</value>
-  </data>
-  <data name="ExtensionSeeApps" xml:space="preserve">
-    <value>Lihat Aplikasi yang Didukung</value>
   </data>
   <data name="ExtensionSetup" xml:space="preserve">
     <value>Login anda sekarang bisa diakses dengan mudah dari Safari, Chrome, dan aplikasi lain yang didukung.</value>
@@ -646,9 +631,6 @@
   <data name="RateTheAppDescription" xml:space="preserve">
     <value>Mohon pertimbangkan membantu kami dengan ulasan yang baik!</value>
   </data>
-  <data name="RateTheAppDescriptionAppStore" xml:space="preserve">
-    <value>Peringkat App Store diatur ulang dengan setiap versi baru dari Bitwarden. Mohon pertimbangkan membatu kami dengan ulasan yang baik!</value>
-  </data>
   <data name="RegeneratePassword" xml:space="preserve">
     <value>Buat Ulang Sandi</value>
   </data>
@@ -660,9 +642,6 @@
   </data>
   <data name="Security" xml:space="preserve">
     <value>Keamanan</value>
-  </data>
-  <data name="SeeDevProgress" xml:space="preserve">
-    <value>Lihat Kemajuan Pengembangan</value>
   </data>
   <data name="Select" xml:space="preserve">
     <value>Pilih</value>
@@ -725,9 +704,6 @@
   <data name="WebVault" xml:space="preserve">
     <value>Brankas Web Bitwarden</value>
   </data>
-  <data name="WebVaultDescription" xml:space="preserve">
-    <value>Kelola info masuk Anda dari berbagai peramban web dengan Bitwarden web vault.</value>
-  </data>
   <data name="Lost2FAApp" xml:space="preserve">
     <value>Kehilangan aplikasi autentikasi?</value>
   </data>
@@ -776,9 +752,6 @@
   <data name="Status" xml:space="preserve">
     <value>Status</value>
   </data>
-  <data name="Beta" xml:space="preserve">
-    <value>Beta</value>
-  </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
     <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
   </data>
@@ -805,9 +778,6 @@
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Bagikan Brankas Anda</value>
-  </data>
-  <data name="ShareVaultDescription" xml:space="preserve">
-    <value>Buat organisasi untuk berbagi info masuk Anda dengan aman dengan pengguna lain.</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
     <value>Pindai Ketika Fokus ke Kolom Kata Sandi</value>
@@ -931,9 +901,6 @@
   <data name="Photos" xml:space="preserve">
     <value>Foto</value>
   </data>
-  <data name="CopiedTotp" xml:space="preserve">
-    <value>TOTP disalin!</value>
-  </data>
   <data name="CopyTotp" xml:space="preserve">
     <value>Salin TOTP</value>
   </data>
@@ -1028,9 +995,6 @@
   </data>
   <data name="SecurityCode" xml:space="preserve">
     <value>Kode Keamanan</value>
-  </data>
-  <data name="SelectTypeAdd" xml:space="preserve">
-    <value>Jenis apa yang ingin Anda tambahkan?</value>
   </data>
   <data name="TypeCard" xml:space="preserve">
     <value>Kartu</value>
@@ -1209,12 +1173,6 @@
   </data>
   <data name="VerifyFaceID" xml:space="preserve">
     <value>Verifikasi Face ID</value>
-  </data>
-  <data name="UseWindowsHelloToUnlock" xml:space="preserve">
-    <value>Buka dengan Windows Hello</value>
-  </data>
-  <data name="VerifyWindowsHello" xml:space="preserve">
-    <value>Verifikasi dengan Windows Hello</value>
   </data>
   <data name="WindowsHello" xml:space="preserve">
     <value>Windows Hello</value>
