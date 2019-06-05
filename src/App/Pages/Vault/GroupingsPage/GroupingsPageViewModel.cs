@@ -3,7 +3,6 @@ using Bit.App.Resources;
 using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
-using Bit.Core.Exceptions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
@@ -17,6 +16,8 @@ namespace Bit.App.Pages
 {
     public class GroupingsPageViewModel : BaseViewModel
     {
+        private const int NoFolderListSize = 100;
+
         private bool _refreshing;
         private bool _doingLoad;
         private bool _loading;
@@ -68,6 +69,8 @@ namespace Bit.App.Pages
         public bool HasCiphers { get; set; }
         public bool HasFolders { get; set; }
         public bool HasCollections { get; set; }
+        public bool ShowNoFolderCiphers => (NoFolderCiphers?.Count ?? int.MaxValue) < NoFolderListSize &&
+            (!Collections?.Any() ?? true);
         public List<CipherView> Ciphers { get; set; }
         public List<CipherView> FavoriteCiphers { get; set; }
         public List<CipherView> NoFolderCiphers { get; set; }
@@ -132,35 +135,24 @@ namespace Bit.App.Pages
             try
             {
                 await LoadDataAsync();
+                if(ShowNoFolderCiphers && (NestedFolders?.Any() ?? false))
+                {
+                    // Remove "No Folder" from folder listing
+                    NestedFolders = NestedFolders.GetRange(0, NestedFolders.Count - 1);
+                }
 
-                var favListItems = FavoriteCiphers?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
-                var ciphersListItems = Ciphers?.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
-                var folderListItems = NestedFolders?.Select(f =>
+                var uppercaseGroupNames = _deviceActionService.DeviceType == DeviceType.iOS;
+                var hasFavorites = FavoriteCiphers?.Any() ?? false;
+                if(hasFavorites)
                 {
-                    var fId = f.Node.Id ?? "none";
-                    return new GroupingsPageListItem
-                    {
-                        Folder = f.Node,
-                        ItemCount = (_folderCounts.ContainsKey(fId) ? _folderCounts[fId] : 0).ToString("N0")
-                    };
-                }).ToList();
-                var collectionListItems = NestedCollections?.Select(c => new GroupingsPageListItem
-                {
-                    Collection = c.Node,
-                    ItemCount = (_collectionCounts.ContainsKey(c.Node.Id) ?
-                        _collectionCounts[c.Node.Id] : 0).ToString("N0")
-                }).ToList();
-
-                var hasFavorites = favListItems?.Any() ?? false;
-                if(favListItems?.Any() ?? false)
-                {
+                    var favListItems = FavoriteCiphers.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(favListItems, AppResources.Favorites,
-                        favListItems.Count, Device.RuntimePlatform == Device.iOS, true));
+                        favListItems.Count, uppercaseGroupNames, true));
                 }
                 if(MainPage)
                 {
                     groupedItems.Add(new GroupingsPageListGroup(
-                        AppResources.Types, 4, Device.RuntimePlatform == Device.iOS, !hasFavorites)
+                        AppResources.Types, 4, uppercaseGroupNames, !hasFavorites)
                     {
                         new GroupingsPageListItem
                         {
@@ -188,28 +180,45 @@ namespace Bit.App.Pages
                         },
                     });
                 }
-                if(folderListItems?.Any() ?? false)
+                if(NestedFolders?.Any() ?? false)
                 {
+                    var folderListItems = NestedFolders.Select(f =>
+                    {
+                        var fId = f.Node.Id ?? "none";
+                        return new GroupingsPageListItem
+                        {
+                            Folder = f.Node,
+                            ItemCount = (_folderCounts.ContainsKey(fId) ? _folderCounts[fId] : 0).ToString("N0")
+                        };
+                    }).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(folderListItems, AppResources.Folders,
-                        folderListItems.Count, Device.RuntimePlatform == Device.iOS, !MainPage));
+                        folderListItems.Count, uppercaseGroupNames, !MainPage));
                 }
-                if(collectionListItems?.Any() ?? false)
+                if(NestedCollections?.Any() ?? false)
                 {
+                    var collectionListItems = NestedCollections.Select(c => new GroupingsPageListItem
+                    {
+                        Collection = c.Node,
+                        ItemCount = (_collectionCounts.ContainsKey(c.Node.Id) ?
+                            _collectionCounts[c.Node.Id] : 0).ToString("N0")
+                    }).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(collectionListItems, AppResources.Collections,
-                        collectionListItems.Count, Device.RuntimePlatform == Device.iOS, !MainPage));
+                        collectionListItems.Count, uppercaseGroupNames, !MainPage));
                 }
-                if(ciphersListItems?.Any() ?? false)
+                if(Ciphers?.Any() ?? false)
                 {
+                    var ciphersListItems = Ciphers.Select(c => new GroupingsPageListItem { Cipher = c }).ToList();
                     groupedItems.Add(new GroupingsPageListGroup(ciphersListItems, AppResources.Items,
-                        ciphersListItems.Count, Device.RuntimePlatform == Device.iOS,
-                        !MainPage && !groupedItems.Any()));
+                        ciphersListItems.Count, uppercaseGroupNames, !MainPage && !groupedItems.Any()));
                 }
-                // Workaround for https://stackoverflow.com/a/49992132/1090359
-                page.ListView.HasUnevenRows = false;
-                page.ListView.IsGroupingEnabled = false;
+                if(ShowNoFolderCiphers)
+                {
+                    var noFolderCiphersListItems = NoFolderCiphers.Select(
+                        c => new GroupingsPageListItem { Cipher = c }).ToList();
+                    groupedItems.Add(new GroupingsPageListGroup(noFolderCiphersListItems, AppResources.FolderNone,
+                        noFolderCiphersListItems.Count, uppercaseGroupNames, false));
+                }
                 GroupedItems.ResetWithRange(groupedItems);
-                page.ListView.HasUnevenRows = true;
-                page.ListView.IsGroupingEnabled = true;
             }
             finally
             {
