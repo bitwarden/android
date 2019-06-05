@@ -51,17 +51,25 @@ namespace Bit.App.Pages
             // Stop analysis until we navigate away so we don't keep reading barcodes
             _zxing.IsAnalyzing = false;
             _zxing.IsScanning = false;
-            if(!string.IsNullOrWhiteSpace(result?.Text) &&
-                Uri.TryCreate(result.Text, UriKind.Absolute, out Uri uri) &&
-                !string.IsNullOrWhiteSpace(uri?.Query))
+            var text = result?.Text;
+            if(!string.IsNullOrWhiteSpace(text))
             {
-                var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
-                foreach(var part in queryParts)
+                if(text.StartsWith("otpauth://totp"))
                 {
-                    if(part.StartsWith("secret="))
+                    _callback(text);
+                    return;
+                }
+                else if(Uri.TryCreate(text, UriKind.Absolute, out Uri uri) &&
+                    !string.IsNullOrWhiteSpace(uri?.Query))
+                {
+                    var queryParts = uri.Query.Substring(1).ToLowerInvariant().Split('&');
+                    foreach(var part in queryParts)
                     {
-                        _callback(part.Substring(7)?.ToUpperInvariant());
-                        return;
+                        if(part.StartsWith("secret="))
+                        {
+                            _callback(part.Substring(7)?.ToUpperInvariant());
+                            return;
+                        }
                     }
                 }
             }
