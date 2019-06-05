@@ -106,7 +106,15 @@ namespace Bit.App.Pages
 
         public async Task FingerprintAsync()
         {
-            var fingerprint = await _cryptoService.GetFingerprintAsync(await _userService.GetUserIdAsync());
+            List<string> fingerprint;
+            try
+            {
+                fingerprint = await _cryptoService.GetFingerprintAsync(await _userService.GetUserIdAsync());
+            }
+            catch(Exception e) when(e.Message == "No public key available.")
+            {
+                return;
+            }
             var phrase = string.Join("-", fingerprint);
             var text = string.Format("{0}:\n\n{1}", AppResources.YourAccountsFingerprint, phrase);
             var learnMore = await _platformUtilsService.ShowDialogAsync(text, AppResources.FingerprintPhrase,
