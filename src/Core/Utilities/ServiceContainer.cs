@@ -42,7 +42,7 @@ namespace Bit.Core.Utilities
             var collectionService = new CollectionService(cryptoService, userService, storageService, i18nService);
             searchService = new SearchService(cipherService);
             var lockService = new LockService(cryptoService, userService, platformUtilsService, storageService,
-                folderService, cipherService, collectionService, searchService, messagingService);
+                folderService, cipherService, collectionService, searchService, messagingService, null);
             var syncService = new SyncService(userService, apiService, settingsService, folderService,
                 cipherService, cryptoService, collectionService, storageService, messagingService,
                 () => messagingService.Send("logout"));

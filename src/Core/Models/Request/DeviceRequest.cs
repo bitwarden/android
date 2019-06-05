@@ -10,7 +10,6 @@ namespace Bit.Core.Models.Request
             Type = platformUtilsService.GetDevice();
             Name = platformUtilsService.GetDeviceString();
             Identifier = appId;
-            PushToken = null; // TODO?
         }
 
         public DeviceType? Type { get; set; }

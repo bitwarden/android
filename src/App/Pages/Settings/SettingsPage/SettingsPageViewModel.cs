@@ -61,8 +61,7 @@ namespace Bit.App.Pages
             _fingerprintName = AppResources.Fingerprint;
             if(Device.RuntimePlatform == Device.iOS)
             {
-                _fingerprintName = AppResources.TouchID;
-                // TODO: face id
+                _fingerprintName = _deviceActionService.SupportsFaceId() ? AppResources.FaceID : AppResources.TouchID;
             }
         }
 

@@ -29,8 +29,7 @@ namespace Bit.Core.Models.Request
                 obj.Add("deviceType", ((int)Device.Type).ToString());
                 obj.Add("deviceIdentifier", Device.Identifier);
                 obj.Add("deviceName", Device.Name);
-                // TODO
-                // dict.Add("devicePushToken", null);
+                obj.Add("devicePushToken", Device.PushToken);
             }
             if(!string.IsNullOrWhiteSpace(Token) && Provider != null)
             {

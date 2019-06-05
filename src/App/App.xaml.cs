@@ -110,10 +110,6 @@ namespace Bit.App
                     // Clean up old migrated key if they ever log out.
                     await _secureStorageService.RemoveAsync("oldKey");
                 }
-                else if(message.Command == "unlocked" || message.Command == "loggedIn")
-                {
-                    // TODO
-                }
                 else if(message.Command == "resumed")
                 {
                     if(Device.RuntimePlatform == Device.iOS)
@@ -195,10 +191,6 @@ namespace Bit.App
             _searchService.ClearIndex();
             _authService.LogOut(() =>
             {
-                if(expired)
-                {
-                    // TODO: Toast?
-                }
                 Current.MainPage = new HomePage();
             });
         }

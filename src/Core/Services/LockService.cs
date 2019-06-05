@@ -1,5 +1,4 @@
 ﻿using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 
@@ -16,6 +15,7 @@ namespace Bit.Core.Services
         private readonly ICollectionService _collectionService;
         private readonly ISearchService _searchService;
         private readonly IMessagingService _messagingService;
+        private readonly Action<bool> _lockedCallback;
 
         public LockService(
             ICryptoService cryptoService,
@@ -26,7 +26,8 @@ namespace Bit.Core.Services
             ICipherService cipherService,
             ICollectionService collectionService,
             ISearchService searchService,
-            IMessagingService messagingService)
+            IMessagingService messagingService,
+            Action<bool> lockedCallback)
         {
             _cryptoService = cryptoService;
             _userService = userService;
@@ -37,6 +38,7 @@ namespace Bit.Core.Services
             _collectionService = collectionService;
             _searchService = searchService;
             _messagingService = messagingService;
+            _lockedCallback = lockedCallback;
         }
 
         public bool PinLocked { get; set; }
@@ -118,7 +120,7 @@ namespace Bit.Core.Services
                 if(FingerprintLocked || PinLocked)
                 {
                     _messagingService.Send("locked", userInitiated);
-                    // TODO: locked callback?
+                    _lockedCallback?.Invoke(userInitiated);
                     return;
                 }
             }
@@ -133,7 +135,7 @@ namespace Bit.Core.Services
             _collectionService.ClearCache();
             _searchService.ClearIndex();
             _messagingService.Send("locked", userInitiated);
-            // TODO: locked callback?
+            _lockedCallback?.Invoke(userInitiated);
         }
 
         public async Task SetLockOptionAsync(int? lockOption)
