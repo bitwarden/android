@@ -6,6 +6,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -126,65 +127,15 @@ namespace Bit.App.Pages
                 if(!success)
                 {
                     await Navigation.PopModalAsync();
+                    return;
                 }
-                else if(!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Cipher.Name))
+                AdjustToolbar();
+                await ShowAlertsAsync();
+                if(!_vm.EditMode && string.IsNullOrWhiteSpace(_vm.Cipher?.Name))
                 {
                     RequestFocus(_nameEntry);
                 }
             });
-            if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
-            {
-                if(_vm.Cipher.OrganizationId == null)
-                {
-                    if(ToolbarItems.Contains(_collectionsItem))
-                    {
-                        ToolbarItems.Remove(_collectionsItem);
-                    }
-                    if(!ToolbarItems.Contains(_shareItem))
-                    {
-                        ToolbarItems.Insert(2, _shareItem);
-                    }
-                }
-                else
-                {
-                    if(ToolbarItems.Contains(_shareItem))
-                    {
-                        ToolbarItems.Remove(_shareItem);
-                    }
-                    if(!ToolbarItems.Contains(_collectionsItem))
-                    {
-                        ToolbarItems.Insert(2, _collectionsItem);
-                    }
-                }
-            }
-            if(!_vm.EditMode)
-            {
-                var addLoginShown = await _storageService.GetAsync<bool?>(Constants.AddSitePromptShownKey);
-                if(_vm.Cipher.Type == CipherType.Login && !_fromAutofill && !addLoginShown.GetValueOrDefault())
-                {
-                    await _storageService.SaveAsync(Constants.AddSitePromptShownKey, true);
-                    if(Device.RuntimePlatform == Device.iOS)
-                    {
-                        if(_deviceActionService.SystemMajorVersion() < 12)
-                        {
-                            await DisplayAlert(AppResources.BitwardenAppExtension,
-                                AppResources.BitwardenAppExtensionAlert2, AppResources.Ok);
-                        }
-                        else
-                        {
-                            await DisplayAlert(AppResources.PasswordAutofill,
-                                AppResources.BitwardenAutofillAlert2, AppResources.Ok);
-                        }
-                    }
-                    else if(Device.RuntimePlatform == Device.Android &&
-                        !_deviceActionService.AutofillAccessibilityServiceRunning() &&
-                        !_deviceActionService.AutofillServiceEnabled())
-                    {
-                        await DisplayAlert(AppResources.BitwardenAutofillService,
-                            AppResources.BitwardenAutofillServiceAlert2, AppResources.Ok);
-                    }
-                }
-            }
         }
 
         protected override void OnDisappearing()
@@ -279,6 +230,75 @@ namespace Bit.App.Pages
                     });
                 });
                 await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private async Task ShowAlertsAsync()
+        {
+            if(!_vm.EditMode)
+            {
+                if(_vm.Cipher == null)
+                {
+                    return;
+                }
+                var addLoginShown = await _storageService.GetAsync<bool?>(Constants.AddSitePromptShownKey);
+                if(_vm.Cipher.Type == CipherType.Login && !_fromAutofill && !addLoginShown.GetValueOrDefault())
+                {
+                    await _storageService.SaveAsync(Constants.AddSitePromptShownKey, true);
+                    if(Device.RuntimePlatform == Device.iOS)
+                    {
+                        if(_deviceActionService.SystemMajorVersion() < 12)
+                        {
+                            await DisplayAlert(AppResources.BitwardenAppExtension,
+                                AppResources.BitwardenAppExtensionAlert2, AppResources.Ok);
+                        }
+                        else
+                        {
+                            await DisplayAlert(AppResources.PasswordAutofill,
+                                AppResources.BitwardenAutofillAlert2, AppResources.Ok);
+                        }
+                    }
+                    else if(Device.RuntimePlatform == Device.Android &&
+                        !_deviceActionService.AutofillAccessibilityServiceRunning() &&
+                        !_deviceActionService.AutofillServiceEnabled())
+                    {
+                        await DisplayAlert(AppResources.BitwardenAutofillService,
+                            AppResources.BitwardenAutofillServiceAlert2, AppResources.Ok);
+                    }
+                }
+            }
+        }
+
+        private void AdjustToolbar()
+        {
+            if(_vm.EditMode && Device.RuntimePlatform == Device.Android)
+            {
+                if(_vm.Cipher == null)
+                {
+                    return;
+                }
+                if(_vm.Cipher.OrganizationId == null)
+                {
+                    if(ToolbarItems.Contains(_collectionsItem))
+                    {
+                        ToolbarItems.Remove(_collectionsItem);
+                    }
+                    if(!ToolbarItems.Contains(_shareItem))
+                    {
+                        ToolbarItems.Insert(2, _shareItem);
+                    }
+                }
+                else
+                {
+                    if(ToolbarItems.Contains(_shareItem))
+                    {
+                        ToolbarItems.Remove(_shareItem);
+                    }
+                    if(!ToolbarItems.Contains(_collectionsItem))
+                    {
+                        ToolbarItems.Insert(2, _collectionsItem);
+                    }
+                }
             }
         }
     }

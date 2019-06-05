@@ -54,13 +54,12 @@ namespace Bit.App.Pages
                     Device.BeginInvokeOnMainThread(() =>
                     {
                         IsBusy = false;
-                        var data = message.Data as Dictionary<string, object>;
-                        if(data.ContainsKey("successfully"))
+                        if(message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
                         {
                             var success = data["successfully"] as bool?;
-                            if(success.HasValue && success.Value)
+                            if(success.GetValueOrDefault())
                             {
-                                var task = _vm.LoadAsync();
+                                var task = _vm.LoadAsync(() => AdjustToolbar());
                             }
                         }
                     });
@@ -68,37 +67,12 @@ namespace Bit.App.Pages
             });
             await LoadOnAppearedAsync(_scrollView, true, async () =>
             {
-                var success = await _vm.LoadAsync();
+                var success = await _vm.LoadAsync(() => AdjustToolbar());
                 if(!success)
                 {
                     await Navigation.PopModalAsync();
                 }
             }, _mainContent);
-            if(Device.RuntimePlatform == Device.Android)
-            {
-                if(_vm.Cipher.OrganizationId == null)
-                {
-                    if(ToolbarItems.Contains(_collectionsItem))
-                    {
-                        ToolbarItems.Remove(_collectionsItem);
-                    }
-                    if(!ToolbarItems.Contains(_shareItem))
-                    {
-                        ToolbarItems.Insert(1, _shareItem);
-                    }
-                }
-                else
-                {
-                    if(ToolbarItems.Contains(_shareItem))
-                    {
-                        ToolbarItems.Remove(_shareItem);
-                    }
-                    if(!ToolbarItems.Contains(_collectionsItem))
-                    {
-                        ToolbarItems.Insert(1, _collectionsItem);
-                    }
-                }
-            }
         }
 
         protected override void OnDisappearing()
@@ -165,6 +139,39 @@ namespace Bit.App.Pages
             {
                 var page = new CollectionsPage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private void AdjustToolbar()
+        {
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                if(_vm.Cipher == null)
+                {
+                    return;
+                }
+                if(_vm.Cipher.OrganizationId == null)
+                {
+                    if(ToolbarItems.Contains(_collectionsItem))
+                    {
+                        ToolbarItems.Remove(_collectionsItem);
+                    }
+                    if(!ToolbarItems.Contains(_shareItem))
+                    {
+                        ToolbarItems.Insert(1, _shareItem);
+                    }
+                }
+                else
+                {
+                    if(ToolbarItems.Contains(_shareItem))
+                    {
+                        ToolbarItems.Remove(_shareItem);
+                    }
+                    if(!ToolbarItems.Contains(_collectionsItem))
+                    {
+                        ToolbarItems.Insert(1, _collectionsItem);
+                    }
+                }
             }
         }
     }

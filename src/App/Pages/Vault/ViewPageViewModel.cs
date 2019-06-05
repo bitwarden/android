@@ -206,12 +206,13 @@ namespace Bit.App.Pages
             }
         }
 
-        public async Task<bool> LoadAsync()
+        public async Task<bool> LoadAsync(Action finishedLoadingAction = null)
         {
             CleanUp();
             var cipher = await _cipherService.GetAsync(CipherId);
             if(cipher == null)
             {
+                finishedLoadingAction?.Invoke();
                 return false;
             }
             Cipher = await cipher.DecryptAsync();
@@ -235,6 +236,7 @@ namespace Bit.App.Pages
                     return true;
                 });
             }
+            finishedLoadingAction?.Invoke();
             return true;
         }
 
