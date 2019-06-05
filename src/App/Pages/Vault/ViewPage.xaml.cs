@@ -1,6 +1,7 @@
 ﻿using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -8,12 +9,14 @@ namespace Bit.App.Pages
     public partial class ViewPage : BaseContentPage
     {
         private readonly IBroadcasterService _broadcasterService;
+        private readonly ISyncService _syncService;
         private ViewPageViewModel _vm;
 
         public ViewPage(string cipherId)
         {
             InitializeComponent();
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _vm = BindingContext as ViewPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
@@ -34,12 +37,23 @@ namespace Bit.App.Pages
         protected override async void OnAppearing()
         {
             base.OnAppearing();
-            _broadcasterService.Subscribe(nameof(ViewPage), (message) =>
+            if(_syncService.SyncInProgress)
             {
-                if(message.Command == "syncCompleted")
+                IsBusy = true;
+            }
+
+            _broadcasterService.Subscribe(nameof(ViewPage), async (message) =>
+            {
+                if(message.Command == "syncStarted")
                 {
+                    Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                }
+                else if(message.Command == "syncCompleted")
+                {
+                    await Task.Delay(500);
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        IsBusy = false;
                         var data = message.Data as Dictionary<string, object>;
                         if(data.ContainsKey("successfully"))
                         {
@@ -90,6 +104,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            IsBusy = false;
             _broadcasterService.Unsubscribe(nameof(ViewPage));
             _vm.CleanUp();
         }

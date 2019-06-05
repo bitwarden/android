@@ -65,13 +65,23 @@ namespace Bit.App.Pages
         protected async override void OnAppearing()
         {
             base.OnAppearing();
+            if(_syncService.SyncInProgress)
+            {
+                IsBusy = true;
+            }
+
             _broadcasterService.Subscribe(_pageName, async (message) =>
             {
-                if(message.Command == "syncCompleted")
+                if(message.Command == "syncStarted")
+                {
+                    Device.BeginInvokeOnMainThread(() => IsBusy = true);
+                }
+                else if(message.Command == "syncCompleted")
                 {
                     await Task.Delay(500);
                     Device.BeginInvokeOnMainThread(() =>
                     {
+                        IsBusy = false;
                         var task = _vm.LoadAsync();
                     });
                 }
@@ -156,6 +166,7 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            IsBusy = false;
             _broadcasterService.Unsubscribe(_pageName);
         }
 
