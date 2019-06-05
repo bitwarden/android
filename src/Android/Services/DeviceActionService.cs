@@ -323,10 +323,17 @@ namespace Bit.Droid.Services
             {
                 return false;
             }
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var type = Java.Lang.Class.FromType(typeof(AutofillManager));
-            var manager = activity.GetSystemService(type) as AutofillManager;
-            return manager.IsAutofillSupported;
+            try
+            {
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var type = Java.Lang.Class.FromType(typeof(AutofillManager));
+                var manager = activity.GetSystemService(type) as AutofillManager;
+                return manager.IsAutofillSupported;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public int SystemMajorVersion()
@@ -514,9 +521,16 @@ namespace Bit.Droid.Services
             {
                 return false;
             }
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var afm = (AutofillManager)activity.GetSystemService(Java.Lang.Class.FromType(typeof(AutofillManager)));
-            return afm.IsEnabled && afm.HasEnabledAutofillServices;
+            try
+            {
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var afm = (AutofillManager)activity.GetSystemService(Java.Lang.Class.FromType(typeof(AutofillManager)));
+                return afm.IsEnabled && afm.HasEnabledAutofillServices;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void OpenAccessibilitySettings()
