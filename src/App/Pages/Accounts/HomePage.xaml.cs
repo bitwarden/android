@@ -11,7 +11,8 @@ namespace Bit.App.Pages
         {
             InitializeComponent();
             var theme = ThemeManager.GetTheme();
-            _logo.Source = theme == "dark" || theme == "black" ? "logo_white.png" : "logo.png";
+            var darkbasedTheme = theme == "dark" || theme == "black" || theme == "nord";
+            _logo.Source = darkbasedTheme ? "logo_white.png" : "logo.png";
         }
 
         public async Task DismissRegisterPageAndLogInAsync(string email)
