@@ -21,7 +21,7 @@
 
     <Color x:Key="TitleTextColor">#d8dee9</Color>
     <Color x:Key="TitleEntryTextColor">#e5e9f0</Color>
-    <Color x:Key="TitleEntryPlaceholderColor">#d8dee9</Color>
+    <Color x:Key="TitleEntryPlaceholderColor">#606C82</Color>
 
     <Color x:Key="ListItemBorderColor">#2e3440</Color>
     <Color x:Key="ListHeaderTextColor">#81a1c1</Color>
