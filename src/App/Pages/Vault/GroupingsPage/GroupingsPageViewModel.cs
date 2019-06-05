@@ -68,6 +68,8 @@ namespace Bit.App.Pages
         public string CollectionId { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
 
+        public bool HasCiphers { get; set; }
+        public bool HasFolders { get; set; }
         public List<CipherView> Ciphers { get; set; }
         public List<CipherView> FavoriteCiphers { get; set; }
         public List<CipherView> NoFolderCiphers { get; set; }
@@ -292,11 +294,13 @@ namespace Bit.App.Pages
         {
             NoDataText = AppResources.NoItems;
             _allCiphers = await _cipherService.GetAllDecryptedAsync();
+            HasCiphers = _allCiphers.Any();
             FavoriteCiphers?.Clear();
             NoFolderCiphers?.Clear();
             _folderCounts.Clear();
             _collectionCounts.Clear();
             _typeCounts.Clear();
+            HasFolders = false;
             Filter = null;
 
             if(MainPage)
@@ -305,6 +309,7 @@ namespace Bit.App.Pages
                 {
                     Folders = await _folderService.GetAllDecryptedAsync();
                     NestedFolders = await _folderService.GetAllNestedAsync();
+                    HasFolders = Folders.Any();
                 }
                 if(ShowCollections)
                 {
