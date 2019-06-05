@@ -30,6 +30,7 @@ namespace Bit.App.Services
             Constants.LastBuildKey,
             Constants.MigratedFromV1,
             Constants.MigratedFromV1AutofillPromptShown,
+            Constants.TriedV1Resync,
         };
 
         public MobileStorageService(

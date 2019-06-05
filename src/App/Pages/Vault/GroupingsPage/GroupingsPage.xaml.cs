@@ -92,7 +92,12 @@ namespace Bit.App.Pages
                     _vm.Ciphers.Count == 0 && _vm.Folders.Count == 0 &&
                     Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
-                    await _syncService.FullSyncAsync(true);
+                    var triedV1ReSync = await _storageService.GetAsync<bool?>(Constants.TriedV1Resync);
+                    if(!triedV1ReSync.GetValueOrDefault())
+                    {
+                        await _storageService.SaveAsync(Constants.TriedV1Resync, true);
+                        await _syncService.FullSyncAsync(true);
+                    }
                 }
             }, _mainContent);
 
