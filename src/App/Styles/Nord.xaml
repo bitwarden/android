@@ -12,6 +12,7 @@
     <Color x:Key="PasswordNumberColor">#88c0d0</Color>
     <Color x:Key="PasswordSpecialColor">#d08770</Color>
     <Color x:Key="ButtonColor">#d8dee9</Color>
+    <Color x:Key="InputPlaceholderColor">#7b88a1</Color>
 
     <Color x:Key="BorderColor">#2e3440</Color>
     <Color x:Key="DisabledIconColor">#d8dee9</Color>

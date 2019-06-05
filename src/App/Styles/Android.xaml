@@ -4,6 +4,8 @@
                     x:Class="Bit.App.Styles.Android">
     <Style TargetType="Entry"
            ApplyToDerivedTypes="True">
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource InputPlaceholderColor}" />
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
     </Style>
@@ -14,6 +16,8 @@
     </Style>
     <Style TargetType="Editor"
            ApplyToDerivedTypes="True">
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource InputPlaceholderColor}" />
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
     </Style>

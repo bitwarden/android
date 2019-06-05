@@ -2,5 +2,14 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.iOS">
-
+    <Style TargetType="Entry"
+           ApplyToDerivedTypes="True">
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource InputPlaceholderColor}" />
+    </Style>
+    <Style TargetType="Editor"
+           ApplyToDerivedTypes="True">
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource InputPlaceholderColor}" />
+    </Style>
 </ResourceDictionary>
