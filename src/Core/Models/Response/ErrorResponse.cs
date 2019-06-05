@@ -27,9 +27,9 @@ namespace Bit.Core.Models.Response
             }
             if(errorModel != null)
             {
-                Message = errorModel.GetValue("Message", StringComparison.OrdinalIgnoreCase)?.Value<string>();
-                ValidationErrors = errorModel.GetValue("ValidationErrors", StringComparison.OrdinalIgnoreCase)
-                    ?.Value<Dictionary<string, List<string>>>();
+                var model = errorModel.ToObject<ErrorModel>();
+                Message = model.Message;
+                ValidationErrors = model.ValidationErrors;
             }
             else
             {
@@ -59,6 +59,12 @@ namespace Bit.Core.Models.Response
                 }
             }
             return Message;
+        }
+
+        private class ErrorModel
+        {
+            public string Message { get; set; }
+            public Dictionary<string, List<string>> ValidationErrors { get; set; }
         }
     }
 }
