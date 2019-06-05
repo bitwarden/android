@@ -5,6 +5,7 @@ using Bit.Core.Enums;
 using Bit.Core.Exceptions;
 using Bit.Core.Models.Request;
 using Bit.Core.Utilities;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -16,7 +17,6 @@ namespace Bit.App.Pages
         private readonly IApiService _apiService;
         private readonly ICryptoService _cryptoService;
         private readonly IPlatformUtilsService _platformUtilsService;
-
         private bool _showPassword;
 
         public RegisterPageViewModel()
@@ -26,7 +26,7 @@ namespace Bit.App.Pages
             _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
 
-            PageTitle = AppResources.Bitwarden;
+            PageTitle = AppResources.CreateAccount;
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleConfirmPasswordCommand = new Command(ToggleConfirmPassword);
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -51,6 +51,7 @@ namespace Bit.App.Pages
         public string MasterPassword { get; set; }
         public string ConfirmMasterPassword { get; set; }
         public string Hint { get; set; }
+        public Action RegistrationSuccess { get; set; }
 
         public async Task SubmitAsync()
         {
@@ -121,10 +122,15 @@ namespace Bit.App.Pages
 
             try
             {
-                await _deviceActionService.ShowLoadingAsync(AppResources.LoggingIn);
+                await _deviceActionService.ShowLoadingAsync(AppResources.CreatingAccount);
                 await _apiService.PostRegisterAsync(request);
                 await _deviceActionService.HideLoadingAsync();
-                // TODO: dismiss this page from home page and pass email for login page
+                _platformUtilsService.ShowToast("success", null, AppResources.AccountCreated,
+                    new System.Collections.Generic.Dictionary<string, object>
+                    {
+                        ["longDuration"] = true
+                    });
+                RegistrationSuccess?.Invoke();
             }
             catch(ApiException e)
             {

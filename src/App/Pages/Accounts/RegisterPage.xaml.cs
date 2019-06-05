@@ -7,11 +7,18 @@ namespace Bit.App.Pages
     {
         private RegisterPageViewModel _vm;
 
-        public RegisterPage()
+        public RegisterPage(HomePage homePage)
         {
             InitializeComponent();
             _vm = BindingContext as RegisterPageViewModel;
             _vm.Page = this;
+            _vm.RegistrationSuccess = async () =>
+            {
+                if(homePage != null)
+                {
+                    await homePage.DismissRegisterPageAndLogInAsync(_vm.Email);
+                }
+            };
             MasterPasswordEntry = _masterPassword;
             ConfirmMasterPasswordEntry = _confirmMasterPassword;
 

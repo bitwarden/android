@@ -7,11 +7,12 @@ namespace Bit.App.Pages
     {
         private LoginPageViewModel _vm;
 
-        public LoginPage()
+        public LoginPage(string email = null)
         {
             InitializeComponent();
             _vm = BindingContext as LoginPageViewModel;
             _vm.Page = this;
+            _vm.Email = email;
             MasterPasswordEntry = _masterPassword;
 
             _email.ReturnType = ReturnType.Next;

@@ -1,5 +1,6 @@
 ﻿using Bit.App.Utilities;
 using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -11,6 +12,12 @@ namespace Bit.App.Pages
             InitializeComponent();
             var theme = ThemeManager.GetTheme();
             _logo.Source = theme == "dark" || theme == "black" ? "logo_white.png" : "logo.png";
+        }
+
+        public async Task DismissRegisterPageAndLogInAsync(string email)
+        {
+            await Navigation.PopModalAsync();
+            await Navigation.PushModalAsync(new NavigationPage(new LoginPage(email)));
         }
 
         private void LogIn_Clicked(object sender, EventArgs e)
@@ -25,7 +32,7 @@ namespace Bit.App.Pages
         {
             if(DoOnce())
             {
-                Navigation.PushModalAsync(new NavigationPage(new RegisterPage()));
+                Navigation.PushModalAsync(new NavigationPage(new RegisterPage(this)));
             }
         }
 
