@@ -143,7 +143,18 @@ namespace Bit.Droid
         protected override void OnNewIntent(Intent intent)
         {
             base.OnNewIntent(intent);
-            ParseYubiKey(intent.DataString);
+            if(intent.GetBooleanExtra("generatorTile", false))
+            {
+                _messagingService.Send("popAllAndGoToTabGenerator");
+            }
+            if(intent.GetBooleanExtra("myVaultTile", false))
+            {
+                _messagingService.Send("popAllAndGoToTabMyVault");
+            }
+            else
+            {
+                ParseYubiKey(intent.DataString);
+            }
         }
 
         public async override void OnRequestPermissionsResult(int requestCode, string[] permissions,
@@ -243,6 +254,7 @@ namespace Bit.Droid
             {
                 Uri = Intent.GetStringExtra("uri") ?? Intent.GetStringExtra("autofillFrameworkUri"),
                 MyVaultTile = Intent.GetBooleanExtra("myVaultTile", false),
+                GeneratorTile = Intent.GetBooleanExtra("generatorTile", false),
                 FromAutofillFramework = Intent.GetBooleanExtra("autofillFramework", false)
             };
             var fillType = Intent.GetIntExtra("autofillFrameworkFillType", 0);

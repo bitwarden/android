@@ -122,6 +122,28 @@ namespace Bit.App
                     await Task.Delay(1000);
                     await SetMainPageAsync();
                 }
+                else if(message.Command == "popAllAndGoToTabGenerator" ||
+                    message.Command == "popAllAndGoToTabMyVault")
+                {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        if(Current.MainPage is TabsPage tabsPage)
+                        {
+                            while(tabsPage.Navigation.ModalStack.Count > 0)
+                            {
+                                await tabsPage.Navigation.PopModalAsync(false);
+                            }
+                            if(message.Command == "popAllAndGoToTabMyVault")
+                            {
+                                tabsPage.ResetToVaultPage();
+                            }
+                            else
+                            {
+                                tabsPage.ResetToGeneratorPage();
+                            }
+                        }
+                    });
+                }
             });
         }
 
@@ -214,7 +236,7 @@ namespace Bit.App
                 }
                 else
                 {
-                    Current.MainPage = new TabsPage();
+                    Current.MainPage = new TabsPage(_appOptions);
                 }
             }
             else

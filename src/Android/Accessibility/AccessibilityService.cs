@@ -231,7 +231,7 @@ namespace Bit.Droid.Accessibility
                 AppResources.BitwardenAutofillServiceNotificationContentOld;
 
             var builder = new Notification.Builder(this);
-            builder.SetSmallIcon(Resource.Drawable.notification_sm)
+            builder.SetSmallIcon(Resource.Drawable.shield)
                    .SetContentTitle(AppResources.BitwardenAutofillService)
                    .SetContentText(notificationContent)
                    .SetTicker(notificationContent)

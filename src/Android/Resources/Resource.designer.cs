@@ -9031,29 +9031,29 @@ namespace Bit.Droid
 			// aapt resource value: 0x7f020155
 			public const int notification_icon_background = 2130837845;
 			
-			// aapt resource value: 0x7f020156
-			public const int notification_sm = 2130837846;
-			
 			// aapt resource value: 0x7f020164
 			public const int notification_template_icon_bg = 2130837860;
 			
 			// aapt resource value: 0x7f020165
 			public const int notification_template_icon_low_bg = 2130837861;
 			
+			// aapt resource value: 0x7f020156
+			public const int notification_tile_bg = 2130837846;
+			
 			// aapt resource value: 0x7f020157
-			public const int notification_tile_bg = 2130837847;
+			public const int notify_panel_notification_icon_bg = 2130837847;
 			
 			// aapt resource value: 0x7f020158
-			public const int notify_panel_notification_icon_bg = 2130837848;
+			public const int pencil = 2130837848;
 			
 			// aapt resource value: 0x7f020159
-			public const int pencil = 2130837849;
+			public const int plus = 2130837849;
 			
 			// aapt resource value: 0x7f02015a
-			public const int plus = 2130837850;
+			public const int refresh = 2130837850;
 			
 			// aapt resource value: 0x7f02015b
-			public const int refresh = 2130837851;
+			public const int refresh_sm = 2130837851;
 			
 			// aapt resource value: 0x7f02015c
 			public const int search = 2130837852;
@@ -10482,6 +10482,9 @@ namespace Bit.Droid
 			
 			// aapt resource value: 0x7f0900c2
 			public const int MyVault = 2131296450;
+			
+			// aapt resource value: 0x7f0900c3
+			public const int PasswordGenerator = 2131296451;
 			
 			// aapt resource value: 0x7f090032
 			public const int abc_action_bar_home_description = 2131296306;

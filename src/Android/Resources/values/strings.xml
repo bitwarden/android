@@ -13,4 +13,7 @@
   <string name="MyVault">
     My Vault
   </string>
+  <string name="PasswordGenerator">
+    Password Generator
+  </string>
 </resources>

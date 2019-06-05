@@ -1,5 +1,8 @@
 ﻿using Bit.App.Effect;
+using Bit.App.Models;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -7,8 +10,9 @@ namespace Bit.App.Pages
     public class TabsPage : TabbedPage
     {
         private NavigationPage _groupingsPage;
+        private NavigationPage _generatorPage;
 
-        public TabsPage()
+        public TabsPage(AppOptions appOptions = null)
         {
             _groupingsPage = new NavigationPage(new GroupingsPage(true))
             {
@@ -17,12 +21,12 @@ namespace Bit.App.Pages
             };
             Children.Add(_groupingsPage);
 
-            var generatorPage = new NavigationPage(new GeneratorPage(true, null, this))
+            _generatorPage = new NavigationPage(new GeneratorPage(true, null, this))
             {
                 Title = AppResources.Generator,
                 Icon = "refresh.png"
             };
-            Children.Add(generatorPage);
+            Children.Add(_generatorPage);
 
             var settingsPage = new NavigationPage(new SettingsPage(this))
             {
@@ -44,11 +48,22 @@ namespace Bit.App.Pages
                 Xamarin.Forms.PlatformConfiguration.AndroidSpecific.TabbedPage.SetBarItemColor(this,
                     (Color)Application.Current.Resources["TabBarItemColor"]);
             }
+
+            if(appOptions?.GeneratorTile ?? false)
+            {
+                appOptions.GeneratorTile = false;
+                ResetToGeneratorPage();
+            }
         }
 
         public void ResetToVaultPage()
         {
             CurrentPage = _groupingsPage;
+        }
+
+        public void ResetToGeneratorPage()
+        {
+            CurrentPage = _generatorPage;
         }
 
         protected async override void OnCurrentPageChanged()

@@ -17,7 +17,7 @@ namespace Bit.Droid.Tile
     [Service(Permission = Android.Manifest.Permission.BindQuickSettingsTile, Label = "@string/MyVault",
         Icon = "@drawable/shield")]
     [IntentFilter(new string[] { ActionQsTile })]
-    [Register("com.x8bit.bitwarden.Tile.MyVaultTileService")]
+    [Register("com.x8bit.bitwarden.MyVaultTileService")]
     public class MyVaultTileService : TileService
     {
         public override void OnTileAdded()

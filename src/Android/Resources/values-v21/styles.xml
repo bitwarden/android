@@ -6,4 +6,6 @@
   </style>
   <style name="BlackTheme" parent="BlackTheme.Base">
   </style>
+  <style name="NordTheme" parent="NordTheme.Base">
+  </style>
 </resources>
