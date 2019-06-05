@@ -1,17 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+  <!-- Light theme -->
   <color name="colorPrimary">#3c8dbc</color>
   <color name="colorPrimaryDark">#222d32</color>
   <color name="primary">#3c8dbc</color>
   <color name="notificationBar">#3883af</color>
   <color name="border">#dddddd</color>
 
+  <!-- Dark theme -->
   <color name="dark_primary">#52bdfb</color>
   <color name="dark_notificationBar">#191919</color>
   <color name="dark_border">#191919</color>
-  
+
+  <!-- Black theme -->
   <color name="black_border">#282828</color>
 
+  <!-- Nord theme -->
+  <color name="nord_background">#3b4252</color>
+  <color name="nord_text">#e5e9f0</color>
+  <color name="nord_primary">#81a1c1</color>
+  <color name="nord_actionBar">#2e3440</color>
+  <color name="nord_actionBarText">#e5e9f0</color>
+  <color name="nord_notificationBar">#20242D</color>
+  <color name="nord_dialogBackground">#3b4252</color>
+  <color name="nord_border">#2e3440</color>
+  <color name="nord_popupBackground">#4c566a</color>
+  <color name="nord_popupText">#e5e9f0</color>
+  <color name="nord_buttonBackground">#4c566a</color>
+
+  <!-- Other -->
   <color name="launcher_background">#FFFFFF</color>
   <color name="white">#FFFFFF</color>
   <color name="black">#000000</color>

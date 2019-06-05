@@ -48,6 +48,10 @@ namespace Bit.Droid
             {
                 SetTheme(Resource.Style.BlackTheme_Splash);
             }
+            else if(theme == "nord")
+            {
+                SetTheme(Resource.Style.NordTheme_Splash);
+            }
             else
             {
                 SetTheme(Resource.Style.LightTheme_Splash);

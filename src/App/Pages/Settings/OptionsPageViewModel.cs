@@ -67,6 +67,7 @@ namespace Bit.App.Pages
             {
                 ThemeOptions.Add(new KeyValuePair<string, string>("black", AppResources.Black));
             }
+            ThemeOptions.Add(new KeyValuePair<string, string>("nord", "Nord"));
             UriMatchOptions = new List<KeyValuePair<UriMatchType?, string>>
             {
                 new KeyValuePair<UriMatchType?, string>(UriMatchType.Domain, AppResources.BaseDomain),

@@ -289,6 +289,10 @@ namespace Bit.Droid
             {
                 SetTheme(Resource.Style.BlackTheme);
             }
+            else if(theme == "nord")
+            {
+                SetTheme(Resource.Style.NordTheme);
+            }
             else
             {
                 SetTheme(Resource.Style.LightTheme);

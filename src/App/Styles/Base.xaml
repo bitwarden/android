@@ -78,6 +78,13 @@
         <Setter Property="BarBackgroundColor"
                 Value="{StaticResource TabBarBackgroundColor}" />
     </Style>
+  <Style TargetType="NavigationPage"
+         ApplyToDerivedTypes="True">
+    <Setter Property="BarTextColor"
+            Value="{StaticResource NavigationBarTextColor}" />
+    <Setter Property="BarBackgroundColor"
+            Value="{StaticResource NavigationBarBackgroundColor}" />
+  </Style>
 
     <!-- Buttons -->
     <Style TargetType="Button"

@@ -118,6 +118,9 @@
     <Compile Update="Styles\Black.xaml.cs">
       <DependentUpon>Black.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Styles\Nord.xaml.cs">
+      <DependentUpon>Nord.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Styles\Variables.xaml.cs">
       <DependentUpon>Variables.xaml</DependentUpon>
     </Compile>

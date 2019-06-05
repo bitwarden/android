@@ -25,6 +25,10 @@ namespace Bit.App.Utilities
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Black());
             }
+            else if(name == "nord")
+            {
+                Application.Current.Resources.MergedDictionaries.Add(new Nord());
+            }
             else
             {
                 Application.Current.Resources.MergedDictionaries.Add(new Light());
