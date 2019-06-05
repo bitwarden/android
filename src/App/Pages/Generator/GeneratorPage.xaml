@@ -29,7 +29,7 @@
     </ContentPage.Resources>
 
     <ScrollView Padding="0, 0, 0, 20">
-        <StackLayout Spacing="20">
+        <StackLayout Spacing="0" Padding="0">
             <StackLayout StyleClass="box">
                 <controls:MonoLabel
                     Text="{Binding Password}"
@@ -37,14 +37,12 @@
                     StyleClass="text-lg"
                     HorizontalTextAlignment="Center"
                     LineBreakMode="CharacterWrap" />
-                <StackLayout Orientation="Horizontal">
-                    <Button Text="{u:I18n RegeneratePassword}"
+                <Button Text="{u:I18n RegeneratePassword}"
                         HorizontalOptions="FillAndExpand"
                         Clicked="Regenerate_Clicked"></Button>
-                    <Button Text="{u:I18n CopyPassword}"
+                <Button Text="{u:I18n CopyPassword}"
                         HorizontalOptions="FillAndExpand"
                         Clicked="Copy_Clicked"></Button>
-                </StackLayout>
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
