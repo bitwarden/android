@@ -4,7 +4,7 @@ using Bit.Droid.Renderers;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(Entry), typeof(CustomEditorRenderer))]
+[assembly: ExportRenderer(typeof(Editor), typeof(CustomEditorRenderer))]
 namespace Bit.Droid.Renderers
 {
     public class CustomEditorRenderer : EditorRenderer

@@ -16,6 +16,7 @@ using Android.Support.V4.Content;
 using Android.Text;
 using Android.Text.Method;
 using Android.Views.Autofill;
+using Android.Views.InputMethods;
 using Android.Webkit;
 using Android.Widget;
 using Bit.App.Abstractions;
@@ -255,6 +256,8 @@ namespace Bit.Droid.Services
 #pragma warning restore CS0618 // Type or member is obsolete
             }
 
+            input.ImeOptions = input.ImeOptions | (ImeAction)ImeFlags.NoPersonalizedLearning |
+                (ImeAction)ImeFlags.NoExtractUi;
             input.Text = text;
             input.SetSelection(text.Length);
             var container = new FrameLayout(activity);
