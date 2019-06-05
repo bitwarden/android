@@ -87,8 +87,10 @@ namespace Bit.App.Pages
                         await _vm.LoadAsync();
                     }
                 }
+                // Forced sync if for some reason we have no data after a v1 migration
                 if(_vm.MainPage && !_syncService.SyncInProgress && migratedFromV1.GetValueOrDefault() &&
-                    _vm.Ciphers.Count == 0 && _vm.Folders.Count == 0)
+                    _vm.Ciphers.Count == 0 && _vm.Folders.Count == 0 &&
+                    Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
                     await _syncService.FullSyncAsync(true);
                 }
