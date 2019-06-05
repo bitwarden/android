@@ -1,24 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
+  <!-- Light theme -->
+  <style name="LightTheme" parent="LightTheme.Base">
+  </style>
+  
   <style name="LightTheme.Splash" parent="LightTheme.Base">
     <item name="android:windowBackground">@drawable/splash_screen</item>
     <item name="android:windowNoTitle">true</item>
-  </style>
-  <style name="DarkTheme.Splash" parent="DarkTheme.Base">
-    <item name="android:windowBackground">@drawable/splash_screen_dark</item>
-    <item name="android:windowNoTitle">true</item>
-  </style>
-  <style name="BlackTheme.Splash" parent="DarkTheme.Splash">
-  </style>
-
-  <style name="LightTheme" parent="LightTheme.Base">
   </style>
 
   <style name="LightTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
     <item name="colorPrimary">@color/primary</item>
-    <item name="colorPrimaryDark">@color/accent</item>
+    <item name="colorPrimaryDark">@color/notificationBar</item>
     <item name="colorAccent">@color/primary</item>
     <item name="colorControlNormal">@color/border</item>
     <item name="windowActionModeOverlay">true</item>
@@ -28,12 +23,19 @@
     <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
   </style>
 
+  <!-- Dark theme -->
   <style name="DarkTheme" parent="DarkTheme.Base">
+  </style>
+  
+  <style name="DarkTheme.Splash" parent="DarkTheme.Base">
+    <item name="android:windowBackground">@drawable/splash_screen_dark</item>
+    <item name="android:windowNoTitle">true</item>
   </style>
   
   <style name="DarkTheme.Base" parent="Theme.AppCompat">
     <item name="windowNoTitle">true</item>
     <item name="windowActionBar">false</item>
+    <item name="colorPrimaryDark">@color/dark_notificationBar</item>
     <item name="colorAccent">@color/dark_primary</item>
     <item name="colorControlNormal">@color/dark_border</item>
     <item name="windowActionModeOverlay">true</item>
@@ -43,15 +45,21 @@
     <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
   </style>
 
+  <!-- Black theme -->
   <style name="BlackTheme" parent="BlackTheme.Base">
+  </style>
+  
+  <style name="BlackTheme.Splash" parent="DarkTheme.Splash">
   </style>
 
   <style name="BlackTheme.Base" parent="DarkTheme.Base">
     <item name="android:windowBackground">@android:color/black</item>
     <item name="colorPrimary">@android:color/black</item>
+    <item name="colorPrimaryDark">@android:color/black</item>
     <item name="colorControlNormal">@color/black_border</item>
   </style>
 
+  <!-- Other theme components -->
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
     <item name="colorAccent">#FF4081</item>
   </style>

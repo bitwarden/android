@@ -2,18 +2,12 @@
 <resources>
   <color name="colorPrimary">#3c8dbc</color>
   <color name="colorPrimaryDark">#222d32</color>
-  <color name="colorAccent">#3883af</color>
   <color name="primary">#3c8dbc</color>
-  <color name="darkaccent">#222d32</color>
-  <color name="accent">#3883af</color>
+  <color name="notificationBar">#3883af</color>
   <color name="border">#dddddd</color>
 
-  <color name="dark_colorPrimary">#52bdfb</color>
-  <color name="dark_colorPrimaryDark">#222d32</color>
-  <color name="dark_colorAccent">#449BCE</color>
   <color name="dark_primary">#52bdfb</color>
-  <color name="dark_darkaccent">#222d32</color>
-  <color name="dark_accent">#449BCE</color>
+  <color name="dark_notificationBar">#191919</color>
   <color name="dark_border">#191919</color>
   
   <color name="black_border">#282828</color>
