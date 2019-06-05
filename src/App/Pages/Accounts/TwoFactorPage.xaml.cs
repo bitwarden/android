@@ -84,23 +84,8 @@ namespace Bit.App.Pages
             if(!_vm.YubikeyMethod)
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
-                _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
             }
-        }
-
-        protected override bool OnBackButtonPressed()
-        {
-            // ref: https://github.com/bitwarden/mobile/issues/350
-            if(_vm.YubikeyMethod)
-            {
-                if(Device.RuntimePlatform == Device.Android)
-                {
-                    return true;
-                }
-                _messagingService.Send("listenYubiKeyOTP", false);
-                _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
-            }
-            return base.OnBackButtonPressed();
+            _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
         }
 
         private async void Continue_Clicked(object sender, EventArgs e)
