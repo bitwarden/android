@@ -127,9 +127,9 @@ namespace Bit.Core.Services
                     Id = f.Id,
                     RevisionDate = f.RevisionDate
                 };
-                CoreHelpers.NestedTraverse(nodes, 0,
-                    Regex.Replace(f.Name, "^\\/+|\\/+$", string.Empty).Split(NestingDelimiter),
-                    folderCopy, null, NestingDelimiter);
+                var parts = f.Name != null ?
+                    Regex.Replace(f.Name, "^\\/+|\\/+$", string.Empty).Split(NestingDelimiter) : new string[] { };
+                CoreHelpers.NestedTraverse(nodes, 0, parts, folderCopy, null, NestingDelimiter);
             }
             return nodes;
         }

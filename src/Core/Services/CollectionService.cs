@@ -133,9 +133,9 @@ namespace Bit.Core.Services
                     Id = c.Id,
                     OrganizationId = c.OrganizationId
                 };
-                CoreHelpers.NestedTraverse(nodes, 0,
-                    Regex.Replace(c.Name, "^\\/+|\\/+$", string.Empty).Split(NestingDelimiter),
-                    collectionCopy, null, NestingDelimiter);
+                var parts = c.Name != null ?
+                    Regex.Replace(c.Name, "^\\/+|\\/+$", string.Empty).Split(NestingDelimiter) : new string[] { };
+                CoreHelpers.NestedTraverse(nodes, 0, parts, collectionCopy, null, NestingDelimiter);
             }
             return nodes;
         }
