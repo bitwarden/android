@@ -6,6 +6,7 @@ using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -93,7 +94,7 @@ namespace Bit.App.Pages
                 }
                 // Forced sync if for some reason we have no data after a v1 migration
                 if(_vm.MainPage && !_syncService.SyncInProgress && migratedFromV1.GetValueOrDefault() &&
-                    _vm.Ciphers.Count == 0 && _vm.Folders.Count == 0 &&
+                    (!_vm.Ciphers?.Any() ?? true) && (!_vm.Folders?.Any() ?? true) &&
                     Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
                     var triedV1ReSync = await _storageService.GetAsync<bool?>(Constants.TriedV1Resync);
