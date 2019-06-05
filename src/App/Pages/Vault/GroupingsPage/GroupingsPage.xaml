@@ -79,6 +79,7 @@
                 </StackLayout>
 
                 <controls:ExtendedListView
+                    x:Name="_listView"
                     IsVisible="{Binding ShowList}"
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"

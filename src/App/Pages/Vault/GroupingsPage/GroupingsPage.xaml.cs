@@ -1,4 +1,5 @@
 ﻿using Bit.App.Abstractions;
+using Bit.App.Controls;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -26,6 +27,7 @@ namespace Bit.App.Pages
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
+            ListView = _listView;
             SetActivityIndicator(_mainContent);
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
@@ -56,6 +58,8 @@ namespace Bit.App.Pages
                 ToolbarItems.Add(_exitItem);
             }
         }
+
+        public ExtendedListView ListView { get; set; }
 
         protected async override void OnAppearing()
         {

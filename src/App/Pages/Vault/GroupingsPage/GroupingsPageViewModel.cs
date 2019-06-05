@@ -127,6 +127,7 @@ namespace Bit.App.Pages
             ShowList = false;
             ShowAddCipherButton = true;
             var groupedItems = new List<GroupingsPageListGroup>();
+            var page = Page as GroupingsPage;
 
             try
             {
@@ -203,7 +204,12 @@ namespace Bit.App.Pages
                         ciphersListItems.Count, Device.RuntimePlatform == Device.iOS,
                         !MainPage && !groupedItems.Any()));
                 }
+                // Workaround for https://stackoverflow.com/a/49992132/1090359
+                page.ListView.HasUnevenRows = false;
+                page.ListView.IsGroupingEnabled = false;
                 GroupedItems.ResetWithRange(groupedItems);
+                page.ListView.HasUnevenRows = true;
+                page.ListView.IsGroupingEnabled = true;
             }
             finally
             {
