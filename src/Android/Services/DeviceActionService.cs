@@ -535,9 +535,13 @@ namespace Bit.Droid.Services
 
         public void OpenAccessibilitySettings()
         {
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var intent = new Intent(Settings.ActionAccessibilitySettings);
-            activity.StartActivity(intent);
+            try
+            {
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var intent = new Intent(Settings.ActionAccessibilitySettings);
+                activity.StartActivity(intent);
+            }
+            catch { }
         }
 
         public void OpenAutofillSettings()
