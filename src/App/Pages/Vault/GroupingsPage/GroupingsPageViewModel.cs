@@ -59,9 +59,6 @@ namespace Bit.App.Pages
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
         }
 
-        public bool ShowFavorites { get; set; } = true;
-        public bool ShowFolders { get; set; } = true;
-        public bool ShowCollections { get; set; } = true;
         public bool MainPage { get; set; }
         public CipherType? Type { get; set; }
         public string FolderId { get; set; }
@@ -70,6 +67,7 @@ namespace Bit.App.Pages
 
         public bool HasCiphers { get; set; }
         public bool HasFolders { get; set; }
+        public bool HasCollections { get; set; }
         public List<CipherView> Ciphers { get; set; }
         public List<CipherView> FavoriteCiphers { get; set; }
         public List<CipherView> NoFolderCiphers { get; set; }
@@ -216,11 +214,11 @@ namespace Bit.App.Pages
             finally
             {
                 _doingLoad = false;
-                ShowNoData = !groupedItems.Any();
-                ShowList = !ShowNoData;
                 Loaded = true;
                 Loading = false;
                 Refreshing = false;
+                ShowNoData = (MainPage && !HasCiphers) || !groupedItems.Any();
+                ShowList = !ShowNoData;
             }
         }
 
@@ -301,21 +299,17 @@ namespace Bit.App.Pages
             _collectionCounts.Clear();
             _typeCounts.Clear();
             HasFolders = false;
+            HasCollections = false;
             Filter = null;
 
             if(MainPage)
             {
-                if(ShowFolders)
-                {
-                    Folders = await _folderService.GetAllDecryptedAsync();
-                    NestedFolders = await _folderService.GetAllNestedAsync();
-                    HasFolders = Folders.Any();
-                }
-                if(ShowCollections)
-                {
-                    Collections = await _collectionService.GetAllDecryptedAsync();
-                    NestedCollections = await _collectionService.GetAllNestedAsync(Collections);
-                }
+                Folders = await _folderService.GetAllDecryptedAsync();
+                NestedFolders = await _folderService.GetAllNestedAsync();
+                HasFolders = NestedFolders.Any();
+                Collections = await _collectionService.GetAllDecryptedAsync();
+                NestedCollections = await _collectionService.GetAllNestedAsync(Collections);
+                HasCollections = NestedCollections.Any();
             }
             else
             {
