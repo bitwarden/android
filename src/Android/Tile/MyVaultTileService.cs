@@ -59,7 +59,7 @@ namespace Bit.Droid.Tile
 
         private void LaunchMyVault()
         {
-            var intent = new Intent(this, typeof(SplashActivity));
+            var intent = new Intent(this, typeof(MainActivity));
             intent.SetFlags(ActivityFlags.NewTask | ActivityFlags.SingleTop | ActivityFlags.ClearTop);
             intent.PutExtra("myVaultTile", true);
             StartActivityAndCollapse(intent);

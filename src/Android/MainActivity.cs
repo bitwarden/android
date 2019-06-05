@@ -23,8 +23,8 @@ namespace Bit.Droid
     [Activity(
         Label = "Bitwarden",
         Icon = "@mipmap/ic_launcher",
-        Theme = "@style/LightTheme",
-        Exported = false,
+        Theme = "@style/LightTheme.Splash",
+        MainLauncher = true,
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
@@ -301,7 +301,7 @@ namespace Bit.Droid
 
         private void RestartApp()
         {
-            var intent = new Intent(this, typeof(SplashActivity));
+            var intent = new Intent(this, typeof(MainActivity));
             var pendingIntent = PendingIntent.GetActivity(this, 5923650, intent, PendingIntentFlags.CancelCurrent);
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + 500;

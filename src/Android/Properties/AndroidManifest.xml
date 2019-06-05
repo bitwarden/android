@@ -19,8 +19,6 @@
   <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
 
   <application
-    android:label="Bitwarden"
-    android:theme="@style/LightTheme"
     android:allowBackup="false"
     tools:replace="android:allowBackup"
     android:icon="@mipmap/ic_launcher"
