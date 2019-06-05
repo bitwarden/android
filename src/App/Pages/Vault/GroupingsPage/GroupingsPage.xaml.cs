@@ -72,6 +72,7 @@ namespace Bit.App.Pages
                 }
             });
 
+            var migratedFromV1 = await _storageService.GetAsync<bool?>(Constants.MigratedFromV1);
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
                 if(!_syncService.SyncInProgress)
@@ -86,7 +87,17 @@ namespace Bit.App.Pages
                         await _vm.LoadAsync();
                     }
                 }
+                if(_vm.MainPage && !_syncService.SyncInProgress && migratedFromV1.GetValueOrDefault() &&
+                    _vm.Ciphers.Count == 0 && _vm.Folders.Count == 0)
+                {
+                    await _syncService.FullSyncAsync(true);
+                }
             }, _mainContent);
+
+            if(!_vm.MainPage)
+            {
+                return;
+            }
 
             // Push registration
             var lastPushRegistration = await _storageService.GetAsync<DateTime?>(Constants.PushLastRegistrationDateKey);
@@ -115,7 +126,6 @@ namespace Bit.App.Pages
                 if(!_deviceActionService.AutofillAccessibilityServiceRunning()
                     && !_deviceActionService.AutofillServiceEnabled())
                 {
-                    var migratedFromV1 = await _storageService.GetAsync<bool?>(Constants.MigratedFromV1);
                     if(migratedFromV1.GetValueOrDefault())
                     {
                         var migratedFromV1AutofillPromptShown = await _storageService.GetAsync<bool?>(
