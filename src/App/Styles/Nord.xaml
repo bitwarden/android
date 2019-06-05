@@ -14,7 +14,7 @@
     <Color x:Key="ButtonColor">#d8dee9</Color>
 
     <Color x:Key="BorderColor">#2e3440</Color>
-    <Color x:Key="DisabledIconColor">#c7c7cd</Color>
+    <Color x:Key="DisabledIconColor">#d8dee9</Color>
 
     <Color x:Key="BoxBorderColor">#2e3440</Color>
     <Color x:Key="BoxHeaderTextColor">#81a1c1</Color>
