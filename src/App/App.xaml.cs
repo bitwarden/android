@@ -184,6 +184,10 @@ namespace Bit.App
             {
                 SyncIfNeeded();
             }
+            if(Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
+            {
+                await lockPage.PromptFingerprintAfterResumeAsync();
+            }
         }
 
         private void SetCulture()

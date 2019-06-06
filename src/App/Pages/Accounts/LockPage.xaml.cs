@@ -11,6 +11,9 @@ namespace Bit.App.Pages
         private readonly bool _autoPromptFingerprint;
         private readonly LockPageViewModel _vm;
 
+        private bool _promptedAfterResume;
+        private bool _appeared;
+
         public LockPage(AppOptions appOptions = null, bool autoPromptFingerprint = true)
         {
             _appOptions = appOptions;
@@ -42,9 +45,24 @@ namespace Bit.App.Pages
         public Entry MasterPasswordEntry { get; set; }
         public Entry PinEntry { get; set; }
 
+        public async Task PromptFingerprintAfterResumeAsync()
+        {
+            await Task.Delay(500);
+            if(!_promptedAfterResume)
+            {
+                _promptedAfterResume = true;
+                await _vm?.PromptFingerprintAsync();
+            }
+        }
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();
+            if(_appeared)
+            {
+                return;
+            }
+            _appeared = true;
             await _vm.InitAsync(_autoPromptFingerprint);
             if(!_vm.FingerprintLock)
             {
