@@ -11,6 +11,7 @@
   <color name="dark_primary">#52bdfb</color>
   <color name="dark_notificationBar">#191919</color>
   <color name="dark_border">#191919</color>
+  <color name="dark_navigationBarBackground">#191919</color>
 
   <!-- Black theme -->
   <color name="black_border">#282828</color>
@@ -27,6 +28,7 @@
   <color name="nord_popupBackground">#4c566a</color>
   <color name="nord_popupText">#e5e9f0</color>
   <color name="nord_buttonBackground">#4c566a</color>
+  <color name="nord_navigationBarBackground">#20242D</color>
 
   <!-- Other -->
   <color name="launcher_background">#FFFFFF</color>

@@ -16,6 +16,7 @@
     <item name="colorPrimaryDark">@color/notificationBar</item>
     <item name="colorAccent">@color/primary</item>
     <item name="colorControlNormal">@color/border</item>
+    <item name="android:navigationBarColor">@android:color/black</item>
     <item name="windowActionModeOverlay">true</item>
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
     <item name="android:colorActivatedHighlight">@android:color/transparent</item>
@@ -38,7 +39,7 @@
     <item name="colorPrimaryDark">@color/dark_notificationBar</item>
     <item name="colorAccent">@color/dark_primary</item>
     <item name="colorControlNormal">@color/dark_border</item>
-    <item name="android:navigationBarColor">@android:color/black</item>
+    <item name="android:navigationBarColor">@color/dark_navigationBarBackground</item>
     <item name="windowActionModeOverlay">true</item>
     <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
     <item name="android:colorActivatedHighlight">@android:color/transparent</item>
@@ -58,6 +59,7 @@
     <item name="colorPrimary">@android:color/black</item>
     <item name="colorPrimaryDark">@android:color/black</item>
     <item name="colorControlNormal">@color/black_border</item>
+    <item name="android:navigationBarColor">@android:color/black</item>
   </style>
 
   <!-- Nord theme -->
@@ -75,6 +77,7 @@
     <item name="colorPrimary">@color/nord_actionBar</item>
     <item name="colorPrimaryDark">@color/nord_notificationBar</item>
     <item name="colorControlNormal">@color/nord_border</item>
+    <item name="android:navigationBarColor">@color/nord_navigationBarBackground</item>
     <item name="colorBackgroundFloating">@color/nord_dialogBackground</item>
     <item name="android:colorBackgroundFloating" tools:targetApi="23">@color/nord_dialogBackground</item>
     <item name="popupTheme">@style/NordTheme.Popup</item>
