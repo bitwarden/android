@@ -51,10 +51,7 @@ namespace Bit.App.Pages
             if(!_hasFocused)
             {
                 _hasFocused = true;
-                if(string.IsNullOrWhiteSpace(_autofillUrl))
-                {
-                    RequestFocus(_searchBar);
-                }
+                RequestFocus(_searchBar);
             }
         }
 
