@@ -22,7 +22,6 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private CancellationTokenSource _searchCancellationTokenSource;
 
-        private string _searchText;
         private bool _showNoData;
         private bool _showList;
 
@@ -41,12 +40,6 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<CipherView> Ciphers { get; set; }
         public Func<CipherView, bool> Filter { get; set; }
         public string AutofillUrl { get; set; }
-
-        public string SearchText
-        {
-            get => _searchText;
-            set => SetProperty(ref _searchText, value);
-        }
 
         public bool ShowNoData
         {
