@@ -244,7 +244,11 @@ namespace Bit.Droid
             }
             else
             {
-                adapter.DisableForegroundDispatch(this);
+                try
+                {
+                    adapter.DisableForegroundDispatch(this);
+                }
+                catch { }
             }
         }
 
