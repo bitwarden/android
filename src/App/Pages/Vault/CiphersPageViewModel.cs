@@ -94,8 +94,6 @@ namespace Bit.App.Pages
                     {
                         ciphers = await _searchService.SearchCiphersAsync(searchText, Filter, null, cts.Token);
                         cts.Token.ThrowIfCancellationRequested();
-                        Ciphers.ResetWithRange(ciphers);
-                        ShowNoData = Ciphers.Count == 0;
                     }
                     catch(OperationCanceledException)
                     {
