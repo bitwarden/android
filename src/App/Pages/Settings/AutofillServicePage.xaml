@@ -58,7 +58,8 @@
             <Button Text="{u:I18n BitwardenAutofillServiceOpenAutofillSettings}"
                     Clicked="Settings_Clicked"
                     HorizontalOptions="Fill"
-                    VerticalOptions="End"></Button>
+                    VerticalOptions="End"
+                    IsVisible="{Binding Enabled, Converter={StaticResource inverseBool}}"></Button>
         </StackLayout>
     </ScrollView>
 
