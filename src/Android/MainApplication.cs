@@ -62,6 +62,11 @@ namespace Bit.Droid
             Task.Run(() =>
             {
                 FFImageLoading.Forms.Platform.CachedImageRenderer.Init(true);
+                FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
+                {
+                    FadeAnimationEnabled = false,
+                    FadeAnimationForCachedImages = false
+                });
                 ZXing.Net.Mobile.Forms.Android.Platform.Init();
             });
             CrossFingerprint.SetCurrentActivityResolver(() => CrossCurrentActivity.Current.Activity);
