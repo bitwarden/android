@@ -47,11 +47,14 @@ namespace Bit.App.Pages
 
         public async Task PromptFingerprintAfterResumeAsync()
         {
-            await Task.Delay(500);
-            if(!_promptedAfterResume)
+            if(_vm.FingerprintLock)
             {
-                _promptedAfterResume = true;
-                await _vm?.PromptFingerprintAsync();
+                await Task.Delay(500);
+                if(!_promptedAfterResume)
+                {
+                    _promptedAfterResume = true;
+                    await _vm?.PromptFingerprintAsync();
+                }
             }
         }
 

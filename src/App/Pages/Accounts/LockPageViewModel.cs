@@ -250,19 +250,23 @@ namespace Bit.App.Pages
 
         public async Task PromptFingerprintAsync()
         {
+            if(!FingerprintLock)
+            {
+                return;
+            }
             var success = await _platformUtilsService.AuthenticateFingerprintAsync(null,
-                PinLock ? AppResources.PIN : AppResources.MasterPassword, () =>
+            PinLock ? AppResources.PIN : AppResources.MasterPassword, () =>
+            {
+                var page = Page as LockPage;
+                if(PinLock)
                 {
-                    var page = Page as LockPage;
-                    if(PinLock)
-                    {
-                        page.PinEntry.Focus();
-                    }
-                    else
-                    {
-                        page.MasterPasswordEntry.Focus();
-                    }
-                });
+                    page.PinEntry.Focus();
+                }
+                else
+                {
+                    page.MasterPasswordEntry.Focus();
+                }
+            });
             _lockService.FingerprintLocked = !success;
             if(success)
             {
