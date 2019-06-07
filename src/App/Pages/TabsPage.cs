@@ -54,6 +54,10 @@ namespace Bit.App.Pages
                 appOptions.GeneratorTile = false;
                 ResetToGeneratorPage();
             }
+            else if(appOptions?.MyVaultTile ?? false)
+            {
+                appOptions.MyVaultTile = false;
+            }
         }
 
         public void ResetToVaultPage()

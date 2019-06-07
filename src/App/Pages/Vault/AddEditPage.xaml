@@ -483,7 +483,6 @@
                     <Editor
                         x:Name="_notesEditor"
                         Text="{Binding Cipher.Notes}"
-                        AutoSize="TextChanges"
                         StyleClass="box-value" />
                 </StackLayout>
             </StackLayout>

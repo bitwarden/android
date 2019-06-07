@@ -90,7 +90,7 @@ namespace Bit.App
                 else if(message.Command == "locked")
                 {
                     await _stateService.PurgeAsync();
-                    var lockPage = new LockPage(null, !(message.Data as bool?).GetValueOrDefault());
+                    var lockPage = new LockPage(_appOptions, !(message.Data as bool?).GetValueOrDefault());
                     Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
                 }
                 else if(message.Command == "lockVault")
@@ -135,10 +135,12 @@ namespace Bit.App
                             }
                             if(message.Command == "popAllAndGoToTabMyVault")
                             {
+                                _appOptions.MyVaultTile = false;
                                 tabsPage.ResetToVaultPage();
                             }
                             else
                             {
+                                _appOptions.GeneratorTile = false;
                                 tabsPage.ResetToGeneratorPage();
                             }
                         }
@@ -170,8 +172,8 @@ namespace Bit.App
             {
                 await _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
             }
-            await HandleLockingAsync();
             SetTabsPageFromAutofill();
+            await HandleLockingAsync();
         }
 
         protected async override void OnResume()

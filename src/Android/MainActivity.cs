@@ -146,10 +146,18 @@ namespace Bit.Droid
             if(intent.GetBooleanExtra("generatorTile", false))
             {
                 _messagingService.Send("popAllAndGoToTabGenerator");
+                if(_appOptions != null)
+                {
+                    _appOptions.GeneratorTile = true;
+                }
             }
             if(intent.GetBooleanExtra("myVaultTile", false))
             {
                 _messagingService.Send("popAllAndGoToTabMyVault");
+                if(_appOptions != null)
+                {
+                    _appOptions.MyVaultTile = true;
+                }
             }
             else
             {

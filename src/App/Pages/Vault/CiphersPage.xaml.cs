@@ -63,7 +63,7 @@ namespace Bit.App.Pages
             {
                 return;
             }
-            _vm.Search(e.NewTextValue, 1000);
+            _vm.Search(e.NewTextValue, 300);
         }
 
         private void SearchBar_SearchButtonPressed(object sender, EventArgs e)

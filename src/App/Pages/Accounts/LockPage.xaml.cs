@@ -36,7 +36,7 @@ namespace Bit.App.Pages
                         return;
                     }
                 }
-                Application.Current.MainPage = new TabsPage();
+                Application.Current.MainPage = new TabsPage(_appOptions);
             };
             MasterPasswordEntry = _masterPassword;
             PinEntry = _pin;
