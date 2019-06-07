@@ -21,8 +21,13 @@ namespace Bit.App.Utilities
             Special
         }
 
-        public static FormattedString FormatPassword(String password)
+        public static FormattedString FormatPassword(string password)
         {
+            if(password == null)
+            {
+                return new FormattedString();
+            }
+
             var result = new FormattedString();
             // Start off with an empty span to prevent possible NPEs. Due to the way the state machine
             // works, this will actually always be replaced by a new span anyway.
