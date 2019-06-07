@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:minHeight="44dp"
+    android:paddingLeft="15dp"
+    android:paddingRight="15dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
+    <LinearLayout
+        android:id="@+id/CipherCellContent"
+        android:orientation="vertical"
+        android:layout_centerVertical="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/CipherCellButton"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/CipherCellTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:gravity="left"
+            android:paddingRight="6dp"
+            android:layout_gravity="left|center_vertical" />
+    </LinearLayout>
+    <ImageButton
+        android:id="@+id/CipherCellButton"
+        android:background="@android:color/transparent"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:gravity="center_vertical" />
+</RelativeLayout>

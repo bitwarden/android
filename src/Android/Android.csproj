@@ -117,6 +117,7 @@
     <Compile Include="Receivers\ClearClipboardAlarmReceiver.cs" />
     <Compile Include="Receivers\LockAlarmReceiver.cs" />
     <Compile Include="Receivers\PackageReplacedReceiver.cs" />
+    <Compile Include="Renderers\CipherViewCellRenderer.cs" />
     <Compile Include="Renderers\ExtendedSliderRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />
     <Compile Include="Renderers\CustomPickerRenderer.cs" />
@@ -551,6 +552,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable-xxxhdpi\refresh_sm.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\CipherViewCell.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
