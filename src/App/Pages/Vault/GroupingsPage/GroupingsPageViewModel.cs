@@ -1,6 +1,7 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.Domain;
@@ -25,6 +26,7 @@ namespace Bit.App.Pages
         private bool _showAddCipherButton;
         private bool _showNoData;
         private bool _showList;
+        private bool _websiteIconsEnabled;
         private string _noDataText;
         private List<CipherView> _allCiphers;
         private Dictionary<string, int> _folderCounts = new Dictionary<string, int>();
@@ -38,6 +40,7 @@ namespace Bit.App.Pages
         private readonly IDeviceActionService _deviceActionService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IMessagingService _messagingService;
+        private readonly IStateService _stateService;
 
         public GroupingsPageViewModel()
         {
@@ -48,6 +51,7 @@ namespace Bit.App.Pages
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             Loading = true;
             PageTitle = AppResources.MyVault;
@@ -114,6 +118,11 @@ namespace Bit.App.Pages
             get => _showList;
             set => SetProperty(ref _showList, value);
         }
+        public bool WebsiteIconsEnabled
+        {
+            get => _websiteIconsEnabled;
+            set => SetProperty(ref _websiteIconsEnabled, value);
+        }
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
@@ -132,6 +141,8 @@ namespace Bit.App.Pages
             var groupedItems = new List<GroupingsPageListGroup>();
             var page = Page as GroupingsPage;
 
+            WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
+                .GetValueOrDefault();
             try
             {
                 await LoadDataAsync();

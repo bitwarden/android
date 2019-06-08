@@ -69,7 +69,9 @@
                 <DataTemplate x:DataType="views:CipherView">
                     <controls:CipherViewCell
                         Cipher="{Binding .}"
-                        ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}" />
+                        ButtonCommand="{Binding BindingContext.CipherOptionsCommand, Source={x:Reference _page}}"
+                        WebsiteIconsEnabled="{Binding BindingContext.WebsiteIconsEnabled, Source={x:Reference _page}}"
+                        />
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

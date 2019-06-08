@@ -14,6 +14,9 @@ namespace Bit.App.Controls
         public static readonly BindableProperty CipherProperty = BindableProperty.Create(
             nameof(Cipher), typeof(CipherView), typeof(CipherViewCell), default(CipherView), BindingMode.OneWay);
 
+        public static readonly BindableProperty WebsiteIconsEnabledProperty = BindableProperty.Create(
+            nameof(WebsiteIconsEnabled), typeof(bool), typeof(CipherViewCell), true, BindingMode.OneWay);
+
         public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
             nameof(ButtonCommand), typeof(Command<CipherView>), typeof(CipherViewCell));
 
@@ -36,7 +39,11 @@ namespace Bit.App.Controls
             }
         }
 
-        public bool WebsiteIconsEnabled { get; set; } = true;
+        public bool WebsiteIconsEnabled
+        {
+            get => (bool)GetValue(WebsiteIconsEnabledProperty);
+            set => SetValue(WebsiteIconsEnabledProperty, value);
+        }
 
         public CipherView Cipher
         {

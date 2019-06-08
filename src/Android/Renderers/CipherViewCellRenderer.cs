@@ -60,6 +60,10 @@ namespace Bit.Droid.Renderers
             {
                 _cell.UpdateCell(cipherCell);
             }
+            else if(e.PropertyName == CipherViewCell.WebsiteIconsEnabledProperty.PropertyName)
+            {
+                _cell.UpdateIconImage(cipherCell);
+            }
         }
     }
 
@@ -106,6 +110,25 @@ namespace Bit.Droid.Renderers
 
         public void UpdateCell(CipherViewCell cipherCell)
         {
+            UpdateIconImage(cipherCell);
+
+            var cipher = cipherCell.Cipher;
+            Name.Text = cipher.Name;
+            if(!string.IsNullOrWhiteSpace(cipher.SubTitle))
+            {
+                SubTitle.Text = cipher.SubTitle;
+                SubTitle.Visibility = ViewStates.Visible;
+            }
+            else
+            {
+                SubTitle.Visibility = ViewStates.Gone;
+            }
+            SharedIcon.Visibility = cipher.Shared ? ViewStates.Visible : ViewStates.Gone;
+            AttachmentsIcon.Visibility = cipher.HasAttachments ? ViewStates.Visible : ViewStates.Gone;
+        }
+
+        public void UpdateIconImage(CipherViewCell cipherCell)
+        {
             if(_currentTask != null && !_currentTask.IsCancelled && !_currentTask.IsCompleted)
             {
                 _currentTask.Cancel();
@@ -128,19 +151,6 @@ namespace Bit.Droid.Renderers
                 Icon.Visibility = ViewStates.Visible;
                 Icon.Text = iconImage.Item1;
             }
-
-            Name.Text = cipher.Name;
-            if(!string.IsNullOrWhiteSpace(cipher.SubTitle))
-            {
-                SubTitle.Text = cipher.SubTitle;
-                SubTitle.Visibility = ViewStates.Visible;
-            }
-            else
-            {
-                SubTitle.Visibility = ViewStates.Gone;
-            }
-            SharedIcon.Visibility = cipher.Shared ? ViewStates.Visible : ViewStates.Gone;
-            AttachmentsIcon.Visibility = cipher.HasAttachments ? ViewStates.Visible : ViewStates.Gone;
         }
     }
 

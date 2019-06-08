@@ -45,9 +45,10 @@ namespace Bit.App.Pages
 
         public SearchBar SearchBar => _searchBar;
 
-        protected override void OnAppearing()
+        protected async override void OnAppearing()
         {
             base.OnAppearing();
+            await _vm.InitAsync();
             if(!_hasFocused)
             {
                 _hasFocused = true;

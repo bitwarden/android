@@ -22,16 +22,19 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IDeviceActionService _deviceActionService;
         private readonly ICipherService _cipherService;
+        private readonly IStateService _stateService;
 
         private AppOptions _appOptions;
         private bool _showList;
         private string _noDataText;
+        private bool _websiteIconsEnabled;
 
         public AutofillCiphersPageViewModel()
         {
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             GroupedItems = new ExtendedObservableCollection<GroupingsPageListGroup>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
@@ -52,6 +55,11 @@ namespace Bit.App.Pages
         {
             get => _noDataText;
             set => SetProperty(ref _noDataText, value);
+        }
+        public bool WebsiteIconsEnabled
+        {
+            get => _websiteIconsEnabled;
+            set => SetProperty(ref _websiteIconsEnabled, value);
         }
 
         public void Init(AppOptions appOptions)
@@ -78,6 +86,8 @@ namespace Bit.App.Pages
 
         public async Task LoadAsync()
         {
+            WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
+                .GetValueOrDefault();
             ShowList = false;
             var groupedItems = new List<GroupingsPageListGroup>();
             var ciphers = await _cipherService.GetAllDecryptedByUrlAsync(Uri, null);

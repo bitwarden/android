@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -20,10 +21,12 @@ namespace Bit.App.Pages
         private readonly ICipherService _cipherService;
         private readonly ISearchService _searchService;
         private readonly IDeviceActionService _deviceActionService;
+        private readonly IStateService _stateService;
         private CancellationTokenSource _searchCancellationTokenSource;
 
         private bool _showNoData;
         private bool _showList;
+        private bool _websiteIconsEnabled;
 
         public CiphersPageViewModel()
         {
@@ -31,6 +34,7 @@ namespace Bit.App.Pages
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             Ciphers = new ExtendedObservableCollection<CipherView>();
             CipherOptionsCommand = new Command<CipherView>(CipherOptionsAsync);
@@ -60,6 +64,18 @@ namespace Bit.App.Pages
         }
 
         public bool ShowSearchDirection => !ShowList && !ShowNoData;
+
+        public bool WebsiteIconsEnabled
+        {
+            get => _websiteIconsEnabled;
+            set => SetProperty(ref _websiteIconsEnabled, value);
+        }
+
+        public async Task InitAsync()
+        {
+            WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
+                .GetValueOrDefault();
+        }
 
         public void Search(string searchText, int? timeout = null)
         {
