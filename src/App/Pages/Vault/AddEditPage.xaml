@@ -482,6 +482,7 @@
                 <StackLayout StyleClass="box-row, box-row-input">
                     <Editor
                         x:Name="_notesEditor"
+                        AutoSize="TextChanges"
                         Text="{Binding Cipher.Notes}"
                         StyleClass="box-value" />
                 </StackLayout>
