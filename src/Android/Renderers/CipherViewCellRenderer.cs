@@ -56,6 +56,7 @@ namespace Bit.Droid.Renderers
         public void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             var cipherCell = sender as CipherViewCell;
+            _cell.CipherViewCell = cipherCell;
             if(e.PropertyName == CipherViewCell.CipherProperty.PropertyName)
             {
                 _cell.UpdateCell(cipherCell);
@@ -89,6 +90,7 @@ namespace Bit.Droid.Renderers
             SharedIcon = view.FindViewById<TextView>(Resource.Id.CipherCellSharedIcon);
             AttachmentsIcon = view.FindViewById<TextView>(Resource.Id.CipherCellAttachmentsIcon);
             MoreButton = view.FindViewById<Android.Widget.Button>(Resource.Id.CipherCellButton);
+            MoreButton.Click += MoreButton_Click;
 
             Icon.Typeface = _faTypeface;
             SharedIcon.Typeface = _faTypeface;
@@ -100,6 +102,7 @@ namespace Bit.Droid.Renderers
 
         public CipherViewCell CipherViewCell { get; set; }
         public Element Element => CipherViewCell;
+
         public IconImageView IconImage { get; set; }
         public TextView Icon { get; set; }
         public TextView Name { get; set; }
@@ -151,6 +154,23 @@ namespace Bit.Droid.Renderers
                 Icon.Visibility = ViewStates.Visible;
                 Icon.Text = iconImage.Item1;
             }
+        }
+
+        private void MoreButton_Click(object sender, EventArgs e)
+        {
+            if(CipherViewCell.ButtonCommand?.CanExecute(CipherViewCell.Cipher) ?? false)
+            {
+                CipherViewCell.ButtonCommand.Execute(CipherViewCell.Cipher);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if(disposing)
+            {
+                MoreButton.Click -= MoreButton_Click;
+            }
+            base.Dispose(disposing);
         }
     }
 
