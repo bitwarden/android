@@ -1,11 +1,17 @@
 ﻿using Android.App;
 using Android.Content;
 using Android.Graphics;
+using Android.Runtime;
+using Android.Util;
 using Android.Views;
 using Android.Views.InputMethods;
 using Android.Widget;
 using Bit.App.Controls;
 using Bit.Droid.Renderers;
+using FFImageLoading;
+using FFImageLoading.Views;
+using FFImageLoading.Work;
+using System;
 using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
@@ -17,6 +23,8 @@ namespace Bit.Droid.Renderers
     {
         private static Typeface _faTypeface;
         private static Typeface _miTypeface;
+
+        private AndroidCipherCell _cell;
 
         protected override Android.Views.View GetCellCore(Cell item, Android.Views.View convertView,
             ViewGroup parent, Context context)
@@ -31,23 +39,26 @@ namespace Bit.Droid.Renderers
             }
 
             var cipherCell = item as CipherViewCell;
-            if(!(convertView is AndroidCipherCell cell))
+            _cell = convertView as AndroidCipherCell;
+            if(_cell == null)
             {
-                cell = new AndroidCipherCell(context, cipherCell, _faTypeface, _miTypeface);
+                _cell = new AndroidCipherCell(context, cipherCell, _faTypeface, _miTypeface);
             }
-            cell.CipherViewCell.PropertyChanged += CellPropertyChanged;
-            cell.CipherViewCell = cipherCell;
-            cell.CipherViewCell.PropertyChanged -= CellPropertyChanged;
-            cell.UpdateCell();
-            return cell;
+            else
+            {
+                _cell.CipherViewCell.PropertyChanged -= CellPropertyChanged;
+            }
+            cipherCell.PropertyChanged += CellPropertyChanged;
+            _cell.UpdateCell(cipherCell);
+            return _cell;
         }
 
         public void CellPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            var nativeCell = sender as AndroidCipherCell;
+            var cipherCell = sender as CipherViewCell;
             if(e.PropertyName == CipherViewCell.CipherProperty.PropertyName)
             {
-                nativeCell.UpdateCell();
+                _cell.UpdateCell(cipherCell);
             }
         }
     }
@@ -57,20 +68,25 @@ namespace Bit.Droid.Renderers
         private readonly Typeface _faTypeface;
         private readonly Typeface _miTypeface;
 
-        public AndroidCipherCell(Context context, CipherViewCell cipherCell, Typeface faTypeface, Typeface miTypeface)
+        private IScheduledWork _currentTask;
+
+        public AndroidCipherCell(Context context, CipherViewCell cipherView, Typeface faTypeface, Typeface miTypeface)
             : base(context)
         {
-            var view = (context as Activity).LayoutInflater.Inflate(Resource.Layout.CipherViewCell, null);
-            CipherViewCell = cipherCell;
+            CipherViewCell = cipherView;
             _faTypeface = faTypeface;
             _miTypeface = miTypeface;
 
+            var view = (context as Activity).LayoutInflater.Inflate(Resource.Layout.CipherViewCell, null);
+            IconImage = view.FindViewById<IconImageView>(Resource.Id.CipherCellIconImage);
+            Icon = view.FindViewById<TextView>(Resource.Id.CipherCellIcon);
             Name = view.FindViewById<TextView>(Resource.Id.CipherCellName);
             SubTitle = view.FindViewById<TextView>(Resource.Id.CipherCellSubTitle);
             SharedIcon = view.FindViewById<TextView>(Resource.Id.CipherCellSharedIcon);
             AttachmentsIcon = view.FindViewById<TextView>(Resource.Id.CipherCellAttachmentsIcon);
             MoreButton = view.FindViewById<Android.Widget.Button>(Resource.Id.CipherCellButton);
 
+            Icon.Typeface = _faTypeface;
             SharedIcon.Typeface = _faTypeface;
             AttachmentsIcon.Typeface = _faTypeface;
             MoreButton.Typeface = _miTypeface;
@@ -80,15 +96,39 @@ namespace Bit.Droid.Renderers
 
         public CipherViewCell CipherViewCell { get; set; }
         public Element Element => CipherViewCell;
+        public IconImageView IconImage { get; set; }
+        public TextView Icon { get; set; }
         public TextView Name { get; set; }
         public TextView SubTitle { get; set; }
         public TextView SharedIcon { get; set; }
         public TextView AttachmentsIcon { get; set; }
         public Android.Widget.Button MoreButton { get; set; }
 
-        public void UpdateCell()
+        public void UpdateCell(CipherViewCell cipherCell)
         {
-            var cipher = CipherViewCell.Cipher;
+            if(_currentTask != null && !_currentTask.IsCancelled && !_currentTask.IsCompleted)
+            {
+                _currentTask.Cancel();
+            }
+
+            var cipher = cipherCell.Cipher;
+
+            var iconImage = cipherCell.GetIconImage(cipher);
+            if(iconImage.Item2 != null)
+            {
+                IconImage.SetImageResource(Resource.Drawable.login);
+                IconImage.Visibility = ViewStates.Visible;
+                Icon.Visibility = ViewStates.Gone;
+                _currentTask = ImageService.Instance.LoadUrl(iconImage.Item2).DownSample(64).Into(IconImage);
+                IconImage.Key = iconImage.Item2;
+            }
+            else
+            {
+                IconImage.Visibility = ViewStates.Gone;
+                Icon.Visibility = ViewStates.Visible;
+                Icon.Text = iconImage.Item1;
+            }
+
             Name.Text = cipher.Name;
             if(!string.IsNullOrWhiteSpace(cipher.SubTitle))
             {
@@ -101,6 +141,32 @@ namespace Bit.Droid.Renderers
             }
             SharedIcon.Visibility = cipher.Shared ? ViewStates.Visible : ViewStates.Gone;
             AttachmentsIcon.Visibility = cipher.HasAttachments ? ViewStates.Visible : ViewStates.Gone;
+        }
+    }
+
+    [Android.Runtime.Preserve(AllMembers = true)]
+    [Register("bit.droid.renderers.IconImageView")]
+    public class IconImageView : ImageViewAsync
+    {
+        public IconImageView(Context context) : base(context)
+        { }
+
+        public IconImageView(IntPtr javaReference, JniHandleOwnership transfer)
+            : base(javaReference, transfer)
+        { }
+
+        public IconImageView(Context context, IAttributeSet attrs)
+            : base(context, attrs)
+        { }
+
+        public string Key { get; set; }
+
+        protected override void JavaFinalize()
+        {
+            SetImageDrawable(null);
+            SetImageBitmap(null);
+            ImageService.Instance.InvalidateCacheEntryAsync(Key, FFImageLoading.Cache.CacheType.Memory);
+            base.JavaFinalize();
         }
     }
 }

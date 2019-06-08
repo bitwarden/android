@@ -2,53 +2,69 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-	android:background="@android:color/holo_red_dark"
-    android:minHeight="44dp">
+    android:minHeight="44dp"
+    android:gravity="center_vertical">
     <LinearLayout
-        android:id="@+id/CipherCellContent"
-		android:background="@android:color/holo_purple"
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/CipherCellButton"
-		android:gravity="center_vertical">
-        <LinearLayout
-            android:id="@+id/CipherCellContentTop"
-			android:background="@android:color/holo_green_dark"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/CipherCellName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-				android:ellipsize="end"
-				android:text="Name" />
-            <TextView
-                android:id="@+id/CipherCellSharedIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-				android:text="&#xf1e0;" />
-            <TextView
-                android:id="@+id/CipherCellAttachmentsIcon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-				android:text="&#xf0c6;" />
-        </LinearLayout>
+        android:layout_height="wrap_content">
+        <bit.droid.renderers.IconImageView
+            android:id="@+id/CipherCellIconImage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:gravity="center"
+            android:layout_gravity="center_vertical" />
         <TextView
-            android:id="@+id/CipherCellSubTitle"
-            android:layout_width="match_parent"
+            android:id="@+id/CipherCellIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+            android:text="[X]" />
+        <LinearLayout
+            android:id="@+id/CipherCellContent"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:singleLine="true"
-            android:ellipsize="end"
-			android:text="SubTitle" />
+            android:layout_gravity="center_vertical">
+            <LinearLayout
+                android:id="@+id/CipherCellContentTop"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/CipherCellName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:text="Name" />
+                <TextView
+                    android:id="@+id/CipherCellSharedIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="&#xf1e0;" />
+                <TextView
+                    android:id="@+id/CipherCellAttachmentsIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="&#xf0c6;" />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/CipherCellSubTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:text="SubTitle" />
+        </LinearLayout>
+        <Button
+            android:id="@+id/CipherCellButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="&#xe5d4;"
+            android:gravity="center"/>
     </LinearLayout>
-    <Button
-        android:id="@+id/CipherCellButton"
-        android:layout_alignParentRight="true"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:gravity="center"
-		android:text="&#xe5d4;" />
 </RelativeLayout>

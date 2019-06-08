@@ -5,7 +5,6 @@ using Bit.Core.Enums;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
 using System;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Controls
@@ -18,19 +17,26 @@ namespace Bit.App.Controls
         public static readonly BindableProperty ButtonCommandProperty = BindableProperty.Create(
             nameof(ButtonCommand), typeof(Command<CipherView>), typeof(CipherViewCell));
 
-        private readonly IStateService _stateService;
         private readonly IEnvironmentService _environmentService;
 
         private CipherViewCellViewModel _viewModel;
+        private bool _usingNativeCell;
 
         public CipherViewCell()
         {
-            InitializeComponent();
-            _viewModel = _grid.BindingContext as CipherViewCellViewModel;
-
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                InitializeComponent();
+                _viewModel = _grid.BindingContext as CipherViewCellViewModel;
+            }
+            else
+            {
+                _usingNativeCell = true;
+            }
         }
+
+        public bool WebsiteIconsEnabled { get; set; } = true;
 
         public CipherView Cipher
         {
@@ -47,18 +53,25 @@ namespace Bit.App.Controls
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
+            if(_usingNativeCell)
+            {
+                return;
+            }
             if(propertyName == CipherProperty.PropertyName)
             {
                 _viewModel.Cipher = Cipher;
             }
         }
 
-        protected async override void OnBindingContextChanged()
+        protected override void OnBindingContextChanged()
         {
-            string icon = null;
-            string image = null;
-            _image.Source = null;
+            base.OnBindingContextChanged();
+            if(_usingNativeCell)
+            {
+                return;
+            }
 
+            _image.Source = null;
             CipherView cipher = null;
             if(BindingContext is GroupingsPageListItem groupingsPageListItem)
             {
@@ -70,48 +83,53 @@ namespace Bit.App.Controls
             }
             if(cipher != null)
             {
-                switch(cipher.Type)
-                {
-                    case CipherType.Login:
-                        var loginIconImage = await GetLoginIconImage(cipher);
-                        icon = loginIconImage.Item1;
-                        image = loginIconImage.Item2;
-                        break;
-                    case CipherType.SecureNote:
-                        icon = "";
-                        break;
-                    case CipherType.Card:
-                        icon = "";
-                        break;
-                    case CipherType.Identity:
-                        icon = "";
-                        break;
-                    default:
-                        break;
-                }
-
-                if(image != null)
+                var iconImage = GetIconImage(cipher);
+                if(iconImage.Item2 != null)
                 {
                     _image.IsVisible = true;
                     _icon.IsVisible = false;
-                    _image.Source = image;
+                    _image.Source = iconImage.Item2;
                     _image.LoadingPlaceholder = "login.png";
                 }
                 else
                 {
                     _image.IsVisible = false;
                     _icon.IsVisible = true;
-                    _icon.Text = icon;
+                    _icon.Text = iconImage.Item1;
                 }
             }
-            base.OnBindingContextChanged();
         }
 
-        private async Task<Tuple<string, string>> GetLoginIconImage(CipherView cipher)
+        public Tuple<string, string> GetIconImage(CipherView cipher)
+        {
+            string icon = null;
+            string image = null;
+            switch(cipher.Type)
+            {
+                case CipherType.Login:
+                    var loginIconImage = GetLoginIconImage(cipher);
+                    icon = loginIconImage.Item1;
+                    image = loginIconImage.Item2;
+                    break;
+                case CipherType.SecureNote:
+                    icon = "";
+                    break;
+                case CipherType.Card:
+                    icon = "";
+                    break;
+                case CipherType.Identity:
+                    icon = "";
+                    break;
+                default:
+                    break;
+            }
+            return new Tuple<string, string>(icon, image);
+        }
+
+        private Tuple<string, string> GetLoginIconImage(CipherView cipher)
         {
             string icon = "";
             string image = null;
-            var imageEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey)).GetValueOrDefault();
             if(cipher.Login.Uri != null)
             {
                 var hostnameUri = cipher.Login.Uri;
@@ -125,17 +143,17 @@ namespace Bit.App.Controls
                 {
                     icon = "";
                 }
-                else if(imageEnabled && !hostnameUri.Contains("://") && hostnameUri.Contains("."))
+                else if(WebsiteIconsEnabled && !hostnameUri.Contains("://") && hostnameUri.Contains("."))
                 {
                     hostnameUri = string.Concat("http://", hostnameUri);
                     isWebsite = true;
                 }
-                else if(imageEnabled)
+                else if(WebsiteIconsEnabled)
                 {
                     isWebsite = hostnameUri.StartsWith("http") && hostnameUri.Contains(".");
                 }
 
-                if(imageEnabled && isWebsite)
+                if(WebsiteIconsEnabled && isWebsite)
                 {
                     var hostname = CoreHelpers.GetHostname(hostnameUri);
                     var iconsUrl = _environmentService.IconsUrl;
