@@ -23,6 +23,9 @@ namespace Bit.Droid.Renderers
     {
         private static Typeface _faTypeface;
         private static Typeface _miTypeface;
+        private static Android.Graphics.Color _textColor;
+        private static Android.Graphics.Color _mutedColor;
+        private static Android.Graphics.Color _disabledIconColor;
 
         private AndroidCipherCell _cell;
 
@@ -37,6 +40,22 @@ namespace Bit.Droid.Renderers
             {
                 _miTypeface = Typeface.CreateFromAsset(context.Assets, "MaterialIcons_Regular.ttf");
             }
+            if(_textColor == default(Android.Graphics.Color))
+            {
+                _textColor = ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["TextColor"])
+                    .ToAndroid();
+            }
+            if(_mutedColor == default(Android.Graphics.Color))
+            {
+                _mutedColor = ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["MutedColor"])
+                    .ToAndroid();
+            }
+            if(_disabledIconColor == default(Android.Graphics.Color))
+            {
+                _disabledIconColor =
+                    ((Xamarin.Forms.Color)Xamarin.Forms.Application.Current.Resources["DisabledIconColor"])
+                    .ToAndroid();
+            }
 
             var cipherCell = item as CipherViewCell;
             _cell = convertView as AndroidCipherCell;
@@ -50,6 +69,7 @@ namespace Bit.Droid.Renderers
             }
             cipherCell.PropertyChanged += CellPropertyChanged;
             _cell.UpdateCell(cipherCell);
+            _cell.UpdateColors(_textColor, _mutedColor, _disabledIconColor);
             return _cell;
         }
 
@@ -154,6 +174,17 @@ namespace Bit.Droid.Renderers
                 Icon.Visibility = ViewStates.Visible;
                 Icon.Text = iconImage.Item1;
             }
+        }
+
+        public void UpdateColors(Android.Graphics.Color textColor, Android.Graphics.Color mutedColor,
+            Android.Graphics.Color iconDisabledColor)
+        {
+            Name.SetTextColor(textColor);
+            SubTitle.SetTextColor(mutedColor);
+            Icon.SetTextColor(mutedColor);
+            SharedIcon.SetTextColor(mutedColor);
+            AttachmentsIcon.SetTextColor(mutedColor);
+            MoreButton.SetTextColor(iconDisabledColor);
         }
 
         private void MoreButton_Click(object sender, EventArgs e)

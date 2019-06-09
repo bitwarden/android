@@ -2,7 +2,6 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
                     x:Class="Bit.App.Styles.Base"
-                    xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
                     xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
                     xmlns:controls="clr-namespace:Bit.App.Controls">
 
