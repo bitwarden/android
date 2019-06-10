@@ -87,6 +87,9 @@ build_script:
     cd $APPVEYOR_BUILD_FOLDER
 - ps: |
     if($isWindows -and $env:KEYSTORE_DEC_SECRET) {
+      msbuild bitwarden-mobile.sln `
+        "/logger:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" `
+        "/p:Configuration=Release"
       .\src\Android\ci-build-apks.ps1
       Push-AppveyorArtifact .\com.x8bit.bitwarden.apk
       Push-AppveyorArtifact .\com.x8bit.bitwarden-fdroid.apk
@@ -104,7 +107,8 @@ on_success:
       cd store\google\Publisher\bin\Release\netcoreapp2.0
       dotnet Publisher.dll `
         $env:APPVEYOR_BUILD_FOLDER\store\google\Publisher\play_creds.json `
-        $env:APPVEYOR_BUILD_FOLDER\com.x8bit.bitwarden.apk alpha
+        $env:APPVEYOR_BUILD_FOLDER\com.x8bit.bitwarden.apk `
+        alpha
       cd $env:APPVEYOR_BUILD_FOLDER
     }
 
