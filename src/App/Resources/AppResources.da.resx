@@ -172,7 +172,7 @@
     <comment>Message shown when interacting with the server</comment>
   </data>
   <data name="DoYouReallyWantToDelete" xml:space="preserve">
-    <value>Sikker på, at du vil slette? Dette kan ikke omgøres.</value>
+    <value>Er du sikker på, at du vil slette? Dette kan ikke fortrydes.</value>
     <comment>Confirmation alert message when deleteing something.</comment>
   </data>
   <data name="Edit" xml:space="preserve">
@@ -412,7 +412,7 @@
     <value>Bitwarden app-udvidelse</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Nye logins føjes lettest til din Boks fra Bitwarden app-udvidelsen. Få mere at vide om brugen af Bitwarden app-udvidelsen ved at gå til skærmen "Værktøjer".</value>
+    <value>Den letteste måde at tilføje nye logins til din boks er fra Bitwarden app-udvidelsen. Få mere at vide om brugen af Bitwarden app-udvidelsen ved at gå til skærmen "Indstillinger".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Benyt Bitwarden i Safari og andre apps til autoudfyldelse af dine logins.</value>
@@ -753,7 +753,7 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Der føjes lettest nye logins til din Boks fra Bitwarden Autoudfyldningstjenesten. Få mere at vide om brugen af Bitwarden Autoudfyldningstjenesten ved at gå til skærmen "Indstillinger".</value>
+    <value>Den letteste måde at tilføje nye logins til din boks er fra Bitwarden Autoudfyldningstjenesten. Få mere at vide om brugen af Bitwarden Autoudfyldningstjenesten ved at gå til skærmen "Indstillinger".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Autoudfyld</value>
@@ -1006,7 +1006,7 @@
     <value>Login</value>
   </data>
   <data name="TypeSecureNote" xml:space="preserve">
-    <value>Sikker note</value>
+    <value>Sikret notat</value>
   </data>
   <data name="Address1" xml:space="preserve">
     <value>Adresse 1</value>
@@ -1302,7 +1302,7 @@
     <value>Adgangskode Autoudfyld</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Der føjes lettest nye logins til din Boks vha. Bitwarden-udvidelsen Adgangskode AutoUdfyldning. Få mere at vide om brugen af Bitwarden Adgangskode Autoudfyldning ved at gå til skærmen "Indstillinger".</value>
+    <value>Den letteste måde at tilføje nye logins til din boks er ved at bruge Bitwarden adgangskode Autoudfyld udvidelsen. Få mere at vide om brugen af Bitwarden adgangskode Autoudfyld udvidelsen ved at navigere til skærmbilledet "Indstillinger".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Ugyldig e-mailadresse.</value>
@@ -1403,7 +1403,7 @@
     <value>Ingen organisationer at vise.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Vælg en organisation, som du ønsker at dele dette emne med. Deling overfører ejerskab af emnet til organisationen. Du vil ikke længere være den direkte ejer af emnet, når først det er delt.</value>
+    <value>Vælg en organisation, som du ønsker at dele dette element med. Deling overfører ejerskab af elementet til organisationen. Du vil ikke længere være den direkte ejer af dette element, når det er blevet delt.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>Antal ord</value>
@@ -1434,7 +1434,7 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden muliggør at dele din Boks med andre ved at benytte en organisationskonto. Vil du besøge webstedet bitwarden.com for at få mere at vide?</value>
+    <value>Bitwarden giver dig mulighed for at dele din boks med andre ved at bruge en organisationskonto. Vil du besøge webstedet bitwarden.com for at få mere at vide?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Eksportér boks</value>
@@ -1455,7 +1455,7 @@
     <value>5 minutter</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Indstil din PIN-kode til at oplåse Bitwarden. Dine PIN-indstillinger nulstilles, hvis du nogensinde logger helt ud af app'en.</value>
+    <value>Indstil din pinkode til at låse Bitwarden op. Dine pin-indstillinger nulstilles, hvis du nogensinde logger helt ud af app'en.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
     <value>Logget ind som {0} på {1}.</value>
@@ -1506,7 +1506,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Vælg standard håndteringsdetekteringen for URI-matches til logins, når du udfører handlinger såsom AutoUdfyld.</value>
+    <value>Vælg den standard måde, som URI matchmetode håndteres til logins, når du udfører handlinger som f.eks. Autoudfyld.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
@@ -1529,7 +1529,7 @@
     <value>Afslut</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Er du Sikker på, at du vil afslutte Bitwarden?</value>
+    <value>Er du sikker på, at du vil afslutte Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>Vil du kræve oplåsning med din hovedadgangskode ved app-genstart?</value>
@@ -1545,15 +1545,15 @@
     <value>Sortlistede URI'er tilbyder ikke autoudfyldning. Listen over apps skal være kommasepareret. F.eks: "https://twitter.com, androidapp: //com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Deaktivér Gem-forespørgsel</value>
+    <value>Deaktivér gem-forespørgsel</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>"Gem"-forespørgslen beder dig automatisk gemme nye emner i din Boks, når du angiver dem for første gang.</value>
+    <value>"Gem"-forespørgslen beder dig automatisk gemme nye emner i din boks, når du angiver dem for første gang.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>Ved App-genstart</value>
+    <value>Ved app-genstart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>AutoUdfyldning gør det nemt at få sikret adgang til dit Bitwarden Boks fra andre websteder og apps. Det lader til, at du ikke har aktiveret en autoudfyldningstjeneste for Bitwarden, så aktivér denne fra skærmen "Indstillinger".</value>
+    <value>Autoudfyldning gør det nemt at få en sikret adgang til din Bitwarden boks fra andre websteder og apps. Det ser ud til, at du ikke har aktiveret en autoudfyldningstjeneste for Bitwarden. Aktivér autoudfyldning for Bitwarden fra skærmen "Indstillinger".</value>
   </data>
 </root>

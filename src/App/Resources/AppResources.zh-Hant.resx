@@ -1539,7 +1539,7 @@
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>黑名單中的 URI</value>
+    <value>黑名單 URI</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>被加到黑名單的網址將不提供自動填入。應用程式列表必須以逗號分隔。範例：「https://twitter.com, androidapp://com.twitter.android」。</value>
