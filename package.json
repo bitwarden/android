@@ -2,7 +2,7 @@
   "name": "bitwarden-fdroid",
   "version": "0.0.0",
   "scripts": {
-    "deploy": "gh-pages --dist ./store/fdroid-dist"
+    "deploy": "gh-pages --dist dist"
   },
   "devDependencies": {
     "gh-pages": "^1.2.0"
