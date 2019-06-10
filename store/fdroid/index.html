@@ -12,7 +12,7 @@
         crossorigin="anonymous">
 </head>
 
-<body style="text-align: center; padding: 20px;">
+<body style="text-align: center; padding: 20px; max-width: 800px; margin: 0 auto;">
     <h1>Bitwarden on F-Droid</h1>
     <p>
         <a href="https://mobileapp.bitwarden.com/fdroid/repo?fingerprint=BC54EA6FD1CD5175BCCCC47C561C5726E1C3ED7E686B6DB4B18BAC843A3EFE6C">
@@ -32,5 +32,11 @@
         <li>Refresh your F-Droid client app Categories tab.</li>
         <li>Install Bitwarden from the F-Droid client app listing.</li>
     </ol>
+    <h3>Limitations</h3>
+    <p>
+        Since the Bitwarden F-Droid build does not include Firebase Messaging,
+        push notifications for live sync updates of your vault will not work.
+        Manual vault syncing will be required.
+    </p>
 </body>
 </html>
