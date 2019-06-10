@@ -1,5 +1,5 @@
 {
-  "name": "bitwarden-fdroid",
+  "name": "bitwarden-mobile",
   "version": "0.0.0",
   "scripts": {
     "deploy": "gh-pages --dist dist",
