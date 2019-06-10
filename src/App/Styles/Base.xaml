@@ -178,7 +178,7 @@
     <Style TargetType="Grid"
            Class="list-row">
         <Setter Property="Padding"
-                Value="2, 5" />
+                Value="2, 5, 0, 5" />
     </Style>
     <Style TargetType="BoxView"
            Class="list-section-separator">

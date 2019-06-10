@@ -124,8 +124,6 @@ namespace Bit.Droid.Renderers
             SharedIcon.SetTextSize(ComplexUnitType.Sp, small);
             AttachmentsIcon.SetTextSize(ComplexUnitType.Sp, small);
             MoreButton.SetTextSize(ComplexUnitType.Sp, 25);
-            MoreButton.SetPadding(0, 0, 0, 0);
-            MoreButton.SetBackgroundColor(Xamarin.Forms.Color.Black.ToAndroid());
 
             AddView(view);
         }
