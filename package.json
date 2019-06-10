@@ -2,7 +2,8 @@
   "name": "bitwarden-fdroid",
   "version": "0.0.0",
   "scripts": {
-    "deploy": "gh-pages --dist dist"
+    "deploy": "gh-pages --dist dist",
+    "clean:l10n": "git push origin --delete l10n_master"
   },
   "devDependencies": {
     "gh-pages": "^1.2.0"
