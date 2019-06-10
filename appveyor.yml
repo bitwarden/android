@@ -1,14 +1,24 @@
-image: Visual Studio 2017
+image:
+- Visual Studio 2017
+- Ubuntu1804
 
 branches:
   except:
     - l10n_master
+    - gh-pages
 
 configuration: Release
 
+stack: node 10
+
 init:
+- sh: |
+    if [ "${DEBUG_SSH}" == "true" ]
+    then
+      curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+    fi
 - ps: |
-    if($env:DEBUG_RDP -eq "true") {
+    if($isWindows -and $env:DEBUG_RDP -eq "true") {
       iex ((new-object net.webclient).DownloadString(`
         'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
     }
@@ -19,39 +29,82 @@ init:
     }
 
 install:
-  - choco install cloc --no-progress
-  - "cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML"
-#  - appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-#  - appveyor DownloadFile https://aka.ms/vs/15/release/vs_community.exe
-#  - vs_community.exe update --wait --quiet --norestart --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
-#  - ps: .\src\Android\update-android.ps1
+- sh: |
+    curl -sflL 'https://raw.githubusercontent.com/appveyor/secure-file/master/install.sh' | bash -e -
+    ./appveyor-tools/secure-file -decrypt ./store/fdroid/keystore.jks.enc -secret $FDROID_KEYSTORE_ENC_PASSWORD
+- sh: npm install
+- sh: |
+    sudo apt-get -qq update
+    sudo apt-get -qqy install --no-install-recommends fdroidserver wget
+- sh: |
+    if [ "${GH_TOKEN}" != "" ]
+    then
+      git config --global credential.helper store
+      echo "https://${GH_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
+      git config --global user.email "ci@bitwarden.com"
+      git config --global user.name "Bitwarden CI"
+    fi
+- cmd: choco install cloc --no-progress
+- cmd: "cloc --vcs git --exclude-dir Resources,store,test,Properties --include-lang C#,XAML"
+#- cmd: appveyor DownloadFile https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
+#- cmd: appveyor DownloadFile https://aka.ms/vs/15/release/vs_community.exe
+#- cmd: vs_community.exe update --wait --quiet --norestart --installPath "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community"
+#- cmd: ps: .\src\Android\update-android.ps1
 
 before_build:
-  - nuget restore
-  - IF DEFINED KEYSTORE_DEC_SECRET nuget install secure-file -ExcludeVersion
-  - IF DEFINED GOOGLE_SERVICES_DEC_SECRET secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc -secret %GOOGLE_SERVICES_DEC_SECRET%
+- cmd: nuget restore
+- cmd: IF DEFINED KEYSTORE_DEC_SECRET nuget install secure-file -ExcludeVersion
+- cmd: IF DEFINED GOOGLE_SERVICES_DEC_SECRET secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc -secret %GOOGLE_SERVICES_DEC_SECRET%
 
 after_build:
-  - ps: |
-      if($env:KEYSTORE_DEC_SECRET) {
-        .\src\Android\ci-build-apks.ps1
-      }
+- sh: |
+    cd store
+    chmod 600 fdroid/config.py keystore.jks
+    mkdir -p temp/fdroid
+    mkdir dist
+    TEMP_DIR="$APPVEYOR_BUILD_FOLDER/store/temp/fdroid"
+    cd fdroid
+    echo "keypass=\"$FDROID_KEYSTORE_PASSWORD\"" >>config.py
+    echo "keystorepass=\"$FDROID_KEYSTORE_PASSWORD\"" >>config.py
+    echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
+    mkdir -p repo
+    curl -Lo repo/com.x8bit.bitwarden-fdroid.apk \
+      https://github.com/bitwarden/mobile/releases/download/v1.22.1/com.x8bit.bitwarden-fdroid.apk
+    fdroid update
+    fdroid server update
+    cd ..
+    rm -rf temp/fdroid/archive
+    mv -v temp/fdroid dist
+    cd $APPVEYOR_BUILD_FOLDER
+- ps: |
+    if($isWindows -and $env:KEYSTORE_DEC_SECRET) {
+      .\src\Android\ci-build-apks.ps1
+      Push-AppveyorArtifact .\com.x8bit.bitwarden.apk
+      Push-AppveyorArtifact .\com.x8bit.bitwarden-fdroid.apk
+    }
 
 on_success:
-  - IF DEFINED PLAY_DEC_SECRET secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %PLAY_DEC_SECRET%
-  - IF DEFINED PLAY_DEC_SECRET dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
+- sh: |
+    if [ "${GH_TOKEN}" != "" ]
+    then
+      npm run deploy
+    fi
+- cmd: IF DEFINED PLAY_DEC_SECRET secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %PLAY_DEC_SECRET%
+- cmd: IF DEFINED PLAY_DEC_SECRET dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk alpha
 
 on_finish:
-  - ps: |
-      if($isWindows -and $env:DEBUG_RDP -eq "true") {
-        $blockRdp = $true
-        iex ((new-object net.webclient).DownloadString(`
-          'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-      }
-
-artifacts:
-  - path: com.x8bit.bitwarden-%APPVEYOR_BUILD_NUMBER%.apk
-  - path: com.x8bit.bitwarden-fdroid-%APPVEYOR_BUILD_NUMBER%.apk
+- sh: |
+    if [ "${DEBUG_SSH}" == "true" ]
+    then
+      export APPVEYOR_SSH_BLOCK=true
+      curl -sflL 'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-ssh.sh' | bash -e -
+    fi
+- ps: |
+    if($isWindows -and $env:DEBUG_RDP -eq "true") {
+      $blockRdp = $true
+      iex ((new-object net.webclient).DownloadString(`
+        'https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+    }
 
 deploy:
   tag: $(APPVEYOR_REPO_TAG_NAME)

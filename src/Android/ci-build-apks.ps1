@@ -29,7 +29,7 @@ msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=Release" "/p
 echo "##### Copy Release apk to project root"
 
 $signedApkPath = $($rootPath + "\src\Android\bin\Release\com.x8bit.bitwarden-Signed.apk");
-$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-" + $env:APPVEYOR_BUILD_NUMBER + ".apk");
+$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden.apk");
 
 Copy-Item $signedApkPath $signedApkDestPath
 
@@ -80,7 +80,7 @@ msbuild "$($androidPath)" "/t:SignAndroidPackage" "/p:Configuration=FDroid" "/p:
 echo "##### Copy FDroid apk to project root"
 
 $signedApkPath = $($rootPath + "\src\Android\bin\FDroid\com.x8bit.bitwarden-Signed.apk");
-$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-fdroid-" + $env:APPVEYOR_BUILD_NUMBER + ".apk");
+$signedApkDestPath = $($rootPath + "\com.x8bit.bitwarden-fdroid.apk");
 
 Copy-Item $signedApkPath $signedApkDestPath
 
