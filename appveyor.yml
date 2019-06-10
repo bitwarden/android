@@ -101,9 +101,11 @@ on_success:
 - ps: |
     if($isWindows -and $env:PLAY_DEC_SECRET) {
       secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret $env:PLAY_DEC_SECRET
-      dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll `
+      cd store\google\Publisher\bin\Release\netcoreapp2.0
+      dotnet Publisher.dll `
         $env:APPVEYOR_BUILD_FOLDER\store\google\Publisher\play_creds.json `
         $env:APPVEYOR_BUILD_FOLDER\com.x8bit.bitwarden.apk alpha
+      cd $env:APPVEYOR_BUILD_FOLDER
     }
 
 on_finish:
