@@ -61,7 +61,7 @@ after_build:
     cd store
     chmod 600 fdroid/config.py keystore.jks
     mkdir -p temp/fdroid
-    mkdir dist
+    mkdir fdroid-dist
     TEMP_DIR="$APPVEYOR_BUILD_FOLDER/store/temp/fdroid"
     cd fdroid
     echo "keypass=\"$FDROID_KEYSTORE_PASSWORD\"" >>config.py
@@ -74,7 +74,7 @@ after_build:
     fdroid server update
     cd ..
     rm -rf temp/fdroid/archive
-    mv -v temp/fdroid dist
+    mv -v temp/fdroid fdroid-dist
     cd $APPVEYOR_BUILD_FOLDER
 - ps: |
     if($isWindows -and $env:KEYSTORE_DEC_SECRET) {
