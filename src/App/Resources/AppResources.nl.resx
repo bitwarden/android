@@ -412,7 +412,7 @@
     <value>Bitwarden app-extensie</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>De eenvoudigste manier om nieuwe logins toe te voegen aan uw kluis is van de Bitwarden App Extensie. Leer meer over het gebruik van de Bitwarden App Extensie door naar het "Instellingen" scherm te navigeren.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Gebruik Bitwarden in Safari en andere apps om uw inloggegevens automatisch in te vullen.</value>
@@ -732,7 +732,7 @@
     <value>Als u een Bitwarden auto-invullen-melding ziet, dan kunt u deze aanraken om de auto-invullen-dienst te starten.</value>
   </data>
   <data name="BitwardenAutofillServiceNotificationContent" xml:space="preserve">
-    <value>Raak deze melding aan om een login automatisch in te vullen d.m.v. uw kluis.</value>
+    <value>Tik deze melding om een aanmelding automatisch in te vullen d.m.v. uw kluis.</value>
   </data>
   <data name="BitwardenAutofillServiceOpenAccessibilitySettings" xml:space="preserve">
     <value>Toegankelijkheidsinstellingen openen</value>
@@ -753,7 +753,7 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>De eenvoudigste manier om nieuwe logins aan uw kluis toe te voegen is via de Bitwarden Auto-fill Service. Leer meer over het gebruik van de Bitwarden Auto-fill Service door te navigeren naar het "Instellingen" scherm.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-invullen</value>
@@ -1302,120 +1302,120 @@
     <value>Wachtwoord automatisch invullen</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>De eenvoudigste manier om nieuwe logins aan uw kluis toe te voegen is door gebruik te maken van de Bitwarden Password AutoFill extensie. Leer meer over het gebruik van de Bitwarden Password AutoFill extensie door te navigeren naar het "Instellingen" scherm.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>Ongeldig e-mailadres.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>Kaarten</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>Identiteiten</value>
   </data>
   <data name="Logins" xml:space="preserve">
     <value>Logins</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>Veilige notities</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>Alle Items</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI's</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Wachtwoord controleren...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Controleer of wachtwoord is gelekt.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Dit wachtwoord is {0} keer aangetroffen in datalekken. U zou het moeten veranderen.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Dit wachtwoord is niet gevonden in bekende datalekken. Het zou veilig te gebruiken moeten zijn.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity Name</value>
+    <value>Identiteitsnaam</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Waarde</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>Wachtwoordgeschiedenis</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Types</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Geen wachtwoorden om weer te geven.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>Er zijn geen items om weer te geven.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>Verzameling doorzoeken</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>Map doorzoeken</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+    <value>Type zoeken</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Omlaag</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Omhoog</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>Diversen</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>Eigendom</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Who owns this item?</value>
+    <value>Wie is eigenaar van dit object?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>There are no collections to list.</value>
+    <value>Er zijn geen verzamelingen om weer te geven.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>Item is gedeeld.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>U moet ten minste één collectie selecteren.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>Delen</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Share Item</value>
+    <value>Object delen</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>No organizations to list.</value>
+    <value>Geen organisaties om weer te geven.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>Kies een organisatie waarmee u dit item wil delen. Door het delen krijgt de organisatie de eigendomsrechten van het item. U bent niet langer meer de directe eigenaar van het item wanneer u deze deelt.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of Words</value>
+    <value>Aantal woorden</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>Wachtwoordzin</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word Separator</value>
+    <value>Woordscheidingsteken</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Wissen</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
@@ -1423,137 +1423,137 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>Er zijn geen mappen om weer te geven.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>Vingerafdrukfrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>Uw account's vingerafdrukfrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Met een organisatie-account kunt u een Bitwarden-kluis met anderen delen. Wilt u op de website bitwarden.com meer informatie lezen?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>Kluis exporteren</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>Nu vergrendelen</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>Ontgrendelen</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 minuten</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 minuten</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>Stel je PIN-code in voor het ontgrendelen van Bitwarden. Je pincode wordt gereset als je ooit volledig uit de applicatie uitlogt.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Ingelogd als {0} op {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>Uw kluis is vergrendeld. Controleer uw hoofdwachtwoord om door te gaan.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>Uw kluis is vergrendeld. Verifieer uw PIN-code om door te gaan.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>Donker</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>Licht</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 minuten</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 minuut</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 seconden</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 seconden</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 seconden</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 minuten</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>Klembord wissen</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Automatisch gekopieerde waarden van uw klembord wissen.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>Standaard URI-overeenkomstdetectie</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Kies de standaardmethode voor detectie van URI-overeenkomsten voor aanmeldingen, voor acties zoals automatisch aanvullen.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Thema</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>Het kleurenthema wijzigen.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
+    <value>Herstart vereist.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+    <value>Herstarten...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>Notities kopiëren</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Afsluiten</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Weet u zeker dat u Bitwarden wilt afsluiten?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>Zwart</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>Geblokkeerde URI's</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>"Notificatie bij Nieuwe Site" deactiveren</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>De "Notificatie bij Nieuwe Site" vraagt automatisch om nieuwe sites op te slaan in je kluis wanneer je voor de eerste keer inlogt.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Na Herstart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Automatisch invullen maakt het gemakkelijk om veilig toegang te krijgen tot uw Bitwarden kluis van andere websites en apps. Het lijkt erop dat u de auto-invullen service voor Bitwarden niet hebt ingeschakeld. Schakel automatisch invullen voor Bitwarden in vanuit het "Instellingen" scherm.</value>
   </data>
 </root>
