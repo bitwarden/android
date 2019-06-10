@@ -254,10 +254,7 @@ namespace Bit.Core.Services
                     DecryptedCipherCache = decCiphers;
                     return DecryptedCipherCache;
                 }
-                finally
-                {
-
-                }
+                finally { }
             }
             _getAllDecryptedTask = doTask();
             return _getAllDecryptedTask;
