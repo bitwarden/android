@@ -412,7 +412,7 @@
     <value>Bitwarden rakenduse laiendus</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>Lihtsaim viis uute sisselogimise andmete lisamiseks on kasutada Bitwardeni rakenduse laiendust. Lisateavet Bitwardeni rakenduse laienduse kasutamiseks leiad menüüst "Seaded".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Kasuta Bitwardenit Safaris ja teistes rakendusestes kontoandmete sisestamiseks.</value>
@@ -534,7 +534,7 @@
     <value>Koheselt</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Automaatne lukustamine</value>
+    <value>Lukustamine</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Sisselogimine...</value>
@@ -632,7 +632,7 @@
     <value>Soovi korral võid meid positiivse hinnanguga toetada!</value>
   </data>
   <data name="RegeneratePassword" xml:space="preserve">
-    <value>Genereeri salasõna uuesti</value>
+    <value>Loo uus</value>
   </data>
   <data name="RetypeMasterPassword" xml:space="preserve">
     <value>Sisesta ülemparool uuesti</value>
@@ -753,7 +753,7 @@
     <value>Olek:</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Lihtsaim viis hoidlasse kontosid lisada on läbi Bitwardeni automaattäite teenuse. Rohkem infot selle kohta leiad Bitwardeni rakenduse menüüst "Seaded".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automaattäide</value>
@@ -780,7 +780,7 @@
     <value>Jaga oma hoidlat</value>
   </data>
   <data name="AutofillPasswordField" xml:space="preserve">
-    <value>Paku täitmist, kui valitud on parooliväli</value>
+    <value>Paroolivälja valimisel</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
     <value>Otsi ekraanilt täitmiseks mõeldud välju ning näita automaattäite teavitust ainult siis, kui valitud on parooli väli. See valik võib aidata akut säästa.</value>
@@ -1150,7 +1150,7 @@
     <value>Selles kaustas ei ole kirjeid.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Automaattäite Juurdepääsetavuse teenus</value>
+    <value>Juurdepääsetavuse teenus</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>Bitwardeni automaattäite teenus kasutab Androidi Autofill raamistikku. See aitab telefonis olevatesse rakendustesse sisestada kontoandmeid, krediitkaardi andmeid ja muud personaalset infot.</value>
@@ -1302,7 +1302,7 @@
     <value>Paroolide Automaatne täitmine</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>Kõige lihtsam viis uute kontoandmete sisestamiseks on kasutada Bitwardeni Automaattäite lisatööriista. Rohkem teavet selle kasutamise kohta leiad menüüst "Seaded".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Vigane e-posti aadress.</value>
@@ -1346,7 +1346,7 @@
     <value>Väärtus</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Salasõna ajalugu</value>
+    <value>Paroolide ajalugu</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Tüübid</value>
@@ -1498,15 +1498,15 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Puhastab automaatselt lõikelauale kopeeritud sisu.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>Vaikse URL-i sobivuse tuvastamine</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Vali vaikeviis, kuidas kirje ja URL-i sobivus tuvastatakse. Seda kasutatakse näiteks siis, kui lehele üritatakse automaatselt andmeid sisestada.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Kujundus</value>
@@ -1520,7 +1520,7 @@
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Taaskäivitumine...</value>
+    <value>Taaskäivitub...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Kopeeri märkus</value>
@@ -1554,6 +1554,6 @@
     <value>Äpi taaskäivitamisel</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Automaattäite teenus võimaldab teistes äppides Bitwardeni kirjetele hõlpsasti ligi pääseda. Paistab, et selles seadmes ei ole Bitwardeni Automaattäite teenus sisselülitatud. Saad selle sisse lülitada menüüst "Seaded".</value>
   </data>
 </root>
