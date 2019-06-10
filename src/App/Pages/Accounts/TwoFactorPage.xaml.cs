@@ -90,8 +90,17 @@ namespace Bit.App.Pages
             if(!_vm.YubikeyMethod)
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
+                _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
             }
-            _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
+        }
+        protected override bool OnBackButtonPressed()
+        {
+            if(_vm.YubikeyMethod)
+            {
+                _messagingService.Send("listenYubiKeyOTP", false);
+                _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
+            }
+            return base.OnBackButtonPressed();
         }
 
         private async void Continue_Clicked(object sender, EventArgs e)
