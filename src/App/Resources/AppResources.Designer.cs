@@ -745,7 +745,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: &quot;https://twitter.com, androidapp://com.twitter.android&quot;..
+        ///   Looks up a localized string similar to URIs that are blacklisted will not offer auto-fill. The list should be comma separated. Ex: &quot;https://twitter.com, androidapp://com.twitter.android&quot;..
         /// </summary>
         public static string BlacklistedUrisDescription {
             get {
