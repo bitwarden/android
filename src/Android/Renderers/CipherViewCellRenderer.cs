@@ -117,6 +117,16 @@ namespace Bit.Droid.Renderers
             AttachmentsIcon.Typeface = _faTypeface;
             MoreButton.Typeface = _miTypeface;
 
+            var small = (float)Device.GetNamedSize(NamedSize.Small, typeof(Label));
+            Icon.SetTextSize(ComplexUnitType.Sp, 22.0952380952381F);
+            Name.SetTextSize(ComplexUnitType.Sp, (float)Device.GetNamedSize(NamedSize.Medium, typeof(Label)));
+            SubTitle.SetTextSize(ComplexUnitType.Sp, small);
+            SharedIcon.SetTextSize(ComplexUnitType.Sp, small);
+            AttachmentsIcon.SetTextSize(ComplexUnitType.Sp, small);
+            MoreButton.SetTextSize(ComplexUnitType.Sp, 25);
+            MoreButton.SetPadding(0, 0, 0, 0);
+            MoreButton.SetBackgroundColor(Xamarin.Forms.Color.Black.ToAndroid());
+
             AddView(view);
         }
 
@@ -144,7 +154,7 @@ namespace Bit.Droid.Renderers
             }
             else
             {
-                SubTitle.Visibility = ViewStates.Gone;
+                SubTitle.Visibility = ViewStates.Invisible;
             }
             SharedIcon.Visibility = cipher.Shared ? ViewStates.Visible : ViewStates.Gone;
             AttachmentsIcon.Visibility = cipher.HasAttachments ? ViewStates.Visible : ViewStates.Gone;

@@ -15,8 +15,8 @@
             android:layout_gravity="center_vertical" />
         <TextView
             android:id="@+id/CipherCellIcon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
+            android:layout_width="26dp"
+            android:layout_height="26dp"
             android:layout_gravity="center_vertical"
             android:gravity="center"
             android:text="[X]" />
@@ -62,7 +62,7 @@
         </LinearLayout>
         <Button
             android:id="@+id/CipherCellButton"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="match_parent"
             android:text="&#xe5d4;"
             android:gravity="center"/>

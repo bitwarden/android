@@ -224,7 +224,7 @@
         <Setter Property="VerticalTextAlignment"
                 Value="Center" />
         <Setter Property="FontSize"
-                Value="Large" />
+                Value="22.0952380952381" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>
@@ -346,6 +346,8 @@
                 Value="Medium" />
         <Setter Property="TextColor"
                 Value="{StaticResource TextColor}" />
+        <Setter Property="VerticalOptions"
+                Value="Center" />
     </Style>
     <Style TargetType="Label"
            ApplyToDerivedTypes="True"
