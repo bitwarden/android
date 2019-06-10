@@ -37,7 +37,7 @@ install:
     sudo apt-get -qq update
     sudo apt-get -qqy install --no-install-recommends fdroidserver wget
 - sh: |
-    if [ "${GH_TOKEN}" != "" ]
+    if [ "${APPVEYOR_REPO_TAG}" == "true" -a "${GH_TOKEN}" != "" ]
     then
       git config --global credential.helper store
       echo "https://${GH_TOKEN}:x-oauth-basic@github.com" >> ~/.git-credentials
@@ -66,25 +66,28 @@ before_build:
 
 build_script:
 - sh: |
-    mkdir dist
-    cp CNAME ./dist
-    cd store
-    chmod 600 fdroid/config.py keystore.jks
-    mkdir -p temp/fdroid
-    TEMP_DIR="$APPVEYOR_BUILD_FOLDER/store/temp/fdroid"
-    cd fdroid
-    echo "keypass=\"$FDROID_KEYSTORE_PASSWORD\"" >>config.py
-    echo "keystorepass=\"$FDROID_KEYSTORE_PASSWORD\"" >>config.py
-    echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
-    mkdir -p repo
-    curl -Lo repo/com.x8bit.bitwarden-fdroid.apk \
-      https://github.com/bitwarden/mobile/releases/download/v1.22.1/com.x8bit.bitwarden-fdroid.apk
-    fdroid update
-    fdroid server update
-    cd ..
-    rm -rf temp/fdroid/archive
-    mv -v temp/fdroid ../dist
-    cd $APPVEYOR_BUILD_FOLDER
+    if [ "${APPVEYOR_REPO_TAG}" == "true" ]
+    then
+      mkdir dist
+      cp CNAME ./dist
+      cd store
+      chmod 600 fdroid/config.py keystore.jks
+      mkdir -p temp/fdroid
+      TEMP_DIR="$APPVEYOR_BUILD_FOLDER/store/temp/fdroid"
+      cd fdroid
+      echo "keypass=\"$FDROID_KEYSTORE_PASSWORD\"" >>config.py
+      echo "keystorepass=\"$FDROID_KEYSTORE_PASSWORD\"" >>config.py
+      echo "local_copy_dir=\"$TEMP_DIR\"" >>config.py
+      mkdir -p repo
+      curl -Lo repo/com.x8bit.bitwarden-fdroid.apk \
+        https://github.com/bitwarden/mobile/releases/download/$APPVEYOR_REPO_TAG_NAME/com.x8bit.bitwarden-fdroid.apk
+      fdroid update
+      fdroid server update
+      cd ..
+      rm -rf temp/fdroid/archive
+      mv -v temp/fdroid ../dist
+      cd $APPVEYOR_BUILD_FOLDER
+    fi
 - ps: |
     if($isWindows -and $env:KEYSTORE_DEC_SECRET) {
       msbuild bitwarden-mobile.sln `
@@ -97,7 +100,7 @@ build_script:
 
 on_success:
 - sh: |
-    if [ "${GH_TOKEN}" != "" ]
+    if [ "${APPVEYOR_REPO_TAG}" == "true" -a "${GH_TOKEN}" != "" ]
     then
       npm run deploy
     fi
