@@ -275,6 +275,7 @@ namespace Bit.App.Pages
             {
                 await _storageService.RemoveAsync(Constants.FingerprintUnlockKey);
             }
+            _lockService.FingerprintLocked = false;
             await _cryptoService.ToggleKeyAsync();
             BuildList();
         }

@@ -88,7 +88,8 @@ namespace Bit.Droid
             {
                 if(message.Command == "scheduleLockTimer")
                 {
-                    var lockOptionMs = (int)message.Data * 1000;
+                    var lockOptionMinutes = (int)message.Data;
+                    var lockOptionMs = lockOptionMinutes * 60000;
                     var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + lockOptionMs + 10;
                     var alarmManager = GetSystemService(AlarmService) as AlarmManager;
                     alarmManager.Set(AlarmType.RtcWakeup, triggerMs, _lockAlarmPendingIntent);
