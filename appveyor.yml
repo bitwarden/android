@@ -86,6 +86,7 @@ build_script:
       cd ..
       rm -rf temp/fdroid/archive
       mv -v temp/fdroid ../dist
+      cp fdroid/index.html ./dist/fdroid
       cd $APPVEYOR_BUILD_FOLDER
     #fi
 - ps: |
