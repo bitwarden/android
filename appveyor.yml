@@ -52,9 +52,17 @@ install:
 #- cmd: ps: .\src\Android\update-android.ps1
 
 before_build:
-- cmd: nuget restore
-- cmd: IF DEFINED KEYSTORE_DEC_SECRET nuget install secure-file -ExcludeVersion
-- cmd: IF DEFINED GOOGLE_SERVICES_DEC_SECRET secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc -secret %GOOGLE_SERVICES_DEC_SECRET%
+- ps: |
+    if($isWindows) {
+      nuget restore
+      if($env:KEYSTORE_DEC_SECRET -or $env:GOOGLE_SERVICES_DEC_SECRET -or $env:PLAY_DEC_SECRET) {
+        nuget install secure-file -ExcludeVersion
+      }
+      if($env:GOOGLE_SERVICES_DEC_SECRET) {
+        secure-file\tools\secure-file -decrypt src\Android\google-services.json.enc `
+          -secret $env:GOOGLE_SERVICES_DEC_SECRET
+      }
+    }
 
 build_script:
 - sh: |
@@ -89,8 +97,13 @@ on_success:
     then
       npm run deploy
     fi
-- cmd: IF DEFINED PLAY_DEC_SECRET secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret %PLAY_DEC_SECRET%
-- cmd: IF DEFINED PLAY_DEC_SECRET dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll %APPVEYOR_BUILD_FOLDER%\store\google\Publisher\play_creds.json %APPVEYOR_BUILD_FOLDER%\com.x8bit.bitwarden.apk alpha
+- ps: |
+    if($isWindows -and $env:PLAY_DEC_SECRET) {
+      secure-file\tools\secure-file -decrypt store\google\Publisher\play_creds.json.enc -secret $env:PLAY_DEC_SECRET
+      dotnet store\google\Publisher\bin\Release\netcoreapp2.0\Publisher.dll `
+        $env:APPVEYOR_BUILD_FOLDER\store\google\Publisher\play_creds.json `
+        $env:APPVEYOR_BUILD_FOLDER\com.x8bit.bitwarden.apk alpha
+    }
 
 on_finish:
 - sh: |
