@@ -79,6 +79,7 @@
             android:layout_height="match_parent"
             android:text="&#xe5d4;"
             android:gravity="center"
-            android:padding="0dp" />
+            android:padding="0dp"
+            android:background="@android:color/transparent" />
     </LinearLayout>
 </RelativeLayout>
