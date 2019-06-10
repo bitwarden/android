@@ -19,6 +19,7 @@ namespace Bit.Core.Services
 
         public Task<byte[]> Pbkdf2Async(string password, string salt, CryptoHashAlgorithm algorithm, int iterations)
         {
+            password = NormalizePassword(password);
             return Pbkdf2Async(Encoding.UTF8.GetBytes(password), Encoding.UTF8.GetBytes(salt), algorithm, iterations);
         }
 
@@ -29,6 +30,7 @@ namespace Bit.Core.Services
 
         public Task<byte[]> Pbkdf2Async(string password, byte[] salt, CryptoHashAlgorithm algorithm, int iterations)
         {
+            password = NormalizePassword(password);
             return Pbkdf2Async(Encoding.UTF8.GetBytes(password), salt, algorithm, iterations);
         }
 
@@ -202,6 +204,18 @@ namespace Bit.Core.Services
                 default:
                     throw new ArgumentException("Unsupported asymmetric algorithm.");
             }
+        }
+
+        // Some users like to copy/paste passwords from external files. Sometimes this can lead to two different
+        // values on mobiles apps vs the web. For example, on Android an EditText will accept a new line character
+        // (\n), whereas whenever you paste a new line character on the web in a HTML input box it is converted
+        // to a space ( ). Normalize those values so that they are the same on all platforms.
+        private string NormalizePassword(string password)
+        {
+            return password
+                .Replace("\r\n", " ") // Windows-style new line => space
+                .Replace("\n", " ") // New line => space
+                .Replace(" ", " "); // No-break space (00A0) => space
         }
     }
 }
