@@ -13,6 +13,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
 
         private TwoFactorPageViewModel _vm;
+        private bool _inited;
 
         public TwoFactorPage()
         {
@@ -67,15 +68,20 @@ namespace Bit.App.Pages
                     }
                 }
             });
-            await LoadOnAppearedAsync(_scrollView, true, () =>
+
+            if(!_inited)
             {
-                _vm.Init();
-                if(_vm.TotpMethod)
+                _inited = true;
+                await LoadOnAppearedAsync(_scrollView, true, () =>
                 {
-                    RequestFocus(_totpEntry);
-                }
-                return Task.FromResult(0);
-            });
+                    _vm.Init();
+                    if(_vm.TotpMethod)
+                    {
+                        RequestFocus(_totpEntry);
+                    }
+                    return Task.FromResult(0);
+                });
+            }
         }
 
         protected override void OnDisappearing()
