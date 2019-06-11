@@ -27,6 +27,7 @@ namespace Bit.iOS
         {
             Xamarin.Forms.Forms.Init();
             InitApp();
+            Bootstrap();
 
             LoadApplication(new App.App(null));
 
