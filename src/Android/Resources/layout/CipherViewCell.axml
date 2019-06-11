@@ -6,7 +6,7 @@
     android:gravity="center_vertical">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingLeft="2.2dp">
         <LinearLayout
             android:orientation="horizontal"
@@ -32,9 +32,10 @@
             android:id="@+id/CipherCellContent"
             android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
+            android:gravity="center"
             android:paddingVertical="7.65dp">
             <LinearLayout
                 android:id="@+id/CipherCellContentTop"
