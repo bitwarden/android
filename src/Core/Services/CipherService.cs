@@ -383,12 +383,16 @@ namespace Bit.Core.Services
                             }
                             break;
                         case UriMatchType.RegularExpression:
-                            var regex = new Regex(u.Uri, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
-                            match = regex.IsMatch(url);
-                            if(match)
+                            try
                             {
-                                AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                                var regex = new Regex(u.Uri, RegexOptions.IgnoreCase, TimeSpan.FromSeconds(1));
+                                match = regex.IsMatch(url);
+                                if(match)
+                                {
+                                    AddMatchingLogin(cipher, matchingLogins, matchingFuzzyLogins);
+                                }
                             }
+                            catch(ArgumentException) { }
                             break;
                         case UriMatchType.Never:
                         default:
