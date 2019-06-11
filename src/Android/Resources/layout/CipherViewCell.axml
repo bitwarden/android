@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:paddingVertical="7dp">
+            android:paddingVertical="7.65dp">
             <LinearLayout
                 android:id="@+id/CipherCellContentTop"
                 android:orientation="horizontal"
