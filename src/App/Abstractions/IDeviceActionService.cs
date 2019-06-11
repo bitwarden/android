@@ -16,7 +16,8 @@ namespace Bit.App.Abstractions
         Task ClearCacheAsync();
         Task SelectFileAsync();
         Task<string> DisplayPromptAync(string title = null, string description = null, string text = null,
-            string okButtonText = null, string cancelButtonText = null, bool numericKeyboard = false);
+            string okButtonText = null, string cancelButtonText = null, bool numericKeyboard = false,
+            bool autofocus = true);
         void RateApp();
         bool SupportsFaceId();
         bool SupportsNfc();

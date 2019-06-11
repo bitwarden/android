@@ -229,7 +229,7 @@ namespace Bit.Droid.Services
 
         public Task<string> DisplayPromptAync(string title = null, string description = null,
             string text = null, string okButtonText = null, string cancelButtonText = null,
-            bool numericKeyboard = false)
+            bool numericKeyboard = false, bool autofocus = true)
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
             if(activity == null)
@@ -278,6 +278,10 @@ namespace Bit.Droid.Services
             var alert = alertBuilder.Create();
             alert.Window.SetSoftInputMode(Android.Views.SoftInput.StateVisible);
             alert.Show();
+            if(autofocus)
+            {
+                input.RequestFocus();
+            }
             return result.Task;
         }
 
