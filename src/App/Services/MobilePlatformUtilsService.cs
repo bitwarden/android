@@ -91,7 +91,8 @@ namespace Bit.App.Services
 
         public void LaunchUri(string uri, Dictionary<string, object> options = null)
         {
-            if(uri.StartsWith("http://") || uri.StartsWith("https://"))
+            if((uri.StartsWith("http://") || uri.StartsWith("https://")) &&
+                Uri.TryCreate(uri, UriKind.Absolute, out var parsedUri))
             {
                 Browser.OpenAsync(uri, BrowserLaunchMode.External);
             }
