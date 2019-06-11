@@ -129,8 +129,8 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = string.Format(" {0} {1}",
-                        Cipher.RevisionDate.ToShortDateString(),
-                        Cipher.RevisionDate.ToShortTimeString())
+                        Cipher.RevisionDate.ToLocalTime().ToShortDateString(),
+                        Cipher.RevisionDate.ToLocalTime().ToShortTimeString())
                 });
                 return fs;
             }
@@ -148,8 +148,8 @@ namespace Bit.App.Pages
                 fs.Spans.Add(new Span
                 {
                     Text = string.Format(" {0} {1}",
-                        Cipher.PasswordRevisionDisplayDate?.ToShortDateString(),
-                        Cipher.PasswordRevisionDisplayDate?.ToShortTimeString())
+                        Cipher.PasswordRevisionDisplayDate?.ToLocalTime().ToShortDateString(),
+                        Cipher.PasswordRevisionDisplayDate?.ToLocalTime().ToShortTimeString())
                 });
                 return fs;
             }
