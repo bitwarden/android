@@ -176,7 +176,7 @@ namespace Bit.iOS.Services
 
         public Task<string> DisplayPromptAync(string title = null, string description = null,
             string text = null, string okButtonText = null, string cancelButtonText = null,
-            bool numericKeyboard = false)
+            bool numericKeyboard = false, bool autofocus = true)
         {
             var result = new TaskCompletionSource<string>();
             var alert = UIAlertController.Create(title ?? string.Empty, description, UIAlertControllerStyle.Alert);
@@ -299,6 +299,31 @@ namespace Bit.iOS.Services
         }
 
         public void Background()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AutofillAccessibilityServiceRunning()
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AutofillServiceEnabled()
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetBuildNumber()
+        {
+            return NSBundle.MainBundle.InfoDictionary["CFBundleVersion"].ToString();
+        }
+
+        public void OpenAccessibilitySettings()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void OpenAutofillSettings()
         {
             throw new NotImplementedException();
         }
