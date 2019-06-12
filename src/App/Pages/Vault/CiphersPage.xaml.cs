@@ -40,6 +40,10 @@ namespace Bit.App.Pages
                 _vm.PageTitle = AppResources.SearchVault;
             }
 
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
         }
 
@@ -114,6 +118,14 @@ namespace Bit.App.Pages
             if(e.SelectedItem is CipherView cipher)
             {
                 await _vm.SelectCipherAsync(cipher);
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }

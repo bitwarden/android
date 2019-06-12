@@ -26,5 +26,13 @@ namespace Bit.App.Pages
         {
             await _vm.ClearAsync();
         }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
+            }
+        }
     }
 }

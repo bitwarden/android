@@ -12,6 +12,10 @@
         <pages:OptionsPageViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView Padding="0, 0, 0, 20">
         <StackLayout Padding="0" Spacing="20">
             <StackLayout StyleClass="box">

@@ -13,6 +13,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
         <ToolbarItem Text="{u:I18n Save}" Clicked="Submit_Clicked" />
     </ContentPage.ToolbarItems>
 

@@ -46,10 +46,14 @@ namespace Bit.App.Pages
             _vm.DefaultUri = uri ?? appOptions?.Uri;
             _vm.Init();
             SetActivityIndicator();
-            if(!_vm.EditMode)
+            if(!_vm.EditMode || Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Remove(_attachmentsItem);
                 ToolbarItems.Remove(_deleteItem);
+            }
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
             }
 
             _typePicker.ItemDisplayBinding = new Binding("Key");
@@ -230,6 +234,14 @@ namespace Bit.App.Pages
                     });
                 });
                 await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
 

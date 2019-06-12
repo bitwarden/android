@@ -21,6 +21,7 @@ namespace Bit.App.Pages
             }
             else
             {
+                ToolbarItems.RemoveAt(0);
                 _fab.Clicked = AddButton_Clicked;
             }
         }
@@ -55,6 +56,14 @@ namespace Bit.App.Pages
             {
                 var page = new FolderAddEditPage();
                 await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }

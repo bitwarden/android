@@ -13,6 +13,10 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _vm.CipherId = cipherId;
             SetActivityIndicator();
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
             _organizationPicker.ItemDisplayBinding = new Binding("Key");
         }
 
@@ -32,6 +36,14 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await _vm.SubmitAsync();
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }

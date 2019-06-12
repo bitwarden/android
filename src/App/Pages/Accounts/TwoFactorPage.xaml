@@ -22,6 +22,10 @@
         </ResourceDictionary>
     </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
     <ScrollView x:Name="_scrollView">
         <StackLayout Spacing="10" Padding="0, 0, 0, 10" VerticalOptions="FillAndExpand">
             <StackLayout Spacing="20" Padding="0" IsVisible="{Binding TotpMethod, Mode=OneWay}">

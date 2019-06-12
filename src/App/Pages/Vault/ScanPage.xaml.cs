@@ -21,6 +21,10 @@ namespace Bit.App.Pages
                 PossibleFormats = new List<ZXing.BarcodeFormat> { ZXing.BarcodeFormat.QR_CODE },
                 AutoRotate = false,
             };
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
         }
 
         protected override void OnAppearing()
@@ -74,6 +78,14 @@ namespace Bit.App.Pages
                 }
             }
             _callback(null);
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
+            }
         }
     }
 }

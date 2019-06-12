@@ -1,4 +1,5 @@
 ﻿using System;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -11,6 +12,10 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as SyncPageViewModel;
             _vm.Page = this;
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
         }
 
         protected async override void OnAppearing()
@@ -24,6 +29,14 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await _vm.SyncAsync();
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }

@@ -21,6 +21,10 @@ namespace Bit.App.Pages
             };
             MasterPasswordEntry = _masterPassword;
             ConfirmMasterPasswordEntry = _confirmMasterPassword;
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
 
             _email.ReturnType = ReturnType.Next;
             _email.ReturnCommand = new Command(() => _masterPassword.Focus());
@@ -44,6 +48,14 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await _vm.SubmitAsync();
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }

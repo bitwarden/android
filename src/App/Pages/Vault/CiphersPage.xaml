@@ -15,6 +15,10 @@
         <pages:CiphersPageViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:DateTimeConverter x:Key="dateTime" />

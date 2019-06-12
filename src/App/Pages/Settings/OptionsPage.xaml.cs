@@ -21,6 +21,7 @@ namespace Bit.App.Pages
             _clearClipboardPicker.ItemDisplayBinding = new Binding("Value");
             if(Device.RuntimePlatform == Device.Android)
             {
+                ToolbarItems.RemoveAt(0);
                 _vm.ShowAndroidAccessibilitySettings = true;
                 _vm.ShowAndroidAutofillSettings = _deviceActionService.SupportsAutofillService();
                 _themeDescriptionLabel.Text = string.Concat(_themeDescriptionLabel.Text, " ",
@@ -43,6 +44,14 @@ namespace Bit.App.Pages
         private async void BlacklistedUrisEditor_Unfocused(object sender, FocusEventArgs e)
         {
             await _vm.UpdateAutofillBlacklistedUris();
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
+            }
         }
     }
 }

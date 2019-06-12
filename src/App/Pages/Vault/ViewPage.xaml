@@ -16,6 +16,7 @@
     </ContentPage.BindingContext>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
         <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" Order="Primary" />
         <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary" />
         <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True" />

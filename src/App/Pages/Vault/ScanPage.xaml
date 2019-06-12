@@ -9,6 +9,10 @@
     x:Name="_page"
     Title="{u:I18n ScanQrTitle}">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
+    </ContentPage.ToolbarItems>
+
     <Grid
         VerticalOptions="FillAndExpand"
         HorizontalOptions="FillAndExpand">

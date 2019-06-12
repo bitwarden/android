@@ -12,6 +12,10 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as EnvironmentPageViewModel;
             _vm.Page = this;
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
 
             _webVaultEntry.ReturnType = ReturnType.Next;
             _webVaultEntry.ReturnCommand = new Command(() => _apiEntry.Focus());
@@ -26,6 +30,14 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await _vm.SubmitAsync();
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }

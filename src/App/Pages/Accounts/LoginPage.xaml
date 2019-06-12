@@ -20,6 +20,7 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
         <ToolbarItem Text="{u:I18n LogIn}" Clicked="LogIn_Clicked" />
     </ContentPage.ToolbarItems>
 

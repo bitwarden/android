@@ -24,6 +24,10 @@ namespace Bit.App.Pages
             _vm = BindingContext as TwoFactorPageViewModel;
             _vm.Page = this;
             DuoWebView = _duoWebView;
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
+            }
         }
 
         public HybridWebView DuoWebView { get; set; }
@@ -124,6 +128,14 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await _vm.SendEmailAsync(true, true);
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }

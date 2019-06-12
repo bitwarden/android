@@ -25,9 +25,12 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
+                ToolbarItems.RemoveAt(2);
+                ToolbarItems.RemoveAt(2);
             }
             else
             {
+                ToolbarItems.RemoveAt(0);
                 ToolbarItems.RemoveAt(0);
                 _fab.Clicked = EditButton_Clicked;
                 _mainLayout.Padding = new Thickness(0, 0, 0, 75);
@@ -142,35 +145,40 @@ namespace Bit.App.Pages
             }
         }
 
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
+            }
+        }
+
         private void AdjustToolbar()
         {
-            if(Device.RuntimePlatform == Device.Android)
+            if(Device.RuntimePlatform != Device.Android || _vm.Cipher == null)
             {
-                if(_vm.Cipher == null)
+                return;
+            }
+            if(_vm.Cipher.OrganizationId == null)
+            {
+                if(ToolbarItems.Contains(_collectionsItem))
                 {
-                    return;
+                    ToolbarItems.Remove(_collectionsItem);
                 }
-                if(_vm.Cipher.OrganizationId == null)
+                if(!ToolbarItems.Contains(_shareItem))
                 {
-                    if(ToolbarItems.Contains(_collectionsItem))
-                    {
-                        ToolbarItems.Remove(_collectionsItem);
-                    }
-                    if(!ToolbarItems.Contains(_shareItem))
-                    {
-                        ToolbarItems.Insert(1, _shareItem);
-                    }
+                    ToolbarItems.Insert(1, _shareItem);
                 }
-                else
+            }
+            else
+            {
+                if(ToolbarItems.Contains(_shareItem))
                 {
-                    if(ToolbarItems.Contains(_shareItem))
-                    {
-                        ToolbarItems.Remove(_shareItem);
-                    }
-                    if(!ToolbarItems.Contains(_collectionsItem))
-                    {
-                        ToolbarItems.Insert(1, _collectionsItem);
-                    }
+                    ToolbarItems.Remove(_shareItem);
+                }
+                if(!ToolbarItems.Contains(_collectionsItem))
+                {
+                    ToolbarItems.Insert(1, _collectionsItem);
                 }
             }
         }

@@ -1,4 +1,6 @@
-﻿namespace Bit.App.Pages
+﻿using Xamarin.Forms;
+
+namespace Bit.App.Pages
 {
     public partial class FolderAddEditPage : BaseContentPage
     {
@@ -13,9 +15,13 @@
             _vm.FolderId = folderId;
             _vm.Init();
             SetActivityIndicator();
-            if(!_vm.EditMode)
+            if(!_vm.EditMode || Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Remove(_deleteItem);
+            }
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ToolbarItems.RemoveAt(0);
             }
         }
 
@@ -45,6 +51,14 @@
             if(DoOnce())
             {
                 await _vm.DeleteAsync();
+            }
+        }
+
+        private async void Close_Clicked(object sender, System.EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
             }
         }
     }
