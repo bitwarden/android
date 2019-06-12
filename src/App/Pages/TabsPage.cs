@@ -1,8 +1,6 @@
-﻿using Bit.App.Effect;
+﻿using Bit.App.Effects;
 using Bit.App.Models;
 using Bit.App.Resources;
-using Bit.Core.Abstractions;
-using Bit.Core.Utilities;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages

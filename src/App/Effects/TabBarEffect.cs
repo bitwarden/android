@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
 
-namespace Bit.App.Effect
+namespace Bit.App.Effects
 {
     public class TabBarEffect : RoutingEffect
     {

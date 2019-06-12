@@ -6,6 +6,7 @@
     xmlns:pages="clr-namespace:Bit.App.Pages"
     xmlns:u="clr-namespace:Bit.App.Utilities"
     xmlns:controls="clr-namespace:Bit.App.Controls"
+    xmlns:effects="clr-namespace:Bit.App.Effects"
     xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
     xmlns:views="clr-namespace:Bit.Core.Models.View;assembly=BitwardenCore"
     x:DataType="pages:ViewPageViewModel"
@@ -480,7 +481,11 @@
                             <Label
                                 Text="{Binding Cipher.Notes, Mode=OneWay}"
                                 StyleClass="box-value"
-                                LineBreakMode="WordWrap" />
+                                LineBreakMode="WordWrap">
+                                <Label.Effects>
+                                    <effects:SelectableLabelEffect />
+                                </Label.Effects>
+                            </Label>
                         </StackLayout>
                         <BoxView StyleClass="box-row-separator" />
                     </StackLayout>
