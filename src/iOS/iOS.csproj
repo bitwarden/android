@@ -112,6 +112,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Migration\KeyChainStorageService.cs" />
+    <Compile Include="Renderers\CustomContentPageRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\iOSPushNotificationHandler.cs" />
