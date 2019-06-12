@@ -103,7 +103,7 @@ namespace Bit.App
                     {
                         return;
                     }
-                    await LogOutAsync(false);
+                    Device.BeginInvokeOnMainThread(async () => await LogOutAsync(false));
                 }
                 else if(message.Command == "loggedOut")
                 {
