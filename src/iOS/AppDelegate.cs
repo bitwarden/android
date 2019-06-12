@@ -9,6 +9,7 @@ using Bit.Core.Services;
 using Bit.Core.Utilities;
 using Bit.iOS.Core.Services;
 using Bit.iOS.Services;
+using CoreNFC;
 using Foundation;
 using UIKit;
 
@@ -21,7 +22,9 @@ namespace Bit.iOS
         private const string AppGroupId = "group.com.8bit.bitwarden";
         private const string AccessGroup = "LTZ2PFU5D6.com.8bit.bitwarden";
 
-        private iOSPushNotificationHandler _pushHandler;
+        private NFCNdefReaderSession _nfcSession = null;
+        private iOSPushNotificationHandler _pushHandler = null;
+        private NFCReaderDelegate _nfcDelegate = null;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -72,6 +75,7 @@ namespace Bit.iOS
             ServiceContainer.Init();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
+            _nfcDelegate = new NFCReaderDelegate((success, message) => { }); // TODO: process YubiKey
             // TODO: HockeyApp Init
         }
 
@@ -146,6 +150,12 @@ namespace Bit.iOS
             await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(Constants.DisableFaviconKey,
                 disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
+        }
+
+        private void AppearanceAdjustments()
+        {
+            UINavigationBar.Appearance.ShadowImage = new UIImage();
+            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
         }
     }
 }
