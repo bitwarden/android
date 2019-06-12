@@ -118,7 +118,7 @@ namespace Bit.Droid.Renderers
             MoreButton.Typeface = _miTypeface;
 
             var small = (float)Device.GetNamedSize(NamedSize.Small, typeof(Label));
-            Icon.SetTextSize(ComplexUnitType.Sp, 22.0952380952381F);
+            Icon.SetTextSize(ComplexUnitType.Pt, 10);
             Name.SetTextSize(ComplexUnitType.Sp, (float)Device.GetNamedSize(NamedSize.Medium, typeof(Label)));
             SubTitle.SetTextSize(ComplexUnitType.Sp, small);
             SharedIcon.SetTextSize(ComplexUnitType.Sp, small);

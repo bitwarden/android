@@ -4,6 +4,7 @@
              x:Class="Bit.App.Pages.GroupingsPage"
              xmlns:pages="clr-namespace:Bit.App.Pages"
              xmlns:u="clr-namespace:Bit.App.Utilities"
+             xmlns:effects="clr-namespace:Bit.App.Effects"
              xmlns:controls="clr-namespace:Bit.App.Controls"
              xmlns:fab="clr-namespace:Refractored.FabControl;assembly=Refractored.FabControl"
              x:DataType="pages:GroupingsPageViewModel"
@@ -21,7 +22,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
-            
+
             <ToolbarItem x:Name="_syncItem" x:Key="syncItem" Text="{u:I18n Sync}"
                          Clicked="Sync_Clicked" Order="Secondary" />
             <ToolbarItem x:Name="_lockItem" x:Key="lockItem" Text="{u:I18n Lock}"
@@ -45,7 +46,11 @@
                         <controls:FaLabel Text="{Binding Icon, Mode=OneWay}"
                                           HorizontalOptions="Start"
                                           VerticalOptions="Center"
-                                          StyleClass="list-icon" />
+                                          StyleClass="list-icon, list-icon-platform">
+                            <controls:FaLabel.Effects>
+                                <effects:FixedSizeEffect />
+                            </controls:FaLabel.Effects>
+                        </controls:FaLabel>
                         <Label Text="{Binding Name, Mode=OneWay}"
                                LineBreakMode="TailTruncation"
                                HorizontalOptions="StartAndExpand"
@@ -59,7 +64,7 @@
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>
-            
+
             <pages:GroupingsPageListItemSelector x:Key="listItemDataTemplateSelector"
                                                  CipherTemplate="{StaticResource cipherTemplate}"
                                                  GroupTemplate="{StaticResource groupTemplate}" />
@@ -95,7 +100,7 @@
                     <x:Arguments>
                         <ListViewCachingStrategy>RecycleElement</ListViewCachingStrategy>
                     </x:Arguments>
-                    
+
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                             <ViewCell>

@@ -223,8 +223,6 @@
                 Value="Center" />
         <Setter Property="VerticalTextAlignment"
                 Value="Center" />
-        <Setter Property="FontSize"
-                Value="22.0952380952381" />
         <Setter Property="TextColor"
                 Value="{StaticResource MutedColor}" />
     </Style>

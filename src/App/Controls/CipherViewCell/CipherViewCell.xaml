@@ -32,7 +32,7 @@
                             Grid.RowSpan="2"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            StyleClass="list-icon" />
+                            StyleClass="list-icon, list-icon-platform" />
         <ff:CachedImage x:Name="_image"
                         Grid.Column="0"
                         Grid.Row="0"

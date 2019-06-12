@@ -110,6 +110,7 @@
     <Compile Include="Autofill\FilledItem.cs" />
     <Compile Include="Autofill\Parser.cs" />
     <Compile Include="Autofill\SavedItem.cs" />
+    <Compile Include="Effects\FixedSizeEffect.cs" />
     <Compile Include="Effects\SelectableLabelEffect.cs" />
     <Compile Include="Effects\TabBarEffect.cs" />
     <Compile Include="Migration\AndroidKeyStoreStorageService.cs" />

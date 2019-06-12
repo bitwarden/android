@@ -67,6 +67,12 @@
     <Style TargetType="Grid"
            Class="list-row-platform">
     </Style>
+    <Style TargetType="Label"
+           Class="list-icon-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="10" />
+    </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
            Class="list-row-button-platform">
