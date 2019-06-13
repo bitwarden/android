@@ -29,6 +29,8 @@ namespace Bit.Droid
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
+
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
@@ -39,7 +41,7 @@ namespace Bit.Droid
         private PendingIntent _lockAlarmPendingIntent;
         private PendingIntent _clearClipboardPendingIntent;
         private AppOptions _appOptions;
-        private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
+        private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
         private Java.Util.Regex.Pattern _otpPattern =
             Java.Util.Regex.Pattern.Compile("^.*?([cbdefghijklnrtuv]{32,64})$");
 
@@ -84,7 +86,7 @@ namespace Bit.Droid
             _appOptions = GetOptions();
             LoadApplication(new App.App(_appOptions));
 
-            _broadcasterService.Subscribe(nameof(MainActivity), (message) =>
+            _broadcasterService.Subscribe(_activityKey, (message) =>
             {
                 if(message.Command == "scheduleLockTimer")
                 {
@@ -225,6 +227,12 @@ namespace Bit.Droid
                     return;
                 }
             }
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _broadcasterService.Unsubscribe(_activityKey);
         }
 
         private void ListenYubiKey(bool listen)
