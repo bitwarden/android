@@ -54,6 +54,11 @@ namespace Bit.Droid.Services
                     netLanguage = "zh-Hans";
                 }
             }
+            else if(androidLanguage.StartsWith("iw"))
+            {
+                // Uncomment when we support RTL
+                // netLanguage = "he";
+            }
             else
             {
                 // Certain languages need to be converted to CultureInfo equivalent
