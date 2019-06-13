@@ -651,15 +651,19 @@ namespace Bit.Droid.Services
 
         private async Task CopyTotpAsync(CipherView cipher)
         {
-            var autoCopyDisabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
-            var canAccessPremium = await ServiceContainer.Resolve<IUserService>("userService").CanAccessPremiumAsync();
-            if((canAccessPremium || cipher.OrganizationUseTotp) && !autoCopyDisabled.GetValueOrDefault() &&
-                !string.IsNullOrWhiteSpace(cipher?.Login?.Totp))
+            if(!string.IsNullOrWhiteSpace(cipher?.Login?.Totp))
             {
-                var totp = await ServiceContainer.Resolve<ITotpService>("totpService").GetCodeAsync(cipher.Login.Totp);
-                if(totp != null)
+                var userService = ServiceContainer.Resolve<IUserService>("userService");
+                var autoCopyDisabled = await _storageService.GetAsync<bool?>(Constants.DisableAutoTotpCopyKey);
+                var canAccessPremium = await userService.CanAccessPremiumAsync();
+                if((canAccessPremium || cipher.OrganizationUseTotp) && !autoCopyDisabled.GetValueOrDefault())
                 {
-                    CopyToClipboard(totp);
+                    var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
+                    var totp = await totpService.GetCodeAsync(cipher.Login.Totp);
+                    if(totp != null)
+                    {
+                        CopyToClipboard(totp);
+                    }
                 }
             }
         }

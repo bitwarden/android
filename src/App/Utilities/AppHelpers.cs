@@ -29,7 +29,12 @@ namespace Bit.App.Utilities
                 }
                 if(!string.IsNullOrWhiteSpace(cipher.Login.Totp))
                 {
-                    options.Add(AppResources.CopyTotp);
+                    var userService = ServiceContainer.Resolve<IUserService>("userService");
+                    var canAccessPremium = await userService.CanAccessPremiumAsync();
+                    if(canAccessPremium || cipher.OrganizationUseTotp)
+                    {
+                        options.Add(AppResources.CopyTotp);
+                    }
                 }
                 if(cipher.Login.CanLaunch)
                 {
