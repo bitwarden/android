@@ -1543,7 +1543,7 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>כתובות ברשימה שחורה</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>כתובות או אפליקציות המופיעות ברשימה לא יוצעו בתהליך ההשלמה האוטומטית. הרשימה צריכה להיות מופרדת בפסיקים. לדוגמא: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>בטל את הבקשה לשמירה</value>
