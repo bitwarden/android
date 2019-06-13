@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:versionCode="1"
-  android:versionName="2.0.1"
+  android:versionName="2.0.2"
   package="com.x8bit.bitwarden">
 
   <uses-sdk android:minSdkVersion="19" android:targetSdkVersion="28" />
