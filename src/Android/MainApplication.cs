@@ -2,6 +2,8 @@
 using System.IO;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content;
+using Android.OS;
 using Android.Runtime;
 using Bit.App.Abstractions;
 using Bit.App.Services;
@@ -13,7 +15,9 @@ using Bit.Droid.Services;
 using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
-using Plugin.Fingerprint.Abstractions;
+#if !FDROID
+using Android.Gms.Security;
+#endif
 
 namespace Bit.Droid
 {
@@ -23,7 +27,11 @@ namespace Bit.Droid
     [Application(Debuggable = false)]
 #endif
     [Register("com.x8bit.bitwarden.MainApplication")]
+#if FDROID
     public class MainApplication : Application
+#else
+    public class MainApplication : Application, ProviderInstaller.IProviderInstallListener
+#endif
     {
         public MainApplication(IntPtr handle, JniHandleOwnership transer)
           : base(handle, transer)
@@ -38,6 +46,12 @@ namespace Bit.Droid
                     Task.Delay(2000).Wait();
                 }
             }
+#if !FDROID
+            if(Build.VERSION.SdkInt <= BuildVersionCodes.Kitkat)
+            {
+                ProviderInstaller.InstallIfNeededAsync(ApplicationContext, this);
+            }
+#endif
         }
 
         public override void OnCreate()
@@ -45,6 +59,14 @@ namespace Bit.Droid
             base.OnCreate();
             Bootstrap();
             CrossCurrentActivity.Current.Init(this);
+        }
+
+        public void OnProviderInstallFailed(int errorCode, Intent recoveryIntent)
+        {
+        }
+
+        public void OnProviderInstalled()
+        {
         }
 
         private void RegisterLocalServices()
@@ -73,7 +95,7 @@ namespace Bit.Droid
             CrossFingerprint.SetDialogFragmentType<CustomFingerprintDialogFragment>();
 
             var preferencesStorage = new PreferencesStorageService(null);
-            var documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
+            var documentsPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             var liteDbStorage = new LiteDbStorageService(Path.Combine(documentsPath, "bitwarden.db"));
             liteDbStorage.InitAsync();
             var localizeService = new LocalizeService();
