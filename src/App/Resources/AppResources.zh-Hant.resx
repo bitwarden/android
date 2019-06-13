@@ -1532,7 +1532,7 @@
     <value>您確定要結束 Bitwarden 嗎？</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>當應用程式重新啟動時，是否要求用主密碼來解鎖？</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>黑色</value>
