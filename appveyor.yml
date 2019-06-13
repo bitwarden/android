@@ -71,7 +71,7 @@ build_script:
       mkdir dist
       cp CNAME ./dist
       cd store
-      chmod 600 fdroid/config.py keystore.jks
+      chmod 600 fdroid/config.py fdroid/keystore.jks
       mkdir -p temp/fdroid
       TEMP_DIR="$APPVEYOR_BUILD_FOLDER/store/temp/fdroid"
       cd fdroid
