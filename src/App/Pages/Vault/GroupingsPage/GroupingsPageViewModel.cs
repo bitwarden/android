@@ -126,6 +126,7 @@ namespace Bit.App.Pages
         public ExtendedObservableCollection<GroupingsPageListGroup> GroupedItems { get; set; }
         public Command RefreshCommand { get; set; }
         public Command<CipherView> CipherOptionsCommand { get; set; }
+        public bool LoadedOnce { get; set; }
 
         public async Task LoadAsync()
         {
@@ -134,6 +135,7 @@ namespace Bit.App.Pages
                 return;
             }
             _doingLoad = true;
+            LoadedOnce = true;
             ShowNoData = false;
             Loading = true;
             ShowList = false;
