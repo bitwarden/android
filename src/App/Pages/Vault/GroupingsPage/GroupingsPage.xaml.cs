@@ -92,6 +92,7 @@ namespace Bit.App.Pages
             {
                 if(!_syncService.SyncInProgress)
                 {
+                    await Task.Delay(500);
                     await _vm.LoadAsync();
                 }
                 else
