@@ -429,6 +429,10 @@ namespace Bit.Droid.Services
         public void Autofill(CipherView cipher)
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+            if(activity == null)
+            {
+                return;
+            }
             if(activity.Intent.GetBooleanExtra("autofillFramework", false))
             {
                 if(cipher == null)
@@ -447,7 +451,7 @@ namespace Bit.Droid.Services
                 }
                 var parser = new Parser(structure, activity.ApplicationContext);
                 parser.Parse();
-                if(!parser.FieldCollection.Fields.Any() || string.IsNullOrWhiteSpace(parser.Uri))
+                if((!parser.FieldCollection?.Fields?.Any() ?? true) || string.IsNullOrWhiteSpace(parser.Uri))
                 {
                     activity.SetResult(Result.Canceled);
                     activity.Finish();
