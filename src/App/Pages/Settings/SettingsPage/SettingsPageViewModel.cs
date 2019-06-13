@@ -261,7 +261,8 @@ namespace Bit.App.Pages
             }
             else if(await _platformUtilsService.SupportsFingerprintAsync())
             {
-                _fingerprint = await _platformUtilsService.AuthenticateFingerprintAsync();
+                _fingerprint = await _platformUtilsService.AuthenticateFingerprintAsync(null,
+                    _deviceActionService.DeviceType == Core.Enums.DeviceType.Android ? "." : null);
             }
             if(_fingerprint == current)
             {
