@@ -59,7 +59,7 @@
     <item name="colorPrimary">@android:color/black</item>
     <item name="colorPrimaryDark">@android:color/black</item>
     <item name="colorControlNormal">@color/black_border</item>
-    <item name="android:navigationBarColor">@android:color/black</item>
+    <item name="android:navigationBarColor">@android:color/transparent</item>
   </style>
 
   <!-- Nord theme -->
