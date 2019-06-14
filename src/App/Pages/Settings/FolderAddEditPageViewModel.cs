@@ -46,7 +46,10 @@ namespace Bit.App.Pages
                 if(EditMode)
                 {
                     var folder = await _folderService.GetAsync(FolderId);
-                    Folder = await folder.DecryptAsync();
+                    if(folder != null)
+                    {
+                        Folder = await folder.DecryptAsync();
+                    }
                 }
                 else
                 {

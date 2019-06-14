@@ -3,6 +3,8 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Utilities;
+using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace Bit.App.Pages
@@ -31,7 +33,15 @@ namespace Bit.App.Pages
             base.OnAppearing();
             await LoadOnAppearedAsync(_mainLayout, false, async () =>
             {
-                await _vm.LoadAsync();
+                try
+                {
+                    await _vm.LoadAsync();
+                }
+                catch(Exception e) when(e.Message.Contains("No key."))
+                {
+                    await Task.Delay(5000);
+                    await _vm.LoadAsync();
+                }
             }, _mainContent);
         }
 
