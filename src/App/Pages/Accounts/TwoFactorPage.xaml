@@ -13,18 +13,19 @@
         <pages:TwoFactorPageViewModel />
     </ContentPage.BindingContext>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                     x:Name="_cancelItem" />
+        <ToolbarItem Text="{u:I18n Continue}" Clicked="Continue_Clicked" Order="Primary"
+                     x:Name="_continueItem" />
+    </ContentPage.ToolbarItems>
+
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:IsNullConverter x:Key="isNull" />
-            <ToolbarItem Text="{u:I18n Continue}" Clicked="Continue_Clicked"
-                         x:Name="_continueItem" x:Key="continueItem" />
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Cancel}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
 
     <ScrollView x:Name="_scrollView">
         <StackLayout Spacing="10" Padding="0, 0, 0, 10" VerticalOptions="FillAndExpand">

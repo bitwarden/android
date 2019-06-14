@@ -40,14 +40,17 @@ namespace Bit.iOS.Renderers
             }
             if(e.NewElement != null)
             {
-                Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
+                if(Element.Uri != null)
+                {
+                    Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
+                }
             }
         }
 
         protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             base.OnElementPropertyChanged(sender, e);
-            if(e.PropertyName == HybridWebView.UriProperty.PropertyName)
+            if(e.PropertyName == HybridWebView.UriProperty.PropertyName && Element.Uri != null)
             {
                 Control.LoadRequest(new NSUrlRequest(new NSUrl(Element.Uri)));
             }

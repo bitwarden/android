@@ -26,7 +26,7 @@ namespace Bit.App.Pages
             DuoWebView = _duoWebView;
             if(Device.RuntimePlatform == Device.Android)
             {
-                ToolbarItems.RemoveAt(0);
+                ToolbarItems.Remove(_cancelItem);
             }
         }
 
@@ -34,7 +34,7 @@ namespace Bit.App.Pages
 
         public void AddContinueButton()
         {
-            if(ToolbarItems.Count == 0)
+            if(!ToolbarItems.Contains(_continueItem))
             {
                 ToolbarItems.Add(_continueItem);
             }
@@ -42,7 +42,7 @@ namespace Bit.App.Pages
 
         public void RemoveContinueButton()
         {
-            if(ToolbarItems.Count > 0)
+            if(ToolbarItems.Contains(_continueItem))
             {
                 ToolbarItems.Remove(_continueItem);
             }
