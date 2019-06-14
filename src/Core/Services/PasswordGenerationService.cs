@@ -310,7 +310,7 @@ namespace Bit.Core.Services
             {
                 options.MinNumber = 9;
             }
-            
+
             if(options.MinSpecial == null)
             {
                 options.MinSpecial = 0;
@@ -354,7 +354,15 @@ namespace Bit.Core.Services
             }
             var tasks = history.Select(async item =>
             {
+                if(item == null)
+                {
+                    return null;
+                }
                 var encrypted = await _cryptoService.EncryptAsync(item.Password);
+                if(encrypted == null)
+                {
+                    return null;
+                }
                 return new GeneratedPasswordHistory
                 {
                     Password = encrypted.EncryptedString,
@@ -362,7 +370,7 @@ namespace Bit.Core.Services
                 };
             });
             var h = await Task.WhenAll(tasks);
-            return h.ToList();
+            return h.Where(x => x != null).ToList();
         }
 
         private async Task<List<GeneratedPasswordHistory>> DecryptHistoryAsync(List<GeneratedPasswordHistory> history)
