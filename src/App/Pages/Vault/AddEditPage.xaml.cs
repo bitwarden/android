@@ -54,7 +54,10 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);
-                ToolbarItems.Add(_moreItem);
+                if(_vm.EditMode)
+                {
+                    ToolbarItems.Add(_moreItem);
+                }
             }
 
             _typePicker.ItemDisplayBinding = new Binding("Key");

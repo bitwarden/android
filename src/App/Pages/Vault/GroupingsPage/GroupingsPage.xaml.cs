@@ -49,6 +49,7 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
+                ToolbarItems.Add(_addItem);
             }
             else
             {

@@ -18,10 +18,11 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
+                ToolbarItems.Add(_closeItem);
+                ToolbarItems.Add(_addItem);
             }
             else
             {
-                ToolbarItems.RemoveAt(0);
                 _fab.Clicked = AddButton_Clicked;
             }
         }

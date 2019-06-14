@@ -637,7 +637,9 @@
             x:Name="_fab"
             ImageName="pencil.png"
             AbsoluteLayout.LayoutFlags="PositionProportional"
-            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize">
+            AbsoluteLayout.LayoutBounds="1, 1, AutoSize, AutoSize"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n EditItem}">
         </fab:FloatingActionButtonView>
     </AbsoluteLayout>
 
