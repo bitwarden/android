@@ -1,4 +1,5 @@
-﻿using Bit.Core.Abstractions;
+﻿using Bit.App.Resources;
+using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,15 +26,16 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 _absLayout.Children.Remove(_fab);
-                ToolbarItems.RemoveAt(2);
-                ToolbarItems.RemoveAt(2);
+                ToolbarItems.Add(_closeItem);
+                ToolbarItems.Add(_editItem);
+                ToolbarItems.Add(_moreItem);
             }
             else
             {
-                ToolbarItems.RemoveAt(0);
-                ToolbarItems.RemoveAt(0);
                 _fab.Clicked = EditButton_Clicked;
                 _mainLayout.Padding = new Thickness(0, 0, 0, 75);
+                ToolbarItems.Add(_attachmentsItem);
+                ToolbarItems.Add(_deleteItem);
             }
         }
 
@@ -141,6 +143,40 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 var page = new CollectionsPage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+        }
+
+        private async void More_Clicked(object sender, System.EventArgs e)
+        {
+            if(!DoOnce())
+            {
+                return;
+            }
+            var options = new List<string> { AppResources.Attachments };
+            options.Add(_vm.Cipher.OrganizationId != null ? AppResources.Share : AppResources.Collections);
+            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+                AppResources.Delete, options.ToArray());
+            if(selection == AppResources.Delete)
+            {
+                if(await _vm.DeleteAsync())
+                {
+                    await Navigation.PopModalAsync();
+                }
+            }
+            else if(selection == AppResources.Attachments)
+            {
+                var page = new AttachmentsPage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+            else if(selection == AppResources.Collections)
+            {
+                var page = new CollectionsPage(_vm.CipherId);
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
+            else if(selection == AppResources.Share)
+            {
+                var page = new SharePage(_vm.CipherId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }

@@ -16,13 +16,6 @@
         <pages:ViewPageViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-        <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" Order="Primary" />
-        <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary" />
-        <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True" />
-    </ContentPage.ToolbarItems>
-
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
@@ -38,6 +31,16 @@
                      x:Name="_shareItem"
                      Clicked="Share_Clicked"
                      Order="Secondary" />
+            <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                         x:Name="_closeItem" x:Key="closeItem"  />
+            <ToolbarItem Text="{u:I18n Edit}" Clicked="EditToolbarItem_Clicked" Order="Primary"
+                         x:Name="_editItem" x:Key="editItem" />
+            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary"
+                         x:Name="_moreItem" x:Key="moreItem" />
+            <ToolbarItem Text="{u:I18n Attachments}" Clicked="Attachments_Clicked" Order="Secondary"
+                         x:Name="_attachmentsItem" x:Key="attachmentsItem" />
+            <ToolbarItem Text="{u:I18n Delete}" Clicked="Delete_Clicked" Order="Secondary" IsDestructive="True"
+                         x:Name="_deleteItem" x:Key="deleteItem" />
 
             <ScrollView x:Key="scrollView" x:Name="_scrollView">
                 <StackLayout Spacing="20" x:Name="_mainLayout">
