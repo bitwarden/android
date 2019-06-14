@@ -381,10 +381,10 @@ namespace Bit.App.Pages
                 return false;
             }
 
-            Cipher.Fields = Fields.Any() ? Fields.Select(f => f.Field).ToList() : null;
+            Cipher.Fields = Fields != null && Fields.Any() ? Fields.Select(f => f.Field).ToList() : null;
             if(Cipher.Login != null)
             {
-                Cipher.Login.Uris = Uris.ToList();
+                Cipher.Login.Uris = Uris?.ToList();
                 if(!EditMode && Cipher.Type == CipherType.Login && (Cipher.Login.Uris?.Count ?? 0) == 1 &&
                     string.IsNullOrWhiteSpace(Cipher.Login.Uris.First().Uri))
                 {

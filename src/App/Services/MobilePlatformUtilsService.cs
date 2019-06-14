@@ -94,7 +94,11 @@ namespace Bit.App.Services
             if((uri.StartsWith("http://") || uri.StartsWith("https://")) &&
                 Uri.TryCreate(uri, UriKind.Absolute, out var parsedUri))
             {
-                Browser.OpenAsync(uri, BrowserLaunchMode.External);
+                try
+                {
+                    Browser.OpenAsync(uri, BrowserLaunchMode.External);
+                }
+                catch(FeatureNotSupportedException) { }
             }
             else
             {

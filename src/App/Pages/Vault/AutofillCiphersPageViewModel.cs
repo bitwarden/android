@@ -112,6 +112,10 @@ namespace Bit.App.Pages
 
         public async Task SelectCipherAsync(CipherView cipher, bool fuzzy)
         {
+            if(cipher == null)
+            {
+                return;
+            }
             if(_deviceActionService.SystemMajorVersion() < 21)
             {
                 await AppHelpers.CipherListOptions(Page, cipher);
