@@ -15,13 +15,11 @@
         <pages:CiphersPageViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-    </ContentPage.ToolbarItems>
-
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:DateTimeConverter x:Key="dateTime" />
+            <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                         x:Name="_closeItem" x:Key="closeItem" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
@@ -31,12 +29,14 @@
             VerticalOptions="FillAndExpand"
             HorizontalOptions="FillAndExpand"
             Spacing="0"
-            Padding="0">
+            Padding="0"
+            x:Name="_titleLayout">
             <controls:MiButton
                 StyleClass="btn-title, btn-title-platform"
                 Text="&#xe5c4;"
                 VerticalOptions="CenterAndExpand"
-                Clicked="BackButton_Clicked" />
+                Clicked="BackButton_Clicked"
+                x:Name="_backButton" />
             <SearchBar
                 x:Name="_searchBar"
                 HorizontalOptions="FillAndExpand"

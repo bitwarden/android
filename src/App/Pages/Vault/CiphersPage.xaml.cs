@@ -40,9 +40,10 @@ namespace Bit.App.Pages
                 _vm.PageTitle = AppResources.SearchVault;
             }
 
-            if(Device.RuntimePlatform == Device.Android)
+            if(Device.RuntimePlatform == Device.iOS)
             {
-                ToolbarItems.RemoveAt(0);
+                ToolbarItems.Add(_closeItem);
+                _titleLayout.Children.Remove(_backButton);
             }
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
         }
@@ -121,12 +122,9 @@ namespace Bit.App.Pages
             }
         }
 
-        private async void Close_Clicked(object sender, System.EventArgs e)
+        private void Close_Clicked(object sender, EventArgs e)
         {
-            if(DoOnce())
-            {
-                await Navigation.PopModalAsync();
-            }
+            GoBack();
         }
     }
 }
