@@ -60,6 +60,10 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
+            if(Folder == null)
+            {
+                return false;
+            }
             if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
@@ -96,6 +100,10 @@ namespace Bit.App.Pages
 
         public async Task<bool> DeleteAsync()
         {
+            if(Folder == null)
+            {
+                return false;
+            }
             if(Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.None)
             {
                 await _platformUtilsService.ShowDialogAsync(AppResources.InternetConnectionRequiredMessage,
