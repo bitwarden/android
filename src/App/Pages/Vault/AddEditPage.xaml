@@ -36,7 +36,9 @@
                          Clicked="Share_Clicked"
                          Order="Secondary" />
             <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
-                         x:Key="moreItem" />
+                         x:Key="moreItem"
+                         AutomationProperties.IsInAccessibleTree="True"
+                         AutomationProperties.Name="{u:I18n Options}" />
             <ToolbarItem Text="{u:I18n Attachments}"
                          Clicked="Attachments_Clicked"
                          Order="Secondary"

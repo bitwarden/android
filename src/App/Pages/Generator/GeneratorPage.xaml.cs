@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bit.App.Resources;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -19,9 +20,17 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _fromTabPage = fromTabPage;
             _selectAction = selectAction;
-            if(selectAction == null)
+            if(selectAction != null)
             {
-                ToolbarItems.Remove(_selectItem);
+                ToolbarItems.Add(_selectItem);
+            }
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_moreItem);
+            }
+            else
+            {
+                ToolbarItems.Add(_historyItem);
             }
         }
 
@@ -57,6 +66,21 @@ namespace Bit.App.Pages
         private async void Copy_Clicked(object sender, EventArgs e)
         {
             await _vm.CopyAsync();
+        }
+
+        private async void More_Clicked(object sender, EventArgs e)
+        {
+            if(!DoOnce())
+            {
+                return;
+            }
+            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+                null, AppResources.PasswordHistory);
+            if(selection == AppResources.PasswordHistory)
+            {
+                var page = new GeneratorHistoryPage();
+                await Navigation.PushModalAsync(new NavigationPage(page));
+            }
         }
 
         private void Select_Clicked(object sender, EventArgs e)

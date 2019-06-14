@@ -12,19 +12,25 @@
         <pages:GeneratorPageViewModel />
     </ContentPage.BindingContext>
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Select}"
-                     Clicked="Select_Clicked"
-                     Order="Primary"
-                     x:Name="_selectItem" />
-        <ToolbarItem Text="{u:I18n PasswordHistory}"
-                     Clicked="History_Clicked"
-                     Order="Secondary" />
-    </ContentPage.ToolbarItems>
-
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
+            <ToolbarItem Text="{u:I18n Select}"
+                     Clicked="Select_Clicked"
+                     Order="Primary"
+                     x:Name="_selectItem"
+                     x:Key="selectItem" />
+            <ToolbarItem Text="{u:I18n PasswordHistory}"
+                     Clicked="History_Clicked"
+                     Order="Secondary"
+                     x:Name="_historyItem"
+                     x:Key="historyItem" />
+            <ToolbarItem Icon="more_vert.png"
+                         AutomationProperties.IsInAccessibleTree="True"
+                         AutomationProperties.Name="{u:I18n Options}"
+                         Clicked="More_Clicked"
+                         x:Name="_moreItem"
+                         x:Key="moreItem" />
         </ResourceDictionary>
     </ContentPage.Resources>
 

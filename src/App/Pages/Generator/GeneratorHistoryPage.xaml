@@ -19,16 +19,21 @@
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
             <u:DateTimeConverter x:Key="dateTime" />
+            <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
+                         x:Name="_closeItem" x:Key="closeItem" />
+            <ToolbarItem Text="{u:I18n Clear}"
+                         Clicked="Clear_Clicked"
+                         Order="Secondary"
+                         x:Name="_clearItem"
+                         x:Key="clearItem" />
+            <ToolbarItem Icon="more_vert.png"
+                         AutomationProperties.IsInAccessibleTree="True"
+                         AutomationProperties.Name="{u:I18n Options}"
+                         Clicked="More_Clicked"
+                         x:Name="_moreItem"
+                         x:Key="moreItem" />
         </ResourceDictionary>
     </ContentPage.Resources>
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1" />
-        <ToolbarItem Text="{u:I18n Clear}"
-                     Clicked="Clear_Clicked"
-                     Order="Secondary"
-                     x:Name="_clearItem" />
-    </ContentPage.ToolbarItems>
 
     <StackLayout x:Name="_mainLayout">
         <Label IsVisible="{Binding ShowNoData}"

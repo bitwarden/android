@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Bit.App.Resources;
+using System;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -12,6 +14,15 @@ namespace Bit.App.Pages
             SetActivityIndicator();
             _vm = BindingContext as GeneratorHistoryPageViewModel;
             _vm.Page = this;
+            if(Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_closeItem);
+                ToolbarItems.Add(_moreItem);
+            }
+            else
+            {
+                ToolbarItems.Add(_clearItem);
+            }
         }
 
         protected override async void OnAppearing()
@@ -32,6 +43,20 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await Navigation.PopModalAsync();
+            }
+        }
+
+        private async void More_Clicked(object sender, EventArgs e)
+        {
+            if(!DoOnce())
+            {
+                return;
+            }
+            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+                null, AppResources.Clear);
+            if(selection == AppResources.Clear)
+            {
+                await _vm.ClearAsync();
             }
         }
     }
