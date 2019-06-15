@@ -15,6 +15,7 @@ using Bit.Droid.Services;
 using Bit.Droid.Utilities;
 using Plugin.CurrentActivity;
 using Plugin.Fingerprint;
+using Xamarin.Android.Net;
 #if !FDROID
 using Android.Gms.Security;
 #endif
@@ -39,7 +40,7 @@ namespace Bit.Droid
             if(ServiceContainer.RegisteredServices.Count == 0)
             {
                 RegisterLocalServices();
-                ServiceContainer.Init();
+                ServiceContainer.Init(new AndroidClientHandler());
                 if(App.Migration.MigrationHelpers.NeedsMigration())
                 {
                     var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
