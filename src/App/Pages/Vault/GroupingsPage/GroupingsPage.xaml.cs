@@ -116,7 +116,7 @@ namespace Bit.App.Pages
                 }
                 // Forced sync if for some reason we have no data after a v1 migration
                 if(_vm.MainPage && !_syncService.SyncInProgress && migratedFromV1.GetValueOrDefault() &&
-                    !_vm.HasCiphers && !_vm.HasFolders &&
+                    !_vm.HasCiphers &&
                     Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
                     var triedV1ReSync = await _storageService.GetAsync<bool?>(Constants.TriedV1Resync);
