@@ -328,7 +328,7 @@ namespace Bit.App.Pages
             {
                 Folders = await _folderService.GetAllDecryptedAsync();
                 NestedFolders = await _folderService.GetAllNestedAsync();
-                HasFolders = NestedFolders.Any();
+                HasFolders = NestedFolders.Any(f => f.Node?.Id != null);
                 Collections = await _collectionService.GetAllDecryptedAsync();
                 NestedCollections = await _collectionService.GetAllNestedAsync(Collections);
                 HasCollections = NestedCollections.Any();
@@ -366,6 +366,7 @@ namespace Bit.App.Pages
                     if(collectionNode?.Node != null)
                     {
                         PageTitle = collectionNode.Node.Name;
+                        NestedCollections = (collectionNode.Children?.Count ?? 0) > 0 ? collectionNode.Children : null;
                     }
                     Filter = c => c.CollectionIds?.Contains(CollectionId) ?? false;
                 }
