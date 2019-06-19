@@ -93,6 +93,8 @@
                             StyleClass="box-label" />
                         <Entry
                             Text="{Binding WordSeparator}"
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False"
                             StyleClass="box-value" />
                     </StackLayout>
                 </StackLayout>

@@ -55,6 +55,8 @@
                         x:Name="_masterPassword"
                         Text="{Binding MasterPassword}"
                         StyleClass="box-value"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         Grid.Row="1"
                         Grid.Column="0" />
@@ -89,6 +91,8 @@
                         x:Name="_confirmMasterPassword"
                         Text="{Binding ConfirmMasterPassword}"
                         StyleClass="box-value"
+                        IsSpellCheckEnabled="False"
+                        IsTextPredictionEnabled="False"
                         IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
                         Grid.Row="1"
                         Grid.Column="0" />
