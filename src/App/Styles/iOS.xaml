@@ -38,12 +38,12 @@
     <Style TargetType="BoxView"
            Class="list-section-separator-top-platform">
         <Setter Property="Color"
-                Value="{StaticResource ListItemBorderColor}" />
+                Value="{StaticResource ListSectionBorderColor}" />
     </Style>
     <Style TargetType="BoxView"
            Class="list-section-separator-bottom-platform">
         <Setter Property="Color"
-                Value="{StaticResource ListItemBorderColor}" />
+                Value="{StaticResource ListSectionBorderColor}" />
         <Setter Property="Margin"
                 Value="0, 0, 0, -1" />
     </Style>
