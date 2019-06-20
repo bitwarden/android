@@ -245,5 +245,13 @@ namespace Bit.App.Pages
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
         }
+
+        private void HeaderBindingContextChanged(object sender, EventArgs e)
+        {
+            if(Device.RuntimePlatform == Device.iOS && sender is ViewCell cell)
+            {
+                // cell.Height = 50;
+            }
+        }
     }
 }

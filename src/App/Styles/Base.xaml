@@ -141,8 +141,6 @@
     </Style>
     <Style TargetType="StackLayout"
            Class="list-row-header">
-        <Setter Property="Padding"
-                Value="10, 12" />
         <Setter Property="Orientation"
                 Value="Horizontal" />
     </Style>
@@ -181,11 +179,14 @@
                 Value="2, 5, 0, 5" />
     </Style>
     <Style TargetType="BoxView"
-           Class="list-section-separator">
+           Class="list-section-separator-top">
         <Setter Property="HeightRequest"
                 Value="1" />
-        <Setter Property="Color"
-                Value="{StaticResource ListItemBorderColor}" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-bottom">
+        <Setter Property="HeightRequest"
+                Value="1" />
     </Style>
     <Style TargetType="Label"
            Class="list-title">

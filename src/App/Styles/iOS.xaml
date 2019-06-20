@@ -12,4 +12,59 @@
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource InputPlaceholderColor}" />
     </Style>
+    
+    <!-- List -->
+
+    <Style TargetType="ListView"
+           Class="list-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="SeparatorColor"
+                Value="{StaticResource ListItemBorderColor}" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-header-platform">
+        <Setter Property="Padding"
+                Value="10, 0, 10, 5" />
+        <Setter Property="VerticalOptions"
+                Value="EndAndExpand" />
+    </Style>
+    <Style TargetType="Label"
+           Class="list-header-platform">
+        <Setter Property="TextColor"
+                Value="{StaticResource ListHeaderTextColor}" />
+        <Setter Property="FontSize"
+                Value="Small" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-top-platform">
+        <Setter Property="Color"
+                Value="{StaticResource ListItemBorderColor}" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-bottom-platform">
+        <Setter Property="Color"
+                Value="{StaticResource ListItemBorderColor}" />
+        <Setter Property="Margin"
+                Value="0, 0, 0, -1" />
+    </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="Grid"
+           Class="list-row-platform">
+    </Style>
+    <Style TargetType="Label"
+           Class="list-icon-platform"
+           ApplyToDerivedTypes="True">
+        <Setter Property="FontSize"
+                Value="10" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="list-row-button-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
 </ResourceDictionary>

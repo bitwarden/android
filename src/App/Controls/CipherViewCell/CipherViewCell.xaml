@@ -76,7 +76,7 @@
             IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}" />
 
         <controls:MiButton
-            Text="&#xe5d4;"
+            Text="&#xe5d3;"
             StyleClass="list-row-button, list-row-button-platform, btn-disabled"
             Clicked="ImageButton_Clicked"
             Grid.Column="4"

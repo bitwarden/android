@@ -52,6 +52,13 @@
         <Setter Property="SeparatorColor"
                 Value="Transparent" />
     </Style>
+    <Style TargetType="StackLayout"
+           Class="list-row-header-platform">
+        <Setter Property="Padding"
+                Value="10, 12" />
+        <Setter Property="VerticalOptions"
+                Value="CenterAndExpand" />
+    </Style>
     <Style TargetType="Label"
            Class="list-header-platform">
         <Setter Property="TextColor"
@@ -60,6 +67,18 @@
                 Value="Small" />
         <Setter Property="FontAttributes"
                 Value="Bold" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-top-platform">
+        <Setter Property="Color"
+                Value="{StaticResource ListItemBorderColor}" />
+    </Style>
+    <Style TargetType="BoxView"
+           Class="list-section-separator-bottom-platform">
+        <Setter Property="Color"
+                Value="Transparent" />
+        <Setter Property="IsVisible"
+                Value="False" />
     </Style>
     <Style TargetType="StackLayout"
            Class="list-row-platform">

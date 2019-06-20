@@ -95,9 +95,10 @@
                     IsVisible="{Binding ShowList}"
                     ItemsSource="{Binding GroupedItems}"
                     VerticalOptions="FillAndExpand"
-                    HasUnevenRows="true"
+                    HasUnevenRows="True"
+                    RowHeight="-1"
                     RefreshCommand="{Binding RefreshCommand}"
-                    IsPullToRefreshEnabled="true"
+                    IsPullToRefreshEnabled="True"
                     IsRefreshing="{Binding Refreshing}"
                     ItemTemplate="{StaticResource listItemDataTemplateSelector}"
                     IsGroupingEnabled="True"
@@ -109,11 +110,12 @@
 
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                            <ViewCell>
-                                <StackLayout Spacing="0" Padding="0">
-                                    <BoxView StyleClass="list-section-separator"
-                                             IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
-                                    <StackLayout StyleClass="list-row-header">
+                            <ViewCell BindingContextChanged="HeaderBindingContextChanged">
+                                <StackLayout Spacing="0" Padding="0" VerticalOptions="FillAndExpand">
+                                    <BoxView
+                                        StyleClass="list-section-separator-top, list-section-separator-top-platform"
+                                        IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
+                                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
                                         <Label
                                             Text="{Binding Name}"
                                             StyleClass="list-header, list-header-platform" />
@@ -121,6 +123,7 @@
                                             Text="{Binding ItemCount}"
                                             StyleClass="list-header-sub" />
                                     </StackLayout>
+                                    <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
