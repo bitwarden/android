@@ -110,7 +110,7 @@
 
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
-                            <ViewCell BindingContextChanged="HeaderBindingContextChanged">
+                            <ViewCell>
                                 <StackLayout Spacing="0" Padding="0" VerticalOptions="FillAndExpand">
                                     <BoxView
                                         StyleClass="list-section-separator-top, list-section-separator-top-platform"
