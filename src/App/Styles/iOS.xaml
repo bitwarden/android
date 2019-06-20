@@ -57,13 +57,13 @@
            Class="list-icon-platform"
            ApplyToDerivedTypes="True">
         <Setter Property="FontSize"
-                Value="10" />
+                Value="21" />
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
            Class="list-row-button-platform">
         <Setter Property="WidthRequest"
-                Value="37" />
+                Value="40" />
         <Setter Property="FontSize"
                 Value="25" />
     </Style>
