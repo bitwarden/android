@@ -48,7 +48,7 @@
                 <StackLayout Spacing="20" x:Name="_mainLayout">
                     <StackLayout StyleClass="box">
                         <StackLayout StyleClass="box-row-header">
-                            <Label Text="{u:I18n ItemInformation}"
+                            <Label Text="{u:I18n ItemInformation, Header=True}"
                                    StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row">
@@ -418,7 +418,7 @@
                     </StackLayout>
                     <StackLayout StyleClass="box" IsVisible="{Binding ShowUris}">
                         <StackLayout StyleClass="box-row-header">
-                            <Label Text="{u:I18n URIs}"
+                            <Label Text="{u:I18n URIs, Header=True}"
                                    StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <controls:RepeaterView ItemsSource="{Binding Cipher.Login.Uris}">
@@ -479,7 +479,7 @@
                     <StackLayout StyleClass="box"
                                  IsVisible="{Binding Cipher.Notes, Converter={StaticResource stringHasValue}}">
                         <StackLayout StyleClass="box-row-header">
-                            <Label Text="{u:I18n Notes}"
+                            <Label Text="{u:I18n Notes, Header=True}"
                                    StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <StackLayout StyleClass="box-row">
@@ -496,7 +496,7 @@
                     </StackLayout>
                     <StackLayout StyleClass="box" IsVisible="{Binding Cipher.HasFields}">
                         <StackLayout StyleClass="box-row-header">
-                            <Label Text="{u:I18n CustomFields}"
+                            <Label Text="{u:I18n CustomFields, Header=True}"
                                    StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <controls:RepeaterView ItemsSource="{Binding Fields}">
@@ -569,7 +569,7 @@
                     </StackLayout>
                     <StackLayout StyleClass="box" IsVisible="{Binding ShowAttachments}">
                         <StackLayout StyleClass="box-row-header">
-                            <Label Text="{u:I18n Attachments}"
+                            <Label Text="{u:I18n Attachments, Header=True}"
                                    StyleClass="box-header, box-header-platform" />
                         </StackLayout>
                         <controls:RepeaterView ItemsSource="{Binding Cipher.Attachments}">

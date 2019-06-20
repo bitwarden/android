@@ -20,10 +20,16 @@ namespace Bit.App.Utilities
         public string P1 { get; set; }
         public string P2 { get; set; }
         public string P3 { get; set; }
+        public bool Header { get; set; }
 
         public object ProvideValue(IServiceProvider serviceProvider)
         {
-            return _i18nService.T(Id, P1, P2, P3);
+            var val = _i18nService.T(Id, P1, P2, P3);
+            if(Header && Device.RuntimePlatform == Device.iOS)
+            {
+                return val.ToUpper();
+            }
+            return val;
         }
     }
 }

@@ -57,7 +57,7 @@
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n ItemInformation}"
+                    <Label Text="{u:I18n ItemInformation, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input"
@@ -421,7 +421,7 @@
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding IsLogin}">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n URIs}"
+                    <Label Text="{u:I18n URIs, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Uris}">
@@ -464,7 +464,7 @@
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Miscellaneous}"
+                    <Label Text="{u:I18n Miscellaneous, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
@@ -491,7 +491,7 @@
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Notes}"
+                    <Label Text="{u:I18n Notes, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
@@ -504,7 +504,7 @@
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n CustomFields}"
+                    <Label Text="{u:I18n CustomFields, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Fields}">
@@ -584,7 +584,7 @@
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding EditMode, Converter={StaticResource inverseBool}}">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Ownership}"
+                    <Label Text="{u:I18n Ownership, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-input">
@@ -600,7 +600,7 @@
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowCollections}">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Collections}"
+                    <Label Text="{u:I18n Collections, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout Spacing="0" Padding="0"

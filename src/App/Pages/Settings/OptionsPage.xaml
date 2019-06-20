@@ -96,7 +96,7 @@
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAutofillSettings}">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n AutofillService}"
+                    <Label Text="{u:I18n AutofillService, Header=True}"
                             StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-switch">
@@ -134,7 +134,7 @@
             </StackLayout>
             <StackLayout StyleClass="box" IsVisible="{Binding ShowAndroidAccessibilitySettings}">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n AutofillAccessibilityService}"
+                    <Label Text="{u:I18n AutofillAccessibilityService, Header=True}"
                             StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row, box-row-switch">

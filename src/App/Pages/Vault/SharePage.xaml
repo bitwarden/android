@@ -49,7 +49,7 @@
             <StackLayout StyleClass="box"
                          IsVisible="{Binding OrganizationId, Converter={StaticResource notNull}}">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n Collections}"
+                    <Label Text="{u:I18n Collections, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row"

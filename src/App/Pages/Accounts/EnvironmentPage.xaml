@@ -21,7 +21,7 @@
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n SelfHostedEnvironment}"
+                    <Label Text="{u:I18n SelfHostedEnvironment, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
@@ -42,7 +42,7 @@
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">
-                    <Label Text="{u:I18n CustomEnvironment}"
+                    <Label Text="{u:I18n CustomEnvironment, Header=True}"
                            StyleClass="box-header, box-header-platform" />
                 </StackLayout>
                 <StackLayout StyleClass="box-row">
