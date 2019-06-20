@@ -25,10 +25,12 @@ namespace Bit.App.Utilities
         public object ProvideValue(IServiceProvider serviceProvider)
         {
             var val = _i18nService.T(Id, P1, P2, P3);
+            /*
             if(Header && Device.RuntimePlatform == Device.iOS)
             {
                 return val.ToUpper();
             }
+            */
             return val;
         }
     }

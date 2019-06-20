@@ -73,9 +73,11 @@
     <Style TargetType="Label"
            Class="box-header-platform">
         <Setter Property="TextColor"
-                Value="{StaticResource MutedColor}" />
+                Value="{StaticResource BoxHeaderTextColor}" />
         <Setter Property="FontSize"
                 Value="Small" />
+        <Setter Property="FontAttributes"
+                Value="Bold" />
     </Style>
     <Style TargetType="Button"
            ApplyToDerivedTypes="True"
