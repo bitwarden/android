@@ -113,11 +113,17 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Migration\KeyChainStorageService.cs" />
     <Compile Include="NFCReaderDelegate.cs" />
+    <Compile Include="Renderers\CustomPickerRenderer.cs" />
+    <Compile Include="Renderers\CustomEntryRenderer.cs" />
+    <Compile Include="Renderers\CustomEditorRenderer.cs" />
+    <Compile Include="Renderers\CustomButtonRenderer.cs" />
+    <Compile Include="Renderers\CustomLabelRenderer.cs" />
     <Compile Include="Renderers\CustomContentPageRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\iOSPushNotificationHandler.cs" />
     <Compile Include="Services\iOSPushNotificationService.cs" />
+    <Compile Include="Utilities\iOSHelpers.cs" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist" />
     <Compile Include="Properties\AssemblyInfo.cs" />
