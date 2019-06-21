@@ -1,5 +1,6 @@
 ﻿using UIKit;
 using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Utilities
 {
@@ -26,6 +27,37 @@ namespace Bit.iOS.Utilities
                 return null;
             }
             return pointSize;
+        }
+
+        public static void SetBottomBorder(UITextField control)
+        {
+            control.BorderStyle = UITextBorderStyle.None;
+            SetBottomBorder(control as UIView);
+        }
+
+        public static void SetBottomBorder(UITextView control)
+        {
+            SetBottomBorder(control as UIView);
+        }
+
+        private static void SetBottomBorder(UIView control)
+        {
+            var borderLine = new UIView
+            {
+                BackgroundColor = ((Color)Xamarin.Forms.Application.Current.Resources["BoxBorderColor"]).ToUIColor(),
+                TranslatesAutoresizingMaskIntoConstraints = false
+            };
+            control.AddSubview(borderLine);
+            control.AddConstraints(new NSLayoutConstraint[]
+            {
+                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Height, NSLayoutRelation.Equal, 1, 1f),
+                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Leading, NSLayoutRelation.Equal,
+                    control, NSLayoutAttribute.Leading, 1, 0),
+                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal,
+                    control, NSLayoutAttribute.Trailing, 1, 0),
+                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Top, NSLayoutRelation.Equal,
+                    control, NSLayoutAttribute.Bottom, 1, 10f),
+            });
         }
     }
 }

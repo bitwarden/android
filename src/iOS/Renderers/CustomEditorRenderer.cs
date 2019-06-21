@@ -15,6 +15,9 @@ namespace Bit.iOS.Renderers
             {
                 var descriptor = UIFontDescriptor.PreferredBody;
                 Control.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
+                // Remove padding
+                Control.TextContainerInset = new UIEdgeInsets(0, 0, 0, 0);
+                Control.TextContainer.LineFragmentPadding = 0;
             }
         }
     }

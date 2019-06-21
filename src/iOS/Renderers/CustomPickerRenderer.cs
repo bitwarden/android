@@ -1,4 +1,5 @@
 ﻿using Bit.iOS.Renderers;
+using Bit.iOS.Utilities;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -15,6 +16,7 @@ namespace Bit.iOS.Renderers
             {
                 var descriptor = UIFontDescriptor.PreferredBody;
                 Control.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
+                iOSHelpers.SetBottomBorder(Control);
             }
         }
     }

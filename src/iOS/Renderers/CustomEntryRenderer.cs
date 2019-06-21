@@ -17,7 +17,7 @@ namespace Bit.iOS.Renderers
             {
                 Control.ClearButtonMode = UITextFieldViewMode.WhileEditing;
                 UpdateFontSize();
-                SetBottomBorder();
+                iOSHelpers.SetBottomBorder(Control);
             }
         }
 
@@ -46,27 +46,6 @@ namespace Bit.iOS.Renderers
                     Control.Font = UIFont.FromDescriptor(UIFontDescriptor.PreferredBody, pointSize.Value);
                 }
             }
-        }
-
-        private void SetBottomBorder()
-        {
-            Control.BorderStyle = UITextBorderStyle.None;
-            var borderLine = new UIView
-            {
-                BackgroundColor = ((Color)Xamarin.Forms.Application.Current.Resources["BoxBorderColor"]).ToUIColor(),
-                TranslatesAutoresizingMaskIntoConstraints = false
-            };
-            Control.AddSubview(borderLine);
-            Control.AddConstraints(new NSLayoutConstraint[]
-            {
-                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Height, NSLayoutRelation.Equal, 1, 1f),
-                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Leading, NSLayoutRelation.Equal,
-                    Control, NSLayoutAttribute.Leading, 1, 0),
-                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Trailing, NSLayoutRelation.Equal,
-                    Control, NSLayoutAttribute.Trailing, 1, 0),
-                NSLayoutConstraint.Create(borderLine, NSLayoutAttribute.Top, NSLayoutRelation.Equal,
-                    Control, NSLayoutAttribute.Bottom, 1, 10f),
-            });
         }
     }
 }

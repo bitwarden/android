@@ -9,6 +9,11 @@
         <Setter Property="Margin"
                 Value="0, 5, 0, 12" />
     </Style>
+    <Style TargetType="Picker"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Margin"
+                Value="0, 5, 0, 12" />
+    </Style>
     <Style TargetType="Editor"
            ApplyToDerivedTypes="True">
         <Setter Property="PlaceholderColor"
