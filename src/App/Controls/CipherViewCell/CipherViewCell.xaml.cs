@@ -181,7 +181,7 @@ namespace Bit.App.Controls
             return new Tuple<string, string>(icon, image);
         }
 
-        private void ImageButton_Clicked(object sender, EventArgs e)
+        private void MoreButton_Clicked(object sender, EventArgs e)
         {
             ButtonCommand?.Execute(Cipher);
         }
