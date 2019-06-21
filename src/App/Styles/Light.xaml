@@ -27,6 +27,7 @@
     <Color x:Key="ListItemBorderColor">#f0f0f0</Color>
     <Color x:Key="ListSectionBorderColor">#dddddd</Color>
     <Color x:Key="ListHeaderTextColor">#3c8dbc</Color>
+    <Color x:Key="ListHeaderBackgroundColor">#efeff4</Color>
 
     <Color x:Key="SliderThumbColor">#ffffff</Color>
     <Color x:Key="SliderThumbBorderColor">#b5b5b5</Color>

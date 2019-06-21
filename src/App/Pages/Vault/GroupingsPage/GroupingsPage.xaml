@@ -111,7 +111,9 @@
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                             <ViewCell>
-                                <StackLayout Spacing="0" Padding="0" VerticalOptions="FillAndExpand">
+                                <StackLayout
+                                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                                    StyleClass="list-row-header-container, list-row-header-container-platform">
                                     <BoxView
                                         StyleClass="list-section-separator-top, list-section-separator-top-platform"
                                         IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />

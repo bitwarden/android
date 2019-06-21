@@ -57,7 +57,9 @@
         <ListView.GroupHeaderTemplate>
             <DataTemplate x:DataType="pages:SettingsPageListGroup">
                 <ViewCell>
-                    <StackLayout Padding="0" Spacing="0" VerticalOptions="FillAndExpand">
+                    <StackLayout
+                        Padding="0" Spacing="0" VerticalOptions="FillAndExpand"
+                        StyleClass="list-row-header-container, list-row-header-container-platform">>
                         <BoxView
                           StyleClass="list-section-separator-top, list-section-separator-top-platform"
                           IsVisible="{Binding First, Converter={StaticResource inverseBool}}" />
@@ -66,7 +68,7 @@
                                 Text="{Binding Name}"
                                 StyleClass="list-header, list-header-platform" />
                         </StackLayout>
-                      <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+                        <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>

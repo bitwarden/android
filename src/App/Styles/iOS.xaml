@@ -22,6 +22,11 @@
                 Value="{StaticResource ListItemBorderColor}" />
     </Style>
     <Style TargetType="StackLayout"
+           Class="list-row-header-container-platform">
+        <Setter Property="BackgroundColor"
+                Value="{StaticResource ListHeaderBackgroundColor}" />
+    </Style>
+    <Style TargetType="StackLayout"
            Class="list-row-header-platform">
         <Setter Property="Padding"
                 Value="10, 0, 10, 5" />
