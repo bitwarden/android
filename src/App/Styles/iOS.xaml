@@ -6,6 +6,8 @@
            ApplyToDerivedTypes="True">
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource InputPlaceholderColor}" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 12" />
     </Style>
     <Style TargetType="Editor"
            ApplyToDerivedTypes="True">
