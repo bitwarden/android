@@ -92,7 +92,6 @@
         </Grid>
 
         <controls:MiButton
-            BackgroundColor="Green"
             Grid.Row="0"
             Grid.Column="2"
             Text="&#xe5d3;"
