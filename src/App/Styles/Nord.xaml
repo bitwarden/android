@@ -34,6 +34,8 @@
     <Color x:Key="SliderTrackMinColor">#81a1c1</Color>
     <Color x:Key="SliderTrackMaxColor">#81a1c1</Color>
 
+    <Color x:Key="SwitchOnColor">#81a1c1</Color>
+
     <Color x:Key="ButtonTextColor">#000000</Color>
     <Color x:Key="ButtonBackgroundColor">#dddddd</Color>
 

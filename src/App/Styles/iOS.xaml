@@ -19,6 +19,11 @@
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource InputPlaceholderColor}" />
     </Style>
+    <Style TargetType="Switch"
+           ApplyToDerivedTypes="True">
+        <Setter Property="OnColor"
+                Value="{StaticResource SwitchOnColor}" />
+    </Style>
 
     <!-- Buttons -->
 
