@@ -19,7 +19,26 @@
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource InputPlaceholderColor}" />
     </Style>
-    
+
+    <!-- Buttons -->
+
+    <Style TargetType="Button">
+        <Setter Property="BackgroundColor"
+                Value="{StaticResource ButtonBackgroundColor}" />
+        <Setter Property="TextColor"
+                Value="{StaticResource ButtonTextColor}" />
+        <Setter Property="Margin"
+                Value="0, 5, 0, 0" />
+    </Style>
+    <Style TargetType="Button"
+           ApplyToDerivedTypes="True"
+           Class="btn-icon-platform">
+        <Setter Property="WidthRequest"
+                Value="37" />
+        <Setter Property="FontSize"
+                Value="25" />
+    </Style>
+
     <!-- List -->
 
     <Style TargetType="ListView"

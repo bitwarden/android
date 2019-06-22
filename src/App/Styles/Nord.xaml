@@ -33,6 +33,9 @@
     <Color x:Key="SliderThumbBorderColor">#2e3440</Color>
     <Color x:Key="SliderTrackColor">#81a1c1</Color>
 
+    <Color x:Key="ButtonTextColor">#000000</Color>
+    <Color x:Key="ButtonBackgroundColor">#dddddd</Color>
+
     <Color x:Key="FabColor">#81a1c1</Color>
     <Color x:Key="FabPressedColor">#81a1c1</Color>
 
