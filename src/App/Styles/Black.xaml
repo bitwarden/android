@@ -31,7 +31,8 @@
 
     <Color x:Key="SliderThumbColor">#B9B9B9</Color>
     <Color x:Key="SliderThumbBorderColor">#000000</Color>
-    <Color x:Key="SliderTrackColor">#52bdfb</Color>
+    <Color x:Key="SliderTrackMinColor">#52bdfb</Color>
+    <Color x:Key="SliderTrackMaxColor">#52bdfb</Color>
 
     <Color x:Key="ButtonTextColor">#000000</Color>
     <Color x:Key="ButtonBackgroundColor">#dddddd</Color>

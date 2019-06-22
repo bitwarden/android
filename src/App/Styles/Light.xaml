@@ -29,9 +29,10 @@
     <Color x:Key="ListHeaderTextColor">#3c8dbc</Color>
     <Color x:Key="ListHeaderBackgroundColor">#efeff4</Color>
 
-    <Color x:Key="SliderThumbColor">#ffffff</Color>
+    <Color x:Key="SliderThumbColor">Default</Color>
     <Color x:Key="SliderThumbBorderColor">#b5b5b5</Color>
-    <Color x:Key="SliderTrackColor">#dddddd</Color>
+    <Color x:Key="SliderTrackMinColor">#3c8dbc</Color>
+    <Color x:Key="SliderTrackMaxColor">#dddddd</Color>
 
     <Color x:Key="ButtonTextColor">#000000</Color>
     <Color x:Key="ButtonBackgroundColor">#dddddd</Color>

@@ -62,9 +62,9 @@
     </Style>
     <Style TargetType="controls:ExtendedSlider">
         <Setter Property="MinimumTrackColor"
-                Value="{StaticResource SliderTrackColor}" />
+                Value="{StaticResource SliderTrackMinColor}" />
         <Setter Property="MaximumTrackColor"
-                Value="{StaticResource SliderTrackColor}" />
+                Value="{StaticResource SliderTrackMaxColor}" />
         <Setter Property="ThumbColor"
                 Value="{StaticResource SliderThumbColor}" />
         <Setter Property="ThumbBorderColor"

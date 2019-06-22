@@ -23,7 +23,14 @@ namespace Bit.Droid.Renderers
                 var t = ResourcesCompat.GetDrawable(Resources, Resource.Drawable.slider_thumb, null);
                 if(t is GradientDrawable thumb)
                 {
-                    thumb.SetColor(view.ThumbColor.ToAndroid());
+                    if(view.ThumbColor == Color.Default)
+                    {
+                        thumb.SetColor(Color.White.ToAndroid());
+                    }
+                    else
+                    {
+                        thumb.SetColor(view.ThumbColor.ToAndroid());
+                    }
                     thumb.SetStroke(3, view.ThumbBorderColor.ToAndroid());
                     Control.SetThumb(thumb);
                 }
