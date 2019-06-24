@@ -18,6 +18,8 @@
            ApplyToDerivedTypes="True">
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource InputPlaceholderColor}" />
+        <Setter Property="Margin"
+                Value="0, 0, 0, 12" />
     </Style>
     <Style TargetType="Switch"
            ApplyToDerivedTypes="True">

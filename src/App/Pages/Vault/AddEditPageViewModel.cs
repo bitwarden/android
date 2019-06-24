@@ -24,6 +24,7 @@ namespace Bit.App.Pages
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
         private CipherView _cipher;
+        private bool _showNotesSeparator;
         private bool _showPassword;
         private bool _showCardCode;
         private int _typeSelectedIndex;
@@ -223,6 +224,11 @@ namespace Bit.App.Pages
         {
             get => _cipher;
             set => SetProperty(ref _cipher, value, additionalPropertyNames: _additionalCipherProperties);
+        }
+        public bool ShowNotesSeparator
+        {
+            get => _showNotesSeparator;
+            set => SetProperty(ref _showNotesSeparator, value);
         }
         public bool ShowPassword
         {

@@ -501,6 +501,7 @@
                         Text="{Binding Cipher.Notes}"
                         StyleClass="box-value" />
                 </StackLayout>
+                <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowNotesSeparator}" />
             </StackLayout>
             <StackLayout StyleClass="box">
                 <StackLayout StyleClass="box-row-header">

@@ -58,6 +58,7 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Add(_moreItem);
                 }
+                _vm.ShowNotesSeparator = true;
             }
 
             _typePicker.ItemDisplayBinding = new Binding("Key");
