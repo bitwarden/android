@@ -27,6 +27,7 @@
 
     <Color x:Key="ListItemBorderColor">#262626</Color>
     <Color x:Key="ListSectionBorderColor">#191919</Color>
+    <Color x:Key="ListSectionBorderBottomColor">#191919</Color>
     <Color x:Key="ListHeaderTextColor">#52bdfb</Color>
     <Color x:Key="ListHeaderBackgroundColor">#222222</Color>
 

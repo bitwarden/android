@@ -27,8 +27,9 @@
 
     <Color x:Key="ListItemBorderColor">#2e3440</Color>
     <Color x:Key="ListSectionBorderColor">#2e3440</Color>
+    <Color x:Key="ListSectionBorderBottomColor">#2e3440</Color>
     <Color x:Key="ListHeaderTextColor">#81a1c1</Color>
-    <Color x:Key="ListHeaderBackgroundColor">#3b4252</Color>
+    <Color x:Key="ListHeaderBackgroundColor">#2e3440</Color>
 
     <Color x:Key="SliderThumbColor">#e5e9f0</Color>
     <Color x:Key="SliderThumbBorderColor">#2e3440</Color>

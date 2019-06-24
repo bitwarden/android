@@ -27,6 +27,7 @@
 
     <Color x:Key="ListItemBorderColor">#191919</Color>
     <Color x:Key="ListSectionBorderColor">#282828</Color>
+    <Color x:Key="ListSectionBorderBottomColor">#000000</Color>
     <Color x:Key="ListHeaderTextColor">#52bdfb</Color>
     <Color x:Key="ListHeaderBackgroundColor">#000000</Color>
 
@@ -37,7 +38,7 @@
 
     <Color x:Key="SwitchOnColor">#52bdfb</Color>
 
-    <Color x:Key="ButtonTextColor">#000000</Color>
+    <Color x:Key="ButtonTextColor">#ffffff</Color>
     <Color x:Key="ButtonBackgroundColor">#5A595B</Color>
 
     <Color x:Key="FabColor">#52bdfb</Color>
