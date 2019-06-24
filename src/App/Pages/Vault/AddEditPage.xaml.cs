@@ -251,7 +251,7 @@ namespace Bit.App.Pages
             var options = new List<string> { AppResources.Attachments };
             if(_vm.EditMode)
             {
-                options.Add(_vm.Cipher.OrganizationId != null ? AppResources.Share : AppResources.Collections);
+                options.Add(_vm.Cipher.OrganizationId == null ? AppResources.Share : AppResources.Collections);
             }
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
                 _vm.EditMode ? AppResources.Delete : null, options.ToArray());

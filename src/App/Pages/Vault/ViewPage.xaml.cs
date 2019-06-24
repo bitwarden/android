@@ -154,7 +154,7 @@ namespace Bit.App.Pages
                 return;
             }
             var options = new List<string> { AppResources.Attachments };
-            options.Add(_vm.Cipher.OrganizationId != null ? AppResources.Share : AppResources.Collections);
+            options.Add(_vm.Cipher.OrganizationId == null ? AppResources.Share : AppResources.Collections);
             var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
                 AppResources.Delete, options.ToArray());
             if(selection == AppResources.Delete)
