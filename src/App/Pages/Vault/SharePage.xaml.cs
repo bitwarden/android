@@ -1,4 +1,6 @@
 ﻿using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Bit.App.Pages
 {
@@ -16,6 +18,10 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.Android)
             {
                 ToolbarItems.RemoveAt(0);
+            }
+            else
+            {
+                _organizationPicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
             _organizationPicker.ItemDisplayBinding = new Binding("Key");
         }

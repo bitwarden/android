@@ -2,6 +2,8 @@
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Bit.App.Pages
 {
@@ -20,9 +22,10 @@ namespace Bit.App.Pages
             _vm.Page = this;
             _fromTabPage = fromTabPage;
             _selectAction = selectAction;
+            var isIos = Device.RuntimePlatform == Device.iOS;
             if(selectAction != null)
             {
-                if(Device.RuntimePlatform == Device.iOS)
+                if(isIos)
                 {
                     ToolbarItems.Add(_closeItem);
                 }
@@ -30,7 +33,7 @@ namespace Bit.App.Pages
             }
             else
             {
-                if(Device.RuntimePlatform == Device.iOS)
+                if(isIos)
                 {
                     ToolbarItems.Add(_moreItem);
                 }
@@ -38,6 +41,10 @@ namespace Bit.App.Pages
                 {
                     ToolbarItems.Add(_historyItem);
                 }
+            }
+            if(isIos)
+            {
+                _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
         }
 
@@ -86,7 +93,7 @@ namespace Bit.App.Pages
             if(selection == AppResources.PasswordHistory)
             {
                 var page = new GeneratorHistoryPage();
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
 
@@ -98,7 +105,7 @@ namespace Bit.App.Pages
         private async void History_Clicked(object sender, EventArgs e)
         {
             var page = new GeneratorHistoryPage();
-            await Navigation.PushModalAsync(new NavigationPage(page));
+            await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
         }
 
         private async void LengthSlider_DragCompleted(object sender, EventArgs e)

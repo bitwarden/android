@@ -297,6 +297,11 @@ namespace Bit.App.Pages
                     await Task.Delay(1000);
                 }
                 _messagingService.Send("updatedTheme", theme);
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    await Task.Delay(500);
+                    await _platformUtilsService.ShowDialogAsync(AppResources.ThemeAppliedOnRestart);
+                }
             }
         }
 

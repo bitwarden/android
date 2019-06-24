@@ -62,6 +62,7 @@
                         Text="{u:I18n Type}"
                         StyleClass="box-label" />
                     <Picker
+                        x:Name="_typePicker"
                         ItemsSource="{Binding TypeOptions, Mode=OneTime}"
                         SelectedIndex="{Binding TypeSelectedIndex}"
                         StyleClass="box-value" />

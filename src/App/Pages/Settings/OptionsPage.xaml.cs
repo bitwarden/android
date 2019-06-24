@@ -2,6 +2,8 @@
 using Bit.App.Resources;
 using Bit.Core.Utilities;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Bit.App.Pages
 {
@@ -26,6 +28,12 @@ namespace Bit.App.Pages
                 _vm.ShowAndroidAutofillSettings = _deviceActionService.SupportsAutofillService();
                 _themeDescriptionLabel.Text = string.Concat(_themeDescriptionLabel.Text, " ",
                     AppResources.RestartIsRequired);
+            }
+            else
+            {
+                _themePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _uriMatchPicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _clearClipboardPicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
         }
 
