@@ -22,15 +22,22 @@ namespace Bit.App.Pages
             _selectAction = selectAction;
             if(selectAction != null)
             {
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    ToolbarItems.Add(_closeItem);
+                }
                 ToolbarItems.Add(_selectItem);
-            }
-            if(Device.RuntimePlatform == Device.iOS)
-            {
-                ToolbarItems.Add(_moreItem);
             }
             else
             {
-                ToolbarItems.Add(_historyItem);
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    ToolbarItems.Add(_moreItem);
+                }
+                else
+                {
+                    ToolbarItems.Add(_historyItem);
+                }
             }
         }
 
@@ -97,6 +104,14 @@ namespace Bit.App.Pages
         private async void LengthSlider_DragCompleted(object sender, EventArgs e)
         {
             await _vm.SliderChangedAsync();
+        }
+
+        private async void Close_Clicked(object sender, EventArgs e)
+        {
+            if(DoOnce())
+            {
+                await Navigation.PopModalAsync();
+            }
         }
     }
 }
