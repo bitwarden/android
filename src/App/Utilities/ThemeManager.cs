@@ -48,16 +48,16 @@ namespace Bit.App.Utilities
             }
         }
 
-        public static void SetTheme()
+        public static void SetTheme(bool android)
         {
-            SetThemeStyle(GetTheme());
+            SetThemeStyle(GetTheme(android));
         }
 
-        public static string GetTheme()
+        public static string GetTheme(bool android)
         {
             return Xamarin.Essentials.Preferences.Get(
                 string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
-                Device.RuntimePlatform == Device.iOS ? "group.com.8bit.bitwarden" : default(string));
+                !android ? "group.com.8bit.bitwarden" : default(string));
         }
     }
 }

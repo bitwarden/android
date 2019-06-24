@@ -59,6 +59,7 @@
     <Compile Include="Services\CryptoPrimitiveService.cs" />
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
+    <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="Views\Toast.cs" />
   </ItemGroup>
   <ItemGroup>

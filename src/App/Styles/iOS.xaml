@@ -1,21 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    x:Class="Bit.App.Styles.iOS">
+                    x:Class="Bit.App.Styles.iOS"
+                    xmlns:controls="clr-namespace:Bit.App.Controls">
     <Style TargetType="Entry"
            ApplyToDerivedTypes="True">
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource InputPlaceholderColor}" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 12" />
     </Style>
     <Style TargetType="Picker"
            ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
         <Setter Property="Margin"
                 Value="0, 5, 0, 12" />
     </Style>
     <Style TargetType="Editor"
            ApplyToDerivedTypes="True">
+        <Setter Property="TextColor"
+                Value="{StaticResource TextColor}" />
+        <Setter Property="BackgroundColor"
+                Value="{StaticResource BackgroundColor}" />
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource InputPlaceholderColor}" />
         <Setter Property="Margin"
@@ -35,6 +44,29 @@
                 Value="{StaticResource PrimaryColor}" />
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource MutedColor}" />
+    </Style>
+    <Style TargetType="ContentPage"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="{StaticResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="ListView"
+           ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor"
+                Value="{StaticResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="ActivityIndicator"
+           ApplyToDerivedTypes="True">
+        <Setter Property="Color"
+                Value="{StaticResource PrimaryColor}" />
+    </Style>
+    <Style TargetType="controls:ExtendedSlider">
+        <Setter Property="MinimumTrackColor"
+                Value="{StaticResource SliderTrackMinColor}" />
+        <Setter Property="MaximumTrackColor"
+                Value="{StaticResource SliderTrackMaxColor}" />
+        <Setter Property="ThumbColor"
+                Value="{StaticResource SliderThumbColor}" />
     </Style>
 
     <!-- Buttons -->

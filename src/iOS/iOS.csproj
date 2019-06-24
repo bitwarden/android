@@ -113,6 +113,7 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Migration\KeyChainStorageService.cs" />
     <Compile Include="NFCReaderDelegate.cs" />
+    <Compile Include="Renderers\CustomTabbedRenderer.cs" />
     <Compile Include="Renderers\CustomPickerRenderer.cs" />
     <Compile Include="Renderers\CustomEntryRenderer.cs" />
     <Compile Include="Renderers\CustomEditorRenderer.cs" />

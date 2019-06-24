@@ -283,9 +283,10 @@ namespace Bit.iOS
 
         private void AppearanceAdjustments()
         {
+            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false));
+            /*
             var primaryColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
             var grayLight = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
-
             UINavigationBar.Appearance.ShadowImage = new UIImage();
             UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             UIBarButtonItem.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
@@ -294,6 +295,7 @@ namespace Bit.iOS
             UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
             UIStepper.Appearance.TintColor = grayLight;
             UISlider.Appearance.TintColor = primaryColor;
+            */
             UIApplication.SharedApplication.StatusBarHidden = false;
             UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }

@@ -10,7 +10,7 @@ namespace Bit.App.Pages
         public HomePage()
         {
             InitializeComponent();
-            var theme = ThemeManager.GetTheme();
+            var theme = ThemeManager.GetTheme(Device.RuntimePlatform == Device.Android);
             var darkbasedTheme = theme == "dark" || theme == "black" || theme == "nord";
             _logo.Source = darkbasedTheme ? "logo_white.png" : "logo.png";
         }

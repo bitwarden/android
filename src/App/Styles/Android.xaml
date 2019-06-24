@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
                     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                    x:Class="Bit.App.Styles.Android">
+                    x:Class="Bit.App.Styles.Android"
+                    xmlns:controls="clr-namespace:Bit.App.Controls">
     <Style TargetType="Entry"
            ApplyToDerivedTypes="True">
         <Setter Property="PlaceholderColor"
@@ -30,6 +31,16 @@
                 Value="{StaticResource TitleEntryTextColor}" />
         <Setter Property="PlaceholderColor"
                 Value="{StaticResource TitleEntryPlaceholderColor}" />
+    </Style>
+    <Style TargetType="controls:ExtendedSlider">
+        <Setter Property="MinimumTrackColor"
+                Value="{StaticResource SliderTrackMinColor}" />
+        <Setter Property="MaximumTrackColor"
+                Value="{StaticResource SliderTrackMinColor}" />
+        <Setter Property="ThumbColor"
+                Value="{StaticResource SliderThumbColor}" />
+        <Setter Property="ThumbBorderColor"
+                Value="{StaticResource SliderThumbBorderColor}" />
     </Style>
     
     <!-- Buttons -->

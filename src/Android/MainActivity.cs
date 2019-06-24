@@ -68,7 +68,7 @@ namespace Bit.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
 
-            UpdateTheme(ThemeManager.GetTheme());
+            UpdateTheme(ThemeManager.GetTheme(true));
             base.OnCreate(savedInstanceState);
             if(!CoreHelpers.InDebugMode())
             {

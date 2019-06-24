@@ -14,6 +14,7 @@
     <Color x:Key="ButtonColor">#e0e0e0</Color>
     <Color x:Key="InputPlaceholderColor">#707070</Color>
 
+    <Color x:Key="BackgroundColor">#000000</Color>
     <Color x:Key="BorderColor">#282828</Color>
     <Color x:Key="DisabledIconColor">#c7c7cd</Color>
 
@@ -32,12 +33,12 @@
     <Color x:Key="SliderThumbColor">#B9B9B9</Color>
     <Color x:Key="SliderThumbBorderColor">#000000</Color>
     <Color x:Key="SliderTrackMinColor">#52bdfb</Color>
-    <Color x:Key="SliderTrackMaxColor">#52bdfb</Color>
+    <Color x:Key="SliderTrackMaxColor">#282828</Color>
 
     <Color x:Key="SwitchOnColor">#52bdfb</Color>
 
     <Color x:Key="ButtonTextColor">#000000</Color>
-    <Color x:Key="ButtonBackgroundColor">#dddddd</Color>
+    <Color x:Key="ButtonBackgroundColor">#5A595B</Color>
 
     <Color x:Key="FabColor">#52bdfb</Color>
     <Color x:Key="FabPressedColor">#3ea1da</Color>
