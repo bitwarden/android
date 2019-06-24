@@ -1,6 +1,8 @@
 ﻿using Foundation;
 using System;
 using UIKit;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS.Core.Views
 {
@@ -16,7 +18,14 @@ namespace Bit.iOS.Core.Views
             : base(CoreGraphics.CGRect.FromLTRB(0, 0, 320, 38))
         {
             TranslatesAutoresizingMaskIntoConstraints = false;
-            BackgroundColor = UIColor.DarkGray.ColorWithAlpha(0.9f);
+            var bgColor = UIColor.DarkGray;
+            var nordTheme = Application.Current?.Resources != null &&
+                ((Color)Application.Current.Resources["BackgroundColor"]) == Color.FromHex("#3b4252");
+            if(nordTheme)
+            {
+                bgColor = Color.FromHex("#4c566a").ToUIColor();
+            }
+            BackgroundColor = bgColor.ColorWithAlpha(0.9f);
             Layer.CornerRadius = 15;
             Layer.MasksToBounds = true;
 
