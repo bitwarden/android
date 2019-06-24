@@ -7,10 +7,15 @@ namespace Bit.iOS.Renderers
 {
     public class CustomTabbedRenderer : TabbedRenderer
     {
-        public CustomTabbedRenderer()
+        protected override void OnElementChanged(VisualElementChangedEventArgs e)
         {
+            base.OnElementChanged(e);
             TabBar.Translucent = false;
             TabBar.Opaque = true;
+            TabBar.SelectedImageTintColor =
+                ((Color)Xamarin.Forms.Application.Current.Resources["TabBarSelectedItemColor"]).ToUIColor();
+            TabBar.UnselectedItemTintColor =
+                ((Color)Xamarin.Forms.Application.Current.Resources["TabBarItemColor"]).ToUIColor();
         }
     }
 }

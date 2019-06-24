@@ -120,6 +120,7 @@
                                     StyleClass="box-value"
                                     Grid.Row="1"
                                     Grid.Column="0"
+                                    LineBreakMode="CharacterWrap"
                                     IsVisible="{Binding ShowPassword}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"

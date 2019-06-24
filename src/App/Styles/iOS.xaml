@@ -39,11 +39,11 @@
         <Setter Property="BackgroundColor"
                 Value="{StaticResource ListHeaderBackgroundColor}" />
         <Setter Property="TextColor"
-                Value="{StaticResource TextColor}" />
+                Value="Black" />
         <Setter Property="CancelButtonColor"
                 Value="{StaticResource PrimaryColor}" />
         <Setter Property="PlaceholderColor"
-                Value="{StaticResource MutedColor}" />
+                Value="#777777" />
     </Style>
     <Style TargetType="ContentPage"
            ApplyToDerivedTypes="True">
