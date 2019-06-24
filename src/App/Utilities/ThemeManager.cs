@@ -56,7 +56,8 @@ namespace Bit.App.Utilities
         public static string GetTheme()
         {
             return Xamarin.Essentials.Preferences.Get(
-                string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string));
+                string.Format(PreferencesStorageService.KeyFormat, Constants.ThemeKey), default(string),
+                Device.RuntimePlatform == Device.iOS ? "group.com.8bit.bitwarden" : default(string));
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Services;
+using Bit.App.Utilities;
 using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
@@ -61,7 +62,7 @@ namespace Bit.iOS
                 }
                 else if(message.Command == "updatedTheme")
                 {
-                    
+                    // ThemeManager.SetThemeStyle(message.Data as string);
                 }
                 else if(message.Command == "copiedToClipboard")
                 {
