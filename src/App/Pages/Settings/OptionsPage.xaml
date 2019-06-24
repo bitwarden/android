@@ -19,7 +19,7 @@
     <ScrollView Padding="0, 0, 0, 20">
         <StackLayout Padding="0" Spacing="20">
             <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row, box-row-input">
+                <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
                     <Label
                         Text="{u:I18n Theme}"
                         StyleClass="box-label" />
@@ -35,7 +35,7 @@
                     x:Name="_themeDescriptionLabel" />
             </StackLayout>
             <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row, box-row-input">
+                <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
                     <Label
                         Text="{u:I18n DefaultUriMatchDetection}"
                         StyleClass="box-label" />
@@ -50,7 +50,7 @@
                     StyleClass="box-footer-label" />
             </StackLayout>
             <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row, box-row-input">
+                <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
                     <Label
                         Text="{u:I18n ClearClipboard}"
                         StyleClass="box-label" />

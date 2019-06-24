@@ -135,4 +135,9 @@
         <Setter Property="FontSize"
                 Value="25" />
     </Style>
+    <Style TargetType="StackLayout"
+           Class="box-row-input-options-platform">
+        <Setter Property="Padding"
+                Value="0, 10, 0, 5" />
+    </Style>
 </ResourceDictionary>
