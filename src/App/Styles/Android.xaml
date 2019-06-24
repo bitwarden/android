@@ -21,6 +21,16 @@
         <Setter Property="Margin"
                 Value="-4, 0, -4, -4" />
     </Style>
+    <Style TargetType="SearchBar">
+        <Setter Property="BackgroundColor"
+                Value="Transparent" />
+        <Setter Property="TextColor"
+                Value="{StaticResource TitleEntryTextColor}" />
+        <Setter Property="CancelButtonColor"
+                Value="{StaticResource TitleEntryTextColor}" />
+        <Setter Property="PlaceholderColor"
+                Value="{StaticResource TitleEntryPlaceholderColor}" />
+    </Style>
     
     <!-- Buttons -->
     

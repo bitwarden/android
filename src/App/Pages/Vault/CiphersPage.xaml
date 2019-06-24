@@ -20,34 +20,33 @@
             <u:DateTimeConverter x:Key="dateTime" />
             <ToolbarItem Text="{u:I18n Close}" Clicked="Close_Clicked" Order="Primary" Priority="-1"
                          x:Name="_closeItem" x:Key="closeItem" />
+            <StackLayout
+                Orientation="Horizontal"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand"
+                Spacing="0"
+                Padding="0"
+                x:Name="_titleLayout"
+                x:Key="titleLayout">
+                <controls:MiButton
+                    StyleClass="btn-title, btn-title-platform"
+                    Text="&#xe5c4;"
+                    VerticalOptions="CenterAndExpand"
+                    Clicked="BackButton_Clicked"
+                    x:Name="_backButton" />
+                <SearchBar
+                    x:Name="_searchBar"
+                    HorizontalOptions="FillAndExpand"
+                    TextChanged="SearchBar_TextChanged"
+                    SearchButtonPressed="SearchBar_SearchButtonPressed"
+                    Placeholder="{Binding PageTitle}" />
+            </StackLayout>
+            <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform"
+                     x:Name="_separator" x:Key="separator" />
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <NavigationPage.TitleView>
-        <StackLayout
-            Orientation="Horizontal"
-            VerticalOptions="FillAndExpand"
-            HorizontalOptions="FillAndExpand"
-            Spacing="0"
-            Padding="0"
-            x:Name="_titleLayout">
-            <controls:MiButton
-                StyleClass="btn-title, btn-title-platform"
-                Text="&#xe5c4;"
-                VerticalOptions="CenterAndExpand"
-                Clicked="BackButton_Clicked"
-                x:Name="_backButton" />
-            <SearchBar
-                x:Name="_searchBar"
-                HorizontalOptions="FillAndExpand"
-                BackgroundColor="Transparent"
-                TextChanged="SearchBar_TextChanged"
-                SearchButtonPressed="SearchBar_SearchButtonPressed"
-                Placeholder="{Binding PageTitle}" />
-        </StackLayout>
-    </NavigationPage.TitleView>
-
-    <StackLayout x:Name="_mainLayout">
+    <StackLayout x:Name="_mainLayout" Spacing="0" Padding="0">
         <controls:FaLabel IsVisible="{Binding ShowSearchDirection}"
                Text="&#xf002;"
                StyleClass="text-muted"
@@ -62,13 +61,13 @@
                HorizontalOptions="CenterAndExpand"
                HorizontalTextAlignment="Center" />
         <ListView x:Name="_listView"
-                  IsVisible="{Binding ShowList}"
-                  ItemsSource="{Binding Ciphers}"
-                  VerticalOptions="FillAndExpand"
-                  HasUnevenRows="true"
-                  CachingStrategy="RecycleElement"
-                  ItemSelected="RowSelected"
-                  StyleClass="list, list-platform">
+                IsVisible="{Binding ShowList}"
+                ItemsSource="{Binding Ciphers}"
+                VerticalOptions="FillAndExpand"
+                HasUnevenRows="true"
+                CachingStrategy="RecycleElement"
+                ItemSelected="RowSelected"
+                StyleClass="list, list-platform">
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="views:CipherView">
                     <controls:CipherViewCell

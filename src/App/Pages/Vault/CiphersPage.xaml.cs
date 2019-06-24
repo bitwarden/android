@@ -43,7 +43,13 @@ namespace Bit.App.Pages
             if(Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Add(_closeItem);
-                _titleLayout.Children.Remove(_backButton);
+                _searchBar.Placeholder = AppResources.Search;
+                _mainLayout.Children.Insert(0, _searchBar);
+                _mainLayout.Children.Insert(1, _separator);
+            }
+            else
+            {
+                NavigationPage.SetTitleView(this, _titleLayout);
             }
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
         }

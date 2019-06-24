@@ -124,16 +124,6 @@
         <Setter Property="TextColor"
                 Value="{StaticResource TitleTextColor}" />
     </Style>
-    <Style TargetType="SearchBar">
-        <Setter Property="BackgroundColor"
-                Value="Transparent" />
-        <Setter Property="TextColor"
-                Value="{StaticResource TitleEntryTextColor}" />
-        <Setter Property="CancelButtonColor"
-                Value="{StaticResource TitleEntryTextColor}" />
-        <Setter Property="PlaceholderColor"
-                Value="{StaticResource TitleEntryPlaceholderColor}" />
-    </Style>
 
     <!-- List -->
     <Style TargetType="ListView"
