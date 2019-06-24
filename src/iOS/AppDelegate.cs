@@ -146,7 +146,7 @@ namespace Bit.iOS
 
         public override void WillEnterForeground(UIApplication uiApplication)
         {
-            _messagingService.Send("Resumed");
+            _messagingService.Send("resumed");
             base.WillEnterForeground(uiApplication);
         }
 
@@ -194,7 +194,7 @@ namespace Bit.iOS
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
             _nfcDelegate = new NFCReaderDelegate((success, message) =>
-                _messagingService.Send("GotYubiKeyOTP", message));
+                _messagingService.Send("gotYubiKeyOTP", message));
 
             var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
                 ServiceContainer.Resolve<IAppIdService>("appIdService"),

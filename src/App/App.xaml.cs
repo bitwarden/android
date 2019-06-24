@@ -114,7 +114,7 @@ namespace Bit.App
                 {
                     if(Device.RuntimePlatform == Device.iOS)
                     {
-                        SyncIfNeeded();
+                        ResumedAsync();
                     }
                 }
                 else if(message.Command == "migrated")
@@ -179,13 +179,18 @@ namespace Bit.App
         protected async override void OnResume()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                ResumedAsync();
+            }
+        }
+
+        private async void ResumedAsync()
+        {
             _messagingService.Send("cancelLockTimer");
             await ClearCacheIfNeededAsync();
             Prime();
-            if(Device.RuntimePlatform == Device.Android)
-            {
-                SyncIfNeeded();
-            }
+            SyncIfNeeded();
             if(Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
             {
                 await lockPage.PromptFingerprintAfterResumeAsync();
