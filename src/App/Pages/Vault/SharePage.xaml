@@ -32,7 +32,7 @@
                              IsVisible="{Binding HasOrganizations, Converter={StaticResource inverseBool}}">
                     <Label Text="{u:I18n NoOrgsToList}" />
                 </StackLayout>
-                <StackLayout StyleClass="box-row, box-row-input">
+                <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
                     <Label
                         Text="{u:I18n Organization}"
                         StyleClass="box-label" />
