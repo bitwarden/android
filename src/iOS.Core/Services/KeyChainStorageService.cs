@@ -76,7 +76,7 @@ namespace Bit.iOS.Core.Services
             using(var data = NSData.FromArray(dataBytes))
             using(var newRecord = GetKeyRecord(formattedKey, data))
             {
-                await RemoveAsync(formattedKey);
+                await RemoveAsync(key);
                 CheckError(SecKeyChain.Add(newRecord));
             }
         }
