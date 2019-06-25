@@ -201,7 +201,7 @@ namespace Bit.Droid.Services
                 {
                     try
                     {
-                        var file = new Java.IO.File(activity.GetExternalFilesDir("temp"), "camera_photo.jpg");
+                        var file = new Java.IO.File(activity.FilesDir, "temp_camera_photo.jpg");
                         if(!file.Exists())
                         {
                             file.ParentFile.Mkdirs();
