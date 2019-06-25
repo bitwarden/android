@@ -45,7 +45,10 @@ namespace Bit.App.Pages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            _broadcasterService.Unsubscribe(nameof(AttachmentsPage));
+            if(Device.RuntimePlatform != Device.iOS)
+            {
+                _broadcasterService.Unsubscribe(nameof(AttachmentsPage));
+            }
         }
 
         private async void Save_Clicked(object sender, EventArgs e)

@@ -161,8 +161,15 @@ namespace Bit.iOS.Services
             });
             picker.DidPickDocumentPicker += (sender, e) =>
             {
+                if(SystemMajorVersion() < 11)
+                {
+                    e.DocumentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
+                }
+                else
+                {
+                    e.DocumentPicker.Delegate = new PickerDelegate(this);
+                }
                 controller.PresentViewController(e.DocumentPicker, true, null);
-                e.DocumentPicker.DidPickDocument += DocumentPicker_DidPickDocument;
             };
             var root = UIApplication.SharedApplication.KeyWindow.RootViewController;
             if(picker.PopoverPresentationController != null && root != null)
@@ -374,27 +381,7 @@ namespace Bit.iOS.Services
 
         private void DocumentPicker_DidPickDocument(object sender, UIDocumentPickedEventArgs e)
         {
-            e.Url.StartAccessingSecurityScopedResource();
-            var doc = new UIDocument(e.Url);
-            var fileName = doc.LocalizedName;
-            if(string.IsNullOrWhiteSpace(fileName))
-            {
-                var path = doc.FileUrl?.ToString();
-                if(path != null)
-                {
-                    path = WebUtility.UrlDecode(path);
-                    var split = path.LastIndexOf('/');
-                    fileName = path.Substring(split + 1);
-                }
-            }
-            var fileCoordinator = new NSFileCoordinator();
-            fileCoordinator.CoordinateRead(e.Url, NSFileCoordinatorReadingOptions.WithoutChanges,
-                out NSError error, (url) =>
-                 {
-                     var data = NSData.FromUrl(url).ToArray();
-                     SelectFileResult(data, fileName ?? "unknown_file_name");
-                 });
-            e.Url.StopAccessingSecurityScopedResource();
+            PickedDocument(e.Url);
         }
 
         private void SelectFileResult(byte[] data, string fileName)
@@ -443,6 +430,46 @@ namespace Bit.iOS.Services
         {
             var documents = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             return Path.Combine(documents, "..", "tmp");
+        }
+
+        public void PickedDocument(NSUrl url)
+        {
+            url.StartAccessingSecurityScopedResource();
+            var doc = new UIDocument(url);
+            var fileName = doc.LocalizedName;
+            if(string.IsNullOrWhiteSpace(fileName))
+            {
+                var path = doc.FileUrl?.ToString();
+                if(path != null)
+                {
+                    path = WebUtility.UrlDecode(path);
+                    var split = path.LastIndexOf('/');
+                    fileName = path.Substring(split + 1);
+                }
+            }
+            var fileCoordinator = new NSFileCoordinator();
+            fileCoordinator.CoordinateRead(url, NSFileCoordinatorReadingOptions.WithoutChanges,
+                out NSError error, (u) =>
+                {
+                    var data = NSData.FromUrl(u).ToArray();
+                    SelectFileResult(data, fileName ?? "unknown_file_name");
+                });
+            url.StopAccessingSecurityScopedResource();
+        }
+
+        public class PickerDelegate : UIDocumentPickerDelegate
+        {
+            private readonly DeviceActionService _deviceActionService;
+
+            public PickerDelegate(DeviceActionService deviceActionService)
+            {
+                _deviceActionService = deviceActionService;
+            }
+
+            public override void DidPickDocument(UIDocumentPickerViewController controller, NSUrl url)
+            {
+                _deviceActionService.PickedDocument(url);
+            }
         }
     }
 }
