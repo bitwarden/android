@@ -27,11 +27,14 @@
 
     <ScrollView x:Name="_scrollView">
         <StackLayout Spacing="20">
-            <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row"
-                             IsVisible="{Binding HasOrganizations, Converter={StaticResource inverseBool}}">
-                    <Label Text="{u:I18n NoOrgsToList}" />
+            <StackLayout StyleClass="box"
+                         IsVisible="{Binding HasOrganizations, Converter={StaticResource inverseBool}}">
+                <StackLayout StyleClass="box-row" Padding="10, 20">
+                    <Label Text="{u:I18n NoOrgsToList}" HorizontalTextAlignment="Center" />
                 </StackLayout>
+            </StackLayout>
+            <StackLayout StyleClass="box"
+                         IsVisible="{Binding HasOrganizations}">
                 <StackLayout StyleClass="box-row, box-row-input, box-row-input-options-platform">
                     <Label
                         Text="{u:I18n Organization}"

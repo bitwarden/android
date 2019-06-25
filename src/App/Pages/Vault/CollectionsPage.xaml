@@ -28,9 +28,9 @@
     <ScrollView x:Name="_scrollView">
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row"
+                <StackLayout StyleClass="box-row" Padding="10, 20"
                              IsVisible="{Binding HasCollections, Converter={StaticResource inverseBool}}">
-                    <Label Text="{u:I18n NoCollectionsToList}" />
+                    <Label Text="{u:I18n NoCollectionsToList}" HorizontalTextAlignment="Center" />
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Collections}" IsVisible="{Binding HasCollections}">
                     <controls:RepeaterView.ItemTemplate>

@@ -30,9 +30,9 @@
     <ScrollView x:Name="_scrollView">
         <StackLayout Spacing="20">
             <StackLayout StyleClass="box">
-                <StackLayout StyleClass="box-row"
+                <StackLayout StyleClass="box-row" Padding="10, 20"
                              IsVisible="{Binding HasAttachments, Converter={StaticResource inverseBool}}">
-                    <Label Text="{u:I18n NoAttachments}" />
+                    <Label Text="{u:I18n NoAttachments}" HorizontalTextAlignment="Center" />
                 </StackLayout>
                 <controls:RepeaterView ItemsSource="{Binding Attachments}" IsVisible="{Binding HasAttachments}">
                     <controls:RepeaterView.ItemTemplate>
