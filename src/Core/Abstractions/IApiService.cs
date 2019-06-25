@@ -12,6 +12,7 @@ namespace Bit.Core.Abstractions
     {
         string ApiBaseUrl { get; set; }
         string IdentityBaseUrl { get; set; }
+        string EventsBaseUrl { get; set; }
         bool UrlsSet { get; }
 
         Task DeleteCipherAsync(string id);
@@ -46,5 +47,6 @@ namespace Bit.Core.Abstractions
         Task<List<BreachAccountResponse>> GetHibpBreachAsync(string username);
         Task PostTwoFactorEmailAsync(TwoFactorEmailRequest request);
         Task PutDeviceTokenAsync(string identifier, DeviceTokenRequest request);
+        Task PostEventsCollectAsync(EventRequest request);
     }
 }

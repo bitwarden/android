@@ -52,6 +52,7 @@ namespace Bit.Core.Services
         public bool UrlsSet { get; private set; }
         public string ApiBaseUrl { get; set; }
         public string IdentityBaseUrl { get; set; }
+        public string EventsBaseUrl { get; set; }
 
         public void SetUrls(EnvironmentUrls urls)
         {
@@ -60,20 +61,27 @@ namespace Bit.Core.Services
             {
                 ApiBaseUrl = urls.Base + "/api";
                 IdentityBaseUrl = urls.Base + "/identity";
+                EventsBaseUrl = urls.Base + "/events";
                 return;
             }
-            if(!string.IsNullOrWhiteSpace(urls.Api) && !string.IsNullOrWhiteSpace(urls.Identity))
-            {
-                ApiBaseUrl = urls.Api;
-                IdentityBaseUrl = urls.Identity;
-                return;
-            }
-            // Local Dev
-            //ApiBaseUrl = "http://localhost:4000";
-            //IdentityBaseUrl = "http://localhost:33656";
+
+            ApiBaseUrl = urls.Api;
+            IdentityBaseUrl = urls.Identity;
+            EventsBaseUrl = urls.Events;
+
             // Production
-            ApiBaseUrl = "https://api.bitwarden.com";
-            IdentityBaseUrl = "https://identity.bitwarden.com";
+            if(string.IsNullOrWhiteSpace(ApiBaseUrl))
+            {
+                ApiBaseUrl = "https://api.bitwarden.com";
+            }
+            if(string.IsNullOrWhiteSpace(IdentityBaseUrl))
+            {
+                IdentityBaseUrl = "https://identity.bitwarden.com";
+            }
+            if(string.IsNullOrWhiteSpace(EventsBaseUrl))
+            {
+                EventsBaseUrl = "https://events.bitwarden.com";
+            }
         }
 
         #region Auth APIs
@@ -294,6 +302,38 @@ namespace Bit.Core.Services
         {
             return SendAsync<DeviceTokenRequest, object>(
                 HttpMethod.Put, $"/devices/identifier/{identifier}/token", request, true, false);
+        }
+
+        #endregion
+
+        #region Event APIs
+
+        public async Task PostEventsCollectAsync(EventRequest request)
+        {
+            using(var requestMessage = new HttpRequestMessage())
+            {
+                requestMessage.Method = HttpMethod.Post;
+                requestMessage.RequestUri = new Uri(string.Concat(EventsBaseUrl, "/collect"));
+                requestMessage.Headers.Add("Device-Type", _deviceType);
+                var authHeader = await GetActiveBearerTokenAsync();
+                requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
+                requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request, _jsonSettings),
+                    Encoding.UTF8, "application/json");
+                HttpResponseMessage response;
+                try
+                {
+                    response = await _httpClient.SendAsync(requestMessage);
+                }
+                catch
+                {
+                    throw new ApiException(HandleWebError());
+                }
+                if(!response.IsSuccessStatusCode)
+                {
+                    var error = await HandleErrorAsync(response, false);
+                    throw new ApiException(error);
+                }
+            }
         }
 
         #endregion

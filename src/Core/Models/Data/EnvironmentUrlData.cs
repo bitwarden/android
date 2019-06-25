@@ -8,5 +8,6 @@
         public string Icons { get; set; }
         public string Notifications { get; set; }
         public string WebVault { get; set; }
+        public string Events { get; set; }
     }
 }

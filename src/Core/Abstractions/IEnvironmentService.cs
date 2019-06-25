@@ -11,6 +11,7 @@ namespace Bit.Core.Abstractions
         string IdentityUrl { get; set; }
         string NotificationsUrl { get; set; }
         string WebVaultUrl { get; set; }
+        string EventsUrl { get; set; }
 
         string GetWebVaultUrl();
         Task<EnvironmentUrlData> SetUrlsAsync(EnvironmentUrlData urls);

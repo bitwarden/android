@@ -25,6 +25,7 @@ namespace Bit.Core.Services
         public string IdentityUrl { get; set; }
         public string IconsUrl { get; set; }
         public string NotificationsUrl { get; set; }
+        public string EventsUrl { get; set; }
 
         public string GetWebVaultUrl()
         {
@@ -58,6 +59,7 @@ namespace Bit.Core.Services
             IdentityUrl = envUrls.Identity = urls.Identity;
             IconsUrl = urls.Icons;
             NotificationsUrl = urls.Notifications;
+            EventsUrl = envUrls.Events = urls.Events;
             _apiService.SetUrls(envUrls);
         }
 
@@ -69,6 +71,7 @@ namespace Bit.Core.Services
             urls.Identity = FormatUrl(urls.Identity);
             urls.Icons = FormatUrl(urls.Icons);
             urls.Notifications = FormatUrl(urls.Notifications);
+            urls.Events = FormatUrl(urls.Events);
             await _storageService.SaveAsync(Constants.EnvironmentUrlsKey, urls);
             BaseUrl = urls.Base;
             WebVaultUrl = urls.WebVault;
@@ -76,6 +79,7 @@ namespace Bit.Core.Services
             IdentityUrl = urls.Identity;
             IconsUrl = urls.Icons;
             NotificationsUrl = urls.Notifications;
+            EventsUrl = urls.Events;
 
             var envUrls = new EnvironmentUrls();
             if(!string.IsNullOrWhiteSpace(BaseUrl))
@@ -86,6 +90,7 @@ namespace Bit.Core.Services
             {
                 envUrls.Api = ApiUrl;
                 envUrls.Identity = IdentityUrl;
+                envUrls.Events = EventsUrl;
             }
 
             _apiService.SetUrls(envUrls);
