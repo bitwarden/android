@@ -201,14 +201,14 @@ namespace Bit.Droid.Services
                 {
                     try
                     {
-                        var root = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
-                        var file = new Java.IO.File(root, "temp_camera_photo.jpg");
+                        var file = new Java.IO.File(activity.GetExternalFilesDir("temp"), "camera_photo.jpg");
                         if(!file.Exists())
                         {
                             file.ParentFile.Mkdirs();
                             file.CreateNewFile();
                         }
-                        var outputFileUri = Android.Net.Uri.FromFile(file);
+                        var outputFileUri = FileProvider.GetUriForFile(activity,
+                            "com.x8bit.bitwarden.fileprovider", file);
                         additionalIntents.AddRange(GetCameraIntents(outputFileUri));
                     }
                     catch(Java.IO.IOException) { }

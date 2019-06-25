@@ -17,6 +17,7 @@ using Bit.Core.Enums;
 using Android.Nfc;
 using Bit.App.Utilities;
 using System.Threading.Tasks;
+using Android.Support.V4.Content;
 
 namespace Bit.Droid
 {
@@ -202,9 +203,8 @@ namespace Bit.Droid
                 else
                 {
                     // camera
-                    var root = new Java.IO.File(Android.OS.Environment.ExternalStorageDirectory, "bitwarden");
-                    var file = new Java.IO.File(root, "temp_camera_photo.jpg");
-                    uri = Android.Net.Uri.FromFile(file);
+                    var file = new Java.IO.File(GetExternalFilesDir("temp"), "camera_photo.jpg");
+                    uri = FileProvider.GetUriForFile(this, "com.x8bit.bitwarden.fileprovider", file);
                     fileName = $"photo_{DateTime.UtcNow.ToString("yyyyMMddHHmmss")}.jpg";
                 }
 
