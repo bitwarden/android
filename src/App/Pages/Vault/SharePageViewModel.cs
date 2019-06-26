@@ -86,7 +86,8 @@ namespace Bit.App.Pages
 
         public async Task<bool> SubmitAsync()
         {
-            if(!Collections?.Any(c => c.Checked) ?? true)
+            var selectedCollectionIds = Collections?.Where(c => c.Checked).Select(c => c.Collection.Id);
+            if(!selectedCollectionIds?.Any() ?? true)
             {
                 await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.SelectOneCollection,
                     AppResources.Ok);
@@ -102,8 +103,7 @@ namespace Bit.App.Pages
             var cipherDomain = await _cipherService.GetAsync(CipherId);
             var cipherView = await cipherDomain.DecryptAsync();
 
-            var checkedCollectionIds = new HashSet<string>(
-                Collections.Where(c => c.Checked).Select(c => c.Collection.Id));
+            var checkedCollectionIds = new HashSet<string>(selectedCollectionIds);
             try
             {
                 await _deviceActionService.ShowLoadingAsync(AppResources.Saving);
