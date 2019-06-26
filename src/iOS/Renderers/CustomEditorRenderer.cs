@@ -1,4 +1,5 @@
 ﻿using Bit.iOS.Renderers;
+using System.ComponentModel;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -18,7 +19,22 @@ namespace Bit.iOS.Renderers
                 // Remove padding
                 Control.TextContainerInset = new UIEdgeInsets(0, 0, 0, 0);
                 Control.TextContainer.LineFragmentPadding = 0;
+                UpdateTintColor();
             }
+        }
+
+        protected override void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            base.OnElementPropertyChanged(sender, e);
+            if(e.PropertyName == Editor.TextColorProperty.PropertyName)
+            {
+                UpdateTintColor();
+            }
+        }
+
+        private void UpdateTintColor()
+        {
+            Control.TintColor = Element.TextColor.ToUIColor();
         }
     }
 }

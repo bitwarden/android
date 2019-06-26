@@ -16,6 +16,7 @@ namespace Bit.iOS.Renderers
             if(Control != null && e.NewElement is Entry)
             {
                 Control.ClearButtonMode = UITextFieldViewMode.WhileEditing;
+                UpdateTintColor();
                 UpdateFontSize();
                 iOSHelpers.SetBottomBorder(Control);
             }
@@ -29,6 +30,10 @@ namespace Bit.iOS.Renderers
                 e.PropertyName == Entry.FontSizeProperty.PropertyName)
             {
                 UpdateFontSize();
+            }
+            else if(e.PropertyName == Entry.TextColorProperty.PropertyName)
+            {
+                UpdateTintColor();
             }
         }
 
@@ -46,6 +51,11 @@ namespace Bit.iOS.Renderers
                     Control.Font = UIFont.FromDescriptor(UIFontDescriptor.PreferredBody, pointSize.Value);
                 }
             }
+        }
+
+        private void UpdateTintColor()
+        {
+            Control.TintColor = Element.TextColor.ToUIColor();
         }
     }
 }
