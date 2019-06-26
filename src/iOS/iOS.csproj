@@ -358,4 +358,13 @@
   <ItemGroup>
     <BundleResource Include="Resources\more_vert%402x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\logo_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\logo_white%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\logo_white%403x.png" />
+  </ItemGroup>
 </Project>

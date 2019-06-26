@@ -17,6 +17,8 @@ using CoreNFC;
 using Foundation;
 using HockeyApp.iOS;
 using UIKit;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.iOS;
 
 namespace Bit.iOS
 {
@@ -58,7 +60,7 @@ namespace Bit.iOS
                 }
                 else if(message.Command == "cancelLockTimer")
                 {
-                    
+
                 }
                 else if(message.Command == "updatedTheme")
                 {
@@ -87,7 +89,7 @@ namespace Bit.iOS
                         var success = data["successfully"] as bool?;
                         if(success.GetValueOrDefault())
                         {
-                            
+
                         }
                     }
                 }
@@ -116,9 +118,13 @@ namespace Bit.iOS
             };
             var backgroundView = new UIView(UIApplication.SharedApplication.KeyWindow.Frame)
             {
-                BackgroundColor = new UIColor(red: 0.93f, green: 0.94f, blue: 0.96f, alpha: 1.0f)
+                BackgroundColor = ((Color)Xamarin.Forms.Application.Current.Resources["SplashBackgroundColor"])
+                    .ToUIColor()
             };
-            var imageView = new UIImageView(new UIImage("logo.png"))
+            var theme = ThemeManager.GetTheme(false);
+            var darkbasedTheme = theme == "dark" || theme == "black" || theme == "nord";
+            var logo = new UIImage(darkbasedTheme ? "logo_white.png" : "logo.png");
+            var imageView = new UIImageView(logo)
             {
                 Center = new CoreGraphics.CGPoint(view.Center.X, view.Center.Y - 30)
             };

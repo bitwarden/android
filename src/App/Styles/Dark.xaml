@@ -15,6 +15,7 @@
     <Color x:Key="InputPlaceholderColor">#707070</Color>
 
     <Color x:Key="BackgroundColor">#303030</Color>
+    <Color x:Key="SplashBackgroundColor">#222222</Color>
     <Color x:Key="BorderColor">#191919</Color>
     <Color x:Key="DisabledIconColor">#c7c7cd</Color>
 
