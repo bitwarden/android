@@ -80,7 +80,8 @@ namespace Bit.iOS
                 }
                 else if(message.Command == "showStatusBar")
                 {
-                    UIApplication.SharedApplication.SetStatusBarHidden(!(bool)message.Data, false);
+                    Device.BeginInvokeOnMainThread(() =>
+                        UIApplication.SharedApplication.SetStatusBarHidden(!(bool)message.Data, false));
                 }
                 else if(message.Command == "syncCompleted")
                 {
