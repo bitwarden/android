@@ -66,6 +66,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Utilities\AutofillHelpers.cs" />
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Models\Context.cs" />
@@ -85,6 +86,10 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\App\App.csproj">
+      <Project>{ee44c6a1-2a85-45fe-8d9b-bf1d5f88809c}</Project>
+      <Name>App</Name>
+    </ProjectReference>
     <ProjectReference Include="..\iOS.Core\iOS.Core.csproj">
       <Project>{e71f3053-056c-4381-9638-048ed73bdff6}</Project>
       <Name>iOS.Core</Name>
