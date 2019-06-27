@@ -275,7 +275,7 @@ namespace Bit.App.Pages
                 await _cipherService.DeleteWithServerAsync(Cipher.Id);
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.ItemDeleted);
-                _messagingService.Send("deletedCipher");
+                _messagingService.Send("deletedCipher", Cipher);
                 return true;
             }
             catch(ApiException e)

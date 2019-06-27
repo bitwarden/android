@@ -428,7 +428,7 @@ namespace Bit.App.Pages
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null,
                     EditMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
-                _messagingService.Send(EditMode ? "editedCipher" : "addedCipher");
+                _messagingService.Send(EditMode ? "editedCipher" : "addedCipher", Cipher.Id);
 
                 if((Page as AddEditPage).FromAutofillFramework)
                 {
@@ -469,7 +469,7 @@ namespace Bit.App.Pages
                 await _cipherService.DeleteWithServerAsync(Cipher.Id);
                 await _deviceActionService.HideLoadingAsync();
                 _platformUtilsService.ShowToast("success", null, AppResources.ItemDeleted);
-                _messagingService.Send("deletedCipher");
+                _messagingService.Send("deletedCipher", Cipher);
                 return true;
             }
             catch(ApiException e)

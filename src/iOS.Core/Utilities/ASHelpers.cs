@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
+using Bit.Core.Utilities;
 
 namespace Bit.iOS.Core.Utilities
 {
     public static class ASHelpers
     {
-        public static async Task ReplaceAllIdentities(ICipherService cipherService)
+        public static async Task ReplaceAllIdentities()
         {
+            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             if(await AutofillEnabled())
             {
                 var identities = new List<ASPasswordCredentialIdentity>();
@@ -42,8 +44,9 @@ namespace Bit.iOS.Core.Utilities
             return state != null && state.Enabled;
         }
 
-        public static async Task<ASPasswordCredentialIdentity> GetCipherIdentityAsync(string cipherId, ICipherService cipherService)
+        public static async Task<ASPasswordCredentialIdentity> GetCipherIdentityAsync(string cipherId)
         {
+            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             var cipher = await cipherService.GetAsync(cipherId);
             if(cipher == null)
             {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using AuthenticationServices;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Services;
@@ -51,7 +52,7 @@ namespace Bit.iOS
             AppearanceAdjustments();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 
-            _broadcasterService.Subscribe(nameof(AppDelegate), (message) =>
+            _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
             {
                 if(message.Command == "scheduleLockTimer")
                 {
@@ -87,23 +88,59 @@ namespace Bit.iOS
                     if(message.Data is Dictionary<string, object> data && data.ContainsKey("successfully"))
                     {
                         var success = data["successfully"] as bool?;
-                        if(success.GetValueOrDefault())
+                        if(success.GetValueOrDefault() && _deviceActionService.SystemMajorVersion() >= 12)
                         {
-
+                            await ASHelpers.ReplaceAllIdentities();
                         }
                     }
                 }
                 else if(message.Command == "addedCipher" || message.Command == "editedCipher")
                 {
-
+                    if(_deviceActionService.SystemMajorVersion() >= 12)
+                    {
+                        if(await ASHelpers.IdentitiesCanIncremental())
+                        {
+                            var cipherId = message.Data as string;
+                            if(message.Command == "addedCipher" && !string.IsNullOrWhiteSpace(cipherId))
+                            {
+                                var identity = await ASHelpers.GetCipherIdentityAsync(cipherId);
+                                if(identity == null)
+                                {
+                                    return;
+                                }
+                                await ASCredentialIdentityStore.SharedStore?.SaveCredentialIdentitiesAsync(
+                                    new ASPasswordCredentialIdentity[] { identity });
+                                return;
+                            }
+                        }
+                        await ASHelpers.ReplaceAllIdentities();
+                    }
                 }
                 else if(message.Command == "deletedCipher")
                 {
-
+                    if(_deviceActionService.SystemMajorVersion() >= 12)
+                    {
+                        if(await ASHelpers.IdentitiesCanIncremental())
+                        {
+                            var identity = ASHelpers.ToCredentialIdentity(
+                                message.Data as Bit.Core.Models.View.CipherView);
+                            if(identity == null)
+                            {
+                                return;
+                            }
+                            await ASCredentialIdentityStore.SharedStore?.RemoveCredentialIdentitiesAsync(
+                                new ASPasswordCredentialIdentity[] { identity });
+                            return;
+                        }
+                        await ASHelpers.ReplaceAllIdentities();
+                    }
                 }
                 else if(message.Command == "loggedOut")
                 {
-
+                    if(_deviceActionService.SystemMajorVersion() >= 12)
+                    {
+                        await ASCredentialIdentityStore.SharedStore?.RemoveAllCredentialIdentitiesAsync();
+                    }
                 }
             });
 

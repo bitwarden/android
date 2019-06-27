@@ -175,7 +175,7 @@ namespace Bit.iOS.Core.Controllers
                 await loadingAlert.DismissViewControllerAsync(true);
                 if(await ASHelpers.IdentitiesCanIncremental())
                 {
-                    var identity = await ASHelpers.GetCipherIdentityAsync(cipherDomain.Id, _cipherService);
+                    var identity = await ASHelpers.GetCipherIdentityAsync(cipherDomain.Id);
                     if(identity != null)
                     {
                         await ASCredentialIdentityStore.SharedStore.SaveCredentialIdentitiesAsync(
@@ -184,7 +184,7 @@ namespace Bit.iOS.Core.Controllers
                 }
                 else
                 {
-                    await ASHelpers.ReplaceAllIdentities(_cipherService);
+                    await ASHelpers.ReplaceAllIdentities();
                 }
                 Success();
             }
