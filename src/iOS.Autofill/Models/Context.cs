@@ -1,5 +1,4 @@
-﻿/*
-using AuthenticationServices;
+﻿using AuthenticationServices;
 using Bit.iOS.Core.Models;
 using Foundation;
 
@@ -13,4 +12,3 @@ namespace Bit.iOS.Autofill.Models
         public bool Configuring { get; set; }
     }
 }
-*/

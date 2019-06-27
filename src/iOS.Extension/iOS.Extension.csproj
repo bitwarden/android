@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
     <ProjectGuid>{324BE76C-38FA-4F11-8BB1-95C7B3B1B545}</ProjectGuid>
     <ProjectTypeGuids>{EE2C853D-36AF-4FDB-B1AD-8E90477E2198};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Bit.iOS.Extension</RootNamespace>
     <AssemblyName>BitwardeniOSExtension</AssemblyName>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
