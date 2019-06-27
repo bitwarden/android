@@ -10,6 +10,7 @@ namespace Bit.iOS.Core.Models
     {
         public CipherViewModel(CipherView cipher)
         {
+            CipherView = cipher;
             Id = cipher.Id;
             Name = cipher.Name;
             Username = cipher.Login?.Username;
@@ -26,6 +27,7 @@ namespace Bit.iOS.Core.Models
         public List<LoginUriModel> Uris { get; set; }
         public string Totp { get; set; }
         public List<Tuple<string, string>> Fields { get; set; }
+        public CipherView CipherView { get; set; }
 
         public class LoginUriModel
         {

@@ -1,0 +1,148 @@
+﻿using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Models.View;
+using Bit.Core.Utilities;
+using Bit.iOS.Core.Models;
+using Foundation;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using UIKit;
+
+namespace Bit.iOS.Core.Views
+{
+    public class ExtensionTableSource : UITableViewSource
+    {
+        private const string CellIdentifier = "TableCell";
+
+        private IEnumerable<CipherViewModel> _allItems = new List<CipherViewModel>();
+        protected ICipherService _cipherService;
+        protected ITotpService _totpService;
+        protected IUserService _userService;
+        private AppExtensionContext _context;
+        private UIViewController _controller;
+
+        public ExtensionTableSource(AppExtensionContext context, UIViewController controller)
+        {
+            _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
+            _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _context = context;
+            _controller = controller;
+        }
+
+        public IEnumerable<CipherViewModel> Items { get; private set; }
+
+        public async Task LoadItemsAsync(bool urlFilter = true, string searchFilter = null)
+        {
+            var combinedLogins = new List<CipherView>();
+
+            if(urlFilter)
+            {
+                var logins = await _cipherService.GetAllDecryptedByUrlAsync(_context.UrlString);
+                if(logins?.Item1 != null)
+                {
+                    combinedLogins.AddRange(logins.Item1);
+                }
+                if(logins?.Item2 != null)
+                {
+                    combinedLogins.AddRange(logins.Item2);
+                }
+            }
+            else
+            {
+                var logins = await _cipherService.GetAllDecryptedAsync();
+                combinedLogins.AddRange(logins);
+            }
+
+            _allItems = combinedLogins
+                .Where(c => c.Type == Bit.Core.Enums.CipherType.Login)
+                .Select(s => new CipherViewModel(s))
+                .OrderBy(s => s.Name)
+                .ThenBy(s => s.Username)
+                .ToList() ?? new List<CipherViewModel>();
+            FilterResults(searchFilter, new CancellationToken());
+        }
+
+        public void FilterResults(string searchFilter, CancellationToken ct)
+        {
+            ct.ThrowIfCancellationRequested();
+
+            if(string.IsNullOrWhiteSpace(searchFilter))
+            {
+                Items = _allItems.ToList();
+            }
+            else
+            {
+                searchFilter = searchFilter.ToLower();
+                Items = _allItems
+                    .Where(s => s.Name?.ToLower().Contains(searchFilter) ?? false ||
+                        (s.Username?.ToLower().Contains(searchFilter) ?? false) ||
+                        (s.Uris?.FirstOrDefault()?.Uri?.ToLower().Contains(searchFilter) ?? false))
+                    .TakeWhile(s => !ct.IsCancellationRequested)
+                    .ToArray();
+            }
+        }
+
+        public IEnumerable<CipherViewModel> TableItems { get; set; }
+
+        public override nint RowsInSection(UITableView tableview, nint section)
+        {
+            return Items == null || Items.Count() == 0 ? 1 : Items.Count();
+        }
+
+        public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
+        {
+            if(Items == null || Items.Count() == 0)
+            {
+                var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
+                noDataCell.TextLabel.Text = AppResources.NoItemsTap;
+                noDataCell.TextLabel.TextAlignment = UITextAlignment.Center;
+                noDataCell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
+                noDataCell.TextLabel.Lines = 0;
+                return noDataCell;
+            }
+
+            var cell = tableView.DequeueReusableCell(CellIdentifier);
+
+            // if there are no cells to reuse, create a new one
+            if(cell == null)
+            {
+                Debug.WriteLine("BW Log, Make new cell for list.");
+                cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
+                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor =
+                    new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
+            }
+            return cell;
+        }
+
+        public override void WillDisplay(UITableView tableView, UITableViewCell cell, NSIndexPath indexPath)
+        {
+            if(Items == null || Items.Count() == 0 || cell == null)
+            {
+                return;
+            }
+
+            var item = Items.ElementAt(indexPath.Row);
+            cell.TextLabel.Text = item.Name;
+            cell.DetailTextLabel.Text = item.Username;
+        }
+
+        public async Task<string> GetTotpAsync(CipherViewModel item)
+        {
+            string totp = null;
+            var accessPremium = await _userService.CanAccessPremiumAsync();
+            if(accessPremium || (item?.CipherView.OrganizationUseTotp ?? false))
+            {
+                if(item != null && !string.IsNullOrWhiteSpace(item.Totp))
+                {
+                    totp = await _totpService.GetCodeAsync(item.Totp);
+                }
+            }
+            return totp;
+        }
+    }
+}

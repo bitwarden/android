@@ -54,6 +54,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ExtendedUITableViewController.cs" />
+    <Compile Include="Controllers\ExtendedUIViewController.cs" />
+    <Compile Include="Controllers\LockPasswordViewController.cs" />
+    <Compile Include="Controllers\LoginAddViewController.cs" />
+    <Compile Include="Controllers\PasswordGeneratorViewController.cs" />
     <Compile Include="Models\AppExtensionContext.cs" />
     <Compile Include="Models\CipherViewModel.cs" />
     <Compile Include="Models\PasswordGenerationOptions.cs" />
@@ -66,6 +71,14 @@
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
     <Compile Include="Utilities\ThemeHelpers.cs" />
+    <Compile Include="Views\ExtensionSearchDelegate.cs" />
+    <Compile Include="Views\ExtensionTableSource.cs" />
+    <Compile Include="Views\FormEntryTableViewCell.cs" />
+    <Compile Include="Views\ISelectable.cs" />
+    <Compile Include="Views\PickerTableViewCell.cs" />
+    <Compile Include="Views\SliderTableViewCell.cs" />
+    <Compile Include="Views\StepperTableViewCell.cs" />
+    <Compile Include="Views\SwitchTableViewCell.cs" />
     <Compile Include="Views\Toast.cs" />
   </ItemGroup>
   <ItemGroup>
