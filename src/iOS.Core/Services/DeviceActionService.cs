@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
@@ -20,7 +17,7 @@ using Photos;
 using UIKit;
 using Xamarin.Forms;
 
-namespace Bit.iOS.Services
+namespace Bit.iOS.Core.Services
 {
     public class DeviceActionService : IDeviceActionService
     {
@@ -132,7 +129,7 @@ namespace Bit.iOS.Services
                     NSFileManager.DefaultManager.Remove(item, out NSError itemError);
                 }
             }
-            await _storageService.SaveAsync(Constants.LastFileCacheClearKey, DateTime.UtcNow);
+            await _storageService.SaveAsync(Bit.Core.Constants.LastFileCacheClearKey, DateTime.UtcNow);
         }
 
         public Task SelectFileAsync()

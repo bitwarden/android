@@ -122,7 +122,6 @@
     <Compile Include="Renderers\CustomLabelRenderer.cs" />
     <Compile Include="Renderers\CustomContentPageRenderer.cs" />
     <Compile Include="Renderers\HybridWebViewRenderer.cs" />
-    <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Services\iOSPushNotificationHandler.cs" />
     <Compile Include="Services\iOSPushNotificationService.cs" />
     <Compile Include="Utilities\iOSHelpers.cs" />

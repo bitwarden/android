@@ -57,6 +57,7 @@
     <Compile Include="Models\AppExtensionContext.cs" />
     <Compile Include="Models\CipherViewModel.cs" />
     <Compile Include="Models\PasswordGenerationOptions.cs" />
+    <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Utilities\HockeyAppCrashManagerDelegate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\CryptoPrimitiveService.cs" />
