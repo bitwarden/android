@@ -74,6 +74,8 @@
     </Compile>
     <Compile Include="ActionViewController.cs" />
     <InterfaceDefinition Include="MainInterface.storyboard" />
+    <BundleResource Include="Resources\FontAwesome.ttf" />
+    <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
