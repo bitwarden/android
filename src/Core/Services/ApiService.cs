@@ -8,7 +8,6 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -22,7 +21,7 @@ namespace Bit.Core.Services
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
-        private readonly HttpClient _httpClient;
+        private readonly HttpClient _httpClient = new HttpClient();
         private readonly ITokenService _tokenService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly Func<bool, Task> _logoutCallbackAsync;
@@ -31,22 +30,13 @@ namespace Bit.Core.Services
         public ApiService(
             ITokenService tokenService,
             IPlatformUtilsService platformUtilsService,
-            Func<bool, Task> logoutCallbackAsync,
-            HttpMessageHandler httpMessageHandler = null)
+            Func<bool, Task> logoutCallbackAsync)
         {
             _tokenService = tokenService;
             _platformUtilsService = platformUtilsService;
             _logoutCallbackAsync = logoutCallbackAsync;
             var device = _platformUtilsService.GetDevice();
             _deviceType = device.ToString();
-            if(httpMessageHandler != null)
-            {
-                _httpClient = new HttpClient(httpMessageHandler);
-            }
-            else
-            {
-                _httpClient = new HttpClient();
-            }
         }
 
         public bool UrlsSet { get; private set; }

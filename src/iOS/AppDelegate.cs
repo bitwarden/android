@@ -6,7 +6,6 @@ using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
-using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -40,7 +39,7 @@ namespace Bit.iOS
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
-            Xamarin.Forms.Forms.Init();
+            Forms.Init();
             InitApp();
             Bootstrap();
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");

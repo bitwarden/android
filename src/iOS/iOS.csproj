@@ -140,7 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
@@ -164,6 +163,12 @@
       <Project>{e71f3053-056c-4381-9638-048ed73bdff6}</Project>
       <Name>iOS.Core</Name>
       <IsAppExtension>false</IsAppExtension>
+      <IsWatchApp>false</IsWatchApp>
+    </ProjectReference>
+    <ProjectReference Include="..\iOS.Extension\iOS.Extension.csproj">
+      <Project>{324be76c-38fa-4f11-8bb1-95c7b3b1b545}</Project>
+      <Name>iOS.Extension</Name>
+      <IsAppExtension>true</IsAppExtension>
       <IsWatchApp>false</IsWatchApp>
     </ProjectReference>
   </ItemGroup>

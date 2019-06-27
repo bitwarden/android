@@ -40,7 +40,7 @@ namespace Bit.Droid
             if(ServiceContainer.RegisteredServices.Count == 0)
             {
                 RegisterLocalServices();
-                ServiceContainer.Init(new AndroidClientHandler());
+                ServiceContainer.Init();
                 if(App.Migration.MigrationHelpers.NeedsMigration())
                 {
                     var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
