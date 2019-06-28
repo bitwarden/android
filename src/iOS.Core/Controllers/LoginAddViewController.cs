@@ -22,9 +22,9 @@ namespace Bit.iOS.Core.Controllers
         private IFolderService _folderService;
         private IEnumerable<FolderView> _folders;
 
-        public LoginAddViewController(IntPtr handle) : base(handle)
-        {
-        }
+        public LoginAddViewController(IntPtr handle)
+            : base(handle)
+        { }
 
         public AppExtensionContext Context { get; set; }
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);

@@ -276,8 +276,10 @@ namespace Bit.iOS
         private void ShowAppExtension()
         {
             var itemProvider = new NSItemProvider(new NSDictionary(), Core.Constants.UTTypeAppExtensionSetup);
-            var extensionItem = new NSExtensionItem();
-            extensionItem.Attachments = new NSItemProvider[] { itemProvider };
+            var extensionItem = new NSExtensionItem
+            {
+                Attachments = new NSItemProvider[] { itemProvider }
+            };
             var activityViewController = new UIActivityViewController(new NSExtensionItem[] { extensionItem }, null);
             activityViewController.CompletionHandler = (activityType, completed) =>
             {

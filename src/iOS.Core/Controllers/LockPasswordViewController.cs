@@ -39,7 +39,7 @@ namespace Bit.iOS.Core.Controllers
         public abstract Action Cancel { get; }
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
-            AppResources.MasterPassword, useLabelAsPlaceholder: true);
+            AppResources.MasterPassword);
 
         public override void ViewWillAppear(bool animated)
         {
@@ -70,7 +70,7 @@ namespace Bit.iOS.Core.Controllers
 
             var descriptor = UIFontDescriptor.PreferredBody;
 
-            MasterPasswordCell.TextField.Placeholder = _pinLock ? AppResources.PIN : AppResources.MasterPassword;
+            MasterPasswordCell.Label.Text = _pinLock ? AppResources.PIN : AppResources.MasterPassword;
             MasterPasswordCell.TextField.SecureTextEntry = true;
             MasterPasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Go;
             MasterPasswordCell.TextField.ShouldReturn += (UITextField tf) =>
@@ -78,6 +78,10 @@ namespace Bit.iOS.Core.Controllers
                 CheckPasswordAsync().GetAwaiter().GetResult();
                 return true;
             };
+            if(_pinLock)
+            {
+                MasterPasswordCell.TextField.KeyboardType = UIKeyboardType.NumberPad;
+            }
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 70;
@@ -94,7 +98,7 @@ namespace Bit.iOS.Core.Controllers
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(500);
-                    PromptFingerprintAsync().GetAwaiter().GetResult();
+                    NSRunLoop.Main.BeginInvokeOnMainThread(async () => await PromptFingerprintAsync());
                 });
             }
         }
@@ -107,8 +111,6 @@ namespace Bit.iOS.Core.Controllers
                 MasterPasswordCell.TextField.BecomeFirstResponder();
             }
         }
-
-        // TODO: Try fingerprint again button action
 
         protected async Task CheckPasswordAsync()
         {
@@ -254,6 +256,16 @@ namespace Bit.iOS.Core.Controllers
                         return _controller.MasterPasswordCell;
                     }
                 }
+                else if(indexPath.Section == 1)
+                {
+                    if(indexPath.Row == 0)
+                    {
+                        var cell = new UITableViewCell();
+                        cell.TextLabel.TextColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
+                        cell.TextLabel.Text = AppResources.UseFingerprintToUnlock;
+                        return cell;
+                    }
+                }
                 return new UITableViewCell();
             }
 
@@ -264,12 +276,12 @@ namespace Bit.iOS.Core.Controllers
 
             public override nint NumberOfSections(UITableView tableView)
             {
-                return 1;
+                return _controller._fingerprintLock ? 2 : 1;
             }
 
             public override nint RowsInSection(UITableView tableview, nint section)
             {
-                if(section == 0)
+                if(section <= 1)
                 {
                     return 1;
                 }
@@ -278,7 +290,7 @@ namespace Bit.iOS.Core.Controllers
 
             public override nfloat GetHeightForHeader(UITableView tableView, nint section)
             {
-                return UITableView.AutomaticDimension;
+                return section == 1 ? 0.00001f : UITableView.AutomaticDimension;
             }
 
             public override string TitleForHeader(UITableView tableView, nint section)
@@ -290,6 +302,11 @@ namespace Bit.iOS.Core.Controllers
             {
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
+                if(indexPath.Section == 1 && indexPath.Row == 0)
+                {
+                    var task = _controller.PromptFingerprintAsync();
+                    return;
+                }
                 var cell = tableView.CellAt(indexPath);
                 if(cell == null)
                 {

@@ -182,7 +182,11 @@ namespace Bit.iOS.Extension
             var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
             var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
             var returningItems = new NSExtensionItem[] { resultsItem };
-            NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CompleteRequest(returningItems, null));
+            NSRunLoop.Main.BeginInvokeOnMainThread(() =>
+            {
+                ServiceContainer.Reset();
+                ExtensionContext?.CompleteRequest(returningItems, null);
+            });
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> dictAction,

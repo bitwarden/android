@@ -5,7 +5,8 @@ namespace Bit.iOS.Extension
 {
     public partial class LockPasswordViewController : Core.Controllers.LockPasswordViewController
     {
-        public LockPasswordViewController(IntPtr handle) : base(handle)
+        public LockPasswordViewController(IntPtr handle)
+            : base(handle)
         { }
 
         public LoadingViewController LoadingController { get; set; }

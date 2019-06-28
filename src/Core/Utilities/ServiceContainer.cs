@@ -97,5 +97,11 @@ namespace Bit.Core.Utilities
             }
             throw new Exception($"Service {serviceName} is not registered.");
         }
+
+        public static void Reset()
+        {
+            Inited = false;
+            RegisteredServices.Clear();
+        }
     }
 }
