@@ -122,29 +122,23 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)
         {
-            var navController = segue.DestinationViewController as UINavigationController;
-            if(navController != null)
+            if(segue.DestinationViewController is UINavigationController navController)
             {
-                var listLoginController = navController.TopViewController as LoginListViewController;
-                var listSearchController = navController.TopViewController as LoginSearchViewController;
-                var passwordViewController = navController.TopViewController as LockPasswordViewController;
-                var setupViewController = navController.TopViewController as SetupViewController;
-
-                if(listLoginController != null)
+                if(navController.TopViewController is LoginListViewController listLoginController)
                 {
                     listLoginController.Context = _context;
                     listLoginController.CPViewController = this;
                 }
-                else if(listSearchController != null)
+                else if(navController.TopViewController is LoginSearchViewController listSearchController)
                 {
                     listSearchController.Context = _context;
                     listSearchController.CPViewController = this;
                 }
-                else if(passwordViewController != null)
+                else if(navController.TopViewController is LockPasswordViewController passwordViewController)
                 {
                     passwordViewController.CPViewController = this;
                 }
-                else if(setupViewController != null)
+                else if(navController.TopViewController is SetupViewController setupViewController)
                 {
                     setupViewController.CPViewController = this;
                 }

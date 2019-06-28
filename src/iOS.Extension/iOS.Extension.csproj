@@ -64,13 +64,37 @@
     <AppExtensionDebugBundleId />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="LoadingViewController.cs" />
+    <Compile Include="LoadingViewController.designer.cs">
+      <DependentUpon>LoadingViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LockPasswordViewController.cs" />
+    <Compile Include="LockPasswordViewController.designer.cs">
+      <DependentUpon>LockPasswordViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoginAddViewController.cs" />
+    <Compile Include="LoginAddViewController.designer.cs">
+      <DependentUpon>LoginAddViewController.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoginListViewController.cs" />
+    <Compile Include="LoginListViewController.designer.cs">
+      <DependentUpon>LoginListViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="SetupViewController.cs" />
+    <Compile Include="SetupViewController.designer.cs">
+      <DependentUpon>SetupViewController.cs</DependentUpon>
+    </Compile>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Models\FillScript.cs" />
     <Compile Include="Models\PageDetails.cs" />
+    <Compile Include="PasswordGeneratorViewController.cs" />
+    <Compile Include="PasswordGeneratorViewController.designer.cs">
+      <DependentUpon>PasswordGeneratorViewController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ActionViewController.designer.cs">
       <DependentUpon>ActionViewController.cs</DependentUpon>
@@ -90,6 +114,10 @@
     <ProjectReference Include="..\App\App.csproj">
       <Project>{ee44c6a1-2a85-45fe-8d9b-bf1d5f88809c}</Project>
       <Name>App</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{4b8a8c41-9820-4341-974c-41e65b7f4366}</Project>
+      <Name>Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\iOS.Core\iOS.Core.csproj">
       <Project>{e71f3053-056c-4381-9638-048ed73bdff6}</Project>
