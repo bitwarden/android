@@ -22,6 +22,7 @@ namespace Bit.iOS.Core.Views
         protected ICipherService _cipherService;
         protected ITotpService _totpService;
         protected IUserService _userService;
+        protected ISearchService _searchService;
         private AppExtensionContext _context;
         private UIViewController _controller;
 
@@ -30,6 +31,7 @@ namespace Bit.iOS.Core.Views
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _totpService = ServiceContainer.Resolve<ITotpService>("totpService");
             _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _searchService = ServiceContainer.Resolve<ISearchService>("searchService");
             _context = context;
             _controller = controller;
         }
@@ -61,8 +63,6 @@ namespace Bit.iOS.Core.Views
             _allItems = combinedLogins
                 .Where(c => c.Type == Bit.Core.Enums.CipherType.Login)
                 .Select(s => new CipherViewModel(s))
-                .OrderBy(s => s.Name)
-                .ThenBy(s => s.Username)
                 .ToList() ?? new List<CipherViewModel>();
             FilterResults(searchFilter, new CancellationToken());
         }
@@ -78,12 +78,9 @@ namespace Bit.iOS.Core.Views
             else
             {
                 searchFilter = searchFilter.ToLower();
-                Items = _allItems
-                    .Where(s => s.Name?.ToLower().Contains(searchFilter) ?? false ||
-                        (s.Username?.ToLower().Contains(searchFilter) ?? false) ||
-                        (s.Uris?.FirstOrDefault()?.Uri?.ToLower().Contains(searchFilter) ?? false))
-                    .TakeWhile(s => !ct.IsCancellationRequested)
-                    .ToArray();
+                var results = _searchService.SearchCiphersAsync(searchFilter,
+                    c => c.Type == Bit.Core.Enums.CipherType.Login, null, ct).GetAwaiter().GetResult();
+                Items = results.Select(s => new CipherViewModel(s)).ToArray();
             }
         }
 

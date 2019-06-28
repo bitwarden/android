@@ -70,6 +70,7 @@
     <Compile Include="Services\CryptoPrimitiveService.cs" />
     <Compile Include="Services\KeyChainStorageService.cs" />
     <Compile Include="Services\LocalizeService.cs" />
+    <Compile Include="Utilities\iOSCoreHelpers.cs" />
     <Compile Include="Utilities\ThemeHelpers.cs" />
     <Compile Include="Views\ExtensionSearchDelegate.cs" />
     <Compile Include="Views\ExtensionTableSource.cs" />

@@ -5,23 +5,38 @@ using Bit.iOS.Core.Views;
 using Bit.App.Resources;
 using Bit.iOS.Core.Utilities;
 using Bit.App.Abstractions;
-using System.Linq;
-using Bit.iOS.Core.Controllers;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
+using System.Threading.Tasks;
+using Bit.Core.Models.Domain;
+using Bit.Core.Enums;
 
 namespace Bit.iOS.Core.Controllers
 {
     public abstract class LockPasswordViewController : ExtendedUITableViewController
     {
-        //private IAuthService _authService;
-        //private ICryptoService _cryptoService;
+        private ILockService _lockService;
+        private ICryptoService _cryptoService;
+        private IDeviceActionService _deviceActionService;
+        private IUserService _userService;
+        private IStorageService _storageService;
+        private IStorageService _secureStorageService;
+        private IPlatformUtilsService _platformUtilsService;
+        private Tuple<bool, bool> _pinSet;
+        private bool _hasKey;
+        private bool _pinLock;
+        private bool _fingerprintLock;
+        private int _invalidPinAttempts;
 
-        public LockPasswordViewController(IntPtr handle) : base(handle)
+        public LockPasswordViewController(IntPtr handle)
+            : base(handle)
         { }
 
         public abstract UINavigationItem BaseNavItem { get; }
         public abstract UIBarButtonItem BaseCancelButton { get; }
         public abstract UIBarButtonItem BaseSubmitButton { get; }
         public abstract Action Success { get; }
+        public abstract Action Cancel { get; }
 
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword, useLabelAsPlaceholder: true);
@@ -35,21 +50,32 @@ namespace Bit.iOS.Core.Controllers
 
         public override void ViewDidLoad()
         {
-            // _authService = Resolver.Resolve<IAuthService>();
-            // _cryptoService = Resolver.Resolve<ICryptoService>();
+            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _cryptoService = ServiceContainer.Resolve<ICryptoService>("cryptoService");
+            _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            _userService = ServiceContainer.Resolve<IUserService>("userService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
+            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
 
-            BaseNavItem.Title = AppResources.VerifyMasterPassword;
+            _pinSet = _lockService.IsPinLockSetAsync().GetAwaiter().GetResult();
+            _hasKey = _cryptoService.HasKeyAsync().GetAwaiter().GetResult();
+            _pinLock = (_pinSet.Item1 && _hasKey) || _pinSet.Item2;
+            _fingerprintLock = _lockService.IsFingerprintLockSetAsync().GetAwaiter().GetResult();
+
+            BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
             BaseSubmitButton.Title = AppResources.Submit;
             View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;
 
+            MasterPasswordCell.TextField.Placeholder = _pinLock ? AppResources.PIN : AppResources.MasterPassword;
             MasterPasswordCell.TextField.SecureTextEntry = true;
             MasterPasswordCell.TextField.ReturnKeyType = UIReturnKeyType.Go;
             MasterPasswordCell.TextField.ShouldReturn += (UITextField tf) =>
             {
-                // CheckPassword();
+                CheckPasswordAsync().GetAwaiter().GetResult();
                 return true;
             };
 
@@ -59,49 +85,156 @@ namespace Bit.iOS.Core.Controllers
             TableView.AllowsSelection = true;
 
             base.ViewDidLoad();
+
+            if(_fingerprintLock)
+            {
+                var fingerprintButtonText = _deviceActionService.SupportsFaceId() ? AppResources.UseFaceIDToUnlock :
+                    AppResources.UseFingerprintToUnlock;
+                // TODO: set button text
+                var tasks = Task.Run(async () =>
+                {
+                    await Task.Delay(500);
+                    PromptFingerprintAsync().GetAwaiter().GetResult();
+                });
+            }
         }
 
         public override void ViewDidAppear(bool animated)
         {
             base.ViewDidAppear(animated);
-            MasterPasswordCell.TextField.BecomeFirstResponder();
+            if(!_fingerprintLock)
+            {
+                MasterPasswordCell.TextField.BecomeFirstResponder();
+            }
         }
 
-        /*
-        protected void CheckPassword()
+        // TODO: Try fingerprint again button action
+
+        protected async Task CheckPasswordAsync()
         {
             if(string.IsNullOrWhiteSpace(MasterPasswordCell.TextField.Text))
             {
                 var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
-                    string.Format(AppResources.ValidationFieldRequired, AppResources.MasterPassword), AppResources.Ok);
+                    string.Format(AppResources.ValidationFieldRequired,
+                        _pinLock ? AppResources.PIN : AppResources.MasterPassword),
+                    AppResources.Ok);
                 PresentViewController(alert, true, null);
                 return;
             }
 
-            var key = _cryptoService.MakeKeyFromPassword(MasterPasswordCell.TextField.Text, _authService.Email,
-                 _authService.Kdf, _authService.KdfIterations);
-            if(key.Key.SequenceEqual(_cryptoService.Key.Key))
+            var email = await _userService.GetEmailAsync();
+            var kdf = await _userService.GetKdfAsync();
+            var kdfIterations = await _userService.GetKdfIterationsAsync();
+            var inputtedValue = MasterPasswordCell.TextField.Text;
+
+            if(_pinLock)
             {
-                _appSettingsService.Locked = false;
-                MasterPasswordCell.TextField.ResignFirstResponder();
-                Success();
+                var failed = true;
+                try
+                {
+                    if(_pinSet.Item1)
+                    {
+                        var protectedPin = await _storageService.GetAsync<string>(Bit.Core.Constants.ProtectedPin);
+                        var decPin = await _cryptoService.DecryptToUtf8Async(new CipherString(protectedPin));
+                        failed = decPin != inputtedValue;
+                        _lockService.PinLocked = failed;
+                        if(!failed)
+                        {
+                            DoContinue();
+                        }
+                    }
+                    else
+                    {
+                        var key2 = await _cryptoService.MakeKeyFromPinAsync(inputtedValue, email,
+                            kdf.GetValueOrDefault(KdfType.PBKDF2_SHA256), kdfIterations.GetValueOrDefault(5000));
+                        failed = false;
+                        await SetKeyAndContinueAsync(key2);
+                    }
+                }
+                catch
+                {
+                    failed = true;
+                }
+                if(failed)
+                {
+                    _invalidPinAttempts++;
+                    if(_invalidPinAttempts >= 5)
+                    {
+                        Cancel?.Invoke();
+                        return;
+                    }
+                    InvalidValue();
+                }
             }
             else
             {
-                // TODO: keep track of invalid attempts and logout?
+                var key2 = await _cryptoService.MakeKeyAsync(inputtedValue, email, kdf, kdfIterations);
+                var keyHash = await _cryptoService.HashPasswordAsync(inputtedValue, key2);
+                var storedKeyHash = await _cryptoService.GetKeyHashAsync();
+                if(storedKeyHash == null)
+                {
+                    var oldKey = await _secureStorageService.GetAsync<string>("oldKey");
+                    if(key2.KeyB64 == oldKey)
+                    {
+                        await _secureStorageService.RemoveAsync("oldKey");
+                        await _cryptoService.SetKeyHashAsync(keyHash);
+                        storedKeyHash = keyHash;
+                    }
+                }
+                if(storedKeyHash != null && keyHash != null && storedKeyHash == keyHash)
+                {
+                    await SetKeyAndContinueAsync(key2);
+                }
+                else
+                {
+                    InvalidValue();
+                }
+            }
+        }
 
-                var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
-                    string.Format(null, AppResources.InvalidMasterPassword), AppResources.Ok, (a) =>
+        private async Task SetKeyAndContinueAsync(SymmetricCryptoKey key)
+        {
+            if(!_hasKey)
+            {
+                await _cryptoService.SetKeyAsync(key);
+            }
+            DoContinue();
+        }
+
+        private void DoContinue()
+        {
+            MasterPasswordCell.TextField.ResignFirstResponder();
+            Success();
+        }
+
+        public async Task PromptFingerprintAsync()
+        {
+            if(!_fingerprintLock)
+            {
+                return;
+            }
+            var success = await _platformUtilsService.AuthenticateFingerprintAsync(null,
+                _pinLock ? AppResources.PIN : AppResources.MasterPassword,
+                () => MasterPasswordCell.TextField.BecomeFirstResponder());
+            _lockService.FingerprintLocked = !success;
+            if(success)
+            {
+                DoContinue();
+            }
+        }
+
+        private void InvalidValue()
+        {
+            var alert = Dialogs.CreateAlert(AppResources.AnErrorHasOccurred,
+                string.Format(null, _pinLock ? AppResources.PIN : AppResources.InvalidMasterPassword),
+                AppResources.Ok, (a) =>
                     {
 
                         MasterPasswordCell.TextField.Text = string.Empty;
                         MasterPasswordCell.TextField.BecomeFirstResponder();
                     });
-
-                PresentViewController(alert, true, null);
-            }
+            PresentViewController(alert, true, null);
         }
-        */
 
         public class TableSource : UITableViewSource
         {
@@ -121,7 +254,6 @@ namespace Bit.iOS.Core.Controllers
                         return _controller.MasterPasswordCell;
                     }
                 }
-
                 return new UITableViewCell();
             }
 
@@ -141,7 +273,6 @@ namespace Bit.iOS.Core.Controllers
                 {
                     return 1;
                 }
-
                 return 0;
             }
 
@@ -159,15 +290,12 @@ namespace Bit.iOS.Core.Controllers
             {
                 tableView.DeselectRow(indexPath, true);
                 tableView.EndEditing(true);
-
                 var cell = tableView.CellAt(indexPath);
                 if(cell == null)
                 {
                     return;
                 }
-
-                var selectableCell = cell as ISelectable;
-                if(selectableCell != null)
+                if(cell is ISelectable selectableCell)
                 {
                     selectableCell.Select();
                 }

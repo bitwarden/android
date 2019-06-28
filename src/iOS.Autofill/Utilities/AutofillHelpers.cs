@@ -1,6 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using Bit.App.Resources;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using Foundation;
@@ -10,10 +12,9 @@ namespace Bit.iOS.Autofill.Utilities
 {
     public static class AutofillHelpers
     {
-        /*
-        public static void TableRowSelected(UITableView tableView, NSIndexPath indexPath,
+        public async static Task TableRowSelectedAsync(UITableView tableView, NSIndexPath indexPath,
             ExtensionTableSource tableSource, CredentialProviderViewController cpViewController,
-            UITableViewController controller, ISettings settings, string loginAddSegue)
+            UITableViewController controller, string loginAddSegue)
         {
             tableView.DeselectRow(indexPath, true);
             tableView.EndEditing(true);
@@ -23,7 +24,6 @@ namespace Bit.iOS.Autofill.Utilities
                 controller.PerformSegue(loginAddSegue, tableSource);
                 return;
             }
-
             var item = tableSource.Items.ElementAt(indexPath.Row);
             if(item == null)
             {
@@ -34,15 +34,23 @@ namespace Bit.iOS.Autofill.Utilities
             if(!string.IsNullOrWhiteSpace(item.Username) && !string.IsNullOrWhiteSpace(item.Password))
             {
                 string totp = null;
-                if(!settings.GetValueOrDefault(App.Constants.SettingDisableTotpCopy, false))
+                var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                var disableTotpCopy = await storageService.GetAsync<bool?>(Bit.Core.Constants.DisableAutoTotpCopyKey);
+                if(!disableTotpCopy.GetValueOrDefault(false))
                 {
-                    totp = tableSource.GetTotp(item);
+                    var userService = ServiceContainer.Resolve<IUserService>("userService");
+                    var canAccessPremiumAsync = await userService.CanAccessPremiumAsync();
+                    if(!string.IsNullOrWhiteSpace(item.Totp) &&
+                        (canAccessPremiumAsync || item.CipherView.OrganizationUseTotp))
+                    {
+                        var totpService = ServiceContainer.Resolve<ITotpService>("totpService");
+                        totp = await totpService.GetCodeAsync(item.Totp);
+                    }
                 }
-
                 cpViewController.CompleteRequest(item.Username, item.Password, totp);
             }
             else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
-                !string.IsNullOrWhiteSpace(item.Totp.Value))
+                !string.IsNullOrWhiteSpace(item.Totp))
             {
                 var sheet = Dialogs.CreateActionSheet(item.Name, controller);
                 if(!string.IsNullOrWhiteSpace(item.Username))
@@ -65,7 +73,8 @@ namespace Bit.iOS.Autofill.Utilities
                     {
                         UIPasteboard clipboard = UIPasteboard.General;
                         clipboard.String = item.Password;
-                        var alert = Dialogs.CreateMessageAlert(AppResources.CopiedPassword);
+                        var alert = Dialogs.CreateMessageAlert(
+                            string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
                         controller.PresentViewController(alert, true, () =>
                         {
                             controller.DismissViewController(true, null);
@@ -73,26 +82,25 @@ namespace Bit.iOS.Autofill.Utilities
                     }));
                 }
 
-                if(!string.IsNullOrWhiteSpace(item.Totp.Value))
+                if(!string.IsNullOrWhiteSpace(item.Totp))
                 {
-                    sheet.AddAction(UIAlertAction.Create(AppResources.CopyTotp, UIAlertActionStyle.Default, a =>
+                    sheet.AddAction(UIAlertAction.Create(AppResources.CopyTotp, UIAlertActionStyle.Default, async a =>
                     {
-                        var totp = tableSource.GetTotp(item);
+                        var totp = await tableSource.GetTotpAsync(item);
                         if(string.IsNullOrWhiteSpace(totp))
                         {
                             return;
                         }
-
                         UIPasteboard clipboard = UIPasteboard.General;
                         clipboard.String = totp;
-                        var alert = Dialogs.CreateMessageAlert(AppResources.CopiedTotp);
+                        var alert = Dialogs.CreateMessageAlert(
+                            string.Format(AppResources.ValueHasBeenCopied, AppResources.VerificationCodeTotp));
                         controller.PresentViewController(alert, true, () =>
                         {
                             controller.DismissViewController(true, null);
                         });
                     }));
                 }
-
                 sheet.AddAction(UIAlertAction.Create(AppResources.Cancel, UIAlertActionStyle.Cancel, null));
                 controller.PresentViewController(sheet, true, null);
             }
@@ -102,6 +110,5 @@ namespace Bit.iOS.Autofill.Utilities
                 controller.PresentViewController(alert, true, null);
             }
         }
-        */
     }
 }

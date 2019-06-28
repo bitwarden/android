@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
@@ -10,12 +8,10 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
-using Bit.iOS.Core.Services;
 using Bit.iOS.Core.Utilities;
 using Bit.iOS.Services;
 using CoreNFC;
 using Foundation;
-using HockeyApp.iOS;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
@@ -23,12 +19,8 @@ using Xamarin.Forms.Platform.iOS;
 namespace Bit.iOS
 {
     [Register("AppDelegate")]
-    public partial class AppDelegate : Xamarin.Forms.Platform.iOS.FormsApplicationDelegate
+    public partial class AppDelegate : FormsApplicationDelegate
     {
-        private const string AppId = "com.8bit.bitwarden";
-        private const string AppGroupId = "group.com.8bit.bitwarden";
-        private const string AccessGroup = "LTZ2PFU5D6.com.8bit.bitwarden";
-
         private NFCNdefReaderSession _nfcSession = null;
         private iOSPushNotificationHandler _pushHandler = null;
         private NFCReaderDelegate _nfcDelegate = null;
@@ -42,14 +34,13 @@ namespace Bit.iOS
         {
             Forms.Init();
             InitApp();
-            Bootstrap();
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
 
             LoadApplication(new App.App(null));
-            AppearanceAdjustments();
+            iOSCoreHelpers.AppearanceAdjustments();
             ZXing.Net.Mobile.Forms.iOS.Platform.Init();
 
             _broadcasterService.Subscribe(nameof(AppDelegate), async (message) =>
@@ -226,33 +217,14 @@ namespace Bit.iOS
             _pushHandler?.OnMessageReceived(userInfo);
         }
 
-        private void InitApp()
+        public void InitApp()
         {
             if(ServiceContainer.RegisteredServices.Count > 0)
             {
                 return;
             }
-            RegisterLocalServices();
-            ServiceContainer.Init();
-            _pushHandler = new iOSPushNotificationHandler(
-                ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
-            _nfcDelegate = new NFCReaderDelegate((success, message) =>
-                _messagingService.Send("gotYubiKeyOTP", message));
 
-            var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
-                ServiceContainer.Resolve<IAppIdService>("appIdService"),
-                ServiceContainer.Resolve<IUserService>("userService"));
-            var manager = BITHockeyManager.SharedHockeyManager;
-            manager.Configure("51f96ae568ba45f699a18ad9f63046c3", crashManagerDelegate);
-            manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
-            manager.StartManager();
-            manager.Authenticator.AuthenticateInstallation();
-            manager.DisableMetricsManager = manager.DisableFeedbackManager = manager.DisableUpdateManager = true;
-            var task = crashManagerDelegate.InitAsync(manager);
-        }
-
-        private void RegisterLocalServices()
-        {
+            // Migration services
             ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
             ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim());
             if(false && App.Migration.MigrationHelpers.NeedsMigration())
@@ -261,86 +233,26 @@ namespace Bit.iOS
                     "oldSecureStorageService", new Migration.KeyChainStorageService());
             }
 
-            // Note: This might cause a race condition. Investigate more.
-            Task.Run(() =>
-            {
-                FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
-                FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
-                {
-                    FadeAnimationEnabled = false,
-                    FadeAnimationForCachedImages = false
-                });
-            });
+            iOSCoreHelpers.RegisterLocalServices();
+            RegisterPush();
+            ServiceContainer.Init();
+            iOSCoreHelpers.RegisterHockeyApp();
+            _pushHandler = new iOSPushNotificationHandler(
+                ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));
+            _nfcDelegate = new NFCReaderDelegate((success, message) =>
+                _messagingService.Send("gotYubiKeyOTP", message));
 
-            var preferencesStorage = new PreferencesStorageService(AppGroupId);
-            var appGroupContainer = new NSFileManager().GetContainerUrl(AppGroupId);
-            var liteDbStorage = new LiteDbStorageService(
-                Path.Combine(appGroupContainer.Path, "Library", "bitwarden.db"));
-            liteDbStorage.InitAsync();
-            var localizeService = new LocalizeService();
-            var broadcasterService = new BroadcasterService();
-            var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
-            var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
-            var secureStorageService = new KeyChainStorageService(AppId, AccessGroup);
-            var cryptoPrimitiveService = new CryptoPrimitiveService();
-            var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
-            var deviceActionService = new DeviceActionService(mobileStorageService, messagingService);
-            var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
-                broadcasterService);
+            iOSCoreHelpers.Bootstrap();
+        }
 
-            ServiceContainer.Register<IBroadcasterService>("broadcasterService", broadcasterService);
-            ServiceContainer.Register<IMessagingService>("messagingService", messagingService);
-            ServiceContainer.Register<ILocalizeService>("localizeService", localizeService);
-            ServiceContainer.Register<II18nService>("i18nService", i18nService);
-            ServiceContainer.Register<ICryptoPrimitiveService>("cryptoPrimitiveService", cryptoPrimitiveService);
-            ServiceContainer.Register<IStorageService>("storageService", mobileStorageService);
-            ServiceContainer.Register<IStorageService>("secureStorageService", secureStorageService);
-            ServiceContainer.Register<IDeviceActionService>("deviceActionService", deviceActionService);
-            ServiceContainer.Register<IPlatformUtilsService>("platformUtilsService", platformUtilsService);
-
-            // Push
+        private void RegisterPush()
+        {
             var notificationListenerService = new PushNotificationListenerService();
             ServiceContainer.Register<IPushNotificationListenerService>(
                 "pushNotificationListenerService", notificationListenerService);
             var iosPushNotificationService = new iOSPushNotificationService();
             ServiceContainer.Register<IPushNotificationService>(
                 "pushNotificationService", iosPushNotificationService);
-        }
-
-        private void Bootstrap()
-        {
-            (ServiceContainer.Resolve<II18nService>("i18nService") as MobileI18nService).Init();
-            ServiceContainer.Resolve<IAuthService>("authService").Init();
-            // Note: This is not awaited
-            var bootstrapTask = BootstrapAsync();
-        }
-
-        private async Task BootstrapAsync()
-        {
-            var disableFavicon = await ServiceContainer.Resolve<IStorageService>("storageService").GetAsync<bool?>(
-                Bit.Core.Constants.DisableFaviconKey);
-            await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
-                Bit.Core.Constants.DisableFaviconKey, disableFavicon);
-            await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
-        }
-
-        private void AppearanceAdjustments()
-        {
-            ThemeHelpers.SetAppearance(ThemeManager.GetTheme(false));
-            /*
-            var primaryColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
-            var grayLight = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
-            UINavigationBar.Appearance.ShadowImage = new UIImage();
-            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            UIBarButtonItem.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
-            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).SetTitleColor(primaryColor,
-                UIControlState.Normal);
-            UIButton.AppearanceWhenContainedIn(new Type[] { typeof(UISearchBar) }).TintColor = primaryColor;
-            UIStepper.Appearance.TintColor = grayLight;
-            UISlider.Appearance.TintColor = primaryColor;
-            */
-            UIApplication.SharedApplication.StatusBarHidden = false;
-            UIApplication.SharedApplication.StatusBarStyle = UIStatusBarStyle.LightContent;
         }
 
         private void ListenYubiKey(bool listen)
