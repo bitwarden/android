@@ -30,7 +30,8 @@ namespace Bit.iOS.Extension
         {
             InitApp();
             base.ViewDidLoad();
-            View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
+            Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
+            View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
             _context.ExtContext = ExtensionContext;
             foreach(var item in ExtensionContext.InputItems)
             {
@@ -385,6 +386,7 @@ namespace Bit.iOS.Extension
             ServiceContainer.Init();
             iOSCoreHelpers.RegisterHockeyApp();
             iOSCoreHelpers.Bootstrap();
+            iOSCoreHelpers.AppearanceAdjustments();
         }
 
         private bool IsLocked()

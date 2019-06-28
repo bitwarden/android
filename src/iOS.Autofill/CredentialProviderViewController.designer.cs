@@ -14,8 +14,16 @@ namespace Bit.iOS.Autofill
     [Register ("CredentialProviderViewController")]
     partial class CredentialProviderViewController
     {
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIImageView Logo { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
+            if (Logo != null) {
+                Logo.Dispose ();
+                Logo = null;
+            }
         }
     }
 }

@@ -23,6 +23,8 @@ namespace Bit.iOS.Autofill
         {
             InitApp();
             base.ViewDidLoad();
+            Logo.Image = new UIImage(ThemeHelpers.LightTheme ? "logo.png" : "logo_white.png");
+            View.BackgroundColor = ThemeHelpers.SplashBackgroundColor;
             _context = new Context
             {
                 ExtContext = ExtensionContext
@@ -249,6 +251,7 @@ namespace Bit.iOS.Autofill
             ServiceContainer.Init();
             iOSCoreHelpers.RegisterHockeyApp();
             iOSCoreHelpers.Bootstrap();
+            iOSCoreHelpers.AppearanceAdjustments();
         }
     }
 }

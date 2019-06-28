@@ -32,6 +32,7 @@
                         <segue destination="6855" kind="presentation" identifier="lockPasswordSegue" id="9874"/>
                         <segue destination="10580" kind="presentation" identifier="setupSegue" modalTransitionStyle="coverVertical" id="11089"/>
                         <segue destination="11552" kind="show" identifier="loginSearchSegue" id="12959"/>
+                        <outlet property="Logo" destination="1713" id="name-outlet-1713"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="45" userLabel="First Responder" sceneMemberID="firstResponder"/>
