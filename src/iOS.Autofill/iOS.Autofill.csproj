@@ -99,10 +99,6 @@
     <None Include="Entitlements.plist" />
     <Compile Include="Models\Context.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ActionViewController.designer.cs">
-      <DependentUpon>ActionViewController.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ActionViewController.cs" />
     <InterfaceDefinition Include="MainInterface.storyboard" />
     <BundleResource Include="Resources\FontAwesome.ttf" />
     <BundleResource Include="Resources\MaterialIcons_Regular.ttf" />
