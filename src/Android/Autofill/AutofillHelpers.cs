@@ -53,6 +53,7 @@ namespace Bit.Droid.Autofill
             "com.ecosia.android",
             "com.opera.mini.native.beta",
             "org.mozilla.fennec_aurora",
+            "org.mozilla.fennec_fdroid",
             "com.qwant.liberty",
             "com.opera.touch",
             "org.mozilla.fenix",
