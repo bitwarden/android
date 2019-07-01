@@ -57,6 +57,7 @@ namespace Bit.Droid.Autofill
             "com.qwant.liberty",
             "com.opera.touch",
             "org.mozilla.fenix",
+            "org.mozilla.fenix.nightly",
             "org.mozilla.reference.browser",
             "org.mozilla.rocket",
         };
