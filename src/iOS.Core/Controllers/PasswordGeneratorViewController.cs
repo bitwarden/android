@@ -26,22 +26,18 @@ namespace Bit.iOS.Core.Controllers
         public SwitchTableViewCell LowercaseCell { get; set; } = new SwitchTableViewCell("a-z");
         public SwitchTableViewCell NumbersCell { get; set; } = new SwitchTableViewCell("0-9");
         public SwitchTableViewCell SpecialCell { get; set; } = new SwitchTableViewCell("!@#$%^&*");
-        public StepperTableViewCell MinNumbersCell { get; set; } = new StepperTableViewCell(AppResources.MinNumbers, 1, 0, 5, 1);
-        public StepperTableViewCell MinSpecialCell { get; set; } = new StepperTableViewCell(AppResources.MinSpecial, 1, 0, 5, 1);
-        public SliderTableViewCell LengthCell { get; set; } = new SliderTableViewCell(AppResources.Length, 10, 5, 64);
+        public StepperTableViewCell MinNumbersCell { get; set; } = new StepperTableViewCell(
+            AppResources.MinNumbers, 1, 0, 5, 1);
+        public StepperTableViewCell MinSpecialCell { get; set; } = new StepperTableViewCell(
+            AppResources.MinSpecial, 1, 0, 5, 1);
+        public SliderTableViewCell LengthCell { get; set; } = new SliderTableViewCell(
+            AppResources.Length, 10, 5, 64);
 
         public PasswordGenerationOptions PasswordOptions { get; set; }
         public abstract UINavigationItem BaseNavItem { get; }
         public abstract UIBarButtonItem BaseCancelButton { get; }
         public abstract UIBarButtonItem BaseSelectBarButton { get; }
         public abstract UILabel BasePasswordLabel { get; }
-
-        public override void ViewWillAppear(bool animated)
-        {
-            UINavigationBar.Appearance.ShadowImage = new UIImage();
-            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            base.ViewWillAppear(animated);
-        }
 
         public async override void ViewDidLoad()
         {
@@ -51,13 +47,13 @@ namespace Bit.iOS.Core.Controllers
             BaseNavItem.Title = AppResources.PasswordGenerator;
             BaseCancelButton.Title = AppResources.Cancel;
             BaseSelectBarButton.Title = AppResources.Select;
-            View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;
             BasePasswordLabel.Font = UIFont.FromName("Menlo-Regular", descriptor.PointSize * 1.3f);
             BasePasswordLabel.LineBreakMode = UILineBreakMode.TailTruncation;
             BasePasswordLabel.Lines = 1;
             BasePasswordLabel.AdjustsFontSizeToFitWidth = false;
+            BasePasswordLabel.TextColor = ThemeHelpers.TextColor;
 
             var controller = ChildViewControllers.LastOrDefault();
             if(controller != null)
@@ -71,7 +67,8 @@ namespace Bit.iOS.Core.Controllers
                 OptionsTableViewController.TableView.EstimatedRowHeight = 70;
                 OptionsTableViewController.TableView.Source = new TableSource(this);
                 OptionsTableViewController.TableView.AllowsSelection = true;
-                OptionsTableViewController.View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
+                OptionsTableViewController.View.BackgroundColor = ThemeHelpers.BackgroundColor;
+                OptionsTableViewController.TableView.SeparatorColor = ThemeHelpers.SeparatorColor;
             }
 
             var options = await _passwordGenerationService.GetOptionsAsync();
@@ -159,7 +156,8 @@ namespace Bit.iOS.Core.Controllers
 
         private bool InvalidState()
         {
-            return !LowercaseCell.Switch.On && !UppercaseCell.Switch.On && !NumbersCell.Switch.On && !SpecialCell.Switch.On;
+            return !LowercaseCell.Switch.On && !UppercaseCell.Switch.On && !NumbersCell.Switch.On &&
+                !SpecialCell.Switch.On;
         }
 
         private async Task GeneratePasswordAsync()
@@ -177,7 +175,7 @@ namespace Bit.iOS.Core.Controllers
                 });
         }
 
-        public class TableSource : UITableViewSource
+        public class TableSource : ExtendedUITableViewSource
         {
             private PasswordGeneratorViewController _controller;
 
@@ -190,8 +188,8 @@ namespace Bit.iOS.Core.Controllers
             {
                 if(indexPath.Section == 0)
                 {
-                    var cell = new UITableViewCell();
-                    cell.TextLabel.TextColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
+                    var cell = new ExtendedUITableViewCell();
+                    cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
                     if(indexPath.Row == 0)
                     {
                         cell.TextLabel.Text = AppResources.RegeneratePassword;
@@ -232,7 +230,7 @@ namespace Bit.iOS.Core.Controllers
                     return _controller.MinSpecialCell;
                 }
 
-                return new UITableViewCell();
+                return new ExtendedUITableViewCell();
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

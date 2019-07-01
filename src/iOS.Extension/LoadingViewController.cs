@@ -378,6 +378,7 @@ namespace Bit.iOS.Extension
 
         private void InitApp()
         {
+            iOSCoreHelpers.AppearanceAdjustments();
             if(ServiceContainer.RegisteredServices.Count > 0)
             {
                 return;
@@ -386,7 +387,6 @@ namespace Bit.iOS.Extension
             ServiceContainer.Init();
             iOSCoreHelpers.RegisterHockeyApp();
             iOSCoreHelpers.Bootstrap();
-            iOSCoreHelpers.AppearanceAdjustments();
         }
 
         private bool IsLocked()

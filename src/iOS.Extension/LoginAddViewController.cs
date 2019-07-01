@@ -1,4 +1,5 @@
 using System;
+using Bit.iOS.Core.Utilities;
 using Foundation;
 using UIKit;
 
@@ -16,6 +17,13 @@ namespace Bit.iOS.Extension
         public override UINavigationItem BaseNavItem => NavItem;
         public override UIBarButtonItem BaseCancelButton => CancelBarButton;
         public override UIBarButtonItem BaseSaveButton => SaveBarButton;
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            SaveBarButton.TintColor = ThemeHelpers.NavBarTextColor;
+            CancelBarButton.TintColor = ThemeHelpers.NavBarTextColor;
+        }
 
         public override Action Success => () =>
         {

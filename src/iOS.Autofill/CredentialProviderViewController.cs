@@ -243,6 +243,7 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
+            iOSCoreHelpers.AppearanceAdjustments();
             if(ServiceContainer.RegisteredServices.Count > 0)
             {
                 return;
@@ -251,7 +252,6 @@ namespace Bit.iOS.Autofill
             ServiceContainer.Init();
             iOSCoreHelpers.RegisterHockeyApp();
             iOSCoreHelpers.Bootstrap();
-            iOSCoreHelpers.AppearanceAdjustments();
         }
     }
 }

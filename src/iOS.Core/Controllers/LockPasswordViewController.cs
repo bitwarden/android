@@ -41,13 +41,6 @@ namespace Bit.iOS.Core.Controllers
         public FormEntryTableViewCell MasterPasswordCell { get; set; } = new FormEntryTableViewCell(
             AppResources.MasterPassword);
 
-        public override void ViewWillAppear(bool animated)
-        {
-            UINavigationBar.Appearance.ShadowImage = new UIImage();
-            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            base.ViewWillAppear(animated);
-        }
-
         public override void ViewDidLoad()
         {
             _lockService = ServiceContainer.Resolve<ILockService>("lockService");
@@ -66,7 +59,6 @@ namespace Bit.iOS.Core.Controllers
             BaseNavItem.Title = _pinLock ? AppResources.VerifyPIN : AppResources.VerifyMasterPassword;
             BaseCancelButton.Title = AppResources.Cancel;
             BaseSubmitButton.Title = AppResources.Submit;
-            View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
 
             var descriptor = UIFontDescriptor.PreferredBody;
 
@@ -238,7 +230,7 @@ namespace Bit.iOS.Core.Controllers
             PresentViewController(alert, true, null);
         }
 
-        public class TableSource : UITableViewSource
+        public class TableSource : ExtendedUITableViewSource
         {
             private LockPasswordViewController _controller;
 
@@ -260,13 +252,13 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if(indexPath.Row == 0)
                     {
-                        var cell = new UITableViewCell();
-                        cell.TextLabel.TextColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f);
+                        var cell = new ExtendedUITableViewCell();
+                        cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
                         cell.TextLabel.Text = AppResources.UseFingerprintToUnlock;
                         return cell;
                     }
                 }
-                return new UITableViewCell();
+                return new ExtendedUITableViewCell();
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

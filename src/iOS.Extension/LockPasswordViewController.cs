@@ -1,3 +1,4 @@
+using Bit.iOS.Core.Utilities;
 using System;
 using UIKit;
 
@@ -15,6 +16,13 @@ namespace Bit.iOS.Extension
         public override UIBarButtonItem BaseSubmitButton => SubmitButton;
         public override Action Success => () => LoadingController.DismissLockAndContinue();
         public override Action Cancel => () => LoadingController.CompleteRequest(null);
+
+        public override void ViewDidLoad()
+        {
+            base.ViewDidLoad();
+            CancelButton.TintColor = ThemeHelpers.NavBarTextColor;
+            SubmitButton.TintColor = ThemeHelpers.NavBarTextColor;
+        }
 
         partial void SubmitButton_Activated(UIBarButtonItem sender)
         {

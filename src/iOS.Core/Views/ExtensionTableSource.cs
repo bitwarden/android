@@ -2,7 +2,9 @@
 using Bit.Core.Abstractions;
 using Bit.Core.Models.View;
 using Bit.Core.Utilities;
+using Bit.iOS.Core.Controllers;
 using Bit.iOS.Core.Models;
+using Bit.iOS.Core.Utilities;
 using Foundation;
 using System;
 using System.Collections.Generic;
@@ -14,7 +16,7 @@ using UIKit;
 
 namespace Bit.iOS.Core.Views
 {
-    public class ExtensionTableSource : UITableViewSource
+    public class ExtensionTableSource : ExtendedUITableViewSource
     {
         private const string CellIdentifier = "TableCell";
 
@@ -95,11 +97,12 @@ namespace Bit.iOS.Core.Views
         {
             if(Items == null || Items.Count() == 0)
             {
-                var noDataCell = new UITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
+                var noDataCell = new ExtendedUITableViewCell(UITableViewCellStyle.Default, "NoDataCell");
                 noDataCell.TextLabel.Text = AppResources.NoItemsTap;
                 noDataCell.TextLabel.TextAlignment = UITextAlignment.Center;
                 noDataCell.TextLabel.LineBreakMode = UILineBreakMode.WordWrap;
                 noDataCell.TextLabel.Lines = 0;
+                noDataCell.TextLabel.TextColor = ThemeHelpers.TextColor;
                 return noDataCell;
             }
 
@@ -109,9 +112,9 @@ namespace Bit.iOS.Core.Views
             if(cell == null)
             {
                 Debug.WriteLine("BW Log, Make new cell for list.");
-                cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
-                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor =
-                    new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
+                cell = new ExtendedUITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
+                cell.TextLabel.TextColor = cell.TextLabel.TintColor = ThemeHelpers.TextColor;
+                cell.DetailTextLabel.TextColor = cell.DetailTextLabel.TintColor = ThemeHelpers.MutedColor;
             }
             return cell;
         }

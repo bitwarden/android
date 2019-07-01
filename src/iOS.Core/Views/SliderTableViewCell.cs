@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using System;
 using UIKit;
 
 namespace Bit.iOS.Core.Views
 {
-    public class SliderTableViewCell : UITableViewCell
+    public class SliderTableViewCell : ExtendedUITableViewCell
     {
         private string _detailRightSpace = "\t";
         private int _value;
@@ -12,14 +14,16 @@ namespace Bit.iOS.Core.Views
             : base(UITableViewCellStyle.Value1, nameof(SwitchTableViewCell))
         {
             TextLabel.Text = labelName;
-            DetailTextLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
+            TextLabel.TextColor = ThemeHelpers.TextColor;
+            DetailTextLabel.TextColor = ThemeHelpers.MutedColor;
 
             Slider = new UISlider
             {
                 MinValue = min,
                 MaxValue = max,
-                TintColor = new UIColor(red: 0.24f, green: 0.55f, blue: 0.74f, alpha: 1.0f),
-                Frame = new CoreGraphics.CGRect(0, 0, 180, 30)
+                TintColor = ThemeHelpers.PrimaryColor,
+                Frame = new CoreGraphics.CGRect(0, 0, 180, 30),
+                BackgroundColor = ThemeHelpers.BackgroundColor
             };
             Slider.ValueChanged += Slider_ValueChanged;
             Value = value;

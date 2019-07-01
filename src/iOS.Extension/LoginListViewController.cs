@@ -23,16 +23,11 @@ namespace Bit.iOS.Extension
         public Context Context { get; set; }
         public LoadingViewController LoadingController { get; set; }
 
-        public override void ViewWillAppear(bool animated)
-        {
-            UINavigationBar.Appearance.ShadowImage = new UIImage();
-            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            base.ViewWillAppear(animated);
-        }
-
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
+            AddBarButton.TintColor = ThemeHelpers.NavBarTextColor;
+            CancelBarButton.TintColor = ThemeHelpers.NavBarTextColor;
             NavItem.Title = AppResources.Items;
             if(!CanAutoFill())
             {

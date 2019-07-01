@@ -30,7 +30,7 @@ namespace Bit.iOS.Core.Controllers
         public FormEntryTableViewCell NameCell { get; set; } = new FormEntryTableViewCell(AppResources.Name);
         public FormEntryTableViewCell UsernameCell { get; set; } = new FormEntryTableViewCell(AppResources.Username);
         public FormEntryTableViewCell PasswordCell { get; set; } = new FormEntryTableViewCell(AppResources.Password);
-        public UITableViewCell GeneratePasswordCell { get; set; } = new UITableViewCell(
+        public UITableViewCell GeneratePasswordCell { get; set; } = new ExtendedUITableViewCell(
             UITableViewCellStyle.Subtitle, "GeneratePasswordCell");
         public FormEntryTableViewCell UriCell { get; set; } = new FormEntryTableViewCell(AppResources.URI);
         public SwitchTableViewCell FavoriteCell { get; set; } = new SwitchTableViewCell(AppResources.Favorite);
@@ -43,13 +43,6 @@ namespace Bit.iOS.Core.Controllers
         public abstract UIBarButtonItem BaseSaveButton { get; }
         public abstract Action Success { get; }
 
-        public override void ViewWillAppear(bool animated)
-        {
-            UINavigationBar.Appearance.ShadowImage = new UIImage();
-            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            base.ViewWillAppear(animated);
-        }
-
         public override void ViewDidLoad()
         {
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
@@ -58,7 +51,7 @@ namespace Bit.iOS.Core.Controllers
             BaseNavItem.Title = AppResources.AddItem;
             BaseCancelButton.Title = AppResources.Cancel;
             BaseSaveButton.Title = AppResources.Save;
-            View.BackgroundColor = new UIColor(red: 0.94f, green: 0.94f, blue: 0.96f, alpha: 1.0f);
+            View.BackgroundColor = ThemeHelpers.BackgroundColor;
 
             NameCell.TextField.Text = Context?.Uri?.Host ?? string.Empty;
             NameCell.TextField.ReturnKeyType = UIReturnKeyType.Next;
@@ -87,6 +80,8 @@ namespace Bit.iOS.Core.Controllers
             };
 
             GeneratePasswordCell.TextLabel.Text = AppResources.GeneratePassword;
+            GeneratePasswordCell.TextLabel.TextColor = GeneratePasswordCell.TextLabel.TintColor =
+                ThemeHelpers.TextColor;
             GeneratePasswordCell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 
             UriCell.TextField.Text = Context?.UrlString ?? string.Empty;
@@ -206,7 +201,7 @@ namespace Bit.iOS.Core.Controllers
                 AppResources.InternetConnectionRequiredMessage, AppResources.Ok);
         }
 
-        public class TableSource : UITableViewSource
+        public class TableSource : ExtendedUITableViewSource
         {
             private LoginAddViewController _controller;
 
@@ -256,7 +251,7 @@ namespace Bit.iOS.Core.Controllers
                     return _controller.NotesCell;
                 }
 
-                return new UITableViewCell();
+                return new ExtendedUITableViewCell();
             }
 
             public override nfloat GetHeightForRow(UITableView tableView, NSIndexPath indexPath)

@@ -1,4 +1,6 @@
-﻿using CoreGraphics;
+﻿using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using CoreGraphics;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,7 +8,7 @@ using UIKit;
 
 namespace Bit.iOS.Core.Views
 {
-    public class PickerTableViewCell : UITableViewCell, ISelectable
+    public class PickerTableViewCell : ExtendedUITableViewCell, ISelectable
     {
         private List<string> _items = new List<string>();
         private int _selectedIndex = 0;
@@ -24,7 +26,7 @@ namespace Bit.iOS.Core.Views
                 Text = labelName,
                 TranslatesAutoresizingMaskIntoConstraints = false,
                 Font = UIFont.FromDescriptor(descriptor, 0.8f * pointSize),
-                TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f)
+                TextColor = ThemeHelpers.MutedColor
             };
 
             ContentView.Add(Label);
@@ -33,7 +35,10 @@ namespace Bit.iOS.Core.Views
             {
                 BorderStyle = UITextBorderStyle.None,
                 TranslatesAutoresizingMaskIntoConstraints = false,
-                Font = UIFont.FromDescriptor(descriptor, pointSize)
+                Font = UIFont.FromDescriptor(descriptor, pointSize),
+                TextColor = ThemeHelpers.TextColor,
+                TintColor = ThemeHelpers.TextColor,
+                BackgroundColor = ThemeHelpers.BackgroundColor
             };
 
             var width = (float)UIScreen.MainScreen.Bounds.Width;

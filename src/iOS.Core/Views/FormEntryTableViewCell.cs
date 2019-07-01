@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using System;
 using UIKit;
 
 namespace Bit.iOS.Core.Views
 {
-    public class FormEntryTableViewCell : UITableViewCell, ISelectable
+    public class FormEntryTableViewCell : ExtendedUITableViewCell, ISelectable
     {
         public FormEntryTableViewCell(
             string labelName = null,
@@ -22,7 +24,7 @@ namespace Bit.iOS.Core.Views
                     Text = labelName,
                     TranslatesAutoresizingMaskIntoConstraints = false,
                     Font = UIFont.FromDescriptor(descriptor, 0.8f * pointSize),
-                    TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f)
+                    TextColor = ThemeHelpers.MutedColor
                 };
 
                 ContentView.Add(Label);
@@ -33,7 +35,10 @@ namespace Bit.iOS.Core.Views
                 TextView = new UITextView
                 {
                     TranslatesAutoresizingMaskIntoConstraints = false,
-                    Font = UIFont.FromDescriptor(descriptor, pointSize)
+                    Font = UIFont.FromDescriptor(descriptor, pointSize),
+                    TextColor = ThemeHelpers.TextColor,
+                    TintColor = ThemeHelpers.TextColor,
+                    BackgroundColor = ThemeHelpers.BackgroundColor
                 };
 
                 ContentView.Add(TextView);
@@ -67,7 +72,10 @@ namespace Bit.iOS.Core.Views
                     TranslatesAutoresizingMaskIntoConstraints = false,
                     BorderStyle = UITextBorderStyle.None,
                     Font = UIFont.FromDescriptor(descriptor, pointSize),
-                    ClearButtonMode = UITextFieldViewMode.WhileEditing
+                    ClearButtonMode = UITextFieldViewMode.WhileEditing,
+                    TextColor = ThemeHelpers.TextColor,
+                    TintColor = ThemeHelpers.TextColor,
+                    BackgroundColor = ThemeHelpers.BackgroundColor
                 };
 
                 if(useLabelAsPlaceholder)

@@ -6,6 +6,7 @@ using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.iOS.Core.Views;
 using Bit.iOS.Autofill.Utilities;
+using Bit.iOS.Core.Utilities;
 
 namespace Bit.iOS.Autofill
 {
@@ -18,19 +19,16 @@ namespace Bit.iOS.Autofill
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
 
-        public override void ViewWillAppear(bool animated)
-        {
-            UINavigationBar.Appearance.ShadowImage = new UIImage();
-            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            base.ViewWillAppear(animated);
-        }
-
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
             NavItem.Title = AppResources.SearchVault;
             CancelBarButton.Title = AppResources.Cancel;
             SearchBar.Placeholder = AppResources.Search;
+            if(!ThemeHelpers.LightTheme)
+            {
+                SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.BackgroundColor;
+            }
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;

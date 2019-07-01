@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Bit.iOS.Core.Controllers;
+using Bit.iOS.Core.Utilities;
+using System;
 using UIKit;
 
 namespace Bit.iOS.Core.Views
 {
-    public class StepperTableViewCell : UITableViewCell
+    public class StepperTableViewCell : ExtendedUITableViewCell
     {
         // Give some space to the right of the detail in between the spacer.
         // This is a bit of a hack, but I did not see a way to specify a margin on the
@@ -15,11 +17,12 @@ namespace Bit.iOS.Core.Views
             : base(UITableViewCellStyle.Value1, nameof(SwitchTableViewCell))
         {
             TextLabel.Text = labelName;
-            DetailTextLabel.TextColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f);
+            TextLabel.TextColor = ThemeHelpers.TextColor;
+            DetailTextLabel.TextColor = ThemeHelpers.MutedColor;
 
             Stepper = new UIStepper
             {
-                TintColor = new UIColor(red: 0.47f, green: 0.47f, blue: 0.47f, alpha: 1.0f),
+                TintColor = ThemeHelpers.MutedColor,
                 MinimumValue = min,
                 MaximumValue = max
             };

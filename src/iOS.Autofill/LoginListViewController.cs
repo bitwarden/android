@@ -18,13 +18,6 @@ namespace Bit.iOS.Autofill
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
 
-        public override void ViewWillAppear(bool animated)
-        {
-            UINavigationBar.Appearance.ShadowImage = new UIImage();
-            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
-            base.ViewWillAppear(animated);
-        }
-
         public async override void ViewDidLoad()
         {
             base.ViewDidLoad();
