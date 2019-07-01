@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Services;
 using Bit.Core.Utilities;
@@ -24,6 +26,8 @@ namespace Bit.iOS
         private NFCNdefReaderSession _nfcSession = null;
         private iOSPushNotificationHandler _pushHandler = null;
         private NFCReaderDelegate _nfcDelegate = null;
+        private NSTimer _clipboardTimer = null;
+        private NSTimer _lockTimer = null;
 
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
@@ -48,6 +52,7 @@ namespace Bit.iOS
                 if(message.Command == "scheduleLockTimer")
                 {
                     var lockOptionMinutes = (int)message.Data;
+
                 }
                 else if(message.Command == "cancelLockTimer")
                 {
@@ -59,7 +64,7 @@ namespace Bit.iOS
                 }
                 else if(message.Command == "copiedToClipboard")
                 {
-
+                    await ClearClipboardTimerAsync(message.Data as Tuple<string, int?, bool>);
                 }
                 else if(message.Command == "listenYubiKeyOTP")
                 {
@@ -271,6 +276,48 @@ namespace Bit.iOS
                     _nfcSession.BeginSession();
                 }
             }
+        }
+
+        private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)
+        {
+            if(data.Item3)
+            {
+                return;
+            }
+            var clearMs = data.Item2;
+            if(clearMs == null)
+            {
+                var clearSeconds = await _storageService.GetAsync<int?>(Constants.ClearClipboardKey);
+                if(clearSeconds != null)
+                {
+                    clearMs = clearSeconds.Value * 1000;
+                }
+            }
+            if(clearMs == null)
+            {
+                return;
+            }
+            _clipboardTimer?.Invalidate();
+            _clipboardTimer?.Dispose();
+            _clipboardTimer = null;
+            var lastClipboardValue = data.Item1;
+            var clearMsSpan = TimeSpan.FromMilliseconds(clearMs.Value);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                _clipboardTimer = NSTimer.CreateScheduledTimer(clearMsSpan, timer =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        if(lastClipboardValue == UIPasteboard.General.String)
+                        {
+                            UIPasteboard.General.String = string.Empty;
+                        }
+                        _clipboardTimer?.Invalidate();
+                        _clipboardTimer?.Dispose();
+                        _clipboardTimer = null;
+                    });
+                });
+            });
         }
 
         private void ShowAppExtension()
