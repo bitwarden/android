@@ -100,6 +100,27 @@
                             IsTextPredictionEnabled="False"
                             StyleClass="box-value" />
                     </StackLayout>
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label
+                            Text="{u:I18n Capitalize}"
+                            StyleClass="box-label, box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding Capitalize}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </StackLayout>
+                    <BoxView StyleClass="box-row-separator" />
+                    <StackLayout StyleClass="box-row, box-row-switch">
+                        <Label
+                            Text="{u:I18n IncludeNumber}"
+                            StyleClass="box-label, box-label-regular"
+                            HorizontalOptions="StartAndExpand" />
+                        <Switch
+                            IsToggled="{Binding IncludeNumber}"
+                            StyleClass="box-value"
+                            HorizontalOptions="End" />
+                    </StackLayout>
                 </StackLayout>
                 <StackLayout Spacing="0" Padding="0" IsVisible="{Binding IsPassword}">
                     <StackLayout StyleClass="box-row, box-row-slider">

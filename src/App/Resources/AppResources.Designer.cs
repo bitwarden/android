@@ -808,6 +808,15 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Capitalize.
+        /// </summary>
+        public static string Capitalize {
+            get {
+                return ResourceManager.GetString("Capitalize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cardholder Name.
         /// </summary>
         public static string CardholderName {
@@ -1929,6 +1938,15 @@ namespace Bit.App.Resources {
         public static string ImportItemsDescription {
             get {
                 return ResourceManager.GetString("ImportItemsDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Include Number.
+        /// </summary>
+        public static string IncludeNumber {
+            get {
+                return ResourceManager.GetString("IncludeNumber", resourceCulture);
             }
         }
         

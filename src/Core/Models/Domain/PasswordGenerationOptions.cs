@@ -21,6 +21,8 @@
                 Type = "password";
                 NumWords = 3;
                 WordSeparator = "-";
+                Capitalize = false;
+                IncludeNumber = false;
             }
         }
 
@@ -37,6 +39,8 @@
         public string Type { get; set; }
         public int? NumWords { get; set; }
         public string WordSeparator { get; set; }
+        public bool? Capitalize { get; set; }
+        public bool? IncludeNumber { get; set; }
 
         public void Merge(PasswordGenerationOptions defaults)
         {
@@ -53,6 +57,8 @@
             Type = Type ?? defaults.Type;
             NumWords = NumWords ?? defaults.NumWords;
             WordSeparator = WordSeparator ?? defaults.WordSeparator;
+            Capitalize = Capitalize ?? defaults.Capitalize;
+            IncludeNumber = IncludeNumber ?? defaults.IncludeNumber;
         }
     }
 }

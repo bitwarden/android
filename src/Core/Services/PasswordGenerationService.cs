@@ -192,12 +192,31 @@ namespace Bit.Core.Services
             {
                 options.WordSeparator = " ";
             }
+            if(options.Capitalize == null)
+            {
+                options.Capitalize = false;
+            }
+            if(options.IncludeNumber == null)
+            {
+                options.IncludeNumber = false;
+            }
             var listLength = EEFLongWordList.Instance.List.Count - 1;
             var wordList = new List<string>();
             for(int i = 0; i < options.NumWords.GetValueOrDefault(); i++)
             {
                 var wordIndex = await _cryptoService.RandomNumberAsync(0, listLength);
-                wordList.Add(EEFLongWordList.Instance.List[wordIndex]);
+                if(options.Capitalize.GetValueOrDefault())
+                {
+                    wordList.Add(Capitalize(EEFLongWordList.Instance.List[wordIndex]));
+                }
+                else
+                {
+                    wordList.Add(EEFLongWordList.Instance.List[wordIndex]);
+                }
+            }
+            if(options.IncludeNumber.GetValueOrDefault())
+            {
+                await AppendRandomNumberToRandomWordAsync(wordList);
             }
             return string.Join(options.WordSeparator, wordList);
         }
@@ -399,6 +418,22 @@ namespace Bit.Core.Services
                 return false;
             }
             return history.Last().Password == password;
+        }
+
+        private string Capitalize(string str)
+        {
+            return str.First().ToString().ToUpper() + str.Substring(1);
+        }
+
+        private async Task AppendRandomNumberToRandomWordAsync(List<string> wordList)
+        {
+            if(wordList == null || wordList.Count <= 0)
+            {
+                return;
+            }
+            var index = await _cryptoService.RandomNumberAsync(0, wordList.Count - 1);
+            var num = await _cryptoService.RandomNumberAsync(0, 9);
+            wordList[index] = wordList[index] + num;
         }
     }
 }

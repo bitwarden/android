@@ -3,9 +3,7 @@ using Bit.App.Utilities;
 using Bit.Core.Abstractions;
 using Bit.Core.Models.Domain;
 using Bit.Core.Utilities;
-using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -29,6 +27,8 @@ namespace Bit.App.Pages
         private int _length = 5;
         private int _numWords = 3;
         private string _wordSeparator;
+        private bool _capitalize;
+        private bool _includeNumber;
         private int _typeSelectedIndex;
         private bool _doneIniting;
 
@@ -196,6 +196,32 @@ namespace Bit.App.Pages
             }
         }
 
+        public bool Capitalize
+        {
+            get => _capitalize;
+            set
+            {
+                if(SetProperty(ref _capitalize, value))
+                {
+                    _options.Capitalize = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
+        public bool IncludeNumber
+        {
+            get => _includeNumber;
+            set
+            {
+                if(SetProperty(ref _includeNumber, value))
+                {
+                    _options.Number = value;
+                    var task = SaveOptionsAsync();
+                }
+            }
+        }
+
         public int TypeSelectedIndex
         {
             get => _typeSelectedIndex;
@@ -273,6 +299,8 @@ namespace Bit.App.Pages
             Uppercase = _options.Uppercase.GetValueOrDefault();
             Lowercase = _options.Lowercase.GetValueOrDefault();
             Length = _options.Length.GetValueOrDefault(5);
+            Capitalize = _options.Capitalize.GetValueOrDefault();
+            IncludeNumber = _options.IncludeNumber.GetValueOrDefault();
         }
 
         private void SetOptions()
@@ -288,6 +316,8 @@ namespace Bit.App.Pages
             _options.Uppercase = Uppercase;
             _options.Lowercase = Lowercase;
             _options.Length = Length;
+            _options.Capitalize = Capitalize;
+            _options.IncludeNumber = IncludeNumber;
         }
     }
 }
