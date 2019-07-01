@@ -41,6 +41,7 @@ namespace Bit.Droid.Accessibility
             new Browser("org.mozilla.focus", "display_url"),
             new Browser("org.mozilla.klar", "display_url"),
             new Browser("org.mozilla.fenix", "mozac_browser_toolbar_url_view"),
+            new Browser("org.mozilla.fenix.nightly", "mozac_browser_toolbar_url_view"),
             new Browser("org.mozilla.reference.browser", "mozac_browser_toolbar_url_view"),
             new Browser("com.ghostery.android.ghostery", "search_field"),
             new Browser("org.adblockplus.browser", "url_bar_title"),
