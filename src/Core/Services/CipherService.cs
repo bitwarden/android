@@ -820,16 +820,25 @@ namespace Bit.Core.Services
                 {
                     if(eqDomainSet.Contains(url))
                     {
-                        eqDomain.Select(d => matchingDomains.Add(d));
+                        foreach(var d in eqDomain)
+                        {
+                            matchingDomains.Add(d);
+                        }
                     }
                     else if(mobileAppWebUriString != null && eqDomainSet.Contains(mobileAppWebUriString))
                     {
-                        eqDomain.Select(d => matchingFuzzyDomains.Add(d));
+                        foreach(var d in eqDomain)
+                        {
+                            matchingFuzzyDomains.Add(d);
+                        }
                     }
                 }
-                else if(eqDomainSet.Contains(url))
+                else if(eqDomainSet.Contains(domain))
                 {
-                    eqDomain.Select(d => matchingDomains.Add(d));
+                    foreach(var d in eqDomain)
+                    {
+                        matchingDomains.Add(d);
+                    }
                 }
             }
             if(!matchingDomains.Any())
