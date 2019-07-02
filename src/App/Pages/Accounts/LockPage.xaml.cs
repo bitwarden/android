@@ -21,7 +21,7 @@ namespace Bit.App.Pages
             InitializeComponent();
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
-            _vm.UnlockedAction = () =>
+            _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(() =>
             {
                 if(_appOptions != null)
                 {
@@ -37,7 +37,7 @@ namespace Bit.App.Pages
                     }
                 }
                 Application.Current.MainPage = new TabsPage(_appOptions);
-            };
+            });
             MasterPasswordEntry = _masterPassword;
             PinEntry = _pin;
         }
