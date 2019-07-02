@@ -25,7 +25,6 @@ namespace Bit.iOS.Autofill
 
             ActivatedLabel.Text = AppResources.AutofillActivated;
             ActivatedLabel.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize * 1.3f);
-            ActivatedLabel.TextColor = ThemeHelpers.SuccessColor;
 
             BackButton.Title = AppResources.Back;
             base.ViewDidLoad();
