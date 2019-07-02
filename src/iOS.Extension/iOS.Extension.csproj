@@ -89,8 +89,6 @@
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
     <Compile Include="Models\Context.cs" />
-    <Compile Include="Models\FillScript.cs" />
-    <Compile Include="Models\PageDetails.cs" />
     <Compile Include="PasswordGeneratorViewController.cs" />
     <Compile Include="PasswordGeneratorViewController.designer.cs">
       <DependentUpon>PasswordGeneratorViewController.cs</DependentUpon>

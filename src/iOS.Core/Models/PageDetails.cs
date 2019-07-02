@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Bit.iOS.Extension.Models
+namespace Bit.iOS.Core.Models
 {
     public class PageDetails
     {
@@ -48,5 +47,4 @@ namespace Bit.iOS.Extension.Models
             public string Form { get; set; }
         }
     }
-
 }

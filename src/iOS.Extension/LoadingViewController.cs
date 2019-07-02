@@ -19,8 +19,6 @@ namespace Bit.iOS.Extension
     public partial class LoadingViewController : ExtendedUIViewController
     {
         private Context _context = new Context();
-        private readonly JsonSerializerSettings _jsonSettings =
-            new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore };
 
         public LoadingViewController(IntPtr handle)
             : base(handle)
@@ -140,7 +138,7 @@ namespace Bit.iOS.Extension
             if(_context.ProviderType == UTType.PropertyList)
             {
                 var fillScript = new FillScript(_context.Details, username, password, fields);
-                var scriptJson = JsonConvert.SerializeObject(fillScript, _jsonSettings);
+                var scriptJson = CoreHelpers.SerializeJson(fillScript, true);
                 var scriptDict = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
                 itemData = new NSDictionary(NSJavaScriptExtension.FinalizeArgumentKey, scriptDict);
             }
@@ -154,7 +152,7 @@ namespace Bit.iOS.Extension
                 || _context.ProviderType == Constants.UTTypeAppExtensionFillWebViewAction)
             {
                 var fillScript = new FillScript(_context.Details, username, password, fields);
-                var scriptJson = JsonConvert.SerializeObject(fillScript, _jsonSettings);
+                var scriptJson = CoreHelpers.SerializeJson(fillScript, true);
                 itemData = new NSDictionary(Constants.AppExtensionWebViewPageFillScript, scriptJson);
             }
             else if(_context.ProviderType == Constants.UTTypeAppExtensionSaveLoginAction)

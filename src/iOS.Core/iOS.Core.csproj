@@ -63,6 +63,8 @@
     <Compile Include="Controllers\PasswordGeneratorViewController.cs" />
     <Compile Include="Models\AppExtensionContext.cs" />
     <Compile Include="Models\CipherViewModel.cs" />
+    <Compile Include="Models\FillScript.cs" />
+    <Compile Include="Models\PageDetails.cs" />
     <Compile Include="Models\PasswordGenerationOptions.cs" />
     <Compile Include="Services\DeviceActionService.cs" />
     <Compile Include="Utilities\ASHelpers.cs" />

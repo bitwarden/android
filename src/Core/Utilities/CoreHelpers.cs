@@ -1,4 +1,5 @@
 ﻿using Bit.Core.Models.Domain;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -178,6 +179,26 @@ namespace Bit.Core.Utilities
                 }
             }
             return dict;
+        }
+
+        public static string SerializeJson(object obj, bool ignoreNulls = false)
+        {
+            var jsonSerializationSettings = new JsonSerializerSettings();
+            if(ignoreNulls)
+            {
+                jsonSerializationSettings.NullValueHandling = NullValueHandling.Ignore;
+            }
+            return JsonConvert.SerializeObject(obj, jsonSerializationSettings);
+        }
+
+        public static T DeserializeJson<T>(string json, bool ignoreNulls = false)
+        {
+            var jsonSerializationSettings = new JsonSerializerSettings();
+            if(ignoreNulls)
+            {
+                jsonSerializationSettings.NullValueHandling = NullValueHandling.Ignore;
+            }
+            return JsonConvert.DeserializeObject<T>(json, jsonSerializationSettings);
         }
     }
 }

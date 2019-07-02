@@ -4,7 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using System.Text.RegularExpressions;
 
-namespace Bit.iOS.Extension.Models
+namespace Bit.iOS.Core.Models
 {
     public class FillScript
     {
@@ -141,6 +141,17 @@ namespace Bit.iOS.Extension.Models
             SetFillScriptForFocus(filledFields);
         }
 
+        [JsonProperty(PropertyName = "script")]
+        public List<List<string>> Script { get; set; } = new List<List<string>>();
+        [JsonProperty(PropertyName = "documentUUID")]
+        public object DocumentUUID { get; set; }
+        [JsonProperty(PropertyName = "properties")]
+        public object Properties { get; set; } = new object();
+        [JsonProperty(PropertyName = "options")]
+        public object Options { get; set; } = new { animate = false };
+        [JsonProperty(PropertyName = "metadata")]
+        public object MetaData { get; set; } = new object();
+
         private PageDetails.Field FindUsernameField(PageDetails pageDetails, PageDetails.Field passwordField, bool canBeHidden,
             bool checkForm)
         {
@@ -261,16 +272,5 @@ namespace Bit.iOS.Extension.Models
         {
             return Regex.Replace(label, @"(?:\r\n|\r|\n)", string.Empty).Trim().ToLower();
         }
-
-        [JsonProperty(PropertyName = "script")]
-        public List<List<string>> Script { get; set; } = new List<List<string>>();
-        [JsonProperty(PropertyName = "documentUUID")]
-        public object DocumentUUID { get; set; }
-        [JsonProperty(PropertyName = "properties")]
-        public object Properties { get; set; } = new object();
-        [JsonProperty(PropertyName = "options")]
-        public object Options { get; set; } = new { animate = false };
-        [JsonProperty(PropertyName = "metadata")]
-        public object MetaData { get; set; } = new object();
     }
 }
