@@ -90,7 +90,16 @@ namespace Bit.App
                 else if(message.Command == "locked")
                 {
                     await _stateService.PurgeAsync();
-                    var lockPage = new LockPage(_appOptions, !(message.Data as bool?).GetValueOrDefault());
+                    var autoPromptFingerprint = !(message.Data as bool?).GetValueOrDefault();
+                    if(autoPromptFingerprint && Device.RuntimePlatform == Device.iOS)
+                    {
+                        var lockOptions = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+                        if(lockOptions == 0)
+                        {
+                            autoPromptFingerprint = false;
+                        }
+                    }
+                    var lockPage = new LockPage(_appOptions, autoPromptFingerprint);
                     Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
                 }
                 else if(message.Command == "lockVault")
