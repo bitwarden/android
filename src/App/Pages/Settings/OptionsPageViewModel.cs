@@ -46,6 +46,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
 
             PageTitle = AppResources.Options;
+            var iosIos = Device.RuntimePlatform == Device.iOS;
 
             ClearClipboardOptions = new List<KeyValuePair<int?, string>>
             {
@@ -53,10 +54,13 @@ namespace Bit.App.Pages
                 new KeyValuePair<int?, string>(10, AppResources.TenSeconds),
                 new KeyValuePair<int?, string>(20, AppResources.TwentySeconds),
                 new KeyValuePair<int?, string>(30, AppResources.ThirtySeconds),
-                new KeyValuePair<int?, string>(60, AppResources.OneMinute),
-                new KeyValuePair<int?, string>(120, AppResources.TwoMinutes),
-                new KeyValuePair<int?, string>(300, AppResources.FiveMinutes),
+                new KeyValuePair<int?, string>(60, AppResources.OneMinute)
             };
+            if(!iosIos)
+            {
+                ClearClipboardOptions.Add(new KeyValuePair<int?, string>(120, AppResources.TwoMinutes));
+                ClearClipboardOptions.Add(new KeyValuePair<int?, string>(300, AppResources.FiveMinutes));
+            }
             ThemeOptions = new List<KeyValuePair<string, string>>
             {
                 new KeyValuePair<string, string>(null, AppResources.Default),

@@ -27,7 +27,9 @@ namespace Bit.iOS
         private iOSPushNotificationHandler _pushHandler = null;
         private NFCReaderDelegate _nfcDelegate = null;
         private NSTimer _clipboardTimer = null;
+        private nint _clipboardBackgroundTaskId;
         private NSTimer _lockTimer = null;
+        private nint _lockBackgroundTaskId;
 
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
@@ -65,7 +67,11 @@ namespace Bit.iOS
                 }
                 else if(message.Command == "copiedToClipboard")
                 {
-                    await ClearClipboardTimerAsync(message.Data as Tuple<string, int?, bool>);
+
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        var task = ClearClipboardTimerAsync(message.Data as Tuple<string, int?, bool>);
+                    });
                 }
                 else if(message.Command == "listenYubiKeyOTP")
                 {
@@ -281,11 +287,21 @@ namespace Bit.iOS
 
         private void LockTimer(int lockOptionMinutes)
         {
+            if(_lockBackgroundTaskId > 0)
+            {
+                UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
+                _lockBackgroundTaskId = 0;
+            }
+            _lockBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
+            {
+                UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
+                _lockBackgroundTaskId = 0;
+            });
             var lockOptionMs = lockOptionMinutes * 60000;
             _lockTimer?.Invalidate();
             _lockTimer?.Dispose();
             _lockTimer = null;
-            var lockMsSpan = TimeSpan.FromMilliseconds(lockOptionMs + 10);
+            var lockMsSpan = TimeSpan.FromMilliseconds(10000 + 10);
             Device.BeginInvokeOnMainThread(() =>
             {
                 _lockTimer = NSTimer.CreateScheduledTimer(lockMsSpan, timer =>
@@ -296,6 +312,11 @@ namespace Bit.iOS
                         _lockTimer?.Invalidate();
                         _lockTimer?.Dispose();
                         _lockTimer = null;
+                        if(_lockBackgroundTaskId > 0)
+                        {
+                            UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
+                            _lockBackgroundTaskId = 0;
+                        }
                     });
                 });
             });
@@ -306,6 +327,11 @@ namespace Bit.iOS
             _lockTimer?.Invalidate();
             _lockTimer?.Dispose();
             _lockTimer = null;
+            if(_lockBackgroundTaskId > 0)
+            {
+                UIApplication.SharedApplication.EndBackgroundTask(_lockBackgroundTaskId);
+                _lockBackgroundTaskId = 0;
+            }
         }
 
         private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)
@@ -327,25 +353,38 @@ namespace Bit.iOS
             {
                 return;
             }
+            if(_clipboardBackgroundTaskId > 0)
+            {
+                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
+                _clipboardBackgroundTaskId = 0;
+            }
+            _clipboardBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
+            {
+                UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
+                _clipboardBackgroundTaskId = 0;
+            });
             _clipboardTimer?.Invalidate();
             _clipboardTimer?.Dispose();
             _clipboardTimer = null;
-            var lastClipboardValue = data.Item1;
+            var lastClipboardChangeCount = UIPasteboard.General.ChangeCount;
             var clearMsSpan = TimeSpan.FromMilliseconds(clearMs.Value);
-            Device.BeginInvokeOnMainThread(() =>
+            _clipboardTimer = NSTimer.CreateScheduledTimer(clearMsSpan, timer =>
             {
-                _clipboardTimer = NSTimer.CreateScheduledTimer(clearMsSpan, timer =>
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    Device.BeginInvokeOnMainThread(() =>
+                    var changeNow = UIPasteboard.General.ChangeCount;
+                    if(changeNow == 0 || lastClipboardChangeCount == changeNow)
                     {
-                        if(lastClipboardValue == UIPasteboard.General.String)
-                        {
-                            UIPasteboard.General.String = string.Empty;
-                        }
-                        _clipboardTimer?.Invalidate();
-                        _clipboardTimer?.Dispose();
-                        _clipboardTimer = null;
-                    });
+                        UIPasteboard.General.String = string.Empty;
+                    }
+                    _clipboardTimer?.Invalidate();
+                    _clipboardTimer?.Dispose();
+                    _clipboardTimer = null;
+                    if(_clipboardBackgroundTaskId > 0)
+                    {
+                        UIApplication.SharedApplication.EndBackgroundTask(_clipboardBackgroundTaskId);
+                        _clipboardBackgroundTaskId = 0;
+                    }
                 });
             });
         }
