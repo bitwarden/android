@@ -21,7 +21,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <u:InverseBoolConverter x:Key="inverseBool" />
-            
+
             <DataTemplate x:Key="cipherTemplate"
                           x:DataType="pages:GroupingsPageListItem">
                 <controls:CipherViewCell
@@ -63,13 +63,19 @@
                     <ListView.GroupHeaderTemplate>
                         <DataTemplate x:DataType="pages:GroupingsPageListGroup">
                             <ViewCell>
-                                <StackLayout StyleClass="list-row-header">
-                                    <Label
-                                        Text="{Binding Name}"
-                                        StyleClass="list-header, list-header-platform" />
-                                    <Label
-                                        Text="{Binding ItemCount}"
-                                        StyleClass="list-header-sub" />
+                                <StackLayout
+                                    Spacing="0" Padding="0" VerticalOptions="FillAndExpand"
+                                    StyleClass="list-row-header-container, list-row-header-container-platform">
+                                    <BoxView
+                                        StyleClass="list-section-separator-top, list-section-separator-top-platform" />
+                                    <StackLayout StyleClass="list-row-header, list-row-header-platform">
+                                        <Label
+                                            Text="{Binding Name}"
+                                            StyleClass="list-header, list-header-platform" />
+                                        <Label
+                                            Text="{Binding ItemCount}"
+                                            StyleClass="list-header-sub" />
+                                    </StackLayout>
                                 </StackLayout>
                             </ViewCell>
                         </DataTemplate>
