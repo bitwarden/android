@@ -26,10 +26,7 @@ namespace Bit.iOS.Autofill
             NavItem.Title = AppResources.SearchVault;
             CancelBarButton.Title = AppResources.Cancel;
             SearchBar.Placeholder = AppResources.Search;
-            if(!ThemeHelpers.LightTheme)
-            {
-                SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.BackgroundColor;
-            }
+            SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.ListHeaderBackgroundColor;
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;
