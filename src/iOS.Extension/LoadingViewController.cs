@@ -3,7 +3,6 @@ using System.Diagnostics;
 using Foundation;
 using UIKit;
 using Bit.iOS.Core;
-using Newtonsoft.Json;
 using Bit.iOS.Extension.Models;
 using MobileCoreServices;
 using Bit.iOS.Core.Utilities;
@@ -368,7 +367,7 @@ namespace Bit.iOS.Extension
         {
             if(jsonString != null)
             {
-                var convertedObject = JsonConvert.DeserializeObject<T>(jsonString.ToString());
+                var convertedObject = CoreHelpers.DeserializeJson<T>(jsonString.ToString());
                 return convertedObject;
             }
             return default(T);
