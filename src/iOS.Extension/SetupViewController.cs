@@ -18,6 +18,7 @@ namespace Bit.iOS.Extension
 
         public override void ViewDidLoad()
         {
+            base.ViewDidLoad();
             var descriptor = UIFontDescriptor.PreferredBody;
             DescriptionLabel.Text = $@"{AppResources.ExtensionSetup}
 
@@ -31,7 +32,6 @@ namespace Bit.iOS.Extension
 
             BackButton.TintColor = ThemeHelpers.NavBarTextColor;
             BackButton.Title = AppResources.Back;
-            base.ViewDidLoad();
         }
 
         partial void BackButton_Activated(UIBarButtonItem sender)

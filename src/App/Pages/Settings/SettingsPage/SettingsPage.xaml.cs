@@ -67,11 +67,11 @@ namespace Bit.App.Pages
             }
             else if(item.Name == AppResources.PasswordAutofill)
             {
-                // await Navigation.PushModalAsync(new NavigationPage(new OptionsPage()));
+                await Navigation.PushModalAsync(new NavigationPage(new AutofillPage()));
             }
             else if(item.Name == AppResources.AppExtension)
             {
-                // await Navigation.PushModalAsync(new NavigationPage(new OptionsPage()));
+                await Navigation.PushModalAsync(new NavigationPage(new ExtensionPage()));
             }
             else if(item.Name == AppResources.Options)
             {

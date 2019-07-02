@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AuthenticationServices;
 using Bit.App.Abstractions;
+using Bit.App.Pages;
 using Bit.App.Resources;
 using Bit.App.Services;
 using Bit.App.Utilities;
@@ -79,7 +80,7 @@ namespace Bit.iOS
                 }
                 else if(message.Command == "showAppExtension")
                 {
-
+                    Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));
                 }
                 else if(message.Command == "showStatusBar")
                 {
@@ -389,18 +390,20 @@ namespace Bit.iOS
             });
         }
 
-        private void ShowAppExtension()
+        private void ShowAppExtension(ExtensionPageViewModel extensionPageViewModel)
         {
             var itemProvider = new NSItemProvider(new NSDictionary(), Core.Constants.UTTypeAppExtensionSetup);
             var extensionItem = new NSExtensionItem
             {
                 Attachments = new NSItemProvider[] { itemProvider }
             };
-            var activityViewController = new UIActivityViewController(new NSExtensionItem[] { extensionItem }, null);
-            activityViewController.CompletionHandler = (activityType, completed) =>
+            var activityViewController = new UIActivityViewController(new NSExtensionItem[] { extensionItem }, null)
             {
-                // TODO
-                //page.EnabledExtension(completed && activityType == "com.8bit.bitwarden.find-login-action-extension");
+                CompletionHandler = (activityType, completed) =>
+                {
+                    extensionPageViewModel.EnabledExtension(
+                        completed && activityType == "com.8bit.bitwarden.find-login-action-extension");
+                }
             };
             var modal = UIApplication.SharedApplication.KeyWindow.RootViewController.ModalViewController;
             if(activityViewController.PopoverPresentationController != null)
