@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Exceptions;
@@ -23,6 +24,7 @@ namespace Bit.App.Pages
         private readonly IEnvironmentService _environmentService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
+        private readonly IStateService _stateService;
 
         private bool _u2fSupported = false;
         private TwoFactorProviderType? _selectedProviderType;
@@ -40,6 +42,7 @@ namespace Bit.App.Pages
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             PageTitle = AppResources.TwoStepLogin;
             SubmitCommand = new Command(async () => await SubmitAsync());
@@ -200,6 +203,8 @@ namespace Bit.App.Pages
                 var task = Task.Run(() => _syncService.FullSyncAsync(true));
                 _messagingService.Send("listenYubiKeyOTP", false);
                 _broadcasterService.Unsubscribe(nameof(TwoFactorPage));
+                var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
+                await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                 Application.Current.MainPage = new TabsPage();
             }
             catch(ApiException e)

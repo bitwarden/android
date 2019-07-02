@@ -148,10 +148,10 @@ namespace Bit.Droid
 
         private async Task BootstrapAsync()
         {
-            var disableFavicon = await ServiceContainer.Resolve<IStorageService>("storageService").GetAsync<bool?>(
-                Constants.DisableFaviconKey);
-            await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(Constants.DisableFaviconKey,
-                disableFavicon);
+            var disableFavicon = await ServiceContainer.Resolve<IStorageService>("storageService")
+                .GetAsync<bool?>(Constants.DisableFaviconKey);
+            await ServiceContainer.Resolve<IStateService>("stateService").SaveAsync(
+                Constants.DisableFaviconKey, disableFavicon);
             await ServiceContainer.Resolve<IEnvironmentService>("environmentService").SetUrlsFromStorageAsync();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Resources;
+using Bit.Core;
 using Bit.Core.Abstractions;
 using Bit.Core.Exceptions;
 using Bit.Core.Utilities;
@@ -18,6 +19,7 @@ namespace Bit.App.Pages
         private readonly ISyncService _syncService;
         private readonly IStorageService _storageService;
         private readonly IPlatformUtilsService _platformUtilsService;
+        private readonly IStateService _stateService;
 
         private bool _showPassword;
         private string _email;
@@ -30,6 +32,7 @@ namespace Bit.App.Pages
             _syncService = ServiceContainer.Resolve<ISyncService>("syncService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             PageTitle = AppResources.Bitwarden;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -123,6 +126,8 @@ namespace Bit.App.Pages
                 }
                 else
                 {
+                    var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
+                    await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
                     var task = Task.Run(async () => await _syncService.FullSyncAsync(true));
                     Application.Current.MainPage = new TabsPage();
                 }

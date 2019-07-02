@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         private readonly IMessagingService _messagingService;
         private readonly IStorageService _secureStorageService;
         private readonly IEnvironmentService _environmentService;
+        private readonly IStateService _stateService;
 
         private bool _hasKey;
         private string _email;
@@ -46,6 +47,7 @@ namespace Bit.App.Pages
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _secureStorageService = ServiceContainer.Resolve<IStorageService>("secureStorageService");
             _environmentService = ServiceContainer.Resolve<IEnvironmentService>("environmentService");
+            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
 
             PageTitle = AppResources.VerifyMasterPassword;
             TogglePasswordCommand = new Command(TogglePassword);
@@ -174,7 +176,7 @@ namespace Bit.App.Pages
                         if(!failed)
                         {
                             Pin = string.Empty;
-                            DoContinue();
+                            await DoContinueAsync();
                         }
                     }
                     else
@@ -270,7 +272,7 @@ namespace Bit.App.Pages
             _lockService.FingerprintLocked = !success;
             if(success)
             {
-                DoContinue();
+                await DoContinueAsync();
             }
         }
 
@@ -280,11 +282,13 @@ namespace Bit.App.Pages
             {
                 await _cryptoService.SetKeyAsync(key);
             }
-            DoContinue();
+            await DoContinueAsync();
         }
 
-        private void DoContinue()
+        private async Task DoContinueAsync()
         {
+            var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
+            await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
             _messagingService.Send("unlocked");
             UnlockedAction?.Invoke();
         }

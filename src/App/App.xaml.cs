@@ -227,7 +227,8 @@ namespace Bit.App
                 _folderService.ClearAsync(userId),
                 _collectionService.ClearAsync(userId),
                 _passwordGenerationService.ClearAsync(),
-                _lockService.ClearAsync());
+                _lockService.ClearAsync(),
+                _stateService.PurgeAsync());
             _lockService.PinLocked = false;
             _lockService.FingerprintLocked = true;
             _searchService.ClearIndex();
