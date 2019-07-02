@@ -19,14 +19,6 @@ namespace Bit.App.Pages
             await _vm.InitAsync();
         }
 
-        private void SeeApps_Clicked(object sender, EventArgs e)
-        {
-            if(DoOnce())
-            {
-                _vm.SeeApps();
-            }
-        }
-
         private void Show_Clicked(object sender, EventArgs e)
         {
             if(DoOnce())

@@ -58,11 +58,6 @@ namespace Bit.App.Pages
             Activated = activated.GetValueOrDefault();
         }
 
-        public void SeeApps()
-        {
-            _platformUtilsService.LaunchUri("https://bitwarden.com/ios/");
-        }
-
         public void ShowExtension()
         {
             _messagingService.Send("showAppExtension", this);

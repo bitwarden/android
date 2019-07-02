@@ -84,10 +84,6 @@
                        Margin="0, -10, 0, 0"
                        WidthRequest="290"
                        HeightRequest="252" />
-                <Button Text="{u:I18n ExtensionSeeApps}"
-                        Clicked="SeeApps_Clicked"
-                        VerticalOptions="End"
-                        HorizontalOptions="Fill" />
                 <Button Text="{u:I18n ExntesionReenable}"
                         Clicked="Show_Clicked"
                         VerticalOptions="End"
