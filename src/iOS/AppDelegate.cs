@@ -301,7 +301,7 @@ namespace Bit.iOS
             _lockTimer?.Invalidate();
             _lockTimer?.Dispose();
             _lockTimer = null;
-            var lockMsSpan = TimeSpan.FromMilliseconds(10000 + 10);
+            var lockMsSpan = TimeSpan.FromMilliseconds(lockOptionMs + 10);
             Device.BeginInvokeOnMainThread(() =>
             {
                 _lockTimer = NSTimer.CreateScheduledTimer(lockMsSpan, timer =>
