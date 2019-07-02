@@ -12,7 +12,10 @@ namespace Bit.iOS.Core.Views
         {
             TextLabel.Text = labelName;
             TextLabel.TextColor = ThemeHelpers.TextColor;
-            Switch.TintColor = ThemeHelpers.MutedColor;
+            if(!ThemeHelpers.LightTheme)
+            {
+                Switch.TintColor = ThemeHelpers.MutedColor;
+            }
             Switch.OnTintColor = ThemeHelpers.PrimaryColor;
             AccessoryView = Switch;
 

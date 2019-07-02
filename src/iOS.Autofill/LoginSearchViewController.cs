@@ -18,6 +18,7 @@ namespace Bit.iOS.Autofill
 
         public Context Context { get; set; }
         public CredentialProviderViewController CPViewController { get; set; }
+        public bool FromList { get; set; }
 
         public async override void ViewDidLoad()
         {
@@ -39,7 +40,14 @@ namespace Bit.iOS.Autofill
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
-            CPViewController.CompleteRequest();
+            if(FromList)
+            {
+                DismissViewController(true, null);
+            }
+            else
+            {
+                CPViewController.CompleteRequest();
+            }
         }
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)

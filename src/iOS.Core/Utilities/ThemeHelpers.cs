@@ -14,6 +14,7 @@ namespace Bit.iOS.Core.Utilities
         public static UIColor TextColor = Xamarin.Forms.Color.FromHex("#000000").ToUIColor();
         public static UIColor PlaceholderColor = Xamarin.Forms.Color.FromHex("#d0d0d0").ToUIColor();
         public static UIColor SeparatorColor = Xamarin.Forms.Color.FromHex("#dddddd").ToUIColor();
+        public static UIColor ListHeaderBackgroundColor = Xamarin.Forms.Color.FromHex("#efeff4").ToUIColor();
         public static UIColor NavBarBackgroundColor = Xamarin.Forms.Color.FromHex("#3c8dbc").ToUIColor();
         public static UIColor NavBarTextColor = Xamarin.Forms.Color.FromHex("#ffffff").ToUIColor();
 
@@ -65,6 +66,7 @@ namespace Bit.iOS.Core.Utilities
                 TextColor = whiteColor;
                 PlaceholderColor = Xamarin.Forms.Color.FromHex("#707070").ToUIColor();
                 SeparatorColor = Xamarin.Forms.Color.FromHex("#191919").ToUIColor();
+                ListHeaderBackgroundColor = Xamarin.Forms.Color.FromHex("#222222").ToUIColor();
                 NavBarBackgroundColor = Xamarin.Forms.Color.FromHex("#212121").ToUIColor();
                 NavBarTextColor = whiteColor;
             }
@@ -80,6 +82,7 @@ namespace Bit.iOS.Core.Utilities
                 TextColor = whiteColor;
                 PlaceholderColor = Xamarin.Forms.Color.FromHex("#707070").ToUIColor();
                 SeparatorColor = Xamarin.Forms.Color.FromHex("#282828").ToUIColor();
+                ListHeaderBackgroundColor = blackColor;
                 NavBarBackgroundColor = blackColor;
                 NavBarTextColor = whiteColor;
             }
@@ -93,6 +96,7 @@ namespace Bit.iOS.Core.Utilities
                 TextColor = Xamarin.Forms.Color.FromHex("#e5e9f0").ToUIColor();
                 PlaceholderColor = Xamarin.Forms.Color.FromHex("#7b88a1").ToUIColor();
                 SeparatorColor = Xamarin.Forms.Color.FromHex("#2e3440").ToUIColor();
+                ListHeaderBackgroundColor = Xamarin.Forms.Color.FromHex("#2e3440").ToUIColor();
                 NavBarBackgroundColor = Xamarin.Forms.Color.FromHex("#2e3440").ToUIColor();
                 NavBarTextColor = Xamarin.Forms.Color.FromHex("#e5e9f0").ToUIColor();
             }

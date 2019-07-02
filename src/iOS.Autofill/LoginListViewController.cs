@@ -58,6 +58,7 @@ namespace Bit.iOS.Autofill
                 {
                     searchLoginController.Context = Context;
                     searchLoginController.CPViewController = CPViewController;
+                    searchLoginController.FromList = true;
                 }
             }
         }
