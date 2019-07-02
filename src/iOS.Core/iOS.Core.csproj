@@ -43,6 +43,28 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|AnyCPU'">
+    <OutputPath>bin\AppStore\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;VSX1000</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|AnyCPU'">
+    <OutputPath>bin\Ad-Hoc\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;VSX1000</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Xml" />

@@ -23,6 +23,11 @@
     <MtouchArch>x86_64</MtouchArch>
     <MtouchLink>None</MtouchLink>
     <MtouchDebug>true</MtouchDebug>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler</MtouchExtraArgs>
+    <OptimizePNGs>true</OptimizePNGs>
+    <MtouchFastDev>false</MtouchFastDev>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchSdkVersion>12.0</MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -30,10 +35,13 @@
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchLink>None</MtouchLink>
+    <MtouchLink>Full</MtouchLink>
     <MtouchArch>x86_64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
+    <OptimizePNGs>true</OptimizePNGs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,6 +58,10 @@
     <MtouchDebug>true</MtouchDebug>
     <MtouchLink>None</MtouchLink>
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler</MtouchExtraArgs>
+    <OptimizePNGs>true</OptimizePNGs>
+    <MtouchSdkVersion>
+    </MtouchSdkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
     <DebugType>none</DebugType>
@@ -61,9 +73,69 @@
     <MtouchArch>ARM64</MtouchArch>
     <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchLink>Full</MtouchLink>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <OptimizePNGs>true</OptimizePNGs>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <AppExtensionDebugBundleId />
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhoneSimulator'">
+    <OutputPath>bin\iPhoneSimulator\AppStore\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
+    <OptimizePNGs>true</OptimizePNGs>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchLink>Full</MtouchLink>
+    <MtouchSdkVersion>9.3</MtouchSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'AppStore|iPhone'">
+    <OutputPath>bin\iPhone\AppStore\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <MtouchLink>Full</MtouchLink>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
+    <OptimizePNGs>true</OptimizePNGs>
+    <MtouchArch>ARM64</MtouchArch>
+    <MtouchSdkVersion>10.2</MtouchSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhoneSimulator'">
+    <OutputPath>bin\iPhoneSimulator\Ad-Hoc\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
+    <OptimizePNGs>true</OptimizePNGs>
+    <MtouchLink>Full</MtouchLink>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchSdkVersion>9.3</MtouchSdkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone'">
+    <OutputPath>bin\iPhone\Ad-Hoc\</OutputPath>
+    <DefineConstants>__IOS__;__MOBILE__;__UNIFIED__;</DefineConstants>
+    <Optimize>true</Optimize>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <MtouchArch>ARM64</MtouchArch>
+    <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
+    <MtouchLink>Full</MtouchLink>
+    <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSAutofill --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
+    <OptimizePNGs>true</OptimizePNGs>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="CredentialProviderViewController.cs" />
