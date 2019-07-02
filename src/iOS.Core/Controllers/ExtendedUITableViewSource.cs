@@ -11,7 +11,7 @@ namespace Bit.iOS.Core.Views
             if(headerView != null && headerView is UITableViewHeaderFooterView hv && hv.TextLabel != null)
             {
                 hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
-                hv.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                hv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
             }
         }
 
@@ -20,7 +20,7 @@ namespace Bit.iOS.Core.Views
             if(footerView != null && footerView is UITableViewHeaderFooterView fv && fv.TextLabel != null)
             {
                 fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
-                fv.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                fv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
             }
         }
     }
