@@ -33,6 +33,7 @@ namespace Bit.iOS
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStorageService _storageService;
+        private ILockService _lockService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -42,6 +43,7 @@ namespace Bit.iOS
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            _lockService = ServiceContainer.Resolve<ILockService>("lockService");
 
             LoadApplication(new App.App(null));
             iOSCoreHelpers.AppearanceAdjustments();
@@ -51,12 +53,11 @@ namespace Bit.iOS
             {
                 if(message.Command == "scheduleLockTimer")
                 {
-                    var lockOptionMinutes = (int)message.Data;
-
+                    LockTimer((int)message.Data);
                 }
                 else if(message.Command == "cancelLockTimer")
                 {
-
+                    CancelLockTimer();
                 }
                 else if(message.Command == "updatedTheme")
                 {
@@ -276,6 +277,35 @@ namespace Bit.iOS
                     _nfcSession.BeginSession();
                 }
             }
+        }
+
+        private void LockTimer(int lockOptionMinutes)
+        {
+            var lockOptionMs = lockOptionMinutes * 60000;
+            _lockTimer?.Invalidate();
+            _lockTimer?.Dispose();
+            _lockTimer = null;
+            var lockMsSpan = TimeSpan.FromMilliseconds(lockOptionMs + 10);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                _lockTimer = NSTimer.CreateScheduledTimer(lockMsSpan, timer =>
+                {
+                    Device.BeginInvokeOnMainThread(() =>
+                    {
+                        _lockService.CheckLockAsync();
+                        _lockTimer?.Invalidate();
+                        _lockTimer?.Dispose();
+                        _lockTimer = null;
+                    });
+                });
+            });
+        }
+
+        private void CancelLockTimer()
+        {
+            _lockTimer?.Invalidate();
+            _lockTimer?.Dispose();
+            _lockTimer = null;
         }
 
         private async Task ClearClipboardTimerAsync(Tuple<string, int?, bool> data)
