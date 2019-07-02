@@ -400,7 +400,6 @@
                     <nil name="viewControllers"/>
                     <connections>
                         <segue destination="10570" kind="relationship" relationship="rootViewController" id="10939"/>
-                        <outlet property="NaviBar2" destination="10583" id="name-outlet-10583"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="10584" userLabel="First Responder" sceneMemberID="firstResponder"/>
