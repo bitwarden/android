@@ -1556,4 +1556,14 @@
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>「自動填入」使其他網站及 App 能更簡單地安全存取您的 Bitwarden 密碼庫。看起來您尚未啟用 Bitwarden 的自動填入服務。請在「設定」畫面啟用 Bitwarden 的自動填入。</value>
   </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
+  </data>
 </root>
