@@ -21,6 +21,8 @@ namespace Bit.iOS.Core.Utilities
         public static void SetAppearance(string theme)
         {
             SetThemeVariables(theme);
+            UINavigationBar.Appearance.ShadowImage = new UIImage();
+            UINavigationBar.Appearance.SetBackgroundImage(new UIImage(), UIBarMetrics.Default);
             UIStepper.Appearance.TintColor = MutedColor;
             if(!LightTheme)
             {
