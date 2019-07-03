@@ -1557,10 +1557,10 @@
     <value>Autoudfyldning gør det nemt at få en sikret adgang til din Bitwarden boks fra andre websteder og apps. Det ser ud til, at du ikke har aktiveret en autoudfyldningstjeneste for Bitwarden. Aktivér autoudfyldning for Bitwarden fra skærmen "Indstillinger".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Dine temaændringer effektueres efter app-genstart.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Stort begyndelsesbogstav</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
