@@ -1560,7 +1560,7 @@
     <value>تغییرات شما در ظاهر برنامه بعد از اینکه برنامه را دوباره آغاز کردید اعمال می‌شود.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>بزرگ نوشتن حرف اول کلمه</value>
+    <value>بزرگ نوشتن حرف اول</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
