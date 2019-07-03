@@ -112,8 +112,9 @@
     <MtouchArch>ARM64</MtouchArch>
     <MtouchLink>Full</MtouchLink>
     <MtouchSdkVersion>10.2</MtouchSdkVersion>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignKey>iPhone Distribution: 8bit Solutions LLC (LTZ2PFU5D6)</CodesignKey>
     <CodesignProvision>Dist: Bitwarden Ext</CodesignProvision>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhoneSimulator'">
     <OutputPath>bin\iPhoneSimulator\Ad-Hoc\</OutputPath>
@@ -143,8 +144,9 @@
     <MtouchHttpClientHandler>NSUrlSessionHandler</MtouchHttpClientHandler>
     <MtouchExtraArgs>--http-message-handler=NSUrlSessionHandler --linkskip=BitwardeniOS --linkskip=BitwardeniOSCore --linkskip=BitwardeniOSExtension --linkskip=BitwardenApp --linkskip=BitwardenCore</MtouchExtraArgs>
     <OptimizePNGs>true</OptimizePNGs>
-    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignKey>iPhone Distribution: 8bit Solutions LLC (LTZ2PFU5D6)</CodesignKey>
     <CodesignProvision>Adhoc: Bitwarden ext</CodesignProvision>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="LoadingViewController.cs" />
