@@ -12,6 +12,7 @@ namespace Bit.iOS.Core.Views
             {
                 hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
                 hv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
+                hv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
             }
         }
 
@@ -21,6 +22,7 @@ namespace Bit.iOS.Core.Views
             {
                 fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
                 fv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
+                fv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
             }
         }
     }
