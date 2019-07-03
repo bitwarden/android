@@ -412,7 +412,7 @@
     <value>Extensió de l'aplicació Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>La forma més senzilla d'afegir nous inicis de sessió a la vostra caixa forta és amb l'extensió d'aplicació Bitwarden. Obteniu més informació sobre el seu ús en la pantalla "Eines".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Utilitzeu Bitwarden en Safari i altres aplicacions per omplir automàticament els vostres inicis de sessió.</value>
@@ -753,7 +753,7 @@
     <value>Estat</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>La forma més senzilla d'afegir nous inicis de sessió a la vostra caixa forta és amb el servei d'emplenament automàtic de Bitwarden. Obteniu més informació sobre com utilitzar el servei en la pantalla "Eines".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Emplenament automàtic</value>
@@ -1302,7 +1302,7 @@
     <value>Emplenament automàtic de contrasenya</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>La forma més senzilla d'afegir nous inicis de sessió a la vostra caixa forta és mitjançant l'extensió Emplenament automàtic de contrasenya de Bitwarden. Obteniu més informació sobre l'ús de l'extensió de Bitwarden a la pantalla "Eines".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>L’adreça electrònica no és vàlida.</value>
@@ -1323,21 +1323,21 @@
     <value>Tots els elements</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Comprovant la contrasenya...</value>
+    <value>S'està comprovant la contrasenya...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
     <value>Comprova si la contrasenya ha estat exposada.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Aquesta contrasenya ha estat exposada {0} vegades en filtracions de seguretat de dades. Heu de canviar-la.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Aquesta contrasenya no s'ha trobat en cap filtració de dades coneguda. Hauries de poder utilitzar-la de manera segura.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>Nom d'identitat</value>
@@ -1349,13 +1349,13 @@
     <value>Historial de les contrasenyes</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Tipologies</value>
+    <value>Tipus</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>Sense contrasenyes per mostrar.</value>
+    <value>No hi ha cap contrasenya per llistar.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>Sense elements per mostrar.</value>
+    <value>No hi ha cap element per llistar.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
     <value>Cerca a la col·lecció</value>
@@ -1364,19 +1364,19 @@
     <value>Cerca a la carpeta</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Tipologia de cerca</value>
+    <value>Tipus de cerca</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Tipologia</value>
+    <value>Tipus</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Mou avall</value>
+    <value>Desplaça cap avall</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Mou amunt</value>
+    <value>Desplaça cap amunt</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscel·lània</value>
+    <value>Diversos</value>
   </data>
   <data name="Ownership" xml:space="preserve">
     <value>Propietat</value>
@@ -1385,10 +1385,10 @@
     <value>Qui és el propietari d'aquest element?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Sense col·leccions per mostrar.</value>
+    <value>No hi ha cap col·lecció per llistar.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>S'ha compartit l'element.</value>
+    <value>L'element s'ha compartit.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
     <value>Heu d'escollir com a mínim una col·lecció.</value>
@@ -1400,13 +1400,13 @@
     <value>Comparteix l'element</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Sense organitzacions per mostrar.</value>
+    <value>No hi ha cap organització per llistar.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>Trieu una organització amb la qual vulgueu compartir aquest element. En compartir transferiu la propietat de l'element a l'organització. Ja no sereu el propietari directe d'aquest element una vegada que s'haja compartit.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Nombre de mots</value>
+    <value>Nombre de paraules</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
     <value>Frase de pas</value>
@@ -1415,7 +1415,7 @@
     <value>Separador de paraules</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Neteja</value>
+    <value>Esborra</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
@@ -1423,18 +1423,18 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>Sense carpetes per mostrar.</value>
+    <value>No hi ha carpetes per llistar.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
     <value>Frase d'empremta digital</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>Frase d'empremta digital del vostre compte</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden us permet compartir la vostra caixa forta amb altres usuaris mitjançant un compte d'organització. Voleu visitar el lloc web de bitwarden.com per obtenir més informació?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>Exporta caixa forta</value>
@@ -1458,14 +1458,14 @@
     <value>Estableix el teu codi PIN per desbloquejar Bitwarden. La configuració PIN es restablirà si tanqueu sessió de manera completa de l'aplicació.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Heu iniciat la sessió com a {0} en {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>La caixa forta està bloquejada. Verifiqueu la contrasenya mestra per continuar.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>La caixa forta està bloquejada. Verifiqueu El codi PIN per continuar.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Fosc</value>
@@ -1498,15 +1498,15 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Esborra automàticament els valors copiats del porta-retalls.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>Detecció de coincidències URI per defecte</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Trieu la manera predeterminada en que es gestiona la detecció de coincidència d'URI per als inicis de sessió en realitzar accions com l'emplenament automàtic.</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>Tema</value>
@@ -1520,40 +1520,50 @@
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Reiniciant...</value>
+    <value>S'està reiniciant...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
     <value>Copia notes</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Surt</value>
+    <value>Tanca</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Esteu segur que voleu tancar Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Voleu sol·licitar el desbloqueig amb la vostra contrasenya mestra quan es reinicie l’aplicació?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Negre</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>URls de la llista negra</value>
+    <value>URl a la llista negra</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Els URI que es mostren a la llista negra no oferiran l’emplenament automàtic. La llista ha de estar separada per comes. Ex: "https://twitter.com, androidapp: //com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>Desactiva Guarda elements nous</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>"Guarda elements nous" demanarà automàticament que guardeu elements nous al magatzem cada volta que els introduïu per primera vegada.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>En reiniciar aplicació</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>L'emplenament automàtic facilita l'accés de forma segura a la vostra caixa forta de Bitwarden des d'altres llocs web i aplicacions. Sembla que no heu habilitat un servei d’emplenament automàtic per a Bitwarden. Habiliteu-lo a la pantalla "Configuració".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
