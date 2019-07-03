@@ -1542,7 +1542,7 @@
     <value>Sortlistede URI'er</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Sortlistede URI'er tilbyder ikke autoudfyldning. Listen over apps skal være kommasepareret. F.eks: "https://twitter.com, androidapp: //com.twitter.android".</value>
+    <value>Sortlistede URI'er tilbyder ikke autoudfyldning. Listen skal være kommasepareret. F.eks: "https://twitter.com, androidapp: //com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Deaktivér gem-forespørgsel</value>
@@ -1555,5 +1555,15 @@
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Autoudfyldning gør det nemt at få en sikret adgang til din Bitwarden boks fra andre websteder og apps. Det ser ud til, at du ikke har aktiveret en autoudfyldningstjeneste for Bitwarden. Aktivér autoudfyldning for Bitwarden fra skærmen "Indstillinger".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>

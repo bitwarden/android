@@ -1556,4 +1556,14 @@
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automaattäite teenus võimaldab teistes äppides Bitwardeni kirjetele hõlpsasti ligi pääseda. Paistab, et selles seadmes ei ole Bitwardeni Automaattäite teenus sisselülitatud. Saad selle sisse lülitada menüüst "Seaded".</value>
   </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
+  </data>
 </root>

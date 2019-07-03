@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>О нас</value>
+    <value>О Bitwarden</value>
   </data>
   <data name="Add" xml:space="preserve">
     <value>Добавить</value>
@@ -209,7 +209,7 @@
     <value>Откройте проблему в нашем репозитории на GitHub.</value>
   </data>
   <data name="FingerprintDirection" xml:space="preserve">
-    <value>Приложите палец к датчику</value>
+    <value>Прикоснитесь к сенсору для входа</value>
   </data>
   <data name="Folder" xml:space="preserve">
     <value>Папка</value>
@@ -356,7 +356,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} скопировано.</value>
+    <value>{0} скопирован(о).</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -534,7 +534,7 @@
     <value>Немедленно</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Параметры блокировки</value>
+    <value>Настройки блокировки</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Вход...</value>
@@ -598,10 +598,10 @@
     <comment>Confirmation, like "Ok, I understand it"</comment>
   </data>
   <data name="OptionDefaults" xml:space="preserve">
-    <value>Параметры по умолчанию задаются из генератора паролей основного приложения Bitwarden.</value>
+    <value>Настройки по умолчанию задаются из генератора паролей основного приложения Bitwarden.</value>
   </data>
   <data name="Options" xml:space="preserve">
-    <value>Опции</value>
+    <value>Параметры</value>
   </data>
   <data name="Other" xml:space="preserve">
     <value>Прочее</value>
@@ -686,10 +686,10 @@
     <value>Двухфакторная аутентификация делает ваш аккаунт более защищенным, требуя подтверждения входа на другом устройстве, например, ключом безопасности, приложением-аутентификатором, SMS, телефонным звонком или email. Двухфакторная аутентификация включается на bitwarden.com. Перейти на сайт сейчас?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Разблокировать {0}</value>
+    <value>Разблокировка {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
-    <value>Разблокировать PIN-кодом</value>
+    <value>Разблокировка PIN-кодом</value>
   </data>
   <data name="Validating" xml:space="preserve">
     <value>Проверка</value>
@@ -833,7 +833,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="TwoStepLoginOptions" xml:space="preserve">
-    <value>Параметры двухфакторной аутентификации</value>
+    <value>Настройки двухфакторной аутентификации</value>
   </data>
   <data name="UseAnotherTwoStepMethod" xml:space="preserve">
     <value>Использовать другой метод двухфакторной аутентификации</value>
@@ -847,7 +847,7 @@
     <comment>For 2FA</comment>
   </data>
   <data name="YubiKeyInstruction" xml:space="preserve">
-    <value>Для продолжения приложите ваш YubiKey NEO к задней панели устройства или вставьте его в USB-порт вашего устройства и нажмите его кнопку.</value>
+    <value>Для продолжения приложите ваш YubiKey NEO к задней панели устройства или вставьте его в USB-порт и нажмите его кнопку.</value>
   </data>
   <data name="YubiKeyTitle" xml:space="preserve">
     <value>Ключ безопасности YubiKey</value>
@@ -944,7 +944,7 @@
     <value>Вы не можете использовать эту функцию, пока не обновите свой ключ шифрования.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-    <value>Узнайть больше</value>
+    <value>Узнать больше</value>
   </data>
   <data name="ApiUrl" xml:space="preserve">
     <value>API URL-адреса сервера</value>
@@ -1494,7 +1494,7 @@
     <value>2 минуты</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Очистить буфер обмена</value>
+    <value>Очистка буфера обмена</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
@@ -1542,7 +1542,7 @@
     <value>Внесенные в черный список URI</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Для URI, внесенных в черный список, автоматическое заполнение предлагаться не будет. Список приложений должен быть разделен запятыми. Например: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Отключить запрос на сохранение</value>
@@ -1555,5 +1555,15 @@
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Автозаполнение упрощает безопасный доступ к вашему хранилищу Bitwarden со сторонних веб-сайтов и приложений. Похоже, вы не включили службу автозаполнения Bitwarden. Это можно сделать в настройках.</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>

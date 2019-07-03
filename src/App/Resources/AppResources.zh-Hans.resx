@@ -412,7 +412,7 @@
     <value>Bitwarden App 扩展</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>最简单的添加网站的方法是 Bitwarden App 扩展。请到 “设置” 页面获得更多信息。</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>在 Safari 和其他应用中使用 Bitwarden 来自动填写登录信息。</value>
@@ -753,7 +753,7 @@
     <value>状态</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>向您的密码库中添加新登录项目的最简单方法，就是 Bitwarden 自动填写服务。转到 “设置” 屏幕了解更多有关使用 Bitwarden 自动填写服务的方法。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>自动填充</value>
@@ -1302,7 +1302,7 @@
     <value>自动填充密码</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>向您的密码库中添加新登录项目的最简单方法，就是 Bitwarden 自动填写扩展。转到 “设置” 屏幕了解更多有关使用 Bitwarden 自动填写扩展的方法。</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>无效的电子邮件地址。</value>
@@ -1403,13 +1403,13 @@
     <value>没有可列出的组织。</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>选择您希望与之共享此项目的组织。共享操作将会把项目的所有权转移到该组织。一旦共享，您将不再是此项目的直接所有者。</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
     <value>字数</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>密码</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
     <value>单词分隔符</value>
@@ -1426,15 +1426,15 @@
     <value>没有可显示的文件夹。</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>指纹短语</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>您的账户的指纹短语</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden 允许您使用组织帐户与他人共享您的存储库。您想访问 bitwarden.com 网站以了解更多内容吗？</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
     <value>导出密码库</value>
@@ -1506,7 +1506,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>选择 URI 匹配检测在操作，例如自动填充时处理的默认方式。</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>主题</value>
@@ -1548,12 +1548,22 @@
     <value>禁用保存提示</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>当您第一次登录时，“保存登录提醒” 会自动提醒您在密码库里保存新的登录项目。</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>重启时</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>自动填充，可以安全地从其他网站和应用程序中访问您的 Bitwarden 安全库。看起来您还没有启用 Bitwarden 自动填充服务。从“设置”屏幕启用 Bitwarden 自动填充。</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
