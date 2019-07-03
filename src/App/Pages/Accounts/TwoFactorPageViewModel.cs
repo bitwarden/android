@@ -160,7 +160,7 @@ namespace Bit.App.Pages
             {
                 _messagingService.Send("listenYubiKeyOTP", false);
             }
-            if(DuoMethod)
+            if(SelectedProviderType == null || DuoMethod)
             {
                 page.RemoveContinueButton();
             }
