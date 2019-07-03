@@ -638,7 +638,7 @@
     <value>Digite novamente a Senha Mestra</value>
   </data>
   <data name="SearchVault" xml:space="preserve">
-    <value>Pesquisar Cofre</value>
+    <value>Pesquisar cofre</value>
   </data>
   <data name="Security" xml:space="preserve">
     <value>Segurança</value>
@@ -1320,7 +1320,7 @@
     <value>Notas Seguras</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>Todos os itens</value>
+    <value>Todos os Itens</value>
   </data>
   <data name="URIs" xml:space="preserve">
     <value>URIs</value>
@@ -1426,7 +1426,7 @@
     <value>Não há pastas para listar.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Frase biométrica</value>
+    <value>Frase Biométrica</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
@@ -1555,5 +1555,15 @@
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>O autopreenchimento facilita o acesso seguro ao seu cofre Bitwarden a partir de outros sites e aplicativos. Parece que você não ativou um serviço de autopreenchimento para o Bitwarden. Ative o autopreenchimento para o Bitwarden na tela "Configurações".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
