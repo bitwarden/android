@@ -8,40 +8,22 @@ namespace Bit.iOS.Core.Views
     {
         public override void WillDisplayHeaderView(UITableView tableView, UIView headerView, nint section)
         {
-            if(headerView != null)
+            if(headerView != null && headerView is UITableViewHeaderFooterView hv)
             {
-                headerView.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
-                headerView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                if(headerView is UITableViewHeaderFooterView hv)
+                if(hv.TextLabel != null)
                 {
-                    if(hv.BackgroundView != null)
-                    {
-                        hv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                    }
-                    if(hv.TextLabel != null)
-                    {
-                        hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
-                    }
+                    hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
                 }
             }
         }
 
         public override void WillDisplayFooterView(UITableView tableView, UIView footerView, nint section)
         {
-            if(footerView != null)
+            if(footerView != null && footerView is UITableViewHeaderFooterView fv)
             {
-                footerView.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
-                footerView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                if(footerView is UITableViewHeaderFooterView fv)
+                if(fv.TextLabel != null)
                 {
-                    if(fv.BackgroundView != null)
-                    {
-                        fv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                    }
-                    if(fv.TextLabel != null)
-                    {
-                        fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
-                    }
+                    fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
                 }
             }
         }
