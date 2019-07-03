@@ -8,34 +8,40 @@ namespace Bit.iOS.Core.Views
     {
         public override void WillDisplayHeaderView(UITableView tableView, UIView headerView, nint section)
         {
-            if(headerView != null && headerView is UITableViewHeaderFooterView hv)
+            if(headerView != null)
             {
-                hv.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                hv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
-                if(hv.BackgroundView != null)
+                headerView.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
+                headerView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                if(headerView is UITableViewHeaderFooterView hv)
                 {
-                    hv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                }
-                if(hv.TextLabel != null)
-                {
-                    hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                    if(hv.BackgroundView != null)
+                    {
+                        hv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                    }
+                    if(hv.TextLabel != null)
+                    {
+                        hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                    }
                 }
             }
         }
 
         public override void WillDisplayFooterView(UITableView tableView, UIView footerView, nint section)
         {
-            if(footerView != null && footerView is UITableViewHeaderFooterView fv)
+            if(footerView != null)
             {
-                fv.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                fv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
-                if(fv.BackgroundView != null)
+                footerView.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
+                footerView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                if(footerView is UITableViewHeaderFooterView fv)
                 {
-                    fv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
-                }
-                if(fv.TextLabel != null)
-                {
-                    fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                    if(fv.BackgroundView != null)
+                    {
+                        fv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                    }
+                    if(fv.TextLabel != null)
+                    {
+                        fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                    }
                 }
             }
         }
