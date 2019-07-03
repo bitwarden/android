@@ -182,18 +182,18 @@
     <value>ويرايش پوشه</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>رایانامه</value>
+    <value>ایمیل</value>
     <comment>Short label for an email address.</comment>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>آدرس رایانامه</value>
+    <value>آدرس ایمیل</value>
     <comment>Full label for a email address.</comment>
   </data>
   <data name="EmailUs" xml:space="preserve">
-    <value>به ما رایانامه بزنید</value>
+    <value>ایمیل ما</value>
   </data>
   <data name="EmailUsDescription" xml:space="preserve">
-    <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما رایانامه ارسال کنید.</value>
+    <value>برای کمک گرفتن و گذاشتن بازخورد بصورت مستقیم به ما ایمیل ارسال کنید.</value>
   </data>
   <data name="EnterPIN" xml:space="preserve">
     <value>پین کد را وارد کنید.</value>
@@ -412,7 +412,7 @@
     <value>افزونه اپلیکیشن Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه اپلیکیشن Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از افزونه اپلیکیشن مرورکردن صفحه "تنظیمات" است.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>با Bitwarden در سافاری و دیگر برنامه ها میتوانید از قابلیت پر کردن خودکار در ورودهایتان استفاده کنید.</value>
@@ -753,7 +753,7 @@
     <value>وضعیت</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوقتان از سرویس پر کردن خودکار Bitwarden است. برای اطلاعات بیشتر درباره استفاده از سرویس پر کردن خودکار Bitwarden است مرور کردن صفحه "تنظیمات" است.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>پر کردن خودکار</value>
@@ -1302,258 +1302,268 @@
     <value>پرکردن خودکار کلمه عبور</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>ساده ترین روش برای افزودن اطلاعات ورود به گاوصندوق از طریق افزونه پرکردن خودکار رمز عبور Bitwarden است. برای اطلاع بیشتر از چگونگی استفاده از پرکردن خودکار رمز عبور Bitwarden مرورکردن صفحه "تنظیمات" است.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>آدرس ایمیل نامعتبر است.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>کارتها</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>مشخصات</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>ورودها</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>یادداشت های امن</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>تمام موارد</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>آدرس اینترنتی</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>درحال بررسی گذرواژه…</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>بررسی کنید که آیا رمز عبور افشا شده است.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>این رمز عبور در رخنه داده ها {0} بار افشا شده است. باید تغییرش دهید.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>این رمز عبور در هیچ رخنه داده ای شناخته نشده است. باید برای امنیت از آن استفاده کنید.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity Name</value>
+    <value>نام شناسایی</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>مقدار</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>تاریخچه رمز عبور</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>انواع</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>رمزعبوری برای لیست کردن نیست.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>هیچ موردی برای نمایش وجود ندارد.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>جستجوی مجموعه</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>جستجوی پوشه</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+    <value>نوع جستجو</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>نوع</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>انتقال به پایین</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>انتقال به بالا</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>متفرقه</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>مالکیت</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Who owns this item?</value>
+    <value>چه کسی مالک این مورد است؟</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>There are no collections to list.</value>
+    <value>هیچ مجموعه ای برای لیست کردن وجود ندارد.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>مورد به اشتراک گذاشته شد.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>شما باید حداقل یک مجموعه را انتخاب کنید.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>اشتراک گذاری</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Share Item</value>
+    <value>اشتراک گذاری مورد</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>No organizations to list.</value>
+    <value>هیچ تشکیلاتی برای لیست کردن نیست.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>تشکیلاتی که میخواهید این مورد را با آن به اشتراک بگذارید انتخاب کنید. پس از اشتراک گذاری مالکیت موارد به آن تشکیلات انتقال می یابد. شما دیگر نمی توانید صاحب اصلی این مورد پس از اشتراک گذاری آن باشید.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of Words</value>
+    <value>تعداد کلمات</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>کلمه عبور</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word Separator</value>
+    <value>کلمه جداکننده</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>پاک کردن</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>تولید کننده</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>هیچ پوشه ای برای لیست شدن وجود ندارد.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>عبارت اثر انگشت</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>عبارت اثر انگشت حساب شما</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden به شما اجازه می دهد با استفاده از سازماندهی حساب، گاوصندوقهای خود را با دیگران به اشتراک بگذارید. آیا مایل به بازدید از وب سایت bitwarden.com برای کسب اطلاعات بیشتر هستید؟</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>صادر کردن گاوصندوق</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>الان قفل شود</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN</value>
+    <value>پین</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>باز کردن قفل</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>۳۰ دقیقه</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>۵ دقیقه</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>پین کد خود را برای باز کردن بیت واردن خود استفاده کنید. اگر به صورت کامل از حساب خود خارج شوید تنظیمات پین شما ریست می شود.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>وارد شده به عنوان {0} در {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>گاوصندوق شما فقل شد. برای ادامه گذرواژه اصلی را وارد کنید.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>گاوصندوق شما قفل شده است. برای ادامه کد پین خود را تایید کنید.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>تاریک</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>روشن</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>۵ دقیقه</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>۱ دقیقه</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>۱۰ ثانیه</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>۳۰ ثانیه</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>۲۰ ثانیه</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>۲ دقیقه</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>پاکسازی کلیپ‌ بورد</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>به صورت خودکار، مقادیر کپی شده را از کلیپ‌برد پاک کن.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>بازرسی تطابق URL پیشفرض</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>روش پیش فرض اعمال بازرسی تطابق ‌‌URL را هنگامی که عملی را مثل پر کردن خودکار انتخاب کنید.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>پوسته</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>تغییر رنگ پوسته برنامه.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
+    <value>راه اندازی مجدد لازم است.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+    <value>راه اندازی مجدد...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>کپی یادداشتها</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>خروج</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>آیا مطمئنید که میخواهید از Bitwarden خارج شوید؟</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>سیاه</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>فهرست سیاه آدرس های اینترنتی</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>غیر فعال کردن ذخیره سریع</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>"ذخیره سریع" به صورت خودکار باعث افزایش سرعت شما برای ذخیره موارد جدید در گاوصندوقتان می شود زمانی که شما آنها را برای اولین بار وارد میکند.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>راه اندازی مجدد در برنامه</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>پرکردن خودکار دسترسی ایمن به گاوصندوق Bitwarden شما را از سایر وبسایت ها و برنامه ها آسان تر میکند. بنظر میرسد که سرویس پرکردن خودکار را برای Bitwarden فعال نکرده اید. از صفحه "تنظیمات" Bitwarden پرکردن خودکار رافعال کنید.</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
