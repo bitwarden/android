@@ -14,6 +14,7 @@ namespace Bit.iOS.Autofill
     public partial class CredentialProviderViewController : ASCredentialProviderViewController
     {
         private Context _context;
+        private bool _initedHockeyApp;
 
         public CredentialProviderViewController(IntPtr handle)
             : base(handle)
@@ -251,7 +252,11 @@ namespace Bit.iOS.Autofill
             }
             iOSCoreHelpers.RegisterLocalServices();
             ServiceContainer.Init();
-            iOSCoreHelpers.RegisterHockeyApp();
+            if(!_initedHockeyApp)
+            {
+                iOSCoreHelpers.RegisterHockeyApp();
+                _initedHockeyApp = true;
+            }
             iOSCoreHelpers.Bootstrap();
             iOSCoreHelpers.AppearanceAdjustments();
         }

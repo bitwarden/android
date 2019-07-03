@@ -102,6 +102,7 @@ namespace Bit.Core.Utilities
         {
             Inited = false;
             RegisteredServices.Clear();
+            RegisteredServices = new Dictionary<string, object>();
         }
     }
 }

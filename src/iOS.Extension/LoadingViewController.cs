@@ -18,6 +18,7 @@ namespace Bit.iOS.Extension
     public partial class LoadingViewController : ExtendedUIViewController
     {
         private Context _context = new Context();
+        private bool _initedHockeyApp;
 
         public LoadingViewController(IntPtr handle)
             : base(handle)
@@ -379,7 +380,11 @@ namespace Bit.iOS.Extension
             }
             iOSCoreHelpers.RegisterLocalServices();
             ServiceContainer.Init();
-            iOSCoreHelpers.RegisterHockeyApp();
+            if(!_initedHockeyApp)
+            {
+                iOSCoreHelpers.RegisterHockeyApp();
+                _initedHockeyApp = true;
+            }
             iOSCoreHelpers.Bootstrap();
             iOSCoreHelpers.AppearanceAdjustments();
         }
