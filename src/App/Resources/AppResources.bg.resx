@@ -1556,4 +1556,14 @@
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
   </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
+  </data>
 </root>
