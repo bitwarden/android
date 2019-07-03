@@ -762,7 +762,7 @@
     <value>Wilt u deze login auto-invullen of weergeven?</value>
   </data>
   <data name="BitwardenAutofillServiceMatchConfirm" xml:space="preserve">
-    <value>Weet u zeker dat u deze login automatisch wilt invullen? Het is geen volledige overeenkomst voor "{0}".</value>
+    <value>Weet u zeker dat u deze login automatisch wilt invullen? Er is geen volledige overeenkomst voor "{0}".</value>
   </data>
   <data name="MatchingItems" xml:space="preserve">
     <value>Overeenkomende items</value>
@@ -774,7 +774,7 @@
     <value>Zoeken</value>
   </data>
   <data name="BitwardenAutofillServiceSearch" xml:space="preserve">
-    <value>U bent aan het zoeken voor een auto-invul-login voor "{0}".</value>
+    <value>U zoekt een auto-invullen voor "{0}".</value>
   </data>
   <data name="ShareVault" xml:space="preserve">
     <value>Deel uw kluis</value>
@@ -1024,7 +1024,7 @@
     <value>Augustus</value>
   </data>
   <data name="Brand" xml:space="preserve">
-    <value>Merk</value>
+    <value>Soort</value>
   </data>
   <data name="CardholderName" xml:space="preserve">
     <value>Naam van kaarthouder</value>
@@ -1150,7 +1150,7 @@
     <value>Er zijn geen items in deze map.</value>
   </data>
   <data name="AutofillAccessibilityService" xml:space="preserve">
-    <value>Automatisch invullen door Toegankelijkheidsservice</value>
+    <value>Auto-invullen Toegankelijkheidsservice</value>
   </data>
   <data name="AutofillServiceDescription" xml:space="preserve">
     <value>De Bitwarden automatische invulservice gebruikt Android Autofill Framework om u te helpen bij het invullen van inloggegevens, creditcards en identiteitsgegevens in andere apps op uw apparaat.</value>
@@ -1272,7 +1272,7 @@
     <value>U moet inloggen op de Bitwarden-app voordat u Automatisch invullen kunt gebruiken.</value>
   </data>
   <data name="AutofillSetup" xml:space="preserve">
-    <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
+    <value>Uw inloggevens zijn nu gemakkelijk bereikbaar vanaf het toetsenbord bij het inloggen op apps en websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
     <value>Het is raadzaam Automatisch invullen door andere apps uit te schakelen als u niet van plan bent om deze te gebruiken.</value>
@@ -1349,7 +1349,7 @@
     <value>Wachtwoordgeschiedenis</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Typen</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
     <value>Geen wachtwoorden om weer te geven.</value>
@@ -1542,7 +1542,7 @@
     <value>Geblokkeerde URI's</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>URI's die op de zwarte lijst staan, worden niet automatisch ingevuld. De lijst moet met komma's gescheiden zijn. Bijv: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>"Notificatie bij Nieuwe Site" deactiveren</value>
@@ -1555,5 +1555,15 @@
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
     <value>Automatisch invullen maakt het gemakkelijk om veilig toegang te krijgen tot uw Bitwarden kluis van andere websites en apps. Het lijkt erop dat u de auto-invullen service voor Bitwarden niet hebt ingeschakeld. Schakel automatisch invullen voor Bitwarden in vanuit het "Instellingen" scherm.</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
