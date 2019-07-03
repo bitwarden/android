@@ -1557,13 +1557,13 @@
     <value>Automatisch invullen maakt het gemakkelijk om veilig toegang te krijgen tot uw Bitwarden kluis van andere websites en apps. Het lijkt erop dat u de auto-invullen service voor Bitwarden niet hebt ingeschakeld. Schakel automatisch invullen voor Bitwarden in vanuit het "Instellingen" scherm.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Uw themawijzigingen zijn toegepast na het herstarten van de app.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Beginhoofdletters</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Nummer opnemen</value>
   </data>
 </root>
