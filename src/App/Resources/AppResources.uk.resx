@@ -261,7 +261,7 @@
     <comment>The button text that allows user to launch the website to their web browser.</comment>
   </data>
   <data name="LogIn" xml:space="preserve">
-    <value>Вхід</value>
+    <value>Увійти</value>
     <comment>The login button text (verb).</comment>
   </data>
   <data name="LogInNoun" xml:space="preserve">
@@ -412,7 +412,7 @@
     <value>Розширення Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>Найлегшим способом додавання нових записів у сховище є використання розширення Bitwarden. Дізнайтеся більше про використання розширення Bitwarden в меню "Налаштування".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Використовуйте Bitwarden в Safari та інших програмах для автоматичного заповнення паролів.</value>
@@ -753,7 +753,7 @@
     <value>Статус</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Найлегшим способом додавання нових записів у сховище є використання служби автозаповнення Bitwarden. Дізнайтеся більше про використання служби автозаповнення Bitwarden в меню "Налаштування".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Автозаповнення</value>
@@ -1302,258 +1302,268 @@
     <value>Автозаповнення паролів</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>Найлегшим способом додавання нових записів у сховище є використання розширення для автозаповнення Bitwarden. Дізнайтеся більше про використання розширення для автозаповнення Bitwarden в меню "Налаштування".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>Неправильна адреса е-пошти.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>Карти</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>Особисті дані</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Записи</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>Захищені нотатки</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>Всі елементи</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URL-адреси</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Перевірка паролів...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Перевірити чи пароль було викрито.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Цей пароль було викрито {0} разів з витоком даних. Вам слід його змінити.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Цей пароль не було знайдено у жодних відомих витоках даних. Його можна безпечно використовувати.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity Name</value>
+    <value>Назва</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Значення</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>Історія паролів</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Типи</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Немає паролів для відображення.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>Немає записів для відображення.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>Пошук в збірках</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>Пошук теки</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+    <value>Типу пошуку</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Тип</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Перемістити вниз</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Перемістити вгору</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>Різне</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>Власник</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Who owns this item?</value>
+    <value>Хто є власником цього елемента?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>There are no collections to list.</value>
+    <value>Немає збірок для відображення.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>Надано спільний доступ для запису.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>Ви повинні обрати принаймні одну збірку.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>Поділитися</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Share Item</value>
+    <value>Поділитися записом</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>No organizations to list.</value>
+    <value>Немає організацій для відображення.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>Оберіть організацію, з якою хочете поділитися. Зробивши це, ви передасте доступ до цього запису іншій організації та більше не будете його одноосібним власником.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of Words</value>
+    <value>Кількість слів</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>Парольна фраза</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word Separator</value>
+    <value>Розділювач слів</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Стерти</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>Generator</value>
+    <value>Генератор</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>Немає тек для відображення.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>Фраза відбитку</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>Фраза відбитку вашого облікового запису</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden дозволяє вам надавати доступ до свого сховища іншим за допомогою облікового запису організації. Чи не бажаєте перейти на веб-сайт bitwarden.com, щоб дізнатися більше?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>Експорт сховища</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>Заблокувати зараз</value>
   </data>
   <data name="PIN" xml:space="preserve">
-    <value>PIN</value>
+    <value>PIN-код</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>Розблокувати</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 хвилин</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 хвилин</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>Встановіть PIN-код для розблокування Bitwarden. Налаштування PIN-коду будуть скинуті, якщо ви коли-небудь повністю вийдете з програми.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Ви увійшли як {0} на {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>Сховище заблоковано. Введіть головний пароль для продовження.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>Ваше сховище заблоковане. Для продовження підтвердьте свій PIN-код.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>Темна</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>Світла</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 хвилин</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 хвилина</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 секунд</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 секунд</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 секунд</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 хвилини</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>Очистити буфер обміну</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Автоматично очищати скопійовані значення з буфера обміну.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>Типове виявлення збігів URI</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Оберіть типовий спосіб виявлення збігів URI для виконання автозаповнення під час входу.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Тема</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>Змінити колірну тему програми.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
+    <value>Необхідне перезавантаження.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+    <value>Перезавантаження...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>Копіювати нотатки</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Вийти</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Ви впевнені, що хочете вийти з Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>You you want to require unlocking with your master password when the application is restarted?</value>
+    <value>Ви хочете вимагати розблокування головним паролем при перезапуску програми?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>Чорна</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>Чорний список URI</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Для URI-адрес, що містяться в чорному списку, не пропонуватиметься автозаповнення. Список повинен бути розділений комами. Наприклад: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>Вимкнути запит про збереження</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>Запит про збереження автоматично пропонує вам зберегти нові записи до вашого сховища, щоразу, коли ви вперше заповнюєте облікові дані.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>При перезапуску програми</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Автозаповнення дозволяє безпечно отримувати доступ до вашого сховища Bitwarden з інших веб-сайтів та програм. Схоже, що ви не активували функцію автозаповнення Bitwarden. Увімкніть автозаповнення на екрані налаштувань.</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
