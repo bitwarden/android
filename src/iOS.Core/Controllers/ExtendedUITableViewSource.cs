@@ -8,21 +8,35 @@ namespace Bit.iOS.Core.Views
     {
         public override void WillDisplayHeaderView(UITableView tableView, UIView headerView, nint section)
         {
-            if(headerView != null && headerView is UITableViewHeaderFooterView hv && hv.TextLabel != null)
+            if(headerView != null && headerView is UITableViewHeaderFooterView hv)
             {
-                hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                hv.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
                 hv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
-                hv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                if(hv.BackgroundView != null)
+                {
+                    hv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                }
+                if(hv.TextLabel != null)
+                {
+                    hv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                }
             }
         }
 
         public override void WillDisplayFooterView(UITableView tableView, UIView footerView, nint section)
         {
-            if(footerView != null && footerView is UITableViewHeaderFooterView fv && fv.TextLabel != null)
+            if(footerView != null && footerView is UITableViewHeaderFooterView fv)
             {
-                fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                fv.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
                 fv.TintColor = ThemeHelpers.ListHeaderBackgroundColor;
-                fv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                if(fv.BackgroundView != null)
+                {
+                    fv.BackgroundView.BackgroundColor = ThemeHelpers.ListHeaderBackgroundColor;
+                }
+                if(fv.TextLabel != null)
+                {
+                    fv.TextLabel.TextColor = ThemeHelpers.MutedColor;
+                }
             }
         }
     }
