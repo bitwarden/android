@@ -176,15 +176,13 @@ namespace Bit.iOS.Extension
 
         public void CompleteRequest(NSDictionary itemData)
         {
+            ServiceContainer.Reset();
+
             Debug.WriteLine("BW LOG, itemData: " + itemData);
             var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
             var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
             var returningItems = new NSExtensionItem[] { resultsItem };
-            NSRunLoop.Main.BeginInvokeOnMainThread(() =>
-            {
-                ServiceContainer.Reset();
-                ExtensionContext?.CompleteRequest(returningItems, null);
-            });
+            NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CompleteRequest(returningItems, null));
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> dictAction,
@@ -375,15 +373,15 @@ namespace Bit.iOS.Extension
 
         private void InitApp()
         {
-            iOSCoreHelpers.AppearanceAdjustments();
             if(ServiceContainer.RegisteredServices.Count > 0)
             {
-                return;
+                ServiceContainer.Reset();
             }
             iOSCoreHelpers.RegisterLocalServices();
             ServiceContainer.Init();
             iOSCoreHelpers.RegisterHockeyApp();
             iOSCoreHelpers.Bootstrap();
+            iOSCoreHelpers.AppearanceAdjustments();
         }
 
         private bool IsLocked()

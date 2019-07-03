@@ -99,6 +99,8 @@ namespace Bit.iOS.Autofill
 
         public void CompleteRequest(string username = null, string password = null, string totp = null)
         {
+            ServiceContainer.Reset();
+
             if((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
                 ExtensionContext?.CompleteExtensionConfigurationRequest();
@@ -243,15 +245,15 @@ namespace Bit.iOS.Autofill
 
         private void InitApp()
         {
-            iOSCoreHelpers.AppearanceAdjustments();
             if(ServiceContainer.RegisteredServices.Count > 0)
             {
-                return;
+                ServiceContainer.Reset();
             }
             iOSCoreHelpers.RegisterLocalServices();
             ServiceContainer.Init();
             iOSCoreHelpers.RegisterHockeyApp();
             iOSCoreHelpers.Bootstrap();
+            iOSCoreHelpers.AppearanceAdjustments();
         }
     }
 }
