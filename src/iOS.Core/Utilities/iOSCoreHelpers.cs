@@ -44,17 +44,6 @@ namespace Bit.iOS.Core.Utilities
                 ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
             }
 
-            // Note: This might cause a race condition. Investigate more.
-            Task.Run(() =>
-            {
-                FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
-                FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
-                {
-                    FadeAnimationEnabled = false,
-                    FadeAnimationForCachedImages = false
-                });
-            });
-
             var preferencesStorage = new PreferencesStorageService(AppGroupId);
             var appGroupContainer = new NSFileManager().GetContainerUrl(AppGroupId);
             var liteDbStorage = new LiteDbStorageService(

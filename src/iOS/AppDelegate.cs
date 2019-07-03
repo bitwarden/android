@@ -246,6 +246,17 @@ namespace Bit.iOS
                     "oldSecureStorageService", new Migration.KeyChainStorageService());
             }
 
+            // Note: This might cause a race condition. Investigate more.
+            Task.Run(() =>
+            {
+                FFImageLoading.Forms.Platform.CachedImageRenderer.Init();
+                FFImageLoading.ImageService.Instance.Initialize(new FFImageLoading.Config.Configuration
+                {
+                    FadeAnimationEnabled = false,
+                    FadeAnimationForCachedImages = false
+                });
+            });
+
             iOSCoreHelpers.RegisterLocalServices();
             RegisterPush();
             ServiceContainer.Init();
