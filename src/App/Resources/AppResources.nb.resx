@@ -412,7 +412,7 @@
     <value>Bitwarden App-utvidelse</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er fra Bitwarden sin apputvidelse. Lær mer om å bruke bitwarden-apputvidelsen ved å navigere til "Innstillinger"-skjermen.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Bruk Bitwarden i Safari og i andre apper for å auto-utfylle dine innlogginger.</value>
@@ -753,7 +753,7 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er fra Bitwarden sin auto-utfyllingstjeneste. Lær mer om å bruke Bitwarden sin auto-utfyllingstjeneste ved å navigere til "Innstillinger"-skjermen.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-utfylling</value>
@@ -1302,120 +1302,120 @@
     <value>Passord-autoutfylling</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>Den enkleste måten å legge til nye innlogginger i hvelvet ditt, er å bruke «Bitwarden-passordautoutfylling»-utvidelsen. Lær mer om «Bitwarden-passordautoutfylling»-utvidelsen ved å gå til «Innstillinger»-siden.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>Ugyldig E-postadresse.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>Kort</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>Identiteter</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Innlogginger</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>Sikre notiser</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>Alle gjenstander</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI-er</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Sjekker passord ...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Sjekk om passordet har blitt utsatt.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Dette passordet har blitt utsatt {0} gang(er) i et databrudd. Du burde endre det.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Dette passordet ble ikke funnet i noen kjente databrudd. Det burde være trygt å bruke.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity Name</value>
+    <value>Identitetsnavn</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Verdi</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>Passordhistorikk</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Typer</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Det er ingen passord å liste opp.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>Det er ingen gjenstander å liste opp.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>Søk i samling</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>Søk i mappe</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+    <value>Søk i typer</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Flytt ned</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Flytt opp</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>Annet</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>Eierskap</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Who owns this item?</value>
+    <value>Hvem eier dette elementet?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>There are no collections to list.</value>
+    <value>Det er ingen samlinger å liste opp.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>Gjenstanden har blitt delt.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>Du må velge minst én samling.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>Del</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Share Item</value>
+    <value>Del element</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>No organizations to list.</value>
+    <value>Det er ingen organisasjoner å liste opp.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>Velg en organisasjon som du ønsker å dele denne gjenstanden med. Deling overfører gjenstandens eierskap til organisasjonen. Du vil ikke lenger være den direkte eieren av denne gjenstanden når den først har blitt delt.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of Words</value>
+    <value>Antall ord</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>Passfrase</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word Separator</value>
+    <value>Ordadskiller</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Tøm</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
@@ -1423,137 +1423,147 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>Det er ingen mapper å liste opp.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>Fingeravtrykksfrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>Din kontos fingeravtrykksfrase</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden lar deg dele hvelvet ditt med andre ved å bruke en organisasjonskonto. Vil du besøke bitwarden.com-nettstedet for å lære mer?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>Eksporter hvelvet</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>Lås nå</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>Lås opp</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 minutter</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 minutter</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>Angi PIN-koden din for å låse opp Bitwarden. PIN-innstillingene tilbakestilles hvis du logger deg helt ut av programmet.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Logget på som {0} gjennom {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>Hvelvet ditt er låst. Kontroller superpassordet ditt for å fortsette.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>Hvelvet ditt er låst. Kontroller PIN-koden din for å fortsette.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>Mørkt</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>Lyst</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 minutter</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 minutt</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 sekunder</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 sekunder</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 sekunder</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 minutter</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>Tøm utklippstavlen</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Slett automatisk kopierte verdier fra utklippstavlen.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>Standard URI-samsvarsgjenkjenning</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Velg standardmåten for å håndtere URI-samsvarsgjenkjenning for pålogginger ved f.eks. auto-utfylling.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Tema</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>Endre appens fargetema.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
+    <value>Omstart er påkrevd.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+    <value>Starter på nytt ...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>Kopier notater</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Avslutt</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Er du sikker på at du vil lukke Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>Svart</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>Svartelistede URI-er</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>Skru av lagreforespørsel</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>"Lagreforespørselen" spør deg automatisk om du vil lagre nye elementer i hvelvet ditt når du skriver dem inn for første gang.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>Ved app-omstart</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Auto-utfylling gjør det lett å få sikker tilgang til Bitwarden-hvelvet ditt fra andre nettsteder og apper. Det ser ut til at du ikke har skrudd på noen auto-utfyllingstjenester for Bitwarden. Du kan skru på auto-utfylling for Bitwarden i «Innstillinger»-menyen.</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
