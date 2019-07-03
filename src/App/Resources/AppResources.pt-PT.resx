@@ -1376,7 +1376,7 @@
     <value>Mover para cima</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Diversos</value>
+    <value>Miscelânea</value>
   </data>
   <data name="Ownership" xml:space="preserve">
     <value>Propriedade</value>
@@ -1516,7 +1516,7 @@
     <value>Altere o tema de cor da aplicação.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>O reinício é necessário.</value>
+    <value>Reiniciar é requerido.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
@@ -1542,7 +1542,7 @@
     <value>URIs na lista negra</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Os URIs que estão na lista negra não irão oferecer auto-preenchimento. A lista de aplicações deve ser separada por virgulas. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Os URIs que estão na lista negra não irão oferecer auto-preenchimento. A lista deve ser separada por virgulas. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Desativar solicitação de guardar</value>
@@ -1551,9 +1551,19 @@
     <value>A "solicitação de guardar" solicita-lhe automaticamente a guardar novos itens para o seu cofre quando os introduz pela primeira vez.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>No Reinício do App</value>
+    <value>Quando reiniciar a aplicação</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>O auto-preenchimento torna fácil aceder em segurança ao seu cofre Bitwarden a partir de outros websites e aplicações. Parece que não ativou um serviço de auto-preenchimento para o Bitwarden. Ative o auto-preenchimento para o Bitwarden a partir do ecrã "Definições".</value>
+  </data>
+  <data name="ThemeAppliedOnRestart" xml:space="preserve">
+    <value>Your theme changes will apply when the app is restarted.</value>
+  </data>
+  <data name="Capitalize" xml:space="preserve">
+    <value>Capitalize</value>
+    <comment>ex. Uppercase the first character of a word.</comment>
+  </data>
+  <data name="IncludeNumber" xml:space="preserve">
+    <value>Include Number</value>
   </data>
 </root>
