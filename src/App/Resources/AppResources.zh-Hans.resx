@@ -1557,13 +1557,13 @@
     <value>自动填充，可以安全地从其他网站和应用程序中访问您的 Bitwarden 安全库。看起来您还没有启用 Bitwarden 自动填充服务。从“设置”屏幕启用 Bitwarden 自动填充。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>您的主题将在应用重启时启用。</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>大写</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>包含数字</value>
   </data>
 </root>
