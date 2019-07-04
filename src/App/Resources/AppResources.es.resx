@@ -1560,10 +1560,10 @@
     <value>Los cambios de tu tema se aplicarán al reiniciar la aplicación.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Mayúsculas iniciales</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Incluir número</value>
   </data>
 </root>
