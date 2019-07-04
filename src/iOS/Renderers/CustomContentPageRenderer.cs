@@ -19,6 +19,13 @@ namespace Bit.iOS.Renderers
                 return;
             }
 
+            // Hide bottom line under nav bar
+            var navBar = NavigationController.NavigationBar;
+            if(navBar != null)
+            {
+                navBar.SetValueForKey(FromObject(true), new Foundation.NSString("hidesShadow"));
+            }
+
             var navigationItem = NavigationController.TopViewController.NavigationItem;
             var leftNativeButtons = (navigationItem.LeftBarButtonItems ?? new UIBarButtonItem[] { }).ToList();
             var rightNativeButtons = (navigationItem.RightBarButtonItems ?? new UIBarButtonItem[] { }).ToList();
