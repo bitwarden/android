@@ -12,30 +12,33 @@ namespace Bit.iOS.Core.Services
 {
     public class KeyChainStorageService : IStorageService
     {
-        private readonly string _keyFormat = "bwKeyChainStorage:{0}";
+        private readonly string _keyFormat = "bwKeyChainStorage:{0}:{1}";
         private readonly string _service;
         private readonly string _group;
+        private readonly Func<Task<string>> _getAppId;
         private readonly JsonSerializerSettings _jsonSettings = new JsonSerializerSettings
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        public KeyChainStorageService(string service, string group)
+        public KeyChainStorageService(string service, string group, Func<Task<string>> getAppId)
         {
             _service = service;
             _group = group;
+            _getAppId = getAppId;
         }
 
-        public Task<T> GetAsync<T>(string key)
+        public async Task<T> GetAsync<T>(string key)
         {
-            var formattedKey = string.Format(_keyFormat, key);
+            var appId = await _getAppId.Invoke();
+            var formattedKey = string.Format(_keyFormat, appId, key);
             byte[] dataBytes = null;
             using(var existingRecord = GetKeyRecord(formattedKey))
             using(var record = SecKeyChain.QueryAsRecord(existingRecord, out SecStatusCode resultCode))
             {
                 if(resultCode == SecStatusCode.ItemNotFound)
                 {
-                    return Task.FromResult((T)(object)null);
+                    return (T)(object)null;
                 }
 
                 CheckError(resultCode);
@@ -45,11 +48,11 @@ namespace Bit.iOS.Core.Services
             var dataString = Encoding.UTF8.GetString(dataBytes);
             if(typeof(T) == typeof(string))
             {
-                return Task.FromResult((T)(object)dataString);
+                return (T)(object)dataString;
             }
             else
             {
-                return Task.FromResult(JsonConvert.DeserializeObject<T>(dataString, _jsonSettings));
+                return JsonConvert.DeserializeObject<T>(dataString, _jsonSettings);
             }
         }
 
@@ -71,7 +74,8 @@ namespace Bit.iOS.Core.Services
                 dataString = JsonConvert.SerializeObject(obj, _jsonSettings);
             }
 
-            var formattedKey = string.Format(_keyFormat, key);
+            var appId = await _getAppId.Invoke();
+            var formattedKey = string.Format(_keyFormat, appId, key);
             var dataBytes = Encoding.UTF8.GetBytes(dataString);
             using(var data = NSData.FromArray(dataBytes))
             using(var newRecord = GetKeyRecord(formattedKey, data))
@@ -81,9 +85,10 @@ namespace Bit.iOS.Core.Services
             }
         }
 
-        public Task RemoveAsync(string key)
+        public async Task RemoveAsync(string key)
         {
-            var formattedKey = string.Format(_keyFormat, key);
+            var appId = await _getAppId.Invoke();
+            var formattedKey = string.Format(_keyFormat, appId, key);
             using(var record = GetExistingRecord(formattedKey))
             {
                 if(record != null)
@@ -91,7 +96,6 @@ namespace Bit.iOS.Core.Services
                     CheckError(SecKeyChain.Remove(record));
                 }
             }
-            return Task.FromResult(0);
         }
 
         private SecRecord GetKeyRecord(string key, NSData data = null)

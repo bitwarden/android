@@ -53,7 +53,8 @@ namespace Bit.iOS.Core.Utilities
             var broadcasterService = new BroadcasterService();
             var messagingService = new MobileBroadcasterMessagingService(broadcasterService);
             var i18nService = new MobileI18nService(localizeService.GetCurrentCultureInfo());
-            var secureStorageService = new KeyChainStorageService(AppId, AccessGroup);
+            var secureStorageService = new KeyChainStorageService(AppId, AccessGroup,
+                () => ServiceContainer.Resolve<IAppIdService>("appIdService").GetAppIdAsync());
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
             var deviceActionService = new DeviceActionService(mobileStorageService, messagingService);
