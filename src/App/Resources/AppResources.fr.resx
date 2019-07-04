@@ -1542,7 +1542,7 @@
     <value>URIs sur liste noire</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>Les URI qui sont sur la liste noire n'offriront pas de remplissage automatique. La liste des applications doit être séparée par des virgules. Ex : "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>Les URI qui sont sur la liste noire n'offriront pas de remplissage automatique. La liste doit être séparée par des virgules. Ex : "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>Désactiver la demande d'enregistrement</value>
@@ -1557,7 +1557,7 @@
     <value>Le remplissage automatique permet d'accéder facilement à votre coffre Bitwarden depuis d'autres sites et applications. Il semble que vous n'ayez pas activé de service de remplissage automatique pour Bitwarden. Activez le remplissage automatique pour Bitwarden à partir de l'écran "Paramètres".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Vos modifications de thème s'appliqueront lorsque l'application sera redémarrée.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Capitalize</value>
