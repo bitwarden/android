@@ -1557,13 +1557,13 @@
     <value>自動入力を使うと、他のウェブサイトやアプリから Bitwarden 保管庫に、より安全・簡単にアクセスできます。現在 Bitwarden の自動入力サービスを有効にしていないようです。設定画面で自動入力を有効化できます。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>アプリを再起動するとテーマの変更が反映されます。</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>先頭を大文字</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>数字を含む</value>
   </data>
 </root>
