@@ -42,6 +42,12 @@ namespace Bit.iOS
         {
             Forms.Init();
             InitApp();
+            if(App.Migration.MigrationHelpers.NeedsMigration())
+            {
+                var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
+                Task.Delay(2000).Wait();
+            }
+
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
@@ -240,7 +246,7 @@ namespace Bit.iOS
             // Migration services
             ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
             ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim());
-            if(false && App.Migration.MigrationHelpers.NeedsMigration())
+            if(App.Migration.MigrationHelpers.NeedsMigration())
             {
                 ServiceContainer.Register<App.Migration.Abstractions.IOldSecureStorageService>(
                     "oldSecureStorageService", new Migration.KeyChainStorageService());
