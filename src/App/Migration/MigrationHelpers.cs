@@ -107,6 +107,10 @@ namespace Bit.App.Migration
             // await storageService.SaveAsync(Constants.PushLastRegistrationDateKey, lastReg);
             await storageService.SaveAsync("rememberedEmail",
                 settingsShim.GetValueOrDefault("other:lastLoginEmail", null));
+            await storageService.SaveAsync("appExtensionStarted",
+                settingsShim.GetValueOrDefault("extension:started", false));
+            await storageService.SaveAsync("appExtensionActivated",
+                settingsShim.GetValueOrDefault("extension:activated", false));
 
             await environmentService.SetUrlsAsync(new Core.Models.Data.EnvironmentUrlData
             {
