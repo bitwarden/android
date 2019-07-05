@@ -45,7 +45,7 @@ namespace Bit.iOS
             if(App.Migration.MigrationHelpers.NeedsMigration())
             {
                 var task = App.Migration.MigrationHelpers.PerformMigrationAsync();
-                Task.Delay(2000).Wait();
+                Task.Delay(5000).Wait();
             }
 
             _deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
