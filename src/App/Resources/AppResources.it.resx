@@ -1557,13 +1557,13 @@
     <value>Auto-riempimento rende facile accedere in modo sicuro alla tua cassaforte Bitwarden da altri siti web e applicazioni. Sembra che tu non abbia abilitato un servizio di auto-riempimento per Bitwarden. Abilita l'auto-riempimento per Bitwarden dalla schermata "Impostazioni".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Le modifiche del tema verranno applicate quando l'app verrà riavviata.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Rendi maiuscolo</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Includi numero</value>
   </data>
 </root>

@@ -1557,13 +1557,13 @@
     <value>Autouzupełnianie ułatwia bezpieczny dostęp do Twojego sejfu Bitwarden z innych stron i aplikacji. Wygląda na to, że nie włączyłeś usługi autouzupełniania dla Bitwarden. Włącz ją na ekranie "Ustawienia".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Zmiana motywu zostanie zastosowana po restarcie aplikacji.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Duże litery</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Uwzględnij Cyfry</value>
   </data>
 </root>
