@@ -245,7 +245,7 @@ namespace Bit.iOS
 
             // Migration services
             ServiceContainer.Register<ILogService>("logService", new ConsoleLogService());
-            ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim());
+            ServiceContainer.Register("settingsShim", new App.Migration.SettingsShim(iOSCoreHelpers.AppGroupId));
             if(App.Migration.MigrationHelpers.NeedsMigration())
             {
                 ServiceContainer.Register<App.Migration.Abstractions.IOldSecureStorageService>(
@@ -418,8 +418,7 @@ namespace Bit.iOS
             {
                 CompletionHandler = (activityType, completed) =>
                 {
-                    extensionPageViewModel.EnabledExtension(
-                        completed && activityType == "com.8bit.bitwarden.find-login-action-extension");
+                    extensionPageViewModel.EnabledExtension(completed && activityType == iOSCoreHelpers.AppExtensionId);
                 }
             };
             var modal = UIApplication.SharedApplication.KeyWindow.RootViewController.ModalViewController;
