@@ -33,7 +33,7 @@ namespace Bit.Core.Services
             {
                 return WebVaultUrl;
             }
-            else if(string.IsNullOrWhiteSpace(BaseUrl))
+            else if(!string.IsNullOrWhiteSpace(BaseUrl))
             {
                 return BaseUrl;
             }
