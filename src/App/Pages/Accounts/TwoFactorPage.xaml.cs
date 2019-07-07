@@ -56,7 +56,8 @@ namespace Bit.App.Pages
                 if(message.Command == "gotYubiKeyOTP")
                 {
                     var token = (string)message.Data;
-                    if(_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) && !token.Contains(" "))
+                    if(_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) &&
+                        token.Length > 40 && !token.Contains(" "))
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                         {
