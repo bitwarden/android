@@ -75,6 +75,10 @@ namespace Bit.App.Pages
         {
             WebsiteIconsEnabled = !(await _stateService.GetAsync<bool?>(Constants.DisableFaviconKey))
                 .GetValueOrDefault();
+            if(!string.IsNullOrWhiteSpace((Page as CiphersPage).SearchBar.Text))
+            {
+                Search((Page as CiphersPage).SearchBar.Text, 500);
+            }
         }
 
         public void Search(string searchText, int? timeout = null)
@@ -126,7 +130,7 @@ namespace Bit.App.Pages
             if(!string.IsNullOrWhiteSpace(AutofillUrl))
             {
                 var options = new List<string> { AppResources.Autofill };
-                if(cipher.Type == CipherType.Login && 
+                if(cipher.Type == CipherType.Login &&
                     Xamarin.Essentials.Connectivity.NetworkAccess != Xamarin.Essentials.NetworkAccess.None)
                 {
                     options.Add(AppResources.AutofillAndSave);
