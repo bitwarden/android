@@ -55,11 +55,12 @@ namespace Bit.App.Pages
             {
                 if(message.Command == "gotYubiKeyOTP")
                 {
-                    if(_vm.YubikeyMethod)
+                    var token = (string)message.Data;
+                    if(_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) && !token.Contains(" "))
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                         {
-                            _vm.Token = (string)message.Data;
+                            _vm.Token = token;
                             await _vm.SubmitAsync();
                         });
                     }
@@ -136,6 +137,17 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await Navigation.PopModalAsync();
+            }
+        }
+
+        private void TryAgain_Clicked(object sender, EventArgs e)
+        {
+            if(DoOnce())
+            {
+                if(_vm.YubikeyMethod)
+                {
+                    _messagingService.Send("listenYubiKeyOTP", true);
+                }
             }
         }
     }

@@ -124,6 +124,10 @@
                     IsVisible="{Binding EmailMethod}"
                     Clicked="ResendEmail_Clicked"
                     Margin="10, 0"></Button>
+            <Button Text="{u:I18n TryAgain}"
+                    IsVisible="{Binding ShowTryAgain}"
+                    Clicked="TryAgain_Clicked"
+                    Margin="10, 0"></Button>
             <Button Text="{u:I18n UseAnotherTwoStepMethod}"
                     Clicked="Methods_Clicked"
                     Margin="10, 0"></Button>

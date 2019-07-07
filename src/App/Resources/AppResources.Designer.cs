@@ -3580,7 +3580,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Try Again.
+        ///   Looks up a localized string similar to Try again.
         /// </summary>
         public static string TryAgain {
             get {

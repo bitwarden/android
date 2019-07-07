@@ -69,6 +69,8 @@ namespace Bit.App.Pages
 
         public bool TotpMethod => AuthenticatorMethod || EmailMethod;
 
+        public bool ShowTryAgain => YubikeyMethod && Device.RuntimePlatform == Device.iOS;
+
         public string YubikeyInstruction => Device.RuntimePlatform == Device.iOS ? AppResources.YubiKeyInstructionIos :
             AppResources.YubiKeyInstruction;
 
@@ -82,6 +84,7 @@ namespace Bit.App.Pages
                 nameof(YubikeyMethod),
                 nameof(AuthenticatorMethod),
                 nameof(TotpMethod),
+                nameof(ShowTryAgain),
             });
         }
         public Command SubmitCommand { get; }
