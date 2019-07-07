@@ -129,7 +129,7 @@ namespace Bit.App.Utilities
                     var currentLock = await storageService.GetAsync<int?>(Constants.LockOptionKey);
                     if(currentLock == null)
                     {
-                        await storageService.SaveAsync(Constants.LockOptionKey, -1);
+                        await storageService.SaveAsync(Constants.LockOptionKey, 15);
                     }
                 }
                 else if(lastBuild != currentBuild)
