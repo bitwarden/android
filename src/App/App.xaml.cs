@@ -162,6 +162,7 @@ namespace Bit.App
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnStart");
             await ClearCacheIfNeededAsync();
+            await TryClearCiphersCacheAsync();
             Prime();
             if(string.IsNullOrWhiteSpace(_appOptions.Uri))
             {
@@ -185,7 +186,7 @@ namespace Bit.App
             await HandleLockingAsync();
         }
 
-        protected async override void OnResume()
+        protected override void OnResume()
         {
             System.Diagnostics.Debug.WriteLine("XF App: OnResume");
             if(Device.RuntimePlatform == Device.Android)
@@ -198,6 +199,7 @@ namespace Bit.App
         {
             _messagingService.Send("cancelLockTimer");
             await ClearCacheIfNeededAsync();
+            await TryClearCiphersCacheAsync();
             Prime();
             SyncIfNeeded();
             if(Current.MainPage is NavigationPage navPage && navPage.CurrentPage is LockPage lockPage)
@@ -355,6 +357,20 @@ namespace Bit.App
                     await _syncService.FullSyncAsync(false);
                 }
             });
+        }
+
+        private async Task TryClearCiphersCacheAsync()
+        {
+            if(Device.RuntimePlatform != Device.iOS)
+            {
+                return;
+            }
+            var clearCache = await _storageService.GetAsync<bool?>(Constants.ClearCiphersCacheKey);
+            if(clearCache.GetValueOrDefault())
+            {
+                _cipherService.ClearCache();
+                await _storageService.RemoveAsync(Constants.ClearCiphersCacheKey);
+            }
         }
     }
 }

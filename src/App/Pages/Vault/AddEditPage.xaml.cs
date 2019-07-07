@@ -8,6 +8,8 @@ using Bit.Core.Utilities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using Xamarin.Forms.PlatformConfiguration;
+using Xamarin.Forms.PlatformConfiguration.iOSSpecific;
 
 namespace Bit.App.Pages
 {
@@ -59,6 +61,9 @@ namespace Bit.App.Pages
                     ToolbarItems.Add(_moreItem);
                 }
                 _vm.ShowNotesSeparator = true;
+
+                _typePicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
+                _ownershipPicker.On<iOS>().SetUpdateMode(UpdateMode.WhenFinished);
             }
 
             _typePicker.ItemDisplayBinding = new Binding("Key");
@@ -156,7 +161,7 @@ namespace Bit.App.Pages
         {
             if(FromAutofillFramework)
             {
-                Application.Current.MainPage = new TabsPage();
+                Xamarin.Forms.Application.Current.MainPage = new TabsPage();
                 return true;
             }
             return base.OnBackButtonPressed();
@@ -166,7 +171,8 @@ namespace Bit.App.Pages
         {
             if(DoOnce())
             {
-                await Navigation.PushModalAsync(new NavigationPage(new PasswordHistoryPage(_vm.CipherId)));
+                await Navigation.PushModalAsync(
+                    new Xamarin.Forms.NavigationPage(new PasswordHistoryPage(_vm.CipherId)));
             }
         }
 
@@ -193,7 +199,7 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 var page = new AttachmentsPage(_vm.CipherId);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
 
@@ -202,7 +208,7 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 var page = new SharePage(_vm.CipherId);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
 
@@ -222,7 +228,7 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 var page = new CollectionsPage(_vm.CipherId);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
 
@@ -238,7 +244,7 @@ namespace Bit.App.Pages
                         await _vm.UpdateTotpKeyAsync(key);
                     });
                 });
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
 
@@ -265,17 +271,17 @@ namespace Bit.App.Pages
             else if(selection == AppResources.Attachments)
             {
                 var page = new AttachmentsPage(_vm.CipherId);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
             else if(selection == AppResources.Collections)
             {
                 var page = new CollectionsPage(_vm.CipherId);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
             else if(selection == AppResources.Share)
             {
                 var page = new SharePage(_vm.CipherId);
-                await Navigation.PushModalAsync(new NavigationPage(page));
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
 

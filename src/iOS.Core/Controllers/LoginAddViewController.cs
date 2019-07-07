@@ -20,6 +20,7 @@ namespace Bit.iOS.Core.Controllers
     {
         private ICipherService _cipherService;
         private IFolderService _folderService;
+        private IStorageService _storageService;
         private IEnumerable<FolderView> _folders;
 
         public LoginAddViewController(IntPtr handle)
@@ -47,6 +48,7 @@ namespace Bit.iOS.Core.Controllers
         {
             _cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
 
             BaseNavItem.Title = AppResources.AddItem;
             BaseCancelButton.Title = AppResources.Cancel;
@@ -168,6 +170,7 @@ namespace Bit.iOS.Core.Controllers
                 var cipherDomain = await _cipherService.EncryptAsync(cipher);
                 await _cipherService.SaveWithServerAsync(cipherDomain);
                 await loadingAlert.DismissViewControllerAsync(true);
+                await _storageService.SaveAsync(Bit.Core.Constants.ClearCiphersCacheKey, true);
                 if(await ASHelpers.IdentitiesCanIncremental())
                 {
                     var identity = await ASHelpers.GetCipherIdentityAsync(cipherDomain.Id);

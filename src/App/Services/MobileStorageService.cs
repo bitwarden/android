@@ -31,6 +31,7 @@ namespace Bit.App.Services
             Constants.MigratedFromV1,
             Constants.MigratedFromV1AutofillPromptShown,
             Constants.TriedV1Resync,
+            Constants.ClearCiphersCacheKey,
         };
 
         public MobileStorageService(

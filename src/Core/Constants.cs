@@ -28,6 +28,7 @@
         public static string LastBuildKey = "lastBuild";
         public static string OldUserIdKey = "userId";
         public static string AddSitePromptShownKey = "addSitePromptShown";
+        public static string ClearCiphersCacheKey = "clearCiphersCache";
         public static string MigratedFromV1 = "migratedFromV1";
         public static string MigratedFromV1AutofillPromptShown = "migratedV1AutofillPromptShown";
         public static string TriedV1Resync = "triedV1Resync";
