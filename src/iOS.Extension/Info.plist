@@ -11,9 +11,9 @@
 	<key>CFBundleIdentifier</key>
 	<string>com.8bit.bitwarden.find-login-action-extension</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.6</string>
+	<string>2.1.0</string>
 	<key>CFBundleVersion</key>
-	<string>50</string>
+	<string>51</string>
 	<key>CFBundleLocalizations</key>
 	<array>
 		<string>en</string>
