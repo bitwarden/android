@@ -1557,13 +1557,13 @@
     <value>Автозаполнение упрощает безопасный доступ к вашему хранилищу Bitwarden со сторонних веб-сайтов и приложений. Похоже, вы не включили службу автозаполнения Bitwarden. Это можно сделать в настройках.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Тема будет изменена после перезапуска приложения.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>С заглавной буквы</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Включить цифру</value>
   </data>
 </root>

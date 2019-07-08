@@ -1557,13 +1557,13 @@
     <value>O auto-preenchimento torna fácil aceder em segurança ao seu cofre Bitwarden a partir de outros websites e aplicações. Parece que não ativou um serviço de auto-preenchimento para o Bitwarden. Ative o auto-preenchimento para o Bitwarden a partir do ecrã "Definições".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>As suas alterações de tema irão ser aplicadas quando a aplicação for reiniciada.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Capitalizar</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Incluir número</value>
   </data>
 </root>
