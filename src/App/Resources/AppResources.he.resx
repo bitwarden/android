@@ -1558,13 +1558,13 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>השלמה אוטומטית הופכת את תהליך הכניסה לאתרים לקל ומאובטח בעת גישה לאתרים ואפליקציות. נראה שלא הפעלת את שירות ההשלמה האוטומטית עבור Bitwarden. אנא הפעל את השירות דרך חלון "הגדרות".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>שינוי בערכת הנושא יוחל בהפעלה הבאה של האפליקציה.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>הפוך לאותיות גדולות</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>כלול מספרים</value>
   </data>
 </root>
