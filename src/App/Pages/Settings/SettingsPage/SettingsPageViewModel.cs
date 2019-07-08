@@ -23,7 +23,6 @@ namespace Bit.App.Pages
         private readonly IStorageService _storageService;
         private readonly ISyncService _syncService;
 
-        private string _fingerprintName;
         private bool _supportsFingerprint;
         private bool _pin;
         private bool _fingerprint;
@@ -57,12 +56,6 @@ namespace Bit.App.Pages
 
             GroupedItems = new ExtendedObservableCollection<SettingsPageListGroup>();
             PageTitle = AppResources.Settings;
-
-            _fingerprintName = AppResources.Fingerprint;
-            if(Device.RuntimePlatform == Device.iOS)
-            {
-                _fingerprintName = _deviceActionService.SupportsFaceId() ? AppResources.FaceID : AppResources.TouchID;
-            }
         }
 
         public ExtendedObservableCollection<SettingsPageListGroup> GroupedItems { get; set; }
@@ -329,9 +322,15 @@ namespace Bit.App.Pages
             };
             if(_supportsFingerprint)
             {
+                var fingerprintName = AppResources.Fingerprint;
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    fingerprintName = _deviceActionService.SupportsFaceId() ?
+                        AppResources.FaceID : AppResources.TouchID;
+                }
                 var item = new SettingsPageListItem
                 {
-                    Name = string.Format(AppResources.UnlockWith, _fingerprintName),
+                    Name = string.Format(AppResources.UnlockWith, fingerprintName),
                     SubLabel = _fingerprint ? AppResources.Enabled : AppResources.Disabled
                 };
                 securityItems.Insert(1, item);
