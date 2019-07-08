@@ -11,8 +11,8 @@ namespace Bit.App.Pages
     {
         private IStorageService _storageService;
 
-        protected int AndroidShowModalAnimationDelay = 400;
-        protected int AndroidShowPageAnimationDelay = 100;
+        protected int ShowModalAnimationDelay = 400;
+        protected int ShowPageAnimationDelay = 100;
 
         public DateTime? LastPageAction { get; set; }
 
@@ -77,21 +77,16 @@ namespace Bit.App.Pages
             }
             await Task.Run(async () =>
             {
-                await Task.Delay(fromModal ? AndroidShowModalAnimationDelay : AndroidShowPageAnimationDelay);
+                await Task.Delay(fromModal ? ShowModalAnimationDelay : ShowPageAnimationDelay);
                 Device.BeginInvokeOnMainThread(async () => await DoWorkAsync());
             });
         }
 
         protected void RequestFocus(InputView input)
         {
-            if(Device.RuntimePlatform == Device.iOS)
-            {
-                input.Focus();
-                return;
-            }
             Task.Run(async () =>
             {
-                await Task.Delay(AndroidShowModalAnimationDelay);
+                await Task.Delay(ShowModalAnimationDelay);
                 Device.BeginInvokeOnMainThread(() => input.Focus());
             });
         }
