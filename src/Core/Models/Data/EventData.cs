@@ -1,9 +1,9 @@
 ﻿using Bit.Core.Enums;
 using System;
 
-namespace Bit.Core.Models.Request
+namespace Bit.Core.Models.Data
 {
-    public class EventRequest
+    public class EventData : Data
     {
         public EventType Type { get; set; }
         public string CipherId { get; set; }

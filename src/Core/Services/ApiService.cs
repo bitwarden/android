@@ -298,7 +298,7 @@ namespace Bit.Core.Services
 
         #region Event APIs
 
-        public async Task PostEventsCollectAsync(EventRequest request)
+        public async Task PostEventsCollectAsync(IEnumerable<EventRequest> request)
         {
             using(var requestMessage = new HttpRequestMessage())
             {
