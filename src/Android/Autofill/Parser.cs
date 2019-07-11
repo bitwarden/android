@@ -5,6 +5,7 @@ using Bit.Core;
 using Android.Content;
 using Bit.Core.Abstractions;
 using System.Threading.Tasks;
+using Android.OS;
 
 namespace Bit.Droid.Autofill
 {
@@ -17,7 +18,7 @@ namespace Bit.Droid.Autofill
         private readonly AssistStructure _structure;
         private string _uri;
         private string _packageName;
-        private string _webDomain;
+        private string _website;
 
         public Parser(AssistStructure structure, Context applicationContext)
         {
@@ -36,14 +37,14 @@ namespace Bit.Droid.Autofill
                 {
                     return _uri;
                 }
-                var webDomainNull = string.IsNullOrWhiteSpace(WebDomain);
-                if(webDomainNull && string.IsNullOrWhiteSpace(PackageName))
+                var websiteNull = string.IsNullOrWhiteSpace(Website);
+                if(websiteNull && string.IsNullOrWhiteSpace(PackageName))
                 {
                     _uri = null;
                 }
-                else if(!webDomainNull)
+                else if(!websiteNull)
                 {
-                    _uri = string.Concat("http://", WebDomain);
+                    _uri = Website;
                 }
                 else
                 {
@@ -66,16 +67,16 @@ namespace Bit.Droid.Autofill
             }
         }
 
-        public string WebDomain
+        public string Website
         {
-            get => _webDomain;
+            get => _website;
             set
             {
                 if(string.IsNullOrWhiteSpace(value))
                 {
-                    _webDomain = _uri = null;
+                    _website = _uri = null;
                 }
-                _webDomain = value;
+                _website = value;
             }
         }
 
@@ -104,7 +105,7 @@ namespace Bit.Droid.Autofill
             if(!AutofillHelpers.TrustedBrowsers.Contains(PackageName) &&
                 !AutofillHelpers.CompatBrowsers.Contains(PackageName))
             {
-                WebDomain = null;
+                Website = null;
             }
         }
 
@@ -135,9 +136,14 @@ namespace Bit.Droid.Autofill
             {
                 PackageName = node.IdPackage;
             }
-            if(string.IsNullOrWhiteSpace(WebDomain) && !string.IsNullOrWhiteSpace(node.WebDomain))
+            if(string.IsNullOrWhiteSpace(Website) && !string.IsNullOrWhiteSpace(node.WebDomain))
             {
-                WebDomain = node.WebDomain;
+                var scheme = "http";
+                if((int)Build.VERSION.SdkInt >= 28)
+                {
+                    scheme = node.WebScheme;
+                }
+                Website = string.Format("{0}://{1}", scheme, node.WebDomain);
             }
         }
     }
