@@ -54,6 +54,7 @@ namespace Bit.Core.Utilities
             // TODO: export service
             var auditService = new AuditService(cryptoFunctionService, apiService);
             var environmentService = new EnvironmentService(apiService, storageService);
+            var eventService = new EventService(storageService, apiService, userService, cipherService);
 
             Register<IStateService>("stateService", stateService);
             Register<ICryptoFunctionService>("cryptoFunctionService", cryptoFunctionService);
@@ -74,6 +75,7 @@ namespace Bit.Core.Utilities
             Register<IAuthService>("authService", authService);
             Register<IAuditService>("auditService", auditService);
             Register<IEnvironmentService>("environmentService", environmentService);
+            Register<IEventService>("eventService", eventService);
         }
 
         public static void Register<T>(string serviceName, T obj)
