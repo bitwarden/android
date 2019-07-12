@@ -173,6 +173,7 @@ namespace Bit.App
                     SyncIfNeeded();
                 }
             }
+            _messagingService.Send("startEventTimer");
         }
 
         protected async override void OnSleep()
@@ -184,6 +185,7 @@ namespace Bit.App
             }
             SetTabsPageFromAutofill();
             await HandleLockingAsync();
+            _messagingService.Send("stopEventTimer");
         }
 
         protected override void OnResume()
@@ -198,6 +200,7 @@ namespace Bit.App
         private async void ResumedAsync()
         {
             _messagingService.Send("cancelLockTimer");
+            _messagingService.Send("startEventTimer");
             await ClearCacheIfNeededAsync();
             await TryClearCiphersCacheAsync();
             Prime();

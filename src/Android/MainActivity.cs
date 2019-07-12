@@ -39,8 +39,10 @@ namespace Bit.Droid
         private IAppIdService _appIdService;
         private IStorageService _storageService;
         private IStateService _stateService;
+        private IEventService _eventService;
         private PendingIntent _lockAlarmPendingIntent;
         private PendingIntent _clearClipboardPendingIntent;
+        private PendingIntent _eventUploadPendingIntent;
         private AppOptions _appOptions;
         private string _activityKey = $"{nameof(MainActivity)}_{Java.Lang.JavaSystem.CurrentTimeMillis().ToString()}";
         private Java.Util.Regex.Pattern _otpPattern =
@@ -48,6 +50,9 @@ namespace Bit.Droid
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            var eventUploadIntent = new Intent(this, typeof(EventUploadReceiver));
+            _eventUploadPendingIntent = PendingIntent.GetBroadcast(this, 0, eventUploadIntent,
+                PendingIntentFlags.UpdateCurrent);
             var alarmIntent = new Intent(this, typeof(LockAlarmReceiver));
             _lockAlarmPendingIntent = PendingIntent.GetBroadcast(this, 0, alarmIntent,
                 PendingIntentFlags.UpdateCurrent);
@@ -65,6 +70,7 @@ namespace Bit.Droid
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _stateService = ServiceContainer.Resolve<IStateService>("stateService");
+            _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
@@ -91,16 +97,24 @@ namespace Bit.Droid
             {
                 if(message.Command == "scheduleLockTimer")
                 {
+                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
                     var lockOptionMinutes = (int)message.Data;
                     var lockOptionMs = lockOptionMinutes * 60000;
                     var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + lockOptionMs + 10;
-                    var alarmManager = GetSystemService(AlarmService) as AlarmManager;
                     alarmManager.Set(AlarmType.RtcWakeup, triggerMs, _lockAlarmPendingIntent);
                 }
                 else if(message.Command == "cancelLockTimer")
                 {
                     var alarmManager = GetSystemService(AlarmService) as AlarmManager;
                     alarmManager.Cancel(_lockAlarmPendingIntent);
+                }
+                else if(message.Command == "startEventTimer")
+                {
+                    StartEventAlarm();
+                }
+                else if(message.Command == "stopEventTimer")
+                {
+                    var task = StopEventAlarmAsync();
                 }
                 else if(message.Command == "finishMainActivity")
                 {
@@ -371,6 +385,19 @@ namespace Bit.Droid
             var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + clearMs.Value;
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Set(AlarmType.Rtc, triggerMs, _clearClipboardPendingIntent);
+        }
+
+        private void StartEventAlarm()
+        {
+            var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+            alarmManager.SetInexactRepeating(AlarmType.ElapsedRealtime, 120000, 300000, _eventUploadPendingIntent);
+        }
+
+        private async Task StopEventAlarmAsync()
+        {
+            var alarmManager = GetSystemService(AlarmService) as AlarmManager;
+            alarmManager.Cancel(_eventUploadPendingIntent);
+            await _eventService.UploadEventsAsync();
         }
     }
 }

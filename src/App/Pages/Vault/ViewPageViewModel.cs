@@ -22,6 +22,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
+        private readonly IEventService _eventService;
         private CipherView _cipher;
         private List<ViewPageFieldViewModel> _fields;
         private bool _canAccessPremium;
@@ -32,6 +33,7 @@ namespace Bit.App.Pages
         private string _totpSec;
         private bool _totpLow;
         private DateTime? _totpInterval = null;
+        private string _previousCipherId;
 
         public ViewPageViewModel()
         {
@@ -42,6 +44,7 @@ namespace Bit.App.Pages
             _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
+            _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             CopyCommand = new Command<string>((id) => CopyAsync(id, null));
             CopyUriCommand = new Command<LoginUriView>(CopyUri);
             CopyFieldCommand = new Command<FieldView>(CopyField);
@@ -217,7 +220,7 @@ namespace Bit.App.Pages
             }
             Cipher = await cipher.DecryptAsync();
             CanAccessPremium = await _userService.CanAccessPremiumAsync();
-            Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(f)).ToList();
+            Fields = Cipher.Fields?.Select(f => new ViewPageFieldViewModel(Cipher, f)).ToList();
 
             if(Cipher.Type == Core.Enums.CipherType.Login && !string.IsNullOrWhiteSpace(Cipher.Login.Totp) &&
                 (Cipher.OrganizationUseTotp || CanAccessPremium))
@@ -236,6 +239,11 @@ namespace Bit.App.Pages
                     return true;
                 });
             }
+            if(_previousCipherId != CipherId)
+            {
+                var task = _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientViewed, CipherId);
+            }
+            _previousCipherId = CipherId;
             finishedLoadingAction?.Invoke();
             return true;
         }
@@ -248,11 +256,20 @@ namespace Bit.App.Pages
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
+            if(ShowPassword)
+            {
+                var task = _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientToggledPasswordVisible, CipherId);
+            }
         }
 
         public void ToggleCardCode()
         {
             ShowCardCode = !ShowCardCode;
+            if(ShowCardCode)
+            {
+                var task = _eventService.CollectAsync(
+                    Core.Enums.EventType.Cipher_ClientToggledCardCodeVisible, CipherId);
+            }
         }
 
         public async Task<bool> DeleteAsync()
@@ -434,7 +451,7 @@ namespace Bit.App.Pages
             {
                 name = AppResources.URI;
             }
-            else if(id == "FieldValue")
+            else if(id == "FieldValue" || id == "H_FieldValue")
             {
                 name = AppResources.Value;
             }
@@ -456,6 +473,18 @@ namespace Bit.App.Pages
                 {
                     _platformUtilsService.ShowToast("info", null, string.Format(AppResources.ValueHasBeenCopied, name));
                 }
+                if(id == "LoginPassword")
+                {
+                    await _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, CipherId);
+                }
+                else if(id == "CardCode")
+                {
+                    await _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, CipherId);
+                }
+                else if(id == "H_FieldValue")
+                {
+                    await _eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedHiddenField, CipherId);
+                }
             }
         }
 
@@ -466,7 +495,7 @@ namespace Bit.App.Pages
 
         private void CopyField(FieldView field)
         {
-            CopyAsync("FieldValue", field.Value);
+            CopyAsync(field.Type == Core.Enums.FieldType.Hidden ? "H_FieldValue" : "FieldValue", field.Value);
         }
 
         private void LaunchUri(LoginUriView uri)
@@ -481,10 +510,12 @@ namespace Bit.App.Pages
     public class ViewPageFieldViewModel : ExtendedViewModel
     {
         private FieldView _field;
+        private CipherView _cipher;
         private bool _showHiddenValue;
 
-        public ViewPageFieldViewModel(FieldView field)
+        public ViewPageFieldViewModel(CipherView cipher, FieldView field)
         {
+            _cipher = cipher;
             Field = field;
             ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
         }
@@ -526,6 +557,12 @@ namespace Bit.App.Pages
         public void ToggleHiddenValue()
         {
             ShowHiddenValue = !ShowHiddenValue;
+            if(ShowHiddenValue)
+            {
+                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                var task = eventService.CollectAsync(
+                    Core.Enums.EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
+            }
         }
     }
 }

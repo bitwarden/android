@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IAuditService _auditService;
         private readonly IMessagingService _messagingService;
+        private readonly IEventService _eventService;
         private CipherView _cipher;
         private bool _showNotesSeparator;
         private bool _showPassword;
@@ -34,6 +35,7 @@ namespace Bit.App.Pages
         private int _folderSelectedIndex;
         private int _ownershipSelectedIndex;
         private bool _hasCollections;
+        private string _previousCipherId;
         private List<Core.Models.View.CollectionView> _writeableCollections;
         private string[] _additionalCipherProperties = new string[]
         {
@@ -74,6 +76,7 @@ namespace Bit.App.Pages
             _auditService = ServiceContainer.Resolve<IAuditService>("auditService");
             _messagingService = ServiceContainer.Resolve<IMessagingService>("messagingService");
             _collectionService = ServiceContainer.Resolve<ICollectionService>("collectionService");
+            _eventService = ServiceContainer.Resolve<IEventService>("eventService");
             GeneratePasswordCommand = new Command(GeneratePassword);
             TogglePasswordCommand = new Command(TogglePassword);
             ToggleCardCodeCommand = new Command(ToggleCardCode);
@@ -365,9 +368,16 @@ namespace Bit.App.Pages
                 }
                 if(Cipher.Fields != null)
                 {
-                    Fields.ResetWithRange(Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(f)));
+                    Fields.ResetWithRange(Cipher.Fields?.Select(f => new AddEditPageFieldViewModel(Cipher, f)));
                 }
             }
+
+            if(EditMode && _previousCipherId != CipherId)
+            {
+                var task = _eventService.CollectAsync(EventType.Cipher_ClientViewed, CipherId);
+            }
+            _previousCipherId = CipherId;
+
             return true;
         }
 
@@ -591,7 +601,7 @@ namespace Bit.App.Pages
                     Fields = new ExtendedObservableCollection<AddEditPageFieldViewModel>();
                 }
                 var type = _fieldTypeOptions.FirstOrDefault(f => f.Value == typeSelection).Key;
-                Fields.Add(new AddEditPageFieldViewModel(new FieldView
+                Fields.Add(new AddEditPageFieldViewModel(Cipher, new FieldView
                 {
                     Type = type,
                     Name = string.IsNullOrWhiteSpace(name) ? null : name
@@ -602,11 +612,19 @@ namespace Bit.App.Pages
         public void TogglePassword()
         {
             ShowPassword = !ShowPassword;
+            if(EditMode && ShowPassword)
+            {
+                var task = _eventService.CollectAsync(EventType.Cipher_ClientToggledPasswordVisible, CipherId);
+            }
         }
 
         public void ToggleCardCode()
         {
             ShowCardCode = !ShowCardCode;
+            if(EditMode && ShowCardCode)
+            {
+                var task = _eventService.CollectAsync(EventType.Cipher_ClientToggledCardCodeVisible, CipherId);
+            }
         }
 
         public async Task UpdateTotpKeyAsync(string key)
@@ -720,6 +738,7 @@ namespace Bit.App.Pages
     public class AddEditPageFieldViewModel : ExtendedViewModel
     {
         private FieldView _field;
+        private CipherView _cipher;
         private bool _showHiddenValue;
         private bool _booleanValue;
         private string[] _additionalFieldProperties = new string[]
@@ -729,8 +748,9 @@ namespace Bit.App.Pages
             nameof(IsTextType),
         };
 
-        public AddEditPageFieldViewModel(FieldView field)
+        public AddEditPageFieldViewModel(CipherView cipher, FieldView field)
         {
+            _cipher = cipher;
             Field = field;
             ToggleHiddenValueCommand = new Command(ToggleHiddenValue);
             BooleanValue = IsBooleanType && field.Value == "true";
@@ -775,6 +795,11 @@ namespace Bit.App.Pages
         public void ToggleHiddenValue()
         {
             ShowHiddenValue = !ShowHiddenValue;
+            if(ShowHiddenValue && _cipher?.Id != null)
+            {
+                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                var task = eventService.CollectAsync(EventType.Cipher_ClientToggledHiddenFieldVisible, _cipher.Id);
+            }
         }
 
         public void TriggerFieldChanged()

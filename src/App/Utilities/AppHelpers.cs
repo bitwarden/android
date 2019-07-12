@@ -16,6 +16,7 @@ namespace Bit.App.Utilities
         public static async Task<string> CipherListOptions(ContentPage page, CipherView cipher)
         {
             var platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
+            var eventService = ServiceContainer.Resolve<IEventService>("eventService");
             var options = new List<string> { AppResources.View, AppResources.Edit };
             if(cipher.Type == Core.Enums.CipherType.Login)
             {
@@ -79,6 +80,7 @@ namespace Bit.App.Utilities
                 await platformUtilsService.CopyToClipboardAsync(cipher.Login.Password);
                 platformUtilsService.ShowToast("info", null,
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.Password));
+                var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedPassword, cipher.Id);
             }
             else if(selection == AppResources.CopyTotp)
             {
@@ -106,6 +108,7 @@ namespace Bit.App.Utilities
                 await platformUtilsService.CopyToClipboardAsync(cipher.Card.Code);
                 platformUtilsService.ShowToast("info", null,
                     string.Format(AppResources.ValueHasBeenCopied, AppResources.SecurityCode));
+                var task = eventService.CollectAsync(Core.Enums.EventType.Cipher_ClientCopiedCardCode, cipher.Id);
             }
             else if(selection == AppResources.CopyNotes)
             {

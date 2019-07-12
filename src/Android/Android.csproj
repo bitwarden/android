@@ -120,6 +120,7 @@
     <Compile Include="Push\FirebaseInstanceIdService.cs" />
     <Compile Include="Push\FirebaseMessagingService.cs" />
     <Compile Include="Receivers\ClearClipboardAlarmReceiver.cs" />
+    <Compile Include="Receivers\EventUploadReceiver.cs" />
     <Compile Include="Receivers\LockAlarmReceiver.cs" />
     <Compile Include="Receivers\PackageReplacedReceiver.cs" />
     <Compile Include="Renderers\CipherViewCellRenderer.cs" />
