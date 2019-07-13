@@ -31,12 +31,15 @@ namespace Bit.iOS
         private nint _clipboardBackgroundTaskId;
         private NSTimer _lockTimer = null;
         private nint _lockBackgroundTaskId;
+        private NSTimer _eventTimer = null;
+        private nint _eventBackgroundTaskId;
 
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
         private IStorageService _storageService;
         private ILockService _lockService;
+        private IEventService _eventService;
 
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
@@ -53,6 +56,7 @@ namespace Bit.iOS
             _broadcasterService = ServiceContainer.Resolve<IBroadcasterService>("broadcasterService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _lockService = ServiceContainer.Resolve<ILockService>("lockService");
+            _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             LoadApplication(new App.App(null));
             iOSCoreHelpers.AppearanceAdjustments();
@@ -67,6 +71,14 @@ namespace Bit.iOS
                 else if(message.Command == "cancelLockTimer")
                 {
                     CancelLockTimer();
+                }
+                else if(message.Command == "startEventTimer")
+                {
+                    StartEventTimer();
+                }
+                else if(message.Command == "stopEventTimer")
+                {
+                    var task = StopEventTimerAsync();
                 }
                 else if(message.Command == "updatedTheme")
                 {
@@ -181,7 +193,7 @@ namespace Bit.iOS
             UIApplication.SharedApplication.KeyWindow.BringSubviewToFront(view);
             UIApplication.SharedApplication.KeyWindow.EndEditing(true);
             UIApplication.SharedApplication.SetStatusBarHidden(true, false);
-            _storageService.SaveAsync(Bit.Core.Constants.LastActiveKey, DateTime.UtcNow);
+            _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
             base.DidEnterBackground(uiApplication);
         }
 
@@ -430,6 +442,40 @@ namespace Bit.iOS
                 activityViewController.PopoverPresentationController.SourceRect = frame;
             }
             modal.PresentViewController(activityViewController, true, null);
+        }
+
+        private void StartEventTimer()
+        {
+            _eventTimer?.Invalidate();
+            _eventTimer?.Dispose();
+            _eventTimer = null;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                _eventTimer = NSTimer.CreateScheduledTimer(60, true, timer =>
+                {
+                    var task = Task.Run(() => _eventService.UploadEventsAsync());
+                });
+            });
+        }
+
+        private async Task StopEventTimerAsync()
+        {
+            _eventTimer?.Invalidate();
+            _eventTimer?.Dispose();
+            _eventTimer = null;
+            if(_eventBackgroundTaskId > 0)
+            {
+                UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+                _eventBackgroundTaskId = 0;
+            }
+            _eventBackgroundTaskId = UIApplication.SharedApplication.BeginBackgroundTask(() =>
+            {
+                UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+                _eventBackgroundTaskId = 0;
+            });
+            await _eventService.UploadEventsAsync();
+            UIApplication.SharedApplication.EndBackgroundTask(_eventBackgroundTaskId);
+            _eventBackgroundTaskId = 0;
         }
     }
 }
