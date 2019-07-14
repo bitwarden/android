@@ -31,6 +31,8 @@ namespace Bit.Core.Services
 
         public async Task CollectAsync(EventType eventType, string cipherId = null, bool uploadImmediately = false)
         {
+            return;
+            // TODO
             var authed = await _userService.IsAuthenticatedAsync();
             if(!authed)
             {
@@ -74,6 +76,8 @@ namespace Bit.Core.Services
 
         public async Task UploadEventsAsync()
         {
+            return;
+            // TODO
             var authed = await _userService.IsAuthenticatedAsync();
             if(!authed)
             {
