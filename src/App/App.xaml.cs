@@ -126,6 +126,13 @@ namespace Bit.App
                         ResumedAsync();
                     }
                 }
+                else if(message.Command == "slept")
+                {
+                    if(Device.RuntimePlatform == Device.iOS)
+                    {
+                        await SleptAsync();
+                    }
+                }
                 else if(message.Command == "migrated")
                 {
                     await Task.Delay(1000);
@@ -182,10 +189,9 @@ namespace Bit.App
             if(Device.RuntimePlatform == Device.Android)
             {
                 await _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
+                SetTabsPageFromAutofill();
+                await SleptAsync();
             }
-            SetTabsPageFromAutofill();
-            await HandleLockingAsync();
-            _messagingService.Send("stopEventTimer");
         }
 
         protected override void OnResume()
@@ -195,6 +201,12 @@ namespace Bit.App
             {
                 ResumedAsync();
             }
+        }
+
+        private async Task SleptAsync()
+        {
+            await HandleLockingAsync();
+            _messagingService.Send("stopEventTimer");
         }
 
         private async void ResumedAsync()
