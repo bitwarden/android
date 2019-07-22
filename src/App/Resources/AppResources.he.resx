@@ -1567,4 +1567,13 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
   <data name="IncludeNumber" xml:space="preserve">
     <value>כלול מספרים</value>
   </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Shared</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Toggle Visiblity</value>
+  </data>
 </root>
