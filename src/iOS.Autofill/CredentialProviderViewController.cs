@@ -34,6 +34,7 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareCredentialList(ASCredentialServiceIdentifier[] serviceIdentifiers)
         {
+            InitAppIfNeeded();
             _context.ServiceIdentifiers = serviceIdentifiers;
             if(serviceIdentifiers.Length > 0)
             {
@@ -67,6 +68,7 @@ namespace Bit.iOS.Autofill
 
         public override void ProvideCredentialWithoutUserInteraction(ASPasswordCredentialIdentity credentialIdentity)
         {
+            InitAppIfNeeded();
             if(!IsAuthed() || IsLocked())
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
@@ -80,6 +82,7 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareInterfaceToProvideCredential(ASPasswordCredentialIdentity credentialIdentity)
         {
+            InitAppIfNeeded();
             if(!CheckAuthed())
             {
                 return;
@@ -90,6 +93,7 @@ namespace Bit.iOS.Autofill
 
         public override void PrepareInterfaceForExtensionConfiguration()
         {
+            InitAppIfNeeded();
             _context.Configuring = true;
             if(!CheckAuthed())
             {
@@ -259,6 +263,14 @@ namespace Bit.iOS.Autofill
             }
             iOSCoreHelpers.Bootstrap();
             iOSCoreHelpers.AppearanceAdjustments();
+        }
+
+        private void InitAppIfNeeded()
+        {
+            if(ServiceContainer.RegisteredServices == null || ServiceContainer.RegisteredServices.Count == 0)
+            {
+                InitApp();
+            }
         }
     }
 }
