@@ -68,7 +68,9 @@
                         Command="{Binding TogglePasswordCommand}"
                         Grid.Row="0"
                         Grid.Column="1"
-                        Grid.RowSpan="2" />
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                 </Grid>
             </StackLayout>
             <StackLayout Padding="10, 0">

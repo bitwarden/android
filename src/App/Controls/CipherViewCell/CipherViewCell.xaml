@@ -3,6 +3,7 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
           x:Class="Bit.App.Controls.CipherViewCell"
           xmlns:controls="clr-namespace:Bit.App.Controls"
+          xmlns:u="clr-namespace:Bit.App.Utilities"
           xmlns:ff="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms">
 
     <Grid 
@@ -32,7 +33,8 @@
             Grid.Column="0"
             HorizontalOptions="Center"
             VerticalOptions="Center"
-            StyleClass="list-icon, list-icon-platform" />
+            StyleClass="list-icon, list-icon-platform"
+            AutomationProperties.IsInAccessibleTree="False" />
 
         <ff:CachedImage
             x:Name="_image"
@@ -44,7 +46,8 @@
             VerticalOptions="Center"
             WidthRequest="22"
             HeightRequest="22"
-            IsVisible="False"/>
+            IsVisible="False"
+            AutomationProperties.IsInAccessibleTree="False" />
 
         <Grid RowSpacing="0" ColumnSpacing="0" Grid.Row="0" Grid.Column="1" VerticalOptions="Center">
             <Grid.RowDefinitions>
@@ -79,7 +82,9 @@
                 StyleClass="list-title-icon"
                 Margin="5, 0, 0, 0"
                 Text="&#xf1e0;"
-                IsVisible="{Binding Cipher.Shared, Mode=OneWay}" />
+                IsVisible="{Binding Cipher.Shared, Mode=OneWay}"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Shared}" />
             <controls:FaLabel
                 Grid.Column="2"
                 Grid.Row="0"
@@ -88,7 +93,9 @@
                 StyleClass="list-title-icon"
                 Margin="5, 0, 0, 0"
                 Text="&#xf0c6;"
-                IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}" />
+                IsVisible="{Binding Cipher.HasAttachments, Mode=OneWay}"
+                AutomationProperties.IsInAccessibleTree="True"
+                AutomationProperties.Name="{u:I18n Attachments}" />
         </Grid>
 
         <controls:MiButton
@@ -98,7 +105,9 @@
             StyleClass="list-row-button, list-row-button-platform, btn-disabled"
             Clicked="MoreButton_Clicked"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="EndAndExpand" />
+            HorizontalOptions="EndAndExpand"
+            AutomationProperties.IsInAccessibleTree="True"
+            AutomationProperties.Name="{u:I18n Options}" />
 
     </Grid>
 

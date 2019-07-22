@@ -58,7 +58,9 @@
                         Command="{Binding TogglePasswordCommand}"
                         Grid.Row="0"
                         Grid.Column="1"
-                        Grid.RowSpan="2" />
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                 </Grid>
                 <Grid StyleClass="box-row" IsVisible="{Binding PinLock, Converter={StaticResource inverseBool}}">
                     <Grid.RowDefinitions>
@@ -91,7 +93,9 @@
                         Command="{Binding TogglePasswordCommand}"
                         Grid.Row="0"
                         Grid.Column="1"
-                        Grid.RowSpan="2" />
+                        Grid.RowSpan="2"
+                        AutomationProperties.IsInAccessibleTree="True"
+                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                 </Grid>
                 <Label
                     Text="{Binding LockedVerifyText}"

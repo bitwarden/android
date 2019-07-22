@@ -54,7 +54,9 @@
                                         Text="&#xf014;"
                                         Command="{Binding BindingContext.DeleteAttachmentCommand, Source={x:Reference _page}}"
                                         CommandParameter="{Binding .}"
-                                        VerticalOptions="Center" />
+                                        VerticalOptions="Center"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n Delete}" />
                                 </StackLayout>
                                 <BoxView StyleClass="box-row-separator" />
                             </StackLayout>

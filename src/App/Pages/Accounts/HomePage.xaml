@@ -16,7 +16,9 @@
         <controls:FaButton Text="&#xf013;"
                            StyleClass="btn-muted, btn-icon, btn-icon-platform"
                            HorizontalOptions="Start"
-                           Clicked="Settings_Clicked">
+                           Clicked="Settings_Clicked"
+                           AutomationProperties.IsInAccessibleTree="True"
+                           AutomationProperties.Name="{u:I18n Options}">
             <controls:FaButton.Margin>
                 <OnPlatform x:TypeArguments="Thickness">
                     <On Platform="iOS" Value="0, 10, 0, 0" />

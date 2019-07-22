@@ -88,7 +88,9 @@
                                     CommandParameter="LoginUsername"
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyUsername}" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Username, Converter={StaticResource stringHasValue}}" />
@@ -128,14 +130,18 @@
                                     Command="{Binding CheckPasswordCommand}"
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CheckPassword}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="{Binding ShowPasswordIcon}"
                                     Command="{Binding TogglePasswordCommand}"
                                     Grid.Row="0"
                                     Grid.Column="2"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
@@ -143,7 +149,9 @@
                                     CommandParameter="LoginPassword"
                                     Grid.Row="0"
                                     Grid.Column="3"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyPassword}" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Login.Password, Converter={StaticResource stringHasValue}}" />
@@ -184,7 +192,9 @@
                                     CommandParameter="LoginTotp"
                                     Grid.Row="0"
                                     Grid.Column="2"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyTotp}" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator" IsVisible="{Binding ShowTotp}" />
                         </StackLayout>
@@ -227,7 +237,9 @@
                                     CommandParameter="CardNumber"
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopyNumber}" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Card.Number, Converter={StaticResource stringHasValue}}" />
@@ -287,7 +299,9 @@
                                     Command="{Binding ToggleCardCodeCommand}"
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                 <controls:FaButton 
                                     StyleClass="box-row-button, box-row-button-platform"
                                     Text="&#xf0ea;"
@@ -295,7 +309,9 @@
                                     CommandParameter="CardCode"
                                     Grid.Row="0"
                                     Grid.Column="2"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n CopySecurityCode}" />
                             </Grid>
                             <BoxView StyleClass="box-row-separator"
                                      IsVisible="{Binding Cipher.Card.Code, Converter={StaticResource stringHasValue}}" />
@@ -461,7 +477,9 @@
                                                 Grid.Row="0"
                                                 Grid.Column="1"
                                                 Grid.RowSpan="2"
-                                                IsVisible="{Binding CanLaunch, Mode=OneWay}" />
+                                                IsVisible="{Binding CanLaunch, Mode=OneWay}"
+                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.Name="{u:I18n Launch}" />
                                             <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
                                                 Text="&#xf0ea;"
@@ -469,7 +487,9 @@
                                                 CommandParameter="{Binding .}"
                                                 Grid.Row="0"
                                                 Grid.Column="2"
-                                                Grid.RowSpan="2" />
+                                                Grid.RowSpan="2"
+                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.Name="{u:I18n Copy}" />
                                         </Grid>
                                         <BoxView StyleClass="box-row-separator" />
                                     </StackLayout>
@@ -551,7 +571,9 @@
                                                 IsVisible="{Binding IsHiddenType}"
                                                 Grid.Row="0"
                                                 Grid.Column="1"
-                                                Grid.RowSpan="2" />
+                                                Grid.RowSpan="2"
+                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                             <controls:FaButton
                                                 StyleClass="box-row-button, box-row-button-platform"
                                                 Text="&#xf0ea;"
@@ -560,7 +582,9 @@
                                                 IsVisible="{Binding ShowCopyButton}"
                                                 Grid.Row="0"
                                                 Grid.Column="2"
-                                                Grid.RowSpan="2" />
+                                                Grid.RowSpan="2"
+                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.Name="{u:I18n Copy}" />
                                         </Grid>
                                         <BoxView StyleClass="box-row-separator" />
                                     </StackLayout>
@@ -593,7 +617,9 @@
                                                 Text="&#xf019;"
                                                 Command="{Binding BindingContext.DownloadAttachmentCommand, Source={x:Reference _page}}"
                                                 CommandParameter="{Binding .}"
-                                                VerticalOptions="Center" />
+                                                VerticalOptions="Center"
+                                                AutomationProperties.IsInAccessibleTree="True"
+                                                AutomationProperties.Name="{u:I18n Download}" />
                                         </StackLayout>
                                         <BoxView StyleClass="box-row-separator" />
                                     </StackLayout>

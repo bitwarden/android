@@ -121,21 +121,27 @@
                             Command="{Binding CheckPasswordCommand}"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Grid.RowSpan="2" />
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n CheckPassword}" />
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="{Binding ShowPasswordIcon}"
                             Command="{Binding TogglePasswordCommand}"
                             Grid.Row="0"
                             Grid.Column="2"
-                            Grid.RowSpan="2" />
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf021;"
                             Command="{Binding GeneratePasswordCommand}"
                             Grid.Row="0"
                             Grid.Column="3"
-                            Grid.RowSpan="2" />
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n GeneratePassword}" />
                     </Grid>
 
                     <Grid StyleClass="box-row, box-row-input">
@@ -166,7 +172,9 @@
                             Clicked="ScanTotp_Clicked"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Grid.RowSpan="2" />
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n ScanQrTitle}" />
                     </Grid>
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
@@ -249,7 +257,9 @@
                             Command="{Binding ToggleCardCodeCommand}"
                             Grid.Row="0"
                             Grid.Column="1"
-                            Grid.RowSpan="2" />
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"
+                            AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                     </Grid>
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsIdentity}" Spacing="0" Padding="0">
@@ -454,7 +464,9 @@
                                     CommandParameter="{Binding .}"
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Grid.RowSpan="2" />
+                                    Grid.RowSpan="2"
+                                    AutomationProperties.IsInAccessibleTree="True"
+                                    AutomationProperties.Name="{u:I18n Options}" />
                             </Grid>
                         </DataTemplate>
                     </controls:RepeaterView.ItemTemplate>
@@ -565,7 +577,9 @@
                                         IsVisible="{Binding IsHiddenType}"
                                         Grid.Row="0"
                                         Grid.Column="1"
-                                        Grid.RowSpan="2" />
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n ToggleVisibility}" />
                                     <controls:FaButton 
                                         StyleClass="box-row-button, box-row-button-platform"
                                         Text="&#xf013;"
@@ -573,7 +587,9 @@
                                         CommandParameter="{Binding .}"
                                         Grid.Row="0"
                                         Grid.Column="2"
-                                        Grid.RowSpan="2" />
+                                        Grid.RowSpan="2"
+                                        AutomationProperties.IsInAccessibleTree="True"
+                                        AutomationProperties.Name="{u:I18n Options}" />
                                 </Grid>
                                 <BoxView StyleClass="box-row-separator" IsVisible="{Binding IsBooleanType}" />
                             </StackLayout>
