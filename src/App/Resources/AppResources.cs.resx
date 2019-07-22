@@ -412,7 +412,7 @@
     <value>Rozšíření aplikace Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>Nejjednodušší způsob přidání nových přihlášení do trezoru je z rozšíření Bitwarden. Další informace o používání rozšíření Bitwarden získáte klepnutím na obrazovku Nastavení.</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Použijte Bitwarden v Safari a ostatních prohlížečích pro automatické vyplnění přihlašovacích údajů.</value>
@@ -753,7 +753,7 @@
     <value>Stav</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do trezoru, je pomocí služby automatického vyplňování Bitwarden. Další informace o používání služby automatického vyplňování Bitwarden naleznete na obrazovce Nastavení.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Automatické vyplnění</value>
@@ -1302,7 +1302,7 @@
     <value>Automatické vyplnění hesel</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>Nejjednodušší způsob, jak přidat nové přihlašovací údaje do trezoru, je pomocí rozšíření automatického vyplňování Bitwarden. Další informace o používání rozšíření automatického vyplňování Bitwarden naleznete na obrazovce Nastavení.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Neplatná e-mailová adresa.</value>
@@ -1557,13 +1557,22 @@
     <value>Automatické vyplňování usnadňuje bezpečný přístup k trezoru Bitwarden z jiných webových stránek a aplikací. Vypadá to, že jste službu Bitwarden nepovolili. Povolte automatické vyplnění pro Bitwarden z obrazovky "Nastavení".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Vaše změny motivu se použijí při restartu aplikace.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Velká písmena na začátku slova</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Zahrnout číslo</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Shared</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Toggle Visiblity</value>
   </data>
 </root>

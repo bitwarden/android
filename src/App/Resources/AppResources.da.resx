@@ -345,7 +345,7 @@
     <comment>Label for a uri/url.</comment>
   </data>
   <data name="UseFingerprintToUnlock" xml:space="preserve">
-    <value>Benyt fingeraftryk til oplåsning</value>
+    <value>Lås op med dit fingeraftryk</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Brugernavn</value>
@@ -1557,13 +1557,22 @@
     <value>Autoudfyldning gør det nemt at få en sikret adgang til din Bitwarden boks fra andre websteder og apps. Det ser ud til, at du ikke har aktiveret en autoudfyldningstjeneste for Bitwarden. Aktivér autoudfyldning for Bitwarden fra skærmen "Indstillinger".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Dine temaændringer effektueres efter app-genstart.</value>
+    <value>Dine temaændringer effektueres efter appen genstartes.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Stort begyndelsesbogstav</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Inkludér cifre</value>
+    <value>Inkludér ciffer</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Shared</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Toggle Visiblity</value>
   </data>
 </root>

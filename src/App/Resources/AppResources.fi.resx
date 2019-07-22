@@ -686,7 +686,7 @@
     <value>Kaksivaiheinen kirjautuminen tekee tilistäsi turvallisemman vaatimalla koodin tunnistautumispalvelusta joka kirjautumiskerralla. Voit ottaa kaksivaiheisen tunnistautumisen käyttöön bitwarden.com-verkkoholvissa. Haluatko käydä sivustolla nyt?</value>
   </data>
   <data name="UnlockWith" xml:space="preserve">
-    <value>Avaa sormenjäljellä</value>
+    <value>Avaa käyttäen: {0}</value>
   </data>
   <data name="UnlockWithPIN" xml:space="preserve">
     <value>Avaa PIN-koodilla</value>
@@ -1565,5 +1565,14 @@
   </data>
   <data name="IncludeNumber" xml:space="preserve">
     <value>Include Number</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Shared</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Toggle Visiblity</value>
   </data>
 </root>
