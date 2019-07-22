@@ -188,8 +188,12 @@ namespace Bit.App
             System.Diagnostics.Debug.WriteLine("XF App: OnSleep");
             if(Device.RuntimePlatform == Device.Android)
             {
-                await _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
-                SetTabsPageFromAutofill();
+                var isLocked = await _lockService.IsLockedAsync();
+                if(!isLocked)
+                {
+                    await _storageService.SaveAsync(Constants.LastActiveKey, DateTime.UtcNow);
+                }
+                SetTabsPageFromAutofill(isLocked);
                 await SleptAsync();
             }
         }
@@ -319,7 +323,7 @@ namespace Bit.App
             }
         }
 
-        private void SetTabsPageFromAutofill()
+        private void SetTabsPageFromAutofill(bool isLocked)
         {
             if(Device.RuntimePlatform == Device.Android && !string.IsNullOrWhiteSpace(_appOptions.Uri) &&
                 !_appOptions.FromAutofillFramework)
@@ -328,8 +332,15 @@ namespace Bit.App
                 {
                     Device.BeginInvokeOnMainThread(() =>
                     {
-                        Current.MainPage = new TabsPage();
                         _appOptions.Uri = null;
+                        if(isLocked)
+                        {
+                            Current.MainPage = new NavigationPage(new LockPage());
+                        }
+                        else
+                        {
+                            Current.MainPage = new TabsPage();
+                        }
                     });
                 });
             }
