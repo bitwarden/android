@@ -36,7 +36,7 @@ namespace Bit.iOS.Extension
 
         partial void BackButton_Activated(UIBarButtonItem sender)
         {
-            LoadingController.CompleteRequest(null);
+            LoadingController.CompleteRequest(null, null);
         }
     }
 }

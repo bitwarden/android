@@ -62,7 +62,7 @@ namespace Bit.iOS.Extension
             {
                 var alert = Dialogs.CreateAlert(null, AppResources.MustLogInMainApp, AppResources.Ok, (a) =>
                 {
-                    CompleteRequest(null);
+                    CompleteRequest(null, null);
                 });
                 PresentViewController(alert, true, null);
                 return;
@@ -131,7 +131,7 @@ namespace Bit.iOS.Extension
             }
         }
 
-        public void CompleteUsernamePasswordRequest(string username, string password,
+        public void CompleteUsernamePasswordRequest(string id, string username, string password,
             List<Tuple<string, string>> fields, string totp)
         {
             NSDictionary itemData = null;
@@ -172,10 +172,10 @@ namespace Bit.iOS.Extension
             {
                 UIPasteboard.General.String = totp;
             }
-            CompleteRequest(itemData);
+            CompleteRequest(id, itemData);
         }
 
-        public void CompleteRequest(NSDictionary itemData)
+        public void CompleteRequest(string id, NSDictionary itemData)
         {
             ServiceContainer.Reset();
 
@@ -183,6 +183,11 @@ namespace Bit.iOS.Extension
             var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
             var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
             var returningItems = new NSExtensionItem[] { resultsItem };
+            if(!string.IsNullOrWhiteSpace(id) && itemData != null)
+            {
+                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                var task = eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
+            }
             NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CompleteRequest(returningItems, null));
         }
 

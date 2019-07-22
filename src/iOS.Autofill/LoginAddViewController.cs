@@ -17,7 +17,7 @@ namespace Bit.iOS.Autofill
         public override UIBarButtonItem BaseCancelButton => CancelBarButton;
         public override UIBarButtonItem BaseSaveButton => SaveBarButton;
 
-        public override Action Success => () =>
+        public override Action<string> Success => id =>
         {
             LoginListController?.DismissModal();
             LoginSearchController?.DismissModal();

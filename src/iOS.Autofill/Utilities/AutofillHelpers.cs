@@ -27,7 +27,7 @@ namespace Bit.iOS.Autofill.Utilities
             var item = tableSource.Items.ElementAt(indexPath.Row);
             if(item == null)
             {
-                cpViewController.CompleteRequest(null);
+                cpViewController.CompleteRequest();
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace Bit.iOS.Autofill.Utilities
                         totp = await totpService.GetCodeAsync(item.Totp);
                     }
                 }
-                cpViewController.CompleteRequest(item.Username, item.Password, totp);
+                cpViewController.CompleteRequest(item.Id, item.Username, item.Password, totp);
             }
             else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
                 !string.IsNullOrWhiteSpace(item.Totp))

@@ -42,7 +42,7 @@ namespace Bit.iOS.Core.Controllers
         public abstract UINavigationItem BaseNavItem { get; }
         public abstract UIBarButtonItem BaseCancelButton { get; }
         public abstract UIBarButtonItem BaseSaveButton { get; }
-        public abstract Action Success { get; }
+        public abstract Action<string> Success { get; }
 
         public override void ViewDidLoad()
         {
@@ -187,7 +187,7 @@ namespace Bit.iOS.Core.Controllers
                 {
                     await ASHelpers.ReplaceAllIdentities();
                 }
-                Success();
+                Success(cipherDomain.Id);
             }
             catch(ApiException e)
             {

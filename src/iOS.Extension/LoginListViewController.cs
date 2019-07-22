@@ -57,7 +57,7 @@ namespace Bit.iOS.Extension
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)
         {
-            LoadingController.CompleteRequest(null);
+            LoadingController.CompleteRequest(null, null);
         }
 
         partial void AddBarButton_Activated(UIBarButtonItem sender)
@@ -110,7 +110,7 @@ namespace Bit.iOS.Extension
                 var item = Items.ElementAt(indexPath.Row);
                 if(item == null)
                 {
-                    _controller.LoadingController.CompleteRequest(null);
+                    _controller.LoadingController.CompleteRequest(null, null);
                     return;
                 }
 
@@ -125,7 +125,7 @@ namespace Bit.iOS.Extension
                         totp = GetTotpAsync(item).GetAwaiter().GetResult();
                     }
                     _controller.LoadingController.CompleteUsernamePasswordRequest(
-                        item.Username, item.Password, item.Fields, totp);
+                        item.Id, item.Username, item.Password, item.Fields, totp);
                 }
                 else if(!string.IsNullOrWhiteSpace(item.Username) || !string.IsNullOrWhiteSpace(item.Password) ||
                     !string.IsNullOrWhiteSpace(item.Totp))

@@ -25,7 +25,7 @@ namespace Bit.iOS.Extension
             CancelBarButton.TintColor = ThemeHelpers.NavBarTextColor;
         }
 
-        public override Action Success => () =>
+        public override Action<string> Success => id =>
         {
             if(LoginListController != null)
             {
@@ -33,7 +33,7 @@ namespace Bit.iOS.Extension
             }
             else if(LoadingController != null)
             {
-                LoadingController.CompleteUsernamePasswordRequest(UsernameCell.TextField.Text,
+                LoadingController.CompleteUsernamePasswordRequest(id, UsernameCell.TextField.Text,
                     PasswordCell.TextField.Text, null, null);
             }
         };
@@ -46,7 +46,7 @@ namespace Bit.iOS.Extension
             }
             else
             {
-                LoadingController.CompleteRequest(null);
+                LoadingController.CompleteRequest(null, null);
             }
         }
 

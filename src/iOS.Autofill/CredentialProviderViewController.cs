@@ -102,7 +102,8 @@ namespace Bit.iOS.Autofill
             CheckLock(() => PerformSegue("setupSegue", this));
         }
 
-        public void CompleteRequest(string username = null, string password = null, string totp = null)
+        public void CompleteRequest(string id = null, string username = null,
+            string password = null, string totp = null)
         {
             ServiceContainer.Reset();
 
@@ -125,6 +126,8 @@ namespace Bit.iOS.Autofill
                 UIPasteboard.General.String = totp;
             }
 
+            var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+            var task = eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
             var cred = new ASPasswordCredential(username, password);
             NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CompleteRequest(cred, null));
         }
@@ -207,7 +210,7 @@ namespace Bit.iOS.Autofill
                 }
             }
 
-            CompleteRequest(decCipher.Login.Username, decCipher.Login.Password, totpCode);
+            CompleteRequest(decCipher.Id, decCipher.Login.Username, decCipher.Login.Password, totpCode);
         }
 
         private void CheckLock(Action notLockedAction)
