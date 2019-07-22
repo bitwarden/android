@@ -57,7 +57,7 @@ namespace Bit.App.Pages
                 {
                     var token = (string)message.Data;
                     if(_vm.YubikeyMethod && !string.IsNullOrWhiteSpace(token) &&
-                        token.Length > 40 && !token.Contains(" "))
+                        token.Length == 44 && !token.Contains(" "))
                     {
                         Device.BeginInvokeOnMainThread(async () =>
                         {
