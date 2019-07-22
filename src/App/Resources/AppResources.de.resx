@@ -1557,13 +1557,22 @@
     <value>Durch automatisches Füllen ist es leicht, auf Ihren Bitwarden Tresor von anderen Webseiten und Apps sicher zuzugreifen. Es sieht aus, als ob Sie den Automatisches Fülldienst für Bitwarden nicht aktiviert haben. Aktivieren Sie automatisches Füllen im "Einstellungen"-Bildschirm.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Ihre Änderungen am Aussehen der App werden beim nächsten Neustart der App angewendet.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Großschreiben</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Zahl hinzufügen</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Shared</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Toggle Visiblity</value>
   </data>
 </root>
