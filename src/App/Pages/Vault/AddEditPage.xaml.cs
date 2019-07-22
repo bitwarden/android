@@ -41,7 +41,7 @@ namespace Bit.App.Pages
             _vm = BindingContext as AddEditPageViewModel;
             _vm.Page = this;
             _vm.CipherId = cipherId;
-            _vm.FolderId = folderId;
+            _vm.FolderId = folderId == "none" ? null : folderId;
             _vm.CollectionIds = collectionId != null ? new HashSet<string>(new List<string> { collectionId }) : null;
             _vm.Type = type;
             _vm.DefaultName = name ?? appOptions?.SaveName;
