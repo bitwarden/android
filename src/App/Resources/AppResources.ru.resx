@@ -519,16 +519,16 @@
     <value>Заблокировать</value>
   </data>
   <data name="LockOption15Minutes" xml:space="preserve">
-    <value>Через 15 минут</value>
+    <value>15 минут</value>
   </data>
   <data name="LockOption1Hour" xml:space="preserve">
-    <value>Через 1 час</value>
+    <value>1 час</value>
   </data>
   <data name="LockOption1Minute" xml:space="preserve">
-    <value>Через 1 минуту</value>
+    <value>1 минута</value>
   </data>
   <data name="LockOption4Hours" xml:space="preserve">
-    <value>Через 4 часа</value>
+    <value>4 часа</value>
   </data>
   <data name="LockOptionImmediately" xml:space="preserve">
     <value>Немедленно</value>
@@ -1249,7 +1249,7 @@
     <value>Удерживайте Yubikey в верхней части устройства.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Еще раз</value>
+    <value>Попробуйте снова</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>Для продолжения, удерживайте YubiKey NEO у задней панели устройства.</value>
@@ -1449,10 +1449,10 @@
     <value>Разблокировать</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>Через 30 минут</value>
+    <value>30 минут</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>Через 5 минут</value>
+    <value>5 минут</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
     <value>Установите PIN-код для разблокировки Bitwarden. Настройки PIN-кода будут сброшены, если вы когда-либо полностью выйдете из приложения.</value>
@@ -1462,10 +1462,10 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Хранилище заблокировано. Введите мастер-пароль для продолжения.</value>
+    <value>Ваше хранилище заблокировано. Для продолжения введите мастер-пароль.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Ваше хранилище заблокировано. Подтвердите свой PIN-код, чтобы продолжить.</value>
+    <value>Ваше хранилище заблокировано. Для продолжения введите PIN-код.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Темная</value>
@@ -1476,10 +1476,10 @@
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>Через 5 минут</value>
+    <value>5 минут</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>Через 1 минуту</value>
+    <value>1 минута</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
     <value>10 секунд</value>
@@ -1565,5 +1565,14 @@
   </data>
   <data name="IncludeNumber" xml:space="preserve">
     <value>Включить цифру</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Shared</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Toggle Visiblity</value>
   </data>
 </root>
