@@ -36,9 +36,12 @@ namespace Bit.App.Services
             {
                 if(_subscribers.ContainsKey(id))
                 {
-                    return;
+                    _subscribers[id] = messageCallback;
                 }
-                _subscribers.Add(id, messageCallback);
+                else
+                {
+                    _subscribers.Add(id, messageCallback);
+                }
             }
         }
 
