@@ -137,10 +137,18 @@ namespace Bit.App.Pages
             {
                 await _vm.UpdatePinAsync();
             }
-            else if(item.Name.Contains(AppResources.Fingerprint) || item.Name.Contains(AppResources.TouchID) ||
-                item.Name.Contains(AppResources.FaceID))
+            else
             {
-                await _vm.UpdateFingerprintAsync();
+                var fingerprintName = AppResources.Fingerprint;
+                if(Device.RuntimePlatform == Device.iOS)
+                {
+                    fingerprintName = _deviceActionService.SupportsFaceId() ?
+                        AppResources.FaceID : AppResources.TouchID;
+                }
+                if(item.Name == string.Format(AppResources.UnlockWith, fingerprintName))
+                {
+                    await _vm.UpdateFingerprintAsync();
+                }
             }
         }
     }
