@@ -123,14 +123,14 @@ namespace Bit.iOS.Core.Controllers
             }
             */
 
-            if(string.IsNullOrWhiteSpace(PasswordCell.TextField.Text))
+            if(string.IsNullOrWhiteSpace(PasswordCell?.TextField?.Text))
             {
                 DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                     AppResources.Password), AppResources.Ok);
                 return;
             }
 
-            if(string.IsNullOrWhiteSpace(NameCell.TextField.Text))
+            if(string.IsNullOrWhiteSpace(NameCell?.TextField?.Text))
             {
                 DisplayAlert(AppResources.AnErrorHasOccurred, string.Format(AppResources.ValidationFieldRequired,
                     AppResources.Name), AppResources.Ok);
@@ -139,20 +139,23 @@ namespace Bit.iOS.Core.Controllers
 
             var cipher = new CipherView
             {
-                Name = string.IsNullOrWhiteSpace(NameCell.TextField.Text) ? null : NameCell.TextField.Text,
-                Notes = string.IsNullOrWhiteSpace(NotesCell.TextView.Text) ? null : NotesCell.TextView.Text,
+                Name = NameCell.TextField.Text,
+                Notes = string.IsNullOrWhiteSpace(NotesCell?.TextView?.Text) ? null : NotesCell.TextView.Text,
                 Favorite = FavoriteCell.Switch.On,
-                FolderId = FolderCell.SelectedIndex == 0 ? null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id,
+                FolderId = FolderCell.SelectedIndex == 0 ?
+                    null : _folders.ElementAtOrDefault(FolderCell.SelectedIndex - 1)?.Id,
                 Type = Bit.Core.Enums.CipherType.Login,
                 Login = new LoginView
                 {
                     Uris = null,
-                    Username = string.IsNullOrWhiteSpace(UsernameCell.TextField.Text) ? null : UsernameCell.TextField.Text,
-                    Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ? null : PasswordCell.TextField.Text,
+                    Username = string.IsNullOrWhiteSpace(UsernameCell?.TextField?.Text) ?
+                        null : UsernameCell.TextField.Text,
+                    Password = string.IsNullOrWhiteSpace(PasswordCell.TextField.Text) ?
+                        null : PasswordCell.TextField.Text,
                 }
             };
 
-            if(!string.IsNullOrWhiteSpace(UriCell.TextField.Text))
+            if(!string.IsNullOrWhiteSpace(UriCell?.TextField?.Text))
             {
                 cipher.Login.Uris = new List<LoginUriView>
                 {

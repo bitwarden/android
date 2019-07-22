@@ -440,7 +440,7 @@ namespace Bit.App.Pages
                     EditMode ? AppResources.ItemUpdated : AppResources.NewItemCreated);
                 _messagingService.Send(EditMode ? "editedCipher" : "addedCipher", Cipher.Id);
 
-                if((Page as AddEditPage).FromAutofillFramework)
+                if(Page is AddEditPage page && page.FromAutofillFramework)
                 {
                     // Close and go back to app
                     _deviceActionService.CloseAutofill();
