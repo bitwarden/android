@@ -84,9 +84,6 @@ namespace Bit.iOS.Core.Controllers
 
             if(_fingerprintLock)
             {
-                var fingerprintButtonText = _deviceActionService.SupportsFaceId() ? AppResources.UseFaceIDToUnlock :
-                    AppResources.UseFingerprintToUnlock;
-                // TODO: set button text
                 var tasks = Task.Run(async () =>
                 {
                     await Task.Delay(500);
@@ -252,9 +249,11 @@ namespace Bit.iOS.Core.Controllers
                 {
                     if(indexPath.Row == 0)
                     {
+                        var fingerprintButtonText = _controller._deviceActionService.SupportsFaceId() ?
+                            AppResources.UseFaceIDToUnlock : AppResources.UseFingerprintToUnlock;
                         var cell = new ExtendedUITableViewCell();
                         cell.TextLabel.TextColor = ThemeHelpers.PrimaryColor;
-                        cell.TextLabel.Text = AppResources.UseFingerprintToUnlock;
+                        cell.TextLabel.Text = fingerprintButtonText;
                         return cell;
                     }
                 }
