@@ -96,6 +96,15 @@ namespace Bit.iOS
                 {
                     ListenYubiKey((bool)message.Data);
                 }
+                else if(message.Command == "unlocked")
+                {
+                    var needsAutofillReplacement = await _storageService.GetAsync<bool?>(
+                        Core.Constants.AutofillNeedsIdentityReplacementKey);
+                    if(needsAutofillReplacement.GetValueOrDefault())
+                    {
+                        await ASHelpers.ReplaceAllIdentities();
+                    }
+                }
                 else if(message.Command == "showAppExtension")
                 {
                     Device.BeginInvokeOnMainThread(() => ShowAppExtension((ExtensionPageViewModel)message.Data));

@@ -6,6 +6,9 @@ using Bit.iOS.Core.Controllers;
 using Bit.App.Resources;
 using Bit.iOS.Core.Views;
 using Bit.iOS.Autofill.Utilities;
+using Bit.iOS.Core.Utilities;
+using Bit.Core.Utilities;
+using Bit.Core.Abstractions;
 
 namespace Bit.iOS.Autofill
 {
@@ -28,6 +31,14 @@ namespace Bit.iOS.Autofill
             TableView.EstimatedRowHeight = 44;
             TableView.Source = new TableSource(this);
             await ((TableSource)TableView.Source).LoadItemsAsync();
+
+            var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+            var needsAutofillReplacement = await storageService.GetAsync<bool?>(
+                Core.Constants.AutofillNeedsIdentityReplacementKey);
+            if(needsAutofillReplacement.GetValueOrDefault())
+            {
+                await ASHelpers.ReplaceAllIdentities();
+            }
         }
 
         partial void CancelBarButton_Activated(UIBarButtonItem sender)

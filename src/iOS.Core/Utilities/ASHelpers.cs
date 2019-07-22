@@ -12,9 +12,16 @@ namespace Bit.iOS.Core.Utilities
     {
         public static async Task ReplaceAllIdentities()
         {
-            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
             if(await AutofillEnabled())
             {
+                var storageService = ServiceContainer.Resolve<IStorageService>("storageService");
+                var lockService = ServiceContainer.Resolve<ILockService>("lockService");
+                if(await lockService.IsLockedAsync())
+                {
+                    await storageService.SaveAsync(Constants.AutofillNeedsIdentityReplacementKey, true);
+                    return;
+                }
+                var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
                 var identities = new List<ASPasswordCredentialIdentity>();
                 var ciphers = await cipherService.GetAllDecryptedAsync();
                 foreach(var cipher in ciphers)
@@ -28,6 +35,7 @@ namespace Bit.iOS.Core.Utilities
                 if(identities.Any())
                 {
                     await ASCredentialIdentityStore.SharedStore?.ReplaceCredentialIdentitiesAsync(identities.ToArray());
+                    await storageService.SaveAsync(Constants.AutofillNeedsIdentityReplacementKey, false);
                 }
             }
         }
