@@ -1302,7 +1302,7 @@
     <value>Autorellenado de contraseña</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>La forma más facil de añadir nuevas entradas a tu caja fuerte es usando la extensión de Autorellenado de contraseñas Bitwarden. Aprende más sobre como utilizar la extensión de Autorellenado de contraseñas Bitwarden yendo a la pantalla de Herramientas.</value>
+    <value>La forma más fácil de añadir nuevas entradas a tu caja fuerte es usando la extensión de Autorellenado de contraseñas Bitwarden. Aprende más sobre como utilizar la extensión de Autorellenado de contraseñas Bitwarden yendo a la pantalla de Herramientas.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Dirección de correo electrónico inválida.</value>
@@ -1462,10 +1462,10 @@
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Tu bóveda está bloqueada. Verifica tu contraseña maestra para continuar.</value>
+    <value>Tu caja fuerte está bloqueada. Verifica tu contraseña maestra para continuar.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Tu bóveda está bloqueada. Verifica tu código PIN para continuar.</value>
+    <value>Tu caja fuerte está bloqueada. Verifica tu código PIN para continuar.</value>
   </data>
   <data name="Dark" xml:space="preserve">
     <value>Oscuro</value>
@@ -1565,5 +1565,14 @@
   </data>
   <data name="IncludeNumber" xml:space="preserve">
     <value>Incluir número</value>
+  </data>
+  <data name="Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="Shared" xml:space="preserve">
+    <value>Shared</value>
+  </data>
+  <data name="ToggleVisibility" xml:space="preserve">
+    <value>Toggle Visiblity</value>
   </data>
 </root>
