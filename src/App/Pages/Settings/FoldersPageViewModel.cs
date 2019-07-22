@@ -10,14 +10,12 @@ namespace Bit.App.Pages
 {
     public class FoldersPageViewModel : BaseViewModel
     {
-        private readonly IPlatformUtilsService _platformUtilsService;
         private readonly IFolderService _folderService;
 
         private bool _showNoData;
 
         public FoldersPageViewModel()
         {
-            _platformUtilsService = ServiceContainer.Resolve<IPlatformUtilsService>("platformUtilsService");
             _folderService = ServiceContainer.Resolve<IFolderService>("folderService");
 
             PageTitle = AppResources.Folders;

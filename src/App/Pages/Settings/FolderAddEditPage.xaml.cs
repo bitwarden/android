@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms;
+﻿using Bit.App.Resources;
+using System.Collections.Generic;
+using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
@@ -18,6 +20,10 @@ namespace Bit.App.Pages
             if(!_vm.EditMode || Device.RuntimePlatform == Device.iOS)
             {
                 ToolbarItems.Remove(_deleteItem);
+            }
+            if(_vm.EditMode && Device.RuntimePlatform == Device.iOS)
+            {
+                ToolbarItems.Add(_moreItem);
             }
             if(Device.RuntimePlatform == Device.Android)
             {
@@ -59,6 +65,21 @@ namespace Bit.App.Pages
             if(DoOnce())
             {
                 await Navigation.PopModalAsync();
+            }
+        }
+
+        private async void More_Clicked(object sender, System.EventArgs e)
+        {
+            if(!DoOnce())
+            {
+                return;
+            }
+            var options = new List<string> { };
+            var selection = await DisplayActionSheet(AppResources.Options, AppResources.Cancel,
+                _vm.EditMode ? AppResources.Delete : null, options.ToArray());
+            if(selection == AppResources.Delete)
+            {
+                await _vm.DeleteAsync();
             }
         }
     }

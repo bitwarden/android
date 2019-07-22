@@ -21,6 +21,15 @@
                      IsDestructive="True"
                      x:Name="_deleteItem" />
     </ContentPage.ToolbarItems>
+    
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ToolbarItem Icon="more_vert.png" Clicked="More_Clicked" Order="Primary" x:Name="_moreItem"
+                         x:Key="moreItem"
+                         AutomationProperties.IsInAccessibleTree="True"
+                         AutomationProperties.Name="{u:I18n Options}" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ScrollView x:Name="_scrollView">
         <StackLayout Spacing="20">
