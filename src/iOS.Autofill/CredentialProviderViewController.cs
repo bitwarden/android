@@ -105,16 +105,16 @@ namespace Bit.iOS.Autofill
         public void CompleteRequest(string id = null, string username = null,
             string password = null, string totp = null)
         {
-            ServiceContainer.Reset();
-
             if((_context?.Configuring ?? true) && string.IsNullOrWhiteSpace(password))
             {
+                ServiceContainer.Reset();
                 ExtensionContext?.CompleteExtensionConfigurationRequest();
                 return;
             }
 
             if(_context == null || string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
             {
+                ServiceContainer.Reset();
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
                     Convert.ToInt32(ASExtensionErrorCode.UserCanceled), null);
                 NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CancelRequest(err));
@@ -126,10 +126,14 @@ namespace Bit.iOS.Autofill
                 UIPasteboard.General.String = totp;
             }
 
-            var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-            var task = eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
             var cred = new ASPasswordCredential(username, password);
-            NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CompleteRequest(cred, null));
+            NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
+            {
+                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
+                ServiceContainer.Reset();
+                ExtensionContext?.CompleteRequest(cred, null);
+            });
         }
 
         public override void PrepareForSegue(UIStoryboardSegue segue, NSObject sender)

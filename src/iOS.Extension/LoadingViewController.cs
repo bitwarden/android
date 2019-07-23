@@ -177,18 +177,20 @@ namespace Bit.iOS.Extension
 
         public void CompleteRequest(string id, NSDictionary itemData)
         {
-            ServiceContainer.Reset();
-
             Debug.WriteLine("BW LOG, itemData: " + itemData);
             var resultsProvider = new NSItemProvider(itemData, UTType.PropertyList);
             var resultsItem = new NSExtensionItem { Attachments = new NSItemProvider[] { resultsProvider } };
             var returningItems = new NSExtensionItem[] { resultsItem };
-            if(!string.IsNullOrWhiteSpace(id) && itemData != null)
+            NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-                var task = eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
-            }
-            NSRunLoop.Main.BeginInvokeOnMainThread(() => ExtensionContext?.CompleteRequest(returningItems, null));
+                if (!string.IsNullOrWhiteSpace(id) && itemData != null)
+                {
+                    var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                    await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
+                }
+                ServiceContainer.Reset();
+                ExtensionContext?.CompleteRequest(returningItems, null);
+            });
         }
 
         private bool ProcessItemProvider(NSItemProvider itemProvider, string type, Action<NSDictionary> dictAction,
