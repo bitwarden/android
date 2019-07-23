@@ -95,7 +95,9 @@ build_script:
       msbuild bitwarden-mobile.sln `
         "/logger:C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" `
         "/p:Configuration=Release"
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
       .\src\Android\ci-build-apks.ps1
+      if ($LastExitCode -ne 0) { $host.SetShouldExit($LastExitCode) }
       Push-AppveyorArtifact .\com.x8bit.bitwarden.apk
       Push-AppveyorArtifact .\com.x8bit.bitwarden-fdroid.apk
     }
