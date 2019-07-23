@@ -26,13 +26,7 @@ namespace Bit.iOS.Core.Utilities
             var crashManagerDelegate = new HockeyAppCrashManagerDelegate(
                 ServiceContainer.Resolve<IAppIdService>("appIdService"),
                 ServiceContainer.Resolve<IUserService>("userService"));
-            var manager = BITHockeyManager.SharedHockeyManager;
-            manager.Configure("51f96ae568ba45f699a18ad9f63046c3", crashManagerDelegate);
-            manager.CrashManager.CrashManagerStatus = BITCrashManagerStatus.AutoSend;
-            manager.StartManager();
-            manager.Authenticator.AuthenticateInstallation();
-            manager.DisableMetricsManager = manager.DisableFeedbackManager = manager.DisableUpdateManager = true;
-            var task = crashManagerDelegate.InitAsync(manager);
+            var task = crashManagerDelegate.InitAsync();
         }
 
         public static void RegisterLocalServices()

@@ -30,8 +30,6 @@ namespace Bit.Droid
     [Register("com.x8bit.bitwarden.MainActivity")]
     public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
-        private const string HockeyAppId = "d3834185b4a643479047b86c65293d42";
-
         private IDeviceActionService _deviceActionService;
         private IMessagingService _messagingService;
         private IBroadcasterService _broadcasterService;
@@ -84,8 +82,7 @@ namespace Bit.Droid
 
 #if !FDROID
             var hockeyAppListener = new HockeyAppCrashManagerListener(_appIdService, _userService);
-            var hockeyAppTask = hockeyAppListener.InitAsync();
-            HockeyApp.Android.CrashManager.Register(this, HockeyAppId, hockeyAppListener);
+            var hockeyAppTask = hockeyAppListener.InitAsync(this);
 #endif
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
