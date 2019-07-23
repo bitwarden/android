@@ -1574,6 +1574,6 @@ Bitwarden בעזרת פתיחת חלון "הגדרות".</value>
     <value>משותף</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>הצג או הסתר</value>
   </data>
 </root>
