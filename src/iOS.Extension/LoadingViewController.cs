@@ -183,7 +183,7 @@ namespace Bit.iOS.Extension
             var returningItems = new NSExtensionItem[] { resultsItem };
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                if (!string.IsNullOrWhiteSpace(id) && itemData != null)
+                if(!string.IsNullOrWhiteSpace(id) && itemData != null)
                 {
                     var eventService = ServiceContainer.Resolve<IEventService>("eventService");
                     await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
