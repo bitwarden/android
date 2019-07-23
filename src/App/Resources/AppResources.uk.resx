@@ -1249,7 +1249,7 @@
     <value>Утримуйте Yubikey біля верхньої частини пристрою.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Спробуйте ще раз</value>
+    <value>Спробуйте знову</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>Щоб продовжити, утримуйте YubiKey NEO навпроти задньої частини пристрою.</value>
@@ -1567,10 +1567,10 @@
     <value>Включити число</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Завантажити</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Спільні</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>
