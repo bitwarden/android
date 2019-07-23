@@ -1379,7 +1379,7 @@
     <value>Verschiedenes</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Besitz</value>
+    <value>Besitzer</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
     <value>Wer besitzt diesen Eintrag?</value>
@@ -1567,10 +1567,10 @@
     <value>Zahl hinzufügen</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Herunterladen</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Geteilt</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>

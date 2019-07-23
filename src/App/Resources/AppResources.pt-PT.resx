@@ -1567,10 +1567,10 @@
     <value>Incluir número</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Transferir</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Partilhado</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>

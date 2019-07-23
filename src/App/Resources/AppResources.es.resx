@@ -1434,10 +1434,10 @@
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden te permite compartir tu bóveda con otras personas utilizando una cuenta de organización. ¿Quieres visitar la web bitwarden.com para conocer más?</value>
+    <value>Bitwarden te permite compartir tu caja fuerte con otras personas utilizando una cuenta de organización. ¿Quieres visitar la web bitwarden.com para conocer más?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Exportar bóveda</value>
+    <value>Exportar caja fuerte</value>
   </data>
   <data name="LockNow" xml:space="preserve">
     <value>Bloquear ahora</value>
@@ -1554,7 +1554,7 @@
     <value>Al reiniciar la App</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>El auto-relleno facilita el acceso seguro a la caja fuerte de Bitwarden desde otros sitios web y aplicaciones. Parece que no has habilitado un servicio de autocompletado para Bitwarden. Habilita el autocompletado para Bitwarden desde la pantalla "Ajustes".</value>
+    <value>El autocompletado facilita el acceso seguro a la caja fuerte de Bitwarden desde otros sitios web y aplicaciones. Parece que no has habilitado un servicio de autocompletado para Bitwarden. Habilita el autocompletado para Bitwarden desde la pantalla "Ajustes".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>Los cambios de tu tema se aplicarán al reiniciar la aplicación.</value>
@@ -1567,10 +1567,10 @@
     <value>Incluir número</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Descargar</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Compartido</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>

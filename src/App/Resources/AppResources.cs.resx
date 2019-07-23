@@ -1532,7 +1532,7 @@
     <value>Opravdu chcete ukončit Bitwarden?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
-    <value>Chcete vyžadovat odemknutí hlavním heslem, když je aplikace restartována?</value>
+    <value>Chcete po restartování aplikace vyžadovat hlavní heslo pro odemknutí trezoru?</value>
   </data>
   <data name="Black" xml:space="preserve">
     <value>Černá</value>
@@ -1557,7 +1557,7 @@
     <value>Automatické vyplňování usnadňuje bezpečný přístup k trezoru Bitwarden z jiných webových stránek a aplikací. Vypadá to, že jste službu Bitwarden nepovolili. Povolte automatické vyplnění pro Bitwarden z obrazovky "Nastavení".</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Vaše změny motivu se použijí při restartu aplikace.</value>
+    <value>Změna motivu se projeví po restartování aplikace.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
     <value>Velká písmena na začátku slova</value>
@@ -1567,10 +1567,10 @@
     <value>Zahrnout číslo</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Stáhnout</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Sdílené</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>
