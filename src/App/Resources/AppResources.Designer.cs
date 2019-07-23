@@ -3571,7 +3571,7 @@ namespace Bit.App.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Toggle Visiblity.
+        ///   Looks up a localized string similar to Toggle Visibility.
         /// </summary>
         public static string ToggleVisibility {
             get {
