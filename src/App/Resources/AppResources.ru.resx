@@ -1567,10 +1567,10 @@
     <value>Включить цифру</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Загрузить</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Общие</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>
