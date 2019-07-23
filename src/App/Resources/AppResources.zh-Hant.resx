@@ -1567,12 +1567,12 @@
     <value>包含數字</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>下載</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>共用</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
-    <value>Toggle Visiblity</value>
+    <value>切換顯示</value>
   </data>
 </root>
