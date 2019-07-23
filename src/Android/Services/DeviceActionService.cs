@@ -36,7 +36,7 @@ namespace Bit.Droid.Services
         private readonly IStorageService _storageService;
         private readonly IMessagingService _messagingService;
         private readonly IBroadcasterService _broadcasterService;
-        private readonly IEventService _eventService;
+        private readonly Func<IEventService> _eventServiceFunc;
         private ProgressDialog _progressDialog;
         private bool _cameraPermissionsDenied;
         private Toast _toast;
@@ -45,12 +45,12 @@ namespace Bit.Droid.Services
             IStorageService storageService,
             IMessagingService messagingService,
             IBroadcasterService broadcasterService,
-            IEventService eventService)
+            Func<IEventService> eventServiceFunc)
         {
             _storageService = storageService;
             _messagingService = messagingService;
             _broadcasterService = broadcasterService;
-            _eventService = eventService;
+            _eventServiceFunc = eventServiceFunc;
 
             _broadcasterService.Subscribe(nameof(DeviceActionService), (message) =>
             {
@@ -466,7 +466,7 @@ namespace Bit.Droid.Services
                 replyIntent.PutExtra(AutofillManager.ExtraAuthenticationResult, dataset);
                 activity.SetResult(Result.Ok, replyIntent);
                 activity.Finish();
-                var eventTask = _eventService.CollectAsync(EventType.Cipher_ClientAutofilled, cipher.Id);
+                var eventTask = _eventServiceFunc().CollectAsync(EventType.Cipher_ClientAutofilled, cipher.Id);
             }
             else
             {
@@ -492,7 +492,7 @@ namespace Bit.Droid.Services
                 }
                 activity.Finish();
                 _messagingService.Send("finishMainActivity");
-                var eventTask = _eventService.CollectAsync(EventType.Cipher_ClientAutofilled, cipher.Id);
+                var eventTask = _eventServiceFunc().CollectAsync(EventType.Cipher_ClientAutofilled, cipher.Id);
             }
         }
 

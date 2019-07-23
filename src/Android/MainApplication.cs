@@ -107,7 +107,7 @@ namespace Bit.Droid
             var cryptoPrimitiveService = new CryptoPrimitiveService();
             var mobileStorageService = new MobileStorageService(preferencesStorage, liteDbStorage);
             var deviceActionService = new DeviceActionService(mobileStorageService, messagingService,
-                broadcasterService);
+                broadcasterService, () => ServiceContainer.Resolve<IEventService>("eventService"));
             var platformUtilsService = new MobilePlatformUtilsService(deviceActionService, messagingService,
                 broadcasterService);
 
