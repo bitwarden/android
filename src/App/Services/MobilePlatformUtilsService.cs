@@ -221,7 +221,6 @@ namespace Bit.App.Services
                 }
                 var fingerprintRequest = new AuthenticationRequestConfiguration(text)
                 {
-                    AllowAlternativeAuthentication = true,
                     CancelTitle = AppResources.Cancel,
                     FallbackTitle = fallbackText
                 };

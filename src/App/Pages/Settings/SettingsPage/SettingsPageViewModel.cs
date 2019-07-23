@@ -320,7 +320,7 @@ namespace Bit.App.Pages
                 new SettingsPageListItem { Name = AppResources.LockNow },
                 new SettingsPageListItem { Name = AppResources.TwoStepLogin }
             };
-            if(_supportsFingerprint)
+            if(_supportsFingerprint || _fingerprint)
             {
                 var fingerprintName = AppResources.Fingerprint;
                 if(Device.RuntimePlatform == Device.iOS)
