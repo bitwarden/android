@@ -1249,7 +1249,7 @@
     <value>Gardez votre Yubikey près du haut de l'appareil.</value>
   </data>
   <data name="TryAgain" xml:space="preserve">
-    <value>Réessayez</value>
+    <value>Réessayer</value>
   </data>
   <data name="YubiKeyInstructionIos" xml:space="preserve">
     <value>Pour continuer, gardez votre Yubikey NEO à l'arrière de l'appareil.</value>
