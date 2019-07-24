@@ -129,8 +129,11 @@ namespace Bit.iOS.Autofill
             var cred = new ASPasswordCredential(username, password);
             NSRunLoop.Main.BeginInvokeOnMainThread(async () =>
             {
-                var eventService = ServiceContainer.Resolve<IEventService>("eventService");
-                await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
+                if(!string.IsNullOrWhiteSpace(id))
+                {
+                    var eventService = ServiceContainer.Resolve<IEventService>("eventService");
+                    await eventService.CollectAsync(Bit.Core.Enums.EventType.Cipher_ClientAutofilled, id);
+                }
                 ServiceContainer.Reset();
                 ExtensionContext?.CompleteRequest(cred, null);
             });
