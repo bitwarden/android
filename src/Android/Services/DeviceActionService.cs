@@ -492,7 +492,10 @@ namespace Bit.Droid.Services
                 }
                 activity.Finish();
                 _messagingService.Send("finishMainActivity");
-                var eventTask = _eventServiceFunc().CollectAsync(EventType.Cipher_ClientAutofilled, cipher.Id);
+                if(cipher != null)
+                {
+                    var eventTask = _eventServiceFunc().CollectAsync(EventType.Cipher_ClientAutofilled, cipher.Id);
+                }
             }
         }
 
