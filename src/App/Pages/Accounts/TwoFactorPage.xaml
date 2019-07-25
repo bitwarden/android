@@ -76,6 +76,9 @@
                             x:Name="_yubikeyTokenEntry"
                             Text="{Binding Token}"
                             StyleClass="box-value"
+                            IsPassword="True"
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False"
                             ReturnType="Go"
                             ReturnCommand="{Binding SubmitCommand}" />
                     </StackLayout>
