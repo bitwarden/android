@@ -34,9 +34,9 @@ namespace Bit.iOS.Core.Services
             var formattedKey = string.Format(_keyFormat, appId, key);
             byte[] dataBytes = null;
             using(var existingRecord = GetKeyRecord(formattedKey))
-            using(var record = SecKeyChain.QueryAsRecord(existingRecord, out SecStatusCode resultCode))
+            using(var record = SecKeyChain.QueryAsRecord(existingRecord, out var resultCode))
             {
-                if(resultCode == SecStatusCode.ItemNotFound)
+                if(resultCode == SecStatusCode.ItemNotFound || resultCode == SecStatusCode.InteractionNotAllowed)
                 {
                     return (T)(object)null;
                 }
@@ -116,7 +116,7 @@ namespace Bit.iOS.Core.Services
         private SecRecord GetExistingRecord(string key)
         {
             var existingRecord = GetKeyRecord(key);
-            SecKeyChain.QueryAsRecord(existingRecord, out SecStatusCode resultCode);
+            SecKeyChain.QueryAsRecord(existingRecord, out var resultCode);
             return resultCode == SecStatusCode.Success ? existingRecord : null;
         }
 
