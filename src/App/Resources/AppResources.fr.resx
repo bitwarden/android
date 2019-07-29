@@ -222,7 +222,7 @@
     <value>Dossier supprimé.</value>
   </data>
   <data name="FolderNone" xml:space="preserve">
-    <value>Pas de dossier</value>
+    <value>Aucun dossier</value>
     <comment>Items that have no folder specified go in this special "catch-all" folder.</comment>
   </data>
   <data name="Folders" xml:space="preserve">
@@ -1548,7 +1548,7 @@
     <value>Désactiver la demande d'enregistrement</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>La "Demande d'enregistrement" vous invite automatiquement à enregistrer de nouveaux éléments dans votre coffre-fort à chaque fois que vous les entrez pour la première fois.</value>
+    <value>La "Demande d'enregistrement" vous invite automatiquement à enregistrer de nouveaux éléments dans votre coffre à chaque fois que vous les entrez pour la première fois.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>Au redémarrage de l'application</value>
