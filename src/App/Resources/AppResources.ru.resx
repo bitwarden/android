@@ -356,7 +356,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} скопирован(о).</value>
+    <value>{0} скопирован(-о).</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">
@@ -874,7 +874,7 @@
     <comment>The placeholder will show the file size of the attachment. Ex "25 MB"</comment>
   </data>
   <data name="AuthenticatorKey" xml:space="preserve">
-    <value>Ключ аутентификатора (TOTP)</value>
+    <value>Ключ проверки подлинности (TOTP)</value>
   </data>
   <data name="VerificationCodeTotp" xml:space="preserve">
     <value>Код подтверждения (TOTP)</value>
@@ -905,7 +905,7 @@
     <value>Копировать TOTP</value>
   </data>
   <data name="DisableAutoTotpCopyDescription" xml:space="preserve">
-    <value>Если к вашему логину прикреплен ключ аутентификации, то код подтверждения TOTP будет скопирован при автозаполнении логина.</value>
+    <value>Если к вашему логину прикреплен ключ проверки подлинности, то код подтверждения TOTP будет скопирован при автозаполнении логина.</value>
   </data>
   <data name="DisableAutoTotpCopy" xml:space="preserve">
     <value>Отключить копирование TOTP</value>
@@ -1334,7 +1334,7 @@
     <value>Проверьте, не скомпрометирован ли пароль.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>Этот пароль был найден в базах утечек {0} раз(а). Вы должны изменить его.</value>
+    <value>Этот пароль был найден в базах утечек {0} раз(-а). Вы должны изменить его.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
     <value>Этот пароль не был найден в известных базах утечек. Можно продолжать его использовать.</value>
@@ -1458,7 +1458,7 @@
     <value>Установите PIN-код для разблокировки Bitwarden. Настройки PIN-кода будут сброшены, если вы когда-либо полностью выйдете из приложения.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Вы вошли как {0} на {1}.</value>
+    <value>Выполнен вход на {1} как {0}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
