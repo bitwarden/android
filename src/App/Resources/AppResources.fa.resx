@@ -406,7 +406,7 @@
     <value>سرویس پر کردن خودکار</value>
   </data>
   <data name="AvoidAmbiguousCharacters" xml:space="preserve">
-    <value>از تکرار کاراکترهای یک شکل اجتناب کن</value>
+    <value>از کاراکترهای مبهم اجتناب شود</value>
   </data>
   <data name="BitwardenAppExtension" xml:space="preserve">
     <value>افزونه اپلیکیشن Bitwarden</value>
@@ -783,7 +783,7 @@
     <value>اسکن زمانی که در فیلد پسورد متمرکز شده</value>
   </data>
   <data name="AutofillPasswordFieldDescription" xml:space="preserve">
-    <value>فقط صفحه را برای فیلدها و پیشنهاد دادن پر کردن خودکار اسکن میکند هر حتی اگر شما یک فیلد رمز عبور را انتخاب کرده باشید. این تنظیم به افزایش عمر باتری کمک میکند.</value>
+    <value>فقط زمانی که شما یک فیلد رمز عبور را انتخاب کنید صفحه را برای فیلدها و اعلانیه پیشنهاد پر کردن خودکار اسکن میکند. این تنظیم به افزایش عمر باتری کمک میکند.</value>
   </data>
   <data name="AutofillPersistNotification" xml:space="preserve">
     <value>اطلاعیه ثابت</value>

@@ -412,7 +412,7 @@
     <value>Bitwarden App Extension</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>Bitwarden App Extension から新しいログイン情報を保管庫に追加するのが一番簡単です。設定画面で App Extension の詳細を確認できます。</value>
+    <value>ログイン情報を保管庫に追加する一番簡単な方法はApp Extensionを使うことです。詳しくは「設定」画面に進んでください。</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Safari などのアプリで Bitwarden を使ってログイン情報を自動入力します。</value>
@@ -1419,7 +1419,7 @@
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
-    <value>ジェネレーター</value>
+    <value>パスワード生成</value>
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">

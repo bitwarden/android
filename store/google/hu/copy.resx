@@ -118,11 +118,11 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Title" xml:space="preserve">
-    <value>bitwarden Jelszókezelő</value>
+    <value>Bitwarden Jelszó Kezelő</value>
     <comment>Max 30 characters</comment>
   </data>
   <data name="ShortDescription" xml:space="preserve">
-    <value>A bitwarden egy jelszókezelő app, mely biztonságban tart amikor online vagy.</value>
+    <value>Bitwarden egy bejelentkezés és jelszó kezelő, amely segít neked biztonságban lenni, amíg online vagy.</value>
     <comment>Max 80 characters</comment>
   </data>
   <data name="FullDesciption" xml:space="preserve">
