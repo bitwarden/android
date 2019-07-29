@@ -1564,7 +1564,7 @@
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Zahl hinzufügen</value>
+    <value>Ziffer hinzufügen</value>
   </data>
   <data name="Download" xml:space="preserve">
     <value>Herunterladen</value>
