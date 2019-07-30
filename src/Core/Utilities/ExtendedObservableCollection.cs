@@ -30,7 +30,16 @@ namespace Bit.Core.Utilities
 
         public void ResetWithRange(IEnumerable<T> range)
         {
-            Items.Clear();
+            // Maybe a fix for https://forums.xamarin.com/discussion/19114/invalid-number-of-rows-in-section
+            // Items.Clear();
+            if(Items.Count > 0)
+            {
+                var count = Items.Count;
+                for(var i = 0; i < count; i++)
+                {
+                    Items.RemoveAt(0);
+                }
+            }
             AddRange(range);
         }
     }
