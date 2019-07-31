@@ -236,7 +236,14 @@ namespace Bit.App.Pages
         {
             if(DoOnce())
             {
-                var page = new ScanPage(key =>
+                if (_vm.Cipher.Login.Totp.StartsWith("steam://"))
+                {
+                    var page = new Vault.SteamTOTPPage();
+                    await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
+                }
+                else
+                {
+                    var page = new ScanPage(key =>
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
@@ -244,7 +251,8 @@ namespace Bit.App.Pages
                         await _vm.UpdateTotpKeyAsync(key);
                     });
                 });
-                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
+                    await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
+                }
             }
         }
 
