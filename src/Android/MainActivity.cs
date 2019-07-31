@@ -378,7 +378,7 @@ namespace Bit.Droid
             {
                 return;
             }
-            await _stateService.SaveAsync(Constants.LastClipboardValueKey, data.Item1);
+            StaticStore.LastClipboardValue = data.Item1;
             var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + clearMs.Value;
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Set(AlarmType.Rtc, triggerMs, _clearClipboardPendingIntent);

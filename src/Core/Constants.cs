@@ -24,7 +24,6 @@
         public static string PushInitialPromptShownKey = "pushInitialPromptShown";
         public static string ThemeKey = "theme";
         public static string ClearClipboardKey = "clearClipboard";
-        public static string LastClipboardValueKey = "lastClipboardValue";
         public static string LastBuildKey = "lastBuild";
         public static string OldUserIdKey = "userId";
         public static string AddSitePromptShownKey = "addSitePromptShown";
