@@ -89,18 +89,7 @@ namespace Bit.App
                 }
                 else if(message.Command == "locked")
                 {
-                    await _stateService.PurgeAsync();
-                    var autoPromptFingerprint = !(message.Data as bool?).GetValueOrDefault();
-                    if(autoPromptFingerprint && Device.RuntimePlatform == Device.iOS)
-                    {
-                        var lockOptions = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
-                        if(lockOptions == 0)
-                        {
-                            autoPromptFingerprint = false;
-                        }
-                    }
-                    var lockPage = new LockPage(_appOptions, autoPromptFingerprint);
-                    Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
+                    await LockedAsync(!(message.Data as bool?).GetValueOrDefault());
                 }
                 else if(message.Command == "lockVault")
                 {
@@ -397,6 +386,46 @@ namespace Bit.App
                 _cipherService.ClearCache();
                 await _storageService.RemoveAsync(Constants.ClearCiphersCacheKey);
             }
+        }
+
+        private async Task LockedAsync(bool autoPromptFingerprint)
+        {
+            await _stateService.PurgeAsync();
+            if(autoPromptFingerprint && Device.RuntimePlatform == Device.iOS)
+            {
+                var lockOptions = await _storageService.GetAsync<int?>(Constants.LockOptionKey);
+                if(lockOptions == 0)
+                {
+                    autoPromptFingerprint = false;
+                }
+            }
+            PreviousPageInfo lastPageBeforeLock = null;
+            if(Current.MainPage is TabbedPage tabbedPage && tabbedPage.Navigation.ModalStack.Count > 0)
+            {
+                var topPage = tabbedPage.Navigation.ModalStack[tabbedPage.Navigation.ModalStack.Count - 1];
+                if(topPage is NavigationPage navPage)
+                {
+                    if(navPage.CurrentPage is ViewPage viewPage)
+                    {
+                        lastPageBeforeLock = new PreviousPageInfo
+                        {
+                            Page = "view",
+                            CipherId = viewPage.ViewModel.CipherId
+                        };
+                    }
+                    else if(navPage.CurrentPage is AddEditPage addEditPage && addEditPage.ViewModel.EditMode)
+                    {
+                        lastPageBeforeLock = new PreviousPageInfo
+                        {
+                            Page = "edit",
+                            CipherId = addEditPage.ViewModel.CipherId
+                        };
+                    }
+                }
+            }
+            await _storageService.SaveAsync(Constants.PreviousPageKey, lastPageBeforeLock);
+            var lockPage = new LockPage(_appOptions, autoPromptFingerprint);
+            Device.BeginInvokeOnMainThread(() => Current.MainPage = new NavigationPage(lockPage));
         }
     }
 }

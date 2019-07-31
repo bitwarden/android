@@ -10,9 +10,9 @@ namespace Bit.App.Pages
         private NavigationPage _groupingsPage;
         private NavigationPage _generatorPage;
 
-        public TabsPage(AppOptions appOptions = null)
+        public TabsPage(AppOptions appOptions = null, PreviousPageInfo previousPage = null)
         {
-            _groupingsPage = new NavigationPage(new GroupingsPage(true))
+            _groupingsPage = new NavigationPage(new GroupingsPage(true, previousPage: previousPage))
             {
                 Title = AppResources.MyVault,
                 Icon = "lock.png"

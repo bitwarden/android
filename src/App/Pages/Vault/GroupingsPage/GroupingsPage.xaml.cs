@@ -1,5 +1,6 @@
 ﻿using Bit.App.Abstractions;
 using Bit.App.Controls;
+using Bit.App.Models;
 using Bit.App.Resources;
 using Bit.Core;
 using Bit.Core.Abstractions;
@@ -22,8 +23,10 @@ namespace Bit.App.Pages
         private readonly GroupingsPageViewModel _vm;
         private readonly string _pageName;
 
+        private PreviousPageInfo _previousPage;
+
         public GroupingsPage(bool mainPage, CipherType? type = null, string folderId = null,
-            string collectionId = null, string pageTitle = null)
+            string collectionId = null, string pageTitle = null, PreviousPageInfo previousPage = null)
         {
             _pageName = string.Concat(nameof(GroupingsPage), "_", DateTime.UtcNow.Ticks);
             InitializeComponent();
@@ -41,6 +44,7 @@ namespace Bit.App.Pages
             _vm.Type = type;
             _vm.FolderId = folderId;
             _vm.CollectionId = collectionId;
+            _previousPage = previousPage;
             if(pageTitle != null)
             {
                 _vm.PageTitle = pageTitle;
@@ -125,6 +129,7 @@ namespace Bit.App.Pages
                         await _syncService.FullSyncAsync(true);
                     }
                 }
+                await ShowPreviousPageAsync();
             }, _mainContent);
 
             if(!_vm.MainPage)
@@ -243,6 +248,23 @@ namespace Bit.App.Pages
                 var page = new AddEditPage(null, _vm.Type, _vm.FolderId, _vm.CollectionId);
                 await Navigation.PushModalAsync(new NavigationPage(page));
             }
+        }
+
+        private async Task ShowPreviousPageAsync()
+        {
+            if(_previousPage == null)
+            {
+                return;
+            }
+            if(_previousPage.Page == "view" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new ViewPage(_previousPage.CipherId)));
+            }
+            else if(_previousPage.Page == "edit" && !string.IsNullOrWhiteSpace(_previousPage.CipherId))
+            {
+                await Navigation.PushModalAsync(new NavigationPage(new AddEditPage(_previousPage.CipherId)));
+            }
+            _previousPage = null;
         }
     }
 }
