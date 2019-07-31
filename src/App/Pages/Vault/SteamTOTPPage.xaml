@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:Bit.App.Controls"
+             mc:Ignorable="d"
+             x:Class="Bit.App.Pages.Vault.SteamTOTPPage">
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Connect your Steam Account to Bitwarden:"
+                HorizontalOptions="CenterAndExpand" />
+            <BoxView Color="Black" WidthRequest ="100" HeightRequest="1"/>
+            <Label Text="Step 1: Input your Credentials"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="Username"
+                       Grid.Row="0"
+                       Grid.Column="0"/>
+                <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Grid.Row="0"
+                                Grid.Column="1" 
+                                HorizontalOptions="Fill"/>
+
+                <Label Text="Password"
+                       Grid.Row="1"
+                       Grid.Column="0"/>
+                <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Grid.Row="1"
+                                Grid.Column="1" 
+                                HorizontalOptions="Fill"/>
+            </Grid>
+            <BoxView Color="Black" WidthRequest ="100" HeightRequest="1"/>
+            <Label Text="Step 2: Enter the E-Mail Code you received"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="E-Mail-Code"
+                       Grid.Row="0"
+                       Grid.Column="0"/>
+                <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Grid.Row="0"
+                                Grid.Column="1" 
+                                HorizontalOptions="Fill"/>
+            </Grid>
+            <BoxView Color="Black" WidthRequest ="100" HeightRequest="1"/>
+            <Label Text="Step 3: Enter the SMS Code you received"/>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Label Text="SMS-Code"
+                       Grid.Row="0"
+                       Grid.Column="0"/>
+                <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Grid.Row="0"
+                                Grid.Column="1" 
+                                HorizontalOptions="Fill"/>
+            </Grid>
+
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
