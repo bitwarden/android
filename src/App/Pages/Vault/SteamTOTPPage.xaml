@@ -4,87 +4,120 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:pages="clr-namespace:Bit.App.Pages"
              mc:Ignorable="d"
              x:Class="Bit.App.Pages.Vault.SteamTOTPPage"
              Title="Connect to Steam">
+    <ContentPage.BindingContext>
+        <pages:SteamTOTPPageViewModel />
+    </ContentPage.BindingContext>
+
     <ContentPage.Content>
-        <ScrollView>        <StackLayout>
-            <Label Text="Input your Credentials"
-                   StyleClass="box-header, box-header-platform"/>
+        <ScrollView Padding="0,0,0,20">
+            <StackLayout Spacing="20">
+                <StackLayout IsEnabled="{Binding NeedCredentials}">
+                    <Label  
+                        Text="Input your Credentials"
+                        StyleClass="box-header, box-header-platform"/>
 
-            <StackLayout StyleClass="box-row, box-row-input">
-                <Label Text="Username"
-                       StyleClass="box-label"/>
-                <controls:MonoEntry
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label  
+                            Text="Username"
+                            StyleClass="box-label"/>
+                        <controls:MonoEntry
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False"
+                            StyleClass="box-value"
+                            Text="{Binding Username}"/>
+                    </StackLayout>
+
+                    <StackLayout
+                        StyleClass="box-row, box-row-input">
+                        <Label  Text="Password"
+                                StyleClass="box-label"/>
+                        <controls:MonoEntry
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
                                 StyleClass="box-value"
-                                x:Name="_usernameEntry"/>
-            </StackLayout>
+                                Text="{Binding Password}"
+                                IsPassword="True"/>
+                    </StackLayout>
 
-            <StackLayout StyleClass="box-row, box-row-input">
-                <Label Text="Password"
-                       StyleClass="box-label"/>
-                <controls:MonoEntry
-                                IsSpellCheckEnabled="False"
-                                IsTextPredictionEnabled="False"
-                                StyleClass="box-value"
-                                x:Name="_passwordEntry"/>
-            </StackLayout>
+                    <Button 
+                        Text="Request E-Mail Code"
+                        Command="{Binding SubmitUsernamePasswordCommand}"/>
 
-                <Button Text="Request E-Mail Code"
-                    Clicked="Button_Clicked"/>
-
-                <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
-
-                <StackLayout StyleClass="box-row, box-row-input">
-                    <Label Text="Captcha"
-                       StyleClass="box-label"
-                        x:Name="_captchaLabel"/>
-                    <WebView x:Name="_captchaWebview"
-                             HeightRequest="40"
-                             WidthRequest="206"
-                             HorizontalOptions="Center"></WebView>
-                    <controls:MonoEntry
-                                IsSpellCheckEnabled="False"
-                                IsTextPredictionEnabled="False"
-                                StyleClass="box-value"
-                                x:Name="_captchaEntry"/>
+                    <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
-                <Button Text="Retry"
-                    Clicked="Button_Clicked_3"/>
-                <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
 
-                <Label Text="Enter the E-Mail Code you received"
-                   StyleClass="box-header, box-header-platform"/>
 
-            <StackLayout StyleClass="box-row, box-row-input">
-                <Label Text="E-Mail-Code"
-                       StyleClass="box-label"/>
-                <controls:MonoEntry
-                                IsSpellCheckEnabled="False"
-                                IsTextPredictionEnabled="False"
-                                StyleClass="box-value"
-                                x:Name="_emailcodeEntry"/>
+                <StackLayout StyleClass="box" IsEnabled="{Binding NeedCaptcha}">
+                    <Label  
+                        Text="Answer Captcha"
+                        StyleClass="box-header, box-header-platform"/>
+                    <WebView 
+                        HeightRequest="40"
+                        WidthRequest="206"
+                        HorizontalOptions="Center"
+                        BackgroundColor="Transparent"
+                        Source="{Binding CaptchaURI}"/>
+
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label 
+                            Text="Captcha"
+                            StyleClass="box-label"/>
+                        <controls:MonoEntry
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False"
+                            StyleClass="box-value"
+                            Text="{Binding Captcha}"/>
+                    </StackLayout>
+                    <Button 
+                        Text="Submit Captcha"
+                        Command="{Binding SubmitCaptchaCommand}"/>
+                    <BoxView StyleClass="box-row-separator" />
+                </StackLayout>
+
+                <StackLayout StyleClass="box" IsEnabled="{Binding NeedEmailCode}">
+                    <Label 
+                        Text="Enter the E-Mail Code you received"
+                        StyleClass="box-header, box-header-platform"/>
+
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label 
+                            Text="E-Mail-Code"
+                            StyleClass="box-label"/>
+                        <controls:MonoEntry
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False"
+                            StyleClass="box-value"
+                            Text="{Binding EmailCode}"/>
+                    </StackLayout>
+                    <Button 
+                        Text="Request SMS Code"
+                        Command="{Binding SubmitEmailCodeCommand}"/>
+                    <BoxView StyleClass="box-row-separator" />
+                </StackLayout>
+
+                <StackLayout StyleClass="box" IsEnabled="{Binding NeedSMSCode}">
+                    <Label 
+                        Text="Enter the SMS Code you received"
+                        StyleClass="box-header, box-header-platform"/>
+                    <StackLayout StyleClass="box-row, box-row-input">
+                        <Label 
+                            Text="SMS-Code"
+                            StyleClass="box-label"/>
+                        <controls:MonoEntry
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False"
+                            StyleClass="box-value"
+                            Text="{Binding SMSCode}"/>
+                    </StackLayout>
+                    <Button 
+                        Text="Finish"
+                        Command="{Binding SubmitSMSCodeCommand}"/>
+                </StackLayout>
             </StackLayout>
-            <Button Text="Request SMS Code"
-                    Clicked="Button_Clicked_1"/>
-            <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
-            <Label Text="Enter the SMS Code you received"
-                   StyleClass="box-header, box-header-platform"/>
-            <StackLayout StyleClass="box-row, box-row-input">
-                <Label Text="SMS-Code"
-                       StyleClass="box-label"/>
-                <controls:MonoEntry
-                                IsSpellCheckEnabled="False"
-                                IsTextPredictionEnabled="False"
-                                StyleClass="box-value"
-                                x:Name="_smscodeEntry"/>
-            </StackLayout>
-            <Button Text="Finish"
-                    Clicked="Button_Clicked_2"/>
-
-        </StackLayout>
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>

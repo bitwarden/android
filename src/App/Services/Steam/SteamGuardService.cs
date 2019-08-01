@@ -8,6 +8,7 @@ using Bit.App.Abstractions;
 using Bit.App.Models.Steam;
 using Bit.App.Utilities;
 using Bit.App.Utilities.Steam;
+using Bit.Core.Enums;
 using Newtonsoft.Json;
 
 namespace Bit.App.Services.Steam
@@ -51,18 +52,16 @@ namespace Bit.App.Services.Steam
 
         public string RecoveryCode => _steamGuardData.RevocationCode;
 
+        public string CaptchaGID => _sessionService.CaptchaID;
+
         private SteamSessionCreateService _sessionService;
         private SteamGuardData _steamGuardData = new SteamGuardData();
         private SteamSession _steamSession;
 
-
-        public bool requiresCaptcha;
-        public string CID;
-
         public void SetCaptcha(string captcha)
         {
             _sessionService.CaptchaText = captcha;
-            CheckSessionStatus();
+            GetSessionStatus();
         }
 
         public SteamGuardService()
@@ -153,7 +152,90 @@ namespace Bit.App.Services.Steam
             _steamGuardData = addAuthenticatorResponse.Response;
         }
 
-        public bool CheckSMSCode(string code)
+        private (SteamSessionCreateService.Status status, SteamSession session) GetSessionStatus()
+        {
+            (SteamSessionCreateService.Status status, SteamSession session) createSessionResponse = _sessionService.TryCreateSession();
+            _steamSession = createSessionResponse.session;
+            return createSessionResponse;
+        }
+
+        static string RandomDeviceID()
+        {
+            string SplitOnRatios(string str, int[] ratios, string intermediate)
+            {
+                string result = "";
+
+                int pos = 0;
+                for (int index = 0; index < ratios.Length; index++)
+                {
+                    result += str.Substring(pos, ratios[index]);
+                    pos = ratios[index];
+
+                    if (index < ratios.Length - 1)
+                        result += intermediate;
+                }
+
+                return result;
+            }
+
+
+            using (var sha1 = new SHA1Managed())
+            {
+                RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
+                byte[] randomBytes = new byte[8];
+                secureRandom.GetBytes(randomBytes);
+
+                byte[] hashedBytes = sha1.ComputeHash(randomBytes);
+                string random32 = BitConverter.ToString(hashedBytes).Replace("-", "").Substring(0, 32).ToLower();
+
+                return "android:" + SplitOnRatios(random32, new[] { 8, 4, 4, 4, 12 }, "-");
+            }
+        }
+
+        public SteamGuardServiceResponse SubmitUsernamePassword(string username, string password)
+        {
+            _sessionService = new SteamSessionCreateService(username, password);
+            var sessionStatus = GetSessionStatus();
+            switch (sessionStatus.status)
+            {
+                case SteamSessionCreateService.Status.NeedEmail:
+                    return SteamGuardServiceResponse.NeedEmailCode;
+                case SteamSessionCreateService.Status.NeedCaptcha:
+                    return SteamGuardServiceResponse.NeedCaptcha;
+            }
+            return SteamGuardServiceResponse.Error;
+        }
+
+        public SteamGuardServiceResponse SubmitCaptcha(string captcha)
+        {
+            _sessionService.CaptchaText = captcha;
+            var sessionStatus = GetSessionStatus();
+            switch (sessionStatus.status)
+            {
+                case SteamSessionCreateService.Status.NeedEmail:
+                    return SteamGuardServiceResponse.NeedEmailCode;
+                case SteamSessionCreateService.Status.NeedCaptcha:
+                    return SteamGuardServiceResponse.NeedCaptcha;
+            }
+            return SteamGuardServiceResponse.Error;
+        }
+
+        SteamGuardServiceResponse ISteamGuardService.SubmitEmailCode(string code)
+        {
+            _sessionService.EmailCode = code;
+            var sessionStatus = GetSessionStatus();
+            switch (sessionStatus.status)
+            {
+                case SteamSessionCreateService.Status.NeedEmail:
+                    return SteamGuardServiceResponse.NeedEmailCode;
+                case SteamSessionCreateService.Status.Okay:
+                    return SteamGuardServiceResponse.NeedSMSCode;
+            }
+            return SteamGuardServiceResponse.Error;
+
+        }
+
+        SteamGuardServiceResponse ISteamGuardService.SubmitSMSCode(string code)
         {
             var postData = new NameValueCollection();
             postData.Add("steamid", _steamSession.SteamID.ToString());
@@ -202,99 +284,10 @@ namespace Bit.App.Services.Steam
                     continue;
                 }
 
-                return true;
+                return SteamGuardServiceResponse.Okay;
             }
 
             throw new Exception("GENERAL EXCEPTION");
-        }
-
-        private bool CheckSessionStatus()
-        {
-            (SteamSessionCreateService.Status status, SteamSession session) createSessionResponse = _sessionService.TryCreateSession();
-            if (createSessionResponse.status == SteamSessionCreateService.Status.NeedCaptcha)
-            {
-                CID = _sessionService.CaptchaID;
-                requiresCaptcha = true;
-                Console.WriteLine(_sessionService.CaptchaID);
-            }
-
-            if (createSessionResponse.status != SteamSessionCreateService.Status.Okay) return false;
-            return true;
-        }
-
-        public void Init(string username, string password)
-        {
-            _sessionService = new SteamSessionCreateService(username, password);
-            CheckSessionStatus();
-        }
-
-        private void HandleSessionStatus(SteamSessionCreateService.Status status, SteamSessionCreateService sessionService)
-        {
-            switch (status)
-            {
-                case SteamSessionCreateService.Status.NeedEmail:
-                    Console.WriteLine("EMAIL, bitte den Code der E-Mail eingeben");
-                    sessionService.EmailCode = Console.ReadLine();
-                    break;
-
-                case SteamSessionCreateService.Status.NeedCaptcha:
-                    Console.WriteLine("https://steamcommunity.com/public/captcha.php?gid=" + sessionService.CaptchaID);
-                    sessionService.CaptchaText = Console.ReadLine();
-                    break;
-
-                case SteamSessionCreateService.Status.Need2FA:
-                    Console.WriteLine("Allready connected to Steam Auth");
-                    return;
-
-                case SteamSessionCreateService.Status.BadRSA:
-                    Console.WriteLine("Steam returned BadRSA");
-                    return;
-
-                case SteamSessionCreateService.Status.BadCredentials:
-                    Console.WriteLine("Wrong username or password");
-                    return;
-
-                case SteamSessionCreateService.Status.TooManyFailedLogins:
-                    Console.WriteLine("Login failed to often");
-                    return;
-
-                case SteamSessionCreateService.Status.GeneralFailure:
-                    Console.WriteLine("General failure");
-                    return;
-            }
-        }
-
-        static string RandomDeviceID()
-        {
-            string SplitOnRatios(string str, int[] ratios, string intermediate)
-            {
-                string result = "";
-
-                int pos = 0;
-                for (int index = 0; index < ratios.Length; index++)
-                {
-                    result += str.Substring(pos, ratios[index]);
-                    pos = ratios[index];
-
-                    if (index < ratios.Length - 1)
-                        result += intermediate;
-                }
-
-                return result;
-            }
-
-
-            using (var sha1 = new SHA1Managed())
-            {
-                RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
-                byte[] randomBytes = new byte[8];
-                secureRandom.GetBytes(randomBytes);
-
-                byte[] hashedBytes = sha1.ComputeHash(randomBytes);
-                string random32 = BitConverter.ToString(hashedBytes).Replace("-", "").Substring(0, 32).ToLower();
-
-                return "android:" + SplitOnRatios(random32, new[] { 8, 4, 4, 4, 12 }, "-");
-            }
         }
     }
 }

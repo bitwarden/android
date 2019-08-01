@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Bit.Core.Enums;
 
 namespace Bit.App.Abstractions
 {
@@ -8,9 +9,11 @@ namespace Bit.App.Abstractions
     { 
         string TOTPSecret { get; }
         string RecoveryCode { get; }
-        void Init(string username, string password);
-        bool CheckEmailCode(string code);
-        bool CheckSMSCode(string code);
+        string CaptchaGID { get; }
+        SteamGuardServiceResponse SubmitUsernamePassword(string username, string password);
+        SteamGuardServiceResponse SubmitCaptcha(string captcha);
+        SteamGuardServiceResponse SubmitEmailCode(string code);
+        SteamGuardServiceResponse SubmitSMSCode(string code);
         void RequestSMSCode();
     }
 }
