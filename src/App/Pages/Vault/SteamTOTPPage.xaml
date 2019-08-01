@@ -13,9 +13,19 @@
     </ContentPage.BindingContext>
 
     <ContentPage.Content>
-        <ScrollView Padding="0,0,0,20">
+        <StackLayout>
+            <StackLayout StyleClass="box">
+                <Label 
+                    Text="Status"
+                    StyleClass="box-header, box-header-platform"/>
+                <Label 
+                    Text="{Binding Status}"/>
+
+                <BoxView StyleClass="box-row-separator" />
+            </StackLayout>        
+            <ScrollView Padding="0,0,0,20">
             <StackLayout Spacing="20">
-                <StackLayout IsEnabled="{Binding NeedCredentials}">
+                <StackLayout StyleClass="box" IsEnabled="{Binding NeedCredentials}">
                     <Label  
                         Text="Input your Credentials"
                         StyleClass="box-header, box-header-platform"/>
@@ -119,5 +129,6 @@
                 </StackLayout>
             </StackLayout>
         </ScrollView>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

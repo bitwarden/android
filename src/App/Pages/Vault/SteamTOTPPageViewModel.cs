@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel.Design;
 using Bit.App.Abstractions;
 using Bit.App.Services.Steam;
+using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Xamarin.Forms;
 
@@ -31,8 +33,11 @@ namespace Bit.App.Pages
         private bool _needSMSCode = true;
         public bool NeedSMSCode { get { return _needSMSCode; } set { _needSMSCode = value; TriggerPropertyChanged(nameof(NeedSMSCode)); } }
 
-        private ISteamGuardService steamGuardService = new SteamGuardService();
+        private string _status = "test";
+        public string Status { get { return _status; } set { _status = value; TriggerPropertyChanged(nameof(Status)); } }
 
+        private ISteamGuardService steamGuardService = new SteamGuardService();
+ 
         public Action<string, string> SteamLinkedCallback;
 
         public SteamTOTPPageViewModel()
