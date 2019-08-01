@@ -4,6 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:controls="clr-namespace:Bit.App.Controls"
+             xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:pages="clr-namespace:Bit.App.Pages"
              mc:Ignorable="d"
              x:Class="Bit.App.Pages.Vault.SteamTOTPPage"
@@ -11,7 +12,11 @@
     <ContentPage.BindingContext>
         <pages:SteamTOTPPageViewModel />
     </ContentPage.BindingContext>
-
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <u:InverseBoolConverter x:Key="inverseBool" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
             <StackLayout StyleClass="box">
@@ -41,17 +46,39 @@
                             Text="{Binding Username}"/>
                     </StackLayout>
 
-                    <StackLayout
-                        StyleClass="box-row, box-row-input">
-                        <Label  Text="Password"
-                                StyleClass="box-label"/>
+                    <Grid StyleClass="box-row, box-row-input">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Label
+                            Text="Password"
+                            StyleClass="box-label"
+                            Grid.Row="0"
+                            Grid.Column="0" />
                         <controls:MonoEntry
-                                IsSpellCheckEnabled="False"
-                                IsTextPredictionEnabled="False"
-                                StyleClass="box-value"
-                                Text="{Binding Password}"
-                                IsPassword="True"/>
-                    </StackLayout>
+                            Text="{Binding Password}"
+                            StyleClass="box-value"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                            IsSpellCheckEnabled="False"
+                            IsTextPredictionEnabled="False" />
+                        <controls:FaButton 
+                            StyleClass="box-row-button, box-row-button-platform"
+                            Text="{Binding ShowPasswordIcon}"
+                            Command="{Binding TogglePasswordCommand}"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Grid.RowSpan="2"
+                            AutomationProperties.IsInAccessibleTree="True"/>
+                    </Grid>
 
                     <Button 
                         Text="Request E-Mail Code"

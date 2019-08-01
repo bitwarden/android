@@ -23,6 +23,7 @@ namespace Bit.App.Pages
         public Command SubmitCaptchaCommand { get; set; }
         public Command SubmitEmailCodeCommand { get; set; }
         public Command SubmitSMSCodeCommand { get; set; }
+        public Command TogglePasswordCommand { get; set; }
 
         private bool _needCredentials = true;
         public bool NeedCredentials { get { return _needCredentials; } set { _needCredentials = value; TriggerPropertyChanged(nameof(NeedCredentials)); } }
@@ -32,6 +33,20 @@ namespace Bit.App.Pages
         public bool NeedEmailCode { get { return _needEmailCode; } set { _needEmailCode = value; TriggerPropertyChanged(nameof(NeedEmailCode)); } }
         private bool _needSMSCode = true;
         public bool NeedSMSCode { get { return _needSMSCode; } set { _needSMSCode = value; TriggerPropertyChanged(nameof(NeedSMSCode)); } }
+
+        public string ShowPasswordIcon => ShowPassword ? "" : "";
+
+        private bool _showPassword;
+        public bool ShowPassword
+        {
+            get => _showPassword;
+            set => SetProperty(ref _showPassword, value,
+                additionalPropertyNames: new string[]
+                {
+                    nameof(ShowPasswordIcon)
+                });
+        }
+
 
         private string _status = "test";
         public string Status { get { return _status; } set { _status = value; TriggerPropertyChanged(nameof(Status)); } }
@@ -46,6 +61,7 @@ namespace Bit.App.Pages
             SubmitCaptchaCommand = new Command(SubmitCaptcha);
             SubmitEmailCodeCommand = new Command(SubmitEmailCode);
             SubmitSMSCodeCommand = new Command(SubmitSMSCode);
+            TogglePasswordCommand = new Command(TogglePassword);
         }
 
         public async void SubmitUsernamePassword()
@@ -117,6 +133,11 @@ namespace Bit.App.Pages
                         break;
                 }
             }
+        }
+
+        public void TogglePassword()
+        {
+            ShowPassword = !ShowPassword;
         }
     }
 }
