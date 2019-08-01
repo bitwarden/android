@@ -10,6 +10,7 @@ namespace Bit.App.Abstractions
         string TOTPSecret { get; }
         string RecoveryCode { get; }
         string CaptchaGID { get; }
+        SteamGuardServiceError Error { get; }
         SteamGuardServiceResponse SubmitUsernamePassword(string username, string password);
         SteamGuardServiceResponse SubmitCaptcha(string captcha);
         SteamGuardServiceResponse SubmitEmailCode(string code);

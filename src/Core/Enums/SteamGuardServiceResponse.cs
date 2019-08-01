@@ -4,7 +4,12 @@
     {
         Error,
         Okay,
+
         WrongCredentials,
+        WrongSMSCode,
+        WrongCaptcha,
+        WrongEmailCode,
+
         NeedCaptcha,
         NeedEmailCode,
         NeedSMSCode,

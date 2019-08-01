@@ -35,6 +35,7 @@ namespace Bit.App.Services.Steam
         {
             Okay,
             GeneralFailure,
+            Error_EmptyResponse,
             BadRSA,
             BadCredentials,
             NeedCaptcha,
@@ -139,7 +140,7 @@ namespace Bit.App.Services.Steam
             NameValueCollection postData = BuildPostData(encryptedPassword, rsaResponse.Timestamp);
 
             string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.COMMUNITY_BASE + "/login/dologin", "POST", postData, cookieContainer);
-            if (response == null) return (Status.GeneralFailure, null);
+            if (response == null) return (Status.Error_EmptyResponse, null);
 
             var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(response);
 
@@ -148,7 +149,7 @@ namespace Bit.App.Services.Steam
 
         private (Status, SteamSession) EvaluateLoginResponse(LoginResponse loginResponse, CookieContainer cookieContainer)
         {
-            if (loginResponse.Message != null && loginResponse.Message.Contains("Incorrect login"))
+            if (loginResponse.Message != null && loginResponse.Message.ToLower().Contains("incorrect login"))
             {
                 return (Status.BadCredentials, null);
             }

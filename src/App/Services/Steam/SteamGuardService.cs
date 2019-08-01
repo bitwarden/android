@@ -1,4 +1,4 @@
-﻿using System;
+﻿,using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
@@ -54,27 +54,16 @@ namespace Bit.App.Services.Steam
 
         public string CaptchaGID => _sessionService.CaptchaID;
 
+        public SteamGuardServiceError Error { get; set; } = SteamGuardServiceError.None;
+
         private SteamSessionCreateService _sessionService;
         private SteamGuardData _steamGuardData = new SteamGuardData();
         private SteamSession _steamSession;
 
-        public void SetCaptcha(string captcha)
-        {
-            _sessionService.CaptchaText = captcha;
-            GetSessionStatus();
-        }
 
         public SteamGuardService()
         {
             _steamGuardData.DeviceID = RandomDeviceID();
-        }
-
-        public bool CheckEmailCode(string code)
-        { 
-            _sessionService.EmailCode = code;
-            (SteamSessionCreateService.Status status, SteamSession session) createSessionResponse = _sessionService.TryCreateSession();
-            _steamSession = createSessionResponse.session;
-            return createSessionResponse.status != SteamSessionCreateService.Status.NeedEmail;
         }
 
         private bool HasPhoneAttached()
@@ -198,10 +187,15 @@ namespace Bit.App.Services.Steam
             var sessionStatus = GetSessionStatus();
             switch (sessionStatus.status)
             {
+                case SteamSessionCreateService.Status.Error_EmptyResponse:
+                    Error = SteamGuardServiceError.EmptyResponse;
+                    return SteamGuardServiceResponse.Error;
                 case SteamSessionCreateService.Status.NeedEmail:
                     return SteamGuardServiceResponse.NeedEmailCode;
                 case SteamSessionCreateService.Status.NeedCaptcha:
                     return SteamGuardServiceResponse.NeedCaptcha;
+                case SteamSessionCreateService.Status.BadCredentials:
+                    return SteamGuardServiceResponse.WrongCredentials;
             }
             return SteamGuardServiceResponse.Error;
         }
@@ -215,7 +209,7 @@ namespace Bit.App.Services.Steam
                 case SteamSessionCreateService.Status.NeedEmail:
                     return SteamGuardServiceResponse.NeedEmailCode;
                 case SteamSessionCreateService.Status.NeedCaptcha:
-                    return SteamGuardServiceResponse.NeedCaptcha;
+                    return SteamGuardServiceResponse.WrongCaptcha;
             }
             return SteamGuardServiceResponse.Error;
         }
@@ -227,7 +221,7 @@ namespace Bit.App.Services.Steam
             switch (sessionStatus.status)
             {
                 case SteamSessionCreateService.Status.NeedEmail:
-                    return SteamGuardServiceResponse.NeedEmailCode;
+                    return SteamGuardServiceResponse.WrongEmailCode;
                 case SteamSessionCreateService.Status.Okay:
                     return SteamGuardServiceResponse.NeedSMSCode;
             }
@@ -250,32 +244,36 @@ namespace Bit.App.Services.Steam
                 string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.STEAMAPI_BASE + "/ITwoFactorService/FinalizeAddAuthenticator/v0001", "POST", postData);
                 if (response == null)
                 {
-                    throw new Exception("GENERAL EXCEPTION");
+                    Error = SteamGuardServiceError.EmptyResponse;
+                    return SteamGuardServiceResponse.Error;
                 }
 
                 var finalizeResponse = JsonConvert.DeserializeObject<FinalizeAuthenticatorResponse>(response);
 
                 if (finalizeResponse == null || finalizeResponse.Response == null)
                 {
-                    throw new Exception("GENERAL EXCEPTION");
+                    Error = SteamGuardServiceError.CorruptResponse;
+                    return SteamGuardServiceResponse.Error;
                 }
 
                 if (finalizeResponse.Response.Status == 89)
                 {
-                    throw new Exception("BAD SMS CODE");
+                    return SteamGuardServiceResponse.WrongSMSCode;
                 }
 
                 if (finalizeResponse.Response.Status == 88)
                 {
                     if (tries >= 30)
                     {
-                        throw new Exception("CANT SYNC STEAM GUARD CODE");
+                        Error = SteamGuardServiceError.GuardSyncFailed;
+                        return SteamGuardServiceResponse.Error;
                     }
                 }
 
                 if (!finalizeResponse.Response.Success)
                 {
-                    throw new Exception("GENERAL EXCEPTION");
+                    Error = SteamGuardServiceError.SuccessMissing;
+                    return SteamGuardServiceResponse.Error;
                 }
 
                 if (finalizeResponse.Response.WantMore)
@@ -287,7 +285,8 @@ namespace Bit.App.Services.Steam
                 return SteamGuardServiceResponse.Okay;
             }
 
-            throw new Exception("GENERAL EXCEPTION");
+            Error = SteamGuardServiceError.General;
+            return SteamGuardServiceResponse.Error;
         }
     }
 }
