@@ -1,9 +1,10 @@
-﻿,using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Bit.App.Abstractions;
 using Bit.App.Models.Steam;
 using Bit.App.Utilities;
@@ -66,7 +67,7 @@ namespace Bit.App.Services.Steam
             _steamGuardData.DeviceID = RandomDeviceID();
         }
 
-        private bool HasPhoneAttached()
+        private async Task<bool> HasPhoneAttached()
         {
             var postData = new NameValueCollection();
             postData.Add("op", "has_phone");
@@ -92,17 +93,17 @@ namespace Bit.App.Services.Steam
             cookieContainer.Add(new Cookie("dob", "", "/", ".steamcommunity.com"));
             cookieContainer.Add(new Cookie("sessionid", _steamSession.SessionID, "/", ".steamcommunity.com"));
 
-            string response = SteamWebHelper.Request(SteamAPIEndpoints.COMMUNITY_BASE + "/steamguard/phoneajax", "POST", postData, cookieContainer);
+            string response = await SteamWebHelper.Request(SteamAPIEndpoints.COMMUNITY_BASE + "/steamguard/phoneajax", "POST", postData, cookieContainer);
             if (response == null) return false;
 
             var hasPhoneResponse = JsonConvert.DeserializeObject<HasPhoneResponse>(response);
             return hasPhoneResponse.HasPhone;
         }
 
-        public void RequestSMSCode()
+        public async void RequestSMSCode()
         {
             // adding a phone to Steam should not be handled by Bitwarden
-            bool hasPhone = HasPhoneAttached();
+            bool hasPhone = await HasPhoneAttached();
             if (!hasPhone)
             {
                 throw new Exception("USER HAS TO APPEND A PHONE NUMBER");
@@ -116,7 +117,7 @@ namespace Bit.App.Services.Steam
             postData.Add("device_identifier", _steamGuardData.DeviceID);
             postData.Add("sms_phone_id", "1");
 
-            string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.STEAMAPI_BASE + "/ITwoFactorService/AddAuthenticator/v0001", "POST", postData);
+            string response = await SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.STEAMAPI_BASE + "/ITwoFactorService/AddAuthenticator/v0001", "POST", postData);
             if (response == null)
             {
                 throw new Exception("GENERAL EXCEPTION");
@@ -141,9 +142,9 @@ namespace Bit.App.Services.Steam
             _steamGuardData = addAuthenticatorResponse.Response;
         }
 
-        private (SteamSessionCreateService.Status status, SteamSession session) GetSessionStatus()
+        private async Task<(SteamSessionCreateService.Status status, SteamSession session)> GetSessionStatus()
         {
-            (SteamSessionCreateService.Status status, SteamSession session) createSessionResponse = _sessionService.TryCreateSession();
+            (SteamSessionCreateService.Status status, SteamSession session) createSessionResponse = await _sessionService.TryCreateSession();
             _steamSession = createSessionResponse.session;
             return createSessionResponse;
         }
@@ -181,10 +182,10 @@ namespace Bit.App.Services.Steam
             }
         }
 
-        public SteamGuardServiceResponse SubmitUsernamePassword(string username, string password)
+        public async Task<SteamGuardServiceResponse> SubmitUsernamePassword(string username, string password)
         {
             _sessionService = new SteamSessionCreateService(username, password);
-            var sessionStatus = GetSessionStatus();
+            var sessionStatus = await GetSessionStatus();
             switch (sessionStatus.status)
             {
                 case SteamSessionCreateService.Status.Error_EmptyResponse:
@@ -200,10 +201,10 @@ namespace Bit.App.Services.Steam
             return SteamGuardServiceResponse.Error;
         }
 
-        public SteamGuardServiceResponse SubmitCaptcha(string captcha)
+        public async Task<SteamGuardServiceResponse> SubmitCaptcha(string captcha)
         {
             _sessionService.CaptchaText = captcha;
-            var sessionStatus = GetSessionStatus();
+            var sessionStatus = await GetSessionStatus();
             switch (sessionStatus.status)
             {
                 case SteamSessionCreateService.Status.NeedEmail:
@@ -214,10 +215,10 @@ namespace Bit.App.Services.Steam
             return SteamGuardServiceResponse.Error;
         }
 
-        SteamGuardServiceResponse ISteamGuardService.SubmitEmailCode(string code)
+        public async Task<SteamGuardServiceResponse> SubmitEmailCode(string code)
         {
             _sessionService.EmailCode = code;
-            var sessionStatus = GetSessionStatus();
+            var sessionStatus = await GetSessionStatus();
             switch (sessionStatus.status)
             {
                 case SteamSessionCreateService.Status.NeedEmail:
@@ -229,7 +230,7 @@ namespace Bit.App.Services.Steam
 
         }
 
-        SteamGuardServiceResponse ISteamGuardService.SubmitSMSCode(string code)
+        public async Task<SteamGuardServiceResponse> SubmitSMSCode(string code)
         {
             var postData = new NameValueCollection();
             postData.Add("steamid", _steamSession.SteamID.ToString());
@@ -241,7 +242,7 @@ namespace Bit.App.Services.Steam
                 postData.Set("authenticator_code", _steamGuardData.GenerateSteamGuardCode());
                 postData.Set("authenticator_time", SteamTimeSyncHelper.GetSteamUnixTime().ToString());
 
-                string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.STEAMAPI_BASE + "/ITwoFactorService/FinalizeAddAuthenticator/v0001", "POST", postData);
+                string response = await SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.STEAMAPI_BASE + "/ITwoFactorService/FinalizeAddAuthenticator/v0001", "POST", postData);
                 if (response == null)
                 {
                     Error = SteamGuardServiceError.EmptyResponse;

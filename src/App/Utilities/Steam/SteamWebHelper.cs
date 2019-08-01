@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.IO;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Bit.App.Utilities.Steam
 {
@@ -15,12 +16,12 @@ namespace Bit.App.Utilities.Steam
         /// <param name="data">Name-data pairs</param>
         /// <param name="cookies">current cookie container</param>
         /// <returns>response body</returns>
-        public static string MobileLoginRequest(string url, string method, NameValueCollection data = null, CookieContainer cookies = null, NameValueCollection headers = null)
+        public static async Task<string> MobileLoginRequest(string url, string method, NameValueCollection data = null, CookieContainer cookies = null, NameValueCollection headers = null)
         {
-            return Request(url, method, data, cookies, headers, SteamAPIEndpoints.COMMUNITY_BASE + "/mobilelogin?oauth_client_id=DE45CD61&oauth_scope=read_profile%20write_profile%20read_client%20write_client");
+            return await Request(url, method, data, cookies, headers, SteamAPIEndpoints.COMMUNITY_BASE + "/mobilelogin?oauth_client_id=DE45CD61&oauth_scope=read_profile%20write_profile%20read_client%20write_client");
         }
 
-        public static string Request(string url, string method, NameValueCollection data = null, CookieContainer cookies = null, NameValueCollection headers = null, string referer = SteamAPIEndpoints.COMMUNITY_BASE)
+        public static async Task<string> Request(string url, string method, NameValueCollection data = null, CookieContainer cookies = null, NameValueCollection headers = null, string referer = SteamAPIEndpoints.COMMUNITY_BASE)
         {
             string query = (data == null ? string.Empty : string.Join("&", Array.ConvertAll(data.AllKeys, key => String.Format("{0}={1}", WebUtility.UrlEncode(key), WebUtility.UrlEncode(data[key])))));
             if (method == "GET")
@@ -28,10 +29,10 @@ namespace Bit.App.Utilities.Steam
                 url += (url.Contains("?") ? "&" : "?") + query;
             }
 
-            return Request(url, method, query, cookies, headers, referer);
+            return await Request(url, method, query, cookies, headers, referer);
         }
 
-        public static string Request(string url, string method, string dataString = null, CookieContainer cookies = null, NameValueCollection headers = null, string referer = SteamAPIEndpoints.COMMUNITY_BASE)
+        public static async Task<string> Request(string url, string method, string dataString = null, CookieContainer cookies = null, NameValueCollection headers = null, string referer = SteamAPIEndpoints.COMMUNITY_BASE)
         {
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Method = method;
@@ -62,7 +63,7 @@ namespace Bit.App.Utilities.Steam
 
             try
             {
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                using (HttpWebResponse response = (HttpWebResponse)(await request.GetResponseAsync()))
                 {
                     if (response.StatusCode != HttpStatusCode.OK)
                     {

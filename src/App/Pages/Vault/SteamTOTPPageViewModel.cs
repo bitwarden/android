@@ -43,12 +43,12 @@ namespace Bit.App.Pages
             SubmitSMSCodeCommand = new Command(SubmitSMSCode);
         }
 
-        public void SubmitUsernamePassword()
+        public async void SubmitUsernamePassword()
         {
             if(!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
             {
                 NeedCredentials = false;
-                switch(steamGuardService.SubmitUsernamePassword(Username, Password))
+                switch(await steamGuardService.SubmitUsernamePassword(Username, Password))
                 {
                     case SteamGuardServiceResponse.NeedCaptcha:
                         CaptchaURI = new Uri("https://steamcommunity.com/public/captcha.php?gid=" + steamGuardService.CaptchaGID);
@@ -61,12 +61,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public void SubmitCaptcha()
+        public async void SubmitCaptcha()
         {
             if (!string.IsNullOrEmpty(Captcha))
             {
                 NeedCaptcha = false;
-                switch (steamGuardService.SubmitCaptcha(Captcha))
+                switch (await steamGuardService.SubmitCaptcha(Captcha))
                 {
                     case SteamGuardServiceResponse.NeedCaptcha:
                         CaptchaURI = new Uri("https://steamcommunity.com/public/captcha.php?gid=" + steamGuardService.CaptchaGID);
@@ -79,12 +79,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public void SubmitEmailCode()
+        public async void SubmitEmailCode()
         {
             if (!string.IsNullOrEmpty(EmailCode))
             {
                 NeedEmailCode = false;
-                switch (steamGuardService.SubmitEmailCode(EmailCode))
+                switch (await steamGuardService.SubmitEmailCode(EmailCode))
                 {
                     case SteamGuardServiceResponse.NeedSMSCode:
                         steamGuardService.RequestSMSCode();
@@ -97,12 +97,12 @@ namespace Bit.App.Pages
             }
         }
 
-        public void SubmitSMSCode()
+        public async void SubmitSMSCode()
         {
             if (!string.IsNullOrEmpty(SMSCode))
             {
                 NeedSMSCode = false;
-                switch (steamGuardService.SubmitSMSCode(SMSCode))
+                switch (await steamGuardService.SubmitSMSCode(SMSCode))
                 {
                     case SteamGuardServiceResponse.NeedSMSCode:
                         NeedSMSCode = true;

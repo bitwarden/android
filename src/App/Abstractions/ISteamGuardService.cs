@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Bit.Core.Enums;
 
 namespace Bit.App.Abstractions
@@ -11,10 +12,10 @@ namespace Bit.App.Abstractions
         string RecoveryCode { get; }
         string CaptchaGID { get; }
         SteamGuardServiceError Error { get; }
-        SteamGuardServiceResponse SubmitUsernamePassword(string username, string password);
-        SteamGuardServiceResponse SubmitCaptcha(string captcha);
-        SteamGuardServiceResponse SubmitEmailCode(string code);
-        SteamGuardServiceResponse SubmitSMSCode(string code);
+        Task<SteamGuardServiceResponse> SubmitUsernamePassword(string username, string password);
+        Task<SteamGuardServiceResponse> SubmitCaptcha(string captcha);
+        Task<SteamGuardServiceResponse> SubmitEmailCode(string code);
+        Task<SteamGuardServiceResponse> SubmitSMSCode(string code);
         void RequestSMSCode();
     }
 }

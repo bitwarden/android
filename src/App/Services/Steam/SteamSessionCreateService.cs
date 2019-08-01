@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 using Bit.App.Models.Steam;
 using Bit.App.Utilities;
 using Bit.App.Utilities.Steam;
@@ -119,7 +120,7 @@ namespace Bit.App.Services.Steam
         private bool requires2FA;
         private string twoFactorCode = null;
 
-        public (Status, SteamSession) TryCreateSession()
+        public async Task<(Status, SteamSession)> TryCreateSession()
         {
             CookieContainer cookieContainer = new CookieContainer();
 
@@ -130,16 +131,16 @@ namespace Bit.App.Services.Steam
             NameValueCollection headers = new NameValueCollection();
             headers.Add("X-Requested-With", "com.valvesoftware.android.steam.community");
 
-            SteamWebHelper.MobileLoginRequest(@"https://steamcommunity.com/login?oauth_client_id=DE45CD61&oauth_scope=read_profile%20write_profile%20read_client%20write_client", "GET", null, cookieContainer, headers);
+            await SteamWebHelper.MobileLoginRequest(@"https://steamcommunity.com/login?oauth_client_id=DE45CD61&oauth_scope=read_profile%20write_profile%20read_client%20write_client", "GET", null, cookieContainer, headers);
 
-            RSAResponse rsaResponse = GetRSAResponse(cookieContainer);
+            RSAResponse rsaResponse = await GetRSAResponse(cookieContainer);
             if (!rsaResponse.Success) return (Status.BadRSA, null);
 
             string encryptedPassword = EncryptPassword(rsaResponse.Exponent, rsaResponse.Modulus);
 
             NameValueCollection postData = BuildPostData(encryptedPassword, rsaResponse.Timestamp);
 
-            string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.COMMUNITY_BASE + "/login/dologin", "POST", postData, cookieContainer);
+            string response = await SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.COMMUNITY_BASE + "/login/dologin", "POST", postData, cookieContainer);
             if (response == null) return (Status.Error_EmptyResponse, null);
 
             var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(response);
@@ -204,11 +205,11 @@ namespace Bit.App.Services.Steam
             }
         }
 
-        private RSAResponse GetRSAResponse(CookieContainer cookieContainer)
+        private async Task<RSAResponse> GetRSAResponse(CookieContainer cookieContainer)
         {
             NameValueCollection postData = new NameValueCollection();
             postData.Add("username", username);
-            string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.COMMUNITY_BASE + "/login/getrsakey", "POST", postData, cookieContainer);
+            string response = await SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.COMMUNITY_BASE + "/login/getrsakey", "POST", postData, cookieContainer);
 
             return JsonConvert.DeserializeObject<RSAResponse>(response);
         }
