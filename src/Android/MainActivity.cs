@@ -36,7 +36,6 @@ namespace Bit.Droid
         private IUserService _userService;
         private IAppIdService _appIdService;
         private IStorageService _storageService;
-        private IStateService _stateService;
         private IEventService _eventService;
         private PendingIntent _lockAlarmPendingIntent;
         private PendingIntent _clearClipboardPendingIntent;
@@ -67,7 +66,6 @@ namespace Bit.Droid
             _userService = ServiceContainer.Resolve<IUserService>("userService");
             _appIdService = ServiceContainer.Resolve<IAppIdService>("appIdService");
             _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
-            _stateService = ServiceContainer.Resolve<IStateService>("stateService");
             _eventService = ServiceContainer.Resolve<IEventService>("eventService");
 
             TabLayoutResource = Resource.Layout.Tabbar;
@@ -378,7 +376,7 @@ namespace Bit.Droid
             {
                 return;
             }
-            await _stateService.SaveAsync(Constants.LastClipboardValueKey, data.Item1);
+            StaticStore.LastClipboardValue = data.Item1;
             var triggerMs = Java.Lang.JavaSystem.CurrentTimeMillis() + clearMs.Value;
             var alarmManager = GetSystemService(AlarmService) as AlarmManager;
             alarmManager.Set(AlarmType.Rtc, triggerMs, _clearClipboardPendingIntent);

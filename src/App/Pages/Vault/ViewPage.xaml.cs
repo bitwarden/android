@@ -39,6 +39,8 @@ namespace Bit.App.Pages
             }
         }
 
+        public ViewPageViewModel ViewModel => _vm;
+
         protected override async void OnAppearing()
         {
             base.OnAppearing();

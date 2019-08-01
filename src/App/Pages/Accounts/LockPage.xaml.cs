@@ -1,4 +1,7 @@
 ﻿using Bit.App.Models;
+using Bit.Core;
+using Bit.Core.Abstractions;
+using Bit.Core.Utilities;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -7,6 +10,7 @@ namespace Bit.App.Pages
 {
     public partial class LockPage : BaseContentPage
     {
+        private readonly IStorageService _storageService;
         private readonly AppOptions _appOptions;
         private readonly bool _autoPromptFingerprint;
         private readonly LockPageViewModel _vm;
@@ -16,28 +20,13 @@ namespace Bit.App.Pages
 
         public LockPage(AppOptions appOptions = null, bool autoPromptFingerprint = true)
         {
+            _storageService = ServiceContainer.Resolve<IStorageService>("storageService");
             _appOptions = appOptions;
             _autoPromptFingerprint = autoPromptFingerprint;
             InitializeComponent();
             _vm = BindingContext as LockPageViewModel;
             _vm.Page = this;
-            _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(() =>
-            {
-                if(_appOptions != null)
-                {
-                    if(_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
-                    {
-                        Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
-                        return;
-                    }
-                    else if(_appOptions.Uri != null)
-                    {
-                        Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
-                        return;
-                    }
-                }
-                Application.Current.MainPage = new TabsPage(_appOptions);
-            });
+            _vm.UnlockedAction = () => Device.BeginInvokeOnMainThread(async () => await UnlockedAsync());
             MasterPasswordEntry = _masterPassword;
             PinEntry = _pin;
         }
@@ -106,6 +95,29 @@ namespace Bit.App.Pages
             {
                 await _vm.PromptFingerprintAsync();
             }
+        }
+
+        private async Task UnlockedAsync()
+        {
+            if(_appOptions != null)
+            {
+                if(_appOptions.FromAutofillFramework && _appOptions.SaveType.HasValue)
+                {
+                    Application.Current.MainPage = new NavigationPage(new AddEditPage(appOptions: _appOptions));
+                    return;
+                }
+                else if(_appOptions.Uri != null)
+                {
+                    Application.Current.MainPage = new NavigationPage(new AutofillCiphersPage(_appOptions));
+                    return;
+                }
+            }
+            var previousPage = await _storageService.GetAsync<PreviousPageInfo>(Constants.PreviousPageKey);
+            if(previousPage != null)
+            {
+                await _storageService.RemoveAsync(Constants.PreviousPageKey);
+            }
+            Application.Current.MainPage = new TabsPage(_appOptions, previousPage);
         }
     }
 }

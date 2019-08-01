@@ -131,6 +131,7 @@ namespace Bit.App.Pages
         }
 
         public bool FromAutofillFramework { get; set; }
+        public AddEditPageViewModel ViewModel => _vm;
 
         protected override async void OnAppearing()
         {
