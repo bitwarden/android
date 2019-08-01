@@ -97,10 +97,19 @@ namespace Bit.Droid.Autofill
 
         public void Parse()
         {
+            string titlePackageId = null;
             for(var i = 0; i < _structure.WindowNodeCount; i++)
             {
                 var node = _structure.GetWindowNodeAt(i);
+                if(i == 0)
+                {
+                    titlePackageId = GetTitlePackageId(node);
+                }
                 ParseNode(node.RootViewNode);
+            }
+            if(string.IsNullOrWhiteSpace(PackageName) && string.IsNullOrWhiteSpace(Website))
+            {
+                PackageName = titlePackageId;
             }
             if(!AutofillHelpers.TrustedBrowsers.Contains(PackageName) &&
                 !AutofillHelpers.CompatBrowsers.Contains(PackageName))
@@ -145,6 +154,23 @@ namespace Bit.Droid.Autofill
                 }
                 Website = string.Format("{0}://{1}", scheme, node.WebDomain);
             }
+        }
+
+        private string GetTitlePackageId(WindowNode node)
+        {
+            if(node != null && !string.IsNullOrWhiteSpace(node.Title))
+            {
+                var slashPosition = node.Title.IndexOf('/');
+                if(slashPosition > -1)
+                {
+                    var packageId = node.Title.Substring(0, slashPosition);
+                    if(packageId.Contains("."))
+                    {
+                        return packageId;
+                    }
+                }
+            }
+            return null;
         }
     }
 }
