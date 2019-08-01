@@ -18,7 +18,8 @@
                 <controls:MonoEntry
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
-                                StyleClass="box-value"/>
+                                StyleClass="box-value"
+                                x:Name="_usernameEntry"/>
             </StackLayout>
 
             <StackLayout StyleClass="box-row, box-row-input">
@@ -27,13 +28,34 @@
                 <controls:MonoEntry
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
-                                StyleClass="box-value"/>
+                                StyleClass="box-value"
+                                x:Name="_passwordEntry"/>
             </StackLayout>
 
-            <Button Text="Request E-Mail Code"/>
+                <Button Text="Request E-Mail Code"
+                    Clicked="Button_Clicked"/>
 
-            <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
-            <Label Text="Enter the E-Mail Code you received"
+                <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+
+                <StackLayout StyleClass="box-row, box-row-input">
+                    <Label Text="Captcha"
+                       StyleClass="box-label"
+                        x:Name="_captchaLabel"/>
+                    <WebView x:Name="_captchaWebview"
+                             HeightRequest="40"
+                             WidthRequest="206"
+                             HorizontalOptions="Center"></WebView>
+                    <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                x:Name="_captchaEntry"/>
+                </StackLayout>
+                <Button Text="Retry"
+                    Clicked="Button_Clicked_3"/>
+                <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
+
+                <Label Text="Enter the E-Mail Code you received"
                    StyleClass="box-header, box-header-platform"/>
 
             <StackLayout StyleClass="box-row, box-row-input">
@@ -43,9 +65,10 @@
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
                                 StyleClass="box-value"
-                    x:Name="_emailBox"/>
+                                x:Name="_emailcodeEntry"/>
             </StackLayout>
-            <Button Text="Request SMS Code"/>
+            <Button Text="Request SMS Code"
+                    Clicked="Button_Clicked_1"/>
             <BoxView StyleClass="list-section-separator-bottom, list-section-separator-bottom-platform" />
             <Label Text="Enter the SMS Code you received"
                    StyleClass="box-header, box-header-platform"/>
@@ -55,9 +78,11 @@
                 <controls:MonoEntry
                                 IsSpellCheckEnabled="False"
                                 IsTextPredictionEnabled="False"
-                                StyleClass="box-value"/>
+                                StyleClass="box-value"
+                                x:Name="_smscodeEntry"/>
             </StackLayout>
-            <Button Text="Finish"/>
+            <Button Text="Finish"
+                    Clicked="Button_Clicked_2"/>
 
         </StackLayout>
         </ScrollView>

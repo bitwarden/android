@@ -1,0 +1,300 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.Net;
+using System.Security.Cryptography;
+using System.Text;
+using Bit.App.Abstractions;
+using Bit.App.Models.Steam;
+using Bit.App.Utilities;
+using Bit.App.Utilities.Steam;
+using Newtonsoft.Json;
+
+namespace Bit.App.Services.Steam
+{
+    public class SteamGuardService : ISteamGuardService
+    {
+        private class HasPhoneResponse
+        {
+            [JsonProperty("has_phone")]
+            public bool HasPhone { get; set; }
+        }
+
+        private class AddAuthenticatorResponse
+        {
+            [JsonProperty("response")]
+            public SteamGuardData Response { get; set; }
+        }
+
+        private class FinalizeAuthenticatorResponse
+        {
+            [JsonProperty("response")]
+            public FinalizeAuthenticatorInternalResponse Response { get; set; }
+
+            internal class FinalizeAuthenticatorInternalResponse
+            {
+                [JsonProperty("status")]
+                public int Status { get; set; }
+
+                [JsonProperty("server_time")]
+                public long ServerTime { get; set; }
+
+                [JsonProperty("want_more")]
+                public bool WantMore { get; set; }
+
+                [JsonProperty("success")]
+                public bool Success { get; set; }
+            }
+        }
+
+        public string TOTPSecret => _steamGuardData.SharedSecret;
+
+        public string RecoveryCode => _steamGuardData.RevocationCode;
+
+        private SteamSessionCreateService _sessionService;
+        private SteamGuardData _steamGuardData = new SteamGuardData();
+        private SteamSession _steamSession;
+
+
+        public bool requiresCaptcha;
+        public string CID;
+
+        public void SetCaptcha(string captcha)
+        {
+            _sessionService.CaptchaText = captcha;
+            CheckSessionStatus();
+        }
+
+        public SteamGuardService()
+        {
+            _steamGuardData.DeviceID = RandomDeviceID();
+        }
+
+        public bool CheckEmailCode(string code)
+        { 
+            _sessionService.EmailCode = code;
+            (SteamSessionCreateService.Status status, SteamSession session) createSessionResponse = _sessionService.TryCreateSession();
+            _steamSession = createSessionResponse.session;
+            return createSessionResponse.status != SteamSessionCreateService.Status.NeedEmail;
+        }
+
+        private bool HasPhoneAttached()
+        {
+            var postData = new NameValueCollection();
+            postData.Add("op", "has_phone");
+            postData.Add("arg", "null");
+            postData.Add("sessionid", _steamSession.SessionID);
+
+            CookieContainer cookieContainer = new CookieContainer();
+            cookieContainer.Add(new Cookie("mobileClientVersion", "0 (2.1.3)", "/", ".steamcommunity.com"));
+            cookieContainer.Add(new Cookie("mobileClient", "android", "/", ".steamcommunity.com"));
+
+            cookieContainer.Add(new Cookie("steamid", _steamSession.SteamID.ToString(), "/", ".steamcommunity.com"));
+            cookieContainer.Add(new Cookie("steamLogin", _steamSession.SteamLogin, "/", ".steamcommunity.com")
+            {
+                HttpOnly = true
+            });
+
+            cookieContainer.Add(new Cookie("steamLoginSecure", _steamSession.SteamLoginSecure, "/", ".steamcommunity.com")
+            {
+                HttpOnly = true,
+                Secure = true
+            });
+            cookieContainer.Add(new Cookie("Steam_Language", "english", "/", ".steamcommunity.com"));
+            cookieContainer.Add(new Cookie("dob", "", "/", ".steamcommunity.com"));
+            cookieContainer.Add(new Cookie("sessionid", _steamSession.SessionID, "/", ".steamcommunity.com"));
+
+            string response = SteamWebHelper.Request(SteamAPIEndpoints.COMMUNITY_BASE + "/steamguard/phoneajax", "POST", postData, cookieContainer);
+            if (response == null) return false;
+
+            var hasPhoneResponse = JsonConvert.DeserializeObject<HasPhoneResponse>(response);
+            return hasPhoneResponse.HasPhone;
+        }
+
+        public void RequestSMSCode()
+        {
+            // adding a phone to Steam should not be handled by Bitwarden
+            bool hasPhone = HasPhoneAttached();
+            if (!hasPhone)
+            {
+                throw new Exception("USER HAS TO APPEND A PHONE NUMBER");
+            }
+
+
+            var postData = new NameValueCollection();
+            postData.Add("access_token", _steamSession.OAuthToken);
+            postData.Add("steamid", _steamSession.SteamID.ToString());
+            postData.Add("authenticator_type", "1");
+            postData.Add("device_identifier", _steamGuardData.DeviceID);
+            postData.Add("sms_phone_id", "1");
+
+            string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.STEAMAPI_BASE + "/ITwoFactorService/AddAuthenticator/v0001", "POST", postData);
+            if (response == null)
+            {
+                throw new Exception("GENERAL EXCEPTION");
+            }
+
+            var addAuthenticatorResponse = JsonConvert.DeserializeObject<AddAuthenticatorResponse>(response);
+            if (addAuthenticatorResponse == null || addAuthenticatorResponse.Response == null)
+            {
+                throw new Exception("GENERAL EXCEPTION");
+            }
+
+            if (addAuthenticatorResponse.Response.Status == 29)
+            {
+                throw new Exception("ALLREADY LINKED TO STEAM AUTHENTICATOR");
+            }
+
+            if (addAuthenticatorResponse.Response.Status != 1)
+            {
+                throw new Exception("GENERAL EXCEPTION");
+            }
+
+            _steamGuardData = addAuthenticatorResponse.Response;
+        }
+
+        public bool CheckSMSCode(string code)
+        {
+            var postData = new NameValueCollection();
+            postData.Add("steamid", _steamSession.SteamID.ToString());
+            postData.Add("access_token", _steamSession.OAuthToken);
+            postData.Add("activation_code", code);
+            int tries = 0;
+            while (tries <= 30)
+            {
+                postData.Set("authenticator_code", _steamGuardData.GenerateSteamGuardCode());
+                postData.Set("authenticator_time", SteamTimeSyncHelper.GetSteamUnixTime().ToString());
+
+                string response = SteamWebHelper.MobileLoginRequest(SteamAPIEndpoints.STEAMAPI_BASE + "/ITwoFactorService/FinalizeAddAuthenticator/v0001", "POST", postData);
+                if (response == null)
+                {
+                    throw new Exception("GENERAL EXCEPTION");
+                }
+
+                var finalizeResponse = JsonConvert.DeserializeObject<FinalizeAuthenticatorResponse>(response);
+
+                if (finalizeResponse == null || finalizeResponse.Response == null)
+                {
+                    throw new Exception("GENERAL EXCEPTION");
+                }
+
+                if (finalizeResponse.Response.Status == 89)
+                {
+                    throw new Exception("BAD SMS CODE");
+                }
+
+                if (finalizeResponse.Response.Status == 88)
+                {
+                    if (tries >= 30)
+                    {
+                        throw new Exception("CANT SYNC STEAM GUARD CODE");
+                    }
+                }
+
+                if (!finalizeResponse.Response.Success)
+                {
+                    throw new Exception("GENERAL EXCEPTION");
+                }
+
+                if (finalizeResponse.Response.WantMore)
+                {
+                    tries++;
+                    continue;
+                }
+
+                return true;
+            }
+
+            throw new Exception("GENERAL EXCEPTION");
+        }
+
+        private bool CheckSessionStatus()
+        {
+            (SteamSessionCreateService.Status status, SteamSession session) createSessionResponse = _sessionService.TryCreateSession();
+            if (createSessionResponse.status == SteamSessionCreateService.Status.NeedCaptcha)
+            {
+                CID = _sessionService.CaptchaID;
+                requiresCaptcha = true;
+                Console.WriteLine(_sessionService.CaptchaID);
+            }
+
+            if (createSessionResponse.status != SteamSessionCreateService.Status.Okay) return false;
+            return true;
+        }
+
+        public void Init(string username, string password)
+        {
+            _sessionService = new SteamSessionCreateService(username, password);
+            CheckSessionStatus();
+        }
+
+        private void HandleSessionStatus(SteamSessionCreateService.Status status, SteamSessionCreateService sessionService)
+        {
+            switch (status)
+            {
+                case SteamSessionCreateService.Status.NeedEmail:
+                    Console.WriteLine("EMAIL, bitte den Code der E-Mail eingeben");
+                    sessionService.EmailCode = Console.ReadLine();
+                    break;
+
+                case SteamSessionCreateService.Status.NeedCaptcha:
+                    Console.WriteLine("https://steamcommunity.com/public/captcha.php?gid=" + sessionService.CaptchaID);
+                    sessionService.CaptchaText = Console.ReadLine();
+                    break;
+
+                case SteamSessionCreateService.Status.Need2FA:
+                    Console.WriteLine("Allready connected to Steam Auth");
+                    return;
+
+                case SteamSessionCreateService.Status.BadRSA:
+                    Console.WriteLine("Steam returned BadRSA");
+                    return;
+
+                case SteamSessionCreateService.Status.BadCredentials:
+                    Console.WriteLine("Wrong username or password");
+                    return;
+
+                case SteamSessionCreateService.Status.TooManyFailedLogins:
+                    Console.WriteLine("Login failed to often");
+                    return;
+
+                case SteamSessionCreateService.Status.GeneralFailure:
+                    Console.WriteLine("General failure");
+                    return;
+            }
+        }
+
+        static string RandomDeviceID()
+        {
+            string SplitOnRatios(string str, int[] ratios, string intermediate)
+            {
+                string result = "";
+
+                int pos = 0;
+                for (int index = 0; index < ratios.Length; index++)
+                {
+                    result += str.Substring(pos, ratios[index]);
+                    pos = ratios[index];
+
+                    if (index < ratios.Length - 1)
+                        result += intermediate;
+                }
+
+                return result;
+            }
+
+
+            using (var sha1 = new SHA1Managed())
+            {
+                RNGCryptoServiceProvider secureRandom = new RNGCryptoServiceProvider();
+                byte[] randomBytes = new byte[8];
+                secureRandom.GetBytes(randomBytes);
+
+                byte[] hashedBytes = sha1.ComputeHash(randomBytes);
+                string random32 = BitConverter.ToString(hashedBytes).Replace("-", "").Substring(0, 32).ToLower();
+
+                return "android:" + SplitOnRatios(random32, new[] { 8, 4, 4, 4, 12 }, "-");
+            }
+        }
+    }
+}

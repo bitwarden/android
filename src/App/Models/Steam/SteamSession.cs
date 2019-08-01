@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Bit.App.Models.Steam
 {
-    class SteamSession
+    public class SteamSession
     {
         public string SessionID { get; set; }
         public string SteamLogin { get; set; }

@@ -11,5 +11,6 @@ namespace Bit.App.Abstractions
         void Init(string username, string password);
         bool CheckEmailCode(string code);
         bool CheckSMSCode(string code);
+        void RequestSMSCode();
     }
 }

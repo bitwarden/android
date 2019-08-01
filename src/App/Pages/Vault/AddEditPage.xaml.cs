@@ -238,8 +238,23 @@ namespace Bit.App.Pages
             {
                 if (_vm.Cipher.Login.Totp.StartsWith("steam://"))
                 {
-                    var page = new Vault.SteamTOTPPage();
-                    await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
+                    System.Action<string, string> setKeyAndRecovery = (key, rec) => {
+                        Device.BeginInvokeOnMainThread(async () =>
+                        {
+                            await Navigation.PopModalAsync();
+                            await _vm.UpdateTotpKeyAsync("steam://" + key);
+
+
+                            _vm.Fields.Add(new AddEditPageFieldViewModel(_vm.Cipher, new Core.Models.View.FieldView()
+                            {
+                                Type = FieldType.Hidden,
+                                Name = "Recovery Code",
+                                Value = rec
+                            }));
+                        });
+                    };
+                    var page = new Vault.SteamTOTPPage(setKeyAndRecovery);
+                        await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
                 }
                 else
                 {

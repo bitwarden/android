@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Bit.App.Utilities.Steam;
 using Newtonsoft.Json;
 
 namespace Bit.App.Utilities
