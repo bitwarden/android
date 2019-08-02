@@ -135,7 +135,7 @@ namespace Bit.App.Pages
                 {
                     case SteamGuardServiceResponse.NeedCaptcha:
                         CaptchaURI = new Uri("https://steamcommunity.com/public/captcha.php?gid=" + steamGuardService.CaptchaGID);
-                        Status = statusNeedEmailCode;
+                        Status = statusNeedCaptcha;
                         NeedCaptcha = true;
                         break;
                     case SteamGuardServiceResponse.NeedEmailCode:

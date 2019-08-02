@@ -237,29 +237,7 @@ namespace Bit.App.Pages
         {
             if(DoOnce())
             {
-                if (_vm.Cipher.Login.Totp.StartsWith("steam://"))
-                {
-                    System.Action<string, string> setKeyAndRecovery = (key, rec) => {
-                        Device.BeginInvokeOnMainThread(async () =>
-                        {
-                            await Navigation.PopModalAsync();
-                            await _vm.UpdateTotpKeyAsync("steam://" + key);
-
-
-                            _vm.Fields.Add(new AddEditPageFieldViewModel(_vm.Cipher, new Core.Models.View.FieldView()
-                            {
-                                Type = FieldType.Hidden,
-                                Name = "Recovery Code",
-                                Value = rec
-                            }));
-                        });
-                    };
-                    var page = new Vault.SteamTOTPPage(setKeyAndRecovery);
-                        await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
-                }
-                else
-                {
-                    var page = new ScanPage(key =>
+                var page = new ScanPage(key =>
                 {
                     Device.BeginInvokeOnMainThread(async () =>
                     {
@@ -267,8 +245,7 @@ namespace Bit.App.Pages
                         await _vm.UpdateTotpKeyAsync(key);
                     });
                 });
-                    await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
-                }
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
 
@@ -383,6 +360,42 @@ namespace Bit.App.Pages
                         ToolbarItems.Insert(2, _collectionsItem);
                     }
                 }
+            }
+        }
+
+        private void _loginTotpEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(e.NewTextValue != null && e.NewTextValue.StartsWith("steam"))
+            {
+                _vm.ShowSteamLoginButton = true;
+            }
+            else
+            {
+                _vm.ShowSteamLoginButton = false;
+            }
+        }
+
+        private async void SignInWithSteam_Clicked(object sender, System.EventArgs e)
+        {
+            if (DoOnce())
+            {
+                System.Action<string, string> setKeyAndRecovery = (key, rec) => {
+                    Device.BeginInvokeOnMainThread(async () =>
+                    {
+                        await Navigation.PopModalAsync();
+                        await _vm.UpdateTotpKeyAsync("steam://" + key);
+
+
+                        _vm.Fields.Add(new AddEditPageFieldViewModel(_vm.Cipher, new Core.Models.View.FieldView()
+                        {
+                            Type = FieldType.Hidden,
+                            Name = "Recovery Code",
+                            Value = rec
+                        }));
+                    });
+                };
+                var page = new Vault.SteamTOTPPage(setKeyAndRecovery);
+                await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }
     }

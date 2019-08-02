@@ -165,7 +165,8 @@
                             IsTextPredictionEnabled="False"
                             StyleClass="box-value"
                             Grid.Row="1"
-                            Grid.Column="0" />
+                            Grid.Column="0"
+                            TextChanged="_loginTotpEntry_TextChanged"/>
                         <controls:FaButton 
                             StyleClass="box-row-button, box-row-button-platform"
                             Text="&#xf030;"
@@ -176,6 +177,10 @@
                             AutomationProperties.IsInAccessibleTree="True"
                             AutomationProperties.Name="{u:I18n ScanQrTitle}" />
                     </Grid>
+
+                    <Button Text="Sign in with Steam"
+                            Clicked="SignInWithSteam_Clicked"
+                            IsVisible="{Binding ShowSteamLoginButton}"/>
                 </StackLayout>
                 <StackLayout IsVisible="{Binding IsCard}" Spacing="0" Padding="0">
                     <StackLayout StyleClass="box-row, box-row-input">

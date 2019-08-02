@@ -28,138 +28,137 @@
 
                 <BoxView StyleClass="box-row-separator" />
             </StackLayout>        
-            <ScrollView Padding="0,0,0,20">
-            <StackLayout Spacing="20">
-                <StackLayout StyleClass="box" IsEnabled="{Binding NeedCredentials}">
-                    <Label  
-                        Text="Input your Credentials"
-                        StyleClass="box-header, box-header-platform"/>
-
-                    <StackLayout StyleClass="box-row, box-row-input">
+            <ScrollView Padding="0,10,0,20">
+                <StackLayout Spacing="20">
+                    <StackLayout StyleClass="box" IsEnabled="{Binding NeedCredentials}">
                         <Label  
-                            Text="Username"
-                            StyleClass="box-label"/>
-                        <controls:MonoEntry
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
-                            StyleClass="box-value"
-                            Text="{Binding Username}"/>
-                    </StackLayout>
+                            Text="Input your Credentials"
+                            StyleClass="box-header, box-header-platform"/>
 
-                    <Grid StyleClass="box-row, box-row-input">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="*" />
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                        <Label
-                            Text="Password"
-                            StyleClass="box-label"
-                            Grid.Row="0"
-                            Grid.Column="0" />
-                        <controls:MonoEntry
-                            Text="{Binding Password}"
-                            StyleClass="box-value"
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False" />
-                        <controls:FaButton 
-                            StyleClass="box-row-button, box-row-button-platform"
-                            Text="{Binding ShowPasswordIcon}"
-                            Command="{Binding TogglePasswordCommand}"
-                            Grid.Row="0"
-                            Grid.Column="2"
-                            Grid.RowSpan="2"
-                            AutomationProperties.IsInAccessibleTree="True"/>
-                    </Grid>
-
-                    <Button 
-                        Text="Request E-Mail Code"
-                        IsVisible="{Binding NeedCredentials}"
-                        Command="{Binding SubmitUsernamePasswordCommand}"/>
-
-                    <BoxView StyleClass="box-row-separator" />
-                </StackLayout>
-
-
-                <StackLayout StyleClass="box" IsVisible="{Binding ShowCaptcha}" IsEnabled="{Binding NeedCaptcha}">
-                    <Label  
-                        Text="Answer Captcha"
-                        StyleClass="box-header, box-header-platform"/>
-                    <WebView 
-                        HeightRequest="40"
-                        WidthRequest="206"
-                        HorizontalOptions="Center"
-                        BackgroundColor="Transparent"
-                        Source="{Binding CaptchaURI}"/>
-
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label 
-                            Text="Captcha"
-                            StyleClass="box-label"/>
-                        <controls:MonoEntry
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
-                            StyleClass="box-value"
-                            Text="{Binding Captcha}"/>
-                    </StackLayout>
-                    <Button 
-                        Text="Submit Captcha"
-                        IsVisible="{Binding NeedCaptcha}"
-                        Command="{Binding SubmitCaptchaCommand}"/>
-                    <BoxView StyleClass="box-row-separator" />
-                </StackLayout>
-
-                <StackLayout StyleClass="box" IsVisible="{Binding ShowEmailCode}" IsEnabled="{Binding NeedEmailCode}">
-                    <Label 
-                        Text="Enter the E-Mail Code you received"
-                        StyleClass="box-header, box-header-platform"/>
-
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label 
-                            Text="E-Mail-Code"
-                            StyleClass="box-label"/>
-                        <controls:MonoEntry
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
-                            StyleClass="box-value"
-                            Text="{Binding EmailCode}"/>
+                        <StackLayout StyleClass="box-row, box-row-input">
+                            <Label  
+                                Text="Username"
+                                StyleClass="box-label"/>
+                            <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Text="{Binding Username}"/>
                         </StackLayout>
-                    <Button 
-                        Text="Request SMS Code"
-                        IsVisible="{Binding NeedEmailCode}"
-                        Command="{Binding SubmitEmailCodeCommand}"/>
-                    <BoxView StyleClass="box-row-separator" />
-                </StackLayout>
 
-                <StackLayout StyleClass="box" IsVisible="{Binding ShowSMSCode}" IsEnabled="{Binding NeedSMSCode}">
-                    <Label 
-                        Text="Enter the SMS Code you received"
-                        StyleClass="box-header, box-header-platform"/>
-                    <StackLayout StyleClass="box-row, box-row-input">
-                        <Label 
-                            Text="SMS-Code"
-                            StyleClass="box-label"/>
-                        <controls:MonoEntry
-                            IsSpellCheckEnabled="False"
-                            IsTextPredictionEnabled="False"
-                            StyleClass="box-value"
-                            Text="{Binding SMSCode}"/>
+                        <Grid StyleClass="box-row, box-row-input">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Text="Password"
+                                StyleClass="box-label"
+                                Grid.Row="0"
+                                Grid.Column="0" />
+                            <controls:MonoEntry
+                                Text="{Binding Password}"
+                                StyleClass="box-value"
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                IsPassword="{Binding ShowPassword, Converter={StaticResource inverseBool}}"
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False" />
+                            <controls:FaButton 
+                                StyleClass="box-row-button, box-row-button-platform"
+                                Text="{Binding ShowPasswordIcon}"
+                                Command="{Binding TogglePasswordCommand}"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Grid.RowSpan="2"
+                                AutomationProperties.IsInAccessibleTree="True"/>
+                        </Grid>
+
+                        <Button 
+                            Text="Request E-Mail Code"
+                            IsVisible="{Binding NeedCredentials}"
+                            Command="{Binding SubmitUsernamePasswordCommand}"/>
+
+                        <BoxView StyleClass="box-row-separator" />
                     </StackLayout>
-                    <Button 
-                        Text="Finish"
-                        IsVisible="{Binding NeedSMSCode}"
-                        Command="{Binding SubmitSMSCodeCommand}"/>
+
+                    <StackLayout StyleClass="box" IsVisible="{Binding ShowCaptcha}" IsEnabled="{Binding NeedCaptcha}">
+                        <Label  
+                            Text="Answer Captcha"
+                            StyleClass="box-header, box-header-platform"/>
+                        <WebView 
+                            HeightRequest="40"
+                            WidthRequest="206"
+                            HorizontalOptions="Center"
+                            BackgroundColor="Transparent"
+                            Source="{Binding CaptchaURI}"/>
+
+                        <StackLayout StyleClass="box-row, box-row-input">
+                            <Label 
+                                Text="Captcha"
+                                StyleClass="box-label"/>
+                            <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Text="{Binding Captcha}"/>
+                        </StackLayout>
+                        <Button 
+                            Text="Submit Captcha"
+                            IsVisible="{Binding NeedCaptcha}"
+                            Command="{Binding SubmitCaptchaCommand}"/>
+                        <BoxView StyleClass="box-row-separator" />
+                    </StackLayout>
+
+                    <StackLayout StyleClass="box" IsVisible="{Binding ShowEmailCode}" IsEnabled="{Binding NeedEmailCode}">
+                        <Label 
+                            Text="Enter the E-Mail Code you received"
+                            StyleClass="box-header, box-header-platform"/>
+
+                        <StackLayout StyleClass="box-row, box-row-input">
+                            <Label 
+                                Text="E-Mail-Code"
+                                StyleClass="box-label"/>
+                            <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Text="{Binding EmailCode}"/>
+                            </StackLayout>
+                        <Button 
+                            Text="Request SMS Code"
+                            IsVisible="{Binding NeedEmailCode}"
+                            Command="{Binding SubmitEmailCodeCommand}"/>
+                        <BoxView StyleClass="box-row-separator" />
+                    </StackLayout>
+
+                    <StackLayout StyleClass="box" IsVisible="{Binding ShowSMSCode}" IsEnabled="{Binding NeedSMSCode}">
+                        <Label 
+                            Text="Enter the SMS Code you received"
+                            StyleClass="box-header, box-header-platform"/>
+                        <StackLayout StyleClass="box-row, box-row-input">
+                            <Label 
+                                Text="SMS-Code"
+                                StyleClass="box-label"/>
+                            <controls:MonoEntry
+                                IsSpellCheckEnabled="False"
+                                IsTextPredictionEnabled="False"
+                                StyleClass="box-value"
+                                Text="{Binding SMSCode}"/>
+                        </StackLayout>
+                        <Button 
+                            Text="Finish"
+                            IsVisible="{Binding NeedSMSCode}"
+                            Command="{Binding SubmitSMSCodeCommand}"/>
+                    </StackLayout>
                 </StackLayout>
-            </StackLayout>
-        </ScrollView>
+            </ScrollView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

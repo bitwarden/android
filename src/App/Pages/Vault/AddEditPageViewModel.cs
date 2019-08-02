@@ -35,6 +35,7 @@ namespace Bit.App.Pages
         private int _folderSelectedIndex;
         private int _ownershipSelectedIndex;
         private bool _hasCollections;
+        private bool _showSteamLoginButton;
         private string _previousCipherId;
         private List<Core.Models.View.CollectionView> _writeableCollections;
         private string[] _additionalCipherProperties = new string[]
@@ -259,6 +260,11 @@ namespace Bit.App.Pages
                 {
                     nameof(ShowCollections)
                 });
+        }
+        public bool ShowSteamLoginButton
+        {
+            get => _showSteamLoginButton;
+            set => SetProperty(ref _showSteamLoginButton, value);
         }
         public bool ShowCollections => !EditMode && Cipher.OrganizationId != null;
         public bool EditMode => !string.IsNullOrWhiteSpace(CipherId);
