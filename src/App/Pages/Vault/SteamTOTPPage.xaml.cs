@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Bit.App.Abstractions;
-using Bit.App.Services.Steam;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace Bit.App.Pages.Vault
+namespace Bit.App.Pages
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SteamTOTPPage : ContentPage
+    public partial class SteamTotpPage : ContentPage
     {
-        public SteamTOTPPage(Action<string, string> callback)
+        private SteamTOTPPageViewModel _vm;
+
+        public SteamTotpPage(Action<string, string> callback, string password = "", string username = "")
         {
             InitializeComponent();
 
-            (BindingContext as SteamTOTPPageViewModel).SteamLinkedCallback = callback;
+            _vm = (BindingContext as SteamTOTPPageViewModel);
+            _vm.SteamLinkedCallback = callback;
+            _vm.Password = password;
+            _vm.Username = username;
         }
     }
 }

@@ -99,6 +99,9 @@
     <Compile Update="Pages\Vault\AddEditPage.xaml.cs">
       <DependentUpon>AddEditPage.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Pages\Vault\SteamTOTPPage.xaml.cs">
+      <DependentUpon>SteamTotpPage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Pages\Vault\ViewPage.xaml.cs">
       <DependentUpon>ViewPage.xaml</DependentUpon>
     </Compile>
@@ -145,7 +148,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Pages\Vault\SteamTOTPPage.xaml">
+    <EmbeddedResource Update="Pages\Vault\SteamTotpPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Styles\Base.xaml">

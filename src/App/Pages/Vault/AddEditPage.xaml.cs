@@ -394,7 +394,7 @@ namespace Bit.App.Pages
                         }));
                     });
                 };
-                var page = new Vault.SteamTOTPPage(setKeyAndRecovery);
+                var page = new SteamTotpPage(setKeyAndRecovery, _vm.Cipher.Login.Password, _vm.Cipher.Login.Username);
                 await Navigation.PushModalAsync(new Xamarin.Forms.NavigationPage(page));
             }
         }

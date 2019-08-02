@@ -7,7 +7,7 @@
              xmlns:u="clr-namespace:Bit.App.Utilities"
              xmlns:pages="clr-namespace:Bit.App.Pages"
              mc:Ignorable="d"
-             x:Class="Bit.App.Pages.Vault.SteamTOTPPage"
+             x:Class="Bit.App.Pages.SteamTotpPage"
              Title="Connect to Steam">
     <ContentPage.BindingContext>
         <pages:SteamTOTPPageViewModel />

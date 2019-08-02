@@ -11,8 +11,10 @@ namespace Bit.App.Pages
 {
     public class SteamTOTPPageViewModel : BaseViewModel
     {
-        public string Password { get; set; }
-        public string Username { get; set; }
+        private string _password;
+        public string Password { get => _password; set => SetProperty(ref _password, value); }
+        private string _username;
+        public string Username { get => _username; set => SetProperty(ref _username, value); }
         public string Captcha { get; set; }
         public string EmailCode { get; set; }
         public string SMSCode { get; set; }
