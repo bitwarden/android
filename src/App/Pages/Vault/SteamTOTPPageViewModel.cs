@@ -65,12 +65,12 @@ namespace Bit.App.Pages
 
         private string statusWait = "Please wait, connecting to Steam servers...";
         private string statusWrongCredential = "Wrong Credentials, please check your username and password!";
-        private string statusNeedCaptcha = "Please enter the Captcha";
-        private string statusWrongCaptcha = "Please try again, the Captcha you entered seems to be incorrect";
+        private string statusNeedCaptcha = "Please enter the Captcha on the screen";
+        private string statusWrongCaptcha = "Wrong Captcha, please try again!";
         private string statusNeedEmailCode = "Please enter the email code you received";
-        private string statusWrongEmailCode = "Please enter the correct email code. The code supplied was rejected!";
+        private string statusWrongEmailCode = "Wrong email code, please enter the correct one!";
         private string statusNeedSMSCode = "Please enter the SMS code you received";
-        private string statusWrongSMSCode = "Please enter the correct SMS code. The code supplied was rejected!";
+        private string statusWrongSMSCode = "Wrong SMS code, please enter the correct one!";
 
         private string statusErrorAllreadyConnectedSteamguard = "It seems like you have allready connected SteamGuard to an other device. Please disconnect it and try again.";
         private string statusErrorCorruptRespone = "The Steam server replied with a response we couldn't parse. Maybe try again later.";
