@@ -197,6 +197,9 @@ namespace Bit.App.Services.Steam
                     return SteamGuardServiceResponse.NeedCaptcha;
                 case SteamSessionCreateService.Status.BadCredentials:
                     return SteamGuardServiceResponse.WrongCredentials;
+                case SteamSessionCreateService.Status.Need2FA:
+                    Error = SteamGuardServiceError.AllreadyConnectedSteamguard;
+                    return SteamGuardServiceResponse.Error;
             }
             return SteamGuardServiceResponse.Error;
         }

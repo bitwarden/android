@@ -82,13 +82,14 @@
 
                     <Button 
                         Text="Request E-Mail Code"
+                        IsVisible="{Binding NeedCredentials}"
                         Command="{Binding SubmitUsernamePasswordCommand}"/>
 
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
 
 
-                <StackLayout StyleClass="box" IsEnabled="{Binding NeedCaptcha}">
+                <StackLayout StyleClass="box" IsVisible="{Binding ShowCaptcha}" IsEnabled="{Binding NeedCaptcha}">
                     <Label  
                         Text="Answer Captcha"
                         StyleClass="box-header, box-header-platform"/>
@@ -111,11 +112,12 @@
                     </StackLayout>
                     <Button 
                         Text="Submit Captcha"
+                        IsVisible="{Binding NeedCaptcha}"
                         Command="{Binding SubmitCaptchaCommand}"/>
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
 
-                <StackLayout StyleClass="box" IsEnabled="{Binding NeedEmailCode}">
+                <StackLayout StyleClass="box" IsVisible="{Binding ShowEmailCode}" IsEnabled="{Binding NeedEmailCode}">
                     <Label 
                         Text="Enter the E-Mail Code you received"
                         StyleClass="box-header, box-header-platform"/>
@@ -132,11 +134,12 @@
                     </StackLayout>
                     <Button 
                         Text="Request SMS Code"
+                        IsVisible="{Binding NeedEmailCode}"
                         Command="{Binding SubmitEmailCodeCommand}"/>
                     <BoxView StyleClass="box-row-separator" />
                 </StackLayout>
 
-                <StackLayout StyleClass="box" IsEnabled="{Binding NeedSMSCode}">
+                <StackLayout StyleClass="box" IsVisible="{Binding ShowSMSCode}" IsEnabled="{Binding NeedSMSCode}">
                     <Label 
                         Text="Enter the SMS Code you received"
                         StyleClass="box-header, box-header-platform"/>
@@ -152,6 +155,7 @@
                     </StackLayout>
                     <Button 
                         Text="Finish"
+                        IsVisible="{Binding NeedSMSCode}"
                         Command="{Binding SubmitSMSCodeCommand}"/>
                 </StackLayout>
             </StackLayout>

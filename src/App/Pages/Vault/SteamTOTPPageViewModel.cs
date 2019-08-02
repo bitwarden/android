@@ -27,12 +27,19 @@ namespace Bit.App.Pages
 
         private bool _needCredentials = true;
         public bool NeedCredentials { get { return _needCredentials; } set { _needCredentials = value; TriggerPropertyChanged(nameof(NeedCredentials)); } }
-        private bool _needCaptcha = true;
-        public bool NeedCaptcha { get { return _needCaptcha; } set { _needCaptcha = value; TriggerPropertyChanged(nameof(NeedCaptcha)); } }
-        private bool _needEmailCode = true;
-        public bool NeedEmailCode { get { return _needEmailCode; } set { _needEmailCode = value; TriggerPropertyChanged(nameof(NeedEmailCode)); } }
-        private bool _needSMSCode = true;
-        public bool NeedSMSCode { get { return _needSMSCode; } set { _needSMSCode = value; TriggerPropertyChanged(nameof(NeedSMSCode)); } }
+        private bool _needCaptcha;
+        public bool NeedCaptcha { get { return _needCaptcha; } set { _needCaptcha = value; if (value) ShowCaptcha = true; TriggerPropertyChanged(nameof(NeedCaptcha)); } }
+        private bool _needEmailCode;
+        public bool NeedEmailCode { get { return _needEmailCode; } set { _needEmailCode = value; if (value) ShowEmailCode = true; TriggerPropertyChanged(nameof(NeedEmailCode)); } }
+        private bool _needSMSCode;
+        public bool NeedSMSCode { get { return _needSMSCode; } set { _needSMSCode = value; if (value) ShowSMSCode = true; TriggerPropertyChanged(nameof(NeedSMSCode)); } }
+
+        private bool _showCaptcha;
+        public bool ShowCaptcha { get { return _showCaptcha; } set { _showCaptcha = value; TriggerPropertyChanged(nameof(ShowCaptcha)); } }
+        private bool _showEmailCode;
+        public bool ShowEmailCode { get { return _showEmailCode; } set { _showEmailCode = value; TriggerPropertyChanged(nameof(ShowEmailCode)); } }
+        private bool _showSMSCode;
+        public bool ShowSMSCode { get { return _showSMSCode; } set { _showSMSCode = value; TriggerPropertyChanged(nameof(ShowSMSCode)); } }
 
         public string ShowPasswordIcon => ShowPassword ? "" : "";
 

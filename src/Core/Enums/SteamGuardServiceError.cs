@@ -7,6 +7,7 @@
         EmptyResponse,
         CorruptResponse,
         GuardSyncFailed,
-        SuccessMissing
+        SuccessMissing,
+        AllreadyConnectedSteamguard,
     }
 }
