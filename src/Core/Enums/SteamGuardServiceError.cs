@@ -9,5 +9,7 @@
         GuardSyncFailed,
         SuccessMissing,
         AllreadyConnectedSteamguard,
+        LoginFailedTooOften,
+        RSAFailed,
     }
 }

@@ -150,7 +150,7 @@ namespace Bit.App.Services.Steam
 
         private (Status, SteamSession) EvaluateLoginResponse(LoginResponse loginResponse, CookieContainer cookieContainer)
         {
-            if (loginResponse.Message != null && loginResponse.Message.ToLower().Contains("incorrect login"))
+            if (loginResponse.Message != null && loginResponse.Message.ToLower().Contains("password") && loginResponse.Message.ToLower().Contains("incorrect"))
             {
                 return (Status.BadCredentials, null);
             }

@@ -131,7 +131,7 @@
                             IsTextPredictionEnabled="False"
                             StyleClass="box-value"
                             Text="{Binding EmailCode}"/>
-                    </StackLayout>
+                        </StackLayout>
                     <Button 
                         Text="Request SMS Code"
                         IsVisible="{Binding NeedEmailCode}"

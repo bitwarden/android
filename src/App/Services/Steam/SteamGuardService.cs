@@ -49,7 +49,7 @@ namespace Bit.App.Services.Steam
             }
         }
 
-        public string TOTPSecret => _steamGuardData.SharedSecret;
+        public string TOTPSecret { get { return _steamGuardData.URI.Split('=')[1].Replace("&issuer", ""); } }
 
         public string RecoveryCode => _steamGuardData.RevocationCode;
 
@@ -200,6 +200,12 @@ namespace Bit.App.Services.Steam
                 case SteamSessionCreateService.Status.Need2FA:
                     Error = SteamGuardServiceError.AllreadyConnectedSteamguard;
                     return SteamGuardServiceResponse.Error;
+                case SteamSessionCreateService.Status.TooManyFailedLogins:
+                    Error = SteamGuardServiceError.LoginFailedTooOften;
+                    return SteamGuardServiceResponse.Error;
+                case SteamSessionCreateService.Status.BadRSA:
+                    Error = SteamGuardServiceError.RSAFailed;
+                    return SteamGuardServiceResponse.Error;
             }
             return SteamGuardServiceResponse.Error;
         }
@@ -214,6 +220,15 @@ namespace Bit.App.Services.Steam
                     return SteamGuardServiceResponse.NeedEmailCode;
                 case SteamSessionCreateService.Status.NeedCaptcha:
                     return SteamGuardServiceResponse.WrongCaptcha;
+                case SteamSessionCreateService.Status.Need2FA:
+                    Error = SteamGuardServiceError.AllreadyConnectedSteamguard;
+                    return SteamGuardServiceResponse.Error;
+                case SteamSessionCreateService.Status.TooManyFailedLogins:
+                    Error = SteamGuardServiceError.LoginFailedTooOften;
+                    return SteamGuardServiceResponse.Error;
+                case SteamSessionCreateService.Status.BadRSA:
+                    Error = SteamGuardServiceError.RSAFailed;
+                    return SteamGuardServiceResponse.Error;
             }
             return SteamGuardServiceResponse.Error;
         }
@@ -228,6 +243,15 @@ namespace Bit.App.Services.Steam
                     return SteamGuardServiceResponse.WrongEmailCode;
                 case SteamSessionCreateService.Status.Okay:
                     return SteamGuardServiceResponse.NeedSMSCode;
+                case SteamSessionCreateService.Status.Need2FA:
+                    Error = SteamGuardServiceError.AllreadyConnectedSteamguard;
+                    return SteamGuardServiceResponse.Error;
+                case SteamSessionCreateService.Status.TooManyFailedLogins:
+                    Error = SteamGuardServiceError.LoginFailedTooOften;
+                    return SteamGuardServiceResponse.Error;
+                case SteamSessionCreateService.Status.BadRSA:
+                    Error = SteamGuardServiceError.RSAFailed;
+                    return SteamGuardServiceResponse.Error;
             }
             return SteamGuardServiceResponse.Error;
 

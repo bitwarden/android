@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using Bit.App.Abstractions;
 using Bit.App.Services.Steam;
@@ -55,12 +56,31 @@ namespace Bit.App.Pages
         }
 
 
-        private string _status = "test";
+        private string _status = "Please enter your credentials";
         public string Status { get { return _status; } set { _status = value; TriggerPropertyChanged(nameof(Status)); } }
 
         private ISteamGuardService steamGuardService = new SteamGuardService();
  
         public Action<string, string> SteamLinkedCallback;
+
+        private string statusWait = "Please wait, connecting to Steam servers...";
+        private string statusWrongCredential = "Wrong Credentials, please check your username and password!";
+        private string statusNeedCaptcha = "Please enter the Captcha";
+        private string statusWrongCaptcha = "Please try again, the Captcha you entered seems to be incorrect";
+        private string statusNeedEmailCode = "Please enter the email code you received";
+        private string statusWrongEmailCode = "Please enter the correct email code. The code supplied was rejected!";
+        private string statusNeedSMSCode = "Please enter the SMS code you received";
+        private string statusWrongSMSCode = "Please enter the correct SMS code. The code supplied was rejected!";
+
+        private string statusErrorAllreadyConnectedSteamguard = "It seems like you have allready connected SteamGuard to an other device. Please disconnect it and try again.";
+        private string statusErrorCorruptRespone = "The Steam server replied with a response we couldn't parse. Maybe try again later.";
+        private string statusErrorEmptyResponse = "The Steam server replied nothing. Maybe try again later.";
+        private string statusErrorGeneral = "Something unhandled went wrong. Try again";
+        private string statusErrorGuardSyncFailed = "We failed to sync the SteamGuard code with the Steam server. Try checking if your systems time is set correctly.";
+        private string statusErrorNone = "We failed but we didn't. This should not occur";
+        private string statusErrorSuccessMissing = "Despite nothing wrong being detected, the sign in failed";
+        private string statusErrorRSAFailed = "We couldn't encrypt your password to send it to Steam. Try restarting the application";
+        private string statusErrorLoginFailedTooOften = "You tried signing in to Steam unsucessfully too often. Try again later or from an other network";
 
         public SteamTOTPPageViewModel()
         {
@@ -71,19 +91,63 @@ namespace Bit.App.Pages
             TogglePasswordCommand = new Command(TogglePassword);
         }
 
+        private void HandleServiceResponseError()
+        {
+            switch (steamGuardService.Error)
+            {
+                case SteamGuardServiceError.AllreadyConnectedSteamguard:
+                    Status = statusErrorAllreadyConnectedSteamguard;
+                    break;
+                case SteamGuardServiceError.CorruptResponse:
+                    Status = statusErrorCorruptRespone;
+                    break;
+                case SteamGuardServiceError.EmptyResponse:
+                    Status = statusErrorEmptyResponse;
+                    break;
+                case SteamGuardServiceError.General:
+                    Status = statusErrorGeneral;
+                    break;
+                case SteamGuardServiceError.GuardSyncFailed:
+                    Status = statusErrorGuardSyncFailed;
+                    break;
+                case SteamGuardServiceError.None:
+                    Status = statusErrorNone;
+                    break;
+                case SteamGuardServiceError.SuccessMissing:
+                    Status = statusErrorSuccessMissing;
+                    break;
+                case SteamGuardServiceError.LoginFailedTooOften:
+                    Status = statusErrorLoginFailedTooOften;
+                    break;
+                case SteamGuardServiceError.RSAFailed:
+                    Status = statusErrorRSAFailed;
+                    break;
+            }
+        }
+
         public async void SubmitUsernamePassword()
         {
             if(!string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Password))
             {
                 NeedCredentials = false;
+                Status = statusWait;
                 switch(await steamGuardService.SubmitUsernamePassword(Username, Password))
                 {
                     case SteamGuardServiceResponse.NeedCaptcha:
                         CaptchaURI = new Uri("https://steamcommunity.com/public/captcha.php?gid=" + steamGuardService.CaptchaGID);
+                        Status = statusNeedEmailCode;
                         NeedCaptcha = true;
                         break;
                     case SteamGuardServiceResponse.NeedEmailCode:
+                        Status = statusNeedEmailCode;
                         NeedEmailCode = true;
+                        break;
+                    case SteamGuardServiceResponse.WrongCredentials:
+                        Status = statusWrongCredential;
+                        NeedCredentials = true;
+                        break;
+                    case SteamGuardServiceResponse.Error:
+                        HandleServiceResponseError();
                         break;
                 }
             }
@@ -94,14 +158,20 @@ namespace Bit.App.Pages
             if (!string.IsNullOrEmpty(Captcha))
             {
                 NeedCaptcha = false;
+                Status = statusWait;
                 switch (await steamGuardService.SubmitCaptcha(Captcha))
                 {
-                    case SteamGuardServiceResponse.NeedCaptcha:
+                    case SteamGuardServiceResponse.WrongCaptcha:
                         CaptchaURI = new Uri("https://steamcommunity.com/public/captcha.php?gid=" + steamGuardService.CaptchaGID);
                         NeedCaptcha = true;
+                        Status = statusWrongCaptcha;
                         break;
                     case SteamGuardServiceResponse.NeedEmailCode:
                         NeedEmailCode = true;
+                        Status = statusNeedEmailCode;
+                        break;
+                    case SteamGuardServiceResponse.Error:
+                        HandleServiceResponseError();
                         break;
                 }
             }
@@ -112,14 +182,20 @@ namespace Bit.App.Pages
             if (!string.IsNullOrEmpty(EmailCode))
             {
                 NeedEmailCode = false;
+                Status = statusWait;
                 switch (await steamGuardService.SubmitEmailCode(EmailCode))
                 {
                     case SteamGuardServiceResponse.NeedSMSCode:
                         steamGuardService.RequestSMSCode();
                         NeedSMSCode = true;
+                        Status = statusNeedSMSCode;
                         break;
-                    case SteamGuardServiceResponse.NeedEmailCode:
+                    case SteamGuardServiceResponse.WrongEmailCode:
                         NeedEmailCode = true;
+                        Status = statusWrongEmailCode;
+                        break;
+                    case SteamGuardServiceResponse.Error:
+                        HandleServiceResponseError();
                         break;
                 }
             }
@@ -130,13 +206,18 @@ namespace Bit.App.Pages
             if (!string.IsNullOrEmpty(SMSCode))
             {
                 NeedSMSCode = false;
+                Status = statusWait;
                 switch (await steamGuardService.SubmitSMSCode(SMSCode))
                 {
-                    case SteamGuardServiceResponse.NeedSMSCode:
+                    case SteamGuardServiceResponse.WrongSMSCode:
                         NeedSMSCode = true;
+                        Status = statusWrongSMSCode;
                         break;
                     case SteamGuardServiceResponse.Okay:
                         SteamLinkedCallback(steamGuardService.TOTPSecret, steamGuardService.RecoveryCode);
+                        break;
+                    case SteamGuardServiceResponse.Error:
+                        HandleServiceResponseError();
                         break;
                 }
             }
