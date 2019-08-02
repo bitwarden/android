@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace Bit.App.Pages
 {
-    public class SteamTOTPPageViewModel : BaseViewModel
+    public class SteamTotpPageViewModel : BaseViewModel
     {
         private string _password;
         public string Password { get => _password; set => SetProperty(ref _password, value); }
@@ -84,7 +84,7 @@ namespace Bit.App.Pages
         private string statusErrorRSAFailed = "We couldn't encrypt your password to send it to Steam. Try restarting the application";
         private string statusErrorLoginFailedTooOften = "You tried signing in to Steam unsucessfully too often. Try again later or from an other network";
 
-        public SteamTOTPPageViewModel()
+        public SteamTotpPageViewModel()
         {
             SubmitUsernamePasswordCommand = new Command(SubmitUsernamePassword);
             SubmitCaptchaCommand = new Command(SubmitCaptcha);

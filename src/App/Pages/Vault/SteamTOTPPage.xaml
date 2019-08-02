@@ -10,7 +10,7 @@
              x:Class="Bit.App.Pages.SteamTotpPage"
              Title="Connect to Steam">
     <ContentPage.BindingContext>
-        <pages:SteamTOTPPageViewModel />
+        <pages:SteamTotpPageViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Resources>
         <ResourceDictionary>

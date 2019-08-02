@@ -7,13 +7,13 @@ namespace Bit.App.Pages
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SteamTotpPage : ContentPage
     {
-        private SteamTOTPPageViewModel _vm;
+        private SteamTotpPageViewModel _vm;
 
         public SteamTotpPage(Action<string, string> callback, string password = "", string username = "")
         {
             InitializeComponent();
 
-            _vm = (BindingContext as SteamTOTPPageViewModel);
+            _vm = (BindingContext as SteamTotpPageViewModel);
             _vm.SteamLinkedCallback = callback;
             _vm.Password = password;
             _vm.Username = username;
