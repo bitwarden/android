@@ -160,6 +160,12 @@ namespace Bit.App.Migration
             await tokenService.SetTokensAsync(oldToken, oldRefreshToken);
             await userService.SetInformationAsync(oldUserId, oldEmail, oldKdf, oldKdfIterations);
 
+            // Save fingerprint
+            if(oldFingerprint)
+            {
+                await storageService.SaveAsync(Constants.FingerprintUnlockKey, true);
+            }
+
             var newKey = new Core.Models.Domain.SymmetricCryptoKey(oldKey.Key);
             await cryptoService.SetKeyAsync(newKey);
             // Key hash is unavailable in old version, store old key until we can move it to key hash
@@ -167,13 +173,8 @@ namespace Bit.App.Migration
             await cryptoService.SetEncKeyAsync(oldEncKey);
             await cryptoService.SetEncPrivateKeyAsync(oldEncPrivateKey);
 
-            // Save fingerprint/pin
-
-            if(oldFingerprint)
-            {
-                await storageService.SaveAsync(Constants.FingerprintUnlockKey, true);
-            }
-            else if(!string.IsNullOrWhiteSpace(oldPin))
+            // Save pin
+            if(!oldFingerprint && !string.IsNullOrWhiteSpace(oldPin))
             {
                 var pinKey = await cryptoService.MakePinKeyAysnc(oldPin, oldEmail, oldKdf, oldKdfIterations);
                 var pinProtectedKey = await cryptoService.EncryptAsync(oldKeyBytes, pinKey);
