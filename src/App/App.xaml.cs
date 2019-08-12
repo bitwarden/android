@@ -367,7 +367,7 @@ namespace Bit.App
             Task.Run(async () =>
             {
                 var lastSync = await _syncService.GetLastSyncAsync();
-                if(DateTime.UtcNow - lastSync > TimeSpan.FromMinutes(30))
+                if(lastSync == null || ((DateTime.UtcNow - lastSync) > TimeSpan.FromMinutes(30)))
                 {
                     await _syncService.FullSyncAsync(false);
                 }
