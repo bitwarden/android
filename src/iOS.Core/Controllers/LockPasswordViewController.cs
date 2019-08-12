@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UIKit;
 using Foundation;
 using Bit.iOS.Core.Views;
@@ -194,6 +194,8 @@ namespace Bit.iOS.Core.Controllers
 
         private void DoContinue()
         {
+            _lockService.PinLocked = false;
+            _lockService.FingerprintLocked = false;
             MasterPasswordCell.TextField.ResignFirstResponder();
             Success();
         }

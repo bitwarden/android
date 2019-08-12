@@ -287,6 +287,8 @@ namespace Bit.App.Pages
 
         private async Task DoContinueAsync()
         {
+            _lockService.PinLocked = false;
+            _lockService.FingerprintLocked = false;
             var disableFavicon = await _storageService.GetAsync<bool?>(Constants.DisableFaviconKey);
             await _stateService.SaveAsync(Constants.DisableFaviconKey, disableFavicon.GetValueOrDefault());
             _messagingService.Send("unlocked");
