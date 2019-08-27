@@ -1,4 +1,4 @@
-using AuthenticationServices;
+﻿using AuthenticationServices;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
@@ -191,8 +191,8 @@ namespace Bit.iOS.Autofill
 
         private async Task ProvideCredentialAsync()
         {
-            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService");
-            var cipher = await cipherService.GetAsync(_context.CredentialIdentity.RecordIdentifier);
+            var cipherService = ServiceContainer.Resolve<ICipherService>("cipherService", true);
+            var cipher = await cipherService?.GetAsync(_context.CredentialIdentity.RecordIdentifier);
             if(cipher == null || cipher.Type != Bit.Core.Enums.CipherType.Login)
             {
                 var err = new NSError(new NSString("ASExtensionErrorDomain"),
