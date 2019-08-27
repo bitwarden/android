@@ -401,12 +401,13 @@ namespace Bit.App.Pages
                 return false;
             }
 
-            Cipher.Fields = Fields != null && Fields.Any() ? Fields.Select(f => f.Field).ToList() : null;
+            Cipher.Fields = Fields != null && Fields.Any() ?
+                Fields.Where(f => f != null).Select(f => f.Field).ToList() : null;
             if(Cipher.Login != null)
             {
                 Cipher.Login.Uris = Uris?.ToList();
                 if(!EditMode && Cipher.Type == CipherType.Login && (Cipher.Login.Uris?.Count ?? 0) == 1 &&
-                    string.IsNullOrWhiteSpace(Cipher.Login.Uris.First().Uri))
+                    string.IsNullOrWhiteSpace(Cipher.Login.Uris.First()?.Uri))
                 {
                     Cipher.Login.Uris = null;
                 }
@@ -414,7 +415,7 @@ namespace Bit.App.Pages
 
             if(!EditMode && Cipher.OrganizationId != null)
             {
-                if(!Collections?.Any(c => c.Checked) ?? true)
+                if(!Collections?.Any(c => c?.Checked ?? false) ?? true)
                 {
                     await Page.DisplayAlert(AppResources.AnErrorHasOccurred, AppResources.SelectOneCollection,
                         AppResources.Ok);
@@ -422,7 +423,8 @@ namespace Bit.App.Pages
                 }
 
                 Cipher.CollectionIds = Collections.Any() ?
-                    new HashSet<string>(Collections.Where(c => c.Checked).Select(c => c.Collection.Id)) : null;
+                    new HashSet<string>(Collections.Where(c => c?.Checked ?? false &&
+                        c.Collection != null).Select(c => c.Collection.Id)) : null;
             }
 
             var cipher = await _cipherService.EncryptAsync(Cipher);
