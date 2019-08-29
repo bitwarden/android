@@ -41,6 +41,11 @@ namespace Bit.iOS.Core.Views
                 BackgroundColor = ThemeHelpers.BackgroundColor
             };
 
+            if(!ThemeHelpers.LightTheme)
+            {
+                TextField.KeyboardAppearance = UIKeyboardAppearance.Dark;
+            }
+
             var width = (float)UIScreen.MainScreen.Bounds.Width;
             var toolbar = new UIToolbar(new RectangleF(0, 0, width, 44))
             {

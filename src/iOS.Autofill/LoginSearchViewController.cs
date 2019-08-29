@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using Bit.iOS.Autofill.Models;
 using Foundation;
 using UIKit;
@@ -27,6 +27,10 @@ namespace Bit.iOS.Autofill
             CancelBarButton.Title = AppResources.Cancel;
             SearchBar.Placeholder = AppResources.Search;
             SearchBar.BackgroundColor = SearchBar.BarTintColor = ThemeHelpers.ListHeaderBackgroundColor;
+            if(!ThemeHelpers.LightTheme)
+            {
+                SearchBar.KeyboardAppearance = UIKeyboardAppearance.Dark;
+            }
 
             TableView.RowHeight = UITableView.AutomaticDimension;
             TableView.EstimatedRowHeight = 44;

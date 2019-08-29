@@ -1,22 +1,18 @@
 ﻿using Bit.iOS.Renderers;
-using Bit.iOS.Utilities;
 using UIKit;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.iOS;
 
-[assembly: ExportRenderer(typeof(Picker), typeof(CustomPickerRenderer))]
+[assembly: ExportRenderer(typeof(SearchBar), typeof(CustomSearchBarRenderer))]
 namespace Bit.iOS.Renderers
 {
-    public class CustomPickerRenderer : PickerRenderer
+    public class CustomSearchBarRenderer : SearchBarRenderer
     {
-        protected override void OnElementChanged(ElementChangedEventArgs<Picker> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<SearchBar> e)
         {
             base.OnElementChanged(e);
-            if(e.NewElement is Picker)
+            if(e.NewElement is SearchBar)
             {
-                var descriptor = UIFontDescriptor.PreferredBody;
-                Control.Font = UIFont.FromDescriptor(descriptor, descriptor.PointSize);
-                iOSHelpers.SetBottomBorder(Control);
                 UpdateKeyboardAppearance();
             }
         }

@@ -18,6 +18,7 @@ namespace Bit.iOS.Renderers
                 Control.ClearButtonMode = UITextFieldViewMode.WhileEditing;
                 UpdateTintColor();
                 UpdateFontSize();
+                UpdateKeyboardAppearance();
                 iOSHelpers.SetBottomBorder(Control);
             }
         }
@@ -56,6 +57,14 @@ namespace Bit.iOS.Renderers
         private void UpdateTintColor()
         {
             Control.TintColor = Element.TextColor.ToUIColor();
+        }
+
+        private void UpdateKeyboardAppearance()
+        {
+            if(!Core.Utilities.ThemeHelpers.LightTheme)
+            {
+                Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
+            }
         }
     }
 }

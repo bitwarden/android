@@ -8,6 +8,7 @@ using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Enums;
 using Bit.Core.Models.View;
+using Bit.iOS.Core.Utilities;
 using Bit.iOS.Core.Views;
 using CoreGraphics;
 using Foundation;
@@ -202,6 +203,10 @@ namespace Bit.iOS.Core.Services
                 if(numericKeyboard)
                 {
                     input.KeyboardType = UIKeyboardType.NumberPad;
+                }
+                if(!ThemeHelpers.LightTheme)
+                {
+                    input.KeyboardAppearance = UIKeyboardAppearance.Dark;
                 }
             });
             var vc = GetPresentedViewController();

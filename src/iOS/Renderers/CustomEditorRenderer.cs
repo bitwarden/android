@@ -20,6 +20,7 @@ namespace Bit.iOS.Renderers
                 Control.TextContainerInset = new UIEdgeInsets(0, 0, 0, 0);
                 Control.TextContainer.LineFragmentPadding = 0;
                 UpdateTintColor();
+                UpdateKeyboardAppearance();
             }
         }
 
@@ -35,6 +36,14 @@ namespace Bit.iOS.Renderers
         private void UpdateTintColor()
         {
             Control.TintColor = Element.TextColor.ToUIColor();
+        }
+
+        private void UpdateKeyboardAppearance()
+        {
+            if(!Core.Utilities.ThemeHelpers.LightTheme)
+            {
+                Control.KeyboardAppearance = UIKeyboardAppearance.Dark;
+            }
         }
     }
 }

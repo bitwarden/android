@@ -41,6 +41,11 @@ namespace Bit.iOS.Core.Views
                     BackgroundColor = ThemeHelpers.BackgroundColor
                 };
 
+                if(!ThemeHelpers.LightTheme)
+                {
+                    TextView.KeyboardAppearance = UIKeyboardAppearance.Dark;
+                }
+
                 ContentView.Add(TextView);
                 ContentView.AddConstraints(new NSLayoutConstraint[] {
                     NSLayoutConstraint.Create(TextView, NSLayoutAttribute.Leading, NSLayoutRelation.Equal, ContentView, NSLayoutAttribute.Leading, 1f, 15f),
@@ -77,6 +82,11 @@ namespace Bit.iOS.Core.Views
                     TintColor = ThemeHelpers.TextColor,
                     BackgroundColor = ThemeHelpers.BackgroundColor
                 };
+
+                if(!ThemeHelpers.LightTheme)
+                {
+                    TextField.KeyboardAppearance = UIKeyboardAppearance.Dark;
+                }
 
                 if(useLabelAsPlaceholder)
                 {
