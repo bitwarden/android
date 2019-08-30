@@ -114,38 +114,14 @@ namespace Bit.Droid.Services
 
         public bool OpenFile(byte[] fileData, string id, string fileName)
         {
-            if(!CanOpenFile(fileName))
-            {
-                return false;
-            }
-            var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
-            if(extension == null)
-            {
-                return false;
-            }
-            var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
-            if(mimeType == null)
-            {
-                return false;
-            }
-
-            var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var cachePath = activity.CacheDir;
-            var filePath = Path.Combine(cachePath.Path, fileName);
-            File.WriteAllBytes(filePath, fileData);
-            var file = new Java.IO.File(cachePath, fileName);
-            if(!file.IsFile)
-            {
-                return false;
-            }
-
             try
             {
-                var intent = new Intent(Intent.ActionView);
-                var uri = FileProvider.GetUriForFile(activity.ApplicationContext,
-                    "com.x8bit.bitwarden.fileprovider", file);
-                intent.SetDataAndType(uri, mimeType);
-                intent.SetFlags(ActivityFlags.GrantReadUriPermission);
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var intent = BuildOpenFileIntent(fileData, fileName);
+                if(intent == null)
+                {
+                    return false;
+                }
                 activity.StartActivity(intent);
                 return true;
             }
@@ -155,21 +131,56 @@ namespace Bit.Droid.Services
 
         public bool CanOpenFile(string fileName)
         {
+            try
+            {
+                var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
+                var intent = BuildOpenFileIntent(new byte[0], string.Concat("opentest_", fileName));
+                if(intent == null)
+                {
+                    return false;
+                }
+                var activities = activity.PackageManager.QueryIntentActivities(intent,
+                    PackageInfoFlags.MatchDefaultOnly);
+                return (activities?.Count ?? 0) > 0;
+            }
+            catch { }
+            return false;
+        }
+
+        private Intent BuildOpenFileIntent(byte[] fileData, string fileName)
+        {
             var extension = MimeTypeMap.GetFileExtensionFromUrl(fileName.Replace(' ', '_').ToLower());
             if(extension == null)
             {
-                return false;
+                return null;
             }
             var mimeType = MimeTypeMap.Singleton.GetMimeTypeFromExtension(extension);
             if(mimeType == null)
             {
-                return false;
+                return null;
             }
+
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var intent = new Intent(Intent.ActionView);
-            intent.SetType(mimeType);
-            var activities = activity.PackageManager.QueryIntentActivities(intent, PackageInfoFlags.MatchDefaultOnly);
-            return (activities?.Count ?? 0) > 0;
+            var cachePath = activity.CacheDir;
+            var filePath = Path.Combine(cachePath.Path, fileName);
+            File.WriteAllBytes(filePath, fileData);
+            var file = new Java.IO.File(cachePath, fileName);
+            if(!file.IsFile)
+            {
+                return null;
+            }
+
+            try
+            {
+                var intent = new Intent(Intent.ActionView);
+                var uri = FileProvider.GetUriForFile(activity.ApplicationContext,
+                    "com.x8bit.bitwarden.fileprovider", file);
+                intent.SetDataAndType(uri, mimeType);
+                intent.SetFlags(ActivityFlags.GrantReadUriPermission);
+                return intent;
+            }
+            catch { }
+            return null;
         }
 
         public async Task ClearCacheAsync()
@@ -185,7 +196,8 @@ namespace Bit.Droid.Services
         public Task SelectFileAsync()
         {
             var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-            var hasStorageWritePermission = !_cameraPermissionsDenied && HasPermission(Manifest.Permission.WriteExternalStorage);
+            var hasStorageWritePermission = !_cameraPermissionsDenied &&
+                HasPermission(Manifest.Permission.WriteExternalStorage);
             var additionalIntents = new List<IParcelable>();
             if(activity.PackageManager.HasSystemFeature(PackageManager.FeatureCamera))
             {
@@ -543,7 +555,8 @@ namespace Bit.Droid.Services
             try
             {
                 var activity = (MainActivity)CrossCurrentActivity.Current.Activity;
-                var afm = (AutofillManager)activity.GetSystemService(Java.Lang.Class.FromType(typeof(AutofillManager)));
+                var afm = (AutofillManager)activity.GetSystemService(
+                    Java.Lang.Class.FromType(typeof(AutofillManager)));
                 return afm.IsEnabled && afm.HasEnabledAutofillServices;
             }
             catch
