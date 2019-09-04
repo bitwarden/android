@@ -25,18 +25,22 @@ namespace Bit.Core.Services
         private readonly ITokenService _tokenService;
         private readonly IPlatformUtilsService _platformUtilsService;
         private readonly Func<bool, Task> _logoutCallbackAsync;
-        private string _deviceType;
 
         public ApiService(
             ITokenService tokenService,
             IPlatformUtilsService platformUtilsService,
-            Func<bool, Task> logoutCallbackAsync)
+            Func<bool, Task> logoutCallbackAsync,
+            string customUserAgent = null)
         {
             _tokenService = tokenService;
             _platformUtilsService = platformUtilsService;
             _logoutCallbackAsync = logoutCallbackAsync;
             var device = _platformUtilsService.GetDevice();
-            _deviceType = device.ToString();
+            _httpClient.DefaultRequestHeaders.Add("Device-Type", device.ToString());
+            if(!string.IsNullOrWhiteSpace(customUserAgent))
+            {
+                _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(customUserAgent);
+            }
         }
 
         public bool UrlsSet { get; private set; }
@@ -86,7 +90,6 @@ namespace Bit.Core.Services
                 Content = new FormUrlEncodedContent(request.ToIdentityToken(_platformUtilsService.IdentityClientId))
             };
             requestMessage.Headers.Add("Accept", "application/json");
-            requestMessage.Headers.Add("Device-Type", _deviceType);
 
             HttpResponseMessage response;
             try
@@ -304,7 +307,6 @@ namespace Bit.Core.Services
             {
                 requestMessage.Method = HttpMethod.Post;
                 requestMessage.RequestUri = new Uri(string.Concat(EventsBaseUrl, "/collect"));
-                requestMessage.Headers.Add("Device-Type", _deviceType);
                 var authHeader = await GetActiveBearerTokenAsync();
                 requestMessage.Headers.Add("Authorization", string.Concat("Bearer ", authHeader));
                 requestMessage.Content = new StringContent(JsonConvert.SerializeObject(request, _jsonSettings),
@@ -377,7 +379,6 @@ namespace Bit.Core.Services
                     }
                 }
 
-                requestMessage.Headers.Add("Device-Type", _deviceType);
                 if(authed)
                 {
                     var authHeader = await GetActiveBearerTokenAsync();
@@ -432,7 +433,6 @@ namespace Bit.Core.Services
                 })
             };
             requestMessage.Headers.Add("Accept", "application/json");
-            requestMessage.Headers.Add("Device-Type", _deviceType);
 
             HttpResponseMessage response;
             try

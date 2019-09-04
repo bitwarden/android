@@ -6,6 +6,7 @@ namespace Bit.App.Abstractions
 {
     public interface IDeviceActionService
     {
+        string DeviceUserAgent { get; }
         DeviceType DeviceType { get; }
         void Toast(string text, bool longDuration = false);
         bool LaunchApp(string appName);

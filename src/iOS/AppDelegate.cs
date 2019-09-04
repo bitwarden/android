@@ -287,7 +287,8 @@ namespace Bit.iOS
 
             iOSCoreHelpers.RegisterLocalServices();
             RegisterPush();
-            ServiceContainer.Init();
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            ServiceContainer.Init(deviceActionService.DeviceUserAgent);
             iOSCoreHelpers.RegisterHockeyApp();
             _pushHandler = new iOSPushNotificationHandler(
                 ServiceContainer.Resolve<IPushNotificationListenerService>("pushNotificationListenerService"));

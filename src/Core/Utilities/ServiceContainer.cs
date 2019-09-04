@@ -11,7 +11,7 @@ namespace Bit.Core.Utilities
         public static Dictionary<string, object> RegisteredServices { get; set; } = new Dictionary<string, object>();
         public static bool Inited { get; set; }
 
-        public static void Init()
+        public static void Init(string customUserAgent = null)
         {
             if(Inited)
             {
@@ -31,7 +31,8 @@ namespace Bit.Core.Utilities
             var cryptoFunctionService = new PclCryptoFunctionService(cryptoPrimitiveService);
             var cryptoService = new CryptoService(storageService, secureStorageService, cryptoFunctionService);
             var tokenService = new TokenService(storageService);
-            var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) => Task.FromResult(0));
+            var apiService = new ApiService(tokenService, platformUtilsService, (bool expired) => Task.FromResult(0),
+                customUserAgent);
             var appIdService = new AppIdService(storageService);
             var userService = new UserService(storageService, tokenService);
             var settingsService = new SettingsService(userService, storageService);

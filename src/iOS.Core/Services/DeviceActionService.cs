@@ -26,6 +26,7 @@ namespace Bit.iOS.Core.Services
         private readonly IMessagingService _messagingService;
         private Toast _toast;
         private UIAlertController _progressAlert;
+        private string _userAgent;
 
         public DeviceActionService(
             IStorageService storageService,
@@ -33,6 +34,19 @@ namespace Bit.iOS.Core.Services
         {
             _storageService = storageService;
             _messagingService = messagingService;
+        }
+
+        public string DeviceUserAgent
+        {
+            get
+            {
+                if(string.IsNullOrWhiteSpace(_userAgent))
+                {
+                    _userAgent = $"Bitwarden_Mobile/{Xamarin.Essentials.AppInfo.VersionString} " +
+                        $"(iOS {UIDevice.CurrentDevice.SystemVersion}; Model {UIDevice.CurrentDevice.Model})";
+                }
+                return _userAgent;
+            }
         }
 
         public DeviceType DeviceType => DeviceType.iOS;
@@ -261,7 +275,7 @@ namespace Bit.iOS.Core.Services
         public int SystemMajorVersion()
         {
             var versionParts = UIDevice.CurrentDevice.SystemVersion.Split('.');
-            if(versionParts.Length > 0 && int.TryParse(versionParts[0], out int version))
+            if(versionParts.Length > 0 && int.TryParse(versionParts[0], out var version))
             {
                 return version;
             }

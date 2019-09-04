@@ -1,4 +1,5 @@
 ﻿using AuthenticationServices;
+using Bit.App.Abstractions;
 using Bit.App.Resources;
 using Bit.Core.Abstractions;
 using Bit.Core.Utilities;
@@ -265,7 +266,8 @@ namespace Bit.iOS.Autofill
                 ServiceContainer.Reset();
             }
             iOSCoreHelpers.RegisterLocalServices();
-            ServiceContainer.Init();
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            ServiceContainer.Init(deviceActionService.DeviceUserAgent);
             if(!_initedHockeyApp)
             {
                 iOSCoreHelpers.RegisterHockeyApp();

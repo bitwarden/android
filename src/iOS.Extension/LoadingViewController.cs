@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using Foundation;
 using UIKit;
@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Bit.iOS.Core.Models;
 using Bit.Core.Utilities;
 using Bit.Core.Abstractions;
+using Bit.App.Abstractions;
 
 namespace Bit.iOS.Extension
 {
@@ -386,7 +387,8 @@ namespace Bit.iOS.Extension
                 ServiceContainer.Reset();
             }
             iOSCoreHelpers.RegisterLocalServices();
-            ServiceContainer.Init();
+            var deviceActionService = ServiceContainer.Resolve<IDeviceActionService>("deviceActionService");
+            ServiceContainer.Init(deviceActionService.DeviceUserAgent);
             if(!_initedHockeyApp)
             {
                 iOSCoreHelpers.RegisterHockeyApp();

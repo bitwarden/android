@@ -40,6 +40,7 @@ namespace Bit.Droid.Services
         private ProgressDialog _progressDialog;
         private bool _cameraPermissionsDenied;
         private Toast _toast;
+        private string _userAgent;
 
         public DeviceActionService(
             IStorageService storageService,
@@ -59,6 +60,19 @@ namespace Bit.Droid.Services
                     _cameraPermissionsDenied = true;
                 }
             });
+        }
+
+        public string DeviceUserAgent
+        {
+            get
+            {
+                if(string.IsNullOrWhiteSpace(_userAgent))
+                {
+                    _userAgent = $"Bitwarden_Mobile/{Xamarin.Essentials.AppInfo.VersionString} " +
+                        $"(Android {Build.VERSION.Release}; SDK {Build.VERSION.Sdk}; Model {Build.Model})";
+                }
+                return _userAgent;
+            }
         }
 
         public DeviceType DeviceType => DeviceType.Android;
