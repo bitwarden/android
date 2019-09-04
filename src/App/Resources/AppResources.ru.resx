@@ -534,7 +534,7 @@
     <value>Немедленно</value>
   </data>
   <data name="LockOptions" xml:space="preserve">
-    <value>Настройки блокировки</value>
+    <value>Параметры блокировки</value>
   </data>
   <data name="LoggingIn" xml:space="preserve">
     <value>Вход...</value>

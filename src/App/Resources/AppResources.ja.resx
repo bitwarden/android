@@ -753,7 +753,7 @@
     <value>状態</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Bitwarden 自動入力サービスから新しいログイン情報を保管庫に追加するのが一番簡単です。設定画面で自動入力サービスの詳細を確認できます。</value>
+    <value>ログイン情報を保管庫に追加する一番簡単な方法はBitwardenの自動入力機能を使うことです。詳しくは「設定」画面に進んでください。</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>自動入力</value>
@@ -1302,7 +1302,7 @@
     <value>パスワード自動入力</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Bitwarden パスワード自動入力拡張機能を使うと、簡単に新しいログイン情報を保管庫に追加できます。設定画面で詳しい使い方をご覧ください。</value>
+    <value>ログイン情報を保管庫に加える一番簡単な方法は、Bitwardenのパスワード自動入力拡張機能を使うことです。詳しい情報は「設定」画面でご覧ください。</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>無効なメールアドレスです。</value>
@@ -1317,7 +1317,7 @@
     <value>ログイン</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>セキュアメモ</value>
+    <value>秘密のメモ</value>
   </data>
   <data name="AllItems" xml:space="preserve">
     <value>すべてのアイテム</value>
@@ -1334,10 +1334,10 @@
     <value>パスワードが漏洩していないか確認する</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>このパスワードは過去に {0} 回漏洩したことがあるため、変更するべきです。</value>
+    <value>このパスワードは過去に {0} 回漏洩しています。変更するべきです。</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>このパスワードは過去に漏洩したデータ内にはないため、安全であると思われます。</value>
+    <value>このパスワードは過去に漏洩したデータにはありません。安全だと思われます。</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
     <value>固有名</value>
@@ -1364,7 +1364,7 @@
     <value>フォルダーの検索</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>検索の種類</value>
+    <value>タイプの検索</value>
   </data>
   <data name="Type" xml:space="preserve">
     <value>タイプ</value>
@@ -1391,7 +1391,7 @@
     <value>アイテムを共有しました。</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>最低でも一つのコレクションを選んでください。</value>
+    <value>コレクションを最低１つは選んでください。</value>
   </data>
   <data name="Share" xml:space="preserve">
     <value>共有</value>
@@ -1426,11 +1426,11 @@
     <value>表示するフォルダーがありません。</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>パスフレーズ</value>
+    <value>指紋句</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>アカウントのパスフレーズ</value>
+    <value>アカウントの指紋句</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
@@ -1498,7 +1498,7 @@
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>選択した時間が経過した後、自動的にクリップボードを消去します。</value>
+    <value>コピー内容をクリップボードから自動的に消去します。</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
@@ -1506,7 +1506,7 @@
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>自動入力などのアクションをする時に、デフォルトでどの方法で URI の一致を検出するか選択します。</value>
+    <value>自動入力などを行うときにデフォルトで使うURI一致検出方法を選択します。</value>
   </data>
   <data name="Theme" xml:space="preserve">
     <value>テーマ</value>
@@ -1542,19 +1542,19 @@
     <value>URI ブラックリスト</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
-    <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
+    <value>ブラックリストに入れたURIでは自動入力を行いません。リストはコンマで区切ってください。（例）"https://twitter.com, androidapp://com.twitter.android"</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
     <value>保存プロンプトを無効化</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>保存プロンプトは、新しいアイテムを入力したときに保管庫に保存するかどうか尋ねるため、自動的に表示されます。</value>
+    <value>保存プロンプトは、新しいアイテムが入力された場合に自動的に表示され、保管庫に保存するよう促します。</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
     <value>アプリ再起動時</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>自動入力を使うと、他のウェブサイトやアプリから Bitwarden 保管庫に、より安全・簡単にアクセスできます。現在 Bitwarden の自動入力サービスを有効にしていないようです。設定画面で自動入力を有効化できます。</value>
+    <value>自動入力を使えば、他のウェブサイトやアプリから Bitwardenの保管庫に簡単に安全にアクセスできます。いまのところ自動入力は有効になっていないようです。自動入力を有効にするには設定画面に行ってください。</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
     <value>アプリを再起動するとテーマの変更が反映されます。</value>

@@ -356,7 +356,7 @@
     <comment>Validation message for when a form field is left blank and is required to be entered.</comment>
   </data>
   <data name="ValueHasBeenCopied" xml:space="preserve">
-    <value>{0} foi copiado.</value>
+    <value>{0} foi copiado(a).</value>
     <comment>Confirmation message after suceessfully copying a value to the clipboard.</comment>
   </data>
   <data name="VerifyFingerprint" xml:space="preserve">

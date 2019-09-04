@@ -412,7 +412,7 @@
     <value>Extensia aplicaţiei Bitwarden</value>
   </data>
   <data name="BitwardenAppExtensionAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden App Extension. Learn more about using the Bitwarden App Extension by navigating to the "Settings" screen.</value>
+    <value>Cea mai ușoară modalitate de a adăuga noi autentificări în seif este din extensia aplicaţiei Bitwarden. Aflați mai multe despre utilizarea extensiei aplicaţiei Bitwarden accesând ecranul "Setări".</value>
   </data>
   <data name="BitwardenAppExtensionDescription" xml:space="preserve">
     <value>Utilizați Bitwarden în Safari și în alte aplicații pentru a completa automat datele de autentificare.</value>
@@ -753,7 +753,7 @@
     <value>Stare</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is from the Bitwarden Auto-fill Service. Learn more about using the Bitwarden Auto-fill Service by navigating to the "Settings" screen.</value>
+    <value>Cea mai ușoară modalitate de a adăuga noi autentificări în seif este din Serviciul de completare automată Bitwarden. Aflați mai multe despre utilizarea Serviciului de completare automată Bitwarden accesând ecranul "Setări".</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Completare automată</value>
@@ -1302,120 +1302,120 @@
     <value>Auto Completare Parolă</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>The easiest way to add new logins to your vault is by using the Bitwarden Password AutoFill extension. Learn more about using the Bitwarden Password AutoFill extension by navigating to the "Settings" screen.</value>
+    <value>Cea mai ușoară modalitate de a adăuga noi autentificări în seif este din extensia aplicaţiei Bitwarden. Aflați mai multe despre utilizarea extensiei aplicaţiei Bitwarden accesând ecranul "Setări".</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
-    <value>Invalid email address.</value>
+    <value>Adresă de email greșită.</value>
   </data>
   <data name="Cards" xml:space="preserve">
-    <value>Cards</value>
+    <value>Carduri</value>
   </data>
   <data name="Identities" xml:space="preserve">
-    <value>Identities</value>
+    <value>Identități</value>
   </data>
   <data name="Logins" xml:space="preserve">
-    <value>Logins</value>
+    <value>Autentificări</value>
   </data>
   <data name="SecureNotes" xml:space="preserve">
-    <value>Secure Notes</value>
+    <value>Notițe securizate</value>
   </data>
   <data name="AllItems" xml:space="preserve">
-    <value>All Items</value>
+    <value>Toate elementele</value>
   </data>
   <data name="URIs" xml:space="preserve">
-    <value>URIs</value>
+    <value>URI-uri</value>
     <comment>Plural form of a URI</comment>
   </data>
   <data name="CheckingPassword" xml:space="preserve">
-    <value>Checking password...</value>
+    <value>Verificare parolă...</value>
     <comment>A loading message when doing an exposed password check.</comment>
   </data>
   <data name="CheckPassword" xml:space="preserve">
-    <value>Check if password has been exposed.</value>
+    <value>Verificare dacă parola a fost dezvăluită.</value>
   </data>
   <data name="PasswordExposed" xml:space="preserve">
-    <value>This password has been exposed {0} time(s) in data breaches. You should change it.</value>
+    <value>Această parolă a fost dezvăluită de {0} ori într-o breșă de date. Ar trebui să o schimbați.</value>
   </data>
   <data name="PasswordSafe" xml:space="preserve">
-    <value>This password was not found in any known data breaches. It should be safe to use.</value>
+    <value>Aceasta parola nu a fost găsită în nicio breșă de date cunoscută. Ar trebui să fie sigură pentru a fi utilizată.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity Name</value>
+    <value>Numele Identității</value>
   </data>
   <data name="Value" xml:space="preserve">
-    <value>Value</value>
+    <value>Valoare</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>Istoric parole</value>
   </data>
   <data name="Types" xml:space="preserve">
-    <value>Types</value>
+    <value>Tipuri</value>
   </data>
   <data name="NoPasswordsToList" xml:space="preserve">
-    <value>No passwords to list.</value>
+    <value>Nicio parolă.</value>
   </data>
   <data name="NoItemsToList" xml:space="preserve">
-    <value>There are no items to list.</value>
+    <value>Nu există niciun articol de afișat.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>Căutare colecție</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
-    <value>Search folder</value>
+    <value>Căutare dosar</value>
   </data>
   <data name="SearchType" xml:space="preserve">
-    <value>Search type</value>
+    <value>Tipul de căutare</value>
   </data>
   <data name="Type" xml:space="preserve">
-    <value>Type</value>
+    <value>Tip</value>
   </data>
   <data name="MoveDown" xml:space="preserve">
-    <value>Move Down</value>
+    <value>Mută în jos</value>
   </data>
   <data name="MoveUp" xml:space="preserve">
-    <value>Move Up</value>
+    <value>Mută în sus</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Miscellaneous</value>
+    <value>Diverse</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Ownership</value>
+    <value>Proprietate</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
-    <value>Who owns this item?</value>
+    <value>Cine deține acest element?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>There are no collections to list.</value>
+    <value>Nu există colecții în listă.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
-    <value>Item has been shared.</value>
+    <value>Articolul a fost distribuit.</value>
   </data>
   <data name="SelectOneCollection" xml:space="preserve">
-    <value>You must select at least one collection.</value>
+    <value>Este nevoie să alegeți măcar o colecție.</value>
   </data>
   <data name="Share" xml:space="preserve">
-    <value>Share</value>
+    <value>Distribuire</value>
   </data>
   <data name="ShareItem" xml:space="preserve">
-    <value>Share Item</value>
+    <value>Distribuie element</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>No organizations to list.</value>
+    <value>Nu există organizații care să fie afișate.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
-    <value>Choose an organization that you wish to share this item with. Sharing transfers ownership of the item to the organization. You will no longer be the direct owner of this item once it has been shared.</value>
+    <value>Alegeți o organizație căreia doriți să îi distribuiți acest element. Distribuirea transferă proprietatea asupra obiectului către organizație. Nu veți mai fi proprietarul direct al acestui element odată ce a fost distribuit.</value>
   </data>
   <data name="NumberOfWords" xml:space="preserve">
-    <value>Number of Words</value>
+    <value>Număr de cuvinte</value>
   </data>
   <data name="Passphrase" xml:space="preserve">
-    <value>Passphrase</value>
+    <value>Frază de acces</value>
   </data>
   <data name="WordSeparator" xml:space="preserve">
-    <value>Word Separator</value>
+    <value>Separator cuvânt</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Clear</value>
+    <value>Ştergere</value>
     <comment>To clear something out. example: To clear browser history.</comment>
   </data>
   <data name="Generator" xml:space="preserve">
@@ -1423,154 +1423,154 @@
     <comment>Short for "Password Generator"</comment>
   </data>
   <data name="NoFoldersToList" xml:space="preserve">
-    <value>There are no folders to list.</value>
+    <value>Nu există dosare de afișat.</value>
   </data>
   <data name="FingerprintPhrase" xml:space="preserve">
-    <value>Fingerprint Phrase</value>
+    <value>Frază amprentă</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="YourAccountsFingerprint" xml:space="preserve">
-    <value>Your account's fingerprint phrase</value>
+    <value>Fraza amprentă a contului</value>
     <comment>A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing.</comment>
   </data>
   <data name="ShareVaultConfirmation" xml:space="preserve">
-    <value>Bitwarden allows you to share your vault with others by using an organization account. Would you like to visit the bitwarden.com website to learn more?</value>
+    <value>Bitwarden vă permite să vă împărtășiți seiful cu alte persoane utilizând un cont pentru organizații. Doriți să vizitați site-ul bitwarden.com pentru a afla mai multe?</value>
   </data>
   <data name="ExportVault" xml:space="preserve">
-    <value>Export Vault</value>
+    <value>Export seif</value>
   </data>
   <data name="LockNow" xml:space="preserve">
-    <value>Lock Now</value>
+    <value>Blocați acum</value>
   </data>
   <data name="PIN" xml:space="preserve">
     <value>PIN</value>
   </data>
   <data name="Unlock" xml:space="preserve">
-    <value>Unlock</value>
+    <value>Deblocare</value>
   </data>
   <data name="LockOption30Minutes" xml:space="preserve">
-    <value>30 minutes</value>
+    <value>30 de minute</value>
   </data>
   <data name="LockOption5Minutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 minute</value>
   </data>
   <data name="SetPINDescription" xml:space="preserve">
-    <value>Set your PIN code for unlocking Bitwarden. Your PIN settings will be reset if you ever fully log out of the application.</value>
+    <value>Setaţi codul PIN de deblocare Bitwarden. Setările codului PIN vor fi resetate dacă vă deconectaţi vreodată din aplicație.</value>
   </data>
   <data name="LoggedInAsOn" xml:space="preserve">
-    <value>Logged in as {0} on {1}.</value>
+    <value>Autentificat ca {0} în {1}.</value>
     <comment>ex: Logged in as user@example.com on bitwarden.com.</comment>
   </data>
   <data name="VaultLockedMasterPassword" xml:space="preserve">
-    <value>Your vault is locked. Verify your master password to continue.</value>
+    <value>Seiful dvs. este blocat. Verificaţi parola principală pentru a continua.</value>
   </data>
   <data name="VaultLockedPIN" xml:space="preserve">
-    <value>Your vault is locked. Verify your PIN code to continue.</value>
+    <value>Seiful dvs. este blocat. Verificaţi codul PIN pentru a continua.</value>
   </data>
   <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+    <value>Întunecată</value>
     <comment>A dark color</comment>
   </data>
   <data name="Light" xml:space="preserve">
-    <value>Light</value>
+    <value>Luminoasă</value>
     <comment>A light color</comment>
   </data>
   <data name="FiveMinutes" xml:space="preserve">
-    <value>5 minutes</value>
+    <value>5 minute</value>
   </data>
   <data name="OneMinute" xml:space="preserve">
-    <value>1 minute</value>
+    <value>1 minut</value>
   </data>
   <data name="TenSeconds" xml:space="preserve">
-    <value>10 seconds</value>
+    <value>10 secunde</value>
   </data>
   <data name="ThirtySeconds" xml:space="preserve">
-    <value>30 seconds</value>
+    <value>30 de secunde</value>
   </data>
   <data name="TwentySeconds" xml:space="preserve">
-    <value>20 seconds</value>
+    <value>20 de secunde</value>
   </data>
   <data name="TwoMinutes" xml:space="preserve">
-    <value>2 minutes</value>
+    <value>2 minute</value>
   </data>
   <data name="ClearClipboard" xml:space="preserve">
-    <value>Clear Clipboard</value>
+    <value>Goliţi Clipboardul</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="ClearClipboardDescription" xml:space="preserve">
-    <value>Automatically clear copied values from your clipboard.</value>
+    <value>Şterge automat valorile copiate din clipboard.</value>
     <comment>Clipboard is the operating system thing where you copy/paste data to on your device.</comment>
   </data>
   <data name="DefaultUriMatchDetection" xml:space="preserve">
-    <value>Default URI Match Detection</value>
+    <value>Detectare de potrivire URI implicită</value>
     <comment>Default URI match detection for auto-fill.</comment>
   </data>
   <data name="DefaultUriMatchDetectionDescription" xml:space="preserve">
-    <value>Choose the default way that URI match detection is handled for logins when performing actions such as auto-fill.</value>
+    <value>Alege modul în care se gestionează detectarea de potrivire de URI pentru autentificări la acțiuni precum cea de auto-completare.</value>
   </data>
   <data name="Theme" xml:space="preserve">
-    <value>Theme</value>
+    <value>Temă</value>
     <comment>Color theme</comment>
   </data>
   <data name="ThemeDescription" xml:space="preserve">
-    <value>Change the application's color theme.</value>
+    <value>Schimbă tema de culori a aplicației.</value>
   </data>
   <data name="RestartIsRequired" xml:space="preserve">
-    <value>Restart is required.</value>
+    <value>Repornire necesară.</value>
     <comment>Referring to restarting the application.</comment>
   </data>
   <data name="Restarting" xml:space="preserve">
-    <value>Restarting...</value>
+    <value>Repornire...</value>
   </data>
   <data name="CopyNotes" xml:space="preserve">
-    <value>Copy Notes</value>
+    <value>Copiere note</value>
   </data>
   <data name="Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Ieșire</value>
   </data>
   <data name="ExitConfirmation" xml:space="preserve">
-    <value>Are you sure you want to exit Bitwarden?</value>
+    <value>Sunteți sigur că doriți să ieșiți?</value>
   </data>
   <data name="PINRequireMasterPasswordRestart" xml:space="preserve">
     <value>You you want to require unlocking with your master password when the application is restarted?</value>
   </data>
   <data name="Black" xml:space="preserve">
-    <value>Black</value>
+    <value>Neagră</value>
     <comment>The color black</comment>
   </data>
   <data name="BlacklistedUris" xml:space="preserve">
-    <value>Blacklisted URIs</value>
+    <value>URI-uri în lista neagră</value>
   </data>
   <data name="BlacklistedUrisDescription" xml:space="preserve">
     <value>URIs that are blacklisted will not offer auto-fill. The list of apps should be comma separated. Ex: "https://twitter.com, androidapp://com.twitter.android".</value>
   </data>
   <data name="DisableSavePrompt" xml:space="preserve">
-    <value>Disable Save Prompt</value>
+    <value>Dezactivați solicitarea de salvare</value>
   </data>
   <data name="DisableSavePromptDescription" xml:space="preserve">
-    <value>The "Save Prompt" automatically prompts you to save new items to your vault whenever you enter them for the first time.</value>
+    <value>"Notificarea de salvare" solicită automat salvarea de noi elemente în seiful dvs. de fiecare dată când le introduceți pentru prima dată.</value>
   </data>
   <data name="LockOptionOnRestart" xml:space="preserve">
-    <value>On App Restart</value>
+    <value>La repornirea aplicației</value>
   </data>
   <data name="AutofillServiceNotEnabled" xml:space="preserve">
-    <value>Auto-fill makes it easy to securely access your Bitwarden vault from other websites and apps. It looks like you have not enabled an auto-fill service for Bitwarden. Enable auto-fill for Bitwarden from the "Settings" screen.</value>
+    <value>Completarea automată simplifică accesarea securizată a seifului Bitwarden de pe alte site-uri web și aplicații. Se pare că nu ați activat un serviciu de completare automată pentru Bitwarden. Activați completarea automată pentru Bitwarden din ecranul „Setări”.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Modificările temei se vor aplica după repornirea aplicației.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Majuscule</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Include număr</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Descărcare</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Distribuit</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>

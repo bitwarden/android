@@ -753,7 +753,7 @@
     <value>Status</value>
   </data>
   <data name="BitwardenAutofillServiceAlert2" xml:space="preserve">
-    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu Ihrem Tresor hinzuzufügen, ist der automatische Fülldienst von Bitwarden. Erfahren Sie mehr über den automatische Fülldienst von Bitwarden, indem Sie zu dem "Einstellungen"-Bildschirm navigieren.</value>
+    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu Ihrem Tresor hinzuzufügen, ist der automatische Fülldienst von Bitwarden. Erfahren Sie mehr über den automatischen Fülldienst von Bitwarden, indem Sie zu dem "Einstellungen"-Bildschirm navigieren.</value>
   </data>
   <data name="Autofill" xml:space="preserve">
     <value>Auto-Ausfüllen</value>
@@ -1302,7 +1302,7 @@
     <value>Passwort AutoFill</value>
   </data>
   <data name="BitwardenAutofillAlert2" xml:space="preserve">
-    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu Ihrem Tresor hinzuzufügen, ist die Bitwardenerweiterung zum Automatische Füllen. Erfahren Sie mehr über die Bitwardenerweiterung zum Automatische Füllen, indem Sie zu dem "Einstellungen"-Bildschirm navigieren.</value>
+    <value>Die einfachste Möglichkeit, neue Anmeldedaten zu Ihrem Tresor hinzuzufügen, ist der automatische Fülldienst von Bitwarden. Erfahren Sie mehr über den automatischen Fülldienst von Bitwarden, indem Sie zu dem "Einstellungen"-Bildschirm navigieren.</value>
   </data>
   <data name="InvalidEmail" xml:space="preserve">
     <value>Ungültige E-Mail-Adresse.</value>
@@ -1376,16 +1376,16 @@
     <value>Nach oben bewegen</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
-    <value>Verschiedenes</value>
+    <value>Sonstiges</value>
   </data>
   <data name="Ownership" xml:space="preserve">
-    <value>Besitzer</value>
+    <value>Besitz</value>
   </data>
   <data name="WhoOwnsThisItem" xml:space="preserve">
     <value>Wer besitzt diesen Eintrag?</value>
   </data>
   <data name="NoCollectionsToList" xml:space="preserve">
-    <value>Keine Sammlungen zum Auflisten.</value>
+    <value>Keine Sammlungen vorhanden.</value>
   </data>
   <data name="ItemShared" xml:space="preserve">
     <value>Eintrag wurde geteilt.</value>
@@ -1400,7 +1400,7 @@
     <value>Eintrag teilen</value>
   </data>
   <data name="NoOrgsToList" xml:space="preserve">
-    <value>Keine Organisationen zum Auflisten.</value>
+    <value>Keine Organisationen vorhanden.</value>
   </data>
   <data name="ShareDesc" xml:space="preserve">
     <value>Wählen Sie eine Organisation, mit der Sie dieses Eintrag teilen möchten. Teilen überträgt den Besitz des Eintrages an die Organisation. Sie werden nicht mehr der direkte Bestitzer dieses Eintrages sein, sobald es geteilt wurde.</value>
