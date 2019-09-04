@@ -1340,13 +1340,13 @@
     <value>This password was not found in any known data breaches. It should be safe to use.</value>
   </data>
   <data name="IdentityName" xml:space="preserve">
-    <value>Identity Name</value>
+    <value>Kimlik Adı</value>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Değer</value>
   </data>
   <data name="PasswordHistory" xml:space="preserve">
-    <value>Password History</value>
+    <value>Parola Geçmişi</value>
   </data>
   <data name="Types" xml:space="preserve">
     <value>Types</value>
@@ -1358,7 +1358,7 @@
     <value>There are no items to list.</value>
   </data>
   <data name="SearchCollection" xml:space="preserve">
-    <value>Search collection</value>
+    <value>Koleksiyon ara</value>
   </data>
   <data name="SearchFolder" xml:space="preserve">
     <value>Search folder</value>
