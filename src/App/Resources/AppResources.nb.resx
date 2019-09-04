@@ -1557,20 +1557,20 @@
     <value>Auto-utfylling gjør det lett å få sikker tilgang til Bitwarden-hvelvet ditt fra andre nettsteder og apper. Det ser ut til at du ikke har skrudd på noen auto-utfyllingstjenester for Bitwarden. Du kan skru på auto-utfylling for Bitwarden i «Innstillinger»-menyen.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Temaendringene dine vil gjelde når appen startes på nytt.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Stor forbokstav</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Inkluder nummer</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Last ned</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Delt</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>
