@@ -1275,19 +1275,19 @@
     <value>Your logins are now easily accessable right from your keyboard while logging into apps and websites.</value>
   </data>
   <data name="AutofillSetup2" xml:space="preserve">
-    <value>We recommend disabling any other AutoFill apps under Settings if you do not plan to use them.</value>
+    <value>Suosittelemme poistamaan muut AutoFill-sovellukset käytöstä asetuksista, jos et aio käyttää niitä.</value>
   </data>
   <data name="BitwardenAutofillDescription" xml:space="preserve">
-    <value>Access your vault directly from your keyboard to quickly autofill passwords.</value>
+    <value>Käytä holviasi suoraan näppäimistöltä täyttääksesi salasanat automaattisesti.</value>
   </data>
   <data name="AutofillTurnOn" xml:space="preserve">
-    <value>To enable password autofill on your device, follow these instructions:</value>
+    <value>Ota salasanojen automattinen täyttäminen käyttöön seuraavasti:</value>
   </data>
   <data name="AutofillTurnOn1" xml:space="preserve">
     <value>1. Siirry iOS:n Asetukset-sovellukseen</value>
   </data>
   <data name="AutofillTurnOn2" xml:space="preserve">
-    <value>2. Tap "Passwords &amp; Accounts"</value>
+    <value>2. Napauta "Salasanat ja tilit"</value>
   </data>
   <data name="AutofillTurnOn3" xml:space="preserve">
     <value>3. Tap "AutoFill Passwords"</value>
@@ -1557,20 +1557,20 @@
     <value>Automaattinen täyttö tekee Bitwarden-holviiisi pääsystä muista ohjelmista ja sivustoista helppoa. Et näytä kytkeneen automaattista täyttöä päälle. Voit tehdä sen Asetukset-näytöstä.</value>
   </data>
   <data name="ThemeAppliedOnRestart" xml:space="preserve">
-    <value>Your theme changes will apply when the app is restarted.</value>
+    <value>Teemamuutokset tulevat voimaan, kun sovellus käynnistetään uudelleen.</value>
   </data>
   <data name="Capitalize" xml:space="preserve">
-    <value>Capitalize</value>
+    <value>Jokainen sana isolla alkukirjaimella</value>
     <comment>ex. Uppercase the first character of a word.</comment>
   </data>
   <data name="IncludeNumber" xml:space="preserve">
-    <value>Include Number</value>
+    <value>Sisällytä numero</value>
   </data>
   <data name="Download" xml:space="preserve">
-    <value>Download</value>
+    <value>Lataa</value>
   </data>
   <data name="Shared" xml:space="preserve">
-    <value>Shared</value>
+    <value>Jaettu</value>
   </data>
   <data name="ToggleVisibility" xml:space="preserve">
     <value>Toggle Visiblity</value>
